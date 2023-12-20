@@ -1,0 +1,95 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# Must be specified in the preamble.
+# Set to true to stop the .editorconfig file search on the current file.
+# The value is case insensitive.
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+# Set to latin1, utf-8, utf-8-bom, utf-16be or utf-16le to control the character set.
+# Use of utf-8-bom is discouraged.
+charset = utf-8
+
+# Set to lf, cr, or crlf to control how line breaks are represented.
+# The values are case insensitive.
+end_of_line = lf
+
+# Set to tab or space to use hard tabs or soft tabs respectively.
+# The values are case insensitive.
+indent_style = space
+
+# Set to a whole number defining the number of columns used for each indentation level
+# and the width of soft tabs (when supported).
+# If this equals tab, the indent_size shall be set to the tab size,
+# which should be tab_width (if specified); else, the tab size set by the editor.
+# The values are case insensitive.
+#indent_size = 4
+
+# Set to a whole number defining the number of columns used to represent a tab character.
+# This defaults to the value of indent_size and should not usually need to be specified.
+#tab_width = 4
+
+# Set to true to remove all whitespace characters
+# preceding newline characters in the file and false to ensure it doesn’t.
+trim_trailing_whitespace = true
+
+# Set to true ensure file ends with a newline when saving and false to ensure it doesn’t.
+insert_final_newline = true
+
+# Matches multiple files with brace expansion notation
+[*.txt]
+end_of_line = crlf
+
+# CommonMark Spec
+# https://spec.commonmark.org/0.28/#tabs
+[*.{md, markdown}]
+indent_size = 4
+trim_trailing_whitespace = false
+
+# Google HTML/CSS Style Guide
+# https://google.github.io/styleguide/htmlcssguide.html#Indentation
+[*.{htm, html}]
+indent_size = 2
+
+# Google HTML/CSS Style Guide
+# https://google.github.io/styleguide/htmlcssguide.html#Indentation
+[*.{css, sass, scss, less}]
+indent_size = 2
+
+# Google JavaScript Style Guide
+# https://google.github.io/styleguide/jsguide.html#formatting-block-indentation
+[*.{js, jsx, ts, tsx, vue}]
+indent_size = 2
+
+# PSR-12: Extended Coding Style
+# https://www.php-fig.org/psr/psr-12/
+[*.php]
+indent_size = 4
+
+# PEP 8 – Style Guide for Python Code
+# https://peps.python.org/pep-0008/#indentation
+[*.py]
+indent_size = 4
+
+# YAML Specification
+# http://www.yaml.org/spec/1.2/spec.html#Syntax
+[*.{yml, yaml}]
+indent_size = 2
+
+# Shell Style Guide
+# https://google.github.io/styleguide/shellguide.html#s5.1-indentation
+[*.sh]
+indent_size = 2
+
+# JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write.
+# https://www.json.org/json-en.html
+[*.json]
+indent_size = 4
+insert_final_newline = false
+
+# Extensible Markup Language (XML) is a simple, very flexible text format derived from SGML (ISO 8879).
+# https://www.w3.org/XML/
+[*.xml]
+indent_size = 4
+insert_final_newline = false
