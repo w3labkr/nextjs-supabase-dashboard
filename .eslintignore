@@ -1,6 +1,8 @@
 node_modules/
 dist/
 
+favicon.ico
+
 **/*.css
 **/*.min.css
 **/*.min.js
