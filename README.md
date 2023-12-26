@@ -65,7 +65,7 @@ node -v > .nvmrc
 Material UI is an open-source React component library that implements Google's Material Design.
 
 ```shell
-npm install @mui/material @emotion/react @emotion/styled
+npm install @mui/material @emotion/react @emotion/styled @mui/lab
 ```
 
 Next.js Integration
@@ -105,7 +105,7 @@ npm install zod react-hook-form @hookform/resolvers
 Generate RFC-compliant UUIDs in JavaScript
 
 ```shell
-npm install uuid @types/uuid
+npm install uuid
 ```
 
 Start the development server.

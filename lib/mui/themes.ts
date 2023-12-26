@@ -1,7 +1,7 @@
+import { Noto_Sans_KR } from 'next/font/google';
 import { createTheme } from '@mui/material/styles';
-import { Roboto } from 'next/font/google';
 
-const roboto = Roboto({
+const notoSansKR = Noto_Sans_KR({
   weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
   display: 'swap',
@@ -9,7 +9,7 @@ const roboto = Roboto({
 
 const theme = createTheme({
   typography: {
-    fontFamily: roboto.style.fontFamily,
+    fontFamily: notoSansKR.style.fontFamily,
   },
 });
 
@@ -17,6 +17,17 @@ export const lightTheme = createTheme({
   ...theme,
   palette: {
     mode: 'light',
+  },
+  components: {
+    MuiAppBar: {
+      styleOverrides: {
+        colorPrimary: {
+          backgroundColor: '#ffffff',
+          color: '#222222',
+          boxShadow: '0px 0px 1px 0px rgba(0, 0, 0, 1)',
+        },
+      },
+    },
   },
 });
 

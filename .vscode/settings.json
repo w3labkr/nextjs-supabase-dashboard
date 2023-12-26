@@ -137,4 +137,14 @@
       "source.fixAll.eslint": "explicit"
     }
   },
+  "[typescript][typescriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
+  "[javascript][javascriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "never"
+    }
+  },
 }
