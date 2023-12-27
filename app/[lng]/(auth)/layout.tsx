@@ -1,21 +1,14 @@
 import Toolbar from '@mui/material/Toolbar';
-import Header from '@/components/Header.tsx';
-import Footer from '@/components/Footer.tsx';
-import BackToTop from '@/components/BackToTop.tsx';
+import Header from '@/components/Header';
+import Main from '@/components/Main';
+import Footer from '@/components/Footer';
 
-export default function AuthLayout({
-  children,
-  params: { lng },
-}: {
-  children: React.ReactNode;
-  params: { lng: string };
-}) {
+export default function Layout({ children, params: { lng } }: { children: React.ReactNode; params: { lng: string } }) {
   return (
     <>
       <Header lng={lng} />
-      <Toolbar id="back-to-top-anchor" />
-      <main>{children}</main>
-      <BackToTop triggerId="back-to-top-anchor" />
+      <Toolbar />
+      <Main>{children}</Main>
       <Footer />
     </>
   );

@@ -1,6 +1,10 @@
 'use client';
 
+// The React Framework.
 import Image from 'next/image';
+
+// Move faster with intuitive React UI tools.
+import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Masonry from '@mui/lab/Masonry';
 
@@ -77,34 +81,36 @@ const data = [
 
 export default function Media() {
   return (
-    <Masonry
-      columns={{ xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }}
-      spacing={1}
-      defaultHeight={450}
-      defaultColumns={6}
-      defaultSpacing={1}
-    >
-      {data.map((item, index) => (
-        <div key={index}>
-          <Image
-            src={`${item.src}?w=320&auto=format`}
-            alt={item.title}
-            quality={75}
-            width={0}
-            height={0}
-            sizes="100vw"
-            style={{
-              display: 'block',
-              width: '100%',
-              height: 'auto',
-              borderBottomLeftRadius: 4,
-              borderBottomRightRadius: 4,
-            }}
-            priority={true}
-          />
-          <Typography noWrap>{item.title}</Typography>
-        </div>
-      ))}
-    </Masonry>
+    <Container maxWidth="xl">
+      <Masonry
+        columns={{ xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }}
+        spacing={1}
+        defaultHeight={450}
+        defaultColumns={6}
+        defaultSpacing={1}
+      >
+        {data.map((item, index) => (
+          <div key={index}>
+            <Image
+              src={`${item.src}?w=320&auto=format`}
+              alt={item.title}
+              quality={75}
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{
+                display: 'block',
+                width: '100%',
+                height: 'auto',
+                borderBottomLeftRadius: 4,
+                borderBottomRightRadius: 4,
+              }}
+              priority={true}
+            />
+            <Typography noWrap>{item.title}</Typography>
+          </div>
+        ))}
+      </Masonry>
+    </Container>
   );
 }

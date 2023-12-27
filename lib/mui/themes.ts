@@ -36,4 +36,15 @@ export const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
+  components: {
+    MuiAppBar: {
+      styleOverrides: {
+        colorPrimary: {
+          backgroundColor: '#121212',
+          color: '#ffffff',
+          boxShadow: '0px 0px 1px 0px rgba(255, 255, 255, 1)',
+        },
+      },
+    },
+  },
 });

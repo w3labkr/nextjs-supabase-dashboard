@@ -1,12 +1,16 @@
 'use client';
 
-import NextLink from 'next/link';
+// Move faster with intuitive React UI tools.
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import Button from '@mui/material/Button';
 import CameraIcon from '@mui/icons-material/PhotoCamera';
+
+// Utility for creating styled components.
+import Link from '@/components/Link';
+import LinkButton from '@/components/LinkButton';
+
+// Internationalization
 import { useTranslation } from '@/app/i18n/client';
 
 export default function Header({ lng }: { lng: string }) {
@@ -14,28 +18,22 @@ export default function Header({ lng }: { lng: string }) {
 
   return (
     <AppBar position="fixed">
-      <Toolbar>
+      <Toolbar sx={{ bgcolor: 'background.paper' }}>
         <CameraIcon sx={{ mr: 2 }} />
-        <Link href={`/${lng}`} component={NextLink} color="inherit" underline="none" noWrap>
+        <Link href={`/${lng}`} color="inherit" underline="none" noWrap>
           NextJS
         </Link>
         <Box sx={{ flexGrow: 1 }} />
-        <Button
+        <LinkButton
           href={`/${lng}/signin`}
-          LinkComponent={NextLink}
           color="inherit"
           style={{ marginRight: 4, whiteSpace: 'nowrap', minWidth: 'auto' }}
         >
           {t('SignIn')}
-        </Button>
-        <Button
-          href={`/${lng}/signup`}
-          LinkComponent={NextLink}
-          color="inherit"
-          style={{ whiteSpace: 'nowrap', minWidth: 'auto' }}
-        >
+        </LinkButton>
+        <LinkButton href={`/${lng}/signup`} color="inherit" style={{ whiteSpace: 'nowrap', minWidth: 'auto' }}>
           {t('SignUp')}
-        </Button>
+        </LinkButton>
       </Toolbar>
     </AppBar>
   );

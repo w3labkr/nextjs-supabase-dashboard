@@ -1,6 +1,7 @@
+// Move faster with intuitive React UI tools.
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 
 export default function Hero() {
   return (

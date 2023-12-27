@@ -1,5 +1,10 @@
+// The React Framework.
 import type { Metadata } from 'next';
+
+// Internationalization
 import { dir } from 'i18next';
+
+// Move faster with intuitive React UI tools.
 import MuiProvider from '@/lib/mui/MuiProvider';
 import packageJSON from '@/package.json';
 import '@/styles/globals.css';
@@ -20,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang={lng} dir={dir(lng)}>
       <body>
-        <MuiProvider>{children}</MuiProvider>
+        <MuiProvider defaultMode="light">{children}</MuiProvider>
       </body>
     </html>
   );

@@ -1,5 +1,6 @@
 'use client';
 
+// Move faster with intuitive React UI tools.
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';

@@ -11,8 +11,8 @@ function getDesignTokens(mode: 'light' | 'dark') {
   return mode === 'light' ? lightTheme : darkTheme;
 }
 
-export default function MuiProvider({ children }: { children: React.ReactNode }) {
-  const [mode, setMode] = useState('light');
+export default function MuiProvider({ children, defaultMode }: { children: React.ReactNode; defaultMode: string }) {
+  const [mode, setMode] = useState(defaultMode);
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
