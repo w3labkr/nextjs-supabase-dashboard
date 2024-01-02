@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  eslint: {
+    dirs: ['app', 'components', 'contexts', 'hooks', 'lib'],
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
