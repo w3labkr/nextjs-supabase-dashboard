@@ -102,7 +102,6 @@
     "auth/missing-recaptcha-version": "auth/missing-recaptcha-version",
     "auth/invalid-recaptcha-version": "auth/invalid-recaptcha-version",
     "auth/invalid-req-type": "auth/invalid-req-type",
-
     "storage/unknown": "알 수 없는 오류가 발생했습니다.",
     "storage/object-not-found": "storage/object-not-found",
     "storage/bucket-not-found": "storage/bucket-not-found",

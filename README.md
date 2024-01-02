@@ -108,7 +108,7 @@ Next.js Integration
 npm install @mui/material-nextjs @emotion/cache
 ```
 
-## i18next
+## i18n
 
 i18next is a very popular internationalization framework for browser or any other javascript environment (eg. Node.js, Deno).
 

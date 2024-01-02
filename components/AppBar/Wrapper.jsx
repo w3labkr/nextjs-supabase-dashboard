@@ -1,10 +1,14 @@
+'use client';
+
 // Move faster with intuitive React UI tools.
-import Toolbar from '@mui/material/Toolbar';
+import MuiToolbar from '@mui/material/Toolbar';
+import { styled } from '@mui/system';
+
+// Utility for creating styled components.
+const Toolbar = styled(MuiToolbar)({
+  backgroundColor: 'inherit',
+});
 
 export default function Wrapper({ children, ...rest }) {
-  return (
-    <Toolbar sx={{ bgcolor: 'background.paper' }} {...rest}>
-      {children}
-    </Toolbar>
-  );
+  return <Toolbar {...rest}>{children}</Toolbar>;
 }
