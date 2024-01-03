@@ -117,13 +117,13 @@ npm install i18next react-i18next i18next-resources-to-backend accept-language
 npm install react-cookie i18next-browser-languagedetector
 ```
 
-## State Management
+## Schema Validation
 
 React Hooks for form state management and validation (Web + React Native).
 
 ```shell
-npm install zod react-hook-form @hookform/resolvers
-# npm install yup formik
+npm install react-hook-form 
+npm install @hookform/resolvers yup
 ```
 
 ## Utils

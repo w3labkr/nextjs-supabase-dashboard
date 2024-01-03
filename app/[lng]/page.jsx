@@ -1,10 +1,18 @@
+'use client';
+
+// Runtime type checking for React props and similar objects
+import PropTypes from 'prop-types';
+
 // Move faster with intuitive React UI tools.
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
+import Masonry from '@mui/lab/Masonry';
+import Typography from '@mui/material/Typography';
 
 // Utility for creating styled components.
-import { Header, Main, Footer } from '@/components/Layout';
-import { Hero } from '@/components/Hero';
-import { Masonry } from '@/components/Masonry';
+import { Header, Hero, Main, Footer } from '@/components/Layout';
+import Image from '@/components/Image';
 import BackToTop from '@/components/BackToTop';
 
 function RootPage({ params: { lng } }) {
@@ -13,30 +21,35 @@ function RootPage({ params: { lng } }) {
       <Header lng={lng} />
       <Toolbar id="back-to-top-anchor" />
       <Main>
-        <Hero.Wrapper>
-          <Hero.Title>Album layout</Hero.Title>
-          <Hero.Description>
-            Something short and leading about the collection below—its contents, the creator, etc.
-            <br />
-            Make it short and sweet, but not too short so folks don&apos;t simply skip over it entirely.
-          </Hero.Description>
-        </Hero.Wrapper>
-        <Masonry.Wrapper>
-          <Masonry.List
-            columns={{ xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }}
-            spacing={1}
-            defaultHeight={450}
-            defaultColumns={6}
-            defaultSpacing={1}
-          >
-            {data.map((item, index) => (
-              <Masonry.ListItem key={index}>
-                <Masonry.Image src={`${item.src}?w=320&fit=crop&auto=format`} alt={item.title} />
-                <Masonry.Title>{item.title}</Masonry.Title>
-              </Masonry.ListItem>
-            ))}
-          </Masonry.List>
-        </Masonry.Wrapper>
+        <Hero />
+        <Box>
+          <Container>
+            <Masonry
+              columns={{ xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }}
+              spacing={1}
+              defaultHeight={450}
+              defaultColumns={6}
+              defaultSpacing={1}
+            >
+              {data.map((item, index) => (
+                <Box key={index}>
+                  <Image
+                    src={`${item.src}?w=320&fit=crop&auto=format`}
+                    alt={item.title}
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      height: 'auto',
+                      borderBottomLeftRadius: 4,
+                      borderBottomRightRadius: 4,
+                    }}
+                  />
+                  <Typography noWrap>{item.title}</Typography>
+                </Box>
+              ))}
+            </Masonry>
+          </Container>
+        </Box>
       </Main>
       <BackToTop triggerId="back-to-top-anchor" />
       <Footer />
@@ -114,5 +127,11 @@ const data = [
     title: 'Bike',
   },
 ];
+
+RootPage.propTypes = {
+  params: PropTypes.shape({
+    lng: PropTypes.string.isRequired,
+  }),
+};
 
 export default RootPage;

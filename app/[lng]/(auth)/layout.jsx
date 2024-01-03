@@ -1,4 +1,8 @@
+// Runtime type checking for React props and similar objects
+import PropTypes from 'prop-types';
+
 // Move faster with intuitive React UI tools.
+import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 
 // Utility for creating styled components.
@@ -9,10 +13,19 @@ function Layout({ children, params: { lng } }) {
     <>
       <Header lng={lng} />
       <Toolbar />
-      <Main>{children}</Main>
+      <Main>
+        <Container maxWidth="xs">{children}</Container>
+      </Main>
       <Footer />
     </>
   );
 }
+
+Layout.propTypes = {
+  children: PropTypes.node.isRequired,
+  params: PropTypes.shape({
+    lng: PropTypes.string.isRequired,
+  }),
+};
 
 export default Layout;

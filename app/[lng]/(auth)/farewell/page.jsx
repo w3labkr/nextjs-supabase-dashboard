@@ -1,9 +1,14 @@
-import Container from '@mui/material/Container';
+// Runtime type checking for React props and similar objects
+import PropTypes from 'prop-types';
 
-export default function Page() {
-  return (
-    <Container maxWidth="xs">
-      <h1>Farewell</h1>
-    </Container>
-  );
+function Page({ params: { lng } }) {
+  return <h1>Farewell</h1>;
 }
+
+Page.propTypes = {
+  params: PropTypes.shape({
+    lng: PropTypes.string.isRequired,
+  }),
+};
+
+export default Page;

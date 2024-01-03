@@ -1,3 +1,6 @@
+// Runtime type checking for React props and similar objects
+import PropTypes from 'prop-types';
+
 // Internationalization
 import { dir } from 'i18next';
 import { languages } from '@/app/i18n/settings';
@@ -15,7 +18,7 @@ export const metadata = {
   description: 'NextJS app routing starter template that integrates Material-UI, i18next, and Firebase Auth.',
 };
 
-export default function RootLayout({ children, params: { lng } }) {
+function RootLayout({ children, params: { lng } }) {
   return (
     <html lang={lng} dir={dir(lng)}>
       <body>
@@ -24,3 +27,12 @@ export default function RootLayout({ children, params: { lng } }) {
     </html>
   );
 }
+
+RootLayout.propTypes = {
+  children: PropTypes.node.isRequired,
+  params: PropTypes.shape({
+    lng: PropTypes.string.isRequired,
+  }),
+};
+
+export default RootLayout;
