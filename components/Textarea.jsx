@@ -1,14 +1,10 @@
-// Runtime type checking for React props and similar objects
-import PropTypes from 'prop-types';
-
-// React Hooks for form state management and validation (Web + React Native).
+import { useTranslations } from 'next-intl';
 import { useController, useForm } from 'react-hook-form';
-
-// Move faster with intuitive React UI tools.
 import TextField from '@mui/material/TextField';
 import FormHelperText from '@mui/material/FormHelperText';
 
-function Textarea({ control, name, ...rest }) {
+export default function Textarea({ control, name, ...rest }) {
+  const t = useTranslations('SchemaValidation');
   const {
     field,
     fieldState: { invalid, isTouched, isDirty, error },
@@ -29,14 +25,7 @@ function Textarea({ control, name, ...rest }) {
         inputRef={field.ref} // send input ref, so we can focus on input when error appear
         {...rest}
       />
-      {error && <FormHelperText error={!!error}>{error?.message}</FormHelperText>}
+      {error && <FormHelperText error={!!error}>{t(error.message)}</FormHelperText>}
     </>
   );
 }
-
-Textarea.propTypes = {
-  control: PropTypes.object.isRequired,
-  name: PropTypes.string.isRequired,
-};
-
-export default Textarea;

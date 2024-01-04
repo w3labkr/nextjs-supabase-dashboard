@@ -37,12 +37,15 @@ The folder and file structure is based on nextjs app router [Next.js Project Str
 
 ## Installation
 
-- Would you like to use TypeScript? … `No`
-- Would you like to use ESLint? … `Yes`
-- Would you like to use Tailwind CSS? … `No`
-- Would you like to use `src/` directory? … `No`
-- Would you like to use App Router? (recommended) … `Yes`
-- Would you like to customize the default import alias (@/\*)? … `No`
+Prompts:
+
+- Would you like to use TypeScript? `No`
+- Would you like to use ESLint? `Yes`
+- Would you like to use Tailwind CSS? `No`
+- Would you like to use `src/` directory? `No`
+- Would you like to use App Router? (recommended) `Yes`
+- Would you like to customize the default import alias (@/*)? `No`
+- What import alias would you like configured? `@/*`
 
 ```shell
 npx create-next-app@latest . --typescript
@@ -108,13 +111,12 @@ Next.js Integration
 npm install @mui/material-nextjs @emotion/cache
 ```
 
-## i18n
+## Internationalization
 
-i18next is a very popular internationalization framework for browser or any other javascript environment (eg. Node.js, Deno).
+Internationalization (i18n) for Next.js that gets out of your way.
 
 ```shell
-npm install i18next react-i18next i18next-resources-to-backend accept-language
-npm install react-cookie i18next-browser-languagedetector
+npm install next-intl rtl-detect
 ```
 
 ## Schema Validation
@@ -138,6 +140,12 @@ Generate RFC-compliant UUIDs in JavaScript
 
 ```shell
 npm install uuid
+```
+
+A modern JavaScript utility library delivering modularity, performance, & extras.
+
+```shell
+npm install lodash
 ```
 
 ## ESLint

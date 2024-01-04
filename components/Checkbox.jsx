@@ -1,15 +1,11 @@
-// Runtime type checking for React props and similar objects
-import PropTypes from 'prop-types';
-
-// React Hooks for form state management and validation (Web + React Native).
+import { useTranslations } from 'next-intl';
 import { useController, useForm } from 'react-hook-form';
-
-// Move faster with intuitive React UI tools.
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import MuiCheckbox from '@mui/material/Checkbox';
 
-function Checkbox({ control, name, ...rest }) {
+export default function Checkbox({ control, name, ...rest }) {
+  const t = useTranslations('SchemaValidation');
   const {
     field,
     fieldState: { invalid, isTouched, isDirty, error },
@@ -30,14 +26,11 @@ function Checkbox({ control, name, ...rest }) {
         control={<MuiCheckbox />}
         {...rest}
       />
-      {error && <FormHelperText error={!!error}>{error?.message}</FormHelperText>}
+      {error && (
+        <FormHelperText error={!!error} sx={{ marginTop: -1 }}>
+          {t(error.message)}
+        </FormHelperText>
+      )}
     </>
   );
 }
-
-Checkbox.propTypes = {
-  control: PropTypes.object.isRequired,
-  name: PropTypes.string.isRequired,
-};
-
-export default Checkbox;
