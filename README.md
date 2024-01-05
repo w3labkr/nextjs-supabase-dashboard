@@ -111,6 +111,20 @@ Next.js Integration
 npm install @mui/material-nextjs @emotion/cache
 ```
 
+## Tailwind CSS
+
+Install Tailwind CSS
+
+```shell
+npm install --save-dev tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+Configure
+
+- <https://tailwindcss.com/docs/guides/nextjs>
+- <https://mui.com/material-ui/guides/interoperability/#tailwind-css>
+
 ## Internationalization
 
 Internationalization (i18n) for Next.js that gets out of your way.

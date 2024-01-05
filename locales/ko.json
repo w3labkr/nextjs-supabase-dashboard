@@ -14,7 +14,6 @@
         "description": "",
         "submit": "제출하기"
     },
-    "SignOutPage": {},
     "ForgotPasswordPage": {
         "title": "비밀번호를 잊으셨나요?",
         "description": "인증번호를 받으려면 이메일 주소를 입력하세요.",
@@ -30,21 +29,30 @@
         "description": "",
         "submit": "저장하기"
     },
-    "WelcomePage": {
-        "title": "환영합니다!",
-        "description": "이제 콘텐츠에 액세스할 수 있습니다!\n귀하의 로그인 정보가 포함된 이메일을 방금 보내드렸습니다.\n귀하의 자격 증명을 위해 이메일을 확인하십시오."
-    },
-    "FarewellPage": {
-        "title": "안녕히가세요!",
-        "description": "당신은 최고의 사람 중 하나입니다!\n다시 만날 때까지 나는 당신을 결코 잊지 않을 것입니다."
-    },
     "AuthNavigation": {
         "forgot-password": "비밀번호를 잊으셨나요?",
         "signin": "이미 계정이 있습니까?",
         "signup": "계정이 없나요?"
     },
 
+    "SignOutPage": {
+        "title": "로그아웃!",
+        "description": "로그아웃되었습니다.",
+        "button": "다시 로그인"
+    },
+    "WelcomePage": {
+        "title": "환영합니다!",
+        "description": "이제 콘텐츠에 액세스할 수 있습니다!\n귀하의 로그인 정보가 포함된 이메일을 방금 보내드렸습니다.\n귀하의 자격 증명을 위해 이메일을 확인하십시오.",
+        "button": "로그인"
+    },
+    "FarewellPage": {
+        "title": "안녕히가세요!",
+        "description": "당신은 최고의 사람 중 하나입니다!\n다시 만날 때까지 나는 당신을 결코 잊지 않을 것입니다.",
+        "button": "홈으로"
+    },
+
     "NotFoundPage": {
+        "title": "404",
         "description": "페이지를 찾을 수 없습니다.",
         "back": "이전으로",
         "home": "홈으로"

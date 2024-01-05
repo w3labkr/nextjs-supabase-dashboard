@@ -30,4 +30,5 @@ module.exports = {
     // ... is defined but never used.
     'no-unused-vars': 'warn',
   },
+  ignorePatterns: ['*.config.js'],
 };

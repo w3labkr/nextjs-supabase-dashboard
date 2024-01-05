@@ -1,14 +1,13 @@
 'use client';
 
 import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
 import Masonry from '@mui/lab/Masonry';
 import Typography from '@mui/material/Typography';
 import Image from '@/components/Image';
 
 export default function ImageList() {
   return (
-    <Box>
+    <div>
       <Container>
         <Masonry
           columns={{ xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }}
@@ -18,24 +17,18 @@ export default function ImageList() {
           defaultSpacing={1}
         >
           {data.map((item, index) => (
-            <Box key={index}>
+            <div key={index}>
               <Image
                 src={`${item.src}?w=320&fit=crop&auto=format`}
                 alt={item.title}
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  height: 'auto',
-                  borderBottomLeftRadius: 4,
-                  borderBottomRightRadius: 4,
-                }}
+                className="block w-full h-auto rounded"
               />
               <Typography noWrap>{item.title}</Typography>
-            </Box>
+            </div>
           ))}
         </Masonry>
       </Container>
-    </Box>
+    </div>
   );
 }
 

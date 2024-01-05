@@ -1,139 +1,167 @@
 {
-  // Insert spaces when pressing `Tab`. This setting is overridden based on the file contents when `editor.detectIndentation` is on.
-  "editor.insertSpaces": true,
-
-  // Controls whether `editor.tabSize#` and `#editor.insertSpaces` will be automatically detected when a file is opened based on the file contents.
-  "editor.detectIndentation": true,
-
-  // The number of spaces a tab is equal to. This setting is overridden based on the file contents when `editor.detectIndentation` is on.
-  "editor.tabSize": 4,
-
-  // Configure settings to be overridden for the html language.
-  "[html]": {
-    "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-  },
-
-  // Configure settings to be overridden for the css language.
-  "[css]": {
-    "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-  },
-
-  // Configure settings to be overridden for the scss language.
-  "[scss]": {
-    "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-  },
-
-  // Configure settings to be overridden for the less language.
-  "[less]": {
-    "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-  },
-
-  // Enable/disable default JavaScript formatter.
-  "javascript.format.enable": false,
-
-  // Enable/disable JavaScript validation.
-  "javascript.validate.enable": false,
-
-  // Enable/disable default TypeScript formatter.
-  "typescript.format.enable": false,
-
-  // Enable/disable TypeScript validation.
-  "typescript.validate.enable": false,
-
-  // Enables ESLint as a formatter.
-  "eslint.format.enable": true,
-
-  // An array of language ids which should be validated by ESLint. If not installed ESLint will show an error.
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
-
-  // Configure settings to be overridden for the javascript language.
-  "[javascript]": {
-    "editor.tabSize": 2,
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": false,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
+    // Configure [glob patterns](https://aka.ms/vscode-glob-patterns) of file associations to languages (for example `"*.extension": "html"`). Patterns will match on the absolute path of a file if they contain a path separator and will match on the name of the file otherwise. These have precedence over the default associations of the languages installed.
+    "files.associations": {
+        "*.css": "tailwindcss"
     },
-  },
 
-  // Configure settings to be overridden for the javascriptreact language.
-  "[javascriptreact]": {
-    "editor.tabSize": 2,
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": false,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    },
-  },
+    // Insert spaces when pressing `Tab`. This setting is overridden based on the file contents when `editor.detectIndentation` is on.
+    "editor.insertSpaces": true,
 
-  // Configure settings to be overridden for the typescript language.
-  "[typescript]": {
-    "editor.tabSize": 2,
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": false,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    },
-  },
+    // Controls whether `editor.tabSize#` and `#editor.insertSpaces` will be automatically detected when a file is opened based on the file contents.
+    "editor.detectIndentation": true,
 
-  // Configure settings to be overridden for the typescriptreact language.
-  "[typescriptreact]": {
-    "editor.tabSize": 2,
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": false,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    },
-  },
-
-  // Configure settings to be overridden for the shellscript language.
-  "[shellscript]": {
-    "editor.tabSize": 2
-  },
-
-  // Configure settings to be overridden for the yaml language.
-  "[yaml]": {
-    "editor.tabSize": 2
-  },
-
-  // Configure settings to be overridden for the php language.
-  "[php]": {
-    "editor.tabSize": 4
-  },
-
-  // Configure settings to be overridden for the python language.
-  "[python]": {
-    "editor.tabSize": 4
-  },
-
-  // Configure settings to be overridden for the markdown language.
-  "[markdown]": {
-    "editor.tabSize": 4
-  },
-
-  // Configure settings to be overridden for the json language.
-  "[json]": {
+    // The number of spaces a tab is equal to. This setting is overridden based on the file contents when `editor.detectIndentation` is on.
     "editor.tabSize": 4,
-    "editor.defaultFormatter": "vscode.json-language-features"
-  },
 
-  // Configure settings to be overridden for the jsonc language.
-  "[jsonc]": {
-    "editor.tabSize": 4,
-    "editor.defaultFormatter": "vscode.json-language-features"
-  },
+    // Controls whether suggestions should automatically show up while typing. This can be controlled for typing in comments, strings, and other code. Quick suggestion can be configured to show as ghost text or with the suggest widget. Also be aware of the '#editor.suggestOnTriggerCharacters#'-setting which controls if suggestions are triggered by special characters.
+    "editor.quickSuggestions": {
+		"strings": "on"
+	},
 
-  // Configure settings to be overridden for the xml language.
-  "[xml]": {
-    "editor.tabSize": 4
-  },
-  "[javascript][javascriptreact][typescript][typescriptreact]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit"
+    // Configure settings to be overridden for the html language.
+    "[html]": {
+        "editor.tabSize": 2,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // Unknown at-rule.
+    "css.lint.unknownAtRules": "ignore",
+
+    // Configure settings to be overridden for the css language.
+    "[css]": {
+        "editor.tabSize": 2,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // Unknown at-rule.
+    "scss.lint.unknownAtRules": "ignore",
+
+    // Configure settings to be overridden for the scss language.
+    "[scss]": {
+        "editor.tabSize": 2,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // Unknown at-rule.
+    "less.lint.unknownAtRules": "ignore",
+
+    // Configure settings to be overridden for the less language.
+    "[less]": {
+        "editor.tabSize": 2,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // Enable/disable default JavaScript formatter.
+    "javascript.format.enable": false,
+
+    // Enable/disable JavaScript validation.
+    "javascript.validate.enable": false,
+
+    // Enable/disable default TypeScript formatter.
+    "typescript.format.enable": false,
+
+    // Enable/disable TypeScript validation.
+    "typescript.validate.enable": false,
+
+    // Enables ESLint as a formatter.
+    "eslint.format.enable": true,
+
+    // An array of language ids which should be validated by ESLint. If not installed ESLint will show an error.
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
+
+    // Configure settings to be overridden for the javascript language.
+    "[javascript]": {
+        "editor.tabSize": 2,
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.formatOnSave": false,
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": true
+        }
+    },
+
+    // Configure settings to be overridden for the javascriptreact language.
+    "[javascriptreact]": {
+        "editor.tabSize": 2,
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.formatOnSave": false,
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": true
+        }
+    },
+
+    // Configure settings to be overridden for the typescript language.
+    "[typescript]": {
+        "editor.tabSize": 2,
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.formatOnSave": false,
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": true
+        }
+    },
+
+    // Configure settings to be overridden for the typescriptreact language.
+    "[typescriptreact]": {
+        "editor.tabSize": 2,
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.formatOnSave": false,
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": true
+        }
+    },
+
+    // Configure settings to be overridden for the shellscript language.
+    "[shellscript]": {
+        "editor.tabSize": 2
+    },
+
+    // Configure settings to be overridden for the yaml language.
+    "[yaml]": {
+        "editor.tabSize": 2
+    },
+
+    // Configure settings to be overridden for the php language.
+    "[php]": {
+        "editor.tabSize": 4
+    },
+
+    // Configure settings to be overridden for the python language.
+    "[python]": {
+        "editor.tabSize": 4
+    },
+
+    // Configure settings to be overridden for the markdown language.
+    "[markdown]": {
+        "editor.tabSize": 4
+    },
+
+    // Configure settings to be overridden for the json language.
+    "[json]": {
+        "editor.tabSize": 4,
+        "editor.defaultFormatter": "vscode.json-language-features",
+        "editor.formatOnSave": false,
+    },
+
+    // Configure settings to be overridden for the jsonc language.
+    "[jsonc]": {
+        "editor.tabSize": 4,
+        "editor.defaultFormatter": "vscode.json-language-features",
+        "editor.formatOnSave": false,
+    },
+
+    // Configure settings to be overridden for the xml language.
+    "[xml]": {
+        "editor.tabSize": 4
+    },
+
+    // Misc
+    "[javascript][javascriptreact][typescript][typescriptreact]": {
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "explicit"
+        }
     }
-  },
 }

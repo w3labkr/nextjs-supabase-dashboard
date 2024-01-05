@@ -27,7 +27,7 @@ export default function Checkbox({ control, name, ...rest }) {
         {...rest}
       />
       {error && (
-        <FormHelperText error={!!error} sx={{ marginTop: -1 }}>
+        <FormHelperText error={!!error} className="!-mt-2">
           {t(error.message)}
         </FormHelperText>
       )}

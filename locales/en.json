@@ -14,7 +14,6 @@
         "description": "",
         "submit": "Sign Up"
     },
-    "SignOutPage": {},
     "ForgotPasswordPage": {
         "title": "Forgot password?",
         "description": "Enter your email address to receive a verification code.",
@@ -30,18 +29,26 @@
         "description": "",
         "submit": "Submit"
     },
-    "WelcomePage": {
-        "title": "Welcome!",
-        "description": "You can now access our content!\nWe've just sent you an email with your login information.\nPlease check your email for your credentials."
-    },
-    "FarewellPage": {
-        "title": "Farewell!",
-        "description": "Your are one of the best people! I will never forget you until we meet again."
-    },
     "AuthNavigation": {
         "forgot-password": "Forgot password?",
         "signin": "Already have an account?",
         "signup": "Don't have an account?"
+    },
+
+    "SignOutPage": {
+        "title": "Sign Out!",
+        "description": "You have been logged out.",
+        "button": "Sign in Again"
+    },
+    "WelcomePage": {
+        "title": "Welcome!",
+        "description": "You can now access our content!\nWe've just sent you an email with your login information.\nPlease check your email for your credentials.",
+        "button": "Sign In"
+    },
+    "FarewellPage": {
+        "title": "Farewell!",
+        "description": "Your are one of the best people! I will never forget you until we meet again.",
+        "button": "Go Home"
     },
 
     "NotFoundPage": {

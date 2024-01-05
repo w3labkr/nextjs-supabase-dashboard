@@ -1,5 +1,5 @@
 import Toolbar from '@mui/material/Toolbar';
-import Header from '@/components/Header';
+import Header from '@/components/StickyHeader';
 import Hero from '@/components/Hero';
 import Main from '@/components/Main';
 import Footer from '@/components/Footer';

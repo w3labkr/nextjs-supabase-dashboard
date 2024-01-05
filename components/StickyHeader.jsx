@@ -11,7 +11,7 @@ export default function Header() {
   const t = useTranslations('Header');
 
   return (
-    <MuiAppBar>
+    <MuiAppBar position="fixed">
       <Toolbar className="bg-inherit">
         <Link href={`/${locale}`} color="inherit" underline="none" noWrap scroll={false}>
           <CameraIcon />
