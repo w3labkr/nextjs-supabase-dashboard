@@ -4,18 +4,19 @@ import Hero from '@/components/Hero';
 import Main from '@/components/Main';
 import Footer from '@/components/Footer';
 import ImageList from '@/components/ImageList';
-import BackToTop from '@/components/BackToTop';
+// import BackToTop from '@/components/BackToTop';
 
 export default function LocalePage() {
   return (
     <>
       <Header />
-      <Toolbar id="back-to-top-anchor" />
-      <Main>
+      <Toolbar />
+      {/* <Toolbar id="back-to-top-anchor" /> */}
+      <Main className="pb-24">
         <Hero />
         <ImageList />
       </Main>
-      <BackToTop triggerId="back-to-top-anchor" />
+      {/* <BackToTop triggerId="back-to-top-anchor" /> */}
       <Footer />
     </>
   );

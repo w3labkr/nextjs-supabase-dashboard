@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { ColorModeContext } from './contexts';
+import { ColorModeContext } from './ColorModeContext.js';
 import { lightTheme, darkTheme } from './themes';
 
 function getDesignTokens(mode) {
@@ -19,7 +19,7 @@ export default function MuiProvider({ children, defaultMode = 'light' }) {
         setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
       },
     }),
-    []
+    [setMode]
   );
 
   // Update the theme only if the mode changes
