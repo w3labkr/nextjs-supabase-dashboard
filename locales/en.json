@@ -61,6 +61,18 @@
         "signin": "Sign In",
         "signup": "Sign Up"
     },
+    "ToggleColorMode": {
+        "mode": "Dark theme",
+        "on": "on",
+        "off": "off"
+    },
+    "LocaleSwitcher": {
+        "button": "Language: English",
+        "dialog-title": "Language and Region",
+        "dialog-cancel": "Cancel",
+        "dialog-ok": "Ok"
+    },
+
     "FormLabel": {
         "username": "Username",
         "email": "Email",

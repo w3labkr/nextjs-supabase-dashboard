@@ -14,7 +14,7 @@ export default function Header() {
   return (
     <MuiAppBar>
       <Container maxWidth="xl">
-        <Toolbar>
+        <Toolbar disableGutters>
           <Link href={`/${locale}`} color="inherit" underline="none" noWrap>
             <CameraIcon />
           </Link>

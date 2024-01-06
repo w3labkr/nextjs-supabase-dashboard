@@ -7,7 +7,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ColorModeContext } from './ColorModeContext.js';
 import { lightTheme, darkTheme } from './themes';
 
-function getDesignTokens(mode) {
+function getDesignTokens(mode = 'light') {
   return mode === 'light' ? lightTheme : darkTheme;
 }
 

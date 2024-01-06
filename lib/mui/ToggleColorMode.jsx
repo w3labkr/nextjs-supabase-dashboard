@@ -1,17 +1,17 @@
+import { useTranslations } from 'next-intl';
 import { useContext } from 'react';
-import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import ModeNightIcon from '@mui/icons-material/ModeNight';
 import { ColorModeContext } from './ColorModeContext';
 
-export default function ToggleColorMode({ ...rest }) {
+export default function ToggleColorMode({ color = 'inherit', size = 'small', ...rest }) {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
+  const t = useTranslations('ToggleColorMode');
 
   return (
-    <IconButton onClick={colorMode.toggleColorMode} color="inherit" {...rest}>
-      {theme.palette.mode === 'dark' ? <LightModeIcon /> : <ModeNightIcon />}
-    </IconButton>
+    <Button onClick={colorMode.toggleColorMode} color={color} size={size} {...rest}>
+      {t('mode')}: {theme.palette.mode === 'dark' ? t('on') : t('off')}
+    </Button>
   );
 }
