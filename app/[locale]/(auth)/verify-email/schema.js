@@ -1,9 +1,18 @@
+'use client';
+
 import * as yup from 'yup';
+import { useTranslations } from 'next-intl';
 
-export const schema = yup.object().shape({
-  verificationCode: yup.string().required('required'),
-});
+export function useSchema() {
+  const t = useTranslations('auth/verify-email/schema');
 
-export const defaultValues = {
-  verificationCode: '',
-};
+  const schema = yup.object().shape({
+    verificationCode: yup.string().required(t('verificationCode/required')),
+  });
+
+  const defaultValues = {
+    verificationCode: '',
+  };
+
+  return { schema, defaultValues };
+}

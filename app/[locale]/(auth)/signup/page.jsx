@@ -1,11 +1,11 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/navigation';
 import { useTranslations } from 'next-intl';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { schema, defaultValues } from './schema';
+import { useSchema } from './schema';
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
@@ -16,12 +16,10 @@ import Button from '@mui/material/Button';
 import Input from '@/components/Input';
 import Checkbox from '@/components/Checkbox';
 
-export default function Page({ params: { locale } }) {
+export default function Page() {
   const router = useRouter();
-  const t = {
-    label: useTranslations('FormLabel'),
-    page: useTranslations('SignUpPage'),
-  };
+  const t = useTranslations('auth/signup');
+  const { schema, defaultValues } = useSchema();
 
   const {
     control,
@@ -50,14 +48,14 @@ export default function Page({ params: { locale } }) {
     //     // An error happened.
     //     setError('password', { message: t(`firebase:${error.code}`) });
     //   });
-    router.push(`/${locale}/welcome`);
+    router.push('/welcome');
   };
 
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)}>
       <div>
         <Typography component="h1" variant="h5" align="center">
-          {t.page('title')}
+          {t('title')}
         </Typography>
         <Typography
           component="p"
@@ -66,7 +64,7 @@ export default function Page({ params: { locale } }) {
           align="center"
           className="whitespace-pre-line mt-1"
         >
-          {t.page('description')}
+          {t('description')}
         </Typography>
       </div>
       <div className="mt-6">
@@ -77,7 +75,7 @@ export default function Page({ params: { locale } }) {
               control={control}
               type="email"
               name="email"
-              label={t.label('email-address')}
+              label={t('email')}
               autoComplete="email"
               autoFocus
               fullWidth
@@ -89,7 +87,7 @@ export default function Page({ params: { locale } }) {
               control={control}
               type="password"
               name="password"
-              label={t.label('password')}
+              label={t('password')}
               autoComplete="new-password"
               fullWidth
             />
@@ -100,19 +98,19 @@ export default function Page({ params: { locale } }) {
               control={control}
               type="password"
               name="confirmPassword"
-              label={t.label('confirm-password')}
+              label={t('confirm-password')}
               autoComplete="new-password"
               fullWidth
             />
           </Grid>
           <Grid item xs={12}>
-            <Checkbox control={control} name="terms" label={t.label('terms-of-service')} />
+            <Checkbox control={control} name="terms" label={t('terms-of-service')} />
           </Grid>
         </Grid>
       </div>
       <div className="mt-6">
         <Button type="submit" disabled={isSubmitting} variant="contained" size="large" fullWidth>
-          {t.page('submit')}
+          {t('submit')}
         </Button>
       </div>
     </form>

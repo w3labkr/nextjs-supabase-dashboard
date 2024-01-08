@@ -1,18 +1,27 @@
+'use client';
+
 import * as yup from 'yup';
+import { useTranslations } from 'next-intl';
 
-export const schema = yup.object().shape({
-  email: yup.string().required('required').email('email-invalid'),
-  password: yup.string().required('required').min(8, 'password-length').max(20, 'password-length'),
-  confirmPassword: yup
-    .string()
-    .required('required')
-    .oneOf([yup.ref('password')], 'password-match'),
-  terms: yup.boolean().required().oneOf([true], 'required'),
-});
+export function useSchema() {
+  const t = useTranslations('auth/signup/schema');
 
-export const defaultValues = {
-  email: '',
-  password: '',
-  confirmPassword: '',
-  terms: false,
-};
+  const schema = yup.object().shape({
+    email: yup.string().required(t('email/required')).email(t('email/valid')),
+    password: yup.string().required(t('password/required')).min(8, t('password/min')).max(20, t('password/max')),
+    confirmPassword: yup
+      .string()
+      .required(t('password/required'))
+      .oneOf([yup.ref('password')], t('password/valid')),
+    terms: yup.boolean().required().oneOf([true], t('terms/required')),
+  });
+
+  const defaultValues = {
+    email: '',
+    password: '',
+    confirmPassword: '',
+    terms: false,
+  };
+
+  return { schema, defaultValues };
+}

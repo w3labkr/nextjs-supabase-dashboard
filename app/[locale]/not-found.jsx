@@ -1,7 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
+import { useRouter } from '@/navigation';
+import { useTranslations } from 'next-intl';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Header from '@/components/StickyHeader';
@@ -14,8 +14,7 @@ import Button from '@/components/LinkButton';
 
 export default function NotFoundPage() {
   const router = useRouter();
-  const locale = useLocale();
-  const t = useTranslations('NotFoundPage');
+  const t = useTranslations('not-found');
 
   return (
     <>
@@ -35,7 +34,7 @@ export default function NotFoundPage() {
               <Button onClick={() => router.back()} variant="outlined" className="inline-block mr-2" disableElevation>
                 {t('back')}
               </Button>
-              <Button onClick={() => router.push(`/${locale}`)} variant="outlined" disableElevation>
+              <Button onClick={() => router.push('/')} variant="outlined" disableElevation>
                 {t('home')}
               </Button>
             </div>

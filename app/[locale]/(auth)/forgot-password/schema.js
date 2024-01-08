@@ -1,9 +1,18 @@
+'use client';
+
 import * as yup from 'yup';
+import { useTranslations } from 'next-intl';
 
-export const schema = yup.object().shape({
-  email: yup.string().required('required').email('email-invalid'),
-});
+export function useSchema() {
+  const t = useTranslations('auth/forgot-password/schema');
 
-export const defaultValues = {
-  email: '',
-};
+  const schema = yup.object().shape({
+    email: yup.string().required(t('email/required')).email(t('email/valid')),
+  });
+
+  const defaultValues = {
+    email: '',
+  };
+
+  return { schema, defaultValues };
+}

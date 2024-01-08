@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { StyledEngineProvider, ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ColorModeContext } from './ColorModeContext.js';
 import { lightTheme, darkTheme } from './themes';
@@ -26,13 +27,20 @@ export default function MuiProvider({ children, defaultMode = 'light' }) {
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
   return (
-    <AppRouterCacheProvider>
-      <ColorModeContext.Provider value={colorMode}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          {children}
-        </ThemeProvider>
-      </ColorModeContext.Provider>
-    </AppRouterCacheProvider>
+    <StyledEngineProvider injectFirst>
+      <AppRouterCacheProvider>
+        <ColorModeContext.Provider value={colorMode}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            {children}
+          </ThemeProvider>
+        </ColorModeContext.Provider>
+      </AppRouterCacheProvider>
+    </StyledEngineProvider>
   );
 }
+
+MuiProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+  defaultMode: PropTypes.string,
+};

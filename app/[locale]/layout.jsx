@@ -1,6 +1,5 @@
 import { NextIntlClientProvider, useMessages } from 'next-intl';
 import useTextDirection from '@/lib/next-intl/useTextDirection';
-import { StyledEngineProvider } from '@mui/material/styles';
 import MuiProvider from '@/lib/mui/MuiProvider';
 
 export const metadata = {
@@ -16,11 +15,9 @@ export default function LocaleLayout({ children, params: { locale } }) {
     <html lang={locale} dir={direction}>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <StyledEngineProvider injectFirst>
-            <MuiProvider defaultMode="light">
-              <div id="__next">{children}</div>
-            </MuiProvider>
-          </StyledEngineProvider>
+          <MuiProvider defaultMode="light">
+            <div id="__next">{children}</div>
+          </MuiProvider>
         </NextIntlClientProvider>
       </body>
     </html>

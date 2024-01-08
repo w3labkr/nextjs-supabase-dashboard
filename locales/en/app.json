@@ -1,0 +1,100 @@
+{
+    "auth/farewell": {
+        "title": "Farewell!",
+        "description": "Your are one of the best people!\nI will never forget you until we meet again.",
+        "button": "Go Home"
+    },
+    "auth/forgot-password": {
+        "title": "Forgot password?",
+        "description": "Enter your email address to receive a verification code.",
+        "email": "Email",
+        "submit": "Continue"
+    },
+    "auth/forgot-password/schema": {
+        "email/required": "Email is required.",
+        "email/valid": "Email is invalid."
+    },
+    "auth/reset-password": {
+        "title": "Reset password",
+        "description": "",
+        "password": "Password",
+        "confirm-password": "Confirm Password",
+        "submit": "Submit"
+    },
+    "auth/reset-password/schema": {
+        "password/required": "Password is required.",
+        "password/valid": "Passwords do not match.",
+        "password/min": "Password must be between 8 and 20 characters.",
+        "password/max": "Password must be between 8 and 20 characters."
+    },
+    "auth/signin": {
+        "title": "Sign In",
+        "description": "",
+        "email": "Email",
+        "password": "Password",
+        "remember-me": "Remember me",
+        "submit": "Sign In"
+    },
+    "auth/signin/schema": {
+        "email/required": "Email is required.",
+        "email/valid": "Email is invalid.",
+        "password/required": "Password is required.",
+        "password/min": "Password must be between 8 and 20 characters.",
+        "password/max": "Password must be between 8 and 20 characters."
+    },
+    "auth/signout": {
+        "title": "Sign Out!",
+        "description": "You have been logged out.",
+        "button": "Sign in Again"
+    },
+    "auth/signup": {
+        "title": "Sign Up",
+        "description": "",
+        "email": "Email",
+        "password": "Password",
+        "confirm-password": "Confirm Password",
+        "terms-of-service": "Agree to Terms of Service",
+        "submit": "Sign Up"
+    },
+    "auth/signup/schema": {
+        "email/required": "Email is required.",
+        "email/valid": "Email is invalid.",
+        "password/required": "Password is required.",
+        "password/valid": "Passwords do not match.",
+        "password/min": "Password must be between 8 and 20 characters.",
+        "password/max": "Password must be between 8 and 20 characters.",
+        "terms/required": "You must agree to the Terms of Service."
+    },
+    "auth/verify-email": {
+        "title": "Verify your email",
+        "description": "Enter the verification code received by email.",
+        "verification-code": "Verification code",
+        "submit": "Continue"
+    },
+    "auth/verify-email/schema": {
+        "verificationCode/required": "Please enter the verification code."
+    },
+    "auth/welcome": {
+        "title": "Welcome!",
+        "description": "You can now access our content!\nWe've just sent you an email with your login information.\nPlease check your email for your credentials.",
+        "button": "Sign In"
+    },
+    "marketing/about": {
+        "title": "",
+        "description": ""
+    },
+    "marketing/blog": {
+        "title": "",
+        "description": ""
+    },
+    "dashboard/settings": {
+        "title": "",
+        "description": ""
+    },
+    "not-found": {
+        "title": "404",
+        "description": "This page could not be found.",
+        "back": "Go Back",
+        "home": "Go Home"
+    }
+}

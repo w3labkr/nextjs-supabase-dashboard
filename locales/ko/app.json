@@ -1,0 +1,100 @@
+{
+    "auth/farewell": {
+        "title": "안녕히가세요!",
+        "description": "당신은 최고의 사람 중 하나입니다!\n다시 만날 때까지 나는 당신을 결코 잊지 않을 것입니다.",
+        "button": "홈으로"
+    },
+    "auth/forgot-password": {
+        "title": "비밀번호를 잊으셨나요?",
+        "description": "인증번호를 받으려면 이메일 주소를 입력하세요.",
+        "email": "이메일",
+        "submit": "계속하기"
+    },
+    "auth/forgot-password/schema": {
+        "email/required": "이메일을 입력해 주세요.",
+        "email/valid": "올바른 이메일 형식이 아닙니다."
+    },
+    "auth/reset-password": {
+        "title": "비밀번호 재설정",
+        "description": "",
+        "password": "비밀번호",
+        "confirm-password": "비밀번호 확인",
+        "submit": "저장하기"
+    },
+    "auth/reset-password/schema": {
+        "password/required": "비밀번호를 입력해 주세요.",
+        "password/valid": "비밀번호가 일치하지 않습니다.",
+        "password/min": "비밀번호는 8~20자 이내여야 합니다.",
+        "password/max": "비밀번호는 8~20자 이내여야 합니다."
+    },
+    "auth/signin": {
+        "title": "로그인",
+        "description": "",
+        "email": "이메일",
+        "password": "비밀번호",
+        "remember-me": "기억하기",
+        "submit": "로그인"
+    },
+    "auth/signin/schema": {
+        "email/required": "이메일을 입력해 주세요.",
+        "email/valid": "올바른 이메일 형식이 아닙니다.",
+        "password/required": "비밀번호를 입력해 주세요.",
+        "password/min": "비밀번호는 8~20자 이내여야 합니다.",
+        "password/max": "비밀번호는 8~20자 이내여야 합니다."
+    },
+    "auth/signout": {
+        "title": "로그아웃!",
+        "description": "로그아웃되었습니다.",
+        "button": "다시 로그인"
+    },
+    "auth/signup": {
+        "title": "회원가입",
+        "description": "",
+        "email": "이메일",
+        "password": "비밀번호",
+        "confirm-password": "비밀번호 확인",
+        "terms-of-service": "서비스 약관에 동의합니다",
+        "submit": "제출하기"
+    },
+    "auth/signup/schema": {
+        "email/required": "이메일을 입력해 주세요.",
+        "email/valid": "올바른 이메일 형식이 아닙니다.",
+        "password/required": "비밀번호를 입력해 주세요.",
+        "password/valid": "비밀번호가 일치하지 않습니다.",
+        "password/min": "비밀번호는 8~20자 이내여야 합니다.",
+        "password/max": "비밀번호는 8~20자 이내여야 합니다.",
+        "terms/required": "서비스 약관에 동의해야 합니다."
+    },
+    "auth/verify-email": {
+        "title": "이메일 확인",
+        "description": "이메일로 받은 인증번호를 입력하세요.",
+        "verification-code": "인증번호",
+        "submit": "계속하기"
+    },
+    "auth/verify-email/schema": {
+        "verificationCode/required": "인증번호를 입력해 주세요."
+    },
+    "auth/welcome": {
+        "title": "환영합니다!",
+        "description": "이제 콘텐츠에 액세스할 수 있습니다!\n귀하의 로그인 정보가 포함된 이메일을 방금 보내드렸습니다.\n귀하의 자격 증명을 위해 이메일을 확인하십시오.",
+        "button": "로그인"
+    },
+    "marketing/about": {
+        "title": "",
+        "description": ""
+    },
+    "marketing/blog": {
+        "title": "",
+        "description": ""
+    },
+    "dashboard/settings": {
+        "title": "",
+        "description": ""
+    },
+    "not-found": {
+        "title": "404",
+        "description": "페이지를 찾을 수 없습니다.",
+        "back": "이전으로",
+        "home": "홈으로"
+    }
+}

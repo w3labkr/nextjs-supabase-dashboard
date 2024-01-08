@@ -1,10 +1,12 @@
-import { useTranslations } from 'next-intl';
 import { useContext } from 'react';
-import Button from '@mui/material/Button';
+import PropTypes from 'prop-types';
+import { useTranslations } from 'next-intl';
 import { useTheme } from '@mui/material/styles';
+import Button from '@mui/material/Button';
 import { ColorModeContext } from './ColorModeContext';
 
-export default function ToggleColorMode({ color = 'inherit', size = 'small', ...rest }) {
+export default function ToggleColorMode(props) {
+  const { color = 'inherit', size = 'small', ...rest } = props;
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
   const t = useTranslations('ToggleColorMode');
@@ -15,3 +17,8 @@ export default function ToggleColorMode({ color = 'inherit', size = 'small', ...
     </Button>
   );
 }
+
+ToggleColorMode.propTypes = {
+  color: PropTypes.string,
+  size: PropTypes.string,
+};

@@ -1,8 +1,13 @@
 import { createLocalizedPathnamesNavigation } from 'next-intl/navigation';
-import { locales, pathnames, localePrefix } from './next-intl.config';
+import { locales, localePrefix, pathnames } from '@/next-intl.config';
 
-export const { Link, redirect, usePathname, useRouter } = createLocalizedPathnamesNavigation({
+/**
+ * Next.js App Router internationalized navigation
+ *
+ * @link https://next-intl-docs.vercel.app/docs/routing/navigation
+ */
+export const { Link, redirect, usePathname, useRouter, getPathname } = createLocalizedPathnamesNavigation({
   locales,
-  pathnames,
   localePrefix,
+  pathnames,
 });

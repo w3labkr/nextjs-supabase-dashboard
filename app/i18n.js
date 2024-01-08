@@ -7,7 +7,7 @@ export default getRequestConfig(async ({ locale }) => {
   if (!locales.includes(locale)) notFound();
 
   return {
-    messages: (await import(`@/locales/${locale}.json`)).default,
+    messages: (await import(`@/locales/${locale}/index.js`)).default,
     // The time zone can either be statically defined, read from the
     // user profile if you store such a setting, or based on dynamic
     // request information like the locale or headers.

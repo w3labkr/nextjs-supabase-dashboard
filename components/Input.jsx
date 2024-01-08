@@ -1,10 +1,8 @@
-import { useTranslations } from 'next-intl';
 import { useController, useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import FormHelperText from '@mui/material/FormHelperText';
 
-export default function Input({ control, name, ...rest }) {
-  const t = useTranslations('SchemaValidation');
+export default function Input({ control, name = '', ...rest }) {
   const {
     field,
     fieldState: { invalid, isTouched, isDirty, error },
@@ -24,7 +22,7 @@ export default function Input({ control, name, ...rest }) {
         inputRef={field.ref} // send input ref, so we can focus on input when error appear
         {...rest}
       />
-      {error && <FormHelperText error={!!error}>{t(error.message)}</FormHelperText>}
+      {error && <FormHelperText error={!!error}>{error.message}</FormHelperText>}
     </>
   );
 }

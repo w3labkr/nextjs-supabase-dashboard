@@ -1,11 +1,11 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/navigation';
 import { useTranslations } from 'next-intl';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { schema, defaultValues } from './schema';
+import { useSchema } from './schema';
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
@@ -15,12 +15,10 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Input from '@/components/Input';
 
-export default function Page({ params: { locale } }) {
+export default function Page() {
   const router = useRouter();
-  const t = {
-    label: useTranslations('FormLabel'),
-    page: useTranslations('ForgotPasswordPage'),
-  };
+  const t = useTranslations('auth/forgot-password');
+  const { schema, defaultValues } = useSchema();
 
   const {
     control,
@@ -38,14 +36,14 @@ export default function Page({ params: { locale } }) {
 
     console.log(data);
 
-    router.push(`/${locale}/verify-email`);
+    router.push('/verify-email');
   };
 
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)}>
       <div>
         <Typography component="h1" variant="h5" align="center">
-          {t.page('title')}
+          {t('title')}
         </Typography>
         <Typography
           component="p"
@@ -54,7 +52,7 @@ export default function Page({ params: { locale } }) {
           align="center"
           className="whitespace-pre-line mt-1"
         >
-          {t.page('description')}
+          {t('description')}
         </Typography>
       </div>
       <div className="mt-6">
@@ -65,7 +63,7 @@ export default function Page({ params: { locale } }) {
               control={control}
               type="email"
               name="email"
-              label={t.label('email-address')}
+              label={t('email')}
               autoComplete="email"
               autoFocus
               fullWidth
@@ -75,7 +73,7 @@ export default function Page({ params: { locale } }) {
       </div>
       <div className="mt-6">
         <Button type="submit" disabled={isSubmitting} variant="contained" size="large" fullWidth>
-          {t.page('submit')}
+          {t('submit')}
         </Button>
       </div>
     </form>

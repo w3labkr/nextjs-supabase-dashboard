@@ -9,12 +9,10 @@ The folder and file structure is based on nextjs app router [Next.js Project Str
 ```txt
 .
 ├── app/                        # App Router
-│   └── [lng]/                  # Dynamic route segment
-│   │   └── <page>/             # Route segment
-│   │   │   └── _components/    # Opt folder and all child segments out of routing
+│   ├── [locale]/               # Dynamic route segment
+│   │   ├── <page>/             # Route segment
 │   │   ├── layout.js           # Layout
 │   │   └── page.js             # Page
-│   ├── i18n/
 │   ├── icon.js                 # Generated App Icon
 │   ├── apple-icon.js           # Generated Apple App Icon
 │   ├── opengraph-image.js      # Generated Open Graph image
@@ -27,6 +25,8 @@ The folder and file structure is based on nextjs app router [Next.js Project Str
 ├── hooks/
 ├── lib/                        # Utility functions that aren't necessarily bound to React or Next.js
 │   └── firebase/               # Firebase-specific code and Firebase configuration
+├── locales/
+│   └── <locale>/
 ├── public/                     # Static assets to be served
 ├── styles/
 ├── .env                        # Environment variables
@@ -133,6 +133,14 @@ Internationalization (i18n) for Next.js that gets out of your way.
 npm install next-intl rtl-detect
 ```
 
+Getting started
+
+- `next.config.js`: Set up the plugin which creates an alias to import your i18n configuration into Server Components.
+- `i18n.js`: Creates a configuration once per request.
+- `middleware.js`: The middleware matches a locale for the request and handles redirects and rewrites accordingly.
+- `next-intl.config.js`
+- `navigation.js`
+
 ## Schema Validation
 
 React Hooks for form state management and validation (Web + React Native).
@@ -160,6 +168,12 @@ A modern JavaScript utility library delivering modularity, performance, & extras
 
 ```shell
 npm install lodash
+```
+
+A simple javascript utility for conditionally joining classNames together.
+
+```shell
+npm install classnames
 ```
 
 ## ESLint

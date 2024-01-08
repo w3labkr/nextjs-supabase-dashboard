@@ -1,0 +1,22 @@
+{
+    "AppBar": {
+        "signin": "로그인",
+        "signup": "회원가입"
+    },
+    "AuthNav": {
+        "forgot-password": "비밀번호를 잊으셨나요?",
+        "signin": "이미 계정이 있습니까?",
+        "signup": "계정이 없나요?"
+    },
+    "ToggleColorMode": {
+        "mode": "어두운 테마",
+        "on": "사용 중",
+        "off": "사용 중지됨"
+    },
+    "LocaleSwitcher": {
+        "button": "언어: 한국어",
+        "dialog-title": "언어 및 지역",
+        "dialog-cancel": "취소",
+        "dialog-ok": "저장"
+    }
+}

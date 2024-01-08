@@ -1,11 +1,9 @@
-import { useTranslations } from 'next-intl';
 import { useController, useForm } from 'react-hook-form';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import MuiCheckbox from '@mui/material/Checkbox';
 
 export default function Checkbox({ control, name, ...rest }) {
-  const t = useTranslations('SchemaValidation');
   const {
     field,
     fieldState: { invalid, isTouched, isDirty, error },
@@ -28,7 +26,7 @@ export default function Checkbox({ control, name, ...rest }) {
       />
       {error && (
         <FormHelperText error={!!error} className="!-mt-2">
-          {t(error.message)}
+          {error.message}
         </FormHelperText>
       )}
     </>

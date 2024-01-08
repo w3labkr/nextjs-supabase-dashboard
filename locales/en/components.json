@@ -1,0 +1,22 @@
+{
+    "AppBar": {
+        "signin": "Sign In",
+        "signup": "Sign Up"
+    },
+    "AuthNav": {
+        "forgot-password": "Forgot password?",
+        "signin": "Already have an account?",
+        "signup": "Don't have an account?"
+    },
+    "ToggleColorMode": {
+        "mode": "Dark theme",
+        "on": "on",
+        "off": "off"
+    },
+    "LocaleSwitcher": {
+        "button": "Language: English",
+        "dialog-title": "Language and Region",
+        "dialog-cancel": "Cancel",
+        "dialog-ok": "Ok"
+    }
+}

@@ -4,8 +4,8 @@ import { useTranslations } from 'next-intl';
 import Typography from '@mui/material/Typography';
 import Button from '@/components/LinkButton';
 
-export default function Page({ params: { locale } }) {
-  const t = useTranslations('WelcomePage');
+export default function Page() {
+  const t = useTranslations('auth/welcome');
 
   return (
     <div className="text-center">
@@ -18,7 +18,7 @@ export default function Page({ params: { locale } }) {
         </Typography>
       </div>
       <div className="mt-6">
-        <Button href={`/${locale}/signin`} variant="outlined" disableElevation>
+        <Button href="/signin" variant="outlined" disableElevation>
           {t('button')}
         </Button>
       </div>
