@@ -18,5 +18,9 @@
         "dialog-title": "언어 및 지역",
         "dialog-cancel": "취소",
         "dialog-ok": "저장"
+    },
+    "Gallery": {
+        "fetch-error": "데이터를 불러오지 못했습니다.",
+        "no-more": "더 이상 데이터가 없습니다."
     }
 }

@@ -18,5 +18,9 @@
         "dialog-title": "Language and Region",
         "dialog-cancel": "Cancel",
         "dialog-ok": "Ok"
+    },
+    "Gallery": {
+        "fetch-error": "failed to load data.",
+        "no-more": "No more data."
     }
 }

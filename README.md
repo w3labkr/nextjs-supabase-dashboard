@@ -41,7 +41,7 @@ Prompts:
 
 - Would you like to use TypeScript? `No`
 - Would you like to use ESLint? `Yes`
-- Would you like to use Tailwind CSS? `No`
+- Would you like to use Tailwind CSS? `Yes`
 - Would you like to use `src/` directory? `No`
 - Would you like to use App Router? (recommended) `Yes`
 - Would you like to customize the default import alias (@/*)? `No`
@@ -51,10 +51,22 @@ Prompts:
 npx create-next-app@latest . --typescript
 ```
 
+React Hooks for Data Fetching
+
+```shell
+npm install swr
+```
+
 Keeping Server-only Code out of the Client Environment
 
 ```shell
 npm install server-only
+```
+
+Runtime type checking for React props and similar objects
+
+```shell
+npm install prop-types
 ```
 
 Set the current Node.js version.
@@ -120,10 +132,25 @@ npm install --save-dev tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 ```
 
-Configure
+A tiny (239B) utility for constructing `className` strings conditionally.
 
-- <https://tailwindcss.com/docs/guides/nextjs>
-- <https://mui.com/material-ui/guides/interoperability/#tailwind-css>
+```shell
+npm install clsx
+```
+
+Merge Tailwind CSS classes without style conflicts
+
+```shell
+npm install tailwind-merge
+```
+
+Using 'clsx' or 'classnames' with 'tailwind-merge'
+
+```typescript
+import clsx, { ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+export const cn = (...classes: ClassValue[]) => twMerge(clsx(...classes));
+```
 
 ## Internationalization
 
@@ -150,13 +177,64 @@ npm install react-hook-form
 npm install @hookform/resolvers yup
 ```
 
-## Utils
+## Authentication
 
-Runtime type checking for React props and similar objects
+Authentication for the Web.
 
 ```shell
-npm install prop-types
+npm install next-auth
 ```
+
+Generate next auth secret
+
+```shell
+openssl rand -base64 32
+```
+
+## Firebase Auth
+
+Firebase provides the tools and infrastructure you need to develop, grow, and earn money from your app.
+
+```shell
+npm install -g firebase-tools
+npm install firebase firebase-admin
+```
+
+- Hosting: Configure files for Firebase Hosting and (optionally) Set up GitHub Action deploys
+- Detected an existing Next.js codebase in the current directory, should we use this? `Yes`
+- Set up automatic builds and deploys with Github? `No`
+
+```shell
+firebase init
+```
+
+Edit firebase rules
+
+- `firebase.json`
+- `firestore.indexes.json`
+- `firestore.rules`
+- `storage.rules`
+
+Start the firebase emulator.
+
+```shell
+firebase emulators:start
+```
+
+Set the expiration of a preview channel.
+
+```shell
+firebase init hosting
+firebase hosting:channel:deploy preview --expires 1h
+```
+
+Start firebase deployment.
+
+```shell
+firebase deploy
+```
+
+## Utils
 
 Generate RFC-compliant UUIDs in JavaScript
 
@@ -168,12 +246,6 @@ A modern JavaScript utility library delivering modularity, performance, & extras
 
 ```shell
 npm install lodash
-```
-
-A simple javascript utility for conditionally joining classNames together.
-
-```shell
-npm install classnames
 ```
 
 ## ESLint
@@ -203,81 +275,6 @@ Find and fix problems in your JavaScript code.
 ```shell
 npx eslint ./app
 npx eslint --fix ./app
-```
-
-## Firebase Auth
-
-Firebase provides the tools and infrastructure you need to develop, grow, and earn money from your app.
-
-```shell
-npm install -g firebase-tools
-npm install firebase firebase-admin
-```
-
-- Hosting: Configure files for Firebase Hosting and (optionally) Set up GitHub Action deploys
-- Detected an existing Next.js codebase in the current directory, should we use this? `Yes`
-- Set up automatic builds and deploys with Github? `No`
-
-```shell
-firebase init
-```
-
-Edit `firebase.json`:
-
-```json
-{
-    "firestore": {
-        "rules": "firestore.rules",
-        "indexes": "firestore.indexes.json"
-    },
-    "storage": {
-        "rules": "storage.rules"
-    }
-}
-```
-
-Edit `firestore.indexes.json`
-
-```json
-{
-    "indexes": [],
-    "fieldOverrides": []
-}
-```
-
-Edit `firestore.rules`:
-
-```javascript
-service cloud.firestore {
-    allow read, write: if true;
-}
-```
-
-Edit `storage.rules`:
-
-```javascript
-service firebase.storage {
-    allow read, write: if true;
-}
-```
-
-Start the firebase emulator.
-
-```shell
-firebase emulators:start
-```
-
-Set the expiration of a preview channel.
-
-```shell
-firebase init hosting
-firebase hosting:channel:deploy preview --expires 1h
-```
-
-Start firebase deployment.
-
-```shell
-firebase deploy
 ```
 
 ## Troubleshooting

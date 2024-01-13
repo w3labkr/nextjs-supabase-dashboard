@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSchema } from './schema';
 
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/lib/firebase/config';
+// import { signInWithEmailAndPassword } from 'firebase/auth';
+// import { auth } from '@/lib/firebase/config';
 
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';

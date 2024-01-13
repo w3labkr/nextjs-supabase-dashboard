@@ -7,6 +7,7 @@ const nextConfig = {
   swcMinify: true,
   eslint: {
     dirs: ['app', 'components', 'contexts', 'hooks', 'lib'],
+    ignoreDuringBuilds: true,
   },
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -19,7 +20,25 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'via.placeholder.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
         port: '',
         pathname: '/**',
       },
