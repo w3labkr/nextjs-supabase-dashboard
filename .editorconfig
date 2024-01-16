@@ -85,11 +85,11 @@ indent_size = 2
 # JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write.
 # https://www.json.org/json-en.html
 [*.json]
-indent_size = 4
+indent_size = 2
 insert_final_newline = false
 
 # Extensible Markup Language (XML) is a simple, very flexible text format derived from SGML (ISO 8879).
 # https://www.w3.org/XML/
 [*.xml]
-indent_size = 4
+indent_size = 2
 insert_final_newline = false

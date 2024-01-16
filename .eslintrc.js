@@ -6,7 +6,10 @@ module.exports = {
     node: true,
     es2021: true,
   },
+  parser: '@typescript-eslint/parser',
   parserOptions: {
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
     ecmaFeatures: {
       jsx: true,
     },
@@ -18,17 +21,41 @@ module.exports = {
     'plugin:import/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-type-checked',
+    'plugin:import/typescript',
     'next',
     'plugin:prettier/recommended',
   ],
-  plugins: ['import', 'react', 'react-hooks', 'prettier'],
+  plugins: ['@typescript-eslint', 'import', 'react', 'react-hooks', 'prettier'],
   rules: {
     // 'React' must be in scope when using JSX react/react-in-jsx-scope`
     'react/react-in-jsx-scope': 'off',
     // Unable to resolve path to module ...
-    'import/no-unresolved': 'off',
-    // ... is defined but never used.
-    'no-unused-vars': 'warn',
+    'import/no-unresolved': 'warn',
+    // Using exported name ... as identifier for default export.
+    'import/no-named-as-default': 'off',
+    //  Disallow unused variables
+    '@typescript-eslint/no-unused-vars': 'warn',
+    // Promise-returning function provided to attribute where a void return was expected.
+    '@typescript-eslint/no-misused-promises': 'off',
+    // Unexpected any.
+    // '@typescript-eslint/no-unsafe-argument': 'off',
+    // '@typescript-eslint/no-unsafe-member-access': 'off',
+    // '@typescript-eslint/no-unsafe-assignment': 'off',
+    // '@typescript-eslint/no-unsafe-return': 'off',
+    // '@typescript-eslint/no-unsafe-call': 'off',
+    // '@typescript-eslint/no-explicit-any': 'off',
+    // Async function has no 'await' expression.
+    '@typescript-eslint/require-await': 'off',
   },
-  ignorePatterns: ['*.config.js'],
+  ignorePatterns: ['.eslintrc.js', '*.config.js', '*.config.ts'],
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      typescript: {},
+    },
+  },
 };

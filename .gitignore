@@ -155,5 +155,5 @@ sketch
 # Env file
 .env
 
-# Configure file
-/configs
+# contentlayer
+.contentlayer

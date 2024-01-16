@@ -1,6 +1,7 @@
 {
     // Configure [glob patterns](https://aka.ms/vscode-glob-patterns) of file associations to languages (for example `"*.extension": "html"`). Patterns will match on the absolute path of a file if they contain a path separator and will match on the name of the file otherwise. These have precedence over the default associations of the languages installed.
     "files.associations": {
+        "*.mdx": "markdown",
         "*.css": "tailwindcss"
     },
 
@@ -77,41 +78,29 @@
     // Configure settings to be overridden for the javascript language.
     "[javascript]": {
         "editor.tabSize": 2,
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-        "editor.formatOnSave": false,
-        "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": true
-        }
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
     },
 
     // Configure settings to be overridden for the javascriptreact language.
     "[javascriptreact]": {
         "editor.tabSize": 2,
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-        "editor.formatOnSave": false,
-        "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": true
-        }
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
     },
 
     // Configure settings to be overridden for the typescript language.
     "[typescript]": {
         "editor.tabSize": 2,
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-        "editor.formatOnSave": false,
-        "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": true
-        }
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
     },
 
     // Configure settings to be overridden for the typescriptreact language.
     "[typescriptreact]": {
         "editor.tabSize": 2,
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-        "editor.formatOnSave": false,
-        "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": true
-        }
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
     },
 
     // Configure settings to be overridden for the shellscript language.
@@ -141,27 +130,20 @@
 
     // Configure settings to be overridden for the json language.
     "[json]": {
-        "editor.tabSize": 4,
+        "editor.tabSize": 2,
         "editor.defaultFormatter": "vscode.json-language-features",
         "editor.formatOnSave": false,
     },
 
     // Configure settings to be overridden for the jsonc language.
     "[jsonc]": {
-        "editor.tabSize": 4,
+        "editor.tabSize": 2,
         "editor.defaultFormatter": "vscode.json-language-features",
         "editor.formatOnSave": false,
     },
 
     // Configure settings to be overridden for the xml language.
     "[xml]": {
-        "editor.tabSize": 4
-    },
-
-    // Misc
-    "[javascript][javascriptreact][typescript][typescriptreact]": {
-        "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": "explicit"
-        }
+        "editor.tabSize": 2
     }
 }
