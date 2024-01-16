@@ -49,7 +49,8 @@ module.exports = {
     // Async function has no 'await' expression.
     '@typescript-eslint/require-await': 'off',
   },
-  ignorePatterns: ['.eslintrc.js', '*.config.js', '*.config.ts'],
+  // ignorePatterns: ['.eslintrc.js', '*.config.js', '*.config.ts'],
+  ignorePatterns: ['.eslintrc.js', '*.config.js'],
   settings: {
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],

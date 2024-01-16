@@ -102,7 +102,7 @@ Edit `packages.json`:
 After cleaning the directories and cache, install the dependency packages.
 
 ```shell
-npm run reinstall
+npm run --force reinstall
 ```
 
 ## Shadcn UI
@@ -291,7 +291,8 @@ Could not resolve dependency: Edit `package.json`
 Transform markdown into HTML:
 
 ```shell
-npm install remark-gfm rehype-slug rehype-autolink-headings rehype-pretty-code 
+npm install remark-gfm rehype-slug rehype-autolink-headings
+npm install rehype rehype-pretty-code@0.10.2 shiki
 ```
 
 ## Utils
@@ -364,3 +365,7 @@ Type error: '"embla-carousel-react"' has no exported member named 'EmblaCarousel
 ```typescript
 
 ```
+
+- `./contentlayer.config.ts`
+
+Type error: downgrade 0.12.3 to 0.10.2

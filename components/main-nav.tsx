@@ -2,16 +2,16 @@
 
 import { useState } from 'react';
 import { Link, usePathname } from '@/navigation';
+import { cn } from '@/lib/utils';
 
-import { LuCommand, LuX } from 'react-icons/lu';
 import { Button } from '@/components/ui/button';
 import { MobileNav } from '@/components/mobile-nav';
-import { cn } from '@/lib/utils';
+import { LuCommand, LuX } from 'react-icons/lu';
 
 const navItems = [
   { title: 'Home', href: '/', disabled: false },
   { title: 'Typography', href: '/typography', disabled: false },
-  { title: 'Disabled', href: '/disabled', disabled: true },
+  { title: 'Disabled', href: '', disabled: true },
 ];
 
 export function MainNav() {
@@ -37,13 +37,13 @@ export function MainNav() {
             variant="link"
             className={cn(
               'flex items-center text-sm font-medium p-0',
-              pathname === item.href ? '' : 'text-muted-foreground',
-              item.disabled ? 'cursor-not-allowed' : ''
+              pathname !== item.href && 'text-muted-foreground',
+              item.disabled && 'cursor-not-allowed opacity-60'
             )}
             asChild
             disabled={item.disabled}
           >
-            <Link href={item.disabled ? '' : item.href} scroll={false}>
+            <Link href={item.href} scroll={false}>
               {item.title}
             </Link>
           </Button>

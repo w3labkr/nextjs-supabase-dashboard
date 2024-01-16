@@ -1,15 +1,20 @@
-import * as React from 'react';
-import Link from 'next/link';
+'use client';
 
-import { LuCommand } from 'react-icons/lu';
+import { Link, usePathname } from '@/navigation';
 import { cn } from '@/lib/utils';
-import { useLockBody } from '@/hooks/use-lock-body';
 
-export function MobileNav({
-  items,
-}: {
-  items: [{ title: string; href: string; disabled: boolean }];
-}) {
+import { useLockBody } from '@/hooks/use-lock-body';
+import { Button } from '@/components/ui/button';
+import { LuCommand } from 'react-icons/lu';
+
+interface NavItemProps {
+  title: string;
+  href: string;
+  disabled: boolean;
+}
+
+export function MobileNav({ items }: { items: NavItemProps[] }) {
+  const pathname = usePathname();
   useLockBody();
 
   return (
@@ -25,16 +30,21 @@ export function MobileNav({
         </Link>
         <nav className="grid grid-flow-row auto-rows-max text-sm">
           {items.map((item, index) => (
-            <Link
+            <Button
               key={index}
-              href={item.disabled ? '#' : item.href}
+              variant="link"
               className={cn(
                 'flex w-full items-center rounded-md p-2 text-sm font-medium hover:underline',
+                pathname !== item.href && 'text-muted-foreground',
                 item.disabled && 'cursor-not-allowed opacity-60'
               )}
+              asChild
+              disabled={item.disabled}
             >
-              {item.title}
-            </Link>
+              <Link href={item.href} scroll={false}>
+                {item.title}
+              </Link>
+            </Button>
           ))}
         </nav>
       </div>

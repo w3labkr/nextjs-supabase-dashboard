@@ -2,12 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { withAuth } from 'next-auth/middleware';
 import createMiddleware from 'next-intl/middleware';
-import {
-  defaultLocale,
-  locales,
-  localePrefix,
-  pathnames,
-} from './next-intl.config';
+import { defaultLocale, locales, localePrefix } from './next-intl.config';
 
 const publicPages = [
   '/',
@@ -27,7 +22,6 @@ const intlMiddleware = createMiddleware({
   defaultLocale,
   localePrefix,
   locales,
-  pathnames,
 });
 
 const authMiddleware = withAuth(
