@@ -1,55 +1,13 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { withAuth } from 'next-auth/middleware';
 import createMiddleware from 'next-intl/middleware';
 import { defaultLocale, locales, localePrefix } from './next-intl.config';
 
-const publicPages = [
-  '/',
-  '/login',
-  '/register',
-  // '/forgot-password',
-  // '/verify-email',
-  // '/reset-password',
-  '/terms',
-  '/privacy',
-  '/posts',
-  '/posts/.*',
-  '/typography',
-];
-
-const intlMiddleware = createMiddleware({
+export default createMiddleware({
   defaultLocale,
   localePrefix,
   locales,
 });
-
-const authMiddleware = withAuth(
-  // Note that this callback is only invoked if
-  // the `authorized` callback has returned `true`
-  // and not for pages listed in `pages`.
-  (req) => intlMiddleware(req),
-  {
-    callbacks: {
-      authorized: ({ token }) => token != null,
-    },
-    pages: {
-      signIn: '/login',
-    },
-  }
-);
-
-export default function middleware(req: NextRequest) {
-  const pattern = `^(/(${locales.join('|')}))?(${publicPages.flatMap((p) => (p === '/' ? ['', '/'] : p)).join('|')})/?$`;
-  const publicPathnameRegex = RegExp(pattern, 'i');
-  const isPublicPage = publicPathnameRegex.test(req.nextUrl.pathname);
-
-  if (isPublicPage) {
-    return intlMiddleware(req);
-  } else {
-    return (authMiddleware as any)(req);
-  }
-}
 
 export const config = {
   matcher: [
@@ -62,6 +20,6 @@ export const config = {
 
     // Enable redirects that add missing locales
     // (e.g. `/pathnames` -> `/en/pathnames`)
-    '/((?!api|_next|_vercel|.*\\..*).*)',
+    '/((?!api|_next|_vercel|favicon.ico|.*\\..*).*)',
   ],
 };

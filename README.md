@@ -1,6 +1,6 @@
-# nextjs-ninja
+# NextJS Ninja
 
-Nextjs-Ninja is a TypeScript [Nextjs](https://nextjs.org/) template for [shadcn/ui](https://ui.shadcn.com/) based app router using [tailwindcss](https://tailwindcss.com/), [next-intl](https://next-intl-docs.vercel.app/) and [next-auth](https://next-auth.js.org/).
+NextJS Ninja is a starter template for the [NextJS](https://nextjs.org/) 14 app router based on [shadcn/ui](https://ui.shadcn.com/).
 
 ## Folder and file Structure
 
@@ -11,27 +11,25 @@ The folder and file structure is based on nextjs app router [Next.js Project Str
 ├── app/                        # App Router
 │   ├── [locale]/               # Dynamic route segment
 │   │   ├── <page>/             # Route segment
-│   │   ├── layout.js           # Layout
-│   │   └── page.js             # Page
-│   ├── icon.js                 # Generated App Icon
-│   ├── apple-icon.js           # Generated Apple App Icon
-│   ├── opengraph-image.js      # Generated Open Graph image
-│   ├── twitter-image.js        # Generated Twitter image
-│   ├── robots.js               # Generated Robots file
-│   └── sitemap.js              # Generated Sitemap
+│   │   ├── layout.ts           # Layout
+│   │   └── page.ts             # Page
+│   ├── icon.ts                 # Generated App Icon
+│   ├── apple-icon.ts           # Generated Apple App Icon
+│   ├── opengraph-image.ts      # Generated Open Graph image
+│   ├── twitter-image.ts        # Generated Twitter image
+│   ├── robots.ts               # Generated Robots file
+│   └── sitemap.ts              # Generated Sitemap
 ├── components/                 # React components for filters, headers
 ├── config/
 ├── content/                    # Content Layer
 ├── hooks/
 ├── lib/                        # Utility functions that aren't necessarily bound to React or Next.js
-│   └── firebase/               # Firebase-specific code and Firebase configuration
 ├── locales/
-│   └── <locale>/
 ├── public/                     # Static assets to be served
 ├── styles/
 ├── .env                        # Environment variables
 ├── package.json                # Project dependencies and scripts
-├── middleware.js               # Next.js request middleware
+├── middleware.ts               # Next.js request middleware
 └── next.config.js              # Configuration file for Next.js
 ```
 
@@ -73,6 +71,12 @@ Start the development server.
 
 ```shell
 npm run dev
+```
+
+Deploy app to Vercel
+
+```shell
+vercel deploy
 ```
 
 ## Configuration
@@ -178,7 +182,7 @@ import { twMerge } from 'tailwind-merge';
 export const cn = (...classes: ClassValue[]) => twMerge(clsx(...classes));
 ```
 
-## Internationalization
+## Internationalization (i18n)
 
 Internationalization (i18n) for Next.js that gets out of your way.
 
@@ -205,25 +209,13 @@ npm install zod @hookform/resolvers
 
 ## Authentication
 
-Authentication for the Web.
-
-```shell
-npm install next-auth
-```
-
-Generate next auth secret
-
-```shell
-openssl rand -base64 32
-```
-
-## Firebase Auth
-
 Firebase provides the tools and infrastructure you need to develop, grow, and earn money from your app.
 
 ```shell
+# npm ERR! Could not resolve dependency:
+# npm ERR! peer firebase-admin@"^11.0.1" from firebase-frameworks@0.11.1
 npm install -g firebase-tools
-npm install firebase firebase-admin
+npm install firebase firebase-admin@11.11.1
 ```
 
 Prompts:
@@ -231,7 +223,7 @@ Prompts:
 - Realtime Database: Configure a security rules file for Realtime Database and (optionally) provision default instance `No`
 - Firestore: Configure security rules and indexes files for Firestore `Yes`
 - Functions: Configure a Cloud Functions directory and its files `No`
-- Hosting: Configure files for Firebase Hosting and (optionally) Set up GitHub Action deploys `Yes`
+- Hosting: Configure files for Firebase Hosting and (optionally) Set up GitHub Action deploys `No`
 - Hosting: Set up GitHub Action deploys `No`
 - Storage: Configure a security rules file for Cloud Storage `Yes`
 - Emulators: Set up local emulators for Firebase products `Yes`
@@ -241,6 +233,28 @@ Prompts:
 
 ```shell
 firebase init
+```
+
+Create a new project alias.
+
+```shell
+firebase list
+firebase use --add
+```
+
+Initialize the Firebase emulator.
+
+```shell
+# hosting: Port 5000 is not open on localhost (127.0.0.1,::1), could not start Hosting Emulator
+# Port 5000 and 7000 are taken by airplay on MacOS Monterey.
+firebase init emulators
+```
+
+For Mac/Linux, use the Terminal/Shell to find the Process ID (PID), then kill the process.
+
+```shell
+# Error: Could not start Hosting Emulator, port taken.
+lsof -ti tcp:5000 | xargs kill -9 && firebase emulators:start
 ```
 
 Start the firebase emulator.
@@ -262,39 +276,6 @@ Start firebase deployment.
 firebase deploy
 ```
 
-## Markdown and MDX
-
-Install packages needed to render MDX:
-
-```shell
-npm install @next/mdx @mdx-js/loader @mdx-js/react @types/mdx
-```
-
-Content Layer
-
-```shell
-npm install contentlayer next-contentlayer date-fns
-```
-
-Could not resolve dependency: Edit `package.json`
-
-```json
-{
-    "overrides": {
-        "next-contentlayer": {
-        "next": "$next"
-        }
-    }
-}
-```
-
-Transform markdown into HTML:
-
-```shell
-npm install remark-gfm rehype-slug rehype-autolink-headings
-npm install rehype rehype-pretty-code@0.10.2 shiki
-```
-
 ## Utils
 
 Svg react icons of popular icon packs
@@ -313,6 +294,13 @@ Generate RFC-compliant UUIDs in JavaScript
 
 ```shell
 npm install uuid @types/uuid
+```
+
+Load and save cookies within your Web application
+
+```shell
+npm install nookies
+npm install react-cookie
 ```
 
 ## ESLint
@@ -349,6 +337,14 @@ npx eslint --fix ./components
 npx eslint --fix ./{app,components,hooks,lib}
 ```
 
+## Production
+
+Dependency packages in production for deployment on Vercel hosting.
+
+```shell
+npm uninstall @vercel/analytics @vercel/speed-insights
+```
+
 ## Troubleshooting
 
 - `./components/icons.tsx`  
@@ -365,7 +361,3 @@ Type error: '"embla-carousel-react"' has no exported member named 'EmblaCarousel
 ```typescript
 
 ```
-
-- `./contentlayer.config.ts`
-
-Type error: downgrade 0.12.3 to 0.10.2

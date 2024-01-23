@@ -22,7 +22,6 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-type-checked',
     'plugin:import/typescript',
     'next',
     'plugin:prettier/recommended',
@@ -33,21 +32,11 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     // Unable to resolve path to module ...
     'import/no-unresolved': 'warn',
+    // Disallow unused variables
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn',
     // Using exported name ... as identifier for default export.
     'import/no-named-as-default': 'off',
-    //  Disallow unused variables
-    '@typescript-eslint/no-unused-vars': 'warn',
-    // Promise-returning function provided to attribute where a void return was expected.
-    '@typescript-eslint/no-misused-promises': 'off',
-    // Unexpected any.
-    // '@typescript-eslint/no-unsafe-argument': 'off',
-    // '@typescript-eslint/no-unsafe-member-access': 'off',
-    // '@typescript-eslint/no-unsafe-assignment': 'off',
-    // '@typescript-eslint/no-unsafe-return': 'off',
-    // '@typescript-eslint/no-unsafe-call': 'off',
-    // '@typescript-eslint/no-explicit-any': 'off',
-    // Async function has no 'await' expression.
-    '@typescript-eslint/require-await': 'off',
   },
   // ignorePatterns: ['.eslintrc.js', '*.config.js', '*.config.ts'],
   ignorePatterns: ['.eslintrc.js', '*.config.js'],

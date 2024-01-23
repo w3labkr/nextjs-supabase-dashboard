@@ -1,10 +1,13 @@
-const withNextIntl = require('next-intl/plugin')('./app/i18n.ts');
-const { withContentlayer } = require('next-contentlayer');
+const withNextIntl = require('next-intl/plugin')('./lib/i18n.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  // reactStrictMode: true,
   swcMinify: true,
+  // output: 'export',
+  // exportTrailingSlash: true,
+  // assetPrefix: '/out',
   // Configure `pageExtensions` to include MDX files
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   eslint: {
@@ -47,9 +50,6 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    appDir: true,
-  },
 };
 
-module.exports = withNextIntl(withContentlayer(nextConfig));
+module.exports = withNextIntl(nextConfig);

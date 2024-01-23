@@ -1,63 +1,56 @@
 'use client';
 
 import { useState } from 'react';
-import { Link, usePathname } from '@/navigation';
-import { cn } from '@/lib/utils';
-
-import { Button } from '@/components/ui/button';
-import { MobileNav } from '@/components/mobile-nav';
 import { LuCommand, LuX } from 'react-icons/lu';
 
-const navItems = [
-  { title: 'Home', href: '/', disabled: false },
-  { title: 'Typography', href: '/typography', disabled: false },
-  { title: 'Disabled', href: '', disabled: true },
-];
+import { MainNavItem } from 'types';
+import { siteConfig } from '@/config/site';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { MobileNav } from '@/components/mobile-nav';
+import { Link } from '@/components/link';
+import { NavLink } from '@/components/nav-link';
 
-export function MainNav() {
+export function MainNav({ items }: { items: MainNavItem[] }) {
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
-  const pathname = usePathname();
 
   return (
     <div className="flex gap-6 md:gap-10">
-      <Button
-        variant="link"
+      <Link
+        href="/"
+        scroll={false}
         className="hidden items-center space-x-2 md:flex p-0"
-        asChild
       >
-        <Link href="/" scroll={false}>
-          <LuCommand />
-          <span className="hidden font-bold sm:inline-block">NextJS</span>
-        </Link>
-      </Button>
+        <LuCommand />
+        <span className="hidden font-bold sm:inline-block">
+          {siteConfig.name}
+        </span>
+      </Link>
       <nav className="hidden gap-6 md:flex">
-        {navItems.map((item, index) => (
-          <Button
+        {items.map((item, index) => (
+          <NavLink
             key={index}
-            variant="link"
+            href={item.disabled ? '#' : item.href}
+            scroll={false}
             className={cn(
               'flex items-center text-sm font-medium p-0',
-              pathname !== item.href && 'text-muted-foreground',
               item.disabled && 'cursor-not-allowed opacity-60'
             )}
-            asChild
             disabled={item.disabled}
           >
-            <Link href={item.href} scroll={false}>
-              {item.title}
-            </Link>
-          </Button>
+            {item.title}
+          </NavLink>
         ))}
       </nav>
       <Button
         variant="ghost"
-        className="flex items-center space-x-2 md:hidden p-0"
+        className="flex items-center space-x-2 md:hidden -ml-4"
         onClick={() => setShowMobileMenu(!showMobileMenu)}
       >
         {showMobileMenu ? <LuX /> : <LuCommand />}
         <span className="font-bold">Menu</span>
       </Button>
-      {showMobileMenu && <MobileNav items={navItems} />}
+      {showMobileMenu && <MobileNav items={items} />}
     </div>
   );
 }

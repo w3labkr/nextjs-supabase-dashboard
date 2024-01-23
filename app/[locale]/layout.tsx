@@ -1,12 +1,15 @@
 import type { Metadata } from 'next';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
+import { useTextDirection } from '@/hooks/use-text-direction';
 
 import { fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
-import { useTextDirection } from '@/hooks/use-text-direction';
-import { NextAuthProvider } from '@/components/auth-provider';
-import { ThemeProvider } from '@/components/theme-provider';
+import { ReactCookieProvider } from '@/context/cookie-provider';
+import { ThemeProvider } from '@/context/theme-provider';
 import { TailwindIndicator } from '@/components/tailwind-indicator';
+import { Toaster } from '@/components/ui/toaster';
+
+import '@/styles/globals.css';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -31,7 +34,7 @@ export default function LocaleLayout({
           fontSans.variable
         )}
       >
-        <NextAuthProvider>
+        <ReactCookieProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
             <ThemeProvider
               attribute="class"
@@ -40,10 +43,11 @@ export default function LocaleLayout({
               disableTransitionOnChange
             >
               {children}
+              <Toaster />
               <TailwindIndicator />
             </ThemeProvider>
           </NextIntlClientProvider>
-        </NextAuthProvider>
+        </ReactCookieProvider>
       </body>
     </html>
   );

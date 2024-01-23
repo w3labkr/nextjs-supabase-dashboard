@@ -1,8 +1,6 @@
-import Link from 'next/link';
-
+import { Link } from '@/components/link';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
-import { buttonVariants } from '@/components/ui/button';
 
 export default function LocalePage() {
   return (
@@ -18,23 +16,18 @@ export default function LocalePage() {
             </h1>
             <p className="max-w-[700px] text-lg text-muted-foreground">
               Accessible and customizable components that you can copy and paste
-              into your apps. Free. Open Source. And Next.js 13 Ready.
+              into your apps. Free. Open Source. And Next.js 14 Ready.
             </p>
           </div>
           <div className="flex gap-4">
-            <Link
-              href="https://ui.shadcn.com"
-              target="_blank"
-              rel="noreferrer"
-              className={buttonVariants()}
-            >
+            <Link href="/docs" variant="default">
               Documentation
             </Link>
             <Link
-              href="https://github.com/shadcn/ui"
+              href="https://github.com/w3labkr/nextjs-ninja"
               target="_blank"
               rel="noreferrer"
-              className={buttonVariants({ variant: 'outline' })}
+              variant="outline"
             >
               GitHub
             </Link>

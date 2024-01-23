@@ -155,5 +155,8 @@ sketch
 # Env file
 .env
 
-# contentlayer
+# Contentlayer
 .contentlayer
+
+# Temporary Directory
+/tmp/
