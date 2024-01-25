@@ -109,39 +109,6 @@ After cleaning the directories and cache, install the dependency packages.
 npm run --force reinstall
 ```
 
-## Shadcn UI
-
-Beautifully designed components that you can copy and paste into your apps. Accessible. Customizable. Open Source.
-
-```shell
-npx shadcn-ui@latest init
-```
-
-A crisp set of 15×15 icons designed by the @workos team.
-
-```shell
-npm install @radix-ui/react-icons
-```
-
-A lightweight carousel library with fluid motion and great swipe precision.
-
-```shell
-npm install embla-carousel-react
-```
-
-Use the add command to add components and dependencies to your project.
-
-```shell
-npx shadcn-ui@latest add
-npx shadcn-ui@latest add [component]
-```
-
-Adding dark mode
-
-```shell
-npm install next-themes
-```
-
 ## Tailwind CSS
 
 Install Tailwind CSS
@@ -151,35 +118,45 @@ npm install --save-dev tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 ```
 
-Then add it to the very end of your plugin list in your PostCSS configuration:
-
-```javascript
-module.exports = {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  }
-}
-```
-
-A tiny (239B) utility for constructing `className` strings conditionally.
-
-```shell
-npm install clsx
-```
-
-Merge Tailwind CSS classes without style conflicts
-
-```shell
-npm install tailwind-merge
-```
-
 Using 'clsx' or 'classnames' with 'tailwind-merge'
+
+```shell
+npm install tailwindcss-animate class-variance-authority clsx tailwind-merge
+```
+
+`lib/utils.ts`:
 
 ```typescript
 import clsx, { ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 export const cn = (...classes: ClassValue[]) => twMerge(clsx(...classes));
+```
+
+## Shadcn UI
+
+Beautifully designed components that you can copy and paste into your apps.
+
+```shell
+npx shadcn-ui@latest init
+```
+
+Add icon library
+
+```shell
+npm install lucide-react @radix-ui/react-icons
+```
+
+Adding dark mode
+
+```shell
+npm install next-themes
+```
+
+Use the add command to add components and dependencies to your project.
+
+```shell
+npx shadcn-ui@latest add
+npx shadcn-ui@latest add [component]
 ```
 
 ## Internationalization (i18n)
@@ -296,18 +273,9 @@ Generate RFC-compliant UUIDs in JavaScript
 npm install uuid @types/uuid
 ```
 
-Load and save cookies within your Web application
-
-```shell
-npm install nookies
-npm install react-cookie
-```
-
 ## ESLint
 
 ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
-
-Installation:
 
 ```shell
 npm install --save-dev eslint @next/eslint-plugin-next
@@ -334,7 +302,7 @@ Find and fix problems in your JavaScript code.
 ```shell
 npx eslint ./app
 npx eslint --fix ./components
-npx eslint --fix ./{app,components,hooks,lib}
+npx eslint --fix ./{app,components,context,hooks,lib}
 ```
 
 ## Production
@@ -342,7 +310,17 @@ npx eslint --fix ./{app,components,hooks,lib}
 Dependency packages in production for deployment on Vercel hosting.
 
 ```shell
-npm uninstall @vercel/analytics @vercel/speed-insights
+npm install @vercel/analytics @vercel/speed-insights
+```
+
+Deploying Static Exports `next.config.js`:
+
+```javascript
+module.exports = {
+  output: 'export',
+  exportTrailingSlash: true,
+  assetPrefix: '/out',
+}
 ```
 
 ## Troubleshooting
