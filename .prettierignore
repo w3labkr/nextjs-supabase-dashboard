@@ -1,11 +1,4 @@
+out/
 dist/
 node_modules/
-build/
-.next/
-
-*.txt
-*.ico
-
-*.css
-*.min.css
-*.min.js
+components/ui/

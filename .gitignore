@@ -152,11 +152,4 @@ sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/firebase
 
-# Env file
-.env
-
-# Contentlayer
-.contentlayer
-
-# Temporary Directory
-/tmp/
+/test/

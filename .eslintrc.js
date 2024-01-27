@@ -26,20 +26,33 @@ module.exports = {
     'next',
     'plugin:prettier/recommended',
   ],
-  plugins: ['@typescript-eslint', 'import', 'react', 'react-hooks', 'prettier'],
+  plugins: ['import', 'react', 'react-hooks', '@typescript-eslint'],
   rules: {
     // 'React' must be in scope when using JSX react/react-in-jsx-scope`
-    'react/react-in-jsx-scope': 'off',
+    // 'react/react-in-jsx-scope': 'warn',
+    // No default export found in imported module "react-dom/client".
+    // 'import/default': 'warn',
+    // Using exported name ... as identifier for default export.
+    // 'import/no-named-as-default': 'warn',
+    // ... is not defined.
+    'no-undef': 'error',
     // Unable to resolve path to module ...
     'import/no-unresolved': 'warn',
-    // Disallow unused variables
+    // ... is defined but never used.
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
-    // Using exported name ... as identifier for default export.
-    'import/no-named-as-default': 'off',
+    // Unexpected any. Specify a different type.
+    '@typescript-eslint/no-explicit-any': 'off',
+    // Using `<img>` could result in slower LCP and higher bandwidth.
+    '@next/next/no-img-element': 'off',
   },
-  // ignorePatterns: ['.eslintrc.js', '*.config.js', '*.config.ts'],
-  ignorePatterns: ['.eslintrc.js', '*.config.js'],
+  ignorePatterns: [
+    '.eslintrc.js',
+    'next.config.mjs',
+    'postcss.config.js',
+    'tailwind.config.ts',
+    'components/ui',
+  ],
   settings: {
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
@@ -48,4 +61,4 @@ module.exports = {
       typescript: {},
     },
   },
-};
+}

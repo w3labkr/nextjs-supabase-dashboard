@@ -1,6 +1,13 @@
 # NextJS Ninja
 
-NextJS Ninja is a starter template for the [NextJS](https://nextjs.org/) 14 app router based on [shadcn/ui](https://ui.shadcn.com/).
+NextJS Ninja is a starter template for the [NextJS](https://nextjs.org/) 14 app router based on [shadcn-ui](https://ui.shadcn.com/).
+
+Denpendency
+
+- NextJS 14 + Typescript + Tailwind
+- Shadcn UI (Radix UI)
+- i18next
+- Supabase (TODO)
 
 ## Folder and file Structure
 
@@ -9,28 +16,15 @@ The folder and file structure is based on nextjs app router [Next.js Project Str
 ```txt
 .
 ├── app/                        # App Router
-│   ├── [locale]/               # Dynamic route segment
-│   │   ├── <page>/             # Route segment
-│   │   ├── layout.ts           # Layout
-│   │   └── page.ts             # Page
-│   ├── icon.ts                 # Generated App Icon
-│   ├── apple-icon.ts           # Generated Apple App Icon
-│   ├── opengraph-image.ts      # Generated Open Graph image
-│   ├── twitter-image.ts        # Generated Twitter image
-│   ├── robots.ts               # Generated Robots file
-│   └── sitemap.ts              # Generated Sitemap
 ├── components/                 # React components for filters, headers
 ├── config/
-├── content/                    # Content Layer
+├── context/
 ├── hooks/
 ├── lib/                        # Utility functions that aren't necessarily bound to React or Next.js
-├── locales/
 ├── public/                     # Static assets to be served
-├── styles/
-├── .env                        # Environment variables
-├── package.json                # Project dependencies and scripts
-├── middleware.ts               # Next.js request middleware
-└── next.config.js              # Configuration file for Next.js
+│   └── [locales]/              # Internationalization
+├── types/
+└── package.json                # Project dependencies and scripts
 ```
 
 ## Installation
@@ -55,12 +49,6 @@ React Hooks for Data Fetching
 npm install swr
 ```
 
-Keeping Server-only Code out of the Client Environment
-
-```shell
-npm install server-only
-```
-
 Set the current Node.js version.
 
 ```shell
@@ -71,12 +59,6 @@ Start the development server.
 
 ```shell
 npm run dev
-```
-
-Deploy app to Vercel
-
-```shell
-vercel deploy
 ```
 
 ## Configuration
@@ -134,7 +116,7 @@ export const cn = (...classes: ClassValue[]) => twMerge(clsx(...classes));
 
 ## Shadcn UI
 
-Beautifully designed components that you can copy and paste into your apps.
+Beautifully designed components that you can copy and paste into your apps. Accessible.
 
 ```shell
 npx shadcn-ui@latest init
@@ -161,19 +143,26 @@ npx shadcn-ui@latest add [component]
 
 ## Internationalization (i18n)
 
-Internationalization (i18n) for Next.js that gets out of your way.
+Internationalization for react done right. Using the i18next i18n ecosystem.
 
 ```shell
-npm install next-intl rtl-detect @types/rtl-detect
+npm install react-i18next i18next i18next-http-backend
 ```
 
-Getting started
+Configure i18next to have the key being the fallback instead of loading a fallback language:
 
-- `next.config.js`: Set up the plugin which creates an alias to import your i18n configuration into Server Components.
-- `i18n.ts`: Creates a configuration once per request.
-- `middleware.ts`: The middleware matches a locale for the request and handles redirects and rewrites accordingly.
-- `next-intl.config.ts`
-- `navigation.ts`
+```javascript
+i18next.init({
+  lng: 'ko',
+
+  // allow keys to be phrases having `:`, `.`
+  nsSeparator: false,
+  keySeparator: false,
+
+  // do not load a fallback
+  fallbackLng: false
+});
+```
 
 ## Schema Validation
 
@@ -185,6 +174,97 @@ npm install zod @hookform/resolvers
 ```
 
 ## Authentication
+
+## Utils
+
+A collection of essential TypeScript types
+
+```shell
+npm install type-fest
+```
+
+Svg react icons of popular icon packs
+
+```shell
+npm install react-icons
+```
+
+A modern JavaScript utility library delivering modularity, performance, & extras.
+
+```shell
+npm install lodash @types/lodash
+```
+
+Generate RFC-compliant UUIDs in JavaScript
+
+```shell
+npm install uuid @types/uuid
+```
+
+## ESLint
+
+ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
+
+```shell
+npm install --save-dev eslint eslint-plugin-react eslint-plugin-react-hooks
+npm install --save-dev @next/eslint-plugin-next
+npm install --save-dev eslint-plugin-import eslint-import-resolver-typescript
+npm install --save-dev @typescript-eslint/parser @typescript-eslint/eslint-plugin 
+npm install --save-dev prettier eslint-plugin-prettier eslint-config-prettier
+npm install --save-dev eslint-plugin-tailwindcss prettier-plugin-tailwindcss
+```
+
+Edit `next.config.js`:
+
+```javascript
+module.exports = {
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
+}
+```
+
+Find and fix problems in your JavaScript code.
+
+```shell
+npx eslint ./app
+npx eslint --fix ./{app,components,context,hooks,lib}
+```
+
+To format a file in-place
+
+```shell
+npx prettier --check "./app/**/*.{ts,tsx}"
+npx prettier --write "./{app,components,context,hooks,lib}/**/*.{ts,tsx}"
+```
+
+## Deploying
+
+Dependency packages in production for deployment on Vercel hosting.
+
+```shell
+npm install @vercel/analytics @vercel/speed-insights
+```
+
+Deploy app to Vercel
+
+```shell
+vercel deploy
+```
+
+Deploying Static Exports `next.config.js`:
+
+```javascript
+module.exports = {
+  output: 'export',
+  exportTrailingSlash: true,
+  assetPrefix: '/out',
+}
+```
+
+## Firebase Auth
 
 Firebase provides the tools and infrastructure you need to develop, grow, and earn money from your app.
 
@@ -253,89 +333,4 @@ Start firebase deployment.
 firebase deploy
 ```
 
-## Utils
-
-Svg react icons of popular icon packs
-
-```shell
-npm install react-icons
-```
-
-A modern JavaScript utility library delivering modularity, performance, & extras.
-
-```shell
-npm install lodash @types/lodash
-```
-
-Generate RFC-compliant UUIDs in JavaScript
-
-```shell
-npm install uuid @types/uuid
-```
-
-## ESLint
-
-ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
-
-```shell
-npm install --save-dev eslint @next/eslint-plugin-next
-npm install --save-dev eslint-plugin-import eslint-import-resolver-typescript
-npm install --save-dev eslint-plugin-react eslint-plugin-react-hooks
-npm install --save-dev @typescript-eslint/parser @typescript-eslint/eslint-plugin 
-npm install --save-dev prettier eslint-plugin-prettier eslint-config-prettier
-```
-
-Edit `next.config.js`:
-
-```javascript
-module.exports = {
-  eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
-  },
-}
-```
-
-Find and fix problems in your JavaScript code.
-
-```shell
-npx eslint ./app
-npx eslint --fix ./components
-npx eslint --fix ./{app,components,context,hooks,lib}
-```
-
-## Production
-
-Dependency packages in production for deployment on Vercel hosting.
-
-```shell
-npm install @vercel/analytics @vercel/speed-insights
-```
-
-Deploying Static Exports `next.config.js`:
-
-```javascript
-module.exports = {
-  output: 'export',
-  exportTrailingSlash: true,
-  assetPrefix: '/out',
-}
-```
-
 ## Troubleshooting
-
-- `./components/icons.tsx`  
-Type error: '"lucide-react"' has no exported member named 'Icon'. Did you mean 'XIcon'?
-
-```typescript
-// import { LucideProps, Moon, SunMedium, type Icon as LucideIcon } from 'lucide-react';
-import { LucideProps, Moon, SunMedium, type LucideIcon } from 'lucide-react';
-```
-
-- `./components/ui/carousel.tsx`  
-Type error: '"embla-carousel-react"' has no exported member named 'EmblaCarouselType'. Did you mean 'UseEmblaCarouselType'?
-
-```typescript
-
-```

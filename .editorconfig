@@ -59,7 +59,7 @@ indent_size = 2
 
 # Google JavaScript Style Guide
 # https://google.github.io/styleguide/jsguide.html#formatting-block-indentation
-[*.{js, jsx, ts, tsx, vue}]
+[*.{js, mjs, jsx, ts, tsx, vue}]
 indent_size = 2
 
 # PSR-12: Extended Coding Style
