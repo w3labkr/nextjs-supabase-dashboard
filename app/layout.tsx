@@ -1,6 +1,7 @@
 import * as React from 'react'
 import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/react'
 
 import { lng } from '@/i18next.config'
 import { I18nextProvider } from '@/context/i18next-provider'
@@ -47,6 +48,7 @@ export default function RootLayout({
             <TailwindIndicator />
           </ThemeProvider>
         </I18nextProvider>
+        <Analytics />
       </body>
     </html>
   )

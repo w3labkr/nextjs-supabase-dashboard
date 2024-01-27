@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
-  // reactStrictMode: true,
+  reactStrictMode: process.env.NODE_ENV === 'production',
   swcMinify: true,
   eslint: {
     // Warning: This allows production builds to successfully complete even if
@@ -13,12 +12,6 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'firebasestorage.googleapis.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
         hostname: 'unsplash.com',
         port: '',
         pathname: '/**',
@@ -26,18 +19,6 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'via.placeholder.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
         port: '',
         pathname: '/**',
       },

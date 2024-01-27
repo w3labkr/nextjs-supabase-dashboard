@@ -175,6 +175,75 @@ npm install zod @hookform/resolvers
 
 ## Authentication
 
+### Firebase Auth
+
+Firebase provides the tools and infrastructure you need to develop, grow, and earn money from your app.
+
+```shell
+# npm ERR! Could not resolve dependency:
+# npm ERR! peer firebase-admin@"^11.0.1" from firebase-frameworks@0.11.1
+npm install -g firebase-tools
+npm install firebase firebase-admin@11.11.1
+```
+
+Prompts:
+
+- Realtime Database: Configure a security rules file for Realtime Database and (optionally) provision default instance `No`
+- Firestore: Configure security rules and indexes files for Firestore `Yes`
+- Functions: Configure a Cloud Functions directory and its files `No`
+- Hosting: Configure files for Firebase Hosting and (optionally) Set up GitHub Action deploys `No`
+- Hosting: Set up GitHub Action deploys `No`
+- Storage: Configure a security rules file for Cloud Storage `Yes`
+- Emulators: Set up local emulators for Firebase products `Yes`
+- Remote Config: Configure a template file for Remote Config `No`
+- Extensions: Set up an empty Extensions manifest `No`
+- Frameworks: Get started with Frameworks projects. `No`
+
+```shell
+firebase init
+```
+
+Create a new project alias.
+
+```shell
+firebase list
+firebase use --add
+```
+
+Initialize the Firebase emulator.
+
+```shell
+# hosting: Port 5000 is not open on localhost (127.0.0.1,::1), could not start Hosting Emulator
+# Port 5000 and 7000 are taken by airplay on MacOS Monterey.
+firebase init emulators
+```
+
+For Mac/Linux, use the Terminal/Shell to find the Process ID (PID), then kill the process.
+
+```shell
+# Error: Could not start Hosting Emulator, port taken.
+lsof -ti tcp:5000 | xargs kill -9 && firebase emulators:start
+```
+
+Start the firebase emulator.
+
+```shell
+firebase emulators:start
+```
+
+Set the expiration of a preview channel.
+
+```shell
+firebase init hosting
+firebase hosting:channel:deploy preview --expires 1h
+```
+
+Start firebase deployment.
+
+```shell
+firebase deploy
+```
+
 ## Utils
 
 A collection of essential TypeScript types
@@ -245,7 +314,7 @@ npx prettier --write "./{app,components,context,hooks,lib}/**/*.{ts,tsx}"
 Dependency packages in production for deployment on Vercel hosting.
 
 ```shell
-npm install @vercel/analytics @vercel/speed-insights
+npm install @vercel/analytics
 ```
 
 Deploy app to Vercel
@@ -262,75 +331,6 @@ module.exports = {
   exportTrailingSlash: true,
   assetPrefix: '/out',
 }
-```
-
-## Firebase Auth
-
-Firebase provides the tools and infrastructure you need to develop, grow, and earn money from your app.
-
-```shell
-# npm ERR! Could not resolve dependency:
-# npm ERR! peer firebase-admin@"^11.0.1" from firebase-frameworks@0.11.1
-npm install -g firebase-tools
-npm install firebase firebase-admin@11.11.1
-```
-
-Prompts:
-
-- Realtime Database: Configure a security rules file for Realtime Database and (optionally) provision default instance `No`
-- Firestore: Configure security rules and indexes files for Firestore `Yes`
-- Functions: Configure a Cloud Functions directory and its files `No`
-- Hosting: Configure files for Firebase Hosting and (optionally) Set up GitHub Action deploys `No`
-- Hosting: Set up GitHub Action deploys `No`
-- Storage: Configure a security rules file for Cloud Storage `Yes`
-- Emulators: Set up local emulators for Firebase products `Yes`
-- Remote Config: Configure a template file for Remote Config `No`
-- Extensions: Set up an empty Extensions manifest `No`
-- Frameworks: Get started with Frameworks projects. `No`
-
-```shell
-firebase init
-```
-
-Create a new project alias.
-
-```shell
-firebase list
-firebase use --add
-```
-
-Initialize the Firebase emulator.
-
-```shell
-# hosting: Port 5000 is not open on localhost (127.0.0.1,::1), could not start Hosting Emulator
-# Port 5000 and 7000 are taken by airplay on MacOS Monterey.
-firebase init emulators
-```
-
-For Mac/Linux, use the Terminal/Shell to find the Process ID (PID), then kill the process.
-
-```shell
-# Error: Could not start Hosting Emulator, port taken.
-lsof -ti tcp:5000 | xargs kill -9 && firebase emulators:start
-```
-
-Start the firebase emulator.
-
-```shell
-firebase emulators:start
-```
-
-Set the expiration of a preview channel.
-
-```shell
-firebase init hosting
-firebase hosting:channel:deploy preview --expires 1h
-```
-
-Start firebase deployment.
-
-```shell
-firebase deploy
 ```
 
 ## Troubleshooting
