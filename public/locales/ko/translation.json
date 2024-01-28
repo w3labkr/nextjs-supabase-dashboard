@@ -18,12 +18,14 @@
   "Or continue with": "또는",
   "Sign in with Google": "구글 로그인",
   "Don't have an account? Sign Up": "계정이 없나요? 가입하기",
+  "Already have an account?": "이미 계정이 있습니까?",
+  "Forgot password?": "비밀번호를 잊으셨나요?",
 
   "Create an account": "계정 만들기",
   "Enter your email below to create your account": "계정을 만들려면 아래에 이메일을 입력하세요",
   "Sign up with Google": "구글로 시작하기",
 
-  "By clicking continue, you agree to our Terms of Service and Privacy Policy.": "계속을 클릭하면 <link1>서비스 약관</link1> 및 <link2>개인정보 보호정책</link2>에 동의하게 됩니다.",
+  "By clicking Sign Up, you agree to our Terms of Service and Privacy Policy.": "가입을 클릭하면 <link1>서비스 약관</link1> 및 <link2>개인정보 보호정책</link2>에 동의하게 됩니다.",
 
   "Welcome to Acme Inc": "Acme Inc에 오신 것을 환영합니다",
   "We provide high quality services for your business.": "우리는 귀하의 비즈니스에 고품질의 서비스를 제공합니다.",

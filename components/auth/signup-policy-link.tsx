@@ -4,6 +4,7 @@ import * as React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import Link, { LinkProps } from 'next/link'
 import type { SetOptional } from 'type-fest'
+import { cn } from '@/lib/utils'
 
 type TransLinkProps = SetOptional<LinkProps, 'href'> &
   React.AnchorHTMLAttributes<HTMLAnchorElement>
@@ -31,13 +32,16 @@ const Link2 = ({ children, ...props }: TransLinkProps) => (
 export interface SignUpPolicyLinkProps
   extends React.HTMLAttributes<HTMLSpanElement> {}
 
-export function SignUpPolicyLink({ ...props }: SignUpPolicyLinkProps) {
+export function SignUpPolicyLink({
+  className,
+  ...props
+}: SignUpPolicyLinkProps) {
   const { t } = useTranslation()
 
   return (
-    <span {...props}>
+    <span className={cn('text-muted-foreground', className)} {...props}>
       <Trans t={t} components={{ link1: <Link1 />, link2: <Link2 /> }}>
-        By clicking continue, you agree to our Terms of Service and Privacy
+        By clicking Sign Up, you agree to our Terms of Service and Privacy
         Policy.
       </Trans>
     </span>

@@ -5,18 +5,19 @@ import { useTranslation } from 'react-i18next'
 import { languages } from '@/i18next.config'
 
 export function LanguageStatus() {
+  const [languageLabel, setLanguageLabel] = React.useState<string>('')
   const { t, i18n } = useTranslation()
+
+  React.useEffect(() => {
+    const label =
+      languages.find((language) => language.value === i18n.resolvedLanguage)
+        ?.label || ''
+    setLanguageLabel(label)
+  }, [i18n.resolvedLanguage])
 
   return (
     <span>
-      {languages.map((language) => {
-        if (language.value !== i18n.resolvedLanguage) return
-        return (
-          <React.Fragment key={language.value}>
-            {t('Language')}: {language.label}
-          </React.Fragment>
-        )
-      })}
+      {t('Language')}: {languageLabel}
     </span>
   )
 }

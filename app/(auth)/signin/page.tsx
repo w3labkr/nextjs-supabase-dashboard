@@ -2,12 +2,12 @@ import * as React from 'react'
 import type { Metadata } from 'next'
 
 import { LanguageSwitcher } from '@/components/language-switcher'
-import { ForwardBackButton } from '@/components/auth/forward-back-button'
+import { BackButton } from '@/components/auth/back-button'
 import { Logo } from '@/components/auth/logo'
 import { Title } from '@/components/auth/title'
 import { Description } from '@/components/auth/description'
 import { SignInWith } from '@/components/auth/signin-with'
-import { SignUpLink } from '@/components/auth/signup-link'
+import { SignUpLink } from '@/components/auth/related-link'
 
 import { SignInForm } from './components/form'
 
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
-      <ForwardBackButton />
+      <BackButton className="absolute left-4 top-4 md:left-8 md:top-8" />
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
@@ -31,9 +31,9 @@ export default function Page() {
           <LanguageSwitcher />
           <SignInWith />
         </div>
-        <p className="px-8 text-center text-sm text-muted-foreground">
+        <div className="text-center text-sm">
           <SignUpLink />
-        </p>
+        </div>
       </div>
     </div>
   )

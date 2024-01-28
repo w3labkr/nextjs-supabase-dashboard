@@ -14,6 +14,8 @@
   "Back": "Back",
   "Welcome back": "Welcome back",
   "Enter your email to sign in to your account": "Enter your email to sign in to your account",
+  "Already have an account?": "Already have an account?",
+  "Forgot password?": "Forgot password?",
 
   "Or continue with": "Or continue with",
   "Sign in with Google": "Sign in with Google",
@@ -23,7 +25,7 @@
   "Enter your email below to create your account": "Enter your email below to create your account",
   "Sign up with Google": "Sign up with Google",
 
-  "By clicking continue, you agree to our Terms of Service and Privacy Policy.": "By clicking continue, you agree to our <link1>Terms of Service</link1> and <link2>Privacy Policy</link2>.",
+  "By clicking Sign Up, you agree to our Terms of Service and Privacy Policy.": "By clicking Sign Up, you agree to our <link1>Terms of Service</link1> and <link2>Privacy Policy</link2>.",
 
   "Welcome to Acme Inc": "Welcome to Acme Inc",
   "We provide high quality services for your business.": "We provide high quality services for your business.",

@@ -13,6 +13,8 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
+import { ForgotPasswordLink } from '@/components/auth/related-link'
+
 type FormData = z.infer<typeof schema>
 
 export function SignInForm() {
@@ -74,6 +76,9 @@ export function SignInForm() {
               {...register('password')}
             />
           </label>
+          <p className="px-1 text-xs">
+            <ForgotPasswordLink />
+          </p>
           {errors?.password && (
             <p className="px-1 text-xs text-red-600">
               {errors.password.message}

@@ -23,8 +23,10 @@ import {
 
 export function LanguageSwitcher({ width = '320px' }: { width?: string }) {
   const { t, i18n } = useTranslation()
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState(i18n.resolvedLanguage)
+  const [open, setOpen] = React.useState<boolean>(false)
+  const [value, setValue] = React.useState<string | undefined>(
+    i18n.resolvedLanguage
+  )
 
   const handleChange = (currentValue: string) => {
     i18n.changeLanguage(currentValue)

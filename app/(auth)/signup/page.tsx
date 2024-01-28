@@ -2,7 +2,7 @@ import * as React from 'react'
 import type { Metadata } from 'next'
 
 import { LanguageSwitcher } from '@/components/language-switcher'
-import { ForwardSignInButton } from '@/components/auth/forward-signin-button'
+import { SignInButton } from '@/components/auth/signin-button'
 import { Logo } from '@/components/auth/logo'
 import { Title } from '@/components/auth/title'
 import { Description } from '@/components/auth/description'
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
-      <ForwardSignInButton />
+      <SignInButton className="absolute right-4 top-4 md:right-8 md:top-8" />
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
@@ -31,7 +31,7 @@ export default function Page() {
           <LanguageSwitcher />
           <SignUpWith />
         </div>
-        <p className="px-8 text-center text-sm text-muted-foreground">
+        <p className="text-center text-sm">
           <SignUpPolicyLink />
         </p>
       </div>
