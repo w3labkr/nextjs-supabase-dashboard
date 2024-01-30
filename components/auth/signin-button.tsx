@@ -9,7 +9,7 @@ export type SignInButtonProps = SetOptional<ForwardButtonProps, 'href'>
 
 export function SignInButton({
   variant = 'ghost',
-  href = '/signin',
+  href = '/auth/signin',
   ...props
 }: SignInButtonProps) {
   const { t } = useTranslation()

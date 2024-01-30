@@ -6,7 +6,8 @@ Denpendency
 
 - NextJS 14 + Typescript + Tailwind
 - Shadcn UI (Radix UI)
-- i18next
+- react-hook-form + zod
+- react-i18next + zod-i18n-map
 - Supabase (TODO)
 
 ## Folder and file Structure
@@ -24,6 +25,7 @@ The folder and file structure is based on nextjs app router [Next.js Project Str
 ├── public/                     # Static assets to be served
 │   └── [locales]/              # Internationalization
 ├── types/
+├── utils/
 └── package.json                # Project dependencies and scripts
 ```
 
@@ -85,6 +87,16 @@ Edit `packages.json`:
 }
 ```
 
+To enable Turbopack. Edit `packages.json`:
+
+```json
+{
+    "scripts": {
+        "dev": "next dev --turbo"
+    }
+}
+```
+
 After cleaning the directories and cache, install the dependency packages.
 
 ```shell
@@ -106,7 +118,7 @@ Using 'clsx' or 'classnames' with 'tailwind-merge'
 npm install tailwindcss-animate class-variance-authority clsx tailwind-merge
 ```
 
-`lib/utils.ts`:
+`utils/cn.ts`:
 
 ```typescript
 import clsx, { ClassValue } from 'clsx';
@@ -149,19 +161,10 @@ Internationalization for react done right. Using the i18next i18n ecosystem.
 npm install react-i18next i18next i18next-http-backend
 ```
 
-Configure i18next to have the key being the fallback instead of loading a fallback language:
+Useful for translating zod error messages.
 
-```javascript
-i18next.init({
-  lng: 'ko',
-
-  // allow keys to be phrases having `:`, `.`
-  nsSeparator: false,
-  keySeparator: false,
-
-  // do not load a fallback
-  fallbackLng: false
-});
+```shell
+npm install zod-i18n-map
 ```
 
 ## Schema Validation
@@ -173,9 +176,15 @@ npm install react-hook-form
 npm install zod @hookform/resolvers
 ```
 
-## Authentication
+## Supabase Auth
 
-### Firebase Auth
+Install Supabase packages
+
+```shell
+npm install @supabase/ssr @supabase/supabase-js
+```
+
+## Firebase Auth
 
 Firebase provides the tools and infrastructure you need to develop, grow, and earn money from your app.
 
@@ -246,6 +255,12 @@ firebase deploy
 
 ## Utils
 
+Share target browsers between different front-end tools, like Autoprefixer, Stylelint and babel-preset-env
+
+```shell
+npm install browserslist
+```
+
 A collection of essential TypeScript types
 
 ```shell
@@ -299,14 +314,14 @@ Find and fix problems in your JavaScript code.
 
 ```shell
 npx eslint ./app
-npx eslint --fix ./{app,components,context,hooks,lib}
+npx eslint --fix ./{app,components,context,hooks,lib,types,utils}
 ```
 
 To format a file in-place
 
 ```shell
 npx prettier --check "./app/**/*.{ts,tsx}"
-npx prettier --write "./{app,components,context,hooks,lib}/**/*.{ts,tsx}"
+npx prettier --write "./{app,components,context,hooks,lib,types,utils}/**/*.{ts,tsx}"
 ```
 
 ## Deploying

@@ -7,7 +7,7 @@ import { Logo } from '@/components/auth/logo'
 import { Title } from '@/components/auth/title'
 import { Description } from '@/components/auth/description'
 import { SignInWith } from '@/components/auth/signin-with'
-import { SignUpLink } from '@/components/auth/related-link'
+import { ForgotPasswordLink, SignUpLink } from '@/components/auth/related-link'
 
 import { SignInForm } from './components/form'
 
@@ -31,7 +31,8 @@ export default function Page() {
           <LanguageSwitcher />
           <SignInWith />
         </div>
-        <div className="text-center text-sm">
+        <div className="grid gap-1 text-center text-sm">
+          <ForgotPasswordLink />
           <SignUpLink />
         </div>
       </div>

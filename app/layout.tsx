@@ -6,7 +6,7 @@ import { Analytics } from '@/components/analytics'
 import { lng } from '@/i18next.config'
 import { I18nextProvider } from '@/context/i18next-provider'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils'
 import { ThemeProvider } from '@/context/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { TailwindIndicator } from '@/components/tailwind-indicator'

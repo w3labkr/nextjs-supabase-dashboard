@@ -10,7 +10,7 @@ export function DarkModeStatus() {
   const { theme } = useTheme()
 
   React.useEffect(() => {
-    const mode = theme === 'light' ? 'Dark mode: off' : 'Dark mode: on'
+    const mode = theme === 'light' ? 'Dark mode off' : 'Dark mode on'
     setStatus(mode)
   }, [theme])
 

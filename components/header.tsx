@@ -212,10 +212,10 @@ export function Header() {
             </NavigationMenuList>
           </NavigationMenu>
           <div className="ml-auto flex gap-2">
-            <ForwardButton variant="outline" href="/signin">
+            <ForwardButton variant="outline" href="/auth/signin">
               {t('Sign In')}
             </ForwardButton>
-            <ForwardButton href="/signup">{t('Sign Up')}</ForwardButton>
+            <ForwardButton href="/auth/signup">{t('Sign Up')}</ForwardButton>
           </div>
         </div>
       </header>

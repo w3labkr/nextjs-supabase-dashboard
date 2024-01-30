@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -42,8 +42,11 @@
     "@radix-ui/react-toggle": "^1.0.3",
     "@radix-ui/react-toggle-group": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@supabase/ssr": "^0.0.10",
+    "@supabase/supabase-js": "^2.39.3",
     "@types/lodash": "^4.14.202",
     "@vercel/analytics": "^1.1.2",
+    "browserslist": "^4.22.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^0.2.0",
@@ -68,7 +71,8 @@
     "tailwindcss-animate": "^1.0.7",
     "type-fest": "^4.10.1",
     "vaul": "^0.8.9",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "zod-i18n-map": "^2.26.0"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.1.0",

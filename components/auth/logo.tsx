@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { LuCommand } from 'react-icons/lu'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils'
 
 export interface LogoProps {
   className?: string

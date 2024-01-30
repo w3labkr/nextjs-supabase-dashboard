@@ -3,6 +3,10 @@ import { initReactI18next } from 'react-i18next'
 import { lng, fallbackLng } from '@/i18next.config'
 import HttpBackend, { HttpBackendOptions } from 'i18next-http-backend'
 
+import { z } from 'zod'
+import { zodI18nMap } from 'zod-i18n-map'
+// import translation from 'zod-i18n-map/locales/en/zod.json'
+
 i18next
   // load translation using http -> see /public/locales (i.e. https://github.com/i18next/react-i18next/tree/master/example/react/public/locales)
   // learn more: https://github.com/i18next/i18next-http-backend
@@ -27,8 +31,8 @@ i18next
     // fallbackLng: false,
 
     // allow keys to be phrases having `:`, `.`
-    nsSeparator: false,
-    keySeparator: false,
+    // nsSeparator: false,
+    // keySeparator: false,
 
     interpolation: {
       escapeValue: false, // react already safes from xss
@@ -40,8 +44,11 @@ i18next
 
     backend: {
       loadPath:
-        process.env.NEXT_PUBLIC_APP_URL + '/locales/{{lng}}/{{ns}}.json',
+        process.env.NEXT_PUBLIC_SITE_URL + '/locales/{{lng}}/{{ns}}.json',
     },
   })
+
+// Useful for translating zod error messages.
+z.setErrorMap(zodI18nMap)
 
 export default i18next

@@ -6,7 +6,7 @@ import { Check, ChevronsUpDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { languages } from '@/i18next.config'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -46,14 +46,14 @@ export function LanguageSwitcher({ width = '320px' }: { width?: string }) {
         >
           {value
             ? languages.find((language) => language.value === value)?.label
-            : t('Search language...')}
+            : t('Search language')}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className={`w-[${width}] p-0`}>
         <Command>
-          <CommandInput placeholder={t('Search language...')} />
-          <CommandEmpty>{t('No language found.')}</CommandEmpty>
+          <CommandInput placeholder={t('Search language')} />
+          <CommandEmpty>{t('No language found')}</CommandEmpty>
           <CommandGroup>
             {languages.map((language) => (
               <CommandItem

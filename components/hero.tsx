@@ -16,7 +16,7 @@ export function Hero() {
               {t('Welcome to Acme Inc')}
             </h1>
             <p className="mx-auto max-w-[700px] text-gray-500 dark:text-gray-400 md:text-xl">
-              {t('We provide high quality services for your business.')}
+              {t('We provide high quality services for your business')}
             </p>
           </div>
           <div className="space-x-4">
