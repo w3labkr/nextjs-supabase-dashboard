@@ -6,8 +6,6 @@ import { type CookieOptions, createServerClient } from '@supabase/ssr'
 /**
  * OAuth with PKCE flow for SSR
  *
- * Learn how to configure OAuth authentication in your server-side rendering (SSR) application to work with the PKCE flow.
- *
  * @link https://supabase.com/docs/guides/auth/server-side/oauth-with-pkce-flow-for-ssr
  */
 export async function GET(request: NextRequest) {

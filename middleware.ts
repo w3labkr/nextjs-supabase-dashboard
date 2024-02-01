@@ -1,19 +1,19 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { createMiddleware, isAuthenticated } from '@/lib/supabase/server'
+import { createMiddlewareClient } from '@/utils/supabase/server'
 
 // Server Components only have read access to cookies.
 // This Middleware example can be used to refresh expired sessions before loading Server Component routes.
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
+    request: { headers: request.headers },
   })
 
-  const supabase = createMiddleware(request, response)
-  const isAuth = await isAuthenticated(supabase)
+  const supabase = createMiddlewareClient(request, response)
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
-  if (request.nextUrl.pathname.startsWith('/dashboard') && !isAuth) {
+  if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
     return NextResponse.redirect(new URL('/auth/signin', request.url))
   }
 
@@ -21,14 +21,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * Feel free to modify this pattern to include more paths.
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/dashboard/:path*'],
 }

@@ -8,7 +8,7 @@ import { ForwardButton, ForwardButtonProps } from '@/components/forward-button'
 
 export type BackButtonProps = SetOptional<ForwardButtonProps, 'href'>
 
-export function BackButton({
+export function BackLinkButton({
   variant = 'ghost',
   href = '/',
   ...props

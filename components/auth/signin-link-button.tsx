@@ -7,7 +7,7 @@ import { ForwardButton, ForwardButtonProps } from '@/components/forward-button'
 
 export type SignInButtonProps = SetOptional<ForwardButtonProps, 'href'>
 
-export function SignInButton({
+export function SignInLinkButton({
   variant = 'ghost',
   href = '/auth/signin',
   ...props

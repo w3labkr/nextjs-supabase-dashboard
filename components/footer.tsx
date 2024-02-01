@@ -17,7 +17,7 @@ export function Footer() {
         </div>
         <div className="flex flex-row gap-2">
           <ThemeToggle />
-          <LanguageSwitcher width="240px" />
+          <LanguageSwitcher />
         </div>
       </div>
     </footer>

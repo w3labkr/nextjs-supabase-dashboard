@@ -4,10 +4,13 @@ import * as React from 'react'
 import { LuLoader2 } from 'react-icons/lu'
 import { useTranslation } from 'react-i18next'
 
+import { useRouter } from 'next/navigation'
+
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { formSchema, formValues, type FormTypes } from './validation'
 
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -20,34 +23,68 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 
-// import { onSubmit } from './actions'
+import { createClient } from '@/utils/supabase/client'
+import { ForgotPasswordLink } from '@/components/auth/related-link'
 
 export function SignInForm() {
+  const router = useRouter()
+  const { t } = useTranslation(['translation', 'zod', 'zod-custom', 'supabase'])
+
   const form = useForm<FormTypes>({
     resolver: zodResolver(formSchema),
     defaultValues: formValues,
   })
-  const disabledSubmit = form.formState.isLoading || form.formState.isSubmitting
-  const { t } = useTranslation(['translation', 'zod'])
+  const {
+    handleSubmit,
+    setError,
+    reset,
+    control,
+    formState: { errors, isSubmitting },
+  } = form
 
-  function onSubmit(values: FormTypes) {
-    console.log(values)
-    form.reset()
+  async function onSubmit(formData: FormTypes) {
+    const supabase = createClient()
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.signInWithPassword({
+      email: formData.email as string,
+      password: formData.password as string,
+    })
+
+    if (error || !user) {
+      switch (error?.name) {
+        case 'AuthApiError':
+          setError('root.serverError', {
+            type: error?.status?.toString(),
+            message: t(`${error?.name}.${error?.message}`, { ns: 'supabase' }),
+          })
+          break
+        case 'AuthRetryableFetchError':
+          toast.error(t(`${error?.name}.${error?.message}`, { ns: 'supabase' }))
+          break
+      }
+
+      return false
+    }
+
+    toast.success(t('You have successfully registered as a member'))
+
+    reset()
+    router.push('/dashboard')
   }
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        noValidate
-        className="space-y-2"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
         <FormField
-          control={form.control}
+          control={control}
           name="email"
-          render={({ field, fieldState: { error } }) => (
+          render={({ field }) => (
             <FormItem>
-              {/* <FormLabel></FormLabel> */}
+              <div className="flex items-center justify-between">
+                <FormLabel className="text-primary">{t('Email')}</FormLabel>
+              </div>
               <FormControl>
                 <Input
                   type="email"
@@ -59,18 +96,19 @@ export function SignInForm() {
                 />
               </FormControl>
               {/* <FormDescription></FormDescription> */}
-              <FormMessage>
-                {error?.message && t(error.message, { ns: 'zod' })}
-              </FormMessage>
+              <FormMessage className="font-normal" />
             </FormItem>
           )}
         />
         <FormField
-          control={form.control}
+          control={control}
           name="password"
-          render={({ field, fieldState: { error } }) => (
+          render={({ field }) => (
             <FormItem>
-              {/* <FormLabel></FormLabel> */}
+              <div className="flex items-center justify-between">
+                <FormLabel className="text-primary">{t('Password')}</FormLabel>
+                <ForgotPasswordLink className="text-sm" />
+              </div>
               <FormControl>
                 <Input
                   type="password"
@@ -82,16 +120,13 @@ export function SignInForm() {
                 />
               </FormControl>
               {/* <FormDescription></FormDescription> */}
-              <FormMessage>
-                {error?.message && t(error.message, { ns: 'zod' })}
-              </FormMessage>
+              <FormMessage className="font-normal" />
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={disabledSubmit} className="w-full">
-          {disabledSubmit && (
-            <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />
-          )}
+        <FormMessage>{errors?.root?.serverError?.message}</FormMessage>
+        <Button type="submit" disabled={isSubmitting} className="w-full">
+          {isSubmitting && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
           {t('Sign In')}
         </Button>
       </form>

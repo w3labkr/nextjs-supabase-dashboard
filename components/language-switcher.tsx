@@ -21,7 +21,15 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 
-export function LanguageSwitcher({ width = '320px' }: { width?: string }) {
+export function LanguageSwitcher({
+  className,
+  triggerClassName,
+  contentClassName,
+}: {
+  className?: string
+  triggerClassName?: string
+  contentClassName?: string
+}) {
   const { t, i18n } = useTranslation()
   const [open, setOpen] = React.useState<boolean>(false)
   const [value, setValue] = React.useState<string | undefined>(
@@ -29,9 +37,10 @@ export function LanguageSwitcher({ width = '320px' }: { width?: string }) {
   )
 
   const handleChange = (currentValue: string) => {
+    if (currentValue === value) return
     i18n.changeLanguage(currentValue)
     document.documentElement.lang = currentValue
-    setValue(currentValue === value ? '' : currentValue)
+    setValue(currentValue)
     setOpen(false)
   }
 
@@ -42,7 +51,7 @@ export function LanguageSwitcher({ width = '320px' }: { width?: string }) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={`w-[${width}] justify-between`}
+          className={cn('w-50 justify-between', className, triggerClassName)}
         >
           {value
             ? languages.find((language) => language.value === value)?.label
@@ -50,7 +59,7 @@ export function LanguageSwitcher({ width = '320px' }: { width?: string }) {
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className={`w-[${width}] p-0`}>
+      <PopoverContent className={cn('w-50 p-0', className, contentClassName)}>
         <Command>
           <CommandInput placeholder={t('Search language')} />
           <CommandEmpty>{t('No language found')}</CommandEmpty>

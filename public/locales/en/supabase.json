@@ -1,0 +1,9 @@
+{
+  "AuthApiError": {
+    "User already registered": "User already registered",
+    "Invalid login credentials": "Your email or password does not match"
+  },
+  "AuthRetryableFetchError": {
+    "Failed to fetch": "Network request failed"
+  }
+}

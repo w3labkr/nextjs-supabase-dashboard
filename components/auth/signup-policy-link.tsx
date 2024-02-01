@@ -39,11 +39,11 @@ export function SignUpPolicyLink({
   const { t } = useTranslation()
 
   return (
-    <span className={cn('text-muted-foreground', className)} {...props}>
+    <p className={cn('text-sm text-muted-foreground', className)} {...props}>
       <Trans t={t} components={{ link1: <Link1 />, link2: <Link2 /> }}>
         By clicking Sign Up, you agree to our Terms of Service and Privacy
         Policy
       </Trans>
-    </span>
+    </p>
   )
 }

@@ -1,13 +1,13 @@
 import * as React from 'react'
 import type { Metadata } from 'next'
 
-import { LanguageSwitcher } from '@/components/language-switcher'
-import { BackButton } from '@/components/auth/back-button'
+import { BackLinkButton } from '@/components/auth/back-link-button'
 import { Logo } from '@/components/auth/logo'
 import { Title } from '@/components/auth/title'
 import { Description } from '@/components/auth/description'
 import { SignInWith } from '@/components/auth/signin-with'
-import { ForgotPasswordLink, SignUpLink } from '@/components/auth/related-link'
+import { SignUpLink } from '@/components/auth/related-link'
+import { LanguageToggleLink } from '@/components/auth/language-toggle-link'
 
 import { SignInForm } from './components/form'
 
@@ -18,8 +18,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className="container flex h-screen w-screen flex-col items-center justify-center">
-      <BackButton className="absolute left-4 top-4 md:left-8 md:top-8" />
+    <div className="container flex min-h-screen w-screen flex-col items-center justify-center py-8">
+      <BackLinkButton className="absolute left-4 top-4 md:left-8 md:top-8" />
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
@@ -28,12 +28,11 @@ export default function Page() {
         </div>
         <div className="grid gap-6">
           <SignInForm />
-          <LanguageSwitcher />
           <SignInWith />
         </div>
-        <div className="grid gap-1 text-center text-sm">
-          <ForgotPasswordLink />
+        <div className="flex justify-between text-center text-sm">
           <SignUpLink />
+          <LanguageToggleLink />
         </div>
       </div>
     </div>

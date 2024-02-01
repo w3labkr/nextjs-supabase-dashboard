@@ -8,22 +8,26 @@
   "Sign Up": "Sign Up",
   "Sign Out": "Sign Out",
 
+  "Email": "Email",
+  "Password": "Password",
+  "Confirm Password": "Confirm Password",
+
   "Search language": "Search language...",
   "No language found": "No language found.",
 
   "Back": "Back",
   "Welcome back": "Welcome back",
   "Enter your email to sign in to your account": "Enter your email to sign in to your account",
-  "Already have an account?": "Already have an account?",
-  "Forgot your password?": "Forgot your password?",
 
-  "Or continue with": "Or continue with",
   "Sign in with Google": "Sign in with Google",
   "Don't have an account? Sign Up": "Don't have an account? Sign Up",
+  "Already have an account? Sign In": "Already have an account? Sign In",
+  "Forgot your password?": "Forgot your password?",
 
   "Create an account": "Create an account",
   "Enter your email below to create your account": "Enter your email below to create your account",
   "Sign up with Google": "Sign up with Google",
+  "You have successfully registered as a member": "You have successfully registered as a member.",
 
   "By clicking Sign Up, you agree to our Terms of Service and Privacy Policy": "By clicking Sign Up, you agree to our <link1>Terms of Service</link1> and <link2>Privacy Policy</link2>.",
 

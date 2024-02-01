@@ -8,7 +8,7 @@ Denpendency
 - Shadcn UI (Radix UI)
 - react-hook-form + zod
 - react-i18next + zod-i18n-map
-- Supabase (TODO)
+- Supabase Auth
 
 ## Folder and file Structure
 

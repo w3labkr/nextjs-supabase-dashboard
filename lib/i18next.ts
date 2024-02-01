@@ -4,8 +4,7 @@ import { lng, fallbackLng } from '@/i18next.config'
 import HttpBackend, { HttpBackendOptions } from 'i18next-http-backend'
 
 import { z } from 'zod'
-import { zodI18nMap } from 'zod-i18n-map'
-// import translation from 'zod-i18n-map/locales/en/zod.json'
+import { makeZodI18nMap } from 'zod-i18n-map'
 
 i18next
   // load translation using http -> see /public/locales (i.e. https://github.com/i18next/react-i18next/tree/master/example/react/public/locales)
@@ -48,7 +47,7 @@ i18next
     },
   })
 
-// Useful for translating zod error messages.
-z.setErrorMap(zodI18nMap)
+// Translating zod error messages.
+z.setErrorMap(makeZodI18nMap({ ns: ['zod', 'zod-custom'] }))
 
 export default i18next
