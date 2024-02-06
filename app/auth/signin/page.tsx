@@ -6,17 +6,16 @@ import { Logo } from '@/components/auth/logo'
 import { Title } from '@/components/auth/title'
 import { Description } from '@/components/auth/description'
 import { SignInWith } from '@/components/auth/signin-with'
-import { SignUpLink } from '@/components/auth/related-link'
-import { LanguageToggleLink } from '@/components/auth/language-toggle-link'
-
-import { SignInForm } from './components/form'
+import { RelatedLink } from '@/components/auth/related-link'
+import { LanguageToggleButton } from '@/components/auth/language-toggle-button'
+import { SignInForm } from './signin-form'
 
 export const metadata: Metadata = {
   title: 'Login',
   description: 'Login to your account',
 }
 
-export default function Page() {
+export default function SignInPage() {
   return (
     <div className="container flex min-h-screen w-screen flex-col items-center justify-center py-8">
       <BackLinkButton className="absolute left-4 top-4 md:left-8 md:top-8" />
@@ -31,8 +30,10 @@ export default function Page() {
           <SignInWith />
         </div>
         <div className="flex justify-between text-center text-sm">
-          <SignUpLink />
-          <LanguageToggleLink />
+          <RelatedLink href="/auth/signup">
+            {"Don't have an account? Sign Up"}
+          </RelatedLink>
+          <LanguageToggleButton />
         </div>
       </div>
     </div>

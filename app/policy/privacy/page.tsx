@@ -8,9 +8,9 @@ export const metadata: Metadata = {
   description: '',
 }
 
-export default function Page() {
+export default function PrivacyPage() {
   return (
-    <>
+    <div>
       <Header />
       <main className="min-h-screen py-10">
         <div className="container">
@@ -85,6 +85,6 @@ export default function Page() {
         </div>
       </main>
       <Footer />
-    </>
+    </div>
   )
 }

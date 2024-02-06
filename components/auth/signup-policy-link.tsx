@@ -1,10 +1,11 @@
 'use client'
 
 import * as React from 'react'
-import { Trans, useTranslation } from 'react-i18next'
 import Link, { LinkProps } from 'next/link'
+
+import { Trans, useTranslation } from 'react-i18next'
 import type { SetOptional } from 'type-fest'
-import { cn } from '@/utils'
+import { cn } from '@/utils/tailwind'
 
 type TransLinkProps = SetOptional<LinkProps, 'href'> &
   React.AnchorHTMLAttributes<HTMLAnchorElement>

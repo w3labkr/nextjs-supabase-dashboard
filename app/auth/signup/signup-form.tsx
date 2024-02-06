@@ -1,16 +1,15 @@
 'use client'
 
 import * as React from 'react'
-import { LuLoader2 } from 'react-icons/lu'
 import { useTranslation } from 'react-i18next'
-
 import { useRouter } from 'next/navigation'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { formSchema, formValues, type FormTypes } from './validation'
+import { z } from 'zod'
 
 import { toast } from 'sonner'
+import { LucideIcon } from '@/lib/lucide-icon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -23,38 +22,52 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 
-import { createClient } from '@/utils/supabase/client'
+import { createClient } from '@/lib/supabase/client'
+
+const signUpFormSchema = z
+  .object({
+    email: z.string().trim().email(),
+    // If the password is larger than 72 chars, it will be truncated to the first 72 chars.
+    password: z.string().trim().min(6).max(72),
+    confirmPassword: z.string().trim().min(6).max(72),
+  })
+  .refine((val) => val.password === val.confirmPassword, {
+    path: ['confirmPassword'],
+    params: { i18n: 'invalid_confirm_password' },
+  })
+
+type SignUpFormValues = z.infer<typeof signUpFormSchema>
+
+const defaultValues = {
+  email: '',
+  password: '',
+  confirmPassword: '',
+}
 
 export function SignUpForm() {
   const router = useRouter()
   const { t } = useTranslation(['translation', 'zod', 'zod-custom', 'supabase'])
 
-  const form = useForm<FormTypes>({
-    resolver: zodResolver(formSchema),
-    defaultValues: formValues,
+  const form = useForm<SignUpFormValues>({
+    resolver: zodResolver(signUpFormSchema),
+    defaultValues: defaultValues,
   })
-  const {
-    handleSubmit,
-    setError,
-    reset,
-    control,
-    formState: { errors, isSubmitting },
-  } = form
+  const { errors, isSubmitting } = form.formState
 
-  async function onSubmit(formData: FormTypes) {
+  async function onSubmit(values: SignUpFormValues) {
     const supabase = createClient()
     const {
       data: { user },
       error,
     } = await supabase.auth.signUp({
-      email: formData.email as string,
-      password: formData.password as string,
+      email: values.email,
+      password: values.password,
     })
 
     if (error || !user) {
       switch (error?.name) {
         case 'AuthApiError':
-          setError('root.serverError', {
+          form.setError('root.serverError', {
             type: error?.status?.toString(),
             message: t(`${error?.name}.${error?.message}`, { ns: 'supabase' }),
           })
@@ -63,28 +76,28 @@ export function SignUpForm() {
           toast.error(t(`${error?.name}.${error?.message}`, { ns: 'supabase' }))
           break
       }
-
       return false
     }
 
     toast.success(t('You have successfully registered as a member'))
 
-    reset()
     router.push('/auth/signin')
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        noValidate
+        className="space-y-4"
+      >
         <div className="space-y-1">
           <FormField
-            control={control}
+            control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem>
-                <div className="flex items-center justify-between">
-                  <FormLabel className="text-primary">{t('Email')}</FormLabel>
-                </div>
+                <FormLabel>{t('Email')}</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
@@ -103,13 +116,11 @@ export function SignUpForm() {
           <FormMessage>{errors?.root?.serverError?.message}</FormMessage>
         </div>
         <FormField
-          control={control}
+          control={form.control}
           name="password"
           render={({ field }) => (
             <FormItem>
-              <div className="flex items-center justify-between">
-                <FormLabel className="text-primary">{t('Password')}</FormLabel>
-              </div>
+              <FormLabel>{t('Password')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
@@ -126,15 +137,11 @@ export function SignUpForm() {
           )}
         />
         <FormField
-          control={control}
+          control={form.control}
           name="confirmPassword"
           render={({ field }) => (
             <FormItem>
-              <div className="flex items-center justify-between">
-                <FormLabel className="text-primary">
-                  {t('Confirm Password')}
-                </FormLabel>
-              </div>
+              <FormLabel>{t('Confirm Password')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
@@ -151,7 +158,9 @@ export function SignUpForm() {
           )}
         />
         <Button type="submit" disabled={isSubmitting} className="w-full">
-          {isSubmitting && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {isSubmitting && (
+            <LucideIcon name="Loader2" className="mr-2 size-4 animate-spin" />
+          )}
           {t('Sign Up')}
         </Button>
       </form>

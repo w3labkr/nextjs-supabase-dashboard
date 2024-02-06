@@ -1,22 +1,30 @@
 'use client'
 
 import * as React from 'react'
-import { useTranslation } from 'react-i18next'
-import type { SetOptional } from 'type-fest'
-import { ForwardButton, ForwardButtonProps } from '@/components/forward-button'
+import { useRouter } from 'next/navigation'
+import { useTranslation, Trans } from 'react-i18next'
 
-export type SignInButtonProps = SetOptional<ForwardButtonProps, 'href'>
+import { Button, ButtonProps } from '@/components/ui/button'
+
+export interface SignInLinkButtonProps
+  extends ButtonProps,
+    React.RefAttributes<HTMLButtonElement> {
+  href?: string
+  title?: string
+}
 
 export function SignInLinkButton({
   variant = 'ghost',
   href = '/auth/signin',
+  title = 'Sign In',
   ...props
-}: SignInButtonProps) {
+}: SignInLinkButtonProps) {
+  const router = useRouter()
   const { t } = useTranslation()
 
   return (
-    <ForwardButton variant={variant} href={href} {...props}>
-      {t('Sign In')}
-    </ForwardButton>
+    <Button variant={variant} onClick={() => router.push(href)} {...props}>
+      <Trans t={t}>{title}</Trans>
+    </Button>
   )
 }

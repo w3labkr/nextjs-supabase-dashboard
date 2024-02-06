@@ -1,8 +1,8 @@
 'use client'
 
 import * as React from 'react'
-import { useTheme } from 'next-themes'
 import { useTranslation } from 'react-i18next'
+import { useTheme } from 'next-themes'
 
 export function DarkModeStatus() {
   const [status, setStatus] = React.useState<string>('')

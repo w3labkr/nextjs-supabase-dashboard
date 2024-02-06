@@ -3,13 +3,12 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { lng, fallbackLng } from '@/i18next.config'
-
-import { cn } from '@/utils'
+import { cn } from '@/utils/tailwind'
 
 export interface LanguageToggleProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
-export function LanguageToggleLink({
+export function LanguageToggleButton({
   className,
   ...props
 }: LanguageToggleProps) {

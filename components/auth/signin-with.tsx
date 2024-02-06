@@ -1,9 +1,5 @@
-'use client'
-
 import * as React from 'react'
-
-import { SignInWithGoogle } from './signin-with-google'
-// import { SignOutButton } from './signout-button'
+import { SignInWithGoogle } from '@/components/auth/signin-with-google'
 
 export function SignInWith() {
   return (
@@ -18,7 +14,6 @@ export function SignInWith() {
       </div>
       <div className="grid gap-2">
         <SignInWithGoogle />
-        {/* <SignOutButton /> */}
       </div>
     </>
   )

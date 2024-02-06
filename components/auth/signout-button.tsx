@@ -1,20 +1,26 @@
 'use client'
 
 import * as React from 'react'
-import { useTranslation } from 'react-i18next'
-
-import { createClient } from '@/utils/supabase/client'
-import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 
 export function SignOutButton() {
-  const { t } = useTranslation()
+  const router = useRouter()
 
-  async function signOut() {
+  const onClick = async () => {
     const supabase = createClient()
     const { error } = await supabase.auth.signOut()
 
-    console.log(error)
+    if (error) {
+      console.log(error)
+    }
+
+    router.push('/')
   }
 
-  return <Button onClick={signOut}>{t('Sign Out')}</Button>
+  return (
+    <button onClick={onClick} className="flex w-full cursor-pointer">
+      Signout
+    </button>
+  )
 }

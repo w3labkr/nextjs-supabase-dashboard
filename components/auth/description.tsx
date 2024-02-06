@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/utils'
+import { cn } from '@/utils/tailwind'
 
 export interface DescriptionProps
   extends React.HTMLAttributes<HTMLParagraphElement> {

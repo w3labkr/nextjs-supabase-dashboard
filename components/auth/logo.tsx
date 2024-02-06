@@ -1,11 +1,14 @@
 import * as React from 'react'
-import { LuCommand } from 'react-icons/lu'
-import { cn } from '@/utils'
+
+import { LucideIcon } from '@/lib/lucide-icon'
+import { cn } from '@/utils/tailwind'
 
 export interface LogoProps {
   className?: string
 }
 
 export function Logo({ className }: LogoProps) {
-  return <LuCommand className={cn('mx-auto h-6 w-6', className)} />
+  return (
+    <LucideIcon name="Command" className={cn('mx-auto size-6', className)} />
+  )
 }

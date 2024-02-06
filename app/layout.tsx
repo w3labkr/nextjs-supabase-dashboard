@@ -6,7 +6,7 @@ import { Analytics } from '@/components/analytics'
 import { lng } from '@/i18next.config'
 import { I18nextProvider } from '@/context/i18next-provider'
 
-import { cn } from '@/utils'
+import { cn } from '@/utils/tailwind'
 import { ThemeProvider } from '@/context/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
@@ -43,7 +43,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <div id="__next">{children}</div>
             <Toaster richColors closeButton />
             <TailwindIndicator />
           </ThemeProvider>

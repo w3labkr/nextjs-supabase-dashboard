@@ -134,10 +134,18 @@ Beautifully designed components that you can copy and paste into your apps. Acce
 npx shadcn-ui@latest init
 ```
 
-Add icon library
+Add icon libraries
 
 ```shell
 npm install lucide-react @radix-ui/react-icons
+```
+
+Dynamically load the lucide icon component.
+
+```javascript
+module.exports = {
+  transpilePackages: ['lucide-react'],
+}
 ```
 
 Adding dark mode

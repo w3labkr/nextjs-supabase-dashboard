@@ -1,12 +1,11 @@
 'use client'
 
 import * as React from 'react'
-import { Check, ChevronsUpDown } from 'lucide-react'
-
 import { useTranslation } from 'react-i18next'
 import { languages } from '@/i18next.config'
 
-import { cn } from '@/utils'
+import { cn } from '@/utils/tailwind'
+import { LucideIcon } from '@/lib/lucide-icon'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -56,7 +55,10 @@ export function LanguageSwitcher({
           {value
             ? languages.find((language) => language.value === value)?.label
             : t('Search language')}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <LucideIcon
+            name="ChevronsUpDown"
+            className="ml-2 h-4 w-4 shrink-0 opacity-50"
+          />
         </Button>
       </PopoverTrigger>
       <PopoverContent className={cn('w-50 p-0', className, contentClassName)}>
@@ -70,7 +72,8 @@ export function LanguageSwitcher({
                 value={language.value}
                 onSelect={handleChange}
               >
-                <Check
+                <LucideIcon
+                  name="Check"
                   className={cn(
                     'mr-2 h-4 w-4',
                     value === language.value ? 'opacity-100' : 'opacity-0'

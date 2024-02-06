@@ -2,8 +2,8 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { FcGoogle } from 'react-icons/fc'
 
+import { FcGoogle } from 'react-icons/fc'
 import { Button } from '@/components/ui/button'
 
 export function SignInWithGoogle() {
