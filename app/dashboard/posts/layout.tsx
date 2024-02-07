@@ -1,20 +1,13 @@
 import * as React from 'react'
 
 import { AppBar } from '@/components/dashboard/app-bar'
-import {
-  PersistentDrawer,
-  drawerItemProps,
-} from '@/components/dashboard/persistent-drawer'
+import { PersistentDrawer } from '@/components/dashboard/persistent-drawer'
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
-
-const drawerItems: drawerItemProps[] = [
-  { id: 1, title: 'New Post', href: '/dashboard/posts/new' },
-  { id: 2, title: 'Edit Post', href: '/dashboard/posts/edit' },
-]
+import { dashboardConfig } from '@/config/dashboard'
 
 export default function PostsLayout({
   children,
@@ -26,7 +19,7 @@ export default function PostsLayout({
       <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
         <PersistentDrawer
           title="Posts"
-          drawerItems={drawerItems}
+          drawerItems={dashboardConfig.posts.drawerItems}
           className="w-full border-none lg:max-w-full"
         />
       </ResizablePanel>

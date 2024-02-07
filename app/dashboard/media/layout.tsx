@@ -1,20 +1,13 @@
 import * as React from 'react'
 
 import { AppBar } from '@/components/dashboard/app-bar'
-import {
-  PersistentDrawer,
-  drawerItemProps,
-} from '@/components/dashboard/persistent-drawer'
+import { PersistentDrawer } from '@/components/dashboard/persistent-drawer'
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
-
-const drawerItems: drawerItemProps[] = [
-  { id: 1, title: 'New Media', href: '/dashboard/media/new' },
-  { id: 2, title: 'Edit Media', href: '/dashboard/media/edit' },
-]
+import { dashboardConfig } from '@/config/dashboard'
 
 export default function MediaLayout({
   children,
@@ -26,7 +19,7 @@ export default function MediaLayout({
       <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
         <PersistentDrawer
           title="Media"
-          drawerItems={drawerItems}
+          drawerItems={dashboardConfig.media.drawerItems}
           className="w-full border-none lg:max-w-full"
         />
       </ResizablePanel>

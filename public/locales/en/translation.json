@@ -6,7 +6,10 @@
 
   "Sign In": "Sign In",
   "Sign Up": "Sign Up",
-  "Sign Out": "Sign Out",
+
+  "Profile": "Profile",
+  "Settings": "Settings",
+  "Signout": "Signout",
 
   "Email": "Email",
   "Password": "Password",

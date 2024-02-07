@@ -22,8 +22,8 @@ export default function SignInPage() {
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title text="Welcome back" />
-          <Description text="Enter your email to sign in to your account" />
+          <Title>Welcome back</Title>
+          <Description>Enter your email to sign in to your account</Description>
         </div>
         <div className="grid gap-6">
           <SignInForm />

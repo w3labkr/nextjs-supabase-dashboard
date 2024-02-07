@@ -6,17 +6,12 @@ import { usePathname } from 'next/navigation'
 
 import { AppBarContext } from '@/context/app-bar-provider'
 import { cn } from '@/utils/tailwind'
-
-export interface drawerItemProps {
-  id: number
-  title: string
-  href: string
-}
+import { DrawerItemProps } from '@/types'
 
 export interface PersistentDrawerProps
   extends React.HTMLAttributes<HTMLDivElement> {
   title: string
-  drawerItems: drawerItemProps[]
+  drawerItems: DrawerItemProps[]
 }
 
 export function PersistentDrawer({

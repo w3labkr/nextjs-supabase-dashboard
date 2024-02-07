@@ -8,7 +8,7 @@ import type { SetOptional } from 'type-fest'
 import { cn } from '@/utils/tailwind'
 
 type TransLinkProps = SetOptional<LinkProps, 'href'> &
-  React.AnchorHTMLAttributes<HTMLAnchorElement>
+  Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>
 
 const Link1 = ({ children, ...props }: TransLinkProps) => (
   <Link

@@ -8,23 +8,22 @@ import { Button, ButtonProps } from '@/components/ui/button'
 
 export interface SignInLinkButtonProps
   extends ButtonProps,
-    React.RefAttributes<HTMLButtonElement> {
-  href?: string
-  title?: string
-}
+    React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 export function SignInLinkButton({
   variant = 'ghost',
-  href = '/auth/signin',
-  title = 'Sign In',
   ...props
 }: SignInLinkButtonProps) {
   const router = useRouter()
   const { t } = useTranslation()
 
   return (
-    <Button variant={variant} onClick={() => router.push(href)} {...props}>
-      <Trans t={t}>{title}</Trans>
+    <Button
+      variant={variant}
+      onClick={() => router.push('/auth/signin')}
+      {...props}
+    >
+      <Trans t={t}>Sign In</Trans>
     </Button>
   )
 }

@@ -1,22 +1,13 @@
 import * as React from 'react'
 
 import { AppBar } from '@/components/dashboard/app-bar'
-import {
-  PersistentDrawer,
-  drawerItemProps,
-} from '@/components/dashboard/persistent-drawer'
+import { PersistentDrawer } from '@/components/dashboard/persistent-drawer'
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
-
-const drawerItems: drawerItemProps[] = [
-  { id: 1, title: 'Profile', href: '/dashboard/settings/profile' },
-  { id: 2, title: 'Account', href: '/dashboard/settings/account' },
-  { id: 3, title: 'Appearance', href: '/dashboard/settings/appearance' },
-  { id: 4, title: 'Notifications', href: '/dashboard/settings/notifications' },
-]
+import { dashboardConfig } from '@/config/dashboard'
 
 export default function SettingsLayout({
   children,
@@ -28,7 +19,7 @@ export default function SettingsLayout({
       <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
         <PersistentDrawer
           title="Settings"
-          drawerItems={drawerItems}
+          drawerItems={dashboardConfig.settings.drawerItems}
           className="w-full border-none lg:max-w-full"
         />
       </ResizablePanel>

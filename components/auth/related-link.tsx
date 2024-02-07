@@ -7,7 +7,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { cn } from '@/utils/tailwind'
 
 export type RelatedLinkProps = LinkProps &
-  React.AnchorHTMLAttributes<HTMLAnchorElement>
+  Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>
 
 export function RelatedLink({
   children,

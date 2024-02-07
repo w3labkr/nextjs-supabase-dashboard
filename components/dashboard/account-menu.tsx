@@ -1,5 +1,8 @@
+'use client'
+
 import * as React from 'react'
 import Link from 'next/link'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -14,6 +17,8 @@ import {
 import { SignOutButton } from '@/components/auth/signout-button'
 
 export function AccountMenu() {
+  const { t } = useTranslation()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -37,12 +42,12 @@ export function AccountMenu() {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="#" className="cursor-pointer">
-            Profile
+            <Trans t={t}>Profile</Trans>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/dashboard/settings/profile" className="cursor-pointer">
-            Settings
+            <Trans t={t}>Settings</Trans>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
