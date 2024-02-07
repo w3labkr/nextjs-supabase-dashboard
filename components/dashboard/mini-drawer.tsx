@@ -25,7 +25,7 @@ export function MiniDrawer({ className, ...props }: MiniDrawerProps) {
   return (
     <div
       className={cn(
-        'hide-scrollbar border-default flex flex-col border-r bg-background px-2',
+        'flex flex-col border-r bg-background px-2',
         'w-14 min-w-14',
         className
       )}

@@ -31,8 +31,8 @@ export function PersistentDrawer({
   return (
     <div
       className={cn(
-        'hide-scrollbar border-default flex flex-col border-r bg-background',
-        'w-64 min-w-48',
+        'flex flex-col border-r bg-background',
+        'w-48 min-w-48 lg:w-64',
         className
       )}
       {...props}

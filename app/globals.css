@@ -57,3 +57,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer base {
+  body:has(.body-overflow-hidden) {
+    @apply overflow-hidden;
+  }
+}

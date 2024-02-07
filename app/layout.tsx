@@ -30,12 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={lng} suppressHydrationWarning>
-      <body
-        className={cn(
-          'min-h-screen bg-background font-sans antialiased',
-          fontSans.variable
-        )}
-      >
+      <body className={cn('font-sans antialiased', fontSans.variable)}>
         <I18nextProvider>
           <ThemeProvider
             attribute="class"

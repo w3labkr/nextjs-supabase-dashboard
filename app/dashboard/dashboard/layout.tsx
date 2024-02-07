@@ -8,7 +8,7 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="hide-scrollbar flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col">
       <AppBar />
       {children}
     </div>

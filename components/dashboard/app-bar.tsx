@@ -9,14 +9,15 @@ import { AccountMenu } from '@/components/dashboard/account-menu'
 
 export interface AppBarProps extends React.HTMLAttributes<HTMLElement> {}
 
-export function AppBar({ children, ...props }: AppBarProps) {
+export function AppBar({ children, className, ...props }: AppBarProps) {
   const appBarState = React.useContext(AppBarContext)
 
   return (
     <header
       className={cn(
-        'flex items-center gap-4 border-b px-6',
-        appBarState?.height ?? 'h-[50px]'
+        'flex w-full items-center gap-4 border-b bg-background px-6',
+        appBarState?.height ?? 'h-[50px]',
+        className
       )}
       {...props}
     >

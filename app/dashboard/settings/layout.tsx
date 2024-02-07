@@ -5,6 +5,11 @@ import {
   PersistentDrawer,
   drawerItemProps,
 } from '@/components/dashboard/persistent-drawer'
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from '@/components/ui/resizable'
 
 const drawerItems: drawerItemProps[] = [
   { id: 1, title: 'Profile', href: '/dashboard/settings/profile' },
@@ -19,12 +24,19 @@ export default function SettingsLayout({
   children: React.ReactNode
 }) {
   return (
-    <>
-      <PersistentDrawer title="Settings" drawerItems={drawerItems} />
-      <div className="hide-scrollbar flex flex-1 flex-col">
-        <AppBar />
-        {children}
-      </div>
-    </>
+    <ResizablePanelGroup direction="horizontal">
+      <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
+        <PersistentDrawer
+          title="Settings"
+          drawerItems={drawerItems}
+          className="w-full border-none lg:max-w-full"
+        />
+      </ResizablePanel>
+      <ResizableHandle withHandle />
+      <ResizablePanel defaultSize={75} className="relative !overflow-auto">
+        <AppBar className="sticky left-0 top-0 z-10" />
+        <div className="flex flex-1 flex-col">{children}</div>
+      </ResizablePanel>
+    </ResizablePanelGroup>
   )
 }

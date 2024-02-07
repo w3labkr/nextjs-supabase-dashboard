@@ -9,7 +9,7 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex h-screen">
+    <div className="body-overflow-hidden flex h-screen w-screen min-w-[768px]">
       <AppBarProvider value={{ height: 'h-[50px]' }}>
         <MiniDrawer />
         {children}

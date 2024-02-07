@@ -93,7 +93,7 @@ export function ProfileForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
-              <FormControl>
+              <FormControl className="max-w-72">
                 <Input placeholder="Your name" {...field} />
               </FormControl>
               <FormDescription>
@@ -111,7 +111,7 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
+                <FormControl className="max-w-72">
                   <SelectTrigger>
                     <SelectValue placeholder="Select a verified email to display" />
                   </SelectTrigger>
@@ -136,7 +136,7 @@ export function ProfileForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Bio</FormLabel>
-              <FormControl>
+              <FormControl className="max-w-96">
                 <Textarea
                   placeholder="Tell us a little bit about yourself"
                   className="resize-none"

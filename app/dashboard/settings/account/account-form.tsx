@@ -90,7 +90,7 @@ export function AccountForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
-              <FormControl>
+              <FormControl className="max-w-60">
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
               <FormDescription>

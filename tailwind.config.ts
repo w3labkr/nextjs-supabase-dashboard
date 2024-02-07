@@ -1,6 +1,5 @@
-import type { Config } from 'tailwindcss'
-
-const config = {
+/** @type {import('tailwindcss').Config} */
+const tailwindConfig = {
   darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
@@ -73,7 +72,7 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
-} satisfies Config
+  plugins: [require('tailwindcss-animate'), require('tailwind-scrollbar-hide')],
+}
 
-export default config
+module.exports = tailwindConfig

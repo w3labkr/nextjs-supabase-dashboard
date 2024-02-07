@@ -10,6 +10,10 @@ Denpendency
 - react-i18next + zod-i18n-map
 - Supabase Auth
 
+## Screenshots
+
+![screenshot](./screenshot.png)
+
 ## Folder and file Structure
 
 The folder and file structure is based on nextjs app router [Next.js Project Structur](https://nextjs.org/docs/getting-started/project-structure).
@@ -24,6 +28,7 @@ The folder and file structure is based on nextjs app router [Next.js Project Str
 ├── lib/                        # Utility functions that aren't necessarily bound to React or Next.js
 ├── public/                     # Static assets to be served
 │   └── [locales]/              # Internationalization
+├── screenshots/                # Screenshots
 ├── types/
 ├── utils/
 └── package.json                # Project dependencies and scripts
@@ -116,6 +121,12 @@ Using 'clsx' or 'classnames' with 'tailwind-merge'
 
 ```shell
 npm install tailwindcss-animate class-variance-authority clsx tailwind-merge
+```
+
+Tailwindcss plugin for hide scrollbar
+
+```shell
+npm install tailwind-scrollbar-hide
 ```
 
 `utils/cn.ts`:
