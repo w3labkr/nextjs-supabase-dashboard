@@ -7,7 +7,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
-import { dashboardConfig } from '@/config/dashboard'
+import { mediaConfig } from '@/config/dashboard'
 
 export default function MediaLayout({
   children,
@@ -19,7 +19,7 @@ export default function MediaLayout({
       <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
         <PersistentDrawer
           title="Media"
-          drawerItems={dashboardConfig.media.drawerItems}
+          drawerItems={mediaConfig.drawerItems}
           className="w-full border-none lg:max-w-full"
         />
       </ResizablePanel>

@@ -7,7 +7,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
-import { dashboardConfig } from '@/config/dashboard'
+import { postsConfig } from '@/config/dashboard'
 
 export default function PostsLayout({
   children,
@@ -19,7 +19,7 @@ export default function PostsLayout({
       <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
         <PersistentDrawer
           title="Posts"
-          drawerItems={dashboardConfig.posts.drawerItems}
+          drawerItems={postsConfig.drawerItems}
           className="w-full border-none lg:max-w-full"
         />
       </ResizablePanel>

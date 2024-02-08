@@ -1,4 +1,9 @@
-import { DashboardConfig } from '@/types'
+import {
+  DashboardConfig,
+  MediaConfig,
+  PostsConfig,
+  SettingsConfig,
+} from '@/types/dashboard'
 
 export const dashboardConfig: DashboardConfig = {
   miniDrawer: [
@@ -35,28 +40,31 @@ export const dashboardConfig: DashboardConfig = {
       separator: true,
     },
   ],
-  media: {
-    drawerItems: [
-      { id: 1, title: 'New Media', href: '/dashboard/media/new' },
-      { id: 2, title: 'Edit Media', href: '/dashboard/media/edit' },
-    ],
-  },
-  posts: {
-    drawerItems: [
-      { id: 1, title: 'New Post', href: '/dashboard/posts/new' },
-      { id: 2, title: 'Edit Post', href: '/dashboard/posts/edit' },
-    ],
-  },
-  settings: {
-    drawerItems: [
-      { id: 1, title: 'Profile', href: '/dashboard/settings/profile' },
-      { id: 2, title: 'Account', href: '/dashboard/settings/account' },
-      { id: 3, title: 'Appearance', href: '/dashboard/settings/appearance' },
-      {
-        id: 4,
-        title: 'Notifications',
-        href: '/dashboard/settings/notifications',
-      },
-    ],
-  },
+}
+
+export const mediaConfig: MediaConfig = {
+  drawerItems: [
+    { id: 1, title: 'New Media', href: '/dashboard/media/new' },
+    { id: 2, title: 'Edit Media', href: '/dashboard/media/edit' },
+  ],
+}
+
+export const postsConfig: PostsConfig = {
+  drawerItems: [
+    { id: 1, title: 'New Post', href: '/dashboard/posts/new' },
+    { id: 2, title: 'Edit Post', href: '/dashboard/posts/edit' },
+  ],
+}
+
+export const settingsConfig: SettingsConfig = {
+  drawerItems: [
+    { id: 1, title: 'Profile', href: '/dashboard/settings/profile' },
+    { id: 2, title: 'Account', href: '/dashboard/settings/account' },
+    { id: 3, title: 'Appearance', href: '/dashboard/settings/appearance' },
+    {
+      id: 4,
+      title: 'Notifications',
+      href: '/dashboard/settings/notifications',
+    },
+  ],
 }

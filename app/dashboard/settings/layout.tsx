@@ -7,7 +7,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
-import { dashboardConfig } from '@/config/dashboard'
+import { settingsConfig } from '@/config/dashboard'
 
 export default function SettingsLayout({
   children,
@@ -19,7 +19,7 @@ export default function SettingsLayout({
       <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
         <PersistentDrawer
           title="Settings"
-          drawerItems={dashboardConfig.settings.drawerItems}
+          drawerItems={settingsConfig.drawerItems}
           className="w-full border-none lg:max-w-full"
         />
       </ResizablePanel>

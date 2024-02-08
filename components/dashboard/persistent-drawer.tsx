@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 
 import { AppBarContext } from '@/context/app-bar-provider'
 import { cn } from '@/utils/tailwind'
-import { DrawerItemProps } from '@/types'
+import { DrawerItemProps } from '@/types/dashboard'
 
 export interface PersistentDrawerProps
   extends React.HTMLAttributes<HTMLDivElement> {
