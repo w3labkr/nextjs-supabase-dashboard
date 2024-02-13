@@ -1,6 +1,5 @@
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
 import { type CookieOptions, createServerClient } from '@supabase/ssr'
 
 /**
@@ -8,7 +7,7 @@ import { type CookieOptions, createServerClient } from '@supabase/ssr'
  *
  * @link https://supabase.com/docs/guides/auth/server-side/oauth-with-pkce-flow-for-ssr
  */
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
   // if "next" is in param, use it as the redirect URL

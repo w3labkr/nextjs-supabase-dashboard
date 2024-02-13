@@ -1,5 +1,5 @@
-import { NextResponse, type NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
+import { NextResponse, type NextRequest } from 'next/server'
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 
 // To access Supabase from Server Components, which run only on the server.

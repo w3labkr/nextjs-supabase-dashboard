@@ -1,19 +1,20 @@
 import * as React from 'react'
 
-import { AppBarProvider } from '@/context/app-bar-provider'
-import { MiniDrawer } from '@/components/dashboard/mini-drawer'
+import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <div className="body-overflow-hidden flex h-screen w-screen min-w-[768px]">
-      <AppBarProvider value={{ height: 'h-[50px]' }}>
-        <MiniDrawer />
-        {children}
-      </AppBarProvider>
-    </div>
-  )
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  console.log(user?.email)
+
+  return <React.Fragment>{children}</React.Fragment>
 }

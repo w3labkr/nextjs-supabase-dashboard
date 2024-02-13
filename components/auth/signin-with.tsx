@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { SignInWithGoogle } from '@/components/auth/signin-with-google'
+// import { SignInWithGithub } from '@/components/auth/signin-with-github'
 
 export function SignInWith() {
   return (
@@ -14,6 +15,7 @@ export function SignInWith() {
         </div>
       </div>
       <div className="grid gap-2">
+        {/* <SignInWithGithub /> */}
         <SignInWithGoogle />
       </div>
     </>

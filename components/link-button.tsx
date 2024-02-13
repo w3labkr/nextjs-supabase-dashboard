@@ -2,11 +2,13 @@
 
 import * as React from 'react'
 import Link, { LinkProps } from 'next/link'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 import { Button, ButtonProps } from '@/components/ui/button'
 
-export interface LinkButtonProps extends ButtonProps, Pick<LinkProps, 'href'> {}
+export interface LinkButtonProps extends ButtonProps, Pick<LinkProps, 'href'> {
+  title?: string
+}
 
 export function LinkButton({
   children,
@@ -18,10 +20,7 @@ export function LinkButton({
 
   return (
     <Button asChild {...props}>
-      <Link href={href}>
-        <Trans t={t}>{title}</Trans>
-        {children}
-      </Link>
+      <Link href={href}>{title ? t(title) : children}</Link>
     </Button>
   )
 }

@@ -63,8 +63,9 @@ export function SignUpForm() {
       email: values.email,
       password: values.password,
     })
+    const isAuthenticated = !(error || !user)
 
-    if (error || !user) {
+    if (!isAuthenticated) {
       switch (error?.name) {
         case 'AuthApiError':
           form.setError('root.serverError', {

@@ -8,7 +8,7 @@ Denpendency
 - Shadcn UI (Radix UI)
 - react-hook-form + zod
 - react-i18next + zod-i18n-map
-- Supabase Auth
+- Supabase Auth with PKCE flow (@supabase/ssr)
 
 ## Screenshots
 
@@ -368,3 +368,5 @@ module.exports = {
 ```
 
 ## Troubleshooting
+
+...

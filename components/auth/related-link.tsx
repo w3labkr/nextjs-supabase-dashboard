@@ -2,15 +2,19 @@
 
 import * as React from 'react'
 import Link, { LinkProps } from 'next/link'
+import { useTranslation } from 'react-i18next'
 
-import { Trans, useTranslation } from 'react-i18next'
 import { cn } from '@/utils/tailwind'
 
-export type RelatedLinkProps = LinkProps &
-  Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>
+export interface RelatedLinkProps
+  extends LinkProps,
+    Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
+  title?: string
+}
 
 export function RelatedLink({
   children,
+  title,
   className,
   ...props
 }: RelatedLinkProps) {
@@ -24,7 +28,7 @@ export function RelatedLink({
       )}
       {...props}
     >
-      <Trans t={t}>{children}</Trans>
+      {title ? t(title) : children}
     </Link>
   )
 }

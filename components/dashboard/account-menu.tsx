@@ -52,7 +52,10 @@ export function AccountMenu() {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <SignOutButton />
+          <SignOutButton
+            variant="ghost"
+            className="flex h-auto w-full justify-start p-0 font-normal"
+          />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

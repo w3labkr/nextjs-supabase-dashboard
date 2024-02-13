@@ -14,9 +14,11 @@ export async function middleware(request: NextRequest) {
     const supabase = createMiddlewareClient(request, response)
     const {
       data: { user },
+      error,
     } = await supabase.auth.getUser()
+    const isAuthenticated = !(error || !user)
 
-    if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
+    if (!isAuthenticated && request.nextUrl.pathname.startsWith('/dashboard')) {
       return NextResponse.redirect(new URL('/auth/signin', request.url))
     }
   } else {

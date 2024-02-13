@@ -1,8 +1,8 @@
 'use client'
 
 import * as React from 'react'
-import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -56,8 +56,9 @@ export function SignInForm() {
       email: values.email,
       password: values.password,
     })
+    const isAuthenticated = !(error || !user)
 
-    if (error || !user) {
+    if (!isAuthenticated) {
       switch (error?.name) {
         case 'AuthApiError':
           form.setError('root.serverError', {
@@ -71,6 +72,8 @@ export function SignInForm() {
       }
       return false
     }
+
+    toast.success(t('You have successfully logged in'))
 
     router.push('/dashboard/dashboard')
   }
@@ -110,9 +113,11 @@ export function SignInForm() {
             <FormItem>
               <div className="flex items-center justify-between">
                 <FormLabel>{t('Password')}</FormLabel>
-                <RelatedLink href="/auth/forgot-password" className="text-sm">
-                  Forgot your password?
-                </RelatedLink>
+                <RelatedLink
+                  href="/auth/forgot-password"
+                  className="text-sm"
+                  title="Forgot your password?"
+                />
               </div>
               <FormControl>
                 <Input
@@ -134,7 +139,7 @@ export function SignInForm() {
           {isSubmitting && (
             <LucideIcon name="Loader2" className="mr-2 size-4 animate-spin" />
           )}
-          {t('Sign In')}
+          <Trans t={t}>Sign In</Trans>
         </Button>
       </form>
     </Form>

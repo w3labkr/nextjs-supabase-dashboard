@@ -3,7 +3,7 @@
 import * as React from 'react'
 import Link, { LinkProps } from 'next/link'
 
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 import type { SetOptional } from 'type-fest'
 import { cn } from '@/utils/tailwind'
 

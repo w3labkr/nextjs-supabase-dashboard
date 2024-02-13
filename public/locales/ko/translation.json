@@ -23,6 +23,8 @@
   "Enter your email to sign in to your account": "귀하의 계정에 로그인하려면 이메일을 입력하세요",
 
   "Sign in with Google": "구글 로그인",
+  "Sign in with Github": "깃허브 로그인",
+  "You have successfully logged in": "성공적으로 로그인되었습니다",
   "Don't have an account? Sign Up": "계정이 없나요? 가입하기",
   "Already have an account? Sign In": "이미 계정이 있습니까? 로그인",
   "Forgot your password?": "비밀번호를 잊으셨나요?",

@@ -2,15 +2,22 @@
 
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/utils/tailwind'
+import { Button, ButtonProps } from '@/components/ui/button'
 
 interface SignOutButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+  extends ButtonProps,
+    React.ButtonHTMLAttributes<HTMLButtonElement> {
+  title?: string
+}
 
-export function SignOutButton({ className, ...props }: SignOutButtonProps) {
+export function SignOutButton({
+  children,
+  title = 'Signout',
+  ...props
+}: SignOutButtonProps) {
   const router = useRouter()
   const { t } = useTranslation()
 
@@ -19,19 +26,15 @@ export function SignOutButton({ className, ...props }: SignOutButtonProps) {
     const { error } = await supabase.auth.signOut()
 
     if (error) {
-      console.log(error)
+      console.error(error?.message)
     }
 
     router.push('/')
   }
 
   return (
-    <button
-      onClick={onClick}
-      className={cn('flex w-full cursor-pointer', className)}
-      {...props}
-    >
-      <Trans t={t}>Signout</Trans>
-    </button>
+    <Button onClick={onClick} {...props}>
+      {title ? t(title) : children}
+    </Button>
   )
 }
