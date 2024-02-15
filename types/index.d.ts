@@ -1,12 +1,12 @@
 import { LucideIconProps } from '@/lib/lucide-icon'
 
-export type MobileNavItemProps = {
+export interface MobileNavItemProps {
   id: number
   title: string
   href: string
 }
 
-export type SiteConfig = {
+export interface SiteConfig {
   name: string
   title: string
   symbol: LucideIconProps['name']

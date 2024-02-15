@@ -3,17 +3,16 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
-import { icons } from 'lucide-react'
 
-import { LucideIcon } from '@/lib/lucide-icon'
+import { LucideIcon, LucideIconProps } from '@/lib/lucide-icon'
 import { Button, ButtonProps } from '@/components/ui/button'
 
 export interface HistoryBackButtonProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
   title?: string
-  startIconName?: keyof typeof icons
-  endIconName?: keyof typeof icons
+  startIconName?: LucideIconProps['name']
+  endIconName?: LucideIconProps['name']
 }
 
 export function HistoryBackButton({

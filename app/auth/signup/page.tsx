@@ -8,6 +8,7 @@ import { SignUpPolicyLink } from '@/components/auth/signup-policy-link'
 import { RelatedLink } from '@/components/auth/related-link'
 import { ButtonLink } from '@/components/button-link'
 import { LanguageToggleButton } from '@/components/auth/language-toggle-button'
+
 import { SignUpForm } from './signup-form'
 
 export const metadata: Metadata = {

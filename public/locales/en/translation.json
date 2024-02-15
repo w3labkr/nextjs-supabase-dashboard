@@ -6,6 +6,7 @@
 
   "Sign In": "Sign In",
   "Sign Up": "Sign Up",
+  "Sign Out": "Sign Out",
 
   "Profile": "Profile",
   "Settings": "Settings",
@@ -20,20 +21,29 @@
 
   "Back": "Back",
   "Welcome back": "Welcome back",
-  "Enter your email to sign in to your account": "Enter your email to sign in to your account",
+  "Enter your email to sign in to your account": "Enter your email to sign in to your account.",
 
   "Sign in with Google": "Sign in with Google",
   "Sign in with Github": "Sign in with Github",
-  "You have successfully logged in": "You have successfully logged in",
+  "You have successfully logged in": "You have successfully logged in.",
   "Don't have an account? Sign Up": "Don't have an account? Sign Up",
   "Already have an account? Sign In": "Already have an account? Sign In",
+
   "Forgot your password?": "Forgot your password?",
+  "Enter your email address below and we will send you a message to reset your password": "Enter your email address below and we will send you a message to reset your password.",
+  "Reset my password": "Reset my password",
+  "The email has been sent successfully": "The email has been sent successfully.",
+
+  "Reset your password": "Reset your password",
+  "Please enter your new password below": "Please enter your new password below.",
+  "New Password": "New Password",
+  "Confirm New Password": "Confirm New Password",
+  "Change password": "Change password",
+  "Your password has been successfully changed": "Your password has been successfully changed.",
 
   "Create an account": "Create an account",
-  "Enter your email below to create your account": "Enter your email below to create your account",
-  "Sign up with Google": "Sign up with Google",
+  "Enter your email below to create your account": "Enter your email below to create your account.",
   "You have successfully registered as a member": "You have successfully registered as a member.",
-
   "By clicking Sign Up, you agree to our Terms of Service and Privacy Policy": "By clicking Sign Up, you agree to our <link1>Terms of Service</link1> and <link2>Privacy Policy</link2>.",
 
   "Welcome to Acme Inc": "Welcome to Acme Inc",

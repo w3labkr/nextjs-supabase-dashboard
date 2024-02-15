@@ -19,11 +19,11 @@ export function SignInWithGithub() {
         // A URL to send the user to after they are confirmed.
         redirectTo:
           process.env.NEXT_PUBLIC_SITE_URL +
-          '/api/v1/auth/callback?next=/dashboard/dashboard',
+          '/api/auth/v1/callback?next=/dashboard/dashboard',
       },
     })
 
-    if (error) toast.error(error?.message)
+    if (error) toast.error(`${error?.name}: ${error?.message}`)
   }
 
   return (

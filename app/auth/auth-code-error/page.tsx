@@ -12,7 +12,7 @@ export default function AuthCodeError() {
         className="absolute left-4 top-4 md:left-8 md:top-8"
         startIconName="ChevronLeft"
       />
-      <Error statusCode={500} />
+      <Error statusCode="500" />
     </div>
   )
 }

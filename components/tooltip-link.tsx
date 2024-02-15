@@ -29,7 +29,7 @@ export function TooltipLink({
         <TooltipTrigger asChild>
           <Link {...props}>{children}</Link>
         </TooltipTrigger>
-        <TooltipContent {...tooltipContent}>{title}</TooltipContent>
+        {title && <TooltipContent {...tooltipContent}>{title}</TooltipContent>}
       </Tooltip>
     </TooltipProvider>
   )

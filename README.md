@@ -8,7 +8,8 @@ Denpendency
 - Shadcn UI (Radix UI)
 - react-hook-form + zod
 - react-i18next + zod-i18n-map
-- Supabase Auth with PKCE flow (@supabase/ssr)
+- Supabase OAuth with PKCE flow (@supabase/ssr)
+- Supabase Email Auth with PKCE flow (@supabase/ssr)
 
 ## Screenshots
 
@@ -200,8 +201,20 @@ npm install zod @hookform/resolvers
 Install Supabase packages
 
 ```shell
-npm install @supabase/ssr @supabase/supabase-js
+npm install @supabase/supabase-js @supabase/ssr
 ```
+
+Set environment variables. Edit `.env.local`:
+
+```txt
+NEXT_PUBLIC_SUPABASE_URL=<your_supabase_project_url>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<your_supabase_anon_key>
+```
+
+Reference
+
+- [Setting up Server-Side Auth for Next.js](https://supabase.com/docs/guides/auth/server-side/nextjs)
+- [Auth rate limits](https://supabase.com/docs/guides/platform/going-into-prod#auth-rate-limits)
 
 ## Firebase Auth
 
@@ -302,6 +315,19 @@ Generate RFC-compliant UUIDs in JavaScript
 
 ```shell
 npm install uuid @types/uuid
+```
+
+## Useful Utils
+
+Get or Set the HTTP response code
+
+```javascript
+import { httpResponseCode } from '@/utils/server'
+
+httpResponseCode(401)
+
+// Same as below
+NextResponse.json({ "status": 401, "statusText": "Unauthorized", "message": "The client must authenticate itself to get the requested response." }, { status: 401 })
 ```
 
 ## ESLint

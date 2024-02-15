@@ -1,8 +1,10 @@
 'use client'
 
 import * as React from 'react'
-import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
+
+import { useTranslation, Trans } from 'react-i18next'
+import { i18nKey } from '@/utils/string'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -56,33 +58,36 @@ export function SignUpForm() {
 
   async function onSubmit(values: SignUpFormValues) {
     const supabase = createClient()
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: values.email,
       password: values.password,
     })
-    const isAuthenticated = !(error || !user)
 
-    if (!isAuthenticated) {
-      switch (error?.name) {
+    if (error) {
+      const { status, name, message } = error
+      const i18nMessage = `${name}.${i18nKey(message)}`
+
+      switch (name) {
         case 'AuthApiError':
           form.setError('root.serverError', {
-            type: error?.status?.toString(),
-            message: t(`${error?.name}.${error?.message}`, { ns: 'supabase' }),
+            type: status?.toString(),
+            message: t(i18nMessage, { ns: 'supabase' }),
           })
           break
         case 'AuthRetryableFetchError':
-          toast.error(t(`${error?.name}.${error?.message}`, { ns: 'supabase' }))
+          toast.error(t(i18nMessage, { ns: 'supabase' }))
+          break
+        default:
+          toast.error(`${name}: ${message}`)
           break
       }
+
       return false
     }
 
     toast.success(t('You have successfully registered as a member'))
 
-    router.push('/auth/signin')
+    router.push('/dashboard/dashboard')
   }
 
   return (
@@ -102,10 +107,10 @@ export function SignUpForm() {
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder="name@example.com"
                     autoCapitalize="none"
                     autoComplete="email"
                     autoCorrect="off"
+                    placeholder="name@example.com"
                     {...field}
                   />
                 </FormControl>
@@ -125,10 +130,10 @@ export function SignUpForm() {
               <FormControl>
                 <Input
                   type="password"
-                  placeholder="Password"
                   autoCapitalize="none"
                   autoComplete="off"
                   autoCorrect="off"
+                  placeholder={t('Password')}
                   {...field}
                 />
               </FormControl>
@@ -146,10 +151,10 @@ export function SignUpForm() {
               <FormControl>
                 <Input
                   type="password"
-                  placeholder="Confirm Password"
                   autoCapitalize="none"
                   autoComplete="off"
                   autoCorrect="off"
+                  placeholder={t('Confirm Password')}
                   {...field}
                 />
               </FormControl>
@@ -162,7 +167,7 @@ export function SignUpForm() {
           {isSubmitting && (
             <LucideIcon name="Loader2" className="mr-2 size-4 animate-spin" />
           )}
-          {t('Sign Up')}
+          <Trans t={t}>Sign Up</Trans>
         </Button>
       </form>
     </Form>

@@ -6,6 +6,7 @@
 
   "Sign In": "로그인",
   "Sign Up": "가입하기",
+  "Sign Out": "로그아웃",
 
   "Profile": "프로필",
   "Settings": "셋팅",
@@ -20,20 +21,29 @@
 
   "Back": "뒤로가기",
   "Welcome back": "돌아온 것을 환영합니다",
-  "Enter your email to sign in to your account": "귀하의 계정에 로그인하려면 이메일을 입력하세요",
+  "Enter your email to sign in to your account": "귀하의 계정에 로그인하려면 이메일을 입력하세요.",
 
   "Sign in with Google": "구글 로그인",
   "Sign in with Github": "깃허브 로그인",
-  "You have successfully logged in": "성공적으로 로그인되었습니다",
+  "You have successfully logged in": "성공적으로 로그인되었습니다.",
   "Don't have an account? Sign Up": "계정이 없나요? 가입하기",
   "Already have an account? Sign In": "이미 계정이 있습니까? 로그인",
+
   "Forgot your password?": "비밀번호를 잊으셨나요?",
+  "Enter your email address below and we will send you a message to reset your password": "아래에 이메일 주소를 입력하시면 비밀번호 재설정을 위한 메시지를 보내드립니다.",
+  "Reset my password": "비밀번호 재설정",
+  "The email has been sent successfully": "이메일이 성공적으로 전송되었습니다.",
+
+  "Reset your password": "비밀번호 재설정",
+  "Please enter your new password below": "아래에 새로운 비밀번호를 입력해주세요.",
+  "New Password": "새 비밀번호",
+  "Confirm New Password": "새 비밀번호 확인",
+  "Change password": "비밀번호 변경",
+  "Your password has been successfully changed": "비밀번호가 성공적으로 변경되었습니다.",
 
   "Create an account": "계정 만들기",
-  "Enter your email below to create your account": "계정을 만들려면 아래에 이메일을 입력하세요",
-  "Sign up with Google": "구글로 시작하기",
+  "Enter your email below to create your account": "계정을 만들려면 아래에 이메일을 입력하세요.",
   "You have successfully registered as a member": "성공적으로 회원가입이 완료되었습니다.",
-
   "By clicking Sign Up, you agree to our Terms of Service and Privacy Policy": "가입하기를 클릭하면 <link1>서비스 약관</link1> 및 <link2>개인정보 보호정책</link2>에 동의하게 됩니다.",
 
   "Welcome to Acme Inc": "Acme Inc에 오신 것을 환영합니다",

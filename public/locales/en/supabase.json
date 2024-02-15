@@ -1,9 +1,13 @@
 {
   "AuthApiError": {
-    "User already registered": "User already registered",
-    "Invalid login credentials": "Your email or password does not match"
+    "user-already-registered": "User already registered.",
+    "invalid-login-credentials": "Your email or password does not match.",
+    "new-password-should-be-different-from-the-old-password": "New password should be different from the old password."
+  },
+  "AuthSessionMissingError": {
+    "auth-session-missing": "Auth session missing!"
   },
   "AuthRetryableFetchError": {
-    "Failed to fetch": "Network request failed"
+    "failed-to-fetch": "Network request failed."
   }
 }

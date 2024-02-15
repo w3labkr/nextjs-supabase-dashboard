@@ -1,5 +1,4 @@
 import * as React from 'react'
-
 import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 
@@ -14,7 +13,7 @@ export default async function DashboardLayout({
     data: { user },
   } = await supabase.auth.getUser()
 
-  console.log(user?.email)
+  console.log(user)
 
   return <React.Fragment>{children}</React.Fragment>
 }

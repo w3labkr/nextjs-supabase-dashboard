@@ -23,37 +23,40 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { RelatedLink } from '@/components/auth/related-link'
 
 import { createClient } from '@/lib/supabase/client'
 
-const signInFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6).max(72),
-})
+const signUpFormSchema = z
+  .object({
+    newPassword: z.string().trim().min(6).max(72),
+    confirmNewPassword: z.string().trim().min(6).max(72),
+  })
+  .refine((val) => val.newPassword === val.confirmNewPassword, {
+    path: ['confirmNewPassword'],
+    params: { i18n: 'invalid_confirm_password' },
+  })
 
-type SignInFormValues = z.infer<typeof signInFormSchema>
+type SignUpFormValues = z.infer<typeof signUpFormSchema>
 
-const defaultValues: Partial<SignInFormValues> = {
-  email: '',
-  password: '',
+const defaultValues = {
+  newPassword: '',
+  confirmNewPassword: '',
 }
 
-export function SignInForm() {
+export function ResetPasswordForm() {
   const router = useRouter()
   const { t } = useTranslation(['translation', 'zod', 'zod-custom', 'supabase'])
 
-  const form = useForm<SignInFormValues>({
-    resolver: zodResolver(signInFormSchema),
+  const form = useForm<SignUpFormValues>({
+    resolver: zodResolver(signUpFormSchema),
     defaultValues: defaultValues,
   })
   const { errors, isSubmitting } = form.formState
 
-  async function onSubmit(values: SignInFormValues) {
+  async function onSubmit(values: SignUpFormValues) {
     const supabase = createClient()
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: values.email,
-      password: values.password,
+    const { data, error } = await supabase.auth.updateUser({
+      password: values.newPassword,
     })
 
     if (error) {
@@ -78,9 +81,15 @@ export function SignInForm() {
       return false
     }
 
-    toast.success(t('You have successfully logged in'))
+    toast.success(t('Your password has been successfully changed'))
 
-    router.push('/dashboard/dashboard')
+    if (data?.user) {
+      const { error } = await supabase.auth.signOut()
+      if (error) toast.error(`${error?.name}: ${error?.message}`)
+      if (error) return false
+    }
+
+    router.push('/auth/signin')
   }
 
   return (
@@ -92,50 +101,43 @@ export function SignInForm() {
       >
         <FormField
           control={form.control}
-          name="email"
+          name="newPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('Email')}</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  autoCapitalize="none"
-                  autoComplete="email"
-                  autoCorrect="off"
-                  placeholder="name@example.com"
-                  {...field}
-                />
-              </FormControl>
-              {/* <FormDescription></FormDescription> */}
-              <FormMessage className="font-normal" />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center justify-between">
-                <FormLabel>{t('Password')}</FormLabel>
-                <RelatedLink
-                  href="/auth/forgot-password"
-                  className="text-sm"
-                  title="Forgot your password?"
-                />
-              </div>
+              <FormLabel>{t('New Password')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoCapitalize="none"
                   autoComplete="off"
                   autoCorrect="off"
-                  placeholder={t('Password')}
+                  placeholder={t('New Password')}
                   {...field}
                 />
               </FormControl>
               {/* <FormDescription></FormDescription> */}
-              <FormMessage className="font-normal" />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="confirmNewPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('Confirm New Password')}</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  placeholder={t('Confirm New Password')}
+                  {...field}
+                />
+              </FormControl>
+              {/* <FormDescription></FormDescription> */}
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -144,7 +146,7 @@ export function SignInForm() {
           {isSubmitting && (
             <LucideIcon name="Loader2" className="mr-2 size-4 animate-spin" />
           )}
-          <Trans t={t}>Sign In</Trans>
+          <Trans t={t}>Change password</Trans>
         </Button>
       </form>
     </Form>

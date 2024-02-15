@@ -9,26 +9,37 @@ export async function middleware(request: NextRequest) {
   const response = NextResponse.next({
     request: { headers: request.headers },
   })
+  const pathname = request.nextUrl.pathname
 
-  if (process.env.NODE_ENV === 'production') {
-    const supabase = createMiddlewareClient(request, response)
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser()
-    const isAuthenticated = !(error || !user)
-
-    if (!isAuthenticated && request.nextUrl.pathname.startsWith('/dashboard')) {
-      return NextResponse.redirect(new URL('/auth/signin', request.url))
-    }
-  } else {
+  if (process.env.NODE_ENV !== 'production') {
     counter++
     console.log('middleware #:', counter)
+    return response
+  }
+
+  const supabase = createMiddlewareClient(request, response)
+  const { data, error } = await supabase.auth.getUser()
+  const isAuthenticated = !(error || !data?.user)
+
+  if (
+    pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/auth/reset-password')
+  ) {
+    if (!isAuthenticated)
+      return NextResponse.redirect(new URL('/auth/signin', request.url))
+  } else if (
+    pathname.startsWith('/auth/signin') ||
+    pathname.startsWith('/auth/signup')
+  ) {
+    if (isAuthenticated)
+      return NextResponse.redirect(
+        new URL('/dashboard/settings/profile', request.url)
+      )
   }
 
   return response
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*'],
+  matcher: ['/dashboard/:path*', '/auth/:path*'],
 }

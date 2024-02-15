@@ -1,32 +1,32 @@
 import { LucideIconProps } from '@/lib/lucide-icon'
 
-export type MiniDrawerItemProps = {
+export interface MiniDrawerItemProps {
   id: number
-  title: string
   href: string
-  icon?: LucideIconProps['name']
+  iconName: LucideIconProps['name']
+  title?: string
   badge?: number
   separator?: boolean
 }
 
-export type DrawerItemProps = {
+export interface DrawerItemProps {
   id: number
   title: string
   href: string
 }
 
-export type DashboardConfig = {
+export interface DashboardConfig {
   miniDrawer: MiniDrawerItemProps[]
 }
 
-export type MediaConfig = {
+export interface MediaConfig {
   drawerItems: DrawerItemProps[]
 }
 
-export type PostsConfig = {
+export interface PostsConfig {
   drawerItems: DrawerItemProps[]
 }
 
-export type SettingsConfig = {
+export interface SettingsConfig {
   drawerItems: DrawerItemProps[]
 }

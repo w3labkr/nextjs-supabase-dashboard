@@ -12,7 +12,7 @@ export default function NotFound() {
         className="absolute left-4 top-4 md:left-8 md:top-8"
         startIconName="ChevronLeft"
       />
-      <Error statusCode={404} />
+      <Error statusCode="404" />
     </div>
   )
 }

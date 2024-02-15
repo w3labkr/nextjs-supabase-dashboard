@@ -52,11 +52,7 @@ export function MiniDrawer({ className, ...props }: MiniDrawerProps) {
               )}
               tooltipContent={{ side: 'right', align: 'end', alignOffset: 6 }}
             >
-              {item.icon ? (
-                <LucideIcon name={item.icon} className="size-5" />
-              ) : (
-                item.title
-              )}
+              <LucideIcon name={item.iconName} className="size-5" />
               {!!item.badge && (
                 <Badge
                   className="absolute bottom-0 right-0 justify-center px-1 py-0.5"

@@ -3,10 +3,9 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
-import { icons } from 'lucide-react'
 
 import { cn } from '@/utils/tailwind'
-import { LucideIcon } from '@/lib/lucide-icon'
+import { LucideIcon, LucideIconProps } from '@/lib/lucide-icon'
 import { Button, ButtonProps } from '@/components/ui/button'
 
 export interface ForwardButtonProps
@@ -14,9 +13,9 @@ export interface ForwardButtonProps
     React.ButtonHTMLAttributes<HTMLButtonElement> {
   href: string
   title?: string
-  startIconName?: keyof typeof icons
+  startIconName?: LucideIconProps['name']
   startIconClassName?: string
-  endIconName?: keyof typeof icons
+  endIconName?: LucideIconProps['name']
   endIconClassName?: string
 }
 
