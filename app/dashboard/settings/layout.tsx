@@ -24,8 +24,8 @@ export default function SettingsLayout({
           <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
             <PersistentDrawer
               title="Settings"
-              drawerItems={settingsConfig.drawerItems}
               className="w-full border-none lg:max-w-full"
+              drawerGroupItems={settingsConfig.drawerGroupItems}
             />
           </ResizablePanel>
           <ResizableHandle withHandle />

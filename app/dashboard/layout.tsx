@@ -7,13 +7,13 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // const cookieStore = cookies()
+  // const supabase = createClient(cookieStore)
+  // const {
+  //   data: { user },
+  // } = await supabase.auth.getUser()
 
-  console.log(user)
+  // console.log(user)
 
   return <React.Fragment>{children}</React.Fragment>
 }
