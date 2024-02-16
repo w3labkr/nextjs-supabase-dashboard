@@ -1,5 +1,6 @@
 import * as React from 'react'
 import type { Metadata } from 'next'
+
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 

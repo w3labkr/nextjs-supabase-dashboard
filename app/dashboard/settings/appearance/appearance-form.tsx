@@ -124,7 +124,9 @@ export function AppearanceForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Update preferences</Button>
+        <Button type="submit" disabled>
+          Update preferences
+        </Button>
       </form>
     </Form>
   )

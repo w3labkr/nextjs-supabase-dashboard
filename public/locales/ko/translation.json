@@ -7,9 +7,6 @@
   "Sign In": "로그인",
   "Sign Up": "가입하기",
   "Sign Out": "로그아웃",
-
-  "Profile": "프로필",
-  "Settings": "설정",
   "Signout": "로그아웃",
 
   "Email": "이메일",
@@ -49,5 +46,18 @@
   "Welcome to Acme Inc": "Acme Inc에 오신 것을 환영합니다",
   "We provide high quality services for your business": "우리는 귀하의 비즈니스에 고품질의 서비스를 제공합니다.",
   "Get Started": "시작하기",
-  "Learn more": "알아보기"
+  "Learn more": "알아보기",
+
+  "Dashboard": "대시보드",
+  "Media": "미디어",
+  "Posts": "글",
+
+  "Settings": "설정",
+  "Profile": "프로필",
+  "Account": "계정",
+  "Appearance": "모습",
+  "Notifications": "알림",
+  "Emails": "이메일",
+  "Security": "보안",
+  "Sessions": "세션"
 }

@@ -1,9 +1,9 @@
 import * as React from 'react'
 import type { Metadata } from 'next'
 
-import { Logo } from '@/components/auth/logo'
-import { Title } from '@/components/auth/title'
-import { Description } from '@/components/auth/description'
+import { Logo } from '@/components/logo'
+import { Title } from '@/components/title'
+import { Description } from '@/components/description'
 import { RelatedLink } from '@/components/auth/related-link'
 import { ButtonLink } from '@/components/button-link'
 import { LanguageToggleButton } from '@/components/auth/language-toggle-button'
@@ -27,11 +27,12 @@ export default function ForgotPasswordPage() {
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title>Forgot your password?</Title>
-          <Description>
-            Enter your email address below and we will send you a message to
-            reset your password
-          </Description>
+          <Title text="Forgot your password?" translate />
+          <Description
+            text="Enter your email address below and we will send you a message to
+            reset your password"
+            translate
+          />
         </div>
         <div className="grid gap-6">
           <ForgotPasswordForm />

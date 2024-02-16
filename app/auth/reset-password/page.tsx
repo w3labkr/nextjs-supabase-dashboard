@@ -1,8 +1,8 @@
 import * as React from 'react'
 
-import { Logo } from '@/components/auth/logo'
-import { Title } from '@/components/auth/title'
-import { Description } from '@/components/auth/description'
+import { Logo } from '@/components/logo'
+import { Title } from '@/components/title'
+import { Description } from '@/components/description'
 import { RelatedLink } from '@/components/auth/related-link'
 import { ButtonLink } from '@/components/button-link'
 import { LanguageToggleButton } from '@/components/auth/language-toggle-button'
@@ -21,8 +21,8 @@ export default function ResetPasswordPage() {
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title>Reset your password</Title>
-          <Description>Please enter your new password below</Description>
+          <Title text="Reset your password" translate />
+          <Description text="Please enter your new password below" translate />
         </div>
         <div className="grid gap-6">
           <ResetPasswordForm />

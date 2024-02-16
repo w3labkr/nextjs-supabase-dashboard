@@ -7,9 +7,6 @@
   "Sign In": "Sign In",
   "Sign Up": "Sign Up",
   "Sign Out": "Sign Out",
-
-  "Profile": "Profile",
-  "Settings": "Settings",
   "Signout": "Signout",
 
   "Email": "Email",
@@ -49,5 +46,18 @@
   "Welcome to Acme Inc": "Welcome to Acme Inc",
   "We provide high quality services for your business": "We provide high quality services for your business.",
   "Get Started": "Get Started",
-  "Learn more": "Learn more"
+  "Learn more": "Learn more",
+
+  "Dashboard": "Dashboard",
+  "Media": "Media",
+  "Posts": "Posts",
+
+  "Settings": "Settings",
+  "Profile": "Profile",
+  "Account": "Account",
+  "Appearance": "Appearance",
+  "Notifications": "Notifications",
+  "Emails": "Emails",
+  "Security": "Security",
+  "Sessions": "Sessions"
 }
