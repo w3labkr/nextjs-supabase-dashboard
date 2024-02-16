@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+
 import { I18nextProvider as I18nProvider } from 'react-i18next'
 import i18next from '@/lib/i18next'
 import { defaultNS } from '@/i18next.config'

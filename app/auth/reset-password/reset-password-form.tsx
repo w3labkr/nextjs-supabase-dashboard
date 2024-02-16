@@ -146,7 +146,7 @@ export function ResetPasswordForm() {
           {isSubmitting && (
             <LucideIcon name="Loader2" className="mr-2 size-4 animate-spin" />
           )}
-          <Trans t={t}>Change password</Trans>
+          <Trans>Change password</Trans>
         </Button>
       </form>
     </Form>

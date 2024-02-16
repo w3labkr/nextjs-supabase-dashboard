@@ -104,7 +104,7 @@ export function ForgotPasswordForm() {
           {isSubmitting && (
             <LucideIcon name="Loader2" className="mr-2 size-4 animate-spin" />
           )}
-          <Trans t={t}>Reset my password</Trans>
+          <Trans>Reset my password</Trans>
         </Button>
       </form>
     </Form>

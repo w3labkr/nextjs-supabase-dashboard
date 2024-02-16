@@ -35,7 +35,7 @@ export function SignInWithGoogle() {
   return (
     <Button variant="outline" onClick={onSubmit}>
       <FcGoogle className="mr-2 h-4 w-4" />
-      <Trans t={t}>Sign in with Google</Trans>
+      <Trans>Sign in with Google</Trans>
     </Button>
   )
 }

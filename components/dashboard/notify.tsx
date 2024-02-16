@@ -1,8 +1,9 @@
 import * as React from 'react'
+import { Trans } from 'react-i18next'
 
 import { LucideIcon } from '@/lib/lucide-icon'
 import { Button } from '@/components/ui/button'
-import { Switch } from '@/components/ui/switch'
+import { Separator } from '@/components/ui/separator'
 import {
   Popover,
   PopoverContent,
@@ -17,16 +18,25 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-const notifications = [
+export interface NotifyItemProps {
+  id: number
+  title: string
+  description: string
+}
+
+const notifyItems: NotifyItemProps[] = [
   {
+    id: 1,
     title: 'Your call has been confirmed.',
     description: '1 hour ago',
   },
   {
+    id: 2,
     title: 'You have a new message!',
     description: '1 hour ago',
   },
   {
+    id: 3,
     title: 'Your subscription is expiring soon!',
     description: '2 hours ago',
   },
@@ -38,55 +48,45 @@ export function Notify() {
       <PopoverTrigger asChild>
         <Button className="h-8 w-8" size="icon" variant="ghost">
           <LucideIcon name="Bell" />
-          <span className="sr-only">Toggle notifications</span>
+          <span className="sr-only">
+            <Trans>Toggle notifications</Trans>
+          </span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="end">
-        <Card className="w-[380px] border-0">
+        <Card className="w-[360px] border-0">
           <CardHeader>
-            <CardTitle>Notifications</CardTitle>
-            <CardDescription>You have 3 unread messages.</CardDescription>
+            <CardTitle>
+              <Trans>Notifications</Trans>
+            </CardTitle>
+            <CardDescription>
+              <Trans values={{ count: 2 }}>You have unread messages</Trans>
+            </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
-            <div className=" flex items-center space-x-4 rounded-md border p-4">
-              <LucideIcon name="BellRing" />
-              <div className="flex-1 space-y-1">
-                <p className="text-sm font-medium leading-none">
-                  Push Notifications
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Send notifications to device.
-                </p>
-              </div>
-              <Switch />
-            </div>
-            <div>
-              {notifications.map((notification, index) => (
-                <div
-                  key={index}
-                  className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
-                >
-                  <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium leading-none">
-                      {notification.title}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {notification.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <Separator className="mb-2" />
+            <NotifyItems items={notifyItems} />
           </CardContent>
           <CardFooter>
             <Button className="w-full">
-              <LucideIcon name="Check" className="mr-2 size-4" /> Mark all as
-              read
+              <LucideIcon name="Check" className="mr-2 size-4" />
+              <Trans>Mark all as read</Trans>
             </Button>
           </CardFooter>
         </Card>
       </PopoverContent>
     </Popover>
   )
+}
+
+function NotifyItems({ items }: { items: NotifyItemProps[] }) {
+  return items.map((item) => (
+    <div key={item.id} className="grid grid-cols-[25px_1fr] items-start">
+      <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
+      <div className="space-y-1">
+        <p className="text-sm font-medium leading-none">{item.title}</p>
+        <p className="text-sm text-muted-foreground">{item.description}</p>
+      </div>
+    </div>
+  ))
 }

@@ -65,5 +65,9 @@
   "New Media": "새 미디어",
   "Edit Media": "미디어 수정",
   "New Post": "새 글",
-  "Edit Post": "글 수정"
+  "Edit Post": "글 수정",
+
+  "Toggle notifications": "알림 전환",
+  "You have unread messages": "읽지 않은 메시지가 {{count}} 있습니다.",
+  "Mark all as read": "모두 읽음으로 표시"
 }

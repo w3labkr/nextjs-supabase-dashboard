@@ -29,7 +29,7 @@ export function SignInWithGithub() {
   return (
     <Button variant="outline" onClick={onSubmit}>
       <FaGithub className="mr-2 h-4 w-4" />
-      <Trans t={t}>Sign in with Github</Trans>
+      <Trans>Sign in with Github</Trans>
     </Button>
   )
 }

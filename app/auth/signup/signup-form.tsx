@@ -167,7 +167,7 @@ export function SignUpForm() {
           {isSubmitting && (
             <LucideIcon name="Loader2" className="mr-2 size-4 animate-spin" />
           )}
-          <Trans t={t}>Sign Up</Trans>
+          <Trans>Sign Up</Trans>
         </Button>
       </form>
     </Form>

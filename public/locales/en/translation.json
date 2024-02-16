@@ -65,5 +65,9 @@
   "New Media": "New Media",
   "Edit Media": "Edit Media",
   "New Post": "New Post",
-  "Edit Post": "Edit Post"
+  "Edit Post": "Edit Post",
+
+  "Toggle notifications": "Toggle notifications",
+  "You have unread messages": "You have {{count}} unread messages.",
+  "Mark all as read": "Mark all as read"
 }
