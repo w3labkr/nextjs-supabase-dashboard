@@ -57,11 +57,6 @@ function MiniDrawerGroupItems({
   return items.map((item) => (
     <React.Fragment key={item.id}>
       {item.separator && <Separator />}
-      {item.label && (
-        <span className="flex p-1 text-sm font-semibold text-muted-foreground">
-          {item.label}
-        </span>
-      )}
       <MiniDrawerItems items={item.items} pathname={pathname} />
     </React.Fragment>
   ))
@@ -78,7 +73,6 @@ function MiniDrawerItems({
     <TooltipLink
       key={item.id}
       href={item.href}
-      title={item.title}
       className={cn(
         'relative flex justify-center rounded-lg p-1 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50',
         pathname.startsWith(item.href)
@@ -86,6 +80,8 @@ function MiniDrawerItems({
           : 'text-gray-500'
       )}
       tooltipContent={{ side: 'right', align: 'end', alignOffset: 6 }}
+      text={item.title}
+      translate="yes"
     >
       {item.iconName && <LucideIcon name={item.iconName} className="size-5" />}
       {!!item.badge && (

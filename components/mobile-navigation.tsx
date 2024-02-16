@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 import { LucideIcon } from '@/lib/lucide-icon'
 import { cn } from '@/utils/tailwind'
@@ -38,7 +38,7 @@ function MobileNavItem({ items }: { items: MobileNavItemProps[] }) {
       )}
       href={item.href}
     >
-      <Trans t={t}>{item.title}</Trans>
+      {t(item.title)}
     </Link>
   ))
 }

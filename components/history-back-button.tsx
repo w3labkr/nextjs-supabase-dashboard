@@ -10,16 +10,17 @@ import { Button, ButtonProps } from '@/components/ui/button'
 export interface HistoryBackButtonProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
-  title?: string
   startIconName?: LucideIconProps['name']
   endIconName?: LucideIconProps['name']
+  text?: string
 }
 
 export function HistoryBackButton({
   children,
   startIconName,
   endIconName,
-  title = 'Back',
+  translate,
+  text = 'Back',
   ...props
 }: HistoryBackButtonProps) {
   const router = useRouter()
@@ -30,7 +31,8 @@ export function HistoryBackButton({
       {startIconName && (
         <LucideIcon name={startIconName} className="mr-2 size-4" />
       )}
-      {title ? t(title) : children}
+      {text && translate === 'yes' ? t(text) : text}
+      {children}
       {endIconName && <LucideIcon name={endIconName} className="ml-2 size-4" />}
     </Button>
   )

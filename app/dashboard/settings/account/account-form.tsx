@@ -48,9 +48,6 @@ const accountFormSchema = z.object({
     .max(30, {
       message: 'Username must not be longer than 30 characters.',
     }),
-  dob: z.date({
-    required_error: 'A date of birth is required.',
-  }),
   language: z.string({
     required_error: 'Please select a language.',
   }),
@@ -61,7 +58,6 @@ type AccountFormValues = z.infer<typeof accountFormSchema>
 // This can come from your database or API.
 const defaultValues: Partial<AccountFormValues> = {
   username: '',
-  // dob: new Date('1900-01-01'),
 }
 
 export function AccountForm() {
@@ -96,53 +92,6 @@ export function AccountForm() {
               <FormDescription>
                 This is your public display name. It can be your real name or a
                 pseudonym. You can only change this once every 30 days.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="dob"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Date of birth</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={'outline'}
-                      className={cn(
-                        'w-[240px] pl-3 text-left font-normal',
-                        !field.value && 'text-muted-foreground'
-                      )}
-                    >
-                      {field.value ? (
-                        formatISO(field.value, { representation: 'date' })
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <LucideIcon
-                        name="Calendar"
-                        className="ml-auto h-4 w-4 opacity-50"
-                      />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date('1900-01-01')
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormDescription>
-                Your date of birth is used to calculate your age.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -213,9 +162,7 @@ export function AccountForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled>
-          Update account
-        </Button>
+        <Button type="submit">Update account</Button>
       </form>
     </Form>
   )

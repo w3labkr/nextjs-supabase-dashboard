@@ -55,6 +55,7 @@ export function AccountMenu() {
           <SignOutButton
             variant="ghost"
             className="flex h-auto w-full justify-start p-0 font-normal"
+            translate="yes"
           />
         </DropdownMenuItem>
       </DropdownMenuContent>

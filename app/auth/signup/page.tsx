@@ -21,16 +21,17 @@ export default function SignUpPage() {
     <div className="container flex min-h-screen w-screen flex-col items-center justify-center py-8">
       <ButtonLink
         href="/auth/signin"
-        title="Sign In"
         className="absolute right-4 top-4 md:right-8 md:top-8"
+        text="Sign In"
+        translate="yes"
       />
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title text="Create an account" translate />
+          <Title text="Create an account" translate="yes" />
           <Description
             text="Enter your email below to create your account"
-            translate
+            translate="yes"
           />
         </div>
         <div className="grid gap-6">
@@ -40,7 +41,8 @@ export default function SignUpPage() {
         <div className="flex justify-between text-center text-sm">
           <RelatedLink
             href="/auth/signin"
-            title="Already have an account? Sign In"
+            text="Already have an account? Sign In"
+            translate="yes"
           />
           <LanguageToggleButton />
         </div>

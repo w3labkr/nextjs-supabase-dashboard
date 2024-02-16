@@ -28,8 +28,13 @@ export function Header() {
           <Brand />
           <Navigation />
           <div className="ml-auto flex gap-2">
-            <LinkButton variant="outline" href="/auth/signin" title="Sign In" />
-            <LinkButton href="/auth/signup" title="Sign Up" />
+            <LinkButton
+              href="/auth/signin"
+              variant="outline"
+              text="Sign In"
+              translate="yes"
+            />
+            <LinkButton href="/auth/signup" text="Sign Up" translate="yes" />
           </div>
         </div>
       </header>

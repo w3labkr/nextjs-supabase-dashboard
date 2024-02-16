@@ -10,8 +10,8 @@ export default function AccountPage() {
   return (
     <main className="flex-1 overflow-auto p-10 pb-16">
       <div className="space-y-0.5">
-        <Title text="Account" translate />
-        <Description text="" translate />
+        <Title text="Account" translate="yes" />
+        <Description text="" translate="yes" />
       </div>
       <Separator className="my-6" />
       <AccountForm />

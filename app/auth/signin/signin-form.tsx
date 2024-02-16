@@ -121,7 +121,8 @@ export function SignInForm() {
                 <RelatedLink
                   href="/auth/forgot-password"
                   className="text-sm"
-                  title="Forgot your password?"
+                  text="Forgot your password?"
+                  translate="yes"
                 />
               </div>
               <FormControl>

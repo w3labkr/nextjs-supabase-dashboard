@@ -8,8 +8,8 @@ export default function EditMediaPage() {
   return (
     <main className="flex-1 overflow-auto p-10 pb-16">
       <div className="space-y-0.5">
-        <Title text="Edit Media" translate />
-        <Description text="" translate />
+        <Title text="Edit Media" translate="yes" />
+        <Description text="" translate="yes" />
       </div>
       <Separator className="my-6" />
       <div>...</div>

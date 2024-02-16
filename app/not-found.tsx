@@ -8,9 +8,10 @@ export default function NotFound() {
     <div className="relative">
       <ButtonLink
         href="/"
-        title="Home"
         className="absolute left-4 top-4 md:left-8 md:top-8"
         startIconName="ChevronLeft"
+        text="Home"
+        translate="yes"
       />
       <Error statusCode="404" />
     </div>

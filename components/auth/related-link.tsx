@@ -9,13 +9,14 @@ import { cn } from '@/utils/tailwind'
 export interface RelatedLinkProps
   extends LinkProps,
     Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
-  title?: string
+  text?: string
 }
 
 export function RelatedLink({
   children,
-  title,
   className,
+  text,
+  translate,
   ...props
 }: RelatedLinkProps) {
   const { t } = useTranslation()
@@ -28,7 +29,8 @@ export function RelatedLink({
       )}
       {...props}
     >
-      {title ? t(title) : children}
+      {text && translate === 'yes' ? t(text) : text}
+      {children}
     </Link>
   )
 }

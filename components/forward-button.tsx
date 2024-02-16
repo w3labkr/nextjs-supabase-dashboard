@@ -12,21 +12,22 @@ export interface ForwardButtonProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
   href: string
-  title?: string
   startIconName?: LucideIconProps['name']
   startIconClassName?: string
   endIconName?: LucideIconProps['name']
   endIconClassName?: string
+  text?: string
 }
 
 export function ForwardButton({
   children,
   href,
-  title,
   startIconName,
   startIconClassName,
   endIconName,
   endIconClassName,
+  text,
+  translate,
   ...props
 }: ForwardButtonProps) {
   const router = useRouter()
@@ -40,7 +41,8 @@ export function ForwardButton({
           className={cn('mr-2 size-4', startIconClassName)}
         />
       )}
-      {title ? t(title) : children}
+      {text && translate === 'yes' ? t(text) : text}
+      {children}
       {endIconName && (
         <LucideIcon
           name={endIconName}

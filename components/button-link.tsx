@@ -11,21 +11,22 @@ import { buttonVariants } from '@/components/ui/button'
 export interface ButtonLinkProps
   extends LinkProps,
     Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
-  title?: string
   startIconName?: LucideIconProps['name']
   startIconClassName?: string
   endIconName?: LucideIconProps['name']
   endIconClassName?: string
+  text?: string
 }
 
 export function ButtonLink({
   children,
-  title,
   className,
   startIconName,
   startIconClassName,
   endIconName,
   endIconClassName,
+  text,
+  translate,
   ...props
 }: ButtonLinkProps) {
   const { t } = useTranslation()
@@ -41,7 +42,8 @@ export function ButtonLink({
           className={cn('mr-2 size-4', startIconClassName)}
         />
       )}
-      {title ? t(title) : children}
+      {text && translate === 'yes' ? t(text) : text}
+      {children}
       {endIconName && (
         <LucideIcon
           name={endIconName}

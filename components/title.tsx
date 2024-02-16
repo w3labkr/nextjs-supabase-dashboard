@@ -7,14 +7,13 @@ import { cn } from '@/utils/tailwind'
 
 export interface TitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   text?: string
-  translate?: boolean
 }
 
 export function Title({
   children,
   className,
   text,
-  translate = false,
+  translate,
   ...props
 }: TitleProps) {
   const { t } = useTranslation()
@@ -24,7 +23,7 @@ export function Title({
       className={cn('text-2xl font-semibold tracking-tight', className)}
       {...props}
     >
-      {translate ? t(text) : text}
+      {text && translate === 'yes' ? t(text) : text}
       {children}
     </h1>
   )

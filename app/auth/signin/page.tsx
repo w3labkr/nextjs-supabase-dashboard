@@ -21,17 +21,18 @@ export default function SignInPage() {
     <div className="container flex min-h-screen w-screen flex-col items-center justify-center py-8">
       <ButtonLink
         href="/"
-        title="Home"
         className="absolute left-4 top-4 md:left-8 md:top-8"
         startIconName="ChevronLeft"
+        text="Home"
+        translate="yes"
       />
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title text="Welcome back" translate />
+          <Title text="Welcome back" translate="yes" />
           <Description
             text="Enter your email to sign in to your account"
-            translate
+            translate="yes"
           />
         </div>
         <div className="grid gap-6">
@@ -41,7 +42,8 @@ export default function SignInPage() {
         <div className="flex justify-between text-center text-sm">
           <RelatedLink
             href="/auth/signup"
-            title="Don't have an account? Sign Up"
+            text="Don't have an account? Sign Up"
+            translate="yes"
           />
           <LanguageToggleButton />
         </div>

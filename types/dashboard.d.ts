@@ -29,7 +29,7 @@ export interface DrawerGroupItemProps {
 }
 
 export interface DashboardConfig {
-  miniDrawerItems: MiniDrawerItemProps[]
+  miniDrawerGroupItems: MiniDrawerGroupItemProps[]
 }
 
 export interface MediaConfig {

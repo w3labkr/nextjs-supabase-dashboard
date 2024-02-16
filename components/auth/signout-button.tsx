@@ -11,12 +11,13 @@ import { Button, ButtonProps } from '@/components/ui/button'
 interface SignOutButtonProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
-  title?: string
+  text?: string
 }
 
 export function SignOutButton({
   children,
-  title = 'Signout',
+  translate,
+  text = 'Sign out',
   ...props
 }: SignOutButtonProps) {
   const router = useRouter()
@@ -34,7 +35,8 @@ export function SignOutButton({
 
   return (
     <Button onClick={onClick} {...props}>
-      {title ? t(title) : children}
+      {text && translate === 'yes' ? t(text) : text}
+      {children}
     </Button>
   )
 }
