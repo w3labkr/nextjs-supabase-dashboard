@@ -3,6 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
 
 import { AppBarContext } from '@/context/app-bar-provider'
 import { LucideIcon } from '@/lib/lucide-icon'
@@ -21,9 +22,11 @@ export function PersistentDrawer({
   className,
   title,
   drawerGroupItems,
+  translate,
   ...props
 }: PersistentDrawerProps) {
   const appBarState = React.useContext(AppBarContext)
+  const { t } = useTranslation()
 
   return (
     <div
@@ -40,7 +43,9 @@ export function PersistentDrawer({
           appBarState?.height ?? 'h-[50px]'
         )}
       >
-        <span className="font-semibold">{title}</span>
+        <span className="font-semibold">
+          {title && translate === 'yes' ? t(title) : title}
+        </span>
       </div>
       <div className="flex-1 space-y-1 overflow-auto p-2">
         <DrawerGroupItems items={drawerGroupItems} />
@@ -50,6 +55,7 @@ export function PersistentDrawer({
 }
 
 function DrawerGroupItems({ items }: { items: DrawerGroupItemProps[] }) {
+  const { t } = useTranslation()
   const pathname = usePathname()
 
   return items.map((item) => (
@@ -57,7 +63,7 @@ function DrawerGroupItems({ items }: { items: DrawerGroupItemProps[] }) {
       {item.separator && <Separator className="!my-4" />}
       {item.label && (
         <span className="flex p-1 text-sm font-semibold text-muted-foreground">
-          {item.label}
+          {item.label && item.translate === 'yes' ? t(item.label) : item.label}
         </span>
       )}
       <DrawerItems items={item.items} pathname={pathname} />
@@ -72,6 +78,8 @@ function DrawerItems({
   items: DrawerItemProps[]
   pathname: string
 }) {
+  const { t } = useTranslation()
+
   return items.map((item) => (
     <Link
       key={item.id}
@@ -87,7 +95,7 @@ function DrawerItems({
           className="mr-2 mt-0.5 size-4 min-w-4"
         />
       )}
-      {item.title}
+      {item.title && item.translate === 'yes' ? t(item.title) : item.title}
     </Link>
   ))
 }

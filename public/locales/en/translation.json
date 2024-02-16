@@ -51,13 +51,19 @@
   "Dashboard": "Dashboard",
   "Media": "Media",
   "Posts": "Posts",
-
   "Settings": "Settings",
+
+  "Access": "Access",
   "Profile": "Profile",
   "Account": "Account",
   "Appearance": "Appearance",
   "Notifications": "Notifications",
   "Emails": "Emails",
   "Security": "Security",
-  "Sessions": "Sessions"
+  "Sessions": "Sessions",
+
+  "New Media": "New Media",
+  "Edit Media": "Edit Media",
+  "New Post": "New Post",
+  "Edit Post": "Edit Post"
 }

@@ -51,13 +51,19 @@
   "Dashboard": "대시보드",
   "Media": "미디어",
   "Posts": "글",
-
   "Settings": "설정",
+
+  "Access": "접근",
   "Profile": "프로필",
   "Account": "계정",
-  "Appearance": "모습",
+  "Appearance": "외형",
   "Notifications": "알림",
   "Emails": "이메일",
   "Security": "보안",
-  "Sessions": "세션"
+  "Sessions": "세션",
+
+  "New Media": "새 미디어",
+  "Edit Media": "미디어 수정",
+  "New Post": "새 글",
+  "Edit Post": "글 수정"
 }

@@ -6,7 +6,7 @@ import { cn } from '@/utils/tailwind'
 import { siteConfig } from '@/config/site'
 
 export interface LogoProps {
-  className?: string
+  className?: string | undefined
 }
 
 export function Logo({ className }: LogoProps) {

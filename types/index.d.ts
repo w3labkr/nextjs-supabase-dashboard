@@ -1,5 +1,5 @@
 import { LinkProps } from 'next/link'
-import { LucideIconProps } from '@/lib/lucide-icon'
+import { LucideIconNameProp } from '@/lib/lucide-icon'
 
 export interface MobileNavItemProps {
   id: number
@@ -10,7 +10,7 @@ export interface MobileNavItemProps {
 export interface SiteConfig {
   name: string
   title: string
-  symbol: LucideIconProps['name']
+  symbol: LucideIconNameProp
   description: string
   mobileNavItems: MobileNavItemProps[]
 }

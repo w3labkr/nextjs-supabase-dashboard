@@ -9,7 +9,7 @@ import { cn } from '@/utils/tailwind'
 export interface RelatedLinkProps
   extends LinkProps,
     Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
-  text?: string
+  text?: string | undefined
 }
 
 export function RelatedLink({

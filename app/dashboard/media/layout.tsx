@@ -23,9 +23,10 @@ export default function MediaLayout({
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
             <PersistentDrawer
-              title="Media"
               className="w-full border-none lg:max-w-full"
               drawerGroupItems={mediaConfig.drawerGroupItems}
+              title="Media"
+              translate="yes"
             />
           </ResizablePanel>
           <ResizableHandle withHandle />

@@ -11,7 +11,7 @@ import { Button, ButtonProps } from '@/components/ui/button'
 interface SignOutButtonProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
-  text?: string
+  text?: string | undefined
 }
 
 export function SignOutButton({

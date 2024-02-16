@@ -8,9 +8,9 @@ import { HttpStatusCodeProps } from '@/utils/server'
 
 export interface ErrorProps extends React.HTMLAttributes<HTMLDivElement> {
   statusCode: HttpStatusCodeProps['statusCode']
-  statusText?: string
-  message?: string
-  className?: string
+  statusText?: string | undefined
+  message?: string | undefined
+  className?: string | undefined
 }
 
 export function Error({

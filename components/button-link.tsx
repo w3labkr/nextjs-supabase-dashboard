@@ -5,17 +5,17 @@ import Link, { LinkProps } from 'next/link'
 import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/utils/tailwind'
-import { LucideIcon, LucideIconProps } from '@/lib/lucide-icon'
+import { LucideIcon, LucideIconNameProp } from '@/lib/lucide-icon'
 import { buttonVariants } from '@/components/ui/button'
 
 export interface ButtonLinkProps
   extends LinkProps,
     Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
-  startIconName?: LucideIconProps['name']
-  startIconClassName?: string
-  endIconName?: LucideIconProps['name']
-  endIconClassName?: string
-  text?: string
+  startIconName?: LucideIconNameProp | undefined
+  startIconClassName?: string | undefined
+  endIconName?: LucideIconNameProp | undefined
+  endIconClassName?: string | undefined
+  text?: string | undefined
 }
 
 export function ButtonLink({

@@ -4,15 +4,15 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
-import { LucideIcon, LucideIconProps } from '@/lib/lucide-icon'
+import { LucideIcon, LucideIconNameProp } from '@/lib/lucide-icon'
 import { Button, ButtonProps } from '@/components/ui/button'
 
 export interface HistoryBackButtonProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
-  startIconName?: LucideIconProps['name']
-  endIconName?: LucideIconProps['name']
-  text?: string
+  startIconName?: LucideIconNameProp | undefined
+  endIconName?: LucideIconNameProp | undefined
+  text?: string | undefined
 }
 
 export function HistoryBackButton({

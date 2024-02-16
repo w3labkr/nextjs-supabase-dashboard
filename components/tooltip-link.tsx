@@ -15,8 +15,8 @@ import { TooltipContentProps } from '@radix-ui/react-tooltip'
 export interface TooltipLinkProps
   extends LinkProps,
     Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
-  tooltipContent?: TooltipContentProps
-  text?: string
+  tooltipContent?: TooltipContentProps | undefined
+  text?: string | undefined
 }
 
 export function TooltipLink({

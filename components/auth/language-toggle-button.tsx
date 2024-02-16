@@ -1,8 +1,11 @@
 'use client'
 
 import * as React from 'react'
+
 import { useTranslation } from 'react-i18next'
 import { lng, fallbackLng } from '@/i18next.config'
+import { ResolvedLanguageProp } from '@/types/i18next'
+
 import { cn } from '@/utils/tailwind'
 
 export interface LanguageToggleProps
@@ -13,15 +16,15 @@ export function LanguageToggleButton({
   ...props
 }: LanguageToggleProps) {
   const { i18n } = useTranslation()
-  const [value, setValue] = React.useState<string | undefined>(
+  const [language, setLanguage] = React.useState<ResolvedLanguageProp>(
     i18n.resolvedLanguage
   )
 
   const onClick = () => {
-    const currentValue = value === lng ? fallbackLng : lng
+    const currentValue = language === lng ? fallbackLng : lng
     i18n.changeLanguage(currentValue)
     document.documentElement.lang = currentValue
-    setValue(currentValue)
+    setLanguage(currentValue)
   }
 
   return (
@@ -31,7 +34,7 @@ export function LanguageToggleButton({
       onClick={onClick}
       {...props}
     >
-      {(value === lng ? fallbackLng : lng)?.toUpperCase()}
+      {(language === lng ? fallbackLng : lng)?.toUpperCase()}
     </button>
   )
 }

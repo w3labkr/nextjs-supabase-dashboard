@@ -7,7 +7,7 @@ import { cn } from '@/utils/tailwind'
 
 export interface DescriptionProps
   extends React.HTMLAttributes<HTMLParagraphElement> {
-  text?: string
+  text?: string | undefined
 }
 
 export function Description({

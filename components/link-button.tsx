@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, ButtonProps } from '@/components/ui/button'
 
 export interface LinkButtonProps extends ButtonProps, Pick<LinkProps, 'href'> {
-  text?: string
+  text?: string | undefined
 }
 
 export function LinkButton({

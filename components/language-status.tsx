@@ -10,8 +10,7 @@ export function LanguageStatus() {
 
   React.useEffect(() => {
     const label =
-      languages.find((language) => language.value === i18n.resolvedLanguage)
-        ?.label || ''
+      languages.find((l) => l.value === i18n.resolvedLanguage)?.label || ''
     setLanguageLabel(label)
   }, [i18n.resolvedLanguage])
 

@@ -1,31 +1,33 @@
-import { LucideIconProps } from '@/lib/lucide-icon'
+import { LucideIconNameProp } from '@/lib/lucide-icon'
 
 export interface MiniDrawerItemProps {
   id: number
   href: string
   title: string
-  iconName?: LucideIconProps['name']
-  badge?: number
+  iconName?: LucideIconNameProp | undefined
+  badge?: number | undefined
 }
 
 export interface MiniDrawerGroupItemProps {
   id: number
   items: MiniDrawerItemProps[]
-  separator?: boolean
+  separator?: boolean | undefined
 }
 
 export interface DrawerItemProps {
   id: number
   href: string
   title: string
-  iconName?: LucideIconProps['name']
+  iconName?: LucideIconNameProp | undefined
+  translate?: 'yes' | 'no' | undefined
 }
 
 export interface DrawerGroupItemProps {
   id: number
   label: string
   items: DrawerItemProps[]
-  separator?: boolean
+  separator?: boolean | undefined
+  translate?: 'yes' | 'no' | undefined
 }
 
 export interface DashboardConfig {
