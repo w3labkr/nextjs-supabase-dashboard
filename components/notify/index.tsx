@@ -52,7 +52,7 @@ export function Notify() {
           </CardContent>
           <CardFooter>
             <Button className="w-full">
-              <LucideIcon name="Check" className="mr-2 size-4" />
+              <LucideIcon name="Check" className="mr-2 size-4 min-w-4" />
               <Trans>Mark all as read</Trans>
             </Button>
           </CardFooter>

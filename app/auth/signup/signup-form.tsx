@@ -26,7 +26,7 @@ import {
 
 import { createClient } from '@/lib/supabase/client'
 
-const signUpFormSchema = z
+const formSchema = z
   .object({
     email: z.string().trim().email(),
     // If the password is larger than 72 chars, it will be truncated to the first 72 chars.
@@ -38,7 +38,7 @@ const signUpFormSchema = z
     params: { i18n: 'invalid_confirm_password' },
   })
 
-type SignUpFormValues = z.infer<typeof signUpFormSchema>
+type FormValues = z.infer<typeof formSchema>
 
 const defaultValues = {
   email: '',
@@ -50,13 +50,13 @@ export function SignUpForm() {
   const router = useRouter()
   const { t } = useTranslation(['translation', 'zod', 'zod-custom', 'supabase'])
 
-  const form = useForm<SignUpFormValues>({
-    resolver: zodResolver(signUpFormSchema),
-    defaultValues: defaultValues,
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues,
   })
   const { errors, isSubmitting } = form.formState
 
-  async function onSubmit(values: SignUpFormValues) {
+  async function onSubmit(values: FormValues) {
     const supabase = createClient()
     const { data, error } = await supabase.auth.signUp({
       email: values.email,
@@ -165,7 +165,10 @@ export function SignUpForm() {
         />
         <Button type="submit" disabled={isSubmitting} className="w-full">
           {isSubmitting && (
-            <LucideIcon name="Loader2" className="mr-2 size-4 animate-spin" />
+            <LucideIcon
+              name="Loader2"
+              className="mr-2 size-4 min-w-4 animate-spin"
+            />
           )}
           <Trans>Sign Up</Trans>
         </Button>

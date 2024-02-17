@@ -31,7 +31,7 @@ export function MiniDrawer({ className, ...props }: MiniDrawerProps) {
           appBarState?.height ?? 'h-[50px]'
         )}
       >
-        <LucideIcon name={siteConfig.symbol} className="size-5" />
+        <LucideIcon name={siteConfig.symbol} className="size-5 min-w-5" />
         <span className="sr-only">{siteConfig.name}</span>
       </div>
       <nav className="flex-1 space-y-2 overflow-auto py-2">

@@ -27,14 +27,14 @@ import { RelatedLink } from '@/components/related-link'
 
 import { createClient } from '@/lib/supabase/client'
 
-const signInFormSchema = z.object({
+const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6).max(72),
 })
 
-type SignInFormValues = z.infer<typeof signInFormSchema>
+type FormValues = z.infer<typeof formSchema>
 
-const defaultValues: Partial<SignInFormValues> = {
+const defaultValues: Partial<FormValues> = {
   email: '',
   password: '',
 }
@@ -43,13 +43,13 @@ export function SignInForm() {
   const router = useRouter()
   const { t } = useTranslation(['translation', 'zod', 'zod-custom', 'supabase'])
 
-  const form = useForm<SignInFormValues>({
-    resolver: zodResolver(signInFormSchema),
-    defaultValues: defaultValues,
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues,
   })
   const { errors, isSubmitting } = form.formState
 
-  async function onSubmit(values: SignInFormValues) {
+  async function onSubmit(values: FormValues) {
     const supabase = createClient()
     const { data, error } = await supabase.auth.signInWithPassword({
       email: values.email,
@@ -143,7 +143,10 @@ export function SignInForm() {
         <FormMessage>{errors?.root?.serverError?.message}</FormMessage>
         <Button type="submit" disabled={isSubmitting} className="w-full">
           {isSubmitting && (
-            <LucideIcon name="Loader2" className="mr-2 size-4 animate-spin" />
+            <LucideIcon
+              name="Loader2"
+              className="mr-2 size-4 min-w-4 animate-spin"
+            />
           )}
           <Trans>Sign In</Trans>
         </Button>

@@ -12,7 +12,7 @@ export function MobileNavigation({ ...props }: MobileNavigationProps) {
   return (
     <div className="grid w-full max-w-md gap-4" {...props}>
       <div className="flex items-center gap-4">
-        <LucideIcon name={siteConfig.symbol} className="size-6" />
+        <LucideIcon name={siteConfig.symbol} className="size-6 min-w-6" />
         <span>{siteConfig.name}</span>
       </div>
       <nav className="grid">

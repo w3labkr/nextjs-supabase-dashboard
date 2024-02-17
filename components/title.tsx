@@ -19,12 +19,12 @@ export function Title({
   const { t } = useTranslation()
 
   return (
-    <h1
+    <h2
       className={cn('text-2xl font-semibold tracking-tight', className)}
       {...props}
     >
       {text && translate === 'yes' ? t(text) : text}
       {children}
-    </h1>
+    </h2>
   )
 }

@@ -13,7 +13,7 @@ export function Logo({ className }: LogoProps) {
   return (
     <LucideIcon
       name={siteConfig.symbol}
-      className={cn('mx-auto size-6', className)}
+      className={cn('mx-auto size-6 min-w-6', className)}
     />
   )
 }
