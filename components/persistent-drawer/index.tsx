@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AppBarContext } from '@/context/app-bar-provider'
+import { AppBarContext } from '@/components/app-bar/app-bar-provider'
 import { cn } from '@/utils/tailwind'
 
 import { DrawerGroupItemProps } from '@/types/dashboard'

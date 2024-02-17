@@ -18,7 +18,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-import { useNotify } from './hooks/use-notify'
+import { useNotify } from './use-notify'
 import { NotifyItems } from './notify-items'
 
 export function Notify() {

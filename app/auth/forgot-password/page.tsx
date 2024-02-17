@@ -4,9 +4,9 @@ import type { Metadata } from 'next'
 import { Logo } from '@/components/logo'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
-import { RelatedLink } from '@/components/auth/related-link'
+import { RelatedLink } from '@/components/related-link'
 import { ButtonLink } from '@/components/button-link'
-import { LanguageToggleButton } from '@/components/auth/language-toggle-button'
+import { LanguageToggleButton } from '@/components/language-toggle-button'
 
 import { ForgotPasswordForm } from './forgot-password-form'
 

@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { SignInWithGoogle } from '@/components/auth/signin-with-google'
+import { SignInWithGoogle } from '@/components/signin-with-google'
 // import { SignInWithGithub } from '@/components/auth/signin-with-github'
 
 export function SignInWith() {

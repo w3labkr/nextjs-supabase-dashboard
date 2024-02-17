@@ -2,10 +2,11 @@
 
 import * as React from 'react'
 
-import { AppBarContext } from '@/context/app-bar-provider'
 import { cn } from '@/utils/tailwind'
-import { Notify } from '@/components/dashboard/notify'
-import { AccountMenu } from '@/components/dashboard/account-menu'
+import { Notify } from '@/components/notify'
+import { AccountMenu } from '@/components/account-menu'
+
+import { AppBarContext } from './app-bar-provider'
 
 export interface AppBarProps extends React.HTMLAttributes<HTMLElement> {}
 

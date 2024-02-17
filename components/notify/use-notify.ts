@@ -1,5 +1,6 @@
 import useSWR from 'swr'
-import { NotifyItemProps } from '../notify-items'
+
+import { NotifyItemProps } from './notify-items'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 

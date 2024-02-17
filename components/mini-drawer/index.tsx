@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-import { AppBarContext } from '@/context/app-bar-provider'
+import { AppBarContext } from '@/components/app-bar/app-bar-provider'
 import { cn } from '@/utils/tailwind'
 import { LucideIcon } from '@/lib/lucide-icon'
 

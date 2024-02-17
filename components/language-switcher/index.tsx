@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import { useTranslation } from 'react-i18next'
 import { languages } from '@/i18next.config'
-import { ResolvedLanguageProp, LanguageProps } from '@/types/i18next'
+import { ResolvedLanguageProp } from '@/types/i18next'
 
 import { cn } from '@/utils/tailwind'
 import { LucideIcon } from '@/lib/lucide-icon'
@@ -14,13 +14,14 @@ import {
   CommandEmpty,
   CommandGroup,
   CommandInput,
-  CommandItem,
 } from '@/components/ui/command'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+
+import { CommandItems } from './command-items'
 
 export interface LanguageSwitcherProps {
   className?: string | undefined
@@ -80,27 +81,4 @@ export function LanguageSwitcher({
       </PopoverContent>
     </Popover>
   )
-}
-
-function CommandItems({
-  items,
-  language,
-  onSelect,
-}: {
-  items: LanguageProps[]
-  language: ResolvedLanguageProp
-  onSelect: (value: string) => void
-}) {
-  return items.map((item) => (
-    <CommandItem key={item.value} value={item.value} onSelect={onSelect}>
-      <LucideIcon
-        name="Check"
-        className={cn(
-          'mr-2 h-4 w-4',
-          item.value === language ? 'opacity-100' : 'opacity-0'
-        )}
-      />
-      {item.label}
-    </CommandItem>
-  ))
 }

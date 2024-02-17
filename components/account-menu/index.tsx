@@ -14,7 +14,7 @@ import {
   DropdownMenuContent,
   DropdownMenu,
 } from '@/components/ui/dropdown-menu'
-import { SignOutButton } from '@/components/auth/signout-button'
+import { SignOutButton } from '@/components/signout-button'
 
 export function AccountMenu() {
   const { t } = useTranslation()

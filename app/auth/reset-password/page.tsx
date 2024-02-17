@@ -3,9 +3,9 @@ import * as React from 'react'
 import { Logo } from '@/components/logo'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
-import { RelatedLink } from '@/components/auth/related-link'
+import { RelatedLink } from '@/components/related-link'
 import { ButtonLink } from '@/components/button-link'
-import { LanguageToggleButton } from '@/components/auth/language-toggle-button'
+import { LanguageToggleButton } from '@/components/language-toggle-button'
 
 import { ResetPasswordForm } from './reset-password-form'
 

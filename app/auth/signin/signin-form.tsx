@@ -23,7 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { RelatedLink } from '@/components/auth/related-link'
+import { RelatedLink } from '@/components/related-link'
 
 import { createClient } from '@/lib/supabase/client'
 

@@ -1,8 +1,8 @@
 import * as React from 'react'
 
-import { AppBarProvider } from '@/context/app-bar-provider'
-import { MiniDrawer } from '@/components/dashboard/mini-drawer'
-import { AppBar } from '@/components/dashboard/app-bar'
+import { AppBarProvider } from '@/components/app-bar/app-bar-provider'
+import { MiniDrawer } from '@/components/mini-drawer'
+import { AppBar } from '@/components/app-bar'
 
 export default function DashboardLayout({
   children,
