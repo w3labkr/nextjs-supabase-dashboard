@@ -5,6 +5,8 @@ export interface MiniDrawerItemProps {
   href: string
   title: string
   iconName?: LucideIconNameProp | undefined
+  translate?: 'yes' | 'no' | undefined
+  disabled?: boolean | undefined
   badge?: number | undefined
 }
 
@@ -20,6 +22,7 @@ export interface DrawerItemProps {
   title: string
   iconName?: LucideIconNameProp | undefined
   translate?: 'yes' | 'no' | undefined
+  disabled?: boolean | undefined
 }
 
 export interface DrawerGroupItemProps {

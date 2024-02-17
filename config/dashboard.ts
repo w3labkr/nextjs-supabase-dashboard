@@ -17,6 +17,8 @@ export const dashboardConfig: DashboardConfig = {
           iconName: 'LayoutDashboard',
           title: 'Dashboard',
           badge: 1,
+          translate: 'yes',
+          disabled: false,
         },
         {
           id: 2,
@@ -24,6 +26,8 @@ export const dashboardConfig: DashboardConfig = {
           iconName: 'Image',
           title: 'Media',
           badge: 0,
+          translate: 'yes',
+          disabled: true,
         },
         {
           id: 3,
@@ -31,6 +35,8 @@ export const dashboardConfig: DashboardConfig = {
           iconName: 'StickyNote',
           title: 'Posts',
           badge: 0,
+          translate: 'yes',
+          disabled: true,
         },
       ],
     },
@@ -44,6 +50,8 @@ export const dashboardConfig: DashboardConfig = {
           iconName: 'Settings',
           title: 'Settings',
           badge: 0,
+          translate: 'yes',
+          disabled: false,
         },
       ],
     },
@@ -64,6 +72,7 @@ export const mediaConfig: MediaConfig = {
           href: '/dashboard/media/new',
           // iconName: '',
           translate: 'yes',
+          disabled: false,
         },
         {
           id: 2,
@@ -71,6 +80,7 @@ export const mediaConfig: MediaConfig = {
           href: '/dashboard/media/edit',
           // iconName: '',
           translate: 'yes',
+          disabled: false,
         },
       ],
     },
@@ -91,6 +101,7 @@ export const postsConfig: PostsConfig = {
           href: '/dashboard/posts/new',
           // iconName: '',
           translate: 'yes',
+          disabled: false,
         },
         {
           id: 2,
@@ -98,6 +109,7 @@ export const postsConfig: PostsConfig = {
           href: '/dashboard/posts/edit',
           // iconName: '',
           translate: 'yes',
+          disabled: false,
         },
       ],
     },
@@ -118,6 +130,7 @@ export const settingsConfig: SettingsConfig = {
           href: '/dashboard/settings/profile',
           iconName: 'UserRound',
           translate: 'yes',
+          disabled: false,
         },
         {
           id: 2,
@@ -125,6 +138,7 @@ export const settingsConfig: SettingsConfig = {
           href: '/dashboard/settings/account',
           iconName: 'Settings',
           translate: 'yes',
+          disabled: false,
         },
         {
           id: 3,
@@ -132,6 +146,7 @@ export const settingsConfig: SettingsConfig = {
           href: '/dashboard/settings/appearance',
           iconName: 'Paintbrush',
           translate: 'yes',
+          disabled: false,
         },
         {
           id: 4,
@@ -139,6 +154,7 @@ export const settingsConfig: SettingsConfig = {
           href: '/dashboard/settings/notifications',
           iconName: 'Bell',
           translate: 'yes',
+          disabled: false,
         },
       ],
     },
@@ -154,6 +170,7 @@ export const settingsConfig: SettingsConfig = {
           href: '/dashboard/settings/emails',
           iconName: 'Mail',
           translate: 'yes',
+          disabled: true,
         },
         {
           id: 2,
@@ -161,6 +178,7 @@ export const settingsConfig: SettingsConfig = {
           href: '/dashboard/settings/security',
           iconName: 'ShieldAlert',
           translate: 'yes',
+          disabled: false,
         },
         {
           id: 3,
@@ -168,6 +186,7 @@ export const settingsConfig: SettingsConfig = {
           href: '/dashboard/settings/sessions',
           iconName: 'RadioTower',
           translate: 'yes',
+          disabled: true,
         },
       ],
     },

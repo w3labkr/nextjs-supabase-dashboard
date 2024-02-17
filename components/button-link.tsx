@@ -39,7 +39,7 @@ export function ButtonLink({
       {startIconName && (
         <LucideIcon
           name={startIconName}
-          className={cn('mr-2 size-4', startIconClassName)}
+          className={cn('mr-2 size-4 min-w-4', startIconClassName)}
         />
       )}
       {text && translate === 'yes' ? t(text) : text}
@@ -47,7 +47,7 @@ export function ButtonLink({
       {endIconName && (
         <LucideIcon
           name={endIconName}
-          className={cn('ml-2 size-4', endIconClassName)}
+          className={cn('ml-2 size-4 min-w-4', endIconClassName)}
         />
       )}
     </Link>

@@ -1,11 +1,7 @@
-'use client'
-
 import * as React from 'react'
-import Link from 'next/link'
-import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/utils/tailwind'
-import { LucideIcon } from '@/lib/lucide-icon'
+import { ForwardButton } from '@/components/forward-button'
 
 import { DrawerItemProps } from '@/types/dashboard'
 
@@ -15,24 +11,21 @@ export interface DrawerItemsProps {
 }
 
 export function DrawerItems({ items, pathname }: DrawerItemsProps) {
-  const { t } = useTranslation()
-
   return items.map((item) => (
-    <Link
+    <ForwardButton
+      variant="ghost"
       key={item.id}
       href={item.href}
       className={cn(
-        'relative flex rounded px-2 py-1 text-sm text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50',
-        pathname.startsWith(item.href) ? 'bg-gray-100 text-gray-900' : ''
+        'relative flex h-auto rounded px-1 py-0.5 text-sm transition-all',
+        'text-gray-500 hover:bg-transparent hover:text-gray-900',
+        'dark:text-gray-400 dark:hover:text-gray-50',
+        pathname.startsWith(item.href) ? 'text-gray-900 dark:text-gray-50' : ''
       )}
-    >
-      {item.iconName && (
-        <LucideIcon
-          name={item.iconName}
-          className="mr-2 mt-0.5 size-4 min-w-4"
-        />
-      )}
-      {item.title && item.translate === 'yes' ? t(item.title) : item.title}
-    </Link>
+      startIconName={item.iconName}
+      text={item.title}
+      translate={item.translate}
+      disabled={item.disabled}
+    />
   ))
 }

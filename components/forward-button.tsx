@@ -19,26 +19,30 @@ export interface ForwardButtonProps
   text?: string | undefined
 }
 
-export function ForwardButton({
-  children,
-  href,
-  startIconName,
-  startIconClassName,
-  endIconName,
-  endIconClassName,
-  text,
-  translate,
-  ...props
-}: ForwardButtonProps) {
+export const ForwardButton = React.forwardRef<
+  HTMLButtonElement,
+  ForwardButtonProps
+>((props, ref) => {
+  const {
+    children,
+    href,
+    text,
+    translate,
+    startIconName,
+    startIconClassName,
+    endIconName,
+    endIconClassName,
+    ...rest
+  } = props
   const router = useRouter()
   const { t } = useTranslation()
 
   return (
-    <Button onClick={() => router.push(href)} {...props}>
+    <Button ref={ref} onClick={() => router.push(href)} {...rest}>
       {startIconName && (
         <LucideIcon
           name={startIconName}
-          className={cn('mr-2 size-4', startIconClassName)}
+          className={cn('mr-2 size-4 min-w-4', startIconClassName)}
         />
       )}
       {text && translate === 'yes' ? t(text) : text}
@@ -46,9 +50,11 @@ export function ForwardButton({
       {endIconName && (
         <LucideIcon
           name={endIconName}
-          className={cn('ml-2 size-4', endIconClassName)}
+          className={cn('ml-2 size-4 min-w-4', endIconClassName)}
         />
       )}
     </Button>
   )
-}
+})
+
+ForwardButton.displayName = 'ForwardButton'
