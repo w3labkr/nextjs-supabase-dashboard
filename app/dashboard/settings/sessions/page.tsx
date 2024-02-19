@@ -8,7 +8,7 @@ export default function SessionsPage() {
     <main className="flex-1 overflow-auto p-10 pb-16">
       <div className="space-y-16">
         <div className="space-y-4">
-          <Title text="Sessions" translate="yes" />
+          <Title text="sessions" translate="yes" />
           <Separator />
           ...
         </div>

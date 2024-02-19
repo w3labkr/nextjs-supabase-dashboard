@@ -25,7 +25,7 @@ export default function PostsLayout({
             <PersistentDrawer
               className="w-full border-none lg:max-w-full"
               drawerGroupItems={postsConfig.drawerGroupItems}
-              title="Posts"
+              title="posts"
               translate="yes"
             />
           </ResizablePanel>

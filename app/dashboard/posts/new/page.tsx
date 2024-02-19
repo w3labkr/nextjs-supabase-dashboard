@@ -8,7 +8,7 @@ export default function NewPostPage() {
     <main className="flex-1 overflow-auto p-10 pb-16">
       <div className="space-y-16">
         <div className="space-y-4">
-          <Title text="New Post" translate="yes" />
+          <Title text="new_post" translate="yes" />
           <Separator />
           ...
         </div>

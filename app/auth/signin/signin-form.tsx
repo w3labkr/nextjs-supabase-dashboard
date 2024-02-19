@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { i18nKey } from '@/utils/string'
 
 import { useForm } from 'react-hook-form'
@@ -11,8 +11,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { toast } from 'sonner'
-import { LucideIcon } from '@/lib/lucide-icon'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
   Form,
@@ -23,6 +21,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { SubmitButton } from '@/components/submit-button'
 import { RelatedLink } from '@/components/related-link'
 
 import { createClient } from '@/lib/supabase/client'
@@ -41,13 +40,12 @@ const defaultValues: Partial<FormValues> = {
 
 export function SignInForm() {
   const router = useRouter()
-  const { t } = useTranslation(['translation', 'zod', 'zod-custom', 'supabase'])
+  const { t } = useTranslation(['translation', 'zod', 'zod-custom'])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
   })
-  const { errors, isSubmitting } = form.formState
 
   async function onSubmit(values: FormValues) {
     const supabase = createClient()
@@ -57,28 +55,31 @@ export function SignInForm() {
     })
 
     if (error) {
-      const { status, name, message } = error
-      const i18nMessage = `${name}.${i18nKey(message)}`
+      const message = i18nKey(error?.message)
 
-      switch (name) {
-        case 'AuthApiError':
-          form.setError('root.serverError', {
-            type: status?.toString(),
-            message: t(i18nMessage, { ns: 'supabase' }),
-          })
+      switch (message) {
+        case 'invalid_login_credentials':
+          form.setError('email', { message: t(message) })
+          form.setError('password', { message: t(message) })
           break
-        case 'AuthRetryableFetchError':
-          toast.error(t(i18nMessage, { ns: 'supabase' }))
+        case 'failed_to_fetch':
+          toast.error(t(message))
           break
         default:
-          toast.error(`${name}: ${message}`)
+          toast.error(error?.message)
           break
       }
 
       return false
     }
 
-    toast.success(t('You have successfully logged in'))
+    toast.success(t('you_have_successfully_logged_in'))
+
+    if (data?.user) {
+      // ...
+    }
+
+    form.reset()
 
     router.push('/dashboard/dashboard')
   }
@@ -95,7 +96,7 @@ export function SignInForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('Email')}</FormLabel>
+              <FormLabel>{t('email')}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
@@ -117,11 +118,11 @@ export function SignInForm() {
           render={({ field }) => (
             <FormItem>
               <div className="flex items-center justify-between">
-                <FormLabel>{t('Password')}</FormLabel>
+                <FormLabel>{t('password')}</FormLabel>
                 <RelatedLink
                   href="/auth/forgot-password"
                   className="text-sm"
-                  text="Forgot your password?"
+                  text="forgot_your_password"
                   translate="yes"
                 />
               </div>
@@ -129,9 +130,9 @@ export function SignInForm() {
                 <Input
                   type="password"
                   autoCapitalize="none"
-                  autoComplete="off"
+                  autoComplete="current-password"
                   autoCorrect="off"
-                  placeholder={t('Password')}
+                  placeholder={t('password')}
                   {...field}
                 />
               </FormControl>
@@ -140,16 +141,12 @@ export function SignInForm() {
             </FormItem>
           )}
         />
-        <FormMessage>{errors?.root?.serverError?.message}</FormMessage>
-        <Button type="submit" disabled={isSubmitting} className="w-full">
-          {isSubmitting && (
-            <LucideIcon
-              name="Loader2"
-              className="mr-2 size-4 min-w-4 animate-spin"
-            />
-          )}
-          <Trans>Sign In</Trans>
-        </Button>
+        <SubmitButton
+          isSubmitting={form?.formState?.isSubmitting}
+          text="sign_in"
+          translate="yes"
+          className="w-full"
+        />
       </form>
     </Form>
   )

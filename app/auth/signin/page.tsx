@@ -23,15 +23,15 @@ export default function SignInPage() {
         href="/"
         className="absolute left-4 top-4 md:left-8 md:top-8"
         startIconName="ChevronLeft"
-        text="Home"
+        text="home"
         translate="yes"
       />
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title text="Welcome back" translate="yes" />
+          <Title text="welcome_back" translate="yes" />
           <Description
-            text="Enter your email to sign in to your account"
+            text="enter_your_email_to_sign_in_to_your_account"
             translate="yes"
           />
         </div>
@@ -42,7 +42,7 @@ export default function SignInPage() {
         <div className="flex justify-between text-center text-sm">
           <RelatedLink
             href="/auth/signup"
-            text="Don't have an account? Sign Up"
+            text="dont_have_an_account_sign_up"
             translate="yes"
           />
           <LanguageToggleButton />

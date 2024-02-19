@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 export function SignInWithGoogle() {
   async function onSubmit() {
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         // A URL to send the user to after they are confirmed.
@@ -27,13 +27,18 @@ export function SignInWithGoogle() {
       },
     })
 
-    if (error) toast.error(`${error?.name}: ${error?.message}`)
+    if (error) {
+      toast.error(error?.message)
+      return false
+    }
+
+    // if (data?.user) {}
   }
 
   return (
     <Button variant="outline" onClick={onSubmit}>
       <FcGoogle className="mr-2 h-4 w-4" />
-      <Trans>Sign in with Google</Trans>
+      <Trans>sign_in_with_google</Trans>
     </Button>
   )
 }

@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { i18nKey } from '@/utils/string'
 
 import { useForm } from 'react-hook-form'
@@ -11,8 +11,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { toast } from 'sonner'
-import { LucideIcon } from '@/lib/lucide-icon'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
   Form,
@@ -23,6 +21,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { SubmitButton } from '@/components/submit-button'
 
 import { createClient } from '@/lib/supabase/client'
 
@@ -30,64 +29,78 @@ const formSchema = z
   .object({
     email: z.string().trim().email(),
     // If the password is larger than 72 chars, it will be truncated to the first 72 chars.
-    password: z.string().trim().min(6).max(72),
-    confirmPassword: z.string().trim().min(6).max(72),
+    newPassword: z.string().trim().min(6).max(72),
+    confirmNewPassword: z.string().trim().min(6).max(72),
   })
-  .refine((val) => val.password === val.confirmPassword, {
-    path: ['confirmPassword'],
+  .refine((val) => val.newPassword === val.confirmNewPassword, {
+    path: ['confirmNewPassword'],
     params: { i18n: 'invalid_confirm_password' },
   })
 
 type FormValues = z.infer<typeof formSchema>
 
-const defaultValues = {
+const defaultValues: Partial<FormValues> = {
   email: '',
-  password: '',
-  confirmPassword: '',
+  newPassword: '',
+  confirmNewPassword: '',
 }
 
 export function SignUpForm() {
   const router = useRouter()
-  const { t } = useTranslation(['translation', 'zod', 'zod-custom', 'supabase'])
+  const { t } = useTranslation(['translation', 'zod', 'zod-custom'])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
   })
-  const { errors, isSubmitting } = form.formState
 
   async function onSubmit(values: FormValues) {
     const supabase = createClient()
     const { data, error } = await supabase.auth.signUp({
       email: values.email,
-      password: values.password,
+      password: values.newPassword,
     })
 
     if (error) {
-      const { status, name, message } = error
-      const i18nMessage = `${name}.${i18nKey(message)}`
+      const message = i18nKey(error?.message)
 
-      switch (name) {
-        case 'AuthApiError':
-          form.setError('root.serverError', {
-            type: status?.toString(),
-            message: t(i18nMessage, { ns: 'supabase' }),
-          })
+      // in staging, we don't verify primary emails
+      // Supabase returns a nice error
+      switch (message) {
+        case 'user_already_registered':
+          form.setError('email', { message: t(message) })
           break
-        case 'AuthRetryableFetchError':
-          toast.error(t(i18nMessage, { ns: 'supabase' }))
+        case 'failed_to_fetch':
+          toast.error(t(message))
           break
         default:
-          toast.error(`${name}: ${message}`)
+          toast.error(error?.message)
           break
       }
 
       return false
     }
 
-    toast.success(t('You have successfully registered as a member'))
+    // in production, we verify primary emails
+    // supabase returns a user object with no identities if the user exists
+    // if (data?.user?.identities?.length === 0) {
+    //   form.setError('email', { message: t('user_already_registered') })
+    //   return false
+    // }
 
-    router.push('/dashboard/dashboard')
+    toast.success(t('you_have_successfully_registered_as_a_member'))
+
+    if (data?.user) {
+      const { error } = await supabase.auth.signOut()
+      if (error) {
+        toast.error(error?.message)
+        return false
+      }
+    }
+
+    form.reset()
+
+    router.push('/auth/signin')
   }
 
   return (
@@ -97,43 +110,19 @@ export function SignUpForm() {
         noValidate
         className="space-y-4"
       >
-        <div className="space-y-1">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('Email')}</FormLabel>
-                <FormControl>
-                  <Input
-                    type="email"
-                    autoCapitalize="none"
-                    autoComplete="email"
-                    autoCorrect="off"
-                    placeholder="name@example.com"
-                    {...field}
-                  />
-                </FormControl>
-                {/* <FormDescription></FormDescription> */}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormMessage>{errors?.root?.serverError?.message}</FormMessage>
-        </div>
         <FormField
           control={form.control}
-          name="password"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('Password')}</FormLabel>
+              <FormLabel>{t('email')}</FormLabel>
               <FormControl>
                 <Input
-                  type="password"
+                  type="email"
                   autoCapitalize="none"
-                  autoComplete="off"
+                  autoComplete="email"
                   autoCorrect="off"
-                  placeholder={t('Password')}
+                  placeholder="name@example.com"
                   {...field}
                 />
               </FormControl>
@@ -144,17 +133,17 @@ export function SignUpForm() {
         />
         <FormField
           control={form.control}
-          name="confirmPassword"
+          name="newPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('Confirm Password')}</FormLabel>
+              <FormLabel>{t('password')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoCapitalize="none"
-                  autoComplete="off"
+                  autoComplete="new-password"
                   autoCorrect="off"
-                  placeholder={t('Confirm Password')}
+                  placeholder={t('password')}
                   {...field}
                 />
               </FormControl>
@@ -163,15 +152,33 @@ export function SignUpForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isSubmitting} className="w-full">
-          {isSubmitting && (
-            <LucideIcon
-              name="Loader2"
-              className="mr-2 size-4 min-w-4 animate-spin"
-            />
+        <FormField
+          control={form.control}
+          name="confirmNewPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('confirm_password')}</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  autoCapitalize="none"
+                  autoComplete="new-password"
+                  autoCorrect="off"
+                  placeholder={t('confirm_password')}
+                  {...field}
+                />
+              </FormControl>
+              {/* <FormDescription></FormDescription> */}
+              <FormMessage />
+            </FormItem>
           )}
-          <Trans>Sign Up</Trans>
-        </Button>
+        />
+        <SubmitButton
+          isSubmitting={form?.formState?.isSubmitting}
+          text="sign_up"
+          translate="yes"
+          className="w-full"
+        />
       </form>
     </Form>
   )

@@ -25,7 +25,7 @@ export default function MediaLayout({
             <PersistentDrawer
               className="w-full border-none lg:max-w-full"
               drawerGroupItems={mediaConfig.drawerGroupItems}
-              title="Media"
+              title="media"
               translate="yes"
             />
           </ResizablePanel>

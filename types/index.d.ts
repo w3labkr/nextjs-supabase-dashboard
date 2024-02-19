@@ -1,10 +1,10 @@
-import { LinkProps } from 'next/link'
 import { LucideIconNameProp } from '@/lib/lucide-icon'
 
 export interface MobileNavItemProps {
   id: number
-  href: LinkProps['href']
+  href: string
   title: string
+  translate?: 'yes' | 'no' | undefined
 }
 
 export interface SiteConfig {

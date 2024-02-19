@@ -30,11 +30,12 @@ i18next
     // fallbackLng: false,
 
     // allow keys to be phrases having `:`, `.`
-    // nsSeparator: false,
-    // keySeparator: false,
+    // nsSeparator: false, // ':'
+    // keySeparator: false, // '.'
 
     interpolation: {
       escapeValue: false, // react already safes from xss
+      // formatSeparator: ',',
     },
 
     // react: {

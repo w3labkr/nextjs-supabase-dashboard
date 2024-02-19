@@ -17,24 +17,26 @@ interface SignOutButtonProps
 export function SignOutButton({
   children,
   translate,
-  text = 'Sign out',
+  text = 'sign_out',
   ...props
 }: SignOutButtonProps) {
   const router = useRouter()
   const { t } = useTranslation()
 
-  const onClick = async () => {
+  async function onSubmit() {
     const supabase = createClient()
     const { error } = await supabase.auth.signOut()
 
-    if (error) toast.error(`${error?.name}: ${error?.message}`)
-    if (error) return false
+    if (error) {
+      toast.error(error?.message)
+      return false
+    }
 
     router.push('/')
   }
 
   return (
-    <Button onClick={onClick} {...props}>
+    <Button onClick={onSubmit} {...props}>
       {text && translate === 'yes' ? t(text) : text}
       {children}
     </Button>

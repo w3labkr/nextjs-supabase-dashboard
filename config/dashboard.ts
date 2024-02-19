@@ -15,7 +15,7 @@ export const dashboardConfig: DashboardConfig = {
           id: 1,
           href: '/dashboard/dashboard',
           iconName: 'LayoutDashboard',
-          title: 'Dashboard',
+          title: 'dashboard',
           badge: 1,
           translate: 'yes',
           disabled: false,
@@ -24,7 +24,7 @@ export const dashboardConfig: DashboardConfig = {
           id: 2,
           href: '/dashboard/media',
           iconName: 'Image',
-          title: 'Media',
+          title: 'media',
           badge: 0,
           translate: 'yes',
           disabled: true,
@@ -33,7 +33,7 @@ export const dashboardConfig: DashboardConfig = {
           id: 3,
           href: '/dashboard/posts',
           iconName: 'StickyNote',
-          title: 'Posts',
+          title: 'posts',
           badge: 0,
           translate: 'yes',
           disabled: true,
@@ -48,7 +48,7 @@ export const dashboardConfig: DashboardConfig = {
           id: 1,
           href: '/dashboard/settings',
           iconName: 'Settings',
-          title: 'Settings',
+          title: 'settings',
           badge: 0,
           translate: 'yes',
           disabled: false,
@@ -68,7 +68,7 @@ export const mediaConfig: MediaConfig = {
       items: [
         {
           id: 1,
-          title: 'New Media',
+          title: 'new_media',
           href: '/dashboard/media/new',
           // iconName: '',
           translate: 'yes',
@@ -76,7 +76,7 @@ export const mediaConfig: MediaConfig = {
         },
         {
           id: 2,
-          title: 'Edit Media',
+          title: 'edit_media',
           href: '/dashboard/media/edit',
           // iconName: '',
           translate: 'yes',
@@ -97,7 +97,7 @@ export const postsConfig: PostsConfig = {
       items: [
         {
           id: 1,
-          title: 'New Post',
+          title: 'new_post',
           href: '/dashboard/posts/new',
           // iconName: '',
           translate: 'yes',
@@ -105,7 +105,7 @@ export const postsConfig: PostsConfig = {
         },
         {
           id: 2,
-          title: 'Edit Post',
+          title: 'edit_post',
           href: '/dashboard/posts/edit',
           // iconName: '',
           translate: 'yes',
@@ -126,7 +126,7 @@ export const settingsConfig: SettingsConfig = {
       items: [
         {
           id: 1,
-          title: 'Profile',
+          title: 'profile',
           href: '/dashboard/settings/profile',
           iconName: 'UserRound',
           translate: 'yes',
@@ -134,7 +134,7 @@ export const settingsConfig: SettingsConfig = {
         },
         {
           id: 2,
-          title: 'Account',
+          title: 'account',
           href: '/dashboard/settings/account',
           iconName: 'Settings',
           translate: 'yes',
@@ -142,7 +142,7 @@ export const settingsConfig: SettingsConfig = {
         },
         {
           id: 3,
-          title: 'Appearance',
+          title: 'appearance',
           href: '/dashboard/settings/appearance',
           iconName: 'Paintbrush',
           translate: 'yes',
@@ -150,7 +150,7 @@ export const settingsConfig: SettingsConfig = {
         },
         {
           id: 4,
-          title: 'Notifications',
+          title: 'notifications',
           href: '/dashboard/settings/notifications',
           iconName: 'Bell',
           translate: 'yes',
@@ -160,13 +160,13 @@ export const settingsConfig: SettingsConfig = {
     },
     {
       id: 2,
-      label: 'Access',
+      label: 'access',
       separator: true,
       translate: 'yes',
       items: [
         {
           id: 1,
-          title: 'Emails',
+          title: 'emails',
           href: '/dashboard/settings/emails',
           iconName: 'Mail',
           translate: 'yes',
@@ -174,7 +174,7 @@ export const settingsConfig: SettingsConfig = {
         },
         {
           id: 2,
-          title: 'Security',
+          title: 'security',
           href: '/dashboard/settings/security',
           iconName: 'ShieldAlert',
           translate: 'yes',
@@ -182,7 +182,7 @@ export const settingsConfig: SettingsConfig = {
         },
         {
           id: 3,
-          title: 'Sessions',
+          title: 'sessions',
           href: '/dashboard/settings/sessions',
           iconName: 'RadioTower',
           translate: 'yes',

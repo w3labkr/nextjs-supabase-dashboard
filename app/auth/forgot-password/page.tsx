@@ -22,16 +22,15 @@ export default function ForgotPasswordPage() {
         href="/auth/signin"
         className="absolute left-4 top-4 md:left-8 md:top-8"
         startIconName="ChevronLeft"
-        text="Sign In"
+        text="sign_in"
         translate="yes"
       />
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title text="Forgot your password?" translate="yes" />
+          <Title text="forgot_your_password" translate="yes" />
           <Description
-            text="Enter your email address below and we will send you a message to
-            reset your password"
+            text="send_you_a_message_to_reset_your_password"
             translate="yes"
           />
         </div>
@@ -41,7 +40,7 @@ export default function ForgotPasswordPage() {
         <div className="flex justify-between text-center text-sm">
           <RelatedLink
             href="/auth/signup"
-            text="Don't have an account? Sign Up"
+            text="dont_have_an_account_sign_up"
             translate="yes"
           />
           <LanguageToggleButton />

@@ -29,20 +29,17 @@ export function Notify() {
       <PopoverTrigger asChild>
         <Button className="h-8 w-8" size="icon" variant="ghost">
           <LucideIcon name="Bell" />
-          <span className="sr-only">
-            <Trans>Toggle notifications</Trans>
-          </span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="end">
         <Card className="w-[360px] border-0">
           <CardHeader>
             <CardTitle>
-              <Trans>Notifications</Trans>
+              <Trans>notifications</Trans>
             </CardTitle>
             <CardDescription>
               <Trans values={{ count: data?.length }}>
-                You have unread messages
+                you_have_unread_messages
               </Trans>
             </CardDescription>
           </CardHeader>
@@ -53,7 +50,7 @@ export function Notify() {
           <CardFooter>
             <Button className="w-full">
               <LucideIcon name="Check" className="mr-2 size-4 min-w-4" />
-              <Trans>Mark all as read</Trans>
+              <Trans>mark_all_as_read</Trans>
             </Button>
           </CardFooter>
         </Card>

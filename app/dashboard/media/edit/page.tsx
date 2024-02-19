@@ -8,7 +8,7 @@ export default function EditMediaPage() {
     <main className="flex-1 overflow-auto p-10 pb-16">
       <div className="space-y-16">
         <div className="space-y-4">
-          <Title text="Edit Media" translate="yes" />
+          <Title text="edit_media" translate="yes" />
           <Separator />
           ...
         </div>

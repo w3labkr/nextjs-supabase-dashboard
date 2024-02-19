@@ -16,15 +16,15 @@ export default function ResetPasswordPage() {
         href="/auth/signin"
         className="absolute left-4 top-4 md:left-8 md:top-8"
         startIconName="ChevronLeft"
-        text="Sign In"
+        text="sign_in"
         translate="yes"
       />
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title text="Reset your password" translate="yes" />
+          <Title text="reset_your_password" translate="yes" />
           <Description
-            text="Please enter your new password below"
+            text="please_enter_your_new_password_below"
             translate="yes"
           />
         </div>
@@ -34,7 +34,7 @@ export default function ResetPasswordPage() {
         <div className="flex justify-between text-center text-sm">
           <RelatedLink
             href="/auth/signup"
-            text="Don't have an account? Sign Up"
+            text="dont_have_an_account_sign_up"
             translate="yes"
           />
           <LanguageToggleButton />

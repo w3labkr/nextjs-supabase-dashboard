@@ -10,7 +10,7 @@ export default function ProfilePage() {
     <main className="flex-1 overflow-auto p-10 pb-16">
       <div className="space-y-16">
         <div className="space-y-4">
-          <Title text="Profile" translate="yes" />
+          <Title text="profile" translate="yes" />
           <Separator />
           <ProfileForm />
         </div>

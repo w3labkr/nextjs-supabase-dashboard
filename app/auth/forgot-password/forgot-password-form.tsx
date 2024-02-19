@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { i18nKey } from '@/utils/string'
 
 import { useForm } from 'react-hook-form'
@@ -10,8 +10,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { toast } from 'sonner'
-import { LucideIcon } from '@/lib/lucide-icon'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
   Form,
@@ -22,6 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { SubmitButton } from '@/components/submit-button'
 
 import { createClient } from '@/lib/supabase/client'
 
@@ -36,39 +35,44 @@ const defaultValues: Partial<FormValues> = {
 }
 
 export function ForgotPasswordForm() {
-  const { t } = useTranslation(['translation', 'zod', 'zod-custom', 'supabase'])
+  const { t } = useTranslation(['translation', 'zod', 'zod-custom'])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
   })
-  const { errors, isSubmitting } = form.formState
 
   async function onSubmit(values: FormValues) {
     const supabase = createClient()
     const { data, error } = await supabase.auth.resetPasswordForEmail(
-      values.email
+      values.email,
+      {
+        redirectTo:
+          process.env.NEXT_PUBLIC_SITE_URL +
+          '/api/v1/auth/confirm?next=/auth/reset-password',
+      }
     )
 
     if (error) {
-      const { status, name, message } = error
-      const i18nMessage = `${name}.${i18nKey(message)}`
+      const message = i18nKey(error?.message)
 
-      switch (name) {
-        case 'AuthRetryableFetchError':
-          toast.error(t(i18nMessage, { ns: 'supabase' }))
+      switch (message) {
+        case 'failed_to_fetch':
+          toast.error(t(message))
           break
         default:
-          toast.error(`${name}: ${message}`)
+          toast.error(error?.message)
           break
       }
 
       return false
     }
 
-    form.reset()
+    toast.success(t('the_email_has_been_sent_successfully'))
 
-    toast.success(t('The email has been sent successfully'))
+    // if (data?.user) {}
+
+    form.reset()
   }
 
   return (
@@ -83,7 +87,7 @@ export function ForgotPasswordForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('Email')}</FormLabel>
+              <FormLabel>{t('email')}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
@@ -94,21 +98,16 @@ export function ForgotPasswordForm() {
                   {...field}
                 />
               </FormControl>
-              {/* <FormDescription></FormDescription> */}
               <FormMessage className="font-normal" />
             </FormItem>
           )}
         />
-        <FormMessage>{errors?.root?.serverError?.message}</FormMessage>
-        <Button type="submit" disabled={isSubmitting} className="w-full">
-          {isSubmitting && (
-            <LucideIcon
-              name="Loader2"
-              className="mr-2 size-4 min-w-4 animate-spin"
-            />
-          )}
-          <Trans>Reset my password</Trans>
-        </Button>
+        <SubmitButton
+          isSubmitting={form?.formState?.isSubmitting}
+          text="reset_my_password"
+          translate="yes"
+          className="w-full"
+        />
       </form>
     </Form>
   )

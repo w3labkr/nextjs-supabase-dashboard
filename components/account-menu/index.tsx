@@ -42,12 +42,12 @@ export function AccountMenu() {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/dashboard/settings/profile" className="cursor-pointer">
-            <Trans>Profile</Trans>
+            <Trans>profile</Trans>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/dashboard/settings/profile" className="cursor-pointer">
-            <Trans>Settings</Trans>
+            <Trans>settings</Trans>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />

@@ -10,7 +10,7 @@ export default function NotificationsPage() {
     <main className="flex-1 p-10 pb-16">
       <div className="space-y-16">
         <div className="space-y-4">
-          <Title text="Notifications" translate="yes" />
+          <Title text="notifications" translate="yes" />
           <Separator />
           <NotificationsForm />
         </div>

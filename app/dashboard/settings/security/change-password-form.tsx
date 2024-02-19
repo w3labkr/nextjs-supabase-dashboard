@@ -2,12 +2,14 @@
 
 import * as React from 'react'
 
+import { useTranslation } from 'react-i18next'
+import { i18nKey } from '@/utils/string'
+
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -18,6 +20,9 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { SubmitButton } from '@/components/submit-button'
+
+import { createClient } from '@/lib/supabase/client'
 
 const formSchema = z
   .object({
@@ -40,15 +45,61 @@ const defaultValues: Partial<FormValues> = {
 }
 
 export function ChangePasswordForm() {
+  const { t } = useTranslation(['translation', 'zod', 'zod-custom'])
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
   })
 
   async function onSubmit(values: FormValues) {
-    console.log(values)
+    const supabase = createClient()
 
-    toast.success('Your password has been successfully changed')
+    // Verify the current password
+    const verified = await supabase.rpc('verify_user_password', {
+      password: values.oldPassword,
+    })
+
+    if (verified?.error) {
+      toast.error(verified?.error?.message)
+      return false
+    }
+
+    if (!verified?.data) {
+      form.setError('oldPassword', { message: t('invalid_old_password') })
+      return false
+    }
+
+    // Update to the new password if the old one is correct
+    const { data, error } = await supabase.auth.updateUser({
+      password: values.newPassword,
+    })
+
+    if (error) {
+      const message = i18nKey(error?.message)
+
+      switch (message) {
+        case 'new_password_should_be_different_from_the_old_password':
+          form.setError('newPassword', { message: t(message) })
+          break
+        case 'failed_to_fetch':
+          toast.error(t(message))
+          break
+        default:
+          toast.error(error?.message)
+          break
+      }
+
+      return false
+    }
+
+    toast.success('your_password_has_been_successfully_changed')
+
+    if (data?.user) {
+      // ...
+    }
+
+    form.reset()
   }
 
   return (
@@ -63,14 +114,14 @@ export function ChangePasswordForm() {
           name="oldPassword"
           render={({ field }) => (
             <FormItem className="max-w-80">
-              <FormLabel>Old Password</FormLabel>
+              <FormLabel>{t('old_password')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoCapitalize="none"
-                  autoComplete="off"
+                  autoComplete="current-password"
                   autoCorrect="off"
-                  placeholder="Old Password"
+                  placeholder={t('old_password')}
                   {...field}
                 />
               </FormControl>
@@ -84,14 +135,14 @@ export function ChangePasswordForm() {
           name="newPassword"
           render={({ field }) => (
             <FormItem className="max-w-80">
-              <FormLabel>New Password</FormLabel>
+              <FormLabel>{t('new_password')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoCapitalize="none"
-                  autoComplete="off"
+                  autoComplete="new-password"
                   autoCorrect="off"
-                  placeholder="New Password"
+                  placeholder={t('new_password')}
                   {...field}
                 />
               </FormControl>
@@ -105,14 +156,14 @@ export function ChangePasswordForm() {
           name="confirmNewPassword"
           render={({ field }) => (
             <FormItem className="max-w-80">
-              <FormLabel>Confirm New Password</FormLabel>
+              <FormLabel>{t('confirm_new_password')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoCapitalize="none"
-                  autoComplete="off"
+                  autoComplete="new-password"
                   autoCorrect="off"
-                  placeholder="Confirm New Password"
+                  placeholder={t('confirm_new_password')}
                   {...field}
                 />
               </FormControl>
@@ -121,7 +172,17 @@ export function ChangePasswordForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Update password</Button>
+        <div className="space-y-1">
+          <p className="text-sm text-muted-foreground">
+            Your password must be at least 6 characters long and must be
+            different from your previous password.
+          </p>
+          <SubmitButton
+            isSubmitting={form?.formState?.isSubmitting}
+            text="update_password"
+            translate="yes"
+          />
+        </div>
       </form>
     </Form>
   )

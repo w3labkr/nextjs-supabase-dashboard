@@ -1,42 +1,53 @@
 'use client'
 
 import * as React from 'react'
-import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/utils/tailwind'
 import { LucideIcon, LucideIconNameProp } from '@/lib/lucide-icon'
 import { Button, ButtonProps } from '@/components/ui/button'
 
-export interface BackLinkButtonProps
+interface SubmitButtonProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
+  text?: string | undefined
+  disabled?: boolean | undefined
   startIconName?: LucideIconNameProp | undefined
   startIconClassName?: string | undefined
   endIconName?: LucideIconNameProp | undefined
   endIconClassName?: string | undefined
-  text?: string | undefined
+  isSubmitting?: boolean | undefined
+  submittingIconName?: LucideIconNameProp | undefined
+  submittingIconClassName?: string | undefined
 }
 
-export const BackLinkButton = React.forwardRef<
-  HTMLButtonElement,
-  BackLinkButtonProps
->((props, ref) => {
-  const {
-    children,
-    startIconName,
-    startIconClassName,
-    endIconName,
-    endIconClassName,
-    translate,
-    text = 'back',
-    ...rest
-  } = props
-  const router = useRouter()
+export function SubmitButton({
+  children,
+  text,
+  translate,
+  disabled,
+  startIconName,
+  startIconClassName,
+  endIconName,
+  endIconClassName,
+  isSubmitting = false,
+  submittingIconName = 'Loader2',
+  submittingIconClassName = '',
+  ...props
+}: SubmitButtonProps) {
   const { t } = useTranslation()
 
   return (
-    <Button ref={ref} onClick={() => router.back()} {...rest}>
+    <Button type="submit" disabled={disabled ?? isSubmitting} {...props}>
+      {isSubmitting && submittingIconName && (
+        <LucideIcon
+          name={submittingIconName}
+          className={cn(
+            'mr-2 size-4 min-w-4 animate-spin',
+            submittingIconClassName
+          )}
+        />
+      )}
       {startIconName && (
         <LucideIcon
           name={startIconName}
@@ -53,6 +64,4 @@ export const BackLinkButton = React.forwardRef<
       )}
     </Button>
   )
-})
-
-BackLinkButton.displayName = 'BackLinkButton'
+}

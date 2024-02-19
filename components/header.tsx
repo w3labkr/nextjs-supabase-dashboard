@@ -31,10 +31,10 @@ export function Header() {
             <LinkButton
               href="/auth/signin"
               variant="outline"
-              text="Sign In"
+              text="sign_in"
               translate="yes"
             />
-            <LinkButton href="/auth/signup" text="Sign Up" translate="yes" />
+            <LinkButton href="/auth/signup" text="sign_up" translate="yes" />
           </div>
         </div>
       </header>

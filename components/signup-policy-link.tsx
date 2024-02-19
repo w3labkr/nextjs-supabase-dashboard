@@ -40,8 +40,7 @@ export function SignUpPolicyLink({
   return (
     <p className={cn('text-sm text-muted-foreground', className)} {...props}>
       <Trans components={{ link1: <Link1 />, link2: <Link2 /> }}>
-        By clicking Sign Up, you agree to our Terms of Service and Privacy
-        Policy
+        agree_to_terms_of_service_and_privacy_policy
       </Trans>
     </p>
   )

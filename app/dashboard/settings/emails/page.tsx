@@ -8,7 +8,7 @@ export default function EmailsPage() {
     <main className="flex-1 overflow-auto p-10 pb-16">
       <div className="space-y-16">
         <div className="space-y-4">
-          <Title text="Emails" translate="yes" />
+          <Title text="emails" translate="yes" />
           <Separator />
           ...
         </div>

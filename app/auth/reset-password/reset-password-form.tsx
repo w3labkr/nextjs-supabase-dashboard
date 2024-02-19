@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { i18nKey } from '@/utils/string'
 
 import { useForm } from 'react-hook-form'
@@ -11,8 +11,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { toast } from 'sonner'
-import { LucideIcon } from '@/lib/lucide-icon'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
   Form,
@@ -23,6 +21,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { SubmitButton } from '@/components/submit-button'
 
 import { createClient } from '@/lib/supabase/client'
 
@@ -38,20 +37,19 @@ const formSchema = z
 
 type FormValues = z.infer<typeof formSchema>
 
-const defaultValues = {
+const defaultValues: Partial<FormValues> = {
   newPassword: '',
   confirmNewPassword: '',
 }
 
 export function ResetPasswordForm() {
   const router = useRouter()
-  const { t } = useTranslation(['translation', 'zod', 'zod-custom', 'supabase'])
+  const { t } = useTranslation(['translation', 'zod', 'zod-custom'])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
   })
-  const { errors, isSubmitting } = form.formState
 
   async function onSubmit(values: FormValues) {
     const supabase = createClient()
@@ -60,34 +58,35 @@ export function ResetPasswordForm() {
     })
 
     if (error) {
-      const { status, name, message } = error
-      const i18nMessage = `${name}.${i18nKey(message)}`
+      const message = i18nKey(error?.message)
 
-      switch (name) {
-        case 'AuthApiError':
-          form.setError('root.serverError', {
-            type: status?.toString(),
-            message: t(i18nMessage, { ns: 'supabase' }),
-          })
+      switch (message) {
+        case 'new_password_should_be_different_from_the_old_password':
+          form.setError('newPassword', { message: t(message) })
           break
-        case 'AuthRetryableFetchError':
-          toast.error(t(i18nMessage, { ns: 'supabase' }))
+        case 'auth_session_missing':
+        case 'failed_to_fetch':
+          toast.error(t(message))
           break
         default:
-          toast.error(`${name}: ${message}`)
+          toast.error(error?.message)
           break
       }
 
       return false
     }
 
-    toast.success(t('Your password has been successfully changed'))
+    toast.success(t('your_password_has_been_successfully_changed'))
 
     if (data?.user) {
       const { error } = await supabase.auth.signOut()
-      if (error) toast.error(`${error?.name}: ${error?.message}`)
-      if (error) return false
+      if (error) {
+        toast.error(error?.message)
+        return false
+      }
     }
+
+    form.reset()
 
     router.push('/auth/signin')
   }
@@ -104,18 +103,17 @@ export function ResetPasswordForm() {
           name="newPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('New Password')}</FormLabel>
+              <FormLabel>{t('new_password')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoCapitalize="none"
-                  autoComplete="off"
+                  autoComplete="new-password"
                   autoCorrect="off"
-                  placeholder={t('New Password')}
+                  placeholder={t('new_password')}
                   {...field}
                 />
               </FormControl>
-              {/* <FormDescription></FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
@@ -125,32 +123,27 @@ export function ResetPasswordForm() {
           name="confirmNewPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('Confirm New Password')}</FormLabel>
+              <FormLabel>{t('confirm_new_password')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoCapitalize="none"
-                  autoComplete="off"
+                  autoComplete="new-password"
                   autoCorrect="off"
-                  placeholder={t('Confirm New Password')}
+                  placeholder={t('confirm_new_password')}
                   {...field}
                 />
               </FormControl>
-              {/* <FormDescription></FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
         />
-        <FormMessage>{errors?.root?.serverError?.message}</FormMessage>
-        <Button type="submit" disabled={isSubmitting} className="w-full">
-          {isSubmitting && (
-            <LucideIcon
-              name="Loader2"
-              className="mr-2 size-4 min-w-4 animate-spin"
-            />
-          )}
-          <Trans>Change password</Trans>
-        </Button>
+        <SubmitButton
+          isSubmitting={form?.formState?.isSubmitting}
+          text="change_password"
+          translate="yes"
+          className="w-full"
+        />
       </form>
     </Form>
   )

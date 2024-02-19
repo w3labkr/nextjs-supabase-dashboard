@@ -1,12 +1,14 @@
 'use client'
 
 import * as React from 'react'
+
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-// import { LucideIcon } from '@/lib/lucide-icon'
 // import { cn } from '@/utils/tailwind'
+import { toast } from 'sonner'
+// import { LucideIcon } from '@/lib/lucide-icon'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -18,47 +20,39 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { toast } from '@/components/ui/use-toast'
 
-const appearanceFormSchema = z.object({
+const formSchema = z.object({
   theme: z.enum(['light', 'dark'], {
     required_error: 'Please select a theme.',
   }),
 })
 
-type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
+type FormValues = z.infer<typeof formSchema>
 
 // This can come from your database or API.
-const defaultValues: Partial<AppearanceFormValues> = {
+const defaultValues: Partial<FormValues> = {
   theme: 'light',
 }
 
 export function AppearanceForm() {
-  const form = useForm<AppearanceFormValues>({
-    resolver: zodResolver(appearanceFormSchema),
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
     defaultValues,
   })
 
-  function onSubmit(values: AppearanceFormValues) {
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      ),
-    })
+  function onSubmit(values: FormValues) {
+    // ...
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="theme"
           render={({ field }) => (
             <FormItem className="space-y-1">
-              <FormLabel>Theme</FormLabel>
+              <FormLabel className="mb-4 text-lg font-medium">Theme</FormLabel>
               <FormDescription>
                 Select the theme for the dashboard.
               </FormDescription>

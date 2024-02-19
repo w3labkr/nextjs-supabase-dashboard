@@ -14,5 +14,5 @@ export function i18nKey(str: string) {
   return str
     .toLowerCase()
     .replace(/[^\w\s]/gi, '')
-    .replace(/\s+/g, '-')
+    .replace(/\s+/g, '_')
 }

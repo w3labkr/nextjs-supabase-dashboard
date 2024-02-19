@@ -25,7 +25,7 @@ export default function SettingsLayout({
             <PersistentDrawer
               className="w-full border-none lg:max-w-full"
               drawerGroupItems={settingsConfig.drawerGroupItems}
-              title="Settings"
+              title="settings"
               translate="yes"
             />
           </ResizablePanel>
