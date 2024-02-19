@@ -10,19 +10,19 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { TooltipContentProps } from '@radix-ui/react-tooltip'
-import { ForwardButton, ForwardButtonProps } from '@/components/forward-button'
+import { LinkButton, LinkButtonProps } from '@/components/link-button'
 
-export interface TooltipForwardButtonProps extends ForwardButtonProps {
+export interface TooltipLinkButtonProps extends LinkButtonProps {
   tooltipContent?: TooltipContentProps | undefined
 }
 
-export function TooltipForwardButton({
+export function TooltipLinkButton({
   children,
   text,
   translate,
   tooltipContent,
   ...props
-}: TooltipForwardButtonProps) {
+}: TooltipLinkButtonProps) {
   const { t } = useTranslation()
 
   return (
@@ -30,7 +30,7 @@ export function TooltipForwardButton({
       <Tooltip>
         <TooltipTrigger asChild>
           <div>
-            <ForwardButton {...props}>{children}</ForwardButton>
+            <LinkButton {...props}>{children}</LinkButton>
           </div>
         </TooltipTrigger>
         <TooltipContent {...tooltipContent}>

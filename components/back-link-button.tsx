@@ -8,7 +8,7 @@ import { cn } from '@/utils/tailwind'
 import { LucideIcon, LucideIconNameProp } from '@/lib/lucide-icon'
 import { Button, ButtonProps } from '@/components/ui/button'
 
-export interface HistoryBackButtonProps
+export interface BackLinkButtonProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
   startIconName?: LucideIconNameProp | undefined
@@ -18,17 +18,17 @@ export interface HistoryBackButtonProps
   text?: string | undefined
 }
 
-export const HistoryBackButton = React.forwardRef<
+export const BackLinkButton = React.forwardRef<
   HTMLButtonElement,
-  HistoryBackButtonProps
+  BackLinkButtonProps
 >((props, ref) => {
   const {
     children,
-    translate,
     startIconName,
     startIconClassName,
     endIconName,
     endIconClassName,
+    translate,
     text = 'Back',
     ...rest
   } = props
@@ -55,4 +55,4 @@ export const HistoryBackButton = React.forwardRef<
   )
 })
 
-HistoryBackButton.displayName = 'HistoryBackButton'
+BackLinkButton.displayName = 'BackLinkButton'

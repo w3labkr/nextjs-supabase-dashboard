@@ -9,7 +9,7 @@ import { SheetTrigger, SheetContent, Sheet } from '@/components/ui/sheet'
 import { Brand } from '@/components/brand'
 import { Navigation } from '@/components/navigation'
 import { MobileNavigation } from '@/components/mobile-navigation'
-import { ForwardButton } from '@/components/forward-button'
+import { LinkButton } from '@/components/link-button'
 
 export function Header() {
   return (
@@ -28,13 +28,13 @@ export function Header() {
           <Brand />
           <Navigation />
           <div className="ml-auto flex gap-2">
-            <ForwardButton
+            <LinkButton
               href="/auth/signin"
               variant="outline"
               text="Sign In"
               translate="yes"
             />
-            <ForwardButton href="/auth/signup" text="Sign Up" translate="yes" />
+            <LinkButton href="/auth/signup" text="Sign Up" translate="yes" />
           </div>
         </div>
       </header>

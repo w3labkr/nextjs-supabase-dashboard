@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/utils/tailwind'
-import { ForwardButton } from '@/components/forward-button'
+import { LinkButton } from '@/components/link-button'
 
 import { DrawerItemProps } from '@/types/dashboard'
 
@@ -12,7 +12,7 @@ export interface DrawerItemsProps {
 
 export function DrawerItems({ items, pathname }: DrawerItemsProps) {
   return items.map((item) => (
-    <ForwardButton
+    <LinkButton
       variant="ghost"
       key={item.id}
       href={item.href}

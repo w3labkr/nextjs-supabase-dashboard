@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { cn } from '@/utils/tailwind'
 import { Badge } from '@/components/ui/badge'
-import { TooltipForwardButton } from '@/components/tooltip-forward-button'
+import { TooltipLinkButton } from '@/components/tooltip-link-button'
 
 import { MiniDrawerItemProps } from '@/types/dashboard'
 
@@ -13,7 +13,7 @@ export interface MiniDrawerItemsProps {
 
 export function MiniDrawerItems({ items, pathname }: MiniDrawerItemsProps) {
   return items.map((item) => (
-    <TooltipForwardButton
+    <TooltipLinkButton
       variant="ghost"
       key={item.id}
       href={item.href}
@@ -38,6 +38,6 @@ export function MiniDrawerItems({ items, pathname }: MiniDrawerItemsProps) {
           {item.badge}
         </Badge>
       )}
-    </TooltipForwardButton>
+    </TooltipLinkButton>
   ))
 }
