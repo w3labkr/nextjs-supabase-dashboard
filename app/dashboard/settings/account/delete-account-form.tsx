@@ -1,15 +1,14 @@
 'use client'
 
 import * as React from 'react'
+import { useRouter } from 'next/navigation'
 import { useTranslation, Trans } from 'react-i18next'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { cn } from '@/utils/tailwind'
 import { toast } from 'sonner'
-import { LucideIcon } from '@/lib/lucide-icon'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -31,22 +30,24 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 
+import { deleteAccount } from '@/lib/supabase/client'
+
 const formSchema = z.object({
   email: z.string().email(),
-  confirmText: z.string(),
-  confirmPassword: z.string().min(6).max(72),
+  password: z.string().min(6).max(72),
+  verifyText: z.literal('delete my account'),
 })
 
 type FormValues = z.infer<typeof formSchema>
 
 const defaultValues: Partial<FormValues> = {
   email: '',
-  confirmText: '',
-  confirmPassword: '',
+  password: '',
+  verifyText: '',
 }
 
 export function DeleteAccountDialog() {
-  const { t } = useTranslation(['translation', 'zod', 'zod-custom', 'supabase'])
+  const { t } = useTranslation(['translation', 'zod', 'zod-custom'])
 
   return (
     <Dialog>
@@ -58,7 +59,7 @@ export function DeleteAccountDialog() {
       <DialogContent className="max-w-[480px]">
         <DialogHeader>
           <DialogTitle>{t('delete_account')}</DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-destructive">
             {t('deleting_your_account_cannot_be_reversed')}
           </DialogDescription>
         </DialogHeader>
@@ -69,7 +70,8 @@ export function DeleteAccountDialog() {
   )
 }
 export function DeleteAccountForm() {
-  const { t } = useTranslation(['translation', 'zod', 'zod-custom', 'supabase'])
+  const router = useRouter()
+  const { t } = useTranslation(['translation', 'zod', 'zod-custom'])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -77,7 +79,28 @@ export function DeleteAccountForm() {
   })
 
   async function onSubmit(values: FormValues) {
-    console.log(values)
+    const { data, error } = await deleteAccount({
+      email: values.email,
+      password: values.password,
+    })
+
+    if (error) {
+      switch (error?.message) {
+        case 'invalid_account_information':
+          form.setError('email', { message: t(error?.message) })
+          form.setError('password', { message: t(error?.message) })
+          break
+        default:
+          toast.error(error?.message)
+          break
+      }
+    }
+
+    form.reset()
+
+    toast.success(t('your_account_has_been_successfully_deleted'))
+
+    router.push('/')
   }
 
   return (
@@ -99,7 +122,28 @@ export function DeleteAccountForm() {
         />
         <FormField
           control={form.control}
-          name="confirmText"
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('confirm_your_password')}:</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  autoCapitalize="none"
+                  autoComplete="current-password"
+                  autoCorrect="off"
+                  placeholder={t('password')}
+                  {...field}
+                />
+              </FormControl>
+              {/* <FormDescription></FormDescription> */}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="verifyText"
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -115,24 +159,10 @@ export function DeleteAccountForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('confirm_your_password')}:</FormLabel>
-              <FormControl>
-                <Input placeholder={t('confirm_your_password')} {...field} />
-              </FormControl>
-              {/* <FormDescription></FormDescription> */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <Button
           variant="destructive"
           type="submit"
-          disabled={!form?.formState?.isValid || form?.formState?.isSubmitting}
+          // disabled={!form?.formState?.isValid || form?.formState?.isSubmitting}
         >
           {t('delete_your_account')}
         </Button>

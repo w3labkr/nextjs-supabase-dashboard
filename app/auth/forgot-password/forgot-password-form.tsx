@@ -53,20 +53,8 @@ export function ForgotPasswordForm() {
       }
     )
 
-    if (error) {
-      const message = i18nKey(error?.message)
-
-      switch (message) {
-        case 'failed_to_fetch':
-          toast.error(t(message))
-          break
-        default:
-          toast.error(error?.message)
-          break
-      }
-
-      return false
-    }
+    if (error) toast.error(error?.message)
+    if (error) return false
 
     toast.success(t('the_email_has_been_sent_successfully'))
 

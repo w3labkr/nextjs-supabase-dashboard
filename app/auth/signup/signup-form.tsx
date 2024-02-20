@@ -70,9 +70,6 @@ export function SignUpForm() {
         case 'user_already_registered':
           form.setError('email', { message: t(message) })
           break
-        case 'failed_to_fetch':
-          toast.error(t(message))
-          break
         default:
           toast.error(error?.message)
           break

@@ -1,9 +1,7 @@
 'use client'
 
 import * as React from 'react'
-
 import { useTranslation } from 'react-i18next'
-import { i18nKey } from '@/utils/string'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -22,7 +20,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { SubmitButton } from '@/components/submit-button'
 
-import { createClient } from '@/lib/supabase/client'
+import { changeUserPassword } from '@/lib/supabase/client'
 
 const formSchema = z
   .object({
@@ -53,51 +51,25 @@ export function ChangePasswordForm() {
   })
 
   async function onSubmit(values: FormValues) {
-    const supabase = createClient()
-
-    // Verify the current password
-    const verified = await supabase.rpc('verify_user_password', {
-      password: values.oldPassword,
+    const { data, error } = await changeUserPassword({
+      oldPassword: values.oldPassword,
+      newPassword: values.newPassword,
     })
 
-    if (verified?.error) {
-      toast.error(verified?.error?.message)
-      return false
-    }
-
-    if (!verified?.data) {
-      form.setError('oldPassword', { message: t('invalid_old_password') })
-      return false
-    }
-
-    // Update to the new password if the old one is correct
-    const { data, error } = await supabase.auth.updateUser({
-      password: values.newPassword,
-    })
-
-    if (error) {
-      const message = i18nKey(error?.message)
-
-      switch (message) {
+    if (error?.message) {
+      switch (error?.message) {
+        case 'invalid_old_password':
         case 'new_password_should_be_different_from_the_old_password':
-          form.setError('newPassword', { message: t(message) })
-          break
-        case 'failed_to_fetch':
-          toast.error(t(message))
+          form.setError('oldPassword', { message: t(error?.message) })
           break
         default:
           toast.error(error?.message)
           break
       }
-
       return false
     }
 
     toast.success('your_password_has_been_successfully_changed')
-
-    if (data?.user) {
-      // ...
-    }
 
     form.reset()
   }

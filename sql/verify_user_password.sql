@@ -1,5 +1,7 @@
 -- SQL Editor > New query
--- const { data, error } = await supabase.rpc('verify_user_password', { password: oldPassword });
+-- const { data, error } = await supabase.rpc('verify_user_password', {
+--   password: ''
+-- });
 
 SET search_path = extensions, public, auth;
 

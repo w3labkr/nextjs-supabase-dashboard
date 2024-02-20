@@ -45,6 +45,8 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     // Using `<img>` could result in slower LCP and higher bandwidth.
     '@next/next/no-img-element': 'off',
+    // ... is never reassigned. Use 'const' instead.
+    'prefer-const': 'warn',
   },
   ignorePatterns: [
     '.eslintrc.js',

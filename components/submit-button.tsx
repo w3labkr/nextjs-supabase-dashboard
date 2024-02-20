@@ -12,10 +12,6 @@ interface SubmitButtonProps
     React.ButtonHTMLAttributes<HTMLButtonElement> {
   text?: string | undefined
   disabled?: boolean | undefined
-  startIconName?: LucideIconNameProp | undefined
-  startIconClassName?: string | undefined
-  endIconName?: LucideIconNameProp | undefined
-  endIconClassName?: string | undefined
   isSubmitting?: boolean | undefined
   submittingIconName?: LucideIconNameProp | undefined
   submittingIconClassName?: string | undefined
@@ -26,10 +22,6 @@ export function SubmitButton({
   text,
   translate,
   disabled,
-  startIconName,
-  startIconClassName,
-  endIconName,
-  endIconClassName,
   isSubmitting = false,
   submittingIconName = 'Loader2',
   submittingIconClassName = '',
@@ -48,20 +40,8 @@ export function SubmitButton({
           )}
         />
       )}
-      {startIconName && (
-        <LucideIcon
-          name={startIconName}
-          className={cn('mr-2 size-4 min-w-4', startIconClassName)}
-        />
-      )}
       {text && translate === 'yes' ? t(text) : text}
       {children}
-      {endIconName && (
-        <LucideIcon
-          name={endIconName}
-          className={cn('ml-2 size-4 min-w-4', endIconClassName)}
-        />
-      )}
     </Button>
   )
 }

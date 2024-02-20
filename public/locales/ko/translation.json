@@ -93,6 +93,7 @@
   "invalid_account_information": "계정 정보가 유효하지 않습니다.",
   "new_password_should_be_different_from_the_old_password": "새 비밀번호는 이전 비밀번호와 달라야 합니다.",
   "auth_session_missing": "인증 세션이 없습니다!",
+  "your_account_has_been_successfully_deleted": "계정이 성공적으로 삭제되었습니다.",
   "failed_to_fetch": "네트워크 연결에 실패했습니다.",
-  "your_account_has_been_successfully_deleted": "계정이 성공적으로 삭제되었습니다."
+  "something_went_wrong": "뭔가 잘못되었습니다!"
 }

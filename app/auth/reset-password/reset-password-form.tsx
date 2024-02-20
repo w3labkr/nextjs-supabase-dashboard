@@ -65,7 +65,6 @@ export function ResetPasswordForm() {
           form.setError('newPassword', { message: t(message) })
           break
         case 'auth_session_missing':
-        case 'failed_to_fetch':
           toast.error(t(message))
           break
         default:
