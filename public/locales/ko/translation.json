@@ -82,7 +82,7 @@
   "your_email": "이메일",
   "your_password": "비밀번호",
   "confirm_your_password": "비밀번호 확인",
-  "verify_type_delete_my_account": "계정을 삭제하려면 아래에 <i>delete my account</i>를 입력하세요.",
+  "verify_delete_my_account": "계정을 삭제하려면 아래에 <i>delete my account</i>를 입력하세요.",
   "delete_account": "계정 삭제",
   "delete_your_account": "계정 삭제",
   "deleting_your_account_cannot_be_reversed": "계정 삭제는 되돌릴 수 없습니다.",

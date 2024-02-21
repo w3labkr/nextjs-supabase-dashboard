@@ -1,24 +1,17 @@
 import { NextResponse } from 'next/server'
-import statusCodes from '@/public/locales/en/httpstatuscode.json'
+import httpStatusCode from '@/public/locales/en/httpstatuscode.json'
 
-export interface HttpStatusCodeProps {
-  statusCode: keyof typeof statusCodes
-}
+export type HttpStatusCodeProp = keyof typeof httpStatusCode
 
-export function httpStatusCode(statusCode: HttpStatusCodeProps['statusCode']) {
-  const obj = statusCodes[statusCode]
+export function httpResponseCode(status: HttpStatusCodeProp) {
+  const obj = httpStatusCode[status]
 
-  return {
-    status: statusCode,
-    statusText: (obj?.statusText ?? '') as string,
-    message: (obj?.message ?? '') as string,
-  }
-}
-
-export function httpResponseCode(
-  statusCode: HttpStatusCodeProps['statusCode']
-) {
-  return NextResponse.json(httpStatusCode(statusCode), {
-    status: +statusCode,
-  })
+  return NextResponse.json(
+    {
+      status: +status,
+      statusText: obj?.statusText,
+      message: obj?.message,
+    },
+    { status: +status }
+  )
 }

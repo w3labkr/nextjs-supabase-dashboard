@@ -30,12 +30,10 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 
-import { deleteAccount } from '@/lib/supabase/client'
-
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6).max(72),
-  verifyText: z.literal('delete my account'),
+  confirmationPhrase: z.string().refine((val) => val === 'delete my account'),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -43,7 +41,7 @@ type FormValues = z.infer<typeof formSchema>
 const defaultValues: Partial<FormValues> = {
   email: '',
   password: '',
-  verifyText: '',
+  confirmationPhrase: '',
 }
 
 export function DeleteAccountDialog() {
@@ -79,10 +77,16 @@ export function DeleteAccountForm() {
   })
 
   async function onSubmit(values: FormValues) {
-    const { data, error } = await deleteAccount({
-      email: values.email,
-      password: values.password,
-    })
+    const formData = new FormData()
+    formData.append('email', values.email)
+    formData.append('password', values.password)
+
+    const fetchUrl =
+      process.env.NEXT_PUBLIC_SITE_URL + '/api/v1/account/delete-account'
+    const { error } = await fetch(fetchUrl, {
+      method: 'POST',
+      body: formData,
+    }).then((res) => res.json())
 
     if (error) {
       switch (error?.message) {
@@ -96,16 +100,20 @@ export function DeleteAccountForm() {
       }
     }
 
-    form.reset()
-
     toast.success(t('your_account_has_been_successfully_deleted'))
 
-    router.push('/')
+    form.reset()
+    router.replace('/')
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form
+        method="post"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4"
+        noValidate
+      >
         <FormField
           control={form.control}
           name="email"
@@ -143,12 +151,12 @@ export function DeleteAccountForm() {
         />
         <FormField
           control={form.control}
-          name="verifyText"
+          name="confirmationPhrase"
           render={({ field }) => (
             <FormItem>
               <FormLabel>
                 <Trans components={{ i: <i /> }}>
-                  verify_type_delete_my_account
+                  verify_delete_my_account
                 </Trans>
               </FormLabel>
               <FormControl>

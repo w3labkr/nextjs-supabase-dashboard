@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
+import { i18nKey } from '@/utils/string'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,8 +20,6 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { SubmitButton } from '@/components/submit-button'
-
-import { changeUserPassword } from '@/lib/supabase/client'
 
 const formSchema = z
   .object({
@@ -51,16 +50,23 @@ export function ChangePasswordForm() {
   })
 
   async function onSubmit(values: FormValues) {
-    const { data, error } = await changeUserPassword({
-      oldPassword: values.oldPassword,
-      newPassword: values.newPassword,
-    })
+    const formData = new FormData()
+    formData.append('oldPassword', values.oldPassword)
+    formData.append('newPassword', values.newPassword)
 
-    if (error?.message) {
-      switch (error?.message) {
+    const fetchUrl =
+      process.env.NEXT_PUBLIC_SITE_URL + '/api/v1/account/change-password'
+    const { error } = await fetch(fetchUrl, {
+      method: 'POST',
+      body: formData,
+    }).then((res) => res.json())
+
+    if (error) {
+      const message: string = i18nKey(error?.message)
+      switch (message) {
         case 'invalid_old_password':
         case 'new_password_should_be_different_from_the_old_password':
-          form.setError('oldPassword', { message: t(error?.message) })
+          form.setError('oldPassword', { message: t(message) })
           break
         default:
           toast.error(error?.message)
@@ -69,7 +75,7 @@ export function ChangePasswordForm() {
       return false
     }
 
-    toast.success('your_password_has_been_successfully_changed')
+    toast.success(t('your_password_has_been_successfully_changed'))
 
     form.reset()
   }
@@ -77,6 +83,7 @@ export function ChangePasswordForm() {
   return (
     <Form {...form}>
       <form
+        method="POST"
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4"
         noValidate

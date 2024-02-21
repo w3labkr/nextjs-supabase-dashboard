@@ -10,6 +10,7 @@ Denpendency
 - react-i18next + zod-i18n-map
 - Supabase OAuth with PKCE flow (@supabase/ssr)
 - Supabase Email Auth with PKCE flow (@supabase/ssr)
+- TODO: Supabase Auth Provider
 
 ## Screenshots
 
@@ -30,6 +31,7 @@ The folder and file structure is based on nextjs app router [Next.js Project Str
 ├── public/                     # Static assets to be served
 │   └── [locales]/              # Internationalization
 ├── screenshots/                # Screenshots
+├── sql/                        # Cloud functions
 ├── types/
 ├── utils/
 └── package.json                # Project dependencies and scripts
@@ -195,6 +197,10 @@ React Hooks for form state management and validation (Web + React Native).
 npm install react-hook-form 
 npm install zod @hookform/resolvers
 ```
+
+## Supabase Cloud Functions
+
+Run the SQL code in `SQL Editor > New Query`.
 
 ## Supabase Auth
 

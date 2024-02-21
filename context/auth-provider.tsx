@@ -1,28 +1,30 @@
-import * as React from 'react'
+// 'use client'
 
-export const AuthContext = React.createContext()
+// import * as React from 'react'
 
-export const AuthProvider = ({ supabase, ...props }) => {
-  const [session, setSession] = React.useState(null)
-  const [user, setUser] = React.useState(null)
+// export const AuthContext = React.createContext(null)
 
-  const value = React.useMemo(() => {
-    return {
-      session,
-      user,
-      signOut: () => supabase.auth.signOut(),
-    }
-  }, [session, user, supabase])
+// export const AuthProvider = ({ supabase, ...props }) => {
+//   const [session, setSession] = React.useState(null)
+//   const [user, setUser] = React.useState(null)
 
-  return <AuthContext.Provider value={value} {...props} />
-}
+//   const value = React.useMemo(() => {
+//     return {
+//       session,
+//       user,
+//       signOut: () => supabase.auth.signOut(),
+//     }
+//   }, [session, user, supabase])
 
-// import { useAuth } from '@/lib/auth';
-// const { user, signOut } = useAuth();
-export const useAuth = () => {
-  const context = React.useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
-  return context
-}
+//   return <AuthContext.Provider value={value} {...props} />
+// }
+
+// // import { useAuth } from '@/lib/auth';
+// // const { user, signOut } = useAuth();
+// export const useAuth = () => {
+//   const context = React.useContext(AuthContext)
+//   if (context === undefined) {
+//     throw new Error('useAuth must be used within an AuthProvider')
+//   }
+//   return context
+// }

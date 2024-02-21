@@ -4,10 +4,10 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/utils/tailwind'
-import { HttpStatusCodeProps } from '@/utils/server'
+import { HttpStatusCodeProp } from '@/utils/server'
 
 export interface ErrorProps extends React.HTMLAttributes<HTMLDivElement> {
-  statusCode: HttpStatusCodeProps['statusCode']
+  statusCode: HttpStatusCodeProp
   statusText?: string | undefined
   message?: string | undefined
   className?: string | undefined

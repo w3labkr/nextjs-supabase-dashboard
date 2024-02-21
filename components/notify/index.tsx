@@ -18,11 +18,14 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-import { useNotify } from './use-notify'
+import useSWR from 'swr'
 import { NotifyItems } from './notify-items'
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json())
+
 export function Notify() {
-  const { data } = useNotify()
+  const fetchUrl = process.env.NEXT_PUBLIC_SITE_URL + '/api/v1/notify'
+  const { data } = useSWR<{ data: any[]; count: number }>(fetchUrl, fetcher)
 
   return (
     <Popover>
@@ -38,14 +41,14 @@ export function Notify() {
               <Trans>notifications</Trans>
             </CardTitle>
             <CardDescription>
-              <Trans values={{ count: data?.length }}>
+              <Trans values={{ count: data?.count }}>
                 you_have_unread_messages
               </Trans>
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
             <Separator className="mb-2" />
-            {data && <NotifyItems items={data} />}
+            {data?.data && <NotifyItems items={data?.data} />}
           </CardContent>
           <CardFooter>
             <Button className="w-full">

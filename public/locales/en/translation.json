@@ -82,7 +82,7 @@
   "your_email": "Your email",
   "your_password": "Your password",
   "confirm_your_password": "Confirm your password",
-  "verify_type_delete_my_account": "To verify, type <i>delete my account</i> below:",
+  "verify_delete_my_account": "To verify, type <i>delete my account</i> below:",
   "delete_account": "Delete Account",
   "delete_your_account": "Delete your account",
   "deleting_your_account_cannot_be_reversed": "Deleting your account cannot be reversed.",

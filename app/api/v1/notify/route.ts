@@ -1,10 +1,10 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function GET(req: NextRequest) {
-  return NextResponse.json({ results })
+  return NextResponse.json({ data, count: data.length })
 }
 
-const results = [
+const data = [
   {
     id: 1,
     title: 'Your call has been confirmed.',
