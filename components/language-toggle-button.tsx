@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import { useTranslation } from 'react-i18next'
 import { lng, fallbackLng } from '@/i18next.config'
-import { ResolvedLanguageProp } from '@/types/i18next'
+import { ResolvedLanguage } from '@/types/i18next'
 
 import { cn } from '@/lib/utils'
 
@@ -16,7 +16,7 @@ export function LanguageToggleButton({
   ...props
 }: LanguageToggleProps) {
   const { i18n } = useTranslation()
-  const [language, setLanguage] = React.useState<ResolvedLanguageProp>(
+  const [language, setLanguage] = React.useState<ResolvedLanguage>(
     i18n.resolvedLanguage
   )
 

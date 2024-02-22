@@ -1,10 +1,10 @@
-import { LucideIconNameProp } from '@/lib/lucide-icon'
+import { LucideIconName } from '@/lib/lucide-icon'
 
 export interface MiniDrawerItemProps {
   id: number
   href: string
   title: string
-  iconName?: LucideIconNameProp | undefined
+  iconName?: LucideIconName | undefined
   translate?: 'yes' | 'no' | undefined
   disabled?: boolean | undefined
   badge?: number | undefined
@@ -20,7 +20,7 @@ export interface DrawerItemProps {
   id: number
   href: string
   title: string
-  iconName?: LucideIconNameProp | undefined
+  iconName?: LucideIconName | undefined
   translate?: 'yes' | 'no' | undefined
   disabled?: boolean | undefined
 }

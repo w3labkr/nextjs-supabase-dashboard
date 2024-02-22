@@ -5,15 +5,15 @@ import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
-import { LucideIcon, LucideIconNameProp } from '@/lib/lucide-icon'
+import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
 import { Button, ButtonProps } from '@/components/ui/button'
 
 export interface BackLinkButtonProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
-  startIconName?: LucideIconNameProp | undefined
+  startIconName?: LucideIconName | undefined
   startIconClassName?: string | undefined
-  endIconName?: LucideIconNameProp | undefined
+  endIconName?: LucideIconName | undefined
   endIconClassName?: string | undefined
   text?: string | undefined
 }

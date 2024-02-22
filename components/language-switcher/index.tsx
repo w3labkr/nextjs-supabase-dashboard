@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import { useTranslation } from 'react-i18next'
 import { languages } from '@/i18next.config'
-import { ResolvedLanguageProp } from '@/types/i18next'
+import { ResolvedLanguage } from '@/types/i18next'
 
 import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
@@ -36,7 +36,7 @@ export function LanguageSwitcher({
 }: LanguageSwitcherProps) {
   const { t, i18n } = useTranslation()
   const [open, setOpen] = React.useState<boolean>(false)
-  const [language, setLanguage] = React.useState<ResolvedLanguageProp>(
+  const [language, setLanguage] = React.useState<ResolvedLanguage>(
     i18n.resolvedLanguage
   )
 

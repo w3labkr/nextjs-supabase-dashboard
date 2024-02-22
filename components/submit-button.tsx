@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
-import { LucideIcon, LucideIconNameProp } from '@/lib/lucide-icon'
+import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
 import { Button, ButtonProps } from '@/components/ui/button'
 
 interface SubmitButtonProps
@@ -13,7 +13,7 @@ interface SubmitButtonProps
   text?: string | undefined
   disabled?: boolean | undefined
   isSubmitting?: boolean | undefined
-  submittingIconName?: LucideIconNameProp | undefined
+  submittingIconName?: LucideIconName | undefined
   submittingIconClassName?: string | undefined
 }
 

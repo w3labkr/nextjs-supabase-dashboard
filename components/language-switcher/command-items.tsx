@@ -2,15 +2,15 @@
 
 import * as React from 'react'
 
-import { ResolvedLanguageProp, LanguageProps } from '@/types/i18next'
+import { ResolvedLanguage, Languages } from '@/types/i18next'
 
 import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { CommandItem } from '@/components/ui/command'
 
 export interface CommandItemsProps {
-  items: LanguageProps[]
-  language: ResolvedLanguageProp
+  items: Languages[]
+  language: ResolvedLanguage
   onSelect: (value: string) => void
 }
 

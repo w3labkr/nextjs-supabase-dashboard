@@ -1,5 +1,5 @@
 import httpStatusCode from '@/public/locales/en/httpstatuscode.json'
-import { LucideIconNameProp } from '@/lib/lucide-icon'
+import { LucideIconName } from '@/lib/lucide-icon'
 
 export interface MobileNavItemProps {
   id: number
@@ -11,7 +11,7 @@ export interface MobileNavItemProps {
 export interface SiteConfig {
   name: string
   title: string
-  symbol: LucideIconNameProp
+  symbol: LucideIconName
   description: string
   mobileNavItems: MobileNavItemProps[]
 }

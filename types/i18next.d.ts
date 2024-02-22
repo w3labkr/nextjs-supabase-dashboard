@@ -1,12 +1,12 @@
-export type LngProp = string
+export type Lng = string
 
-export type FallbackLngProp = string
+export type FallbackLng = string
 
-export type DefaultNSProp = string
+export type DefaultNS = string
 
-export type ResolvedLanguageProp = string | undefined
+export type ResolvedLanguage = string | undefined
 
-export interface LanguageProps {
+export interface Languages {
   value: string
   label: string
 }
