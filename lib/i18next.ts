@@ -1,4 +1,4 @@
-import i18next from 'i18next'
+import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import { lng, fallbackLng } from '@/i18next.config'
 import HttpBackend, { HttpBackendOptions } from 'i18next-http-backend'
@@ -6,7 +6,7 @@ import HttpBackend, { HttpBackendOptions } from 'i18next-http-backend'
 import { z } from 'zod'
 import { makeZodI18nMap } from 'zod-i18n-map'
 
-i18next
+i18n
   // load translation using http -> see /public/locales (i.e. https://github.com/i18next/react-i18next/tree/master/example/react/public/locales)
   // learn more: https://github.com/i18next/i18next-http-backend
   // want your translations to be loaded from a professional CDN? => https://github.com/locize/react-tutorial#step-2---use-the-locize-cdn
@@ -51,4 +51,4 @@ i18next
 // Translating zod error messages.
 z.setErrorMap(makeZodI18nMap({ ns: ['zod', 'zod-custom'] }))
 
-export default i18next
+export default i18n

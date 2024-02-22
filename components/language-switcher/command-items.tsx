@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import { ResolvedLanguageProp, LanguageProps } from '@/types/i18next'
 
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { CommandItem } from '@/components/ui/command'
 

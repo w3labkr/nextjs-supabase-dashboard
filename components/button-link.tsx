@@ -4,7 +4,7 @@ import * as React from 'react'
 import Link, { LinkProps } from 'next/link'
 import { useTranslation } from 'react-i18next'
 
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/lib/utils'
 import { LucideIcon, LucideIconNameProp } from '@/lib/lucide-icon'
 import { buttonVariants } from '@/components/ui/button'
 

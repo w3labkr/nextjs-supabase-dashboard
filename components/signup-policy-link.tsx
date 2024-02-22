@@ -5,7 +5,7 @@ import Link, { LinkProps } from 'next/link'
 
 import { Trans } from 'react-i18next'
 import type { SetOptional } from 'type-fest'
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/lib/utils'
 
 type TransLinkProps = SetOptional<LinkProps, 'href'> &
   Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>

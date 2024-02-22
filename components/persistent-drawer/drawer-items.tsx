@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/lib/utils'
 import { LinkButton } from '@/components/link-button'
 
 import { DrawerItemProps } from '@/types/dashboard'

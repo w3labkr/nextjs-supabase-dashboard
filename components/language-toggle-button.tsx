@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { lng, fallbackLng } from '@/i18next.config'
 import { ResolvedLanguageProp } from '@/types/i18next'
 
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/lib/utils'
 
 export interface LanguageToggleProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {}

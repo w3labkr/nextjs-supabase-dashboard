@@ -3,7 +3,7 @@
 import * as React from 'react'
 
 import { AppBarContext } from '@/components/app-bar/app-bar-provider'
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 
 import { MiniDrawerGroupItems } from './mini-drawer-group-items'

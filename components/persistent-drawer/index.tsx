@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AppBarContext } from '@/components/app-bar/app-bar-provider'
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/lib/utils'
 
 import { DrawerGroupItemProps } from '@/types/dashboard'
 import { DrawerGroupItems } from './drawer-group-items'

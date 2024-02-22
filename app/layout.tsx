@@ -4,9 +4,9 @@ import { Inter as FontSans } from 'next/font/google'
 import { Analytics } from '@/components/analytics'
 
 import { lng } from '@/i18next.config'
-import { I18nextProvider } from '@/context/i18next-provider'
+import { I18nProvider } from '@/context/i18n-provider'
 
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/lib/utils'
 import { ThemeProvider } from '@/context/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang={lng} suppressHydrationWarning>
       <body className={cn('font-sans antialiased', fontSans.variable)}>
-        <I18nextProvider>
+        <I18nProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -43,7 +43,7 @@ export default function RootLayout({
             <Toaster richColors closeButton />
             <TailwindIndicator />
           </ThemeProvider>
-        </I18nextProvider>
+        </I18nProvider>
         <Analytics />
       </body>
     </html>

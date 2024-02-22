@@ -4,7 +4,7 @@ import * as React from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/lib/utils'
 import { MobileNavItemProps } from '@/types'
 
 export interface MobileNavItemsProps {

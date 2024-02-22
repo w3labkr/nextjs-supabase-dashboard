@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-// import { cn } from '@/utils/tailwind'
+// import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 // import { LucideIcon } from '@/lib/lucide-icon'
 import { Button } from '@/components/ui/button'

@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/lib/utils'
 import { Notify } from '@/components/notify'
 import { AccountMenu } from '@/components/account-menu'
 

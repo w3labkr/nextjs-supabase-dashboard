@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { LucideIcon } from '@/lib/lucide-icon'
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/lib/utils'
 
 import { siteConfig } from '@/config/site'
 

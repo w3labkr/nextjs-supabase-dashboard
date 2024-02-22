@@ -1,3 +1,4 @@
+import httpStatusCode from '@/public/locales/en/httpstatuscode.json'
 import { LucideIconNameProp } from '@/lib/lucide-icon'
 
 export interface MobileNavItemProps {
@@ -14,3 +15,5 @@ export interface SiteConfig {
   description: string
   mobileNavItems: MobileNavItemProps[]
 }
+
+export type HttpStatusCode = keyof typeof httpStatusCode

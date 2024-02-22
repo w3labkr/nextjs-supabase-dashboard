@@ -323,19 +323,6 @@ Generate RFC-compliant UUIDs in JavaScript
 npm install uuid @types/uuid
 ```
 
-## Useful Utils
-
-Get or Set the HTTP response code
-
-```javascript
-import { httpResponseCode } from '@/utils/server'
-
-httpResponseCode(401)
-
-// Same as below
-NextResponse.json({ "status": 401, "statusText": "Unauthorized", "message": "The client must authenticate itself to get the requested response." }, { status: 401 })
-```
-
 ## ESLint
 
 ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.

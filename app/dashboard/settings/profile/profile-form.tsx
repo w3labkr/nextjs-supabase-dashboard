@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {

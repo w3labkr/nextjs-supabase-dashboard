@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/lib/utils'
 import { LucideIcon, LucideIconNameProp } from '@/lib/lucide-icon'
 import { Button, ButtonProps } from '@/components/ui/button'
 

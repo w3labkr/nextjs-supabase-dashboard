@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { languages } from '@/i18next.config'
 import { ResolvedLanguageProp } from '@/types/i18next'
 
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { Button } from '@/components/ui/button'
 import {

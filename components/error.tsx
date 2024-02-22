@@ -3,11 +3,11 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { cn } from '@/utils/tailwind'
-import { HttpStatusCodeProp } from '@/utils/server'
+import { cn } from '@/lib/utils'
+import { HttpStatusCode } from '@/types'
 
 export interface ErrorProps extends React.HTMLAttributes<HTMLDivElement> {
-  statusCode: HttpStatusCodeProp
+  statusCode: HttpStatusCode
   statusText?: string | undefined
   message?: string | undefined
   className?: string | undefined
