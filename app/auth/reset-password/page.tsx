@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { redirect } from 'next/navigation'
+import { isAuthenticate } from '@/lib/supabase/server'
 
 import { Logo } from '@/components/logo'
 import { Title } from '@/components/title'
@@ -9,7 +11,13 @@ import { LanguageToggleButton } from '@/components/language-toggle-button'
 
 import { ResetPasswordForm } from './reset-password-form'
 
-export default function ResetPasswordPage() {
+export default async function ResetPasswordPage() {
+  const isAuthenticated = await isAuthenticate()
+
+  if (!isAuthenticated) {
+    redirect('/auth/signin')
+  }
+
   return (
     <div className="container flex min-h-screen w-screen flex-col items-center justify-center py-8">
       <ButtonLink

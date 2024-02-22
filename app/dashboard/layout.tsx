@@ -1,19 +1,17 @@
 import * as React from 'react'
-import { cookies } from 'next/headers'
-import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
+import { isAuthenticate } from '@/lib/supabase/server'
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  // const cookieStore = cookies()
-  // const supabase = createClient(cookieStore)
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser()
+  const isAuthenticated = await isAuthenticate()
 
-  // console.log(user)
+  if (!isAuthenticated) {
+    redirect('/auth/signin')
+  }
 
   return <React.Fragment>{children}</React.Fragment>
 }

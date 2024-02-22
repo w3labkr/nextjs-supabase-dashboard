@@ -1,12 +1,10 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 
 export async function POST(request: NextRequest) {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
   const formData = await request.formData()
 
+  const supabase = createClient()
   const verified = await supabase.rpc('verify_user_password', {
     password: formData.get('oldPassword') as string,
   })

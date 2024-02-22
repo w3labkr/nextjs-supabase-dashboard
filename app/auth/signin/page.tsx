@@ -1,5 +1,7 @@
 import * as React from 'react'
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
+import { isAuthenticate } from '@/lib/supabase/server'
 
 import { Logo } from '@/components/logo'
 import { Title } from '@/components/title'
@@ -16,7 +18,13 @@ export const metadata: Metadata = {
   description: 'Login to your account',
 }
 
-export default function SignInPage() {
+export default async function SignInPage() {
+  const isAuthenticated = await isAuthenticate()
+
+  if (isAuthenticated) {
+    redirect('/dashboard/settings/profile')
+  }
+
   return (
     <div className="container flex min-h-screen w-screen flex-col items-center justify-center py-8">
       <ButtonLink
