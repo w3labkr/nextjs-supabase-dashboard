@@ -30,6 +30,8 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 
+import { fetcher } from '@/lib/fetch'
+
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6).max(72),
@@ -81,23 +83,22 @@ export function DeleteAccountForm() {
     formData.append('email', values.email)
     formData.append('password', values.password)
 
-    const fetchUrl =
-      process.env.NEXT_PUBLIC_SITE_URL + '/api/v1/account/delete-account'
-    const { error } = await fetch(fetchUrl, {
+    const { error } = await fetcher('/api/v1/account/delete-account', {
       method: 'POST',
       body: formData,
-    }).then((res) => res.json())
+    })
 
     if (error) {
-      switch (error?.message) {
+      switch (error?.i18n) {
         case 'invalid_account_information':
-          form.setError('email', { message: t(error?.message) })
-          form.setError('password', { message: t(error?.message) })
+          form.setError('email', { message: t(error?.i18n) })
+          form.setError('password', { message: t(error?.i18n) })
           break
         default:
           toast.error(error?.message)
           break
       }
+      return false
     }
 
     toast.success(t('your_account_has_been_successfully_deleted'))
@@ -109,7 +110,7 @@ export function DeleteAccountForm() {
   return (
     <Form {...form}>
       <form
-        method="post"
+        method="POST"
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4"
         noValidate

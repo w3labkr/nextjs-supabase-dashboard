@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { i18nKey } from '@/utils/string'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -20,6 +19,8 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { SubmitButton } from '@/components/submit-button'
+
+import { fetcher } from '@/lib/fetch'
 
 const formSchema = z
   .object({
@@ -54,19 +55,16 @@ export function ChangePasswordForm() {
     formData.append('oldPassword', values.oldPassword)
     formData.append('newPassword', values.newPassword)
 
-    const fetchUrl =
-      process.env.NEXT_PUBLIC_SITE_URL + '/api/v1/account/change-password'
-    const { error } = await fetch(fetchUrl, {
+    const { error } = await fetcher('/api/v1/account/change-password', {
       method: 'POST',
       body: formData,
-    }).then((res) => res.json())
+    })
 
     if (error) {
-      const message: string = i18nKey(error?.message)
-      switch (message) {
+      switch (error?.i18n) {
         case 'invalid_old_password':
         case 'new_password_should_be_different_from_the_old_password':
-          form.setError('oldPassword', { message: t(message) })
+          form.setError('oldPassword', { message: t(error?.i18n) })
           break
         default:
           toast.error(error?.message)

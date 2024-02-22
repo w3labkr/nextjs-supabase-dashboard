@@ -2,9 +2,7 @@
 
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
-
 import { useTranslation } from 'react-i18next'
-import { i18nKey } from '@/utils/string'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -23,7 +21,7 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
-import { createClient } from '@/lib/supabase/client'
+import { fetcher } from '@/lib/fetch'
 
 const formSchema = z
   .object({
@@ -52,47 +50,36 @@ export function ResetPasswordForm() {
   })
 
   async function onSubmit(values: FormValues) {
-    const supabase = createClient()
-    const { data, error } = await supabase.auth.updateUser({
-      password: values.newPassword,
+    const formData = new FormData()
+    formData.append('password', values.newPassword)
+
+    const { error } = await fetcher('/api/v1/auth/reset-password', {
+      method: 'POST',
+      body: formData,
     })
 
     if (error) {
-      const message = i18nKey(error?.message)
-
-      switch (message) {
+      switch (error?.i18n) {
         case 'new_password_should_be_different_from_the_old_password':
-          form.setError('newPassword', { message: t(message) })
-          break
-        case 'auth_session_missing':
-          toast.error(t(message))
+          form.setError('newPassword', { message: t(error?.i18n) })
           break
         default:
           toast.error(error?.message)
           break
       }
-
       return false
     }
 
     toast.success(t('your_password_has_been_successfully_changed'))
 
-    if (data?.user) {
-      const { error } = await supabase.auth.signOut()
-      if (error) {
-        toast.error(error?.message)
-        return false
-      }
-    }
-
     form.reset()
-
-    router.push('/auth/signin')
+    router.replace('/auth/signin')
   }
 
   return (
     <Form {...form}>
       <form
+        method="POST"
         onSubmit={form.handleSubmit(onSubmit)}
         noValidate
         className="space-y-4"

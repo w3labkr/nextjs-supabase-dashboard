@@ -1,9 +1,7 @@
 'use client'
 
 import * as React from 'react'
-
 import { useTranslation } from 'react-i18next'
-import { i18nKey } from '@/utils/string'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -22,7 +20,7 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
-import { createClient } from '@/lib/supabase/client'
+import { fetcher } from '@/lib/fetch'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -43,22 +41,20 @@ export function ForgotPasswordForm() {
   })
 
   async function onSubmit(values: FormValues) {
-    const supabase = createClient()
-    const { data, error } = await supabase.auth.resetPasswordForEmail(
-      values.email,
-      {
-        redirectTo:
-          process.env.NEXT_PUBLIC_SITE_URL +
-          '/api/v1/auth/confirm?next=/auth/reset-password',
-      }
-    )
+    const formData = new FormData()
+    formData.append('email', values.email)
 
-    if (error) toast.error(error?.message)
-    if (error) return false
+    const { error } = await fetcher('/api/v1/auth/forgot-password', {
+      method: 'POST',
+      body: formData,
+    })
+
+    if (error) {
+      toast.error(error?.message)
+      return false
+    }
 
     toast.success(t('the_email_has_been_sent_successfully'))
-
-    // if (data?.user) {}
 
     form.reset()
   }
@@ -66,6 +62,7 @@ export function ForgotPasswordForm() {
   return (
     <Form {...form}>
       <form
+        method="POST"
         onSubmit={form.handleSubmit(onSubmit)}
         noValidate
         className="space-y-4"

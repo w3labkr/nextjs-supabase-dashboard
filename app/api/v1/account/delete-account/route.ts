@@ -19,7 +19,11 @@ export async function POST(request: NextRequest) {
   if (verified?.data === false) {
     return NextResponse.json({
       ...verified,
-      error: { code: 'ApiError', message: 'invalid_account_information' },
+      error: {
+        code: 'ApiError',
+        message: 'Your account information is invalid.',
+        i18n: 'invalid_account_information',
+      },
     })
   }
 

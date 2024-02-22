@@ -2,9 +2,7 @@
 
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
-
 import { useTranslation } from 'react-i18next'
-import { i18nKey } from '@/utils/string'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -24,7 +22,7 @@ import {
 import { SubmitButton } from '@/components/submit-button'
 import { RelatedLink } from '@/components/related-link'
 
-import { createClient } from '@/lib/supabase/client'
+import { fetcher } from '@/lib/fetch'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -48,19 +46,20 @@ export function SignInForm() {
   })
 
   async function onSubmit(values: FormValues) {
-    const supabase = createClient()
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: values.email,
-      password: values.password,
+    const formData = new FormData()
+    formData.append('email', values.email)
+    formData.append('password', values.password)
+
+    const { error } = await fetcher('/api/v1/auth/signin', {
+      method: 'POST',
+      body: formData,
     })
 
     if (error) {
-      const message = i18nKey(error?.message)
-
-      switch (message) {
+      switch (error?.i18n) {
         case 'invalid_login_credentials':
-          form.setError('email', { message: t(message) })
-          form.setError('password', { message: t(message) })
+          form.setError('email', { message: t(error?.i18n) })
+          form.setError('password', { message: t(error?.i18n) })
           break
         default:
           toast.error(error?.message)
@@ -72,18 +71,16 @@ export function SignInForm() {
 
     toast.success(t('you_have_successfully_logged_in'))
 
-    if (data?.user) {
-      // ...
-    }
+    // if (data?.user) {}
 
     form.reset()
-
     router.push('/dashboard/dashboard')
   }
 
   return (
     <Form {...form}>
       <form
+        method="POST"
         onSubmit={form.handleSubmit(onSubmit)}
         noValidate
         className="space-y-4"

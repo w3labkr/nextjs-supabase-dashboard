@@ -4,7 +4,6 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 
 import { useTranslation } from 'react-i18next'
-import { i18nKey } from '@/utils/string'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -23,7 +22,7 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
-import { createClient } from '@/lib/supabase/client'
+import { fetcher } from '@/lib/fetch'
 
 const formSchema = z
   .object({
@@ -55,54 +54,37 @@ export function SignUpForm() {
   })
 
   async function onSubmit(values: FormValues) {
-    const supabase = createClient()
-    const { data, error } = await supabase.auth.signUp({
-      email: values.email,
-      password: values.newPassword,
+    const formData = new FormData()
+    formData.append('email', values.email)
+    formData.append('password', values.newPassword)
+
+    const { error } = await fetcher('/api/v1/auth/signup', {
+      method: 'POST',
+      body: formData,
     })
 
     if (error) {
-      const message = i18nKey(error?.message)
-
-      // in staging, we don't verify primary emails
-      // Supabase returns a nice error
-      switch (message) {
+      switch (error?.i18n) {
         case 'user_already_registered':
-          form.setError('email', { message: t(message) })
+          form.setError('email', { message: t(error?.i18n) })
           break
         default:
           toast.error(error?.message)
           break
       }
-
       return false
     }
 
-    // in production, we verify primary emails
-    // supabase returns a user object with no identities if the user exists
-    // if (data?.user?.identities?.length === 0) {
-    //   form.setError('email', { message: t('user_already_registered') })
-    //   return false
-    // }
-
     toast.success(t('you_have_successfully_registered_as_a_member'))
 
-    if (data?.user) {
-      const { error } = await supabase.auth.signOut()
-      if (error) {
-        toast.error(error?.message)
-        return false
-      }
-    }
-
     form.reset()
-
     router.push('/auth/signin')
   }
 
   return (
     <Form {...form}>
       <form
+        method="POST"
         onSubmit={form.handleSubmit(onSubmit)}
         noValidate
         className="space-y-4"

@@ -2,24 +2,16 @@
 
 import * as React from 'react'
 import { Trans } from 'react-i18next'
-import { createClient } from '@/lib/supabase/client'
 
 import { toast } from 'sonner'
 import { FaGithub } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
 
+import { fetcher } from '@/lib/fetch'
+
 export function SignInWithGithub() {
   async function onSubmit() {
-    const supabase = createClient()
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'github',
-      options: {
-        // A URL to send the user to after they are confirmed.
-        redirectTo:
-          process.env.NEXT_PUBLIC_SITE_URL +
-          '/api/v1/auth/callback?next=/dashboard/dashboard',
-      },
-    })
+    const { data, error } = await fetcher('/api/v1/auth/signin-with-google')
 
     if (error) {
       toast.error(error?.message)

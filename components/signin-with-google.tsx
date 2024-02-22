@@ -2,30 +2,16 @@
 
 import * as React from 'react'
 import { Trans } from 'react-i18next'
-import { createClient } from '@/lib/supabase/client'
 
 import { toast } from 'sonner'
 import { FcGoogle } from 'react-icons/fc'
 import { Button } from '@/components/ui/button'
 
+import { fetcher } from '@/lib/fetch'
+
 export function SignInWithGoogle() {
   async function onSubmit() {
-    const supabase = createClient()
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        // A URL to send the user to after they are confirmed.
-        redirectTo:
-          process.env.NEXT_PUBLIC_SITE_URL +
-          '/api/v1/auth/callback?next=/dashboard/dashboard',
-        // Google does not send out a refresh token by default,
-        // so you will need to pass parameters like these to signInWithOAuth() in order to extract the provider_refresh_token:
-        queryParams: {
-          access_type: 'offline',
-          prompt: 'consent',
-        },
-      },
-    })
+    const { data, error } = await fetcher('/api/v1/auth/signin-with-google')
 
     if (error) {
       toast.error(error?.message)
