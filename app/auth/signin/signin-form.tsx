@@ -22,7 +22,9 @@ import {
 import { SubmitButton } from '@/components/submit-button'
 import { RelatedLink } from '@/components/related-link'
 
+import { SignInWithPassword } from '@/types/supabase'
 import { fetcher } from '@/lib/fetch'
+import { useAuth } from '@/hooks/use-auth'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -39,6 +41,7 @@ const defaultValues: Partial<FormValues> = {
 export function SignInForm() {
   const router = useRouter()
   const { t } = useTranslation(['translation', 'zod', 'zod-custom'])
+  const { setSession, setUser } = useAuth()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -50,10 +53,13 @@ export function SignInForm() {
     formData.append('email', values.email)
     formData.append('password', values.password)
 
-    const { error } = await fetcher('/api/v1/auth/signin', {
-      method: 'POST',
-      body: formData,
-    })
+    const { data, error } = await fetcher<SignInWithPassword>(
+      '/api/v1/auth/signin',
+      {
+        method: 'POST',
+        body: formData,
+      }
+    )
 
     if (error) {
       switch (error?.i18n) {
@@ -69,12 +75,13 @@ export function SignInForm() {
       return false
     }
 
+    setSession(data?.session)
+    setUser(data?.user)
+
     toast.success(t('you_have_successfully_logged_in'))
 
-    // if (data?.user) {}
-
     form.reset()
-    router.push('/dashboard/dashboard')
+    router.replace('/dashboard/dashboard')
   }
 
   return (

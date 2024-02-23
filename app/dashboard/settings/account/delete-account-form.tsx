@@ -30,6 +30,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 
+import { DeleteUser } from '@/types/supabase'
 import { fetcher } from '@/lib/fetch'
 
 const formSchema = z.object({
@@ -83,14 +84,17 @@ export function DeleteAccountForm() {
     formData.append('email', values.email)
     formData.append('password', values.password)
 
-    const { error } = await fetcher('/api/v1/account/delete-account', {
-      method: 'POST',
-      body: formData,
-    })
+    const { error } = await fetcher<DeleteUser>(
+      '/api/v1/account/delete-account',
+      {
+        method: 'POST',
+        body: formData,
+      }
+    )
 
     if (error) {
       switch (error?.i18n) {
-        case 'invalid_account_information':
+        case 'your_account_information_is_invalid':
           form.setError('email', { message: t(error?.i18n) })
           form.setError('password', { message: t(error?.i18n) })
           break

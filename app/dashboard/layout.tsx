@@ -1,16 +1,17 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
-import { isAuthenticate } from '@/lib/supabase/server'
+import { authState } from '@/lib/supabase/server'
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const isAuthenticated = await isAuthenticate()
+  const { signedIn } = await authState()
 
-  if (!isAuthenticated) {
+  if (!signedIn) {
     redirect('/auth/signin')
+    return null
   }
 
   return <React.Fragment>{children}</React.Fragment>

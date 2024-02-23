@@ -44,6 +44,7 @@
   "sign_in_with_google": "구글 로그인",
   "sign_in_with_github": "깃허브 로그인",
   "you_have_successfully_logged_in": "성공적으로 로그인되었습니다.",
+  "you_have_been_logged_out_successfully": "성공적으로 로그아웃되었습니다.",
   "dont_have_an_account_sign_up": "계정이 없나요? 가입하기",
   "already_have_an_account_sign_in": "이미 계정이 있습니까? 로그인",
 
@@ -89,8 +90,9 @@
 
   "user_already_registered": "이미 등록된 사용자입니다.",
   "invalid_login_credentials": "이메일 또는 비밀번호가 일치하지 않습니다.",
+  "your_user_data_is_invalid": "사용자 데이터가 유효하지 않습니다.",
   "invalid_old_password": "이전 비밀번호가 일치하지 않습니다.",
-  "invalid_account_information": "계정 정보가 유효하지 않습니다.",
+  "your_account_information_is_invalid": "계정 정보가 유효하지 않습니다.",
   "new_password_should_be_different_from_the_old_password": "새 비밀번호는 이전 비밀번호와 달라야 합니다.",
   "auth_session_missing": "인증 세션이 없습니다!",
   "your_account_has_been_successfully_deleted": "계정이 성공적으로 삭제되었습니다.",

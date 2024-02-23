@@ -1,5 +1,4 @@
 import merge from 'lodash/merge'
-import { i18n } from '@/lib/utils'
 
 export async function fetcher<JSON = any>(
   input: string,
@@ -18,4 +17,12 @@ export async function fetcher<JSON = any>(
       }
       return res
     })
+}
+
+function i18n(str: string) {
+  return str
+    .trim()
+    .toLowerCase()
+    .replace(/[^\w\s]/gi, ' ')
+    .replace(/\s+/g, '_')
 }

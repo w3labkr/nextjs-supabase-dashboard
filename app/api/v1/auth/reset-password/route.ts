@@ -5,12 +5,12 @@ export async function POST(request: NextRequest) {
   const formData = await request.formData()
 
   const supabase = createClient()
-  const signed = await supabase.auth.updateUser({
+  const updated = await supabase.auth.updateUser({
     password: formData.get('password') as string,
   })
 
-  if (signed?.error || !signed?.data?.user) {
-    return NextResponse.json(signed)
+  if (updated?.error || !updated?.data?.user) {
+    return NextResponse.json(updated)
   }
 
   const outed = await supabase.auth.signOut()

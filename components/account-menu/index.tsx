@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -16,8 +16,31 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { SignOutButton } from '@/components/signout-button'
 
+import { useAuth } from '@/hooks/use-auth'
+
+interface StateProps {
+  username: string
+  email: string
+  initial: string
+}
+
 export function AccountMenu() {
   const { t } = useTranslation()
+  const { user } = useAuth()
+  const [state, setState] = React.useState<StateProps>({
+    username: '',
+    email: '',
+    initial: '',
+  })
+
+  React.useEffect(() => {
+    const email = user?.email ?? ''
+    setState({
+      email,
+      username: email.split('@')[0],
+      initial: email.charAt(0).toUpperCase(),
+    })
+  }, [user])
 
   return (
     <DropdownMenu>
@@ -29,25 +52,25 @@ export function AccountMenu() {
         >
           <Avatar className="h-8 w-8">
             <AvatarImage src="" alt="Avatar" />
-            <AvatarFallback>A</AvatarFallback>
+            <AvatarFallback>{state.initial}</AvatarFallback>
           </Avatar>
           <span className="sr-only">Toggle user menu</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel className="grid font-normal">
-          <span>Shadcn</span>
-          <span className="text-xs text-muted-foreground">me@example.com</span>
+          <span>{state.username}</span>
+          <span className="text-xs text-muted-foreground">{state.email}</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/dashboard/settings/profile" className="cursor-pointer">
-            <Trans>profile</Trans>
+            {t('profile')}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/dashboard/settings/profile" className="cursor-pointer">
-            <Trans>settings</Trans>
+            {t('settings')}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />

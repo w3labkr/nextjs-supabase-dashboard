@@ -1,30 +1,56 @@
-// 'use client'
+'use client'
 
-// import * as React from 'react'
+import * as React from 'react'
 
-// export const AuthContext = React.createContext(null)
+import { Session, User } from '@/types/supabase'
+import { supabase } from '@/lib/supabase/client'
 
-// export const AuthProvider = ({ supabase, ...props }) => {
-//   const [session, setSession] = React.useState(null)
-//   const [user, setUser] = React.useState(null)
+/**
+ * Listen to auth events
+ *
+ * @link https://supabase.com/docs/reference/javascript/auth-onauthstatechange
+ */
+export interface AuthContextProps {
+  session: Session | null
+  user: User | null
+  setSession: React.Dispatch<React.SetStateAction<Session | null>>
+  setUser: React.Dispatch<React.SetStateAction<User | null>>
+}
 
-//   const value = React.useMemo(() => {
-//     return {
-//       session,
-//       user,
-//       signOut: () => supabase.auth.signOut(),
-//     }
-//   }, [session, user, supabase])
+export const AuthContext = React.createContext<AuthContextProps>({
+  session: null,
+  user: null,
+  setSession: () => void 0,
+  setUser: () => void 0,
+})
 
-//   return <AuthContext.Provider value={value} {...props} />
-// }
+export interface AuthProviderProps {
+  children: React.ReactNode
+}
 
-// // import { useAuth } from '@/lib/auth';
-// // const { user, signOut } = useAuth();
-// export const useAuth = () => {
-//   const context = React.useContext(AuthContext)
-//   if (context === undefined) {
-//     throw new Error('useAuth must be used within an AuthProvider')
-//   }
-//   return context
-// }
+export function AuthProvider({ children }: AuthProviderProps) {
+  const [session, setSession] = React.useState<Session | null>(null)
+  const [user, setUser] = React.useState<User | null>(null)
+
+  React.useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+      setUser(session?.user ?? null)
+    })
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+      setUser(session?.user ?? null)
+    })
+
+    return () => subscription?.unsubscribe()
+  }, [])
+
+  return (
+    <AuthContext.Provider value={{ session, user, setSession, setUser }}>
+      {children}
+    </AuthContext.Provider>
+  )
+}

@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
+import { SignUp } from '@/types/supabase'
 import { fetcher } from '@/lib/fetch'
 
 const formSchema = z
@@ -58,7 +59,7 @@ export function SignUpForm() {
     formData.append('email', values.email)
     formData.append('password', values.newPassword)
 
-    const { error } = await fetcher('/api/v1/auth/signup', {
+    const { error } = await fetcher<SignUp>('/api/v1/auth/signup', {
       method: 'POST',
       body: formData,
     })
@@ -78,7 +79,7 @@ export function SignUpForm() {
     toast.success(t('you_have_successfully_registered_as_a_member'))
 
     form.reset()
-    router.push('/auth/signin')
+    router.replace('/auth/signin')
   }
 
   return (

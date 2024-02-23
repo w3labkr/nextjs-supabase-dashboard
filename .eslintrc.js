@@ -47,6 +47,8 @@ module.exports = {
     '@next/next/no-img-element': 'off',
     // ... is never reassigned. Use 'const' instead.
     'prefer-const': 'warn',
+    // Don't use `{}` as a type.
+    '@typescript-eslint/ban-types': 'warn',
   },
   ignorePatterns: [
     '.eslintrc.js',

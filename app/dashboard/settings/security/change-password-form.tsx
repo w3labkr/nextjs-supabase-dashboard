@@ -20,6 +20,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { SubmitButton } from '@/components/submit-button'
 
+import { UpdateUser } from '@/types/supabase'
 import { fetcher } from '@/lib/fetch'
 
 const formSchema = z
@@ -55,10 +56,13 @@ export function ChangePasswordForm() {
     formData.append('oldPassword', values.oldPassword)
     formData.append('newPassword', values.newPassword)
 
-    const { error } = await fetcher('/api/v1/account/change-password', {
-      method: 'POST',
-      body: formData,
-    })
+    const { error } = await fetcher<UpdateUser>(
+      '/api/v1/account/change-password',
+      {
+        method: 'POST',
+        body: formData,
+      }
+    )
 
     if (error) {
       switch (error?.i18n) {

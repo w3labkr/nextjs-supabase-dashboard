@@ -1,11 +1,13 @@
 'use client'
 
 import * as React from 'react'
+import Link from 'next/link'
 
 import { AppBarContext } from '@/components/app-bar/app-bar-provider'
 import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 
+import { LinkButton } from '../link-button'
 import { MiniDrawerGroupItems } from './mini-drawer-group-items'
 
 import { siteConfig } from '@/config/site'
@@ -31,8 +33,10 @@ export function MiniDrawer({ className, ...props }: MiniDrawerProps) {
           appBarState?.height ?? 'h-[50px]'
         )}
       >
-        <LucideIcon name={siteConfig.symbol} className="size-5 min-w-5" />
-        <span className="sr-only">{siteConfig.name}</span>
+        <Link href="/">
+          <LucideIcon name={siteConfig.symbol} className="size-5 min-w-5" />
+          <span className="sr-only">{siteConfig.name}</span>
+        </Link>
       </div>
       <nav className="flex-1 space-y-2 overflow-auto py-2">
         <MiniDrawerGroupItems items={dashboardConfig.miniDrawerGroupItems} />

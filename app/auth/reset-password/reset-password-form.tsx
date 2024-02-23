@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
+import { UpdateUser } from '@/types/supabase'
 import { fetcher } from '@/lib/fetch'
 
 const formSchema = z
@@ -53,7 +54,7 @@ export function ResetPasswordForm() {
     const formData = new FormData()
     formData.append('password', values.newPassword)
 
-    const { error } = await fetcher('/api/v1/auth/reset-password', {
+    const { error } = await fetcher<UpdateUser>('/api/v1/auth/reset-password', {
       method: 'POST',
       body: formData,
     })

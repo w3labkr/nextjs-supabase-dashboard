@@ -44,6 +44,7 @@
   "sign_in_with_google": "Sign in with Google",
   "sign_in_with_github": "Sign in with Github",
   "you_have_successfully_logged_in": "You have successfully logged in.",
+  "you_have_been_logged_out_successfully": "You have been logged out successfully.",
   "dont_have_an_account_sign_up": "Don't have an account? Sign Up",
   "already_have_an_account_sign_in": "Already have an account? Sign In",
 
@@ -89,8 +90,9 @@
 
   "user_already_registered": "User already registered.",
   "invalid_login_credentials": "Your email or password does not match.",
+  "your_user_data_is_invalid": "Your user data is invalid.",
   "invalid_old_password": "Old password does not match.",
-  "invalid_account_information": "Your account information is invalid.",
+  "your_account_information_is_invalid": "Your account information is invalid.",
   "new_password_should_be_different_from_the_old_password": "New password should be different from the old password.",
   "auth_session_missing": "Auth session missing!",
   "your_account_has_been_successfully_deleted": "Your account has been successfully deleted.",

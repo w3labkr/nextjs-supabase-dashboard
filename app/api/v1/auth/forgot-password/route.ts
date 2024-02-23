@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
   const formData = await request.formData()
 
   const supabase = createClient()
-  const response = await supabase.auth.resetPasswordForEmail(
+  const sent = await supabase.auth.resetPasswordForEmail(
     formData.get('email') as string,
     {
       redirectTo:
@@ -14,5 +14,5 @@ export async function POST(request: NextRequest) {
     }
   )
 
-  return NextResponse.json(response)
+  return NextResponse.json(sent)
 }

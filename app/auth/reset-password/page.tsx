@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
-import { isAuthenticate } from '@/lib/supabase/server'
+import { authState } from '@/lib/supabase/server'
 
 import { Logo } from '@/components/logo'
 import { Title } from '@/components/title'
@@ -12,10 +12,11 @@ import { LanguageToggleButton } from '@/components/language-toggle-button'
 import { ResetPasswordForm } from './reset-password-form'
 
 export default async function ResetPasswordPage() {
-  const isAuthenticated = await isAuthenticate()
+  const { signedIn } = await authState()
 
-  if (!isAuthenticated) {
+  if (!signedIn) {
     redirect('/auth/signin')
+    return null
   }
 
   return (

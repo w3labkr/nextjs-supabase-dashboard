@@ -11,7 +11,11 @@ import { Navigation } from '@/components/navigation'
 import { MobileNavigation } from '@/components/mobile-navigation'
 import { LinkButton } from '@/components/link-button'
 
+import { useAuth } from '@/hooks/use-auth'
+
 export function Header() {
+  const { user } = useAuth()
+
   return (
     <Sheet>
       <SheetContent className="bg-white dark:bg-gray-900" side="left">
@@ -28,16 +32,35 @@ export function Header() {
           <Brand />
           <Navigation />
           <div className="ml-auto flex gap-2">
-            <LinkButton
-              href="/auth/signin"
-              variant="outline"
-              text="sign_in"
-              translate="yes"
-            />
-            <LinkButton href="/auth/signup" text="sign_up" translate="yes" />
+            {user ? <SignedInButton /> : <SignedOutButton />}
           </div>
         </div>
       </header>
     </Sheet>
+  )
+}
+
+function SignedInButton() {
+  return (
+    <LinkButton
+      variant="outline"
+      href="/dashboard/dashboard"
+      text="dashboard"
+      translate="yes"
+    />
+  )
+}
+
+function SignedOutButton() {
+  return (
+    <>
+      <LinkButton
+        variant="outline"
+        href="/auth/signin"
+        text="sign_in"
+        translate="yes"
+      />
+      <LinkButton href="/auth/signup" text="sign_up" translate="yes" />
+    </>
   )
 }

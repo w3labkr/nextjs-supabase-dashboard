@@ -5,6 +5,7 @@ import { Analytics } from '@/components/analytics'
 
 import { lng } from '@/i18next.config'
 import { I18nProvider } from '@/context/i18n-provider'
+import { AuthProvider } from '@/context/auth-provider'
 
 import { cn } from '@/lib/utils'
 import { ThemeProvider } from '@/context/theme-provider'
@@ -32,19 +33,21 @@ export default function RootLayout({
   return (
     <html lang={lng} suppressHydrationWarning>
       <body className={cn('font-sans antialiased', fontSans.variable)}>
-        <I18nProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div id="__next">{children}</div>
-            <Toaster richColors closeButton />
-            <TailwindIndicator />
-          </ThemeProvider>
-        </I18nProvider>
-        <Analytics />
+        <AuthProvider>
+          <I18nProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <div id="__next">{children}</div>
+              <Toaster richColors closeButton />
+              <TailwindIndicator />
+              <Analytics />
+            </ThemeProvider>
+          </I18nProvider>
+        </AuthProvider>
       </body>
     </html>
   )

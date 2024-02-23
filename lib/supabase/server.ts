@@ -40,9 +40,13 @@ export function createClient() {
   )
 }
 
-export async function isAuthenticate() {
+export async function authState() {
   const supabase = createClient()
   const { data, error } = await supabase.auth.getUser()
 
-  return !(error || !data?.user)
+  return {
+    signedIn: !(error || !data?.user),
+    user: data?.user,
+    error,
+  }
 }

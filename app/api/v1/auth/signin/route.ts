@@ -10,5 +10,12 @@ export async function POST(request: NextRequest) {
     password: formData.get('password') as string,
   })
 
+  if (!signed?.data?.user) {
+    return NextResponse.json({
+      ...signed,
+      error: { code: 'ApiError', message: 'Your user data is invalid.' },
+    })
+  }
+
   return NextResponse.json(signed)
 }

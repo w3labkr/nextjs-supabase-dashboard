@@ -10,7 +10,7 @@ Denpendency
 - react-i18next + zod-i18n-map
 - Supabase OAuth with PKCE flow (@supabase/ssr)
 - Supabase Email Auth with PKCE flow (@supabase/ssr)
-- TODO: Supabase Auth Provider
+- Supabase Auth Provider
 
 ## Screenshots
 
@@ -33,7 +33,6 @@ The folder and file structure is based on nextjs app router [Next.js Project Str
 ├── screenshots/                # Screenshots
 ├── sql/                        # Cloud functions
 ├── types/
-├── utils/
 └── package.json                # Project dependencies and scripts
 ```
 
