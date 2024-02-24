@@ -13,12 +13,11 @@ export async function POST(request: NextRequest) {
   // in staging, we don't verify primary emails
   // Supabase returns a nice error
   if (signed?.error) {
-    return NextResponse.json(signed)
+    return NextResponse.json({ error: signed?.error })
   }
 
   if (!signed?.data?.user) {
     return NextResponse.json({
-      ...signed,
       error: { code: 'ApiError', message: 'User data is invalid.' },
     })
   }
@@ -27,12 +26,11 @@ export async function POST(request: NextRequest) {
   // supabase returns a user object with no identities if the user exists
   if (signed?.data?.user?.identities?.length === 0) {
     return NextResponse.json({
-      ...signed,
       error: { code: 'ApiError', message: 'User already registered.' },
     })
   }
 
-  const outed = await supabase.auth.signOut()
+  const res = await supabase.auth.signOut()
 
-  return NextResponse.json(outed)
+  return NextResponse.json({ error: res?.error })
 }

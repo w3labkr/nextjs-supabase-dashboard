@@ -10,16 +10,12 @@ export async function POST(request: NextRequest) {
   })
 
   if (verified?.error) {
-    return NextResponse.json(verified)
+    return NextResponse.json({ error: verified?.error })
   }
 
   if (verified?.data === false) {
     return NextResponse.json({
-      ...verified,
-      error: {
-        code: 'ApiError',
-        message: 'invalid_old_password',
-      },
+      error: { code: 'ApiError', message: 'invalid_old_password' },
     })
   }
 
@@ -27,5 +23,5 @@ export async function POST(request: NextRequest) {
     password: formData.get('newPassword') as string,
   })
 
-  return NextResponse.json(updated)
+  return NextResponse.json({ error: updated?.error })
 }

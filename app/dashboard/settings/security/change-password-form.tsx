@@ -23,7 +23,7 @@ import { SubmitButton } from '@/components/submit-button'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
-import { UpdateUser } from '@/types/supabase'
+import { AuthPostgrestApi } from '@/types/api'
 import { fetcher } from '@/lib/fetch'
 
 const formSchema = z
@@ -59,8 +59,8 @@ export function ChangePasswordForm() {
     formData.append('oldPassword', values.oldPassword)
     formData.append('newPassword', values.newPassword)
 
-    const { error } = await fetcher<UpdateUser>(
-      '/api/v1/account/change-password',
+    const { error } = await fetcher<AuthPostgrestApi>(
+      '/api/v1/security/change-password',
       {
         method: 'POST',
         body: formData,

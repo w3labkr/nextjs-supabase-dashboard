@@ -12,10 +12,9 @@ export async function POST(request: NextRequest) {
 
   if (!signed?.data?.user) {
     return NextResponse.json({
-      ...signed,
       error: { code: 'ApiError', message: 'User data is invalid.' },
     })
   }
 
-  return NextResponse.json(signed)
+  return NextResponse.json({ data: signed?.data, error: signed?.error })
 }

@@ -14,5 +14,5 @@ export async function POST(request: NextRequest) {
     }
   )
 
-  return NextResponse.json(sent)
+  return NextResponse.json({ error: sent?.error })
 }

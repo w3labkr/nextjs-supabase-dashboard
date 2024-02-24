@@ -34,7 +34,7 @@ import { SubmitButton } from '@/components/submit-button'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
-import { DeleteUser } from '@/types/supabase'
+import { PostgrestApi } from '@/types/api'
 import { fetcher } from '@/lib/fetch'
 
 const formSchema = z.object({
@@ -51,7 +51,7 @@ const defaultValues: Partial<FormValues> = {
   confirmationPhrase: '',
 }
 
-export function DeleteAccountForm() {
+export function DeleteUserForm() {
   const router = useRouter()
   const { t } = useTranslation(['translation', 'zod'])
 
@@ -65,8 +65,8 @@ export function DeleteAccountForm() {
     formData.append('email', values.email)
     formData.append('password', values.password)
 
-    const { error } = await fetcher<DeleteUser>(
-      '/api/v1/account/delete-account',
+    const { error } = await fetcher<PostgrestApi>(
+      '/api/v1/account/delete-user',
       {
         method: 'POST',
         body: formData,
@@ -97,12 +97,12 @@ export function DeleteAccountForm() {
   return (
     <div className="space-y-4">
       <Title
-        text="DeleteAccountForm.title"
+        text="DeleteUserForm.title"
         translate="yes"
         className="text-destructive"
       />
       <Separator />
-      <Description text="DeleteAccountForm.description" translate="yes" />
+      <Description text="DeleteUserForm.description" translate="yes" />
       <Dialog>
         <DialogTrigger asChild>
           <Button variant="outline" className="text-destructive">
@@ -184,7 +184,7 @@ export function DeleteAccountForm() {
                   !form?.formState?.isValid || form?.formState?.isSubmitting
                 }
                 isSubmitting={form?.formState?.isSubmitting}
-                text="DeleteAccountForm.submit"
+                text="DeleteUserForm.submit"
                 translate="yes"
               />
             </form>

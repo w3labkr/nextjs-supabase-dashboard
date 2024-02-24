@@ -47,7 +47,7 @@
     "description": ""
   },
 
-  "DeleteAccountForm": {
+  "DeleteUserForm": {
     "title": "Delete Account",
     "description": "Deleting your account cannot be reversed.",
     "submit": "Delete your account"

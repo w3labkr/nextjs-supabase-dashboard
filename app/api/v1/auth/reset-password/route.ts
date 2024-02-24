@@ -9,11 +9,17 @@ export async function POST(request: NextRequest) {
     password: formData.get('password') as string,
   })
 
-  if (updated?.error || !updated?.data?.user) {
-    return NextResponse.json(updated)
+  if (updated?.error) {
+    return NextResponse.json({ error: updated?.error })
   }
 
-  const outed = await supabase.auth.signOut()
+  if (!updated?.data?.user) {
+    return NextResponse.json({
+      error: { code: 'ApiError', message: 'User data is invalid.' },
+    })
+  }
 
-  return NextResponse.json(outed)
+  const res = await supabase.auth.signOut()
+
+  return NextResponse.json({ error: res?.error })
 }

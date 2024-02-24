@@ -6,8 +6,8 @@ import { useTheme } from 'next-themes'
 
 export function DarkModeStatus() {
   const [status, setStatus] = React.useState<string>('')
-  const { t } = useTranslation()
   const { theme } = useTheme()
+  const { t } = useTranslation()
 
   React.useEffect(() => {
     const mode =

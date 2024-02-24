@@ -13,5 +13,5 @@ export async function GET(request: NextRequest) {
     },
   })
 
-  return NextResponse.json(signed)
+  return NextResponse.json({ error: signed?.error })
 }

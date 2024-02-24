@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-import { Session, User } from '@/types/supabase'
+import { Session, User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase/client'
 
 /**
@@ -16,6 +16,7 @@ export interface AuthContextProps {
   user: User | null
   setSession: React.Dispatch<React.SetStateAction<Session | null>>
   setUser: React.Dispatch<React.SetStateAction<User | null>>
+  signOut: () => void
 }
 
 export const AuthContext = React.createContext<AuthContextProps>({
@@ -23,6 +24,7 @@ export const AuthContext = React.createContext<AuthContextProps>({
   user: null,
   setSession: () => void 0,
   setUser: () => void 0,
+  signOut: () => void 0,
 })
 
 export interface AuthProviderProps {
@@ -32,6 +34,11 @@ export interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [session, setSession] = React.useState<Session | null>(null)
   const [user, setUser] = React.useState<User | null>(null)
+
+  const signOut = () => {
+    setSession(null)
+    setUser(null)
+  }
 
   React.useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -50,7 +57,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ session, user, setSession, setUser }}>
+    <AuthContext.Provider
+      value={{ session, user, setSession, setUser, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   )

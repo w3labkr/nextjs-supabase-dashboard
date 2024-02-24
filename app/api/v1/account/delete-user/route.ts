@@ -4,7 +4,6 @@ import { createClient } from '@/lib/supabase/server'
 export async function POST(request: NextRequest) {
   const formData = await request.formData()
 
-  // user?.app_metadata.provider
   const supabase = createClient()
   const verified = await supabase.rpc('verify_user_email_and_password', {
     user_email: formData.get('email') as string,
@@ -12,12 +11,11 @@ export async function POST(request: NextRequest) {
   })
 
   if (verified?.error) {
-    return NextResponse.json(verified)
+    return NextResponse.json({ error: verified?.error })
   }
 
   if (verified?.data === false) {
     return NextResponse.json({
-      ...verified,
       error: {
         code: 'ApiError',
         message: 'Your account information is invalid.',
@@ -27,5 +25,5 @@ export async function POST(request: NextRequest) {
 
   const deleted = await supabase.rpc('delete_user')
 
-  return NextResponse.json(deleted)
+  return NextResponse.json({ error: deleted?.error })
 }

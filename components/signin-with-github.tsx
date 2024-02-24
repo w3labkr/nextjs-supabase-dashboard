@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 import { FaGithub } from 'react-icons/fa'
 import { Button, ButtonProps } from '@/components/ui/button'
 
-import { SignInWithOAuth } from '@/types/supabase'
+import { AuthApi } from '@/types/api'
 import { fetcher } from '@/lib/fetch'
 
 interface SignInWithGithubProps
@@ -21,9 +21,7 @@ export function SignInWithGithub({
   const { t } = useTranslation()
 
   async function onSubmit() {
-    const { data, error } = await fetcher<SignInWithOAuth>(
-      '/api/v1/auth/signin-with-google'
-    )
+    const { error } = await fetcher<AuthApi>('/api/v1/auth/signin-with-github')
 
     if (error) {
       toast.error(error?.message)

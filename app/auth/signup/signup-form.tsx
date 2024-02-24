@@ -22,8 +22,9 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
-import { SignUp } from '@/types/supabase'
+import { AuthApi } from '@/types/api'
 import { fetcher } from '@/lib/fetch'
+import { useAuth } from '@/hooks/use-auth'
 
 const formSchema = z
   .object({
@@ -47,6 +48,7 @@ const defaultValues: Partial<FormValues> = {
 
 export function SignUpForm() {
   const router = useRouter()
+  const auth = useAuth()
   const { t } = useTranslation(['translation', 'zod'])
 
   const form = useForm<FormValues>({
@@ -59,7 +61,7 @@ export function SignUpForm() {
     formData.append('email', values.email)
     formData.append('password', values.newPassword)
 
-    const { error } = await fetcher<SignUp>('/api/v1/auth/signup', {
+    const { error } = await fetcher<AuthApi>('/api/v1/auth/signup', {
       method: 'POST',
       body: formData,
     })
@@ -77,6 +79,8 @@ export function SignUpForm() {
     }
 
     toast.success(t('FormMessage.you_have_successfully_registered_as_a_member'))
+
+    auth.signOut()
 
     form.reset()
     router.replace('/auth/signin')

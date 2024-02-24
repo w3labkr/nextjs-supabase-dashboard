@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 import { FcGoogle } from 'react-icons/fc'
 import { Button, ButtonProps } from '@/components/ui/button'
 
-import { SignInWithOAuth } from '@/types/supabase'
+import { AuthApi } from '@/types/api'
 import { fetcher } from '@/lib/fetch'
 
 interface SignInWithGoogleProps
@@ -21,9 +21,7 @@ export function SignInWithGoogle({
   const { t } = useTranslation()
 
   async function onSubmit() {
-    const { data, error } = await fetcher<SignInWithOAuth>(
-      '/api/v1/auth/signin-with-google'
-    )
+    const { error } = await fetcher<AuthApi>('/api/v1/auth/signin-with-google')
 
     if (error) {
       toast.error(error?.message)

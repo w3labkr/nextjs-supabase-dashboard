@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { Button, ButtonProps } from '@/components/ui/button'
 
-import { SignOut } from '@/types/supabase'
+import { AuthApi } from '@/types/api'
 import { fetcher } from '@/lib/fetch'
 import { useAuth } from '@/hooks/use-auth'
 
@@ -17,21 +17,20 @@ interface SignOutButtonProps
 
 export function SignOutButton(props: SignOutButtonProps) {
   const router = useRouter()
+  const auth = useAuth()
   const { t } = useTranslation()
-  const { setSession, setUser } = useAuth()
 
   async function onSubmit() {
-    const { error } = await fetcher<SignOut>('/api/v1/auth/signout')
+    const { error } = await fetcher<AuthApi>('/api/v1/auth/signout')
 
     if (error) {
       toast.error(error?.message)
       return false
     }
 
-    setSession(null)
-    setUser(null)
-
     toast.success(t('FormMessage.you_have_been_logged_out_successfully'))
+
+    auth.signOut()
 
     router.replace('/')
   }

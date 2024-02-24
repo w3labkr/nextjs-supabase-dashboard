@@ -47,7 +47,7 @@
     "description": ""
   },
 
-  "DeleteAccountForm": {
+  "DeleteUserForm": {
     "title": "계정 삭제",
     "description": "계정 삭제는 되돌릴 수 없습니다.",
     "submit": "계정 삭제"

@@ -21,8 +21,9 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
-import { UpdateUser } from '@/types/supabase'
+import { AuthApi } from '@/types/api'
 import { fetcher } from '@/lib/fetch'
+import { useAuth } from '@/hooks/use-auth'
 
 const formSchema = z
   .object({
@@ -43,6 +44,7 @@ const defaultValues: Partial<FormValues> = {
 
 export function ResetPasswordForm() {
   const router = useRouter()
+  const auth = useAuth()
   const { t } = useTranslation(['translation', 'zod'])
 
   const form = useForm<FormValues>({
@@ -54,7 +56,7 @@ export function ResetPasswordForm() {
     const formData = new FormData()
     formData.append('password', values.newPassword)
 
-    const { error } = await fetcher<UpdateUser>('/api/v1/auth/reset-password', {
+    const { error } = await fetcher<AuthApi>('/api/v1/auth/reset-password', {
       method: 'POST',
       body: formData,
     })
@@ -75,7 +77,9 @@ export function ResetPasswordForm() {
 
     toast.success(t('FormMessage.your_password_has_been_successfully_changed'))
 
+    auth.signOut()
     form.reset()
+
     router.replace('/auth/signin')
   }
 

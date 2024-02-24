@@ -22,7 +22,7 @@ import {
 import { SubmitButton } from '@/components/submit-button'
 import { RelatedLink } from '@/components/related-link'
 
-import { SignInWithPassword } from '@/types/supabase'
+import { SignInApi } from '@/types/api'
 import { fetcher } from '@/lib/fetch'
 import { useAuth } from '@/hooks/use-auth'
 
@@ -40,8 +40,8 @@ const defaultValues: Partial<FormValues> = {
 
 export function SignInForm() {
   const router = useRouter()
+  const auth = useAuth()
   const { t } = useTranslation(['translation', 'zod'])
-  const { setSession, setUser } = useAuth()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -53,13 +53,10 @@ export function SignInForm() {
     formData.append('email', values.email)
     formData.append('password', values.password)
 
-    const { data, error } = await fetcher<SignInWithPassword>(
-      '/api/v1/auth/signin',
-      {
-        method: 'POST',
-        body: formData,
-      }
-    )
+    const { data, error } = await fetcher<SignInApi>('/api/v1/auth/signin', {
+      method: 'POST',
+      body: formData,
+    })
 
     if (error) {
       switch (error?.i18n) {
@@ -77,10 +74,10 @@ export function SignInForm() {
       return false
     }
 
-    setSession(data?.session)
-    setUser(data?.user)
-
     toast.success(t('FormMessage.you_have_successfully_logged_in'))
+
+    auth.setSession(data?.session)
+    auth.setUser(data?.user)
 
     form.reset()
     router.replace('/dashboard/dashboard')

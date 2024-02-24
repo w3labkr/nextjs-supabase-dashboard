@@ -23,7 +23,7 @@ export default async function ResetPasswordPage({
   const { signedIn } = await authState()
 
   if (
-    !/^pkce_/.test(searchParams?.token_hash ?? '') ||
+    !/^pkce_/.test(searchParams?.token_hash) ||
     searchParams?.type !== 'recovery'
   ) {
     redirect('/auth/signin')
