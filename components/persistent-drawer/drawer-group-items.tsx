@@ -22,7 +22,9 @@ export function DrawerGroupItems({ items }: DrawerGroupItemsProps) {
       {item.separator && <Separator className="!my-4" />}
       {item.label && (
         <span className="flex p-1 text-sm font-semibold text-muted-foreground">
-          {item.label && item.translate === 'yes' ? t(item.label) : item.label}
+          {item.label && item.translate === 'yes'
+            ? t(`DrawerGroupItems.${item.label}`)
+            : item.label}
         </span>
       )}
       <DrawerItems items={item.items} pathname={pathname} />

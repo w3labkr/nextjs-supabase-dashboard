@@ -8,7 +8,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { toast } from 'sonner'
-import { Input } from '@/components/ui/input'
 import {
   Form,
   FormControl,
@@ -18,6 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { SubmitButton } from '@/components/submit-button'
 
 import { ResetPasswordForEmail } from '@/types/supabase'
@@ -34,7 +34,7 @@ const defaultValues: Partial<FormValues> = {
 }
 
 export function ForgotPasswordForm() {
-  const { t } = useTranslation(['translation', 'zod', 'zod-custom'])
+  const { t } = useTranslation(['translation', 'zod'])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -58,7 +58,7 @@ export function ForgotPasswordForm() {
       return false
     }
 
-    toast.success(t('the_email_has_been_sent_successfully'))
+    toast.success(t('FormMessage.the_email_has_been_sent_successfully'))
 
     form.reset()
   }
@@ -76,7 +76,7 @@ export function ForgotPasswordForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('email')}</FormLabel>
+              <FormLabel>{t('FormLabel.email')}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
@@ -93,7 +93,7 @@ export function ForgotPasswordForm() {
         />
         <SubmitButton
           isSubmitting={form?.formState?.isSubmitting}
-          text="reset_my_password"
+          text="ForgotPasswordForm.submit"
           translate="yes"
           className="w-full"
         />

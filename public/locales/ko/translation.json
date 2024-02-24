@@ -1,101 +1,250 @@
 {
-  "home": "홈",
-  "pricing": "가격",
-  "contact_us": "연락하기",
-  "back": "뒤로가기",
+  "SignInPage": {
+    "title": "돌아온 것을 환영합니다",
+    "description": "귀하의 계정에 로그인하려면 이메일을 입력하세요."
+  },
 
-  "dashboard": "대시보드",
-  "media": "미디어",
-  "posts": "글",
-  "settings": "설정",
+  "SignUpPage": {
+    "title": "계정 만들기",
+    "description": "계정을 만들려면 아래에 이메일을 입력하세요."
+  },
 
-  "access": "접근",
-  "profile": "프로필",
-  "account": "계정",
-  "appearance": "외형",
-  "notifications": "알림",
-  "emails": "이메일",
-  "security": "보안",
-  "sessions": "세션",
+  "ForgotPasswordPage": {
+    "title": "비밀번호를 잊으셨나요?",
+    "description": "아래에 이메일 주소를 입력하시면 비밀번호 재설정을 위한 메시지를 보내드립니다."
+  },
 
-  "new_media": "새 미디어",
-  "edit_media": "미디어 수정",
-  "new_post": "새 글",
-  "edit_post": "글 수정",
+  "ResetPasswordPage": {
+    "title": "비밀번호 재설정",
+    "description": "아래에 새로운 비밀번호를 입력해주세요."
+  },
 
-  "dark_mode_on": "어두운 테마: 사용 중",
-  "dark_mode_off": "어두운 테마: 사용하지 않음",
+  "ChangeEmailForm": {
+    "title": "이메일 변경",
+    "description": ""
+  },
 
-  "sign_in": "로그인",
-  "sign_up": "가입하기",
-  "sign_out": "로그아웃",
+  "ChangePasswordForm": {
+    "title": "비밀번호 변경",
+    "description": "비밀번호는 6자 이상이어야 하며 이전 비밀번호와 달라야 합니다.",
+    "submit": "비밀번호 변경"
+  },
 
-  "email": "이메일",
-  "password": "비밀번호",
-  "confirm_password": "비밀번호 확인",
+  "ChangeThemeForm": {
+    "title": "테마",
+    "description": "대시보드의 테마를 선택합니다.",
+    "submit": "테마 변경"
+  },
 
-  "language": "언어",
-  "search_language": "언어 검색...",
-  "no_language_found": "언어를 찾을 수 없습니다.",
+  "ChangeUsernameForm": {
+    "title": "사용자 이름",
+    "description": "",
+    "submit": "사용자 이름 변경"
+  },
 
-  "welcome_back": "돌아온 것을 환영합니다",
-  "enter_your_email_to_sign_in_to_your_account": "귀하의 계정에 로그인하려면 이메일을 입력하세요.",
+  "DashboardForm": {
+    "title": "대시보드",
+    "description": ""
+  },
 
-  "sign_in_with_google": "구글 로그인",
-  "sign_in_with_github": "깃허브 로그인",
-  "you_have_successfully_logged_in": "성공적으로 로그인되었습니다.",
-  "you_have_been_logged_out_successfully": "성공적으로 로그아웃되었습니다.",
-  "dont_have_an_account_sign_up": "계정이 없나요? 가입하기",
-  "already_have_an_account_sign_in": "이미 계정이 있습니까? 로그인",
+  "DeleteAccountForm": {
+    "title": "계정 삭제",
+    "description": "계정 삭제는 되돌릴 수 없습니다.",
+    "submit": "계정 삭제"
+  },
 
-  "forgot_your_password": "비밀번호를 잊으셨나요?",
-  "send_you_a_message_to_reset_your_password": "아래에 이메일 주소를 입력하시면 비밀번호 재설정을 위한 메시지를 보내드립니다.",
-  "reset_my_password": "비밀번호 재설정",
-  "the_email_has_been_sent_successfully": "이메일이 성공적으로 전송되었습니다.",
+  "DeleteAccountDialog": {
+    "title": "계정 삭제",
+    "description": "계정 삭제는 되돌릴 수 없습니다.",
+    "trigger": "계정 삭제"
+  },
 
-  "reset_your_password": "비밀번호 재설정",
-  "please_enter_your_new_password_below": "아래에 새로운 비밀번호를 입력해주세요:",
-  "old_password": "이전 비밀번호",
-  "new_password": "새 비밀번호",
-  "confirm_new_password": "새 비밀번호 확인",
-  "change_password": "비밀번호 변경",
-  "update_password": "비밀번호 수정",
-  "your_password_has_been_successfully_changed": "비밀번호가 성공적으로 변경되었습니다.",
+  "ForgotPasswordForm": {
+    "submit": "비밀번호 재설정"
+  },
 
-  "create_an_account": "계정 만들기",
-  "enter_your_email_below_to_create_your_account": "계정을 만들려면 아래에 이메일을 입력하세요.",
-  "you_have_successfully_registered_as_a_member": "성공적으로 회원가입이 완료되었습니다.",
-  "agree_to_terms_of_service_and_privacy_policy": "가입하기를 클릭하면 <link1>서비스 약관</link1> 및 <link2>개인정보 보호정책</link2>에 동의하게 됩니다.",
+  "NotificationsForm": {
+    "title": "알림",
+    "description": "",
+    "submit": "알림 변경"
+  },
 
-  "welcome_to_acme_inc": "Acme Inc에 오신 것을 환영합니다",
-  "we_provide_high_quality_services_for_your_business": "우리는 귀하의 비즈니스에 고품질의 서비스를 제공합니다.",
-  "get_started": "시작하기",
-  "learn_more": "알아보기",
+  "ResetPasswordForm": {
+    "submit": "비밀번호 변경"
+  },
 
-  "you_have_unread_messages": "읽지 않은 메시지가 {{count}} 있습니다.",
-  "mark_all_as_read": "모두 읽음으로 표시",
+  "ProfileForm": {
+    "title": "프로필",
+    "description": "",
+    "submit": "프로필 변경"
+  },
 
-  "username": "사용자 이름",
-  "change_username": "사용자 이름 변경",
-  "update_username": "사용자 이름 업데이트",
-  "you_can_only_change_this_once_every_30_days": "30일에 한 번만 변경할 수 있습니다.",
+  "SessionsForm": {
+    "title": "세션",
+    "description": ""
+  },
 
-  "your_email": "이메일",
-  "your_password": "비밀번호",
-  "confirm_your_password": "비밀번호 확인",
-  "verify_delete_my_account": "계정을 삭제하려면 아래에 <i>delete my account</i>를 입력하세요.",
-  "delete_account": "계정 삭제",
-  "delete_your_account": "계정 삭제",
-  "deleting_your_account_cannot_be_reversed": "계정 삭제는 되돌릴 수 없습니다.",
+  "SignInForm": {
+    "submit": "로그인"
+  },
 
-  "user_already_registered": "이미 등록된 사용자입니다.",
-  "invalid_login_credentials": "이메일 또는 비밀번호가 일치하지 않습니다.",
-  "your_user_data_is_invalid": "사용자 데이터가 유효하지 않습니다.",
-  "invalid_old_password": "이전 비밀번호가 일치하지 않습니다.",
-  "your_account_information_is_invalid": "계정 정보가 유효하지 않습니다.",
-  "new_password_should_be_different_from_the_old_password": "새 비밀번호는 이전 비밀번호와 달라야 합니다.",
-  "auth_session_missing": "인증 세션이 없습니다!",
-  "your_account_has_been_successfully_deleted": "계정이 성공적으로 삭제되었습니다.",
-  "failed_to_fetch": "네트워크 연결에 실패했습니다.",
-  "something_went_wrong": "뭔가 잘못되었습니다!"
+  "SignUpForm": {
+    "submit": "가입하기"
+  },
+
+  "NewMediaForm": {
+    "title": "새 미디어",
+    "description": ""
+  },
+
+  "EditMediaForm": {
+    "title": "미디어 수정",
+    "description": ""
+  },
+
+  "NewPostForm": {
+    "title": "새 글",
+    "description": ""
+  },
+
+  "EditPostForm": {
+    "title": "글 수정",
+    "description": ""
+  },
+
+  "FormLabel": {
+    "username": "사용자 이름",
+    "password": "비밀번호",
+    "your_password": "비밀번호",
+    "confirm_password": "비밀번호 확인",
+    "confirm_your_password": "비밀번호 확인",
+    "new_password": "새 비밀번호",
+    "confirm_new_password": "새 비밀번호 확인",
+    "old_password": "이전 비밀번호",
+    "email": "이메일",
+    "your_email": "이메일",
+    "verify_delete_my_account": "계정을 삭제하려면 아래에 <i>delete my account</i>를 입력하세요."
+  },
+
+  "FormMessage": {
+    "invalid_confirm_password": "비밀번호가 일치하지 않습니다.",
+    "invalid_login_credentials": "이메일 또는 비밀번호가 일치하지 않습니다.",
+    "invalid_old_password": "이전 비밀번호가 일치하지 않습니다.",
+    "new_password_should_be_different_from_the_old_password": "새 비밀번호는 이전 비밀번호와 달라야 합니다.",
+    "the_email_has_been_sent_successfully": "이메일이 성공적으로 전송되었습니다.",
+    "user_already_registered": "이미 등록된 사용자입니다.",
+    "you_have_been_logged_out_successfully": "성공적으로 로그아웃되었습니다.",
+    "you_have_successfully_logged_in": "성공적으로 로그인되었습니다.",
+    "you_have_successfully_registered_as_a_member": "성공적으로 회원가입이 완료되었습니다.",
+    "your_account_information_is_invalid": "계정 정보가 유효하지 않습니다.",
+    "your_account_has_been_successfully_deleted": "계정이 성공적으로 삭제되었습니다.",
+    "your_password_has_been_successfully_changed": "비밀번호가 성공적으로 변경되었습니다."
+  },
+
+  "FormDescription": {
+    "you_can_change_it_only_once_every_%d_days": "{{count}}일에 한 번만 변경할 수 있습니다."
+  },
+
+  "MobileNavItems": {
+    "home": "홈",
+    "pricing": "가격",
+    "contact_us": "연락하기"
+  },
+
+  "MiniDrawerItems": {
+    "dashboard": "대시보드",
+    "media": "미디어",
+    "posts": "글",
+    "settings": "설정"
+  },
+
+  "PersistentDrawer": {
+    "dashboard": "대시보드",
+    "media": "미디어",
+    "posts": "글",
+    "settings": "설정"
+  },
+
+  "DrawerGroupItems": {
+    "access": "접근"
+  },
+
+  "DrawerItems": {
+    "profile": "프로필",
+    "account": "계정",
+    "appearance": "외형",
+    "notifications": "알림",
+    "emails": "이메일",
+    "security": "보안",
+    "sessions": "세션",
+    "new_media": "새 미디어",
+    "edit_media": "미디어 수정",
+    "new_post": "새 글",
+    "edit_post": "글 수정"
+  },
+
+  "DarkModeStatus": {
+    "dark_mode_on": "어두운 테마: 사용 중",
+    "dark_mode_off": "어두운 테마: 사용하지 않음"
+  },
+
+  "LanguageStatus": {
+    "label": "언어"
+  },
+
+  "LanguageSwitcher": {
+    "label": "언어 검색...",
+    "placeholder": "언어 검색...",
+    "empty": "언어를 찾을 수 없습니다."
+  },
+
+  "SignInWithGithub": {
+    "label": "깃허브 로그인"
+  },
+
+  "SignInWithGoogle": {
+    "label": "구글 로그인"
+  },
+
+  "SignOutButton": {
+    "label": "로그아웃"
+  },
+
+  "Notify": {
+    "title": "알림",
+    "description": "읽지 않은 메시지가 {{count}} 있습니다.",
+    "submit": "모두 읽음으로 표시"
+  },
+
+  "Hero": {
+    "title": "Acme Inc에 오신 것을 환영합니다",
+    "description": "우리는 귀하의 비즈니스에 고품질의 서비스를 제공합니다.",
+    "link1": "시작하기",
+    "link2": "알아보기"
+  },
+
+  "SignUpPolicyLink": {
+    "paragraph": "가입하기를 클릭하면 <link1>서비스 약관</link1> 및 <link2>개인정보 보호정책</link2>에 동의하게 됩니다."
+  },
+
+  "RelatedLink": {
+    "signup": "계정이 없나요? 가입하기",
+    "signin": "이미 계정이 있습니까? 로그인",
+    "forgot_password": "비밀번호를 잊으셨나요?"
+  },
+
+  "ButtonLink": {
+    "home": "홈",
+    "signin": "로그인"
+  },
+
+  "LinkButton": {
+    "signin": "로그인",
+    "signup": "가입하기",
+    "dashboard": "대시보드"
+  },
+
+  "BackLinkButton": {
+    "back": "뒤로가기"
+  }
 }

@@ -40,7 +40,7 @@ const defaultValues: Partial<FormValues> = {
 
 export function SignInForm() {
   const router = useRouter()
-  const { t } = useTranslation(['translation', 'zod', 'zod-custom'])
+  const { t } = useTranslation(['translation', 'zod'])
   const { setSession, setUser } = useAuth()
 
   const form = useForm<FormValues>({
@@ -64,8 +64,10 @@ export function SignInForm() {
     if (error) {
       switch (error?.i18n) {
         case 'invalid_login_credentials':
-          form.setError('email', { message: t(error?.i18n) })
-          form.setError('password', { message: t(error?.i18n) })
+          form.setError('email', { message: t(`FormMessage.${error?.i18n}`) })
+          form.setError('password', {
+            message: t(`FormMessage.${error?.i18n}`),
+          })
           break
         default:
           toast.error(error?.message)
@@ -78,7 +80,7 @@ export function SignInForm() {
     setSession(data?.session)
     setUser(data?.user)
 
-    toast.success(t('you_have_successfully_logged_in'))
+    toast.success(t('FormMessage.you_have_successfully_logged_in'))
 
     form.reset()
     router.replace('/dashboard/dashboard')
@@ -97,7 +99,7 @@ export function SignInForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('email')}</FormLabel>
+              <FormLabel>{t('FormLabel.email')}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
@@ -119,11 +121,11 @@ export function SignInForm() {
           render={({ field }) => (
             <FormItem>
               <div className="flex items-center justify-between">
-                <FormLabel>{t('password')}</FormLabel>
+                <FormLabel>{t('FormLabel.password')}</FormLabel>
                 <RelatedLink
                   href="/auth/forgot-password"
                   className="text-sm"
-                  text="forgot_your_password"
+                  text="RelatedLink.forgot_password"
                   translate="yes"
                 />
               </div>
@@ -133,7 +135,7 @@ export function SignInForm() {
                   autoCapitalize="none"
                   autoComplete="current-password"
                   autoCorrect="off"
-                  placeholder={t('password')}
+                  placeholder={t('FormLabel.password')}
                   {...field}
                 />
               </FormControl>
@@ -144,7 +146,7 @@ export function SignInForm() {
         />
         <SubmitButton
           isSubmitting={form?.formState?.isSubmitting}
-          text="sign_in"
+          text="SignInForm.submit"
           translate="yes"
           className="w-full"
         />

@@ -10,7 +10,7 @@ export default function AuthCodeError() {
         href="/auth/signin"
         className="absolute left-4 top-4 md:left-8 md:top-8"
         startIconName="ChevronLeft"
-        text="sign_in"
+        text="ButtonLink.signin"
         translate="yes"
       />
       <Error statusCode="500" />

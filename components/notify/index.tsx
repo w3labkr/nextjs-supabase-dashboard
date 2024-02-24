@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from 'react'
 import { Trans } from 'react-i18next'
 
@@ -38,12 +40,10 @@ export function Notify() {
         <Card className="w-[360px] border-0">
           <CardHeader>
             <CardTitle>
-              <Trans>notifications</Trans>
+              <Trans>Notify.title</Trans>
             </CardTitle>
             <CardDescription>
-              <Trans values={{ count: data?.count }}>
-                you_have_unread_messages
-              </Trans>
+              <Trans values={{ count: data?.count }}>Notify.description</Trans>
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
@@ -53,7 +53,7 @@ export function Notify() {
           <CardFooter>
             <Button className="w-full">
               <LucideIcon name="Check" className="mr-2 size-4 min-w-4" />
-              <Trans>mark_all_as_read</Trans>
+              <Trans>Notify.submit</Trans>
             </Button>
           </CardFooter>
         </Card>

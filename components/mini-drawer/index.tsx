@@ -7,7 +7,6 @@ import { AppBarContext } from '@/components/app-bar/app-bar-provider'
 import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 
-import { LinkButton } from '../link-button'
 import { MiniDrawerGroupItems } from './mini-drawer-group-items'
 
 import { siteConfig } from '@/config/site'

@@ -22,17 +22,14 @@ export default function ForgotPasswordPage() {
         href="/auth/signin"
         className="absolute left-4 top-4 md:left-8 md:top-8"
         startIconName="ChevronLeft"
-        text="sign_in"
+        text="ButtonLink.signin"
         translate="yes"
       />
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title text="forgot_your_password" translate="yes" />
-          <Description
-            text="send_you_a_message_to_reset_your_password"
-            translate="yes"
-          />
+          <Title text="ForgotPasswordPage.title" translate="yes" />
+          <Description text="ForgotPasswordPage.description" translate="yes" />
         </div>
         <div className="grid gap-6">
           <ForgotPasswordForm />
@@ -40,7 +37,7 @@ export default function ForgotPasswordPage() {
         <div className="flex justify-between text-center text-sm">
           <RelatedLink
             href="/auth/signup"
-            text="dont_have_an_account_sign_up"
+            text="RelatedLink.signup"
             translate="yes"
           />
           <LanguageToggleButton />

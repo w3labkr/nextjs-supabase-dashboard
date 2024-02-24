@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { toast } from 'sonner'
+import { Separator } from '@/components/ui/separator'
 import {
   Form,
   FormControl,
@@ -19,6 +20,8 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { SubmitButton } from '@/components/submit-button'
+import { Title } from '@/components/title'
+import { Description } from '@/components/description'
 
 import { UpdateUser } from '@/types/supabase'
 import { fetcher } from '@/lib/fetch'
@@ -32,7 +35,7 @@ const formSchema = z
   })
   .refine((val) => val.newPassword === val.confirmNewPassword, {
     path: ['confirmNewPassword'],
-    params: { i18n: 'invalid_confirm_password' },
+    params: { i18n: 'FormMessage.invalid_confirm_password' },
   })
 
 type FormValues = z.infer<typeof formSchema>
@@ -44,7 +47,7 @@ const defaultValues: Partial<FormValues> = {
 }
 
 export function ChangePasswordForm() {
-  const { t } = useTranslation(['translation', 'zod', 'zod-custom'])
+  const { t } = useTranslation(['translation', 'zod'])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -68,7 +71,9 @@ export function ChangePasswordForm() {
       switch (error?.i18n) {
         case 'invalid_old_password':
         case 'new_password_should_be_different_from_the_old_password':
-          form.setError('oldPassword', { message: t(error?.i18n) })
+          form.setError('oldPassword', {
+            message: t(`FormMessage.${error?.i18n}`),
+          })
           break
         default:
           toast.error(error?.message)
@@ -77,94 +82,93 @@ export function ChangePasswordForm() {
       return false
     }
 
-    toast.success(t('your_password_has_been_successfully_changed'))
+    toast.success(t('FormMessage.your_password_has_been_successfully_changed'))
 
     form.reset()
   }
 
   return (
-    <Form {...form}>
-      <form
-        method="POST"
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4"
-        noValidate
-      >
-        <FormField
-          control={form.control}
-          name="oldPassword"
-          render={({ field }) => (
-            <FormItem className="max-w-80">
-              <FormLabel>{t('old_password')}</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  autoCapitalize="none"
-                  autoComplete="current-password"
-                  autoCorrect="off"
-                  placeholder={t('old_password')}
-                  {...field}
-                />
-              </FormControl>
-              {/* <FormDescription></FormDescription> */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="newPassword"
-          render={({ field }) => (
-            <FormItem className="max-w-80">
-              <FormLabel>{t('new_password')}</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  autoCapitalize="none"
-                  autoComplete="new-password"
-                  autoCorrect="off"
-                  placeholder={t('new_password')}
-                  {...field}
-                />
-              </FormControl>
-              {/* <FormDescription></FormDescription> */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="confirmNewPassword"
-          render={({ field }) => (
-            <FormItem className="max-w-80">
-              <FormLabel>{t('confirm_new_password')}</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  autoCapitalize="none"
-                  autoComplete="new-password"
-                  autoCorrect="off"
-                  placeholder={t('confirm_new_password')}
-                  {...field}
-                />
-              </FormControl>
-              {/* <FormDescription></FormDescription> */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="space-y-1">
-          <p className="text-sm text-muted-foreground">
-            Your password must be at least 6 characters long and must be
-            different from your previous password.
-          </p>
+    <div className="space-y-4">
+      <Title text="ChangePasswordForm.title" translate="yes" />
+      <Separator />
+      <Description text="ChangePasswordForm.description" translate="yes" />
+      <Form {...form}>
+        <form
+          method="POST"
+          onSubmit={form.handleSubmit(onSubmit)}
+          noValidate
+          className="space-y-4"
+        >
+          <FormField
+            control={form.control}
+            name="oldPassword"
+            render={({ field }) => (
+              <FormItem className="max-w-80">
+                <FormLabel>{t('FormLabel.old_password')}</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    autoCapitalize="none"
+                    autoComplete="current-password"
+                    autoCorrect="off"
+                    placeholder={t('FormLabel.old_password')}
+                    {...field}
+                  />
+                </FormControl>
+                {/* <FormDescription></FormDescription> */}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="newPassword"
+            render={({ field }) => (
+              <FormItem className="max-w-80">
+                <FormLabel>{t('FormLabel.new_password')}</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    autoCapitalize="none"
+                    autoComplete="new-password"
+                    autoCorrect="off"
+                    placeholder={t('FormLabel.new_password')}
+                    {...field}
+                  />
+                </FormControl>
+                {/* <FormDescription></FormDescription> */}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="confirmNewPassword"
+            render={({ field }) => (
+              <FormItem className="max-w-80">
+                <FormLabel>{t('FormLabel.confirm_new_password')}</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    autoCapitalize="none"
+                    autoComplete="new-password"
+                    autoCorrect="off"
+                    placeholder={t('FormLabel.confirm_new_password')}
+                    {...field}
+                  />
+                </FormControl>
+                {/* <FormDescription></FormDescription> */}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <SubmitButton
             isSubmitting={form?.formState?.isSubmitting}
-            text="update_password"
+            text="ChangePasswordForm.submit"
             translate="yes"
           />
-        </div>
-      </form>
-    </Form>
+        </form>
+      </Form>
+    </div>
   )
 }

@@ -49,6 +49,6 @@ i18n
   })
 
 // Translating zod error messages.
-z.setErrorMap(makeZodI18nMap({ ns: ['zod', 'zod-custom'] }))
+z.setErrorMap(makeZodI18nMap({ ns: ['zod'] }))
 
 export default i18n

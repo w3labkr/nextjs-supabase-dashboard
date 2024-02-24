@@ -1,12 +1,12 @@
 import * as React from 'react'
 
-import { ChangeThemeForm } from './change-theme-form'
+import { EditPostForm } from './edit-post-form'
 
-export default function AppearancePage() {
+export default function EditPostPage() {
   return (
     <main className="flex-1 overflow-auto p-10 pb-16">
       <div className="space-y-16">
-        <ChangeThemeForm />
+        <EditPostForm />
       </div>
     </main>
   )

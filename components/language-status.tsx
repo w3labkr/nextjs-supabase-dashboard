@@ -16,7 +16,7 @@ export function LanguageStatus() {
 
   return (
     <span>
-      {t('language')}: {languageLabel}
+      {t('LanguageStatus.label')}: {languageLabel}
     </span>
   )
 }

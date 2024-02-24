@@ -45,7 +45,7 @@ function SignedInButton() {
     <LinkButton
       variant="outline"
       href="/dashboard/dashboard"
-      text="dashboard"
+      text="LinkButton.dashboard"
       translate="yes"
     />
   )
@@ -57,10 +57,14 @@ function SignedOutButton() {
       <LinkButton
         variant="outline"
         href="/auth/signin"
-        text="sign_in"
+        text="LinkButton.signin"
         translate="yes"
       />
-      <LinkButton href="/auth/signup" text="sign_up" translate="yes" />
+      <LinkButton
+        href="/auth/signup"
+        text="LinkButton.signup"
+        translate="yes"
+      />
     </>
   )
 }

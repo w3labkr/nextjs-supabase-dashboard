@@ -5,12 +5,19 @@ import { useTranslation } from 'react-i18next'
 
 import { toast } from 'sonner'
 import { FcGoogle } from 'react-icons/fc'
-import { Button } from '@/components/ui/button'
+import { Button, ButtonProps } from '@/components/ui/button'
 
 import { SignInWithOAuth } from '@/types/supabase'
 import { fetcher } from '@/lib/fetch'
 
-export function SignInWithGoogle() {
+interface SignInWithGoogleProps
+  extends ButtonProps,
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {}
+
+export function SignInWithGoogle({
+  variant = 'outline',
+  ...props
+}: SignInWithGoogleProps) {
   const { t } = useTranslation()
 
   async function onSubmit() {
@@ -23,13 +30,13 @@ export function SignInWithGoogle() {
       return false
     }
 
-    toast.success(t('you_have_successfully_logged_in'))
+    toast.success(t('FormMessage.you_have_successfully_logged_in'))
   }
 
   return (
-    <Button variant="outline" onClick={onSubmit}>
+    <Button variant={variant} onClick={onSubmit} {...props}>
       <FcGoogle className="mr-2 h-4 w-4" />
-      {t('sign_in_with_google')}
+      {t('SignInWithGoogle.label')}
     </Button>
   )
 }

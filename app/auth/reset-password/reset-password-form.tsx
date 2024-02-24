@@ -31,7 +31,7 @@ const formSchema = z
   })
   .refine((val) => val.newPassword === val.confirmNewPassword, {
     path: ['confirmNewPassword'],
-    params: { i18n: 'invalid_confirm_password' },
+    params: { i18n: 'FormMessage.invalid_confirm_password' },
   })
 
 type FormValues = z.infer<typeof formSchema>
@@ -43,7 +43,7 @@ const defaultValues: Partial<FormValues> = {
 
 export function ResetPasswordForm() {
   const router = useRouter()
-  const { t } = useTranslation(['translation', 'zod', 'zod-custom'])
+  const { t } = useTranslation(['translation', 'zod'])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -62,7 +62,9 @@ export function ResetPasswordForm() {
     if (error) {
       switch (error?.i18n) {
         case 'new_password_should_be_different_from_the_old_password':
-          form.setError('newPassword', { message: t(error?.i18n) })
+          form.setError('newPassword', {
+            message: t(`FormMessage.${error?.i18n}`),
+          })
           break
         default:
           toast.error(error?.message)
@@ -71,7 +73,7 @@ export function ResetPasswordForm() {
       return false
     }
 
-    toast.success(t('your_password_has_been_successfully_changed'))
+    toast.success(t('FormMessage.your_password_has_been_successfully_changed'))
 
     form.reset()
     router.replace('/auth/signin')
@@ -90,14 +92,14 @@ export function ResetPasswordForm() {
           name="newPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('new_password')}</FormLabel>
+              <FormLabel>{t('FormLabel.new_password')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoCapitalize="none"
                   autoComplete="new-password"
                   autoCorrect="off"
-                  placeholder={t('new_password')}
+                  placeholder={t('FormLabel.new_password')}
                   {...field}
                 />
               </FormControl>
@@ -110,14 +112,14 @@ export function ResetPasswordForm() {
           name="confirmNewPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('confirm_new_password')}</FormLabel>
+              <FormLabel>{t('FormLabel.confirm_new_password')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoCapitalize="none"
                   autoComplete="new-password"
                   autoCorrect="off"
-                  placeholder={t('confirm_new_password')}
+                  placeholder={t('FormLabel.confirm_new_password')}
                   {...field}
                 />
               </FormControl>
@@ -127,9 +129,9 @@ export function ResetPasswordForm() {
         />
         <SubmitButton
           isSubmitting={form?.formState?.isSubmitting}
-          text="change_password"
-          translate="yes"
           className="w-full"
+          text="ResetPasswordForm.submit"
+          translate="yes"
         />
       </form>
     </Form>

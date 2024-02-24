@@ -23,7 +23,9 @@ export function MobileNavItems({ items }: MobileNavItemsProps) {
       )}
       href={item?.href}
     >
-      {item?.title && item?.translate === 'yes' ? t(item?.title) : item?.title}
+      {item?.title && item?.translate === 'yes'
+        ? t(`MobileNavItems.${item?.title}`)
+        : item?.title}
     </Link>
   ))
 }

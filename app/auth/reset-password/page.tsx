@@ -25,17 +25,14 @@ export default async function ResetPasswordPage() {
         href="/auth/signin"
         className="absolute left-4 top-4 md:left-8 md:top-8"
         startIconName="ChevronLeft"
-        text="sign_in"
+        text="ButtonLink.signin"
         translate="yes"
       />
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title text="reset_your_password" translate="yes" />
-          <Description
-            text="please_enter_your_new_password_below"
-            translate="yes"
-          />
+          <Title text="ResetPasswordPage.title" translate="yes" />
+          <Description text="ResetPasswordPage.description" translate="yes" />
         </div>
         <div className="grid gap-6">
           <ResetPasswordForm />
@@ -43,7 +40,7 @@ export default async function ResetPasswordPage() {
         <div className="flex justify-between text-center text-sm">
           <RelatedLink
             href="/auth/signup"
-            text="dont_have_an_account_sign_up"
+            text="RelatedLink.signup"
             translate="yes"
           />
           <LanguageToggleButton />

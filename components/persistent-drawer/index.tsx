@@ -41,7 +41,9 @@ export function PersistentDrawer({
         )}
       >
         <span className="font-semibold">
-          {title && translate === 'yes' ? t(title) : title}
+          {title && translate === 'yes'
+            ? t(`PersistentDrawer.${title}`)
+            : title}
         </span>
       </div>
       <div className="flex-1 space-y-1 overflow-auto p-2">

@@ -5,12 +5,19 @@ import { useTranslation } from 'react-i18next'
 
 import { toast } from 'sonner'
 import { FaGithub } from 'react-icons/fa'
-import { Button } from '@/components/ui/button'
+import { Button, ButtonProps } from '@/components/ui/button'
 
 import { SignInWithOAuth } from '@/types/supabase'
 import { fetcher } from '@/lib/fetch'
 
-export function SignInWithGithub() {
+interface SignInWithGithubProps
+  extends ButtonProps,
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {}
+
+export function SignInWithGithub({
+  variant = 'outline',
+  ...props
+}: SignInWithGithubProps) {
   const { t } = useTranslation()
 
   async function onSubmit() {
@@ -23,13 +30,13 @@ export function SignInWithGithub() {
       return false
     }
 
-    toast.success(t('you_have_successfully_logged_in'))
+    toast.success(t('FormMessage.you_have_successfully_logged_in'))
   }
 
   return (
-    <Button variant="outline" onClick={onSubmit}>
+    <Button variant={variant} onClick={onSubmit} {...props}>
       <FaGithub className="mr-2 h-4 w-4" />
-      {t('sign_in_with_google')}
+      {t('SignInWithGithub.label')}
     </Button>
   )
 }

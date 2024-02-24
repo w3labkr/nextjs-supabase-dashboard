@@ -13,16 +13,9 @@ import { useAuth } from '@/hooks/use-auth'
 
 interface SignOutButtonProps
   extends ButtonProps,
-    React.ButtonHTMLAttributes<HTMLButtonElement> {
-  text?: string | undefined
-}
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {}
 
-export function SignOutButton({
-  children,
-  translate,
-  text = 'sign_out',
-  ...props
-}: SignOutButtonProps) {
+export function SignOutButton(props: SignOutButtonProps) {
   const router = useRouter()
   const { t } = useTranslation()
   const { setSession, setUser } = useAuth()
@@ -38,15 +31,14 @@ export function SignOutButton({
     setSession(null)
     setUser(null)
 
-    toast.success(t('you_have_been_logged_out_successfully'))
+    toast.success(t('FormMessage.you_have_been_logged_out_successfully'))
 
     router.replace('/')
   }
 
   return (
     <Button onClick={onSubmit} {...props}>
-      {text && translate === 'yes' ? t(text) : text}
-      {children}
+      {t('SignOutButton.label')}
     </Button>
   )
 }

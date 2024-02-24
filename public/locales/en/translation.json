@@ -1,101 +1,250 @@
 {
-  "home": "Home",
-  "pricing": "Pricing",
-  "contact_us": "Contact Us",
-  "back": "Back",
+  "SignInPage": {
+    "title": "Welcome back",
+    "description": "Enter your email to sign in to your account."
+  },
 
-  "dashboard": "Dashboard",
-  "media": "Media",
-  "posts": "Posts",
-  "settings": "Settings",
+  "SignUpPage": {
+    "title": "Create an account",
+    "description": "Enter your email below to create your account."
+  },
 
-  "access": "Access",
-  "profile": "Profile",
-  "account": "Account",
-  "appearance": "Appearance",
-  "notifications": "Notifications",
-  "emails": "Emails",
-  "security": "Security",
-  "sessions": "Sessions",
+  "ForgotPasswordPage": {
+    "title": "Forgot your password?",
+    "description": "Enter your email address below and we will send you a message to reset your password."
+  },
 
-  "new_media": "New Media",
-  "edit_media": "Edit Media",
-  "new_post": "New Post",
-  "edit_post": "Edit Post",
+  "ResetPasswordPage": {
+    "title": "Reset your password",
+    "description": "Please enter your new password below."
+  },
 
-  "dark_mode_on": "Dark mode: on",
-  "dark_mode_off": "Dark mode: off",
+  "ChangeEmailForm": {
+    "title": "Change email",
+    "description": ""
+  },
 
-  "sign_in": "Sign In",
-  "sign_up": "Sign Up",
-  "sign_out": "Sign out",
+  "ChangePasswordForm": {
+    "title": "Change Password",
+    "description": "Your password must be at least 6 characters long and must be different from your previous password.",
+    "submit": "Change Password"
+  },
 
-  "email": "Email",
-  "password": "Password",
-  "confirm_password": "Confirm Password",
+  "ChangeThemeForm": {
+    "title": "Theme",
+    "description": "Select the theme for the dashboard.",
+    "submit": "Update theme"
+  },
 
-  "language": "Language",
-  "search_language": "Search language...",
-  "no_language_found": "No language found.",
+  "ChangeUsernameForm": {
+    "title": "Username",
+    "description": "",
+    "submit": "Change username"
+  },
 
-  "welcome_back": "Welcome back",
-  "enter_your_email_to_sign_in_to_your_account": "Enter your email to sign in to your account.",
+  "DashboardForm": {
+    "title": "Dashboard",
+    "description": ""
+  },
 
-  "sign_in_with_google": "Sign in with Google",
-  "sign_in_with_github": "Sign in with Github",
-  "you_have_successfully_logged_in": "You have successfully logged in.",
-  "you_have_been_logged_out_successfully": "You have been logged out successfully.",
-  "dont_have_an_account_sign_up": "Don't have an account? Sign Up",
-  "already_have_an_account_sign_in": "Already have an account? Sign In",
+  "DeleteAccountForm": {
+    "title": "Delete Account",
+    "description": "Deleting your account cannot be reversed.",
+    "submit": "Delete your account"
+  },
 
-  "forgot_your_password": "Forgot your password?",
-  "send_you_a_message_to_reset_your_password": "Enter your email address below and we will send you a message to reset your password.",
-  "reset_my_password": "Reset my password",
-  "the_email_has_been_sent_successfully": "The email has been sent successfully.",
+  "DeleteAccountDialog": {
+    "title": "Delete Account",
+    "description": "Deleting your account cannot be reversed.",
+    "trigger": "Delete your account"
+  },
 
-  "reset_your_password": "Reset your password",
-  "please_enter_your_new_password_below": "Please enter your new password below:",
-  "old_password": "Old Password",
-  "new_password": "New Password",
-  "confirm_new_password": "Confirm New Password",
-  "change_password": "Change Password",
-  "update_password": "Update Password",
-  "your_password_has_been_successfully_changed": "Your password has been successfully changed.",
+  "ForgotPasswordForm": {
+    "submit": "Reset my password"
+  },
 
-  "create_an_account": "Create an account",
-  "enter_your_email_below_to_create_your_account": "Enter your email below to create your account.",
-  "you_have_successfully_registered_as_a_member": "You have successfully registered as a member.",
-  "agree_to_terms_of_service_and_privacy_policy": "By clicking Sign Up, you agree to our <link1>Terms of Service</link1> and <link2>Privacy Policy</link2>.",
+  "NotificationsForm": {
+    "title": "Notifications",
+    "description": "",
+    "submit": "Update notifications"
+  },
 
-  "welcome_to_acme_inc": "Welcome to Acme Inc",
-  "we_provide_high_quality_services_for_your_business": "We provide high quality services for your business.",
-  "get_started": "Get Started",
-  "learn_more": "Learn more",
+  "ResetPasswordForm": {
+    "submit": "Change Password"
+  },
 
-  "you_have_unread_messages": "You have {{count}} unread messages.",
-  "mark_all_as_read": "Mark all as read",
+  "ProfileForm": {
+    "title": "Profile",
+    "description": "",
+    "submit": "Update profile"
+  },
 
-  "username": "Username",
-  "change_username": "Change username",
-  "update_username": "Update username",
-  "you_can_only_change_this_once_every_30_days": "You can only change this once every 30 days.",
+  "SessionsForm": {
+    "title": "Session",
+    "description": ""
+  },
 
-  "your_email": "Your email",
-  "your_password": "Your password",
-  "confirm_your_password": "Confirm your password",
-  "verify_delete_my_account": "To verify, type <i>delete my account</i> below:",
-  "delete_account": "Delete Account",
-  "delete_your_account": "Delete your account",
-  "deleting_your_account_cannot_be_reversed": "Deleting your account cannot be reversed.",
+  "SignInForm": {
+    "submit": "Sign In"
+  },
 
-  "user_already_registered": "User already registered.",
-  "invalid_login_credentials": "Your email or password does not match.",
-  "your_user_data_is_invalid": "Your user data is invalid.",
-  "invalid_old_password": "Old password does not match.",
-  "your_account_information_is_invalid": "Your account information is invalid.",
-  "new_password_should_be_different_from_the_old_password": "New password should be different from the old password.",
-  "auth_session_missing": "Auth session missing!",
-  "your_account_has_been_successfully_deleted": "Your account has been successfully deleted.",
-  "failed_to_fetch": "Network request failed.",
-  "something_went_wrong": "Something went wrong!"
+  "SignUpForm": {
+    "submit": "Sign Up"
+  },
+
+  "NewMediaForm": {
+    "title": "New Media",
+    "description": ""
+  },
+
+  "EditMediaForm": {
+    "title": "Edit Media",
+    "description": ""
+  },
+
+  "NewPostForm": {
+    "title": "New Post",
+    "description": ""
+  },
+
+  "EditPostForm": {
+    "title": "Edit Post",
+    "description": ""
+  },
+
+  "FormLabel": {
+    "username": "Username",
+    "password": "Password",
+    "your_password": "Your password",
+    "confirm_password": "Confirm Password",
+    "confirm_your_password": "Confirm your password",
+    "new_password": "New Password",
+    "confirm_new_password": "Confirm New Password",
+    "old_password": "Old Password",
+    "email": "Email",
+    "your_email": "Your email",
+    "verify_delete_my_account": "To verify, type <i>delete my account</i> below."
+  },
+
+  "FormMessage": {
+    "invalid_confirm_password": "Passwords don't match.",
+    "invalid_login_credentials": "Your email or password does not match.",
+    "invalid_old_password": "Old password does not match.",
+    "new_password_should_be_different_from_the_old_password": "New password should be different from the old password.",
+    "the_email_has_been_sent_successfully": "The email has been sent successfully.",
+    "user_already_registered": "User already registered.",
+    "you_have_been_logged_out_successfully": "You have been logged out successfully.",
+    "you_have_successfully_logged_in": "You have successfully logged in.",
+    "you_have_successfully_registered_as_a_member": "You have successfully registered as a member.",
+    "your_account_information_is_invalid": "Your account information is invalid.",
+    "your_account_has_been_successfully_deleted": "Your account has been successfully deleted.",
+    "your_password_has_been_successfully_changed": "Your password has been successfully changed."
+  },
+
+  "FormDescription": {
+    "you_can_change_it_only_once_every_%d_days": "You can change it only once every {{count}} days."
+  },
+
+  "MobileNavItems": {
+    "home": "Home",
+    "pricing": "Pricing",
+    "contact_us": "Contact Us"
+  },
+
+  "MiniDrawerItems": {
+    "dashboard": "Dashboard",
+    "media": "Media",
+    "posts": "Posts",
+    "settings": "Settings"
+  },
+
+  "PersistentDrawer": {
+    "dashboard": "Dashboard",
+    "media": "Media",
+    "posts": "Posts",
+    "settings": "Settings"
+  },
+
+  "DrawerGroupItems": {
+    "access": "Access"
+  },
+
+  "DrawerItems": {
+    "profile": "Profile",
+    "account": "Account",
+    "appearance": "Appearance",
+    "notifications": "Notifications",
+    "emails": "Emails",
+    "security": "Security",
+    "sessions": "Sessions",
+    "new_media": "New Media",
+    "edit_media": "Edit Media",
+    "new_post": "New Post",
+    "edit_post": "Edit Post"
+  },
+
+  "DarkModeStatus": {
+    "dark_mode_on": "Dark mode: on",
+    "dark_mode_off": "Dark mode: off"
+  },
+
+  "LanguageStatus": {
+    "label": "Language"
+  },
+
+  "LanguageSwitcher": {
+    "label": "Search language...",
+    "placeholder": "Search language...",
+    "empty": "No language found."
+  },
+
+  "SignInWithGithub": {
+    "label": "Sign in with Github"
+  },
+
+  "SignInWithGoogle": {
+    "label": "Sign in with Google"
+  },
+
+  "SignOutButton": {
+    "label": "Sign out"
+  },
+
+  "Notify": {
+    "title": "notifications",
+    "description": "You have {{count}} unread messages.",
+    "submit": "Mark all as read"
+  },
+
+  "Hero": {
+    "title": "Welcome to Acme Inc",
+    "description": "We provide high quality services for your business.",
+    "link1": "Get Started",
+    "link2": "Learn more"
+  },
+
+  "SignUpPolicyLink": {
+    "paragraph": "By clicking Sign Up, you agree to our <link1>Terms of Service</link1> and <link2>Privacy Policy</link2>."
+  },
+
+  "RelatedLink": {
+    "signup": "Don't have an account? Sign Up",
+    "signin": "Already have an account? Sign In",
+    "forgot_password": "Forgot your password?"
+  },
+
+  "ButtonLink": {
+    "home": "Home",
+    "signin": "Sign In"
+  },
+
+  "LinkButton": {
+    "signin": "Sign In",
+    "signup": "Sign Up",
+    "dashboard": "Dashboard"
+  },
+
+  "BackLinkButton": {
+    "back": "Back"
+  }
 }

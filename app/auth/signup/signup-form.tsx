@@ -34,7 +34,7 @@ const formSchema = z
   })
   .refine((val) => val.newPassword === val.confirmNewPassword, {
     path: ['confirmNewPassword'],
-    params: { i18n: 'invalid_confirm_password' },
+    params: { i18n: 'FormMessage.invalid_confirm_password' },
   })
 
 type FormValues = z.infer<typeof formSchema>
@@ -47,7 +47,7 @@ const defaultValues: Partial<FormValues> = {
 
 export function SignUpForm() {
   const router = useRouter()
-  const { t } = useTranslation(['translation', 'zod', 'zod-custom'])
+  const { t } = useTranslation(['translation', 'zod'])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -67,7 +67,7 @@ export function SignUpForm() {
     if (error) {
       switch (error?.i18n) {
         case 'user_already_registered':
-          form.setError('email', { message: t(error?.i18n) })
+          form.setError('email', { message: t(`FormMessage.${error?.i18n}`) })
           break
         default:
           toast.error(error?.message)
@@ -76,7 +76,7 @@ export function SignUpForm() {
       return false
     }
 
-    toast.success(t('you_have_successfully_registered_as_a_member'))
+    toast.success(t('FormMessage.you_have_successfully_registered_as_a_member'))
 
     form.reset()
     router.replace('/auth/signin')
@@ -95,7 +95,7 @@ export function SignUpForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('email')}</FormLabel>
+              <FormLabel>{t('FormLabel.email')}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
@@ -116,14 +116,14 @@ export function SignUpForm() {
           name="newPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('password')}</FormLabel>
+              <FormLabel>{t('FormLabel.password')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoCapitalize="none"
                   autoComplete="new-password"
                   autoCorrect="off"
-                  placeholder={t('password')}
+                  placeholder={t('FormLabel.password')}
                   {...field}
                 />
               </FormControl>
@@ -137,14 +137,14 @@ export function SignUpForm() {
           name="confirmNewPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('confirm_password')}</FormLabel>
+              <FormLabel>{t('FormLabel.confirm_password')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoCapitalize="none"
                   autoComplete="new-password"
                   autoCorrect="off"
-                  placeholder={t('confirm_password')}
+                  placeholder={t('FormLabel.confirm_password')}
                   {...field}
                 />
               </FormControl>
@@ -155,7 +155,7 @@ export function SignUpForm() {
         />
         <SubmitButton
           isSubmitting={form?.formState?.isSubmitting}
-          text="sign_up"
+          text="SignUpForm.submit"
           translate="yes"
           className="w-full"
         />

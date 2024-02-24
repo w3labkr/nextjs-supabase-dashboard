@@ -31,17 +31,14 @@ export default async function SignUpPage() {
       <ButtonLink
         href="/auth/signin"
         className="absolute right-4 top-4 md:right-8 md:top-8"
-        text="sign_in"
+        text="ButtonLink.signin"
         translate="yes"
       />
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title text="create_an_account" translate="yes" />
-          <Description
-            text="enter_your_email_below_to_create_your_account"
-            translate="yes"
-          />
+          <Title text="SignUpPage.title" translate="yes" />
+          <Description text="SignUpPage.description" translate="yes" />
         </div>
         <div className="grid gap-6">
           <SignUpForm />
@@ -50,7 +47,7 @@ export default async function SignUpPage() {
         <div className="flex justify-between text-center text-sm">
           <RelatedLink
             href="/auth/signin"
-            text="already_have_an_account_sign_in"
+            text="RelatedLink.signin"
             translate="yes"
           />
           <LanguageToggleButton />

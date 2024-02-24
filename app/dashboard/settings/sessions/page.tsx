@@ -1,17 +1,12 @@
 import * as React from 'react'
 
-import { Separator } from '@/components/ui/separator'
-import { Title } from '@/components/title'
+import { SessionsForm } from './sessions-form'
 
 export default function SessionsPage() {
   return (
     <main className="flex-1 overflow-auto p-10 pb-16">
       <div className="space-y-16">
-        <div className="space-y-4">
-          <Title text="sessions" translate="yes" />
-          <Separator />
-          ...
-        </div>
+        <SessionsForm />
       </div>
     </main>
   )

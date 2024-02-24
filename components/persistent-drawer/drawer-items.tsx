@@ -23,7 +23,7 @@ export function DrawerItems({ items, pathname }: DrawerItemsProps) {
         pathname.startsWith(item.href) ? 'text-gray-900 dark:text-gray-50' : ''
       )}
       startIconName={item.iconName}
-      text={item.title}
+      text={`DrawerItems.${item.title}`}
       translate={item.translate}
       disabled={item.disabled}
     />

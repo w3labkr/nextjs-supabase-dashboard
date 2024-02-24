@@ -32,17 +32,14 @@ export default async function SignInPage() {
         href="/"
         className="absolute left-4 top-4 md:left-8 md:top-8"
         startIconName="ChevronLeft"
-        text="home"
+        text="ButtonLink.home"
         translate="yes"
       />
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title text="welcome_back" translate="yes" />
-          <Description
-            text="enter_your_email_to_sign_in_to_your_account"
-            translate="yes"
-          />
+          <Title text="SignInPage.title" translate="yes" />
+          <Description text="SignInPage.description" translate="yes" />
         </div>
         <div className="grid gap-6">
           <SignInForm />
@@ -51,7 +48,7 @@ export default async function SignInPage() {
         <div className="flex justify-between text-center text-sm">
           <RelatedLink
             href="/auth/signup"
-            text="dont_have_an_account_sign_up"
+            text="RelatedLink.signup"
             translate="yes"
           />
           <LanguageToggleButton />

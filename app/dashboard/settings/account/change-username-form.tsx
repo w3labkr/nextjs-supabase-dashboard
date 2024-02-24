@@ -7,10 +7,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
-import { LucideIcon } from '@/lib/lucide-icon'
-import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 import {
   Form,
   FormControl,
@@ -21,16 +19,12 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { SubmitButton } from '@/components/submit-button'
+import { Title } from '@/components/title'
+import { Description } from '@/components/description'
 
 const formSchema = z.object({
-  username: z
-    .string()
-    .min(2, {
-      message: 'Username must be at least 2 characters.',
-    })
-    .max(30, {
-      message: 'Username must not be longer than 30 characters.',
-    }),
+  username: z.string().min(2).max(30),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -40,7 +34,7 @@ const defaultValues: Partial<FormValues> = {
 }
 
 export function ChangeUsernameForm() {
-  const { t } = useTranslation(['translation', 'zod', 'zod-custom'])
+  const { t } = useTranslation(['translation', 'zod'])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -52,28 +46,43 @@ export function ChangeUsernameForm() {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('username')}</FormLabel>
-              <FormControl className="max-w-60">
-                <Input placeholder="Username" {...field} />
-              </FormControl>
-              <FormDescription>
-                {t('you_can_only_change_this_once_every_30_days')}
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" disabled>
-          {t('update_username')}
-        </Button>
-      </form>
-    </Form>
+    <div className="space-y-4">
+      <Title text="ChangeUsernameForm.title" translate="yes" />
+      <Separator />
+      <Description text="ChangeUsernameForm.description" translate="yes" />
+      <Form {...form}>
+        <form
+          method="POST"
+          onSubmit={form.handleSubmit(onSubmit)}
+          noValidate
+          className="space-y-4"
+        >
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t('FormLabel.username')}</FormLabel>
+                <FormControl className="max-w-60">
+                  <Input placeholder="Username" {...field} />
+                </FormControl>
+                <FormDescription>
+                  <Trans values={{ count: 30 }}>
+                    FormDescription.you_can_change_it_only_once_every_%d_days
+                  </Trans>
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <SubmitButton
+            isSubmitting={form?.formState?.isSubmitting}
+            text="ChangeUsernameForm.submit"
+            translate="yes"
+            disabled
+          />
+        </form>
+      </Form>
+    </div>
   )
 }

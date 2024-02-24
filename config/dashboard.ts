@@ -36,7 +36,7 @@ export const dashboardConfig: DashboardConfig = {
           title: 'posts',
           badge: 0,
           translate: 'yes',
-          disabled: true,
+          disabled: false,
         },
       ],
     },
@@ -69,7 +69,7 @@ export const mediaConfig: MediaConfig = {
         {
           id: 1,
           title: 'new_media',
-          href: '/dashboard/media/new',
+          href: '/dashboard/media/new-media',
           // iconName: '',
           translate: 'yes',
           disabled: false,
@@ -77,7 +77,7 @@ export const mediaConfig: MediaConfig = {
         {
           id: 2,
           title: 'edit_media',
-          href: '/dashboard/media/edit',
+          href: '/dashboard/media/edit-media',
           // iconName: '',
           translate: 'yes',
           disabled: false,
@@ -98,7 +98,7 @@ export const postsConfig: PostsConfig = {
         {
           id: 1,
           title: 'new_post',
-          href: '/dashboard/posts/new',
+          href: '/dashboard/posts/new-post',
           // iconName: '',
           translate: 'yes',
           disabled: false,
@@ -106,7 +106,7 @@ export const postsConfig: PostsConfig = {
         {
           id: 2,
           title: 'edit_post',
-          href: '/dashboard/posts/edit',
+          href: '/dashboard/posts/edit-post',
           // iconName: '',
           translate: 'yes',
           disabled: false,

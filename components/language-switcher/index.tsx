@@ -59,7 +59,7 @@ export function LanguageSwitcher({
         >
           {language
             ? languages.find((l) => l.value === language)?.label
-            : t('search_language')}
+            : t('LanguageSwitcher.label')}
           <LucideIcon
             name="ChevronsUpDown"
             className="ml-2 h-4 w-4 shrink-0 opacity-50"
@@ -68,8 +68,8 @@ export function LanguageSwitcher({
       </PopoverTrigger>
       <PopoverContent className={cn('w-50 p-0', className, contentClassName)}>
         <Command>
-          <CommandInput placeholder={t('search_language')} />
-          <CommandEmpty>{t('no_language_found')}</CommandEmpty>
+          <CommandInput placeholder={t('LanguageSwitcher.placeholder')} />
+          <CommandEmpty>{t('LanguageSwitcher.empty')}</CommandEmpty>
           <CommandGroup>
             <CommandItems
               items={languages}

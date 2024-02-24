@@ -25,7 +25,7 @@ export function MiniDrawerItems({ items, pathname }: MiniDrawerItemsProps) {
       )}
       startIconName={item.iconName}
       startIconClassName="size-5 min-w-5 mr-0"
-      text={item.title}
+      text={`MiniDrawerItems.${item.title}`}
       translate={item.translate}
       tooltipContent={{ side: 'right', align: 'end', alignOffset: 6 }}
       disabled={item.disabled}

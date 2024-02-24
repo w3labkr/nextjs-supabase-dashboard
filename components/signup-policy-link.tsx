@@ -40,7 +40,7 @@ export function SignUpPolicyLink({
   return (
     <p className={cn('text-sm text-muted-foreground', className)} {...props}>
       <Trans components={{ link1: <Link1 />, link2: <Link2 /> }}>
-        agree_to_terms_of_service_and_privacy_policy
+        SignUpPolicyLink.paragraph
       </Trans>
     </p>
   )
