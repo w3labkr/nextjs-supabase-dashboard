@@ -23,7 +23,6 @@ export default async function SignUpPage() {
 
   if (signedIn) {
     redirect('/dashboard/settings/profile')
-    return null
   }
 
   return (

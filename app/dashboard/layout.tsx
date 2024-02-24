@@ -11,7 +11,6 @@ export default async function DashboardLayout({
 
   if (!signedIn) {
     redirect('/auth/signin')
-    return null
   }
 
   return <React.Fragment>{children}</React.Fragment>

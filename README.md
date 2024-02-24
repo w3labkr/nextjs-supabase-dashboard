@@ -10,7 +10,6 @@ Denpendency
 - react-i18next + zod-i18n-map
 - Supabase OAuth with PKCE flow (@supabase/ssr)
 - Supabase Email Auth with PKCE flow (@supabase/ssr)
-- Supabase Auth Provider
 
 ## Screenshots
 

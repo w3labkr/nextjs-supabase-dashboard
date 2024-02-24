@@ -11,12 +11,26 @@ import { LanguageToggleButton } from '@/components/language-toggle-button'
 
 import { ResetPasswordForm } from './reset-password-form'
 
-export default async function ResetPasswordPage() {
+export default async function ResetPasswordPage({
+  searchParams,
+}: {
+  searchParams: {
+    token_hash: string
+    type: string
+    next: string
+  }
+}) {
   const { signedIn } = await authState()
+
+  if (
+    !/^pkce_/.test(searchParams?.token_hash ?? '') ||
+    searchParams?.type !== 'recovery'
+  ) {
+    redirect('/auth/signin')
+  }
 
   if (!signedIn) {
     redirect('/auth/signin')
-    return null
   }
 
   return (

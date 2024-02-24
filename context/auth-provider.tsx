@@ -8,6 +8,7 @@ import { supabase } from '@/lib/supabase/client'
 /**
  * Listen to auth events
  *
+ * @link https://supabase.com/docs/guides/getting-started/tutorials/with-react
  * @link https://supabase.com/docs/reference/javascript/auth-onauthstatechange
  */
 export interface AuthContextProps {
