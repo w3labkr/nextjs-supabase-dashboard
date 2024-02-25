@@ -24,7 +24,7 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
 import { AuthPostgrestApi } from '@/types/api'
-import { fetcher } from '@/lib/fetch'
+import { fetcher } from '@/lib/utils'
 
 const formSchema = z
   .object({
@@ -68,11 +68,17 @@ export function ChangePasswordForm() {
     )
 
     if (error) {
-      switch (error?.i18n) {
-        case 'invalid_old_password':
-        case 'new_password_should_be_different_from_the_old_password':
+      switch (error?.message) {
+        case 'Old password does not match.':
           form.setError('oldPassword', {
-            message: t(`FormMessage.${error?.i18n}`),
+            message: t('FormMessage.old_password_does_not_match'),
+          })
+          break
+        case 'New password should be different from the old password.':
+          form.setError('oldPassword', {
+            message: t(
+              'FormMessage.new_password_should_be_different_from_the_old_password'
+            ),
           })
           break
         default:

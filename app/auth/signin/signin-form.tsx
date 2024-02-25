@@ -23,7 +23,7 @@ import { SubmitButton } from '@/components/submit-button'
 import { RelatedLink } from '@/components/related-link'
 
 import { SignInApi } from '@/types/api'
-import { fetcher } from '@/lib/fetch'
+import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 
 const formSchema = z.object({
@@ -59,11 +59,13 @@ export function SignInForm() {
     })
 
     if (error) {
-      switch (error?.i18n) {
-        case 'invalid_login_credentials':
-          form.setError('email', { message: t(`FormMessage.${error?.i18n}`) })
+      switch (error?.message) {
+        case 'Invalid login credentials':
+          form.setError('email', {
+            message: t('FormMessage.invalid_login_credentials'),
+          })
           form.setError('password', {
-            message: t(`FormMessage.${error?.i18n}`),
+            message: t('FormMessage.invalid_login_credentials'),
           })
           break
         default:

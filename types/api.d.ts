@@ -1,26 +1,16 @@
 import { AuthError, PostgrestError } from '@supabase/supabase-js'
 import { SignInWithPassword } from './supabase'
 
-export interface AuthApiError extends AuthError {
-  i18n?: string | undefined
-}
-
-export interface PostgrestApiError extends PostgrestError {
-  i18n?: string | undefined
-}
-
 export interface AuthApi {
-  error: AuthApiError | null
+  error: AuthError | null
 }
 
 export interface PostgrestApi {
-  error: PostgrestApiError | null
+  error: PostgrestError | null
 }
 
 export interface AuthPostgrestApi {
-  error: AuthApiError | PostgrestApiError | null
+  error: AuthError | PostgrestError | null
 }
 
-export interface SignInApi extends Omit<SignInWithPassword, 'error'> {
-  error: AuthApiError | null
-}
+export interface SignInApi extends SignInWithPassword {}

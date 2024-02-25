@@ -8,7 +8,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { Button, ButtonProps } from '@/components/ui/button'
 
 import { AuthApi } from '@/types/api'
-import { fetcher } from '@/lib/fetch'
+import { fetcher } from '@/lib/utils'
 
 interface SignInWithGoogleProps
   extends ButtonProps,

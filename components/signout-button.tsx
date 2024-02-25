@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 import { Button, ButtonProps } from '@/components/ui/button'
 
 import { AuthApi } from '@/types/api'
-import { fetcher } from '@/lib/fetch'
+import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 
 interface SignOutButtonProps
@@ -30,7 +30,8 @@ export function SignOutButton(props: SignOutButtonProps) {
 
     toast.success(t('FormMessage.you_have_been_logged_out_successfully'))
 
-    auth.signOut()
+    auth.setSession(null)
+    auth.setUser(null)
 
     router.replace('/')
   }

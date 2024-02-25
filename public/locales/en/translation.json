@@ -129,9 +129,10 @@
   "FormMessage": {
     "invalid_confirm_password": "Passwords don't match.",
     "invalid_login_credentials": "Your email or password does not match.",
-    "invalid_old_password": "Old password does not match.",
     "new_password_should_be_different_from_the_old_password": "New password should be different from the old password.",
+    "old_password_does_not_match": "Old password does not match.",
     "the_email_has_been_sent_successfully": "The email has been sent successfully.",
+    "user_data_is_invalid": "User data is invalid.",
     "user_already_registered": "User already registered.",
     "you_have_been_logged_out_successfully": "You have been logged out successfully.",
     "you_have_successfully_logged_in": "You have successfully logged in.",

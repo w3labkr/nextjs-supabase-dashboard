@@ -22,7 +22,7 @@ import {
 import { SubmitButton } from '@/components/submit-button'
 
 import { AuthApi } from '@/types/api'
-import { fetcher } from '@/lib/fetch'
+import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 
 const formSchema = z
@@ -62,10 +62,12 @@ export function ResetPasswordForm() {
     })
 
     if (error) {
-      switch (error?.i18n) {
-        case 'new_password_should_be_different_from_the_old_password':
+      switch (error?.message) {
+        case 'New password should be different from the old password.':
           form.setError('newPassword', {
-            message: t(`FormMessage.${error?.i18n}`),
+            message: t(
+              'FormMessage.new_password_should_be_different_from_the_old_password'
+            ),
           })
           break
         default:
@@ -77,9 +79,10 @@ export function ResetPasswordForm() {
 
     toast.success(t('FormMessage.your_password_has_been_successfully_changed'))
 
-    auth.signOut()
-    form.reset()
+    auth.setSession(null)
+    auth.setUser(null)
 
+    form.reset()
     router.replace('/auth/signin')
   }
 

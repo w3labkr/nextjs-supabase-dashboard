@@ -23,7 +23,7 @@ import {
 import { SubmitButton } from '@/components/submit-button'
 
 import { AuthApi } from '@/types/api'
-import { fetcher } from '@/lib/fetch'
+import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 
 const formSchema = z
@@ -67,9 +67,11 @@ export function SignUpForm() {
     })
 
     if (error) {
-      switch (error?.i18n) {
-        case 'user_already_registered':
-          form.setError('email', { message: t(`FormMessage.${error?.i18n}`) })
+      switch (error?.message) {
+        case 'User already registered':
+          form.setError('email', {
+            message: t('FormMessage.user_already_registered'),
+          })
           break
         default:
           toast.error(error?.message)
@@ -80,7 +82,8 @@ export function SignUpForm() {
 
     toast.success(t('FormMessage.you_have_successfully_registered_as_a_member'))
 
-    auth.signOut()
+    auth.setSession(null)
+    auth.setUser(null)
 
     form.reset()
     router.replace('/auth/signin')

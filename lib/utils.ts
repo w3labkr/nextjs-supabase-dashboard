@@ -8,3 +8,11 @@ export function cn(...inputs: ClassValue[]) {
 export function absoluteUrl(path: string) {
   return `${process.env.NEXT_PUBLIC_SITE_URL}${path}`
 }
+
+export async function fetcher<JSON = any>(
+  input: string,
+  init?: RequestInit | undefined
+): Promise<JSON> {
+  input = /^\//.test(input) ? process.env.NEXT_PUBLIC_SITE_URL + input : input
+  return await fetch(input, init).then((res) => res.json())
+}

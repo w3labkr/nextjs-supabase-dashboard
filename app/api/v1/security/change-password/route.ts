@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
   if (verified?.data === false) {
     return NextResponse.json({
-      error: { code: 'ApiError', message: 'invalid_old_password' },
+      error: { code: 'ApiError', message: 'Old password does not match.' },
     })
   }
 

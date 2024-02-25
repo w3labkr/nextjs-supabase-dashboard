@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
   // supabase returns a user object with no identities if the user exists
   if (signed?.data?.user?.identities?.length === 0) {
     return NextResponse.json({
-      error: { code: 'ApiError', message: 'User already registered.' },
+      error: { code: 'ApiError', message: 'User already registered' },
     })
   }
 

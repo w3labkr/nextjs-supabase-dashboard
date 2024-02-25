@@ -21,7 +21,7 @@ import { Input } from '@/components/ui/input'
 import { SubmitButton } from '@/components/submit-button'
 
 import { AuthApi } from '@/types/api'
-import { fetcher } from '@/lib/fetch'
+import { fetcher } from '@/lib/utils'
 
 const formSchema = z.object({
   email: z.string().email(),

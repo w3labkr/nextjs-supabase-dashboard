@@ -35,7 +35,7 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
 import { PostgrestApi } from '@/types/api'
-import { fetcher } from '@/lib/fetch'
+import { fetcher } from '@/lib/utils'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -74,11 +74,13 @@ export function DeleteUserForm() {
     )
 
     if (error) {
-      switch (error?.i18n) {
-        case 'your_account_information_is_invalid':
-          form.setError('email', { message: t(`FormMessage.${error?.i18n}`) })
+      switch (error?.message) {
+        case 'Your account information is invalid.':
+          form.setError('email', {
+            message: t('FormMessage.your_account_information_is_invalid'),
+          })
           form.setError('password', {
-            message: t(`FormMessage.${error?.i18n}`),
+            message: t('FormMessage.your_account_information_is_invalid'),
           })
           break
         default:
