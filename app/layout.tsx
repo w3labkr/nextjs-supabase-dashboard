@@ -5,10 +5,10 @@ import { Analytics } from '@/components/analytics'
 
 import { lng } from '@/i18next.config'
 import { I18nProvider } from '@/context/i18n-provider'
+import { ThemeProvider } from '@/context/theme-provider'
 import { AuthProvider } from '@/context/auth-provider'
 
 import { cn } from '@/lib/utils'
-import { ThemeProvider } from '@/context/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { siteConfig } from '@/config/site'
@@ -35,12 +35,7 @@ export default function RootLayout({
       <body className={cn('font-sans antialiased', fontSans.variable)}>
         <AuthProvider>
           <I18nProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
+            <ThemeProvider>
               <div id="__next">{children}</div>
               <Toaster richColors closeButton />
               <TailwindIndicator />
