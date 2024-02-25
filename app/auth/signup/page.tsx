@@ -1,7 +1,7 @@
 import * as React from 'react'
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { authState } from '@/lib/supabase/server'
+import { authenticate } from '@/lib/supabase/server'
 
 import { Logo } from '@/components/logo'
 import { Title } from '@/components/title'
@@ -19,9 +19,9 @@ export const metadata: Metadata = {
 }
 
 export default async function SignUpPage() {
-  const { signedIn } = await authState()
+  const { isAuth } = await authenticate()
 
-  if (signedIn) {
+  if (isAuth) {
     redirect('/dashboard/settings/profile')
   }
 

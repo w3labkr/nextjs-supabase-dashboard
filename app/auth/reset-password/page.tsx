@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
-import { authState } from '@/lib/supabase/server'
+import { authenticate } from '@/lib/supabase/server'
 
 import { Logo } from '@/components/logo'
 import { Title } from '@/components/title'
@@ -20,7 +20,7 @@ export default async function ResetPasswordPage({
     next: string
   }
 }) {
-  const { signedIn } = await authState()
+  const { isAuth } = await authenticate()
 
   if (
     !/^pkce_/.test(searchParams?.token_hash) ||
@@ -29,7 +29,7 @@ export default async function ResetPasswordPage({
     redirect('/auth/signin')
   }
 
-  if (!signedIn) {
+  if (!isAuth) {
     redirect('/auth/signin')
   }
 

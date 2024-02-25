@@ -1,15 +1,15 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
-import { authState } from '@/lib/supabase/server'
+import { authenticate } from '@/lib/supabase/server'
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const { signedIn } = await authState()
+  const { isAuth } = await authenticate()
 
-  if (!signedIn) {
+  if (!isAuth) {
     redirect('/auth/signin')
   }
 

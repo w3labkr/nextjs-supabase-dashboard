@@ -1,5 +1,3 @@
-'use client'
-
 import * as React from 'react'
 
 import { LucideIcon } from '@/lib/lucide-icon'
@@ -11,10 +9,10 @@ import { Navigation } from '@/components/navigation'
 import { MobileNavigation } from '@/components/mobile-navigation'
 import { LinkButton } from '@/components/link-button'
 
-import { useAuth } from '@/hooks/use-auth'
+import { authenticate } from '@/lib/supabase/server'
 
-export function Header() {
-  const { user } = useAuth()
+export async function Header() {
+  const { isAuth } = await authenticate()
 
   return (
     <Sheet>
@@ -32,7 +30,7 @@ export function Header() {
           <Brand />
           <Navigation />
           <div className="ml-auto flex gap-2">
-            {user ? <SignedInButton /> : <SignedOutButton />}
+            {isAuth ? <SignedInButton /> : <SignedOutButton />}
           </div>
         </div>
       </header>
