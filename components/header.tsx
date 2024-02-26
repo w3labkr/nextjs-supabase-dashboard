@@ -9,7 +9,7 @@ import { Navigation } from '@/components/navigation'
 import { MobileNavigation } from '@/components/mobile-navigation'
 import { LinkButton } from '@/components/link-button'
 
-import { authenticate } from '@/lib/supabase/server'
+import { authenticate } from '@/lib/supabase/auth'
 
 export async function Header() {
   const { isAuth } = await authenticate()

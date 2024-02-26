@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
-import { authenticate } from '@/lib/supabase/server'
 
 import { Logo } from '@/components/logo'
 import { Title } from '@/components/title'
@@ -9,6 +8,7 @@ import { RelatedLink } from '@/components/related-link'
 import { ButtonLink } from '@/components/button-link'
 import { LanguageToggleButton } from '@/components/language-toggle-button'
 
+import { authenticate } from '@/lib/supabase/auth'
 import { ResetPasswordForm } from './reset-password-form'
 
 export default async function ResetPasswordPage({

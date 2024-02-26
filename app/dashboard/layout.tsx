@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
-import { authenticate } from '@/lib/supabase/server'
+import { authenticate } from '@/lib/supabase/auth'
 
 export default async function DashboardLayout({
   children,

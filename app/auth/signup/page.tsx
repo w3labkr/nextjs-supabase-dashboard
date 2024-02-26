@@ -1,7 +1,6 @@
 import * as React from 'react'
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { authenticate } from '@/lib/supabase/server'
 
 import { Logo } from '@/components/logo'
 import { Title } from '@/components/title'
@@ -11,6 +10,7 @@ import { RelatedLink } from '@/components/related-link'
 import { ButtonLink } from '@/components/button-link'
 import { LanguageToggleButton } from '@/components/language-toggle-button'
 
+import { authenticate } from '@/lib/supabase/auth'
 import { SignUpForm } from './signup-form'
 
 export const metadata: Metadata = {
