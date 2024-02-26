@@ -4,7 +4,6 @@ import * as React from 'react'
 
 import { useTranslation } from 'react-i18next'
 import { languages } from '@/i18next.config'
-import { ResolvedLanguage } from '@/types/i18next'
 
 import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
@@ -21,6 +20,10 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from '@/lib/redux/store'
+import { setResolvedLanguage } from '@/features/i18n-slice'
+
 import { CommandItems } from './command-items'
 
 export interface LanguageSwitcherProps {
@@ -34,17 +37,20 @@ export function LanguageSwitcher({
   triggerClassName,
   contentClassName,
 }: LanguageSwitcherProps) {
-  const { t, i18n } = useTranslation()
-  const [open, setOpen] = React.useState<boolean>(false)
-  const [language, setLanguage] = React.useState<ResolvedLanguage>(
-    i18n.resolvedLanguage
+  const dispatch = useDispatch()
+  const resolvedLanguage = useSelector(
+    (state: RootState) => state.i18n.resolvedLanguage
   )
+  const [open, setOpen] = React.useState<boolean>(false)
+  const [language, setLanguage] = React.useState<string>(resolvedLanguage)
+  const { t, i18n } = useTranslation()
 
   const handleChange = (currentValue: string) => {
     if (currentValue === language) return false
     i18n.changeLanguage(currentValue)
     document.documentElement.lang = currentValue
     setLanguage(currentValue)
+    dispatch(setResolvedLanguage(currentValue))
     setOpen(false)
   }
 

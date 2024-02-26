@@ -26,6 +26,7 @@ The folder and file structure is based on nextjs app router [Next.js Project Str
 ├── components/                 # React components for filters, headers
 ├── config/
 ├── context/
+├── features/                   # the Redux logic for the feature
 ├── hooks/
 ├── lib/                        # Utility functions that aren't necessarily bound to React or Next.js
 ├── public/                     # Static assets to be served

@@ -1,8 +1,10 @@
 import { combineReducers } from '@reduxjs/toolkit'
 
-import initialReducer from './initial-slice'
+import i18nReducer from './i18n-slice'
 
 // Nested Persists
-const rootReducer = combineReducers({ initial: initialReducer })
+const rootReducer = combineReducers({
+  i18n: i18nReducer,
+})
 
 export default rootReducer
