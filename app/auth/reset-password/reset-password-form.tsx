@@ -51,17 +51,32 @@ export function ResetPasswordForm() {
     resolver: zodResolver(formSchema),
     defaultValues,
   })
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   async function onSubmit(values: FormValues) {
-    const formData = new FormData()
-    formData.append('password', values.newPassword)
+    setIsSubmitting(true)
+    try {
+      const formData = new FormData()
+      formData.append('password', values.newPassword)
 
-    const { error } = await fetcher<AuthApi>('/api/v1/auth/reset-password', {
-      method: 'POST',
-      body: formData,
-    })
+      const { error } = await fetcher<AuthApi>('/api/v1/auth/reset-password', {
+        method: 'POST',
+        body: formData,
+      })
 
-    if (error) {
+      if (error) throw new Error(error?.message)
+
+      toast.success(
+        t('FormMessage.your_password_has_been_successfully_changed')
+      )
+
+      auth.setSession(null)
+      auth.setUser(null)
+
+      form.reset()
+      router.replace('/auth/signin')
+    } catch (e: unknown) {
+      const error = e as Error
       switch (error?.message) {
         case 'New password should be different from the old password.':
           form.setError('newPassword', {
@@ -74,16 +89,9 @@ export function ResetPasswordForm() {
           toast.error(error?.message)
           break
       }
-      return false
+    } finally {
+      setIsSubmitting(false)
     }
-
-    toast.success(t('FormMessage.your_password_has_been_successfully_changed'))
-
-    auth.setSession(null)
-    auth.setUser(null)
-
-    form.reset()
-    router.replace('/auth/signin')
   }
 
   return (
@@ -135,7 +143,7 @@ export function ResetPasswordForm() {
           )}
         />
         <SubmitButton
-          isSubmitting={form?.formState?.isSubmitting}
+          isSubmitting={isSubmitting}
           className="w-full"
           text="ResetPasswordForm.submit"
           translate="yes"

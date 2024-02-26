@@ -40,9 +40,18 @@ export function ChangeUsernameForm() {
     resolver: zodResolver(formSchema),
     defaultValues,
   })
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   async function onSubmit(values: FormValues) {
-    // ...
+    setIsSubmitting(true)
+    try {
+      // ...
+      // if (error) throw new Error(error?.message)
+    } catch (e: unknown) {
+      // const error = e as Error
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -76,7 +85,7 @@ export function ChangeUsernameForm() {
             )}
           />
           <SubmitButton
-            isSubmitting={form?.formState?.isSubmitting}
+            isSubmitting={isSubmitting}
             text="ChangeUsernameForm.submit"
             translate="yes"
             disabled

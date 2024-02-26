@@ -399,6 +399,30 @@ module.exports = {
 }
 ```
 
+## Error Handling
+
+```javascript
+export function Component() {
+    const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+    
+    async function onSubmit(values: FormValues) {
+        setIsSubmitting(true)
+        try {
+            const { data, error } = await fetch('https://...').then((res) => res.json())
+            if (error) throw new Error(error?.message)
+            // ...
+        } catch (e: unknown) {
+            const error = e as Error
+            console.error(error?.message)
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+    
+    return <SubmitButton isSubmitting={isSubmitting} />
+}
+```
+
 ## Troubleshooting
 
 ...

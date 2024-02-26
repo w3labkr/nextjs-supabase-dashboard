@@ -59,21 +59,31 @@ export function DeleteUserForm() {
     resolver: zodResolver(formSchema),
     defaultValues,
   })
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   async function onSubmit(values: FormValues) {
-    const formData = new FormData()
-    formData.append('email', values.email)
-    formData.append('password', values.password)
+    setIsSubmitting(true)
+    try {
+      const formData = new FormData()
+      formData.append('email', values.email)
+      formData.append('password', values.password)
 
-    const { error } = await fetcher<PostgrestApi>(
-      '/api/v1/account/delete-user',
-      {
-        method: 'POST',
-        body: formData,
-      }
-    )
+      const { error } = await fetcher<PostgrestApi>(
+        '/api/v1/account/delete-user',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      )
 
-    if (error) {
+      if (error) throw new Error(error?.message)
+
+      toast.success(t('FormMessage.your_account_has_been_successfully_deleted'))
+
+      form.reset()
+      router.replace('/')
+    } catch (e: unknown) {
+      const error = e as Error
       switch (error?.message) {
         case 'Your account information is invalid.':
           form.setError('email', {
@@ -87,13 +97,9 @@ export function DeleteUserForm() {
           toast.error(error?.message)
           break
       }
-      return false
+    } finally {
+      setIsSubmitting(false)
     }
-
-    toast.success(t('FormMessage.your_account_has_been_successfully_deleted'))
-
-    form.reset()
-    router.replace('/')
   }
 
   return (
@@ -182,10 +188,8 @@ export function DeleteUserForm() {
               />
               <SubmitButton
                 variant="destructive"
-                disabled={
-                  !form?.formState?.isValid || form?.formState?.isSubmitting
-                }
-                isSubmitting={form?.formState?.isSubmitting}
+                disabled={!form?.formState?.isValid || isSubmitting}
+                isSubmitting={isSubmitting}
                 text="DeleteUserForm.submit"
                 translate="yes"
               />

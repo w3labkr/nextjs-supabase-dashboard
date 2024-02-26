@@ -53,21 +53,32 @@ export function ChangePasswordForm() {
     resolver: zodResolver(formSchema),
     defaultValues,
   })
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   async function onSubmit(values: FormValues) {
-    const formData = new FormData()
-    formData.append('oldPassword', values.oldPassword)
-    formData.append('newPassword', values.newPassword)
+    setIsSubmitting(true)
+    try {
+      const formData = new FormData()
+      formData.append('oldPassword', values.oldPassword)
+      formData.append('newPassword', values.newPassword)
 
-    const { error } = await fetcher<AuthPostgrestApi>(
-      '/api/v1/security/change-password',
-      {
-        method: 'POST',
-        body: formData,
-      }
-    )
+      const { error } = await fetcher<AuthPostgrestApi>(
+        '/api/v1/security/change-password',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      )
 
-    if (error) {
+      if (error) throw new Error(error?.message)
+
+      toast.success(
+        t('FormMessage.your_password_has_been_successfully_changed')
+      )
+
+      form.reset()
+    } catch (e: unknown) {
+      const error = e as Error
       switch (error?.message) {
         case 'Old password does not match.':
           form.setError('oldPassword', {
@@ -85,12 +96,9 @@ export function ChangePasswordForm() {
           toast.error(error?.message)
           break
       }
-      return false
+    } finally {
+      setIsSubmitting(false)
     }
-
-    toast.success(t('FormMessage.your_password_has_been_successfully_changed'))
-
-    form.reset()
   }
 
   return (
@@ -169,7 +177,7 @@ export function ChangePasswordForm() {
             )}
           />
           <SubmitButton
-            isSubmitting={form?.formState?.isSubmitting}
+            isSubmitting={isSubmitting}
             text="ChangePasswordForm.submit"
             translate="yes"
           />

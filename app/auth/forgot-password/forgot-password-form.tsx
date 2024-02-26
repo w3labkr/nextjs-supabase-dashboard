@@ -40,24 +40,30 @@ export function ForgotPasswordForm() {
     resolver: zodResolver(formSchema),
     defaultValues,
   })
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   async function onSubmit(values: FormValues) {
-    const formData = new FormData()
-    formData.append('email', values.email)
+    setIsSubmitting(true)
+    try {
+      const formData = new FormData()
+      formData.append('email', values.email)
 
-    const { error } = await fetcher<AuthApi>('/api/v1/auth/forgot-password', {
-      method: 'POST',
-      body: formData,
-    })
+      const { error } = await fetcher<AuthApi>('/api/v1/auth/forgot-password', {
+        method: 'POST',
+        body: formData,
+      })
 
-    if (error) {
+      if (error) throw new Error(error?.message)
+
+      toast.success(t('FormMessage.the_email_has_been_sent_successfully'))
+
+      form.reset()
+    } catch (e: unknown) {
+      const error = e as Error
       toast.error(error?.message)
-      return false
+    } finally {
+      setIsSubmitting(false)
     }
-
-    toast.success(t('FormMessage.the_email_has_been_sent_successfully'))
-
-    form.reset()
   }
 
   return (
@@ -89,7 +95,7 @@ export function ForgotPasswordForm() {
           )}
         />
         <SubmitButton
-          isSubmitting={form?.formState?.isSubmitting}
+          isSubmitting={isSubmitting}
           text="ForgotPasswordForm.submit"
           translate="yes"
           className="w-full"

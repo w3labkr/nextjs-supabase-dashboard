@@ -55,18 +55,33 @@ export function SignUpForm() {
     resolver: zodResolver(formSchema),
     defaultValues,
   })
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   async function onSubmit(values: FormValues) {
-    const formData = new FormData()
-    formData.append('email', values.email)
-    formData.append('password', values.newPassword)
+    setIsSubmitting(true)
+    try {
+      const formData = new FormData()
+      formData.append('email', values.email)
+      formData.append('password', values.newPassword)
 
-    const { error } = await fetcher<AuthApi>('/api/v1/auth/signup', {
-      method: 'POST',
-      body: formData,
-    })
+      const { error } = await fetcher<AuthApi>('/api/v1/auth/signup', {
+        method: 'POST',
+        body: formData,
+      })
 
-    if (error) {
+      if (error) throw new Error(error?.message)
+
+      toast.success(
+        t('FormMessage.you_have_successfully_registered_as_a_member')
+      )
+
+      auth.setSession(null)
+      auth.setUser(null)
+
+      form.reset()
+      router.replace('/auth/signin')
+    } catch (e: unknown) {
+      const error = e as Error
       switch (error?.message) {
         case 'User already registered':
           form.setError('email', {
@@ -77,16 +92,9 @@ export function SignUpForm() {
           toast.error(error?.message)
           break
       }
-      return false
+    } finally {
+      setIsSubmitting(false)
     }
-
-    toast.success(t('FormMessage.you_have_successfully_registered_as_a_member'))
-
-    auth.setSession(null)
-    auth.setUser(null)
-
-    form.reset()
-    router.replace('/auth/signin')
   }
 
   return (
@@ -161,7 +169,7 @@ export function SignUpForm() {
           )}
         />
         <SubmitButton
-          isSubmitting={form?.formState?.isSubmitting}
+          isSubmitting={isSubmitting}
           text="SignUpForm.submit"
           translate="yes"
           className="w-full"

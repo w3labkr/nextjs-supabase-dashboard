@@ -47,18 +47,31 @@ export function SignInForm() {
     resolver: zodResolver(formSchema),
     defaultValues,
   })
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   async function onSubmit(values: FormValues) {
-    const formData = new FormData()
-    formData.append('email', values.email)
-    formData.append('password', values.password)
+    setIsSubmitting(true)
+    try {
+      const formData = new FormData()
+      formData.append('email', values.email)
+      formData.append('password', values.password)
 
-    const { data, error } = await fetcher<SignInApi>('/api/v1/auth/signin', {
-      method: 'POST',
-      body: formData,
-    })
+      const { data, error } = await fetcher<SignInApi>('/api/v1/auth/signin', {
+        method: 'POST',
+        body: formData,
+      })
 
-    if (error) {
+      if (error) throw new Error(error?.message)
+
+      toast.success(t('FormMessage.you_have_successfully_logged_in'))
+
+      auth.setSession(data?.session)
+      auth.setUser(data?.user)
+
+      form.reset()
+      router.replace('/dashboard/dashboard')
+    } catch (e: unknown) {
+      const error = e as Error
       switch (error?.message) {
         case 'Invalid login credentials':
           form.setError('email', {
@@ -72,17 +85,9 @@ export function SignInForm() {
           toast.error(error?.message)
           break
       }
-
-      return false
+    } finally {
+      setIsSubmitting(false)
     }
-
-    toast.success(t('FormMessage.you_have_successfully_logged_in'))
-
-    auth.setSession(data?.session)
-    auth.setUser(data?.user)
-
-    form.reset()
-    router.replace('/dashboard/dashboard')
   }
 
   return (
@@ -144,7 +149,7 @@ export function SignInForm() {
           )}
         />
         <SubmitButton
-          isSubmitting={form?.formState?.isSubmitting}
+          isSubmitting={isSubmitting}
           text="SignInForm.submit"
           translate="yes"
           className="w-full"
