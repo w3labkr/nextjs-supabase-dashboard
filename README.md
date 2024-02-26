@@ -8,6 +8,7 @@ Denpendency
 - Shadcn UI (Radix UI)
 - react-hook-form + zod
 - react-i18next + zod-i18n-map
+- Redux Toolkit + Redux Persist
 - Supabase OAuth with PKCE flow (@supabase/ssr)
 - Supabase Email Auth with PKCE flow (@supabase/ssr)
 
@@ -194,6 +195,20 @@ React Hooks for form state management and validation (Web + React Native).
 ```shell
 npm install react-hook-form 
 npm install zod @hookform/resolvers
+```
+
+## Redux Toolkit
+
+The official, opinionated, batteries-included toolset for efficient Redux development.
+
+```shell
+npm install @reduxjs/toolkit react-redux
+```
+
+persist and rehydrate a redux store
+
+```shell
+npm install redux-persist
 ```
 
 ## Supabase Cloud Functions

@@ -7,6 +7,7 @@ import { lng } from '@/i18next.config'
 import { I18nProvider } from '@/context/i18n-provider'
 import { ThemeProvider } from '@/context/theme-provider'
 import { AuthProvider } from '@/context/auth-provider'
+import { ReduxProvider } from '@/lib/redux/redux-provider'
 
 import { cn } from '@/lib/utils'
 import { Toaster } from '@/components/ui/sonner'
@@ -33,16 +34,18 @@ export default function RootLayout({
   return (
     <html lang={lng} suppressHydrationWarning>
       <body className={cn('font-sans antialiased', fontSans.variable)}>
-        <AuthProvider>
-          <I18nProvider>
-            <ThemeProvider>
-              <div id="__next">{children}</div>
-              <Toaster richColors closeButton />
-              <TailwindIndicator />
-              <Analytics />
-            </ThemeProvider>
-          </I18nProvider>
-        </AuthProvider>
+        <ReduxProvider>
+          <AuthProvider>
+            <I18nProvider>
+              <ThemeProvider>
+                <div id="__next">{children}</div>
+                <Toaster richColors closeButton />
+                <TailwindIndicator />
+                <Analytics />
+              </ThemeProvider>
+            </I18nProvider>
+          </AuthProvider>
+        </ReduxProvider>
       </body>
     </html>
   )
