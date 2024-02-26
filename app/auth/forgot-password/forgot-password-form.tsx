@@ -20,8 +20,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { SubmitButton } from '@/components/submit-button'
 
-import { AuthApi } from '@/types/api'
-import { fetcher } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/client'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -45,13 +44,15 @@ export function ForgotPasswordForm() {
   async function onSubmit(values: FormValues) {
     setIsSubmitting(true)
     try {
-      const formData = new FormData()
-      formData.append('email', values.email)
-
-      const { error } = await fetcher<AuthApi>('/api/v1/auth/forgot-password', {
-        method: 'POST',
-        body: formData,
-      })
+      const supabase = createClient()
+      const { error } = await supabase.auth.resetPasswordForEmail(
+        values.email,
+        {
+          redirectTo:
+            process.env.NEXT_PUBLIC_SITE_URL +
+            '/api/v1/auth/confirm?next=/auth/reset-password',
+        }
+      )
 
       if (error) throw new Error(error?.message)
 
