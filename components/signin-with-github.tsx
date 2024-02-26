@@ -7,8 +7,7 @@ import { toast } from 'sonner'
 import { FaGithub } from 'react-icons/fa'
 import { Button, ButtonProps } from '@/components/ui/button'
 
-import { AuthApi } from '@/types/api'
-import { fetcher } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/client'
 
 interface SignInWithGithubProps
   extends ButtonProps,
@@ -21,7 +20,16 @@ export function SignInWithGithub({
   const { t } = useTranslation()
 
   async function onSubmit() {
-    const { error } = await fetcher<AuthApi>('/api/v1/auth/signin-with-github')
+    const supabase = createClient()
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: {
+        // A URL to send the user to after they are confirmed.
+        redirectTo:
+          process.env.NEXT_PUBLIC_SITE_URL +
+          '/api/v1/auth/callback?next=/dashboard/dashboard',
+      },
+    })
 
     if (error) {
       toast.error(error?.message)
