@@ -49,9 +49,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return () => subscription?.unsubscribe()
   }, [])
 
-  return (
-    <AuthContext.Provider value={{ session, user, setSession, setUser }}>
-      {children}
-    </AuthContext.Provider>
+  const value = React.useMemo(
+    () => ({ session, user, setSession, setUser }),
+    [session, user, setSession, setUser]
   )
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
