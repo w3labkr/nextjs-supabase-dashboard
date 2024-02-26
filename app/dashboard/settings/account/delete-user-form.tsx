@@ -53,7 +53,7 @@ const defaultValues: Partial<FormValues> = {
 
 export function DeleteUserForm() {
   const router = useRouter()
-  const { t } = useTranslation(['translation', 'zod'])
+  const { t } = useTranslation()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),

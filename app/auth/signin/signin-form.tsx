@@ -41,7 +41,7 @@ const defaultValues: Partial<FormValues> = {
 export function SignInForm() {
   const router = useRouter()
   const auth = useAuth()
-  const { t } = useTranslation(['translation', 'zod'])
+  const { t } = useTranslation()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),

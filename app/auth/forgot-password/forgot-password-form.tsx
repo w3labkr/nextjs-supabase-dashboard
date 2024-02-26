@@ -34,7 +34,7 @@ const defaultValues: Partial<FormValues> = {
 }
 
 export function ForgotPasswordForm() {
-  const { t } = useTranslation(['translation', 'zod'])
+  const { t } = useTranslation()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),

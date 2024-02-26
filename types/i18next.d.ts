@@ -2,7 +2,7 @@ export type Lng = string
 
 export type FallbackLng = string
 
-export type DefaultNS = string
+export type DefaultNS = string | string[]
 
 export type ResolvedLanguage = string | undefined
 

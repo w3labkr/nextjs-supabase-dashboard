@@ -35,7 +35,7 @@ const formSchema = z
   })
   .refine((val) => val.newPassword === val.confirmNewPassword, {
     path: ['confirmNewPassword'],
-    params: { i18n: 'FormMessage.invalid_confirm_password' },
+    params: { i18n: 'invalid_confirm_password' },
   })
 
 type FormValues = z.infer<typeof formSchema>
@@ -47,7 +47,7 @@ const defaultValues: Partial<FormValues> = {
 }
 
 export function ChangePasswordForm() {
-  const { t } = useTranslation(['translation', 'zod'])
+  const { t } = useTranslation()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),

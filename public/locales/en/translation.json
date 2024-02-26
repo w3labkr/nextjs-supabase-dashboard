@@ -127,7 +127,6 @@
   },
 
   "FormMessage": {
-    "invalid_confirm_password": "Passwords don't match.",
     "invalid_login_credentials": "Your email or password does not match.",
     "new_password_should_be_different_from_the_old_password": "New password should be different from the old password.",
     "old_password_does_not_match": "Old password does not match.",
