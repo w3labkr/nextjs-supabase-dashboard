@@ -126,7 +126,7 @@
 
     // Configure settings to be overridden for the markdown language.
     "[markdown]": {
-        "editor.tabSize": 4
+        "editor.tabSize": 2
     },
 
     // Configure settings to be overridden for the json language.

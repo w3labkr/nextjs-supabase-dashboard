@@ -44,7 +44,7 @@ end_of_line = crlf
 # CommonMark Spec
 # https://spec.commonmark.org/0.28/#tabs
 [*.{md, markdown}]
-indent_size = 4
+indent_size = 2
 trim_trailing_whitespace = false
 
 # Google HTML/CSS Style Guide

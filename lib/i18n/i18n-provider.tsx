@@ -3,15 +3,14 @@
 import * as React from 'react'
 
 import { I18nextProvider } from 'react-i18next'
-import i18n from '@/lib/i18next'
+import i18n from '@/lib/i18n'
 import { defaultNS } from '@/i18next.config'
 
-import { useSelector } from 'react-redux'
-import { RootState } from '@/lib/redux/store'
+import { useAppSelector } from '@/lib/redux/hooks'
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const resolvedLanguage = useSelector(
-    (state: RootState) => state.i18n.resolvedLanguage
+  const resolvedLanguage = useAppSelector(
+    (state) => state.i18n.resolvedLanguage
   )
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
 
