@@ -184,6 +184,11 @@
     "edit_post": "글 수정"
   },
 
+  "AccountMenu": {
+    "profile": "프로필",
+    "settings": "설정"
+  },
+
   "DarkModeStatus": {
     "dark_mode_on": "어두운 테마: 사용 중",
     "dark_mode_off": "어두운 테마: 사용하지 않음"

@@ -184,6 +184,11 @@
     "edit_post": "Edit Post"
   },
 
+  "AccountMenu": {
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+
   "DarkModeStatus": {
     "dark_mode_on": "Dark mode: on",
     "dark_mode_off": "Dark mode: off"

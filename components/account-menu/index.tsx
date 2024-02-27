@@ -18,29 +18,10 @@ import { SignOutButton } from '@/components/signout-button'
 
 import { useAuth } from '@/hooks/use-auth'
 
-interface StateProps {
-  username: string
-  email: string
-  initial: string
-}
-
 export function AccountMenu() {
   const { t } = useTranslation()
   const { user } = useAuth()
-  const [state, setState] = React.useState<StateProps>({
-    username: '',
-    email: '',
-    initial: '',
-  })
-
-  React.useEffect(() => {
-    const email = user?.email ?? ''
-    setState({
-      email,
-      username: email.split('@')[0],
-      initial: email.charAt(0).toUpperCase(),
-    })
-  }, [user])
+  const user_metadata = user?.user_metadata
 
   return (
     <DropdownMenu>
@@ -52,25 +33,27 @@ export function AccountMenu() {
         >
           <Avatar className="h-8 w-8">
             <AvatarImage src="" alt="Avatar" />
-            <AvatarFallback>{state.initial}</AvatarFallback>
+            <AvatarFallback>A</AvatarFallback>
           </Avatar>
-          <span className="sr-only">Toggle user menu</span>
+          <span className="sr-only">Toggle account menu</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel className="grid font-normal">
-          <span>{state.username}</span>
-          <span className="text-xs text-muted-foreground">{state.email}</span>
+          <span>{user_metadata?.name}</span>
+          <span className="text-xs text-muted-foreground">
+            {user_metadata?.email}
+          </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/dashboard/settings/profile" className="cursor-pointer">
-            {t('profile')}
+            {t('AccountMenu.profile')}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/dashboard/settings/profile" className="cursor-pointer">
-            {t('settings')}
+            {t('AccountMenu.settings')}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />

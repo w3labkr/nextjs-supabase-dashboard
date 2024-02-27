@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
-
 import { useTranslation } from 'react-i18next'
 
 import { useForm } from 'react-hook-form'
@@ -22,6 +21,7 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
+import { SignInWithGoogleUserMetadata } from '@/types/supabase'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 
@@ -59,10 +59,24 @@ export function SignUpForm() {
   async function onSubmit(values: FormValues) {
     setIsSubmitting(true)
     try {
+      const user_metadata: SignInWithGoogleUserMetadata = {
+        avatar_url: '',
+        email: values.email,
+        email_verified: false,
+        full_name: values.email.split('@')[0],
+        iss: '',
+        name: values.email.split('@')[0],
+        phone_verified: false,
+        picture: '',
+        provider_id: '',
+        sub: '',
+      }
+
       const supabase = createClient()
       const signup = await supabase.auth.signUp({
         email: values.email,
         password: values.newPassword,
+        options: { data: user_metadata },
       })
 
       if (signup?.error) throw new Error(signup?.error?.message)

@@ -44,3 +44,23 @@ export interface DeleteUser {
   data: any
   error: PostgrestError | null
 }
+
+export interface SignInWithPasswordUserMetadata {
+  email: string
+  email_verified: boolean
+  phone_verified: boolean
+  sub: string
+}
+
+export interface SignInWithGoogleUserMetadata {
+  avatar_url: string
+  email: string
+  email_verified: boolean
+  full_name: string
+  iss: string
+  name: string
+  phone_verified: boolean
+  picture: string
+  provider_id: string
+  sub: string
+}
