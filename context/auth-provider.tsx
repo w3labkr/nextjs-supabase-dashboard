@@ -8,7 +8,6 @@ import { supabase } from '@/lib/supabase/client'
 /**
  * Listen to auth events
  *
- * @link https://supabase.com/docs/guides/getting-started/tutorials/with-react
  * @link https://supabase.com/docs/reference/javascript/auth-onauthstatechange
  */
 export interface AuthContextProps {
@@ -32,20 +31,16 @@ export interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [session, setSession] = React.useState<Session | null>(null)
   const [user, setUser] = React.useState<User | null>(null)
+  const [isLoading, setIsLoading] = React.useState<boolean>(true)
 
   React.useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-    })
-
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
       setUser(session?.user ?? null)
+      setIsLoading(false)
     })
-
     return () => subscription?.unsubscribe()
   }, [])
 
