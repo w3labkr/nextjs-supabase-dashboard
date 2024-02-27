@@ -21,8 +21,7 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
-import { AuthApi } from '@/types/api'
-import { fetcher } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 
 const formSchema = z
@@ -56,15 +55,17 @@ export function ResetPasswordForm() {
   async function onSubmit(values: FormValues) {
     setIsSubmitting(true)
     try {
-      const formData = new FormData()
-      formData.append('password', values.newPassword)
-
-      const { error } = await fetcher<AuthApi>('/api/v1/auth/reset-password', {
-        method: 'POST',
-        body: formData,
+      const supabase = createClient()
+      const updated = await supabase.auth.updateUser({
+        password: values.newPassword,
       })
 
-      if (error) throw new Error(error?.message)
+      if (updated?.error) throw new Error(updated?.error?.message)
+      if (!updated?.data?.user) throw new Error('User data is invalid.')
+
+      const signout = await supabase.auth.signOut()
+
+      if (signout?.error) throw new Error(signout?.error?.message)
 
       toast.success(
         t('FormMessage.your_password_has_been_successfully_changed')
@@ -73,8 +74,8 @@ export function ResetPasswordForm() {
       auth.setSession(null)
       auth.setUser(null)
 
-      form.reset()
       router.replace('/auth/signin')
+      router.refresh()
     } catch (e: unknown) {
       const error = e as Error
       switch (error?.message) {

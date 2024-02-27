@@ -22,8 +22,7 @@ import {
 import { SubmitButton } from '@/components/submit-button'
 import { RelatedLink } from '@/components/related-link'
 
-import { SignInApi } from '@/types/api'
-import { fetcher } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 
 const formSchema = z.object({
@@ -52,24 +51,22 @@ export function SignInForm() {
   async function onSubmit(values: FormValues) {
     setIsSubmitting(true)
     try {
-      const formData = new FormData()
-      formData.append('email', values.email)
-      formData.append('password', values.password)
-
-      const { data, error } = await fetcher<SignInApi>('/api/v1/auth/signin', {
-        method: 'POST',
-        body: formData,
+      const supabase = createClient()
+      const signin = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
       })
 
-      if (error) throw new Error(error?.message)
+      if (signin?.error) throw new Error(signin?.error?.message)
+      if (!signin?.data?.user) throw new Error('User data is invalid.')
 
       toast.success(t('FormMessage.you_have_successfully_logged_in'))
 
-      auth.setSession(data?.session)
-      auth.setUser(data?.user)
+      auth.setSession(signin?.data?.session)
+      auth.setUser(signin?.data?.user)
 
-      form.reset()
       router.replace('/dashboard/dashboard')
+      router.refresh()
     } catch (e: unknown) {
       const error = e as Error
       switch (error?.message) {

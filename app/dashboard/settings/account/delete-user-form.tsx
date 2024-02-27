@@ -34,8 +34,7 @@ import { SubmitButton } from '@/components/submit-button'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
-import { PostgrestApi } from '@/types/api'
-import { fetcher } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/client'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -64,24 +63,24 @@ export function DeleteUserForm() {
   async function onSubmit(values: FormValues) {
     setIsSubmitting(true)
     try {
-      const formData = new FormData()
-      formData.append('email', values.email)
-      formData.append('password', values.password)
+      const supabase = createClient()
+      const verified = await supabase.rpc('verify_user_email_and_password', {
+        user_email: values.email,
+        user_password: values.password,
+      })
 
-      const { error } = await fetcher<PostgrestApi>(
-        '/api/v1/account/delete-user',
-        {
-          method: 'POST',
-          body: formData,
-        }
-      )
+      if (verified?.error) throw new Error(verified?.error?.message)
+      if (verified?.data === false)
+        throw new Error('Your account information is invalid.')
 
-      if (error) throw new Error(error?.message)
+      const deleted = await supabase.rpc('delete_user')
+
+      if (deleted?.error) throw new Error(deleted?.error?.message)
 
       toast.success(t('FormMessage.your_account_has_been_successfully_deleted'))
 
-      form.reset()
       router.replace('/')
+      router.refresh()
     } catch (e: unknown) {
       const error = e as Error
       switch (error?.message) {

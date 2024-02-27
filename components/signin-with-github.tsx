@@ -20,23 +20,25 @@ export function SignInWithGithub({
   const { t } = useTranslation()
 
   async function onSubmit() {
-    const supabase = createClient()
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'github',
-      options: {
-        // A URL to send the user to after they are confirmed.
-        redirectTo:
-          process.env.NEXT_PUBLIC_SITE_URL +
-          '/api/v1/auth/callback?next=/dashboard/dashboard',
-      },
-    })
+    try {
+      const supabase = createClient()
+      const signin = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          // A URL to send the user to after they are confirmed.
+          redirectTo:
+            process.env.NEXT_PUBLIC_SITE_URL +
+            '/api/v1/auth/callback?next=/dashboard/dashboard',
+        },
+      })
 
-    if (error) {
+      if (signin?.error) throw new Error(signin?.error?.message)
+
+      toast.success(t('FormMessage.you_have_successfully_logged_in'))
+    } catch (e: unknown) {
+      const error = e as Error
       toast.error(error?.message)
-      return false
     }
-
-    toast.success(t('FormMessage.you_have_successfully_logged_in'))
   }
 
   return (

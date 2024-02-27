@@ -401,27 +401,62 @@ module.exports = {
 }
 ```
 
+## Data Fetching
+
+Component
+
+```javascript
+import { fetcher } from '@/lib/utils'
+
+export function Component() {
+  async function onSubmit(values: FormValues) {
+    const formData = new FormData()
+    formData.append('email', values.email)
+    const { data, error } = await fetcher<FetchData>('https://...', {
+      method: 'POST',
+      body: formData,
+    })
+    // ...
+  }
+}
+```
+
+Route
+
+```javascript
+import { NextResponse, type NextRequest } from 'next/server'
+
+export async function POST(request: NextRequest) {
+  const formData = await request.formData()
+  const email = formData.get('email') as string
+  // ...
+  return NextResponse.json()
+}
+```
+
 ## Error Handling
 
 ```javascript
+import { SubmitButton } from '@/components/submit-button'
+
 export function Component() {
-    const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
-    
-    async function onSubmit(values: FormValues) {
-        setIsSubmitting(true)
-        try {
-            const { data, error } = await fetch('https://...').then((res) => res.json())
-            if (error) throw new Error(error?.message)
-            // ...
-        } catch (e: unknown) {
-            const error = e as Error
-            console.error(error?.message)
-        } finally {
-            setIsSubmitting(false)
-        }
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+  
+  async function onSubmit(values: FormValues) {
+    setIsSubmitting(true)
+    try {
+      const { data, error } = await fetch('https://...').then((res) => res.json())
+      if (error) throw new Error(error?.message)
+      // ...
+    } catch (e: unknown) {
+      const error = e as Error
+      console.error(error?.message)
+    } finally {
+      setIsSubmitting(false)
     }
-    
-    return <SubmitButton isSubmitting={isSubmitting} />
+  }
+  
+  return <SubmitButton isSubmitting={isSubmitting} />
 }
 ```
 

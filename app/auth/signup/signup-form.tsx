@@ -22,8 +22,7 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
-import { AuthApi } from '@/types/api'
-import { fetcher } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 
 const formSchema = z
@@ -60,26 +59,28 @@ export function SignUpForm() {
   async function onSubmit(values: FormValues) {
     setIsSubmitting(true)
     try {
-      const formData = new FormData()
-      formData.append('email', values.email)
-      formData.append('password', values.newPassword)
-
-      const { error } = await fetcher<AuthApi>('/api/v1/auth/signup', {
-        method: 'POST',
-        body: formData,
+      const supabase = createClient()
+      const signup = await supabase.auth.signUp({
+        email: values.email,
+        password: values.newPassword,
       })
 
-      if (error) throw new Error(error?.message)
+      if (signup?.error) throw new Error(signup?.error?.message)
+      if (!signup?.data?.user) throw new Error('User data is invalid.')
+
+      const signout = await supabase.auth.signOut()
+
+      if (signout?.error) throw new Error(signout?.error?.message)
+
+      auth.setSession(null)
+      auth.setUser(null)
 
       toast.success(
         t('FormMessage.you_have_successfully_registered_as_a_member')
       )
 
-      auth.setSession(null)
-      auth.setUser(null)
-
-      form.reset()
       router.replace('/auth/signin')
+      router.refresh()
     } catch (e: unknown) {
       const error = e as Error
       switch (error?.message) {

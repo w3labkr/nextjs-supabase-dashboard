@@ -23,8 +23,7 @@ import { SubmitButton } from '@/components/submit-button'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
-import { AuthPostgrestApi } from '@/types/api'
-import { fetcher } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/client'
 
 const formSchema = z
   .object({
@@ -58,19 +57,20 @@ export function ChangePasswordForm() {
   async function onSubmit(values: FormValues) {
     setIsSubmitting(true)
     try {
-      const formData = new FormData()
-      formData.append('oldPassword', values.oldPassword)
-      formData.append('newPassword', values.newPassword)
+      const supabase = createClient()
+      const verified = await supabase.rpc('verify_user_password', {
+        password: values.oldPassword,
+      })
 
-      const { error } = await fetcher<AuthPostgrestApi>(
-        '/api/v1/security/change-password',
-        {
-          method: 'POST',
-          body: formData,
-        }
-      )
+      if (verified?.error) throw new Error(verified?.error?.message)
+      if (verified?.data === false)
+        throw new Error('Old password does not match.')
 
-      if (error) throw new Error(error?.message)
+      const updated = await supabase.auth.updateUser({
+        password: values.newPassword,
+      })
+
+      if (updated?.error) throw new Error(updated?.error?.message)
 
       toast.success(
         t('FormMessage.your_password_has_been_successfully_changed')
