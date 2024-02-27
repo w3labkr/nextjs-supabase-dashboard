@@ -10,8 +10,12 @@ import { Button, ButtonProps } from '@/components/ui/button'
 interface SubmitButtonProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
-  text?: string | undefined
   disabled?: boolean | undefined
+  startIconName?: LucideIconName | undefined
+  startIconClassName?: string | undefined
+  endIconName?: LucideIconName | undefined
+  endIconClassName?: string | undefined
+  text?: string | undefined
   isSubmitting?: boolean | undefined
   submittingIconName?: LucideIconName | undefined
   submittingIconClassName?: string | undefined
@@ -19,9 +23,13 @@ interface SubmitButtonProps
 
 export function SubmitButton({
   children,
-  text,
-  translate,
   disabled,
+  startIconName,
+  startIconClassName,
+  endIconName,
+  endIconClassName,
+  translate,
+  text = 'Submit',
   isSubmitting = false,
   submittingIconName = 'Loader2',
   submittingIconClassName = '',
@@ -40,8 +48,20 @@ export function SubmitButton({
           )}
         />
       )}
+      {startIconName && (
+        <LucideIcon
+          name={startIconName}
+          className={cn('mr-2 size-4 min-w-4', startIconClassName)}
+        />
+      )}
       {text && translate === 'yes' ? t(text) : text}
       {children}
+      {endIconName && (
+        <LucideIcon
+          name={endIconName}
+          className={cn('ml-2 size-4 min-w-4', endIconClassName)}
+        />
+      )}
     </Button>
   )
 }

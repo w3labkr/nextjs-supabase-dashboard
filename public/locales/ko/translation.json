@@ -123,7 +123,8 @@
     "old_password": "이전 비밀번호",
     "email": "이메일",
     "your_email": "이메일",
-    "verify_delete_my_account": "계정을 삭제하려면 아래에 <i>delete my account</i>를 입력하세요."
+    "verify_delete_my_account": "계정을 삭제하려면 아래에 <i>delete my account</i>를 입력하세요.",
+    "submit": "제출하기"
   },
 
   "FormMessage": {

@@ -123,7 +123,8 @@
     "old_password": "Old Password",
     "email": "Email",
     "your_email": "Your email",
-    "verify_delete_my_account": "To verify, type <i>delete my account</i> below."
+    "verify_delete_my_account": "To verify, type <i>delete my account</i> below.",
+    "submit": "Submit"
   },
 
   "FormMessage": {
