@@ -5,9 +5,8 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { lng, fallbackLng } from '@/i18next.config'
 
-import { useSelector, useDispatch } from 'react-redux'
-import { RootState } from '@/lib/redux/store'
-import { setResolvedLanguage } from '@/features/i18n-slice'
+import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
+import { setResolvedLanguage } from '@/store/features/i18n-slice'
 
 import { cn } from '@/lib/utils'
 
@@ -18,9 +17,9 @@ export function LanguageToggleButton({
   className,
   ...props
 }: LanguageToggleProps) {
-  const dispatch = useDispatch()
-  const resolvedLanguage = useSelector(
-    (state: RootState) => state.i18n.resolvedLanguage
+  const dispatch = useAppDispatch()
+  const resolvedLanguage = useAppSelector(
+    (state) => state.i18n.resolvedLanguage
   )
   const [language, setLanguage] = React.useState<string>(resolvedLanguage)
   const { i18n } = useTranslation()

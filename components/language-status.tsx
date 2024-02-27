@@ -4,12 +4,11 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { languages } from '@/i18next.config'
 
-import { useSelector } from 'react-redux'
-import { RootState } from '@/lib/redux/store'
+import { useAppSelector } from '@/lib/redux/hooks'
 
 export function LanguageStatus() {
-  const resolvedLanguage = useSelector(
-    (state: RootState) => state.i18n.resolvedLanguage
+  const resolvedLanguage = useAppSelector(
+    (state) => state.i18n.resolvedLanguage
   )
   const [languageLabel, setLanguageLabel] = React.useState<string>('')
   const { t } = useTranslation()

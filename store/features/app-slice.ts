@@ -1,26 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 // Define a type for the slice state
-export interface InitialState {
+export interface AppState {
   value: any
 }
 
 // Define the initial state using that type
-const initialState: InitialState = {
+const initialState: AppState = {
   value: null,
 }
 
-export const initialSlice = createSlice({
+export const appSlice = createSlice({
   name: 'initial',
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    setInitialValue: (state, action: PayloadAction<InitialState>) => {
+    setAppValue: (state, action: PayloadAction<AppState>) => {
       state.value = action.payload
     },
   },
 })
 
-export const { setInitialValue } = initialSlice.actions
+export const { setAppValue } = appSlice.actions
 
-export default initialSlice.reducer
+export default appSlice.reducer

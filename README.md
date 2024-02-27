@@ -33,6 +33,7 @@ The folder and file structure is based on nextjs app router [Next.js Project Str
 │   └── [locales]/              # Internationalization
 ├── screenshots/                # Screenshots
 ├── sql/                        # Cloud functions
+├── store/                      # Redux reducers
 ├── types/
 └── package.json                # Project dependencies and scripts
 ```

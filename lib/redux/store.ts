@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
-import rootReducer from '@/features/root-reducer'
+import rootReducer from '@/store/root-reducer'
 
 // Error: redux-persist failed to create sync storage. falling back to noop storage.
 // import storage from 'redux-persist/lib/storage'

@@ -20,9 +20,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 
-import { useSelector, useDispatch } from 'react-redux'
-import { RootState } from '@/lib/redux/store'
-import { setResolvedLanguage } from '@/features/i18n-slice'
+import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
+import { setResolvedLanguage } from '@/store/features/i18n-slice'
 
 import { CommandItems } from './command-items'
 
@@ -37,9 +36,9 @@ export function LanguageSwitcher({
   triggerClassName,
   contentClassName,
 }: LanguageSwitcherProps) {
-  const dispatch = useDispatch()
-  const resolvedLanguage = useSelector(
-    (state: RootState) => state.i18n.resolvedLanguage
+  const dispatch = useAppDispatch()
+  const resolvedLanguage = useAppSelector(
+    (state) => state.i18n.resolvedLanguage
   )
   const [open, setOpen] = React.useState<boolean>(false)
   const [language, setLanguage] = React.useState<string>(resolvedLanguage)

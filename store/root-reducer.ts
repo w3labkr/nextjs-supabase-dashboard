@@ -1,6 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit'
 
-import i18nReducer from './i18n-slice'
+import i18nReducer from './features/i18n-slice'
 
 // Nested Persists
 const rootReducer = combineReducers({
