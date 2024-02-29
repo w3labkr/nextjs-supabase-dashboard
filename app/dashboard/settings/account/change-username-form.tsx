@@ -24,7 +24,7 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
 const formSchema = z.object({
-  username: z.string().min(2).max(30),
+  username: z.string().trim().min(2).max(30),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -42,13 +42,13 @@ export function ChangeUsernameForm() {
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  async function onSubmit(values: FormValues) {
+  const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
       // ...
       // if (error) throw new Error(error?.message)
     } catch (e: unknown) {
-      // const error = e as Error
+      // console.error((e as Error)?.message)
     } finally {
       setIsSubmitting(false)
     }

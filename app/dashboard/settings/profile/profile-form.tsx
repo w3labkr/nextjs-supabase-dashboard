@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -31,34 +32,52 @@ import { SubmitButton } from '@/components/submit-button'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
+import { fetcher } from '@/lib/utils'
+import { useAuth } from '@/hooks/use-auth'
+import { useProfile } from '@/hooks/api/use-profile'
+
 const formSchema = z.object({
-  name: z.string().min(2).max(30),
-  email: z.string().email(),
-  bio: z.string().max(160).min(4),
+  name: z.string().trim().min(2),
+  email: z.string().trim().max(255).email().optional(),
+  bio: z.string().trim().max(160).optional(),
 })
 
 type FormValues = z.infer<typeof formSchema>
 
-// This can come from your database or API.
 const defaultValues: Partial<FormValues> = {
   name: '',
-  bio: 'I own a computer.',
+  bio: '',
 }
 
 export function ProfileForm() {
+  const { t } = useTranslation()
+  const { user } = useAuth()
+  const userId = user?.id ?? null
+  const { data: values } = useProfile(userId)
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
-    mode: 'onChange',
+    values: {
+      name: values?.name ?? '',
+      bio: values?.bio ?? '',
+    },
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  async function onSubmit(values: FormValues) {
+  const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
-      // if (error) throw new Error(error?.message)
+      const response = await fetcher(`/api/v1/profile/${userId}`, {
+        method: 'POST',
+        body: JSON.stringify(formValues),
+      })
+
+      if (response?.error) throw new Error(response?.error?.message)
+
+      toast.success(t('FormMessage.your_profile_has_been_successfully_changed'))
     } catch (e: unknown) {
-      // const error = e as Error
+      toast.error((e as Error)?.message)
     } finally {
       setIsSubmitting(false)
     }
@@ -81,13 +100,14 @@ export function ProfileForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>{t('FormLabel.name')}</FormLabel>
                 <FormControl className="max-w-72">
-                  <Input placeholder="Your name" {...field} />
+                  <Input placeholder={t('FormLabel.your_name')} {...field} />
                 </FormControl>
                 <FormDescription>
-                  This is the name that will be displayed on your profile and in
-                  emails.
+                  {t(
+                    'FormDescription.this_is_the_name_that_appears_on_your_profile_and_email'
+                  )}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -98,25 +118,34 @@ export function ProfileForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t('FormLabel.email')}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled
                 >
                   <FormControl className="max-w-72">
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a verified email to display" />
+                      <SelectValue
+                        placeholder={t(
+                          'SelectValue.select_a_verified_email_to_display'
+                        )}
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="m@example.com">m@example.com</SelectItem>
-                    <SelectItem value="m@google.com">m@google.com</SelectItem>
-                    <SelectItem value="m@support.com">m@support.com</SelectItem>
+                    <SelectItem value="name@example.com">
+                      name@example.com
+                    </SelectItem>
+                    <SelectItem value="name@google.com">
+                      name@google.com
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  You can manage verified email addresses in your{' '}
-                  <Link href="/examples/forms">email settings</Link>.
+                  <Trans components={{ link1: <Link1 /> }}>
+                    FormDescription.you_can_manage_your_email_address_in_your_email_settings
+                  </Trans>
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -127,18 +156,17 @@ export function ProfileForm() {
             name="bio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Bio</FormLabel>
+                <FormLabel>{t('FormLabel.bio')}</FormLabel>
                 <FormControl className="max-w-96">
                   <Textarea
-                    placeholder="Tell us a little bit about yourself"
+                    placeholder={t(
+                      'Textarea.please_tell_us_a_little_about_yourself'
+                    )}
                     className="resize-none"
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>
-                  You can <span>@mention</span> other users and organizations to
-                  link to them.
-                </FormDescription>
+                <FormDescription></FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -147,10 +175,20 @@ export function ProfileForm() {
             isSubmitting={isSubmitting}
             text="ProfileForm.submit"
             translate="yes"
-            disabled
           />
         </form>
       </Form>
     </div>
+  )
+}
+
+function Link1({ children }: { children?: React.ReactNode }) {
+  return (
+    <Link
+      href="/dashboard/settings/emails"
+      className="text-primary underline underline-offset-4"
+    >
+      {children}
+    </Link>
   )
 }

@@ -9,12 +9,12 @@ export function absoluteUrl(path: string): string {
   return `${process.env.NEXT_PUBLIC_SITE_URL}${path}`
 }
 
-export function fetcher<JSON = any>(
+export async function fetcher<JSON = any>(
   input: string,
   init?: RequestInit | undefined
 ): Promise<JSON> {
   input = /^\//.test(input) ? process.env.NEXT_PUBLIC_SITE_URL + input : input
-  return fetch(input, init).then((res) => res.json())
+  return await fetch(input, init).then((res) => res.json())
 }
 
 export function isObject(obj: any): boolean {

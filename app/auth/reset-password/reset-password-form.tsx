@@ -52,20 +52,20 @@ export function ResetPasswordForm() {
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  async function onSubmit(values: FormValues) {
+  const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
       const supabase = createClient()
       const updated = await supabase.auth.updateUser({
-        password: values.newPassword,
+        password: formValues.newPassword,
       })
 
       if (updated?.error) throw new Error(updated?.error?.message)
       if (!updated?.data?.user) throw new Error('User data is invalid.')
 
-      const signout = await supabase.auth.signOut()
+      const signedOut = await supabase.auth.signOut()
 
-      if (signout?.error) throw new Error(signout?.error?.message)
+      if (signedOut?.error) throw new Error(signedOut?.error?.message)
 
       toast.success(
         t('FormMessage.your_password_has_been_successfully_changed')

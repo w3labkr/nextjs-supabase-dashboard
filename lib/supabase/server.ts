@@ -1,18 +1,25 @@
 import { cookies } from 'next/headers'
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { Database } from '@/types/supabase'
 
 /**
  * Setting up Server-Side Auth for Next.js
  *
  * @link https://supabase.com/docs/guides/auth/server-side/nextjs
+ * @link https://supabase.com/docs/reference/javascript/auth-api
  */
 export function createClient() {
   const cookieStore = cookies()
 
-  return createServerClient(
+  return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      // auth: {
+      //   autoRefreshToken: false,
+      //   persistSession: false,
+      //   detectSessionInUrl: false,
+      // },
       cookies: {
         get(name: string) {
           return cookieStore.get(name)?.value

@@ -17,11 +17,13 @@ import {
 import { SignOutButton } from '@/components/signout-button'
 
 import { useAuth } from '@/hooks/use-auth'
+import { useProfile } from '@/hooks/api/use-profile'
 
 export function AccountMenu() {
   const { t } = useTranslation()
   const { user } = useAuth()
-  const user_metadata = user?.user_metadata
+  const userId = user?.id ?? null
+  const { data: profile } = useProfile(userId)
 
   return (
     <DropdownMenu>
@@ -40,9 +42,9 @@ export function AccountMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel className="grid font-normal">
-          <span>{user_metadata?.name}</span>
+          <span>{profile?.name}</span>
           <span className="text-xs text-muted-foreground">
-            {user_metadata?.email}
+            {profile?.email}
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

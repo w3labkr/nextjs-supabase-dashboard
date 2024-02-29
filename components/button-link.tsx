@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
-import { buttonVariants } from '@/components/ui/button'
+import { ButtonProps, buttonVariants } from '@/components/ui/button'
 
 export interface ButtonLinkProps
   extends LinkProps,
@@ -16,6 +16,7 @@ export interface ButtonLinkProps
   endIconName?: LucideIconName | undefined
   endIconClassName?: string | undefined
   text?: string | undefined
+  variant?: ButtonProps['variant']
 }
 
 export function ButtonLink({
@@ -27,15 +28,13 @@ export function ButtonLink({
   endIconClassName,
   text,
   translate,
+  variant = 'ghost',
   ...props
 }: ButtonLinkProps) {
   const { t } = useTranslation()
 
   return (
-    <Link
-      className={cn(buttonVariants({ variant: 'ghost' }), className)}
-      {...props}
-    >
+    <Link className={cn(buttonVariants({ variant }), className)} {...props}>
       {startIconName && (
         <LucideIcon
           name={startIconName}

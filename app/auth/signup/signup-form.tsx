@@ -21,13 +21,13 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
-import { SignInWithGoogleUserMetadata } from '@/types/supabase'
+import { SignInWithGoogleUserMetadata } from '@/types/api'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 
 const formSchema = z
   .object({
-    email: z.string().trim().email(),
+    email: z.string().trim().max(255).email(),
     // If the password is larger than 72 chars, it will be truncated to the first 72 chars.
     newPassword: z.string().trim().min(6).max(72),
     confirmNewPassword: z.string().trim().min(6).max(72),
@@ -56,35 +56,35 @@ export function SignUpForm() {
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  async function onSubmit(values: FormValues) {
+  const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
       const user_metadata: SignInWithGoogleUserMetadata = {
-        avatar_url: '',
-        email: values.email,
+        avatar_url: null,
+        email: formValues.email,
         email_verified: false,
-        full_name: values.email.split('@')[0],
-        iss: '',
-        name: values.email.split('@')[0],
+        full_name: formValues.email.split('@')[0],
+        iss: null,
+        name: formValues.email.split('@')[0],
         phone_verified: false,
-        picture: '',
-        provider_id: '',
-        sub: '',
+        picture: null,
+        provider_id: null,
+        sub: null,
       }
 
       const supabase = createClient()
-      const signup = await supabase.auth.signUp({
-        email: values.email,
-        password: values.newPassword,
+      const signedIn = await supabase.auth.signUp({
+        email: formValues.email,
+        password: formValues.newPassword,
         options: { data: user_metadata },
       })
 
-      if (signup?.error) throw new Error(signup?.error?.message)
-      if (!signup?.data?.user) throw new Error('User data is invalid.')
+      if (signedIn?.error) throw new Error(signedIn?.error?.message)
+      if (!signedIn?.data?.user) throw new Error('User data is invalid.')
 
-      const signout = await supabase.auth.signOut()
+      const signedOut = await supabase.auth.signOut()
 
-      if (signout?.error) throw new Error(signout?.error?.message)
+      if (signedOut?.error) throw new Error(signedOut?.error?.message)
 
       auth.setSession(null)
       auth.setUser(null)

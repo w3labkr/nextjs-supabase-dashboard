@@ -23,7 +23,7 @@ import { SubmitButton } from '@/components/submit-button'
 import { createClient } from '@/lib/supabase/client'
 
 const formSchema = z.object({
-  email: z.string().email(),
+  email: z.string().trim().max(255).email(),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -41,12 +41,12 @@ export function ForgotPasswordForm() {
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  async function onSubmit(values: FormValues) {
+  const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
       const supabase = createClient()
       const { error } = await supabase.auth.resetPasswordForEmail(
-        values.email,
+        formValues.email,
         {
           redirectTo:
             process.env.NEXT_PUBLIC_SITE_URL +
@@ -60,8 +60,7 @@ export function ForgotPasswordForm() {
 
       form.reset()
     } catch (e: unknown) {
-      const error = e as Error
-      toast.error(error?.message)
+      toast.error((e as Error)?.message)
     } finally {
       setIsSubmitting(false)
     }

@@ -48,12 +48,12 @@ export function NotificationsForm() {
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  async function onSubmit(values: FormValues) {
+  const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
       // if (error) throw new Error(error?.message)
     } catch (e: unknown) {
-      // const error = e as Error
+      // console.error((e as Error)?.message)
     } finally {
       setIsSubmitting(false)
     }

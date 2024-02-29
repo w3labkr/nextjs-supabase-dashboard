@@ -113,7 +113,10 @@
   },
 
   "FormLabel": {
+    "name": "Name",
+    "your_name": "Your name",
     "username": "Username",
+    "your_username": "Your username",
     "password": "Password",
     "your_password": "Your password",
     "confirm_password": "Confirm Password",
@@ -123,6 +126,7 @@
     "old_password": "Old Password",
     "email": "Email",
     "your_email": "Your email",
+    "bio": "Bio",
     "verify_delete_my_account": "To verify, type <i>delete my account</i> below.",
     "submit": "Submit"
   },
@@ -139,11 +143,22 @@
     "you_have_successfully_registered_as_a_member": "You have successfully registered as a member.",
     "your_account_information_is_invalid": "Your account information is invalid.",
     "your_account_has_been_successfully_deleted": "Your account has been successfully deleted.",
-    "your_password_has_been_successfully_changed": "Your password has been successfully changed."
+    "your_password_has_been_successfully_changed": "Your password has been successfully changed.",
+    "your_profile_has_been_successfully_changed": "Your profile has been successfully changed."
   },
 
   "FormDescription": {
-    "you_can_change_it_only_once_every_%d_days": "You can change it only once every {{count}} days."
+    "you_can_change_it_only_once_every_%d_days": "You can change it only once every {{count}} days.",
+    "this_is_the_name_that_appears_on_your_profile_and_email": "This is the name that appears on your profile and email.",
+    "you_can_manage_your_email_address_in_your_email_settings": "You can manage verified email addresses in your <link1>email settings</link1>."
+  },
+
+  "SelectValue": {
+    "select_a_verified_email_to_display": "Select a verified email to display"
+  },
+
+  "Textarea": {
+    "please_tell_us_a_little_about_yourself": "Please tell us a little about yourself."
   },
 
   "MobileNavItems": {

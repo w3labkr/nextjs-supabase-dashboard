@@ -54,12 +54,12 @@ export function ChangePasswordForm() {
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  async function onSubmit(values: FormValues) {
+  const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
       const supabase = createClient()
       const verified = await supabase.rpc('verify_user_password', {
-        password: values.oldPassword,
+        password: formValues.oldPassword,
       })
 
       if (verified?.error) throw new Error(verified?.error?.message)
@@ -67,7 +67,7 @@ export function ChangePasswordForm() {
         throw new Error('Old password does not match.')
 
       const updated = await supabase.auth.updateUser({
-        password: values.newPassword,
+        password: formValues.newPassword,
       })
 
       if (updated?.error) throw new Error(updated?.error?.message)

@@ -113,7 +113,10 @@
   },
 
   "FormLabel": {
+    "name": "이름",
+    "your_name": "이름",
     "username": "사용자 이름",
+    "your_username": "사용자 이름",
     "password": "비밀번호",
     "your_password": "비밀번호",
     "confirm_password": "비밀번호 확인",
@@ -123,6 +126,7 @@
     "old_password": "이전 비밀번호",
     "email": "이메일",
     "your_email": "이메일",
+    "bio": "소개",
     "verify_delete_my_account": "계정을 삭제하려면 아래에 <i>delete my account</i>를 입력하세요.",
     "submit": "제출하기"
   },
@@ -139,11 +143,22 @@
     "you_have_successfully_registered_as_a_member": "성공적으로 회원가입이 완료되었습니다.",
     "your_account_information_is_invalid": "계정 정보가 유효하지 않습니다.",
     "your_account_has_been_successfully_deleted": "계정이 성공적으로 삭제되었습니다.",
-    "your_password_has_been_successfully_changed": "비밀번호가 성공적으로 변경되었습니다."
+    "your_password_has_been_successfully_changed": "비밀번호가 성공적으로 변경되었습니다.",
+    "your_profile_has_been_successfully_changed": "프로필이 성공적으로 변경되었습니다."
   },
 
   "FormDescription": {
-    "you_can_change_it_only_once_every_%d_days": "{{count}}일에 한 번만 변경할 수 있습니다."
+    "you_can_change_it_only_once_every_%d_days": "{{count}}일에 한 번만 변경할 수 있습니다.",
+    "this_is_the_name_that_appears_on_your_profile_and_email": "프로필과 이메일에 표시되는 이름입니다.",
+    "you_can_manage_your_email_address_in_your_email_settings": "<link1>이메일 설정</link1>에서 확인된 이메일 주소를 관리할 수 있습니다."
+  },
+
+  "SelectValue": {
+    "select_a_verified_email_to_display": "이메일을 선택하세요"
+  },
+
+  "Textarea": {
+    "please_tell_us_a_little_about_yourself": "당신에 대해 조금 알려주세요."
   },
 
   "MobileNavItems": {

@@ -26,8 +26,8 @@ import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 
 const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6).max(72),
+  email: z.string().trim().max(255).email(),
+  password: z.string().trim().min(6).max(72),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -48,22 +48,22 @@ export function SignInForm() {
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  async function onSubmit(values: FormValues) {
+  const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
       const supabase = createClient()
-      const signin = await supabase.auth.signInWithPassword({
-        email: values.email,
-        password: values.password,
+      const signedIn = await supabase.auth.signInWithPassword({
+        email: formValues.email,
+        password: formValues.password,
       })
 
-      if (signin?.error) throw new Error(signin?.error?.message)
-      if (!signin?.data?.user) throw new Error('User data is invalid.')
+      if (signedIn?.error) throw new Error(signedIn?.error?.message)
+      if (!signedIn?.data?.user) throw new Error('User data is invalid.')
 
       toast.success(t('FormMessage.you_have_successfully_logged_in'))
 
-      auth.setSession(signin?.data?.session)
-      auth.setUser(signin?.data?.user)
+      auth.setSession(signedIn?.data?.session)
+      auth.setUser(signedIn?.data?.user)
 
       router.replace('/dashboard/dashboard')
       router.refresh()

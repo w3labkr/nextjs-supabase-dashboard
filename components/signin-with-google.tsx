@@ -20,10 +20,10 @@ export function SignInWithGoogle({
 }: SignInWithGoogleProps) {
   const { t } = useTranslation()
 
-  async function onSubmit() {
+  const onSubmit = async () => {
     try {
       const supabase = createClient()
-      const signin = await supabase.auth.signInWithOAuth({
+      const signedIn = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           // A URL to send the user to after they are confirmed.
@@ -39,12 +39,9 @@ export function SignInWithGoogle({
         },
       })
 
-      if (signin?.error) throw new Error(signin?.error?.message)
-
-      toast.success(t('FormMessage.you_have_successfully_logged_in'))
+      if (signedIn?.error) throw new Error(signedIn?.error?.message)
     } catch (e: unknown) {
-      const error = e as Error
-      toast.error(error?.message)
+      toast.error((e as Error)?.message)
     }
   }
 

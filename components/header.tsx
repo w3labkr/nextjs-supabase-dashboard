@@ -12,7 +12,7 @@ import { LinkButton } from '@/components/link-button'
 import { authenticate } from '@/lib/supabase/auth'
 
 export async function Header() {
-  const { isAuth } = await authenticate()
+  const { authenticated } = await authenticate()
 
   return (
     <Sheet>
@@ -30,7 +30,7 @@ export async function Header() {
           <Brand />
           <Navigation />
           <div className="ml-auto flex gap-2">
-            {isAuth ? <SignedInButton /> : <SignedOutButton />}
+            {authenticated ? <SignedInButton /> : <SignedOutButton />}
           </div>
         </div>
       </header>

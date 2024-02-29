@@ -37,9 +37,12 @@ import { Description } from '@/components/description'
 import { createClient } from '@/lib/supabase/client'
 
 const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6).max(72),
-  confirmationPhrase: z.string().refine((val) => val === 'delete my account'),
+  email: z.string().trim().max(255).email(),
+  password: z.string().trim().min(6).max(72),
+  confirmationPhrase: z
+    .string()
+    .trim()
+    .refine((val) => val === 'delete my account'),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -60,13 +63,13 @@ export function DeleteUserForm() {
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  async function onSubmit(values: FormValues) {
+  const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
       const supabase = createClient()
       const verified = await supabase.rpc('verify_user_email_and_password', {
-        user_email: values.email,
-        user_password: values.password,
+        user_email: formValues.email,
+        user_password: formValues.password,
       })
 
       if (verified?.error) throw new Error(verified?.error?.message)

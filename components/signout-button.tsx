@@ -19,23 +19,22 @@ export function SignOutButton(props: SignOutButtonProps) {
   const auth = useAuth()
   const { t } = useTranslation()
 
-  async function onSubmit() {
+  const onSubmit = async () => {
     try {
       const supabase = createClient()
-      const { error } = await supabase.auth.signOut()
+      const signedOut = await supabase.auth.signOut()
 
-      if (error) throw new Error(error?.message)
-
-      toast.success(t('FormMessage.you_have_been_logged_out_successfully'))
+      if (signedOut?.error) throw new Error(signedOut?.error?.message)
 
       auth.setSession(null)
       auth.setUser(null)
 
       router.replace('/')
       router.refresh()
+
+      toast.success(t('FormMessage.you_have_been_logged_out_successfully'))
     } catch (e: unknown) {
-      const error = e as Error
-      toast.error(error?.message)
+      toast.error((e as Error)?.message)
     }
   }
 
