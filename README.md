@@ -12,6 +12,31 @@ Denpendency
 - Supabase OAuth with PKCE flow (@supabase/ssr)
 - Supabase Email Auth with PKCE flow (@supabase/ssr)
 
+## Table of Contents
+
+- [NextJS Ninja](#nextjs-ninja)
+  - [Table of Contents](#table-of-contents)
+  - [Screenshots](#screenshots)
+  - [Folder and file Structure](#folder-and-file-structure)
+  - [Installation](#installation)
+    - [Tailwind CSS](#tailwind-css)
+    - [Shadcn UI](#shadcn-ui)
+    - [Internationalization (i18n)](#internationalization-i18n)
+    - [Schema Validation](#schema-validation)
+    - [Redux Toolkit](#redux-toolkit)
+    - [Supabase Cloud Functions](#supabase-cloud-functions)
+    - [Supabase Auth](#supabase-auth)
+    - [Firebase Auth](#firebase-auth)
+    - [Utils](#utils)
+    - [ESLint](#eslint)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+    - [Data Fetching With JSON](#data-fetching-with-json)
+    - [Data Fetching With FormData](#data-fetching-with-formdata)
+    - [Error Handling](#error-handling)
+  - [Deploying](#deploying)
+  - [Troubleshooting](#troubleshooting)
+
 ## Screenshots
 
 ![screenshot](./screenshot.png)
@@ -23,18 +48,20 @@ The folder and file structure is based on nextjs app router [Next.js Project Str
 ```txt
 .
 ├── app/                        # App Router
-├── components/                 # React components for filters, headers
-├── config/
+├── components/                 # React components
+├── config/                     # Configuration for site
 ├── context/
-│   └── app-provider.ts         # Register context providers
+│   └── app-provider.ts         # Register context provider
 ├── hooks/
-├── lib/                        # Utility functions that aren't necessarily bound to React or Next.js
+├── lib/                        # Utility functions
 ├── public/                     # Static assets to be served
 │   └── [locales]/              # Internationalization
 ├── screenshots/                # Screenshots
 ├── sql/                        # Cloud functions
 ├── store/                      # Redux reducers
 ├── types/
+├── components.json             # Shadcn UI
+├── i18next.config.ts           # Internationalization
 └── package.json                # Project dependencies and scripts
 ```
 
@@ -72,47 +99,7 @@ Start the development server.
 npm run dev
 ```
 
-## Configuration
-
-Edit `next.config.js`:
-
-```javascript
-module.exports = {
-  reactStrictMode: true,
-  swcMinify: true,
-}
-```
-
-Edit `packages.json`:
-
-```json
-{
-    "scripts": {
-        "clean:dir": "rm -rf node_modules",
-        "clean:cache": "npm cache clean --force",
-        "clean": "npm run clean:dir && npm run clean:cache",
-        "reinstall": "npm run clean && npm install"
-    },
-}
-```
-
-To enable Turbopack. Edit `packages.json`:
-
-```json
-{
-    "scripts": {
-        "dev": "next dev --turbo"
-    }
-}
-```
-
-After cleaning the directories and cache, install the dependency packages.
-
-```shell
-npm run --force reinstall
-```
-
-## Tailwind CSS
+### Tailwind CSS
 
 Install Tailwind CSS
 
@@ -141,7 +128,7 @@ import { twMerge } from 'tailwind-merge';
 export const cn = (...classes: ClassValue[]) => twMerge(clsx(...classes));
 ```
 
-## Shadcn UI
+### Shadcn UI
 
 Beautifully designed components that you can copy and paste into your apps. Accessible.
 
@@ -176,7 +163,9 @@ npx shadcn-ui@latest add
 npx shadcn-ui@latest add [component]
 ```
 
-## Internationalization (i18n)
+The configuration for Shadcn UI is `components.json`.
+
+### Internationalization (i18n)
 
 Internationalization for react done right. Using the i18next i18n ecosystem.
 
@@ -190,7 +179,9 @@ Useful for translating zod error messages.
 npm install zod-i18n-map
 ```
 
-## Schema Validation
+The configuration for i18next is `i18next.config.ts`.
+
+### Schema Validation
 
 React Hooks for form state management and validation (Web + React Native).
 
@@ -199,7 +190,7 @@ npm install react-hook-form
 npm install zod @hookform/resolvers
 ```
 
-## Redux Toolkit
+### Redux Toolkit
 
 The official, opinionated, batteries-included toolset for efficient Redux development.
 
@@ -213,11 +204,11 @@ persist and rehydrate a redux store
 npm install redux-persist
 ```
 
-## Supabase Cloud Functions
+### Supabase Cloud Functions
 
 Run the SQL code in `SQL Editor > New Query`.
 
-## Supabase Auth
+### Supabase Auth
 
 Install Supabase packages
 
@@ -237,7 +228,7 @@ Reference
 - [Setting up Server-Side Auth for Next.js](https://supabase.com/docs/guides/auth/server-side/nextjs)
 - [Auth rate limits](https://supabase.com/docs/guides/platform/going-into-prod#auth-rate-limits)
 
-## Firebase Auth
+### Firebase Auth
 
 Firebase provides the tools and infrastructure you need to develop, grow, and earn money from your app.
 
@@ -306,7 +297,7 @@ Start firebase deployment.
 firebase deploy
 ```
 
-## Utils
+### Utils
 
 Share target browsers between different front-end tools, like Autoprefixer, Stylelint and babel-preset-env
 
@@ -338,7 +329,7 @@ Generate RFC-compliant UUIDs in JavaScript
 npm install uuid @types/uuid
 ```
 
-## ESLint
+### ESLint
 
 ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
 
@@ -377,13 +368,153 @@ npx prettier --check "./app/**/*.{ts,tsx}"
 npx prettier --write "./{app,components,context,hooks,lib,types,utils}/**/*.{ts,tsx}"
 ```
 
-## Deploying
+## Configuration
 
-Dependency packages in production for deployment on Vercel hosting.
+Generating Database Types
+
+`Api Docs > Introduction > Generating Types`
+
+- [generating-types](https://supabase.com/docs/guides/api/rest/generating-types)
+
+Edit `next.config.js`:
+
+```javascript
+module.exports = {
+  reactStrictMode: true,
+  swcMinify: true,
+}
+```
+
+Edit `packages.json`:
+
+```json
+{
+    "scripts": {
+        "clean:dir": "rm -rf node_modules",
+        "clean:cache": "npm cache clean --force",
+        "clean": "npm run clean:dir && npm run clean:cache",
+        "reinstall": "npm run clean && npm install"
+    },
+}
+```
+
+To enable Turbopack. Edit `packages.json`:
+
+```json
+{
+    "scripts": {
+        "dev": "next dev --turbo"
+    }
+}
+```
+
+After cleaning the directories and cache, install the dependency packages.
 
 ```shell
-npm install @vercel/analytics
+npm run --force reinstall
 ```
+
+## Usage
+
+Register your provider in `context/app-provider.tsx`.
+
+```javascript
+import { Provider } from '@/context/provider'
+
+const providers = [Provider]
+```
+
+Register your redux store in `store/root-reducer.ts`.
+
+```javascript
+import reducer from './features/slice'
+
+const rootReducer = combineReducers({
+  name: reducer,
+})
+```
+
+### Data Fetching With JSON
+
+Client side
+
+```javascript
+import { fetcher } from '@/lib/utils'
+
+const onSubmit = async (formValues: FormValues) => {
+  const { data, error } = await fetcher<FetchData>('https://...', {
+    method: 'POST',
+    body: JSON.stringify(formValues),
+  })
+}
+```
+
+Server side: `route.ts`
+
+```javascript
+import { NextResponse, type NextRequest } from 'next/server'
+
+export async function POST(request: NextRequest) {
+  const res = await request.json()
+  return NextResponse.json({ res })
+}
+```
+
+### Data Fetching With FormData
+
+Client side
+
+```javascript
+import { fetcher } from '@/lib/utils'
+
+const onSubmit = async (formValues: FormValues) => {
+  const formData = new FormData()
+  formData.append('email', formValues.email)
+  const { data, error } = await fetcher<FetchData>('https://...', {
+    method: 'POST',
+    body: formData,
+  })
+}
+```
+
+Server side: `route.ts`
+
+```javascript
+import { NextResponse, type NextRequest } from 'next/server'
+
+export async function POST(request: NextRequest) {
+  const formData = await request.formData()
+  const email = formData.get('email') as string
+  return NextResponse.json({ email })
+}
+```
+
+### Error Handling
+
+```javascript
+import { SubmitButton } from '@/components/submit-button'
+
+export function Component() {
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+  
+  const onSubmit = async (formValues: FormValues) => {
+    setIsSubmitting(true)
+    try {
+      const { data, error } = await fetch('https://...').then((res) => res.json())
+      if (error) throw new Error(error?.message)
+      // ...
+    } catch (e: unknown) {
+      console.error((e as Error)?.message)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+  
+  return <SubmitButton isSubmitting={isSubmitting} />
+}
+```
+
+## Deploying
 
 Deploy app to Vercel
 
@@ -401,62 +532,41 @@ module.exports = {
 }
 ```
 
-## Data Fetching
+Dependency packages in production for deployment on Vercel hosting.
 
-Component
+```shell
+npm install @vercel/analytics
+```
+
+(Optional) Vercel Speed Insights package
+
+- [Limits and Pricing for Speed Insights](https://vercel.com/docs/speed-insights/limits-and-pricing)
+
+```shell
+npm install @vercel/speed-insights
+```
+
+(Optional) Image Optimization
+
+- [Limits and Pricing for Image Optimization](https://vercel.com/docs/image-optimization/limits-and-pricing)
+
+Usage image component
 
 ```javascript
-import { fetcher } from '@/lib/utils'
+import Image from 'next/image'
 
-export function Component() {
-  async function onSubmit(values: FormValues) {
-    const formData = new FormData()
-    formData.append('email', values.email)
-    const { data, error } = await fetcher<FetchData>('https://...', {
-      method: 'POST',
-      body: formData,
-    })
-    // ...
-  }
+export default function Page() {
+  return <Image />
 }
 ```
 
-Route
+Set image element rules in `.eslintrc.js`:
 
 ```javascript
-import { NextResponse, type NextRequest } from 'next/server'
-
-export async function POST(request: NextRequest) {
-  const formData = await request.formData()
-  const email = formData.get('email') as string
-  // ...
-  return NextResponse.json()
-}
-```
-
-## Error Handling
-
-```javascript
-import { SubmitButton } from '@/components/submit-button'
-
-export function Component() {
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
-  
-  async function onSubmit(values: FormValues) {
-    setIsSubmitting(true)
-    try {
-      const { data, error } = await fetch('https://...').then((res) => res.json())
-      if (error) throw new Error(error?.message)
-      // ...
-    } catch (e: unknown) {
-      const error = e as Error
-      console.error(error?.message)
-    } finally {
-      setIsSubmitting(false)
-    }
+module.exports = {
+  rules: {
+    '@next/next/no-img-element': 'warn',
   }
-  
-  return <SubmitButton isSubmitting={isSubmitting} />
 }
 ```
 
