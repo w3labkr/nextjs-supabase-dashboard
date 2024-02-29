@@ -8,7 +8,6 @@ import { RelatedLink } from '@/components/related-link'
 import { ButtonLink } from '@/components/button-link'
 import { LanguageToggleButton } from '@/components/language-toggle-button'
 
-import { authenticate } from '@/lib/supabase/auth'
 import { ResetPasswordForm } from './reset-password-form'
 
 export default async function ResetPasswordPage({
@@ -20,16 +19,10 @@ export default async function ResetPasswordPage({
     next: string
   }
 }) {
-  const { isAuth } = await authenticate()
-
   if (
     !/^pkce_/.test(searchParams?.token_hash) ||
     searchParams?.type !== 'recovery'
   ) {
-    redirect('/auth/signin')
-  }
-
-  if (!isAuth) {
     redirect('/auth/signin')
   }
 

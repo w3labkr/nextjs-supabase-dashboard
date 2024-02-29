@@ -1,5 +1,6 @@
-import { type NextRequest } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
+import { accessDenied } from '@/config/middleware'
 
 let counter = 0
 
@@ -11,7 +12,19 @@ export async function middleware(request: NextRequest) {
     console.log('middleware #:', counter)
   }
 
-  return await updateSession(request)
+  const { response, authenticated } = await updateSession(request)
+
+  const denied = accessDenied.filter((deny) => {
+    if (!request.nextUrl.pathname.startsWith(deny.from)) return
+    if (authenticated !== deny?.authenticated) return
+    return deny
+  })[0]
+
+  if (denied) {
+    return NextResponse.redirect(new URL(denied.to, request.url))
+  }
+
+  return response
 }
 
 export const config = {

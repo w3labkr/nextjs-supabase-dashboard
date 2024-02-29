@@ -1,20 +1,27 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { Database } from '@/types/supabase'
 
 /**
  * Setting up Server-Side Auth for Next.js
  *
  * @link https://supabase.com/docs/guides/auth/server-side/nextjs
+ * @link https://supabase.com/docs/reference/javascript/auth-api
  */
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
     request: { headers: request.headers },
   })
 
-  const supabase = createServerClient(
+  const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      // auth: {
+      //   autoRefreshToken: false,
+      //   persistSession: false,
+      //   detectSessionInUrl: false,
+      // },
       cookies: {
         get(name: string) {
           return request.cookies.get(name)?.value
@@ -37,7 +44,10 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  await supabase.auth.getUser()
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
 
-  return response
+  return { response, authenticated: !(error || !user), role: user?.role }
 }

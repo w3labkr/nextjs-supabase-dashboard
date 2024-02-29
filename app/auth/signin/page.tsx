@@ -1,6 +1,5 @@
 import * as React from 'react'
 import type { Metadata } from 'next'
-import { redirect } from 'next/navigation'
 
 import { Logo } from '@/components/logo'
 import { Title } from '@/components/title'
@@ -10,7 +9,6 @@ import { RelatedLink } from '@/components/related-link'
 import { ButtonLink } from '@/components/button-link'
 import { LanguageToggleButton } from '@/components/language-toggle-button'
 
-import { authenticate } from '@/lib/supabase/auth'
 import { SignInForm } from './signin-form'
 
 export const metadata: Metadata = {
@@ -19,12 +17,6 @@ export const metadata: Metadata = {
 }
 
 export default async function SignInPage() {
-  const { isAuth } = await authenticate()
-
-  if (isAuth) {
-    redirect('/dashboard/settings/profile')
-  }
-
   return (
     <div className="container flex min-h-screen w-screen flex-col items-center justify-center py-8">
       <ButtonLink

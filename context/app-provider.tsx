@@ -3,8 +3,8 @@
 import * as React from 'react'
 
 import { ReduxProvider } from '@/lib/redux/redux-provider'
-import { I18nProvider } from '@/lib/i18n/i18n-provider'
 import { AuthProvider } from '@/context/auth-provider'
+import { I18nProvider } from '@/lib/i18n/i18n-provider'
 import { ThemeProvider } from '@/context/theme-provider'
 
 const providers = [ReduxProvider, AuthProvider, I18nProvider, ThemeProvider]
