@@ -3,11 +3,18 @@
 import * as React from 'react'
 
 import { ReduxProvider } from '@/lib/redux/redux-provider'
-import { AuthProvider } from '@/context/auth-provider'
 import { I18nProvider } from '@/lib/i18n/i18n-provider'
+import { SWRProvider } from '@/context/swr-provider'
+import { AuthProvider } from '@/context/auth-provider'
 import { ThemeProvider } from '@/context/theme-provider'
 
-const providers = [ReduxProvider, AuthProvider, I18nProvider, ThemeProvider]
+const providers = [
+  ReduxProvider,
+  AuthProvider,
+  SWRProvider,
+  I18nProvider,
+  ThemeProvider,
+]
 
 export interface AppContextProps {
   children: React.ReactNode

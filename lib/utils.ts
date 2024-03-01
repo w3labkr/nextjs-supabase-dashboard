@@ -14,13 +14,7 @@ export function fetcher<JSON = any>(
   input: string,
   init?: RequestInit | undefined
 ): Promise<JSON> {
-  input = /^\//.test(input) ? process.env.NEXT_PUBLIC_SITE_URL + input : input
-  return fetch(input, init)
-    .then((res) => res.json())
-    .catch((e: unknown) => {
-      if (!input) return { error: { message: 'Failed to fetch' } }
-      return { error: { message: (e as Error)?.message } }
-    })
+  return fetch(input, init).then((res) => res.json())
 }
 
 export function isObject(obj: any): boolean {

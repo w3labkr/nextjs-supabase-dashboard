@@ -2,9 +2,8 @@
 
 import useSWR from 'swr'
 import { Tables } from '@/types/supabase'
-import { fetcher } from '@/lib/utils'
 
-interface Profile {
+interface FetchData {
   data: Tables<'profiles'> | null
   error: Error | null
 }
@@ -15,11 +14,15 @@ export function useProfile(userId: string | null) {
     data: api,
     error,
     isLoading,
-  } = useSWR<Profile, Error>(fetchUrl, fetcher)
+    isValidating,
+    mutate,
+  } = useSWR<FetchData, Error>(fetchUrl)
 
   return {
     data: api?.data,
     error: error ?? api?.error,
     isLoading,
+    isValidating,
+    mutate,
   }
 }

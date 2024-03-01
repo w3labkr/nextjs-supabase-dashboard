@@ -23,11 +23,9 @@ import {
 import useSWR from 'swr'
 import { NotifyItems } from './notify-items'
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
-
 export function Notify() {
   const fetchUrl = process.env.NEXT_PUBLIC_SITE_URL + '/api/v1/notify'
-  const { data } = useSWR<{ data: any[]; count: number }>(fetchUrl, fetcher)
+  const { data } = useSWR<{ data: any[]; count: number }>(fetchUrl)
 
   return (
     <Popover>
