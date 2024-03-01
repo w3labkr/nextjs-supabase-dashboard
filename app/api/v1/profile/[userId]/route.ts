@@ -6,27 +6,23 @@ export async function GET(
   request: NextRequest,
   { params: { userId } }: { params: { userId: string } }
 ) {
-  let data = null
-
   try {
     const supabase = createClient()
-    const result = await supabase
+    const response = await supabase
       .from('profiles')
       .select('*')
       .eq('user_id', userId)
       .single()
 
-    if (result?.error) throw new Error(result?.error?.message)
+    if (response?.error) throw new Error(response?.error?.message)
 
-    data = result?.data
+    return NextResponse.json({ data: response?.data, error: null })
   } catch (e: unknown) {
     return NextResponse.json(
       { data: null, error: { message: (e as Error)?.message } },
       { status: 400 }
     )
   }
-
-  return NextResponse.json({ data, error: null })
 }
 
 export async function POST(
@@ -50,20 +46,20 @@ export async function POST(
   }
 
   try {
-    const response = await request.json()
+    const formData = await request.json()
     const supabase = createClient()
-    const result = await supabase
+    const response = await supabase
       .from('profiles')
-      .update(response)
+      .update(formData)
       .eq('user_id', userId)
 
-    if (result?.error) throw new Error(result?.error?.message)
+    if (response?.error) throw new Error(response?.error?.message)
+
+    return NextResponse.json({ data: null, error: null })
   } catch (e: unknown) {
     return NextResponse.json(
       { data: null, error: { message: (e as Error)?.message } },
       { status: 400 }
     )
   }
-
-  return NextResponse.json({ data: null, error: null })
 }

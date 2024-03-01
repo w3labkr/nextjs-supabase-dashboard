@@ -48,9 +48,11 @@ export function ForgotPasswordForm() {
       const { error } = await supabase.auth.resetPasswordForEmail(
         formValues.email,
         {
+          // A URL to send the user to after they are confirmed.
+          // Don't forget to change the URL in supabase's email template.
           redirectTo:
             process.env.NEXT_PUBLIC_SITE_URL +
-            '/api/v1/auth/confirm?next=/auth/reset-password',
+            '/api/auth/v1/confirm?next=/auth/reset-password',
         }
       )
 

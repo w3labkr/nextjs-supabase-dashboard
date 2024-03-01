@@ -31,7 +31,6 @@ export interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [session, setSession] = React.useState<Session | null>(null)
   const [user, setUser] = React.useState<User | null>(null)
-  const [isLoading, setIsLoading] = React.useState<boolean>(true)
 
   React.useEffect(() => {
     const {
@@ -39,7 +38,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
       setUser(session?.user ?? null)
-      setIsLoading(false)
     })
     return () => subscription?.unsubscribe()
   }, [])

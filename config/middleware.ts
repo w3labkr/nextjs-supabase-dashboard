@@ -1,5 +1,9 @@
 import { AccessDenied } from '@/types/middleware'
 
+// Make sure the new route is registered in the middleware.
+// The default registered router routes are as follows:
+// ['/', '/auth/:path*', '/dashboard/:path*']
+
 export const accessDenied: AccessDenied[] = [
   {
     from: '/dashboard',

@@ -48,6 +48,9 @@ The folder and file structure is based on nextjs app router [Next.js Project Str
 ```txt
 .
 ├── app/                        # App Router
+│   └── api/
+│       ├── auth/               # Public API for authentication
+│       └── v1/                 # APIs that require authentication
 ├── components/                 # React components
 ├── config/                     # Configuration for site
 ├── context/

@@ -27,9 +27,10 @@ export function SignInWithGoogle({
         provider: 'google',
         options: {
           // A URL to send the user to after they are confirmed.
+          // Don't forget to change the URL in supabase's email template.
           redirectTo:
             process.env.NEXT_PUBLIC_SITE_URL +
-            '/api/v1/auth/callback?next=/dashboard/dashboard',
+            '/api/auth/v1/callback?next=/dashboard/dashboard',
           // Google does not send out a refresh token by default,
           // so you will need to pass parameters like these to signInWithOAuth() in order to extract the provider_refresh_token:
           queryParams: {
