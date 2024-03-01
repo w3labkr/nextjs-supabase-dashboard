@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 

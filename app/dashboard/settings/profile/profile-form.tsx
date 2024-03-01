@@ -35,6 +35,7 @@ import { Description } from '@/components/description'
 import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useProfile } from '@/hooks/api/use-profile'
+import useSWRMutation from 'swr/mutation'
 
 const formSchema = z.object({
   name: z.string().trim().min(2),
@@ -49,10 +50,21 @@ const defaultValues: Partial<FormValues> = {
   bio: '',
 }
 
+async function updateProfile(url: string, { arg }: { arg: FormValues }) {
+  return await fetcher(url, {
+    method: 'POST',
+    body: JSON.stringify(arg),
+  })
+}
+
 export function ProfileForm() {
   const { t } = useTranslation()
   const { user } = useAuth()
   const { data: values } = useProfile(user?.id ?? null)
+  const { trigger } = useSWRMutation(
+    user?.id ? `/api/v1/profile/${user?.id}` : null,
+    updateProfile
+  )
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -67,14 +79,8 @@ export function ProfileForm() {
   const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
-      const fetchUrl = user?.id ? `/api/v1/profile/${user?.id}` : null
-      const response = await fetcher(fetchUrl, {
-        method: 'POST',
-        body: JSON.stringify(formValues),
-      })
-
+      const response = await trigger(formValues)
       if (response?.error) throw new Error(response?.error?.message)
-
       toast.success(t('FormMessage.your_profile_has_been_successfully_changed'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
