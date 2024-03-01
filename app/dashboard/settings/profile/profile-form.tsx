@@ -52,8 +52,7 @@ const defaultValues: Partial<FormValues> = {
 export function ProfileForm() {
   const { t } = useTranslation()
   const { user } = useAuth()
-  const userId = user?.id ?? null
-  const { data: values } = useProfile(userId)
+  const { data: values } = useProfile(user?.id ?? null)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -68,7 +67,8 @@ export function ProfileForm() {
   const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
-      const response = await fetcher(`/api/v1/profile/${userId}`, {
+      const fetchUrl = user?.id ? `/api/v1/profile/${user?.id}` : null
+      const response = await fetcher(fetchUrl, {
         method: 'POST',
         body: JSON.stringify(formValues),
       })

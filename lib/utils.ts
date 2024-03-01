@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -9,12 +10,17 @@ export function absoluteUrl(path: string): string {
   return `${process.env.NEXT_PUBLIC_SITE_URL}${path}`
 }
 
-export async function fetcher<JSON = any>(
+export function fetcher<JSON = any>(
   input: string,
   init?: RequestInit | undefined
 ): Promise<JSON> {
   input = /^\//.test(input) ? process.env.NEXT_PUBLIC_SITE_URL + input : input
-  return await fetch(input, init).then((res) => res.json())
+  return fetch(input, init)
+    .then((res) => res.json())
+    .catch((e: unknown) => {
+      if (!input) return { error: { message: 'Failed to fetch' } }
+      return { error: { message: (e as Error)?.message } }
+    })
 }
 
 export function isObject(obj: any): boolean {
