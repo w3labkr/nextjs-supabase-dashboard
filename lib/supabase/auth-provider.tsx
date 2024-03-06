@@ -3,7 +3,7 @@
 import * as React from 'react'
 
 import { Session, User } from '@supabase/supabase-js'
-import { supabase } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/client'
 
 /**
  * Listen to auth events
@@ -33,6 +33,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = React.useState<User | null>(null)
 
   React.useEffect(() => {
+    const supabase = createClient()
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
