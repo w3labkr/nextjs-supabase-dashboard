@@ -112,6 +112,11 @@
     "description": ""
   },
 
+  "ListUsers": {
+    "title": "사용자",
+    "description": ""
+  },
+
   "FormLabel": {
     "name": "이름",
     "your_name": "이름",
@@ -172,14 +177,16 @@
     "dashboard": "대시보드",
     "media": "미디어",
     "posts": "글",
-    "settings": "설정"
+    "settings": "설정",
+    "admin": "관리자"
   },
 
   "PersistentDrawer": {
     "dashboard": "대시보드",
     "media": "미디어",
     "posts": "글",
-    "settings": "설정"
+    "settings": "설정",
+    "admin": "관리자"
   },
 
   "DrawerGroupItems": {
@@ -197,7 +204,8 @@
     "new_media": "새 미디어",
     "edit_media": "미디어 수정",
     "new_post": "새 글",
-    "edit_post": "글 수정"
+    "edit_post": "글 수정",
+    "users": "사용자"
   },
 
   "AccountMenu": {
@@ -268,5 +276,17 @@
 
   "BackLinkButton": {
     "back": "뒤로가기"
+  },
+
+  "Pagination": {
+    "firstText": "처음",
+    "firstAriaLabel": "처음 페이지로 이동",
+    "previousText": "이전",
+    "previousAriaLabel": "이전 페이지로 이동",
+    "nextText": "다음",
+    "nextAriaLabel": "다음 페이지로 이동",
+    "lastText": "마지막",
+    "lastAriaLabel": "마지막 페이지로 이동",
+    "ellipsisText": "더 많은 페이지"
   }
 }

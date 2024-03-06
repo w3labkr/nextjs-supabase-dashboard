@@ -112,6 +112,11 @@
     "description": ""
   },
 
+  "ListUsers": {
+    "title": "Users",
+    "description": ""
+  },
+
   "FormLabel": {
     "name": "Name",
     "your_name": "Your name",
@@ -172,14 +177,16 @@
     "dashboard": "Dashboard",
     "media": "Media",
     "posts": "Posts",
-    "settings": "Settings"
+    "settings": "Settings",
+    "admin": "Admin"
   },
 
   "PersistentDrawer": {
     "dashboard": "Dashboard",
     "media": "Media",
     "posts": "Posts",
-    "settings": "Settings"
+    "settings": "Settings",
+    "admin": "Admin"
   },
 
   "DrawerGroupItems": {
@@ -197,7 +204,8 @@
     "new_media": "New Media",
     "edit_media": "Edit Media",
     "new_post": "New Post",
-    "edit_post": "Edit Post"
+    "edit_post": "Edit Post",
+    "users": "Users"
   },
 
   "AccountMenu": {
@@ -268,5 +276,17 @@
 
   "BackLinkButton": {
     "back": "Back"
+  },
+
+  "Pagination": {
+    "firstText": "First",
+    "firstAriaLabel": "Go to first page",
+    "previousText": "Previous",
+    "previousAriaLabel": "Go to previous page",
+    "nextText": "Next",
+    "nextAriaLabel": "Go to next page",
+    "lastText": "Last",
+    "lastAriaLabel": "Go to last page",
+    "ellipsisText": "More pages"
   }
 }

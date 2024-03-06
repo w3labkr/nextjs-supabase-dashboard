@@ -48,3 +48,7 @@ export interface PostsConfig {
 export interface SettingsConfig {
   drawerGroupItems: DrawerGroupItemProps[]
 }
+
+export interface AdminConfig {
+  drawerGroupItems: DrawerGroupItemProps[]
+}

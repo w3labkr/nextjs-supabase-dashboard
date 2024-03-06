@@ -12,6 +12,9 @@ Denpendency
 - Supabase OAuth with PKCE flow (@supabase/ssr)
 - Supabase Email Auth with PKCE flow (@supabase/ssr)
 
+> The administrator page cannot be viewed on the demo page.  
+> Check the files in the `app/dashboard/admin` directory.
+
 ## Table of Contents
 
 - [NextJS Ninja](#nextjs-ninja)
@@ -43,7 +46,7 @@ Denpendency
 
 ## Folder and file Structure
 
-The folder and file structure is based on nextjs app router [Next.js Project Structur](https://nextjs.org/docs/getting-started/project-structure).
+The folder and file structure is based on nextjs app router [next.js project structure](https://nextjs.org/docs/getting-started/project-structure).
 
 ```txt
 .
@@ -330,6 +333,12 @@ Generate RFC-compliant UUIDs in JavaScript
 
 ```shell
 npm install uuid @types/uuid
+```
+
+Day.js 2kB immutable date-time library alternative to Moment.js with the same modern API
+
+```shell
+npm install dayjs
 ```
 
 ### ESLint

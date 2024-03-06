@@ -3,6 +3,7 @@ import {
   MediaConfig,
   PostsConfig,
   SettingsConfig,
+  AdminConfig,
 } from '@/types/dashboard'
 
 export const dashboardConfig: DashboardConfig = {
@@ -52,6 +53,15 @@ export const dashboardConfig: DashboardConfig = {
           badge: 0,
           translate: 'yes',
           disabled: false,
+        },
+        {
+          id: 2,
+          href: '/dashboard/admin',
+          iconName: 'FolderLock',
+          title: 'admin',
+          badge: 0,
+          translate: 'yes',
+          disabled: true,
         },
       ],
     },
@@ -170,7 +180,7 @@ export const settingsConfig: SettingsConfig = {
           href: '/dashboard/settings/emails',
           iconName: 'Mail',
           translate: 'yes',
-          disabled: true,
+          disabled: false,
         },
         {
           id: 2,
@@ -187,6 +197,27 @@ export const settingsConfig: SettingsConfig = {
           iconName: 'RadioTower',
           translate: 'yes',
           disabled: true,
+        },
+      ],
+    },
+  ],
+}
+
+export const adminConfig: AdminConfig = {
+  drawerGroupItems: [
+    {
+      id: 1,
+      label: '',
+      separator: false,
+      translate: 'no',
+      items: [
+        {
+          id: 1,
+          title: 'users',
+          href: '/dashboard/admin/users',
+          // iconName: '',
+          translate: 'yes',
+          disabled: false,
         },
       ],
     },
