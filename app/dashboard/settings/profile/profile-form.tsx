@@ -81,7 +81,7 @@ export function ProfileForm() {
     try {
       const response = await trigger(formValues)
       if (response?.error) throw new Error(response?.error?.message)
-      toast.success(t('FormMessage.your_profile_has_been_successfully_changed'))
+      toast.success(t('FormMessage.profile_has_been_successfully_changed'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {

@@ -80,23 +80,22 @@ export function DeleteUserForm() {
 
       if (deleted?.error) throw new Error(deleted?.error?.message)
 
-      toast.success(t('FormMessage.your_account_has_been_successfully_deleted'))
+      toast.success(t('FormMessage.account_has_been_successfully_deleted'))
 
       router.replace('/')
       router.refresh()
     } catch (e: unknown) {
-      const error = e as Error
-      switch (error?.message) {
+      switch ((e as Error)?.message) {
         case 'Your account information is invalid.':
           form.setError('email', {
-            message: t('FormMessage.your_account_information_is_invalid'),
+            message: t('FormMessage.account_information_is_invalid'),
           })
           form.setError('password', {
-            message: t('FormMessage.your_account_information_is_invalid'),
+            message: t('FormMessage.account_information_is_invalid'),
           })
           break
         default:
-          toast.error(error?.message)
+          toast.error((e as Error)?.message)
           break
       }
     } finally {

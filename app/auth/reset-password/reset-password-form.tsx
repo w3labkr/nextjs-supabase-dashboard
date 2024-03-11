@@ -67,9 +67,7 @@ export function ResetPasswordForm() {
 
       if (signedOut?.error) throw new Error(signedOut?.error?.message)
 
-      toast.success(
-        t('FormMessage.your_password_has_been_successfully_changed')
-      )
+      toast.success(t('FormMessage.password_has_been_successfully_changed'))
 
       auth.setSession(null)
       auth.setUser(null)
@@ -77,8 +75,7 @@ export function ResetPasswordForm() {
       router.replace('/auth/signin')
       router.refresh()
     } catch (e: unknown) {
-      const error = e as Error
-      switch (error?.message) {
+      switch ((e as Error)?.message) {
         case 'New password should be different from the old password.':
           form.setError('newPassword', {
             message: t(
@@ -87,7 +84,7 @@ export function ResetPasswordForm() {
           })
           break
         default:
-          toast.error(error?.message)
+          toast.error((e as Error)?.message)
           break
       }
     } finally {
