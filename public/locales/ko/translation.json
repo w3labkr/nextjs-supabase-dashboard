@@ -137,24 +137,26 @@
   },
 
   "FormMessage": {
+    "account_has_been_successfully_deleted": "계정이 성공적으로 삭제되었습니다.",
+    "account_information_is_invalid": "계정 정보가 유효하지 않습니다.",
     "failed_to_fetch": "데이터를 가져오지 못했습니다.",
     "invalid_login_credentials": "이메일 또는 비밀번호가 일치하지 않습니다.",
     "new_password_should_be_different_from_the_old_password": "새 비밀번호는 이전 비밀번호와 달라야 합니다.",
+    "nothing_has_changed": "변경된 내용이 없습니다.",
     "old_password_does_not_match": "이전 비밀번호가 일치하지 않습니다.",
+    "password_has_been_successfully_changed": "비밀번호가 성공적으로 변경되었습니다.",
+    "profile_has_been_successfully_changed": "프로필이 성공적으로 변경되었습니다.",
     "the_email_has_been_sent_successfully": "이메일이 성공적으로 전송되었습니다.",
     "user_already_registered": "이미 등록된 사용자입니다.",
     "user_data_is_invalid": "사용자 데이터가 유효하지 않습니다.",
+    "username_already_registered": "이미 등록된 사용자이름입니다.",
+    "username_has_been_successfully_changed": "사용자이름이 성공적으로 변경되었습니다.",
     "you_have_been_logged_out_successfully": "성공적으로 로그아웃되었습니다.",
     "you_have_successfully_logged_in": "성공적으로 로그인되었습니다.",
-    "you_have_successfully_registered_as_a_member": "성공적으로 회원가입이 완료되었습니다.",
-    "your_account_has_been_successfully_deleted": "계정이 성공적으로 삭제되었습니다.",
-    "your_account_information_is_invalid": "계정 정보가 유효하지 않습니다.",
-    "your_password_has_been_successfully_changed": "비밀번호가 성공적으로 변경되었습니다.",
-    "your_profile_has_been_successfully_changed": "프로필이 성공적으로 변경되었습니다."
+    "you_have_successfully_registered_as_a_member": "성공적으로 회원가입이 완료되었습니다."
   },
 
   "FormDescription": {
-    "you_can_change_it_only_once_every_%d_days": "{{count}}일에 한 번만 변경할 수 있습니다.",
     "this_is_the_name_that_appears_on_your_profile_and_email": "프로필과 이메일에 표시되는 이름입니다.",
     "you_can_manage_your_email_address_in_your_email_settings": "<link1>이메일 설정</link1>에서 확인된 이메일 주소를 관리할 수 있습니다."
   },

@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -23,6 +23,11 @@ import { SubmitButton } from '@/components/submit-button'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
+import { fetcher } from '@/lib/utils'
+import { useAuth } from '@/hooks/use-auth'
+import { useProfile } from '@/hooks/api/use-profile'
+import useSWRMutation from 'swr/mutation'
+
 const formSchema = z.object({
   username: z.string().trim().min(2).max(30),
 })
@@ -33,22 +38,51 @@ const defaultValues: Partial<FormValues> = {
   username: '',
 }
 
+async function updateProfile(url: string, { arg }: { arg: FormValues }) {
+  return await fetcher(url, {
+    method: 'POST',
+    body: JSON.stringify(arg),
+  })
+}
+
 export function ChangeUsernameForm() {
   const { t } = useTranslation()
+  const { user } = useAuth()
+  const { data: values } = useProfile(user?.id ?? null)
+  const { trigger } = useSWRMutation(
+    user?.id ? `/api/v1/profile/${user?.id}` : null,
+    updateProfile
+  )
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
+    values: {
+      username: values?.username ?? '',
+    },
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
-      // ...
-      // if (error) throw new Error(error?.message)
+      if (values?.username === formValues?.username) {
+        throw new Error('Nothing has changed.')
+      }
+      const response = await trigger(formValues)
+      if (response?.error) throw new Error(response?.error?.message)
+      toast.success(t('FormMessage.username_has_been_successfully_changed'))
     } catch (e: unknown) {
-      // console.error((e as Error)?.message)
+      switch ((e as Error)?.message) {
+        case 'duplicate key value violates unique constraint "profiles_username_key"':
+          form.setError('username', {
+            message: t('FormMessage.username_already_registered'),
+          })
+          break
+        default:
+          toast.error((e as Error)?.message)
+          break
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -75,11 +109,7 @@ export function ChangeUsernameForm() {
                 <FormControl className="max-w-60">
                   <Input placeholder="Username" {...field} />
                 </FormControl>
-                <FormDescription>
-                  <Trans values={{ count: 30 }}>
-                    FormDescription.you_can_change_it_only_once_every_%d_days
-                  </Trans>
-                </FormDescription>
+                {/* <FormDescription></FormDescription> */}
                 <FormMessage />
               </FormItem>
             )}
@@ -88,7 +118,6 @@ export function ChangeUsernameForm() {
             isSubmitting={isSubmitting}
             text="ChangeUsernameForm.submit"
             translate="yes"
-            disabled
           />
         </form>
       </Form>
