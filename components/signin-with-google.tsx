@@ -1,12 +1,11 @@
 'use client'
 
 import * as React from 'react'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 import { toast } from 'sonner'
 import { FcGoogle } from 'react-icons/fc'
 import { Button, ButtonProps } from '@/components/ui/button'
-import { SubmitButton } from '@/components/submit-button'
 
 import { createClient } from '@/lib/supabase/client'
 

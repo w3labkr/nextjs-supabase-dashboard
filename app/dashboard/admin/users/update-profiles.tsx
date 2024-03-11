@@ -15,13 +15,14 @@ export async function updateProfiles() {
   if (users) {
     const values = users.map((user) => {
       const email = user?.email ?? ''
+      const username = email.split('@')[0]
       return {
         id: uuidv4(),
         user_id: user?.id,
         avatar_url: user?.user_metadata?.avatar_url ?? null,
         email,
-        full_name: user?.user_metadata?.full_name ?? email.split('@')[0],
-        name: user?.user_metadata?.name ?? email.split('@')[0],
+        full_name: user?.user_metadata?.full_name ?? username,
+        name: user?.user_metadata?.name ?? username,
         picture: user?.user_metadata?.picture ?? null,
       }
     })

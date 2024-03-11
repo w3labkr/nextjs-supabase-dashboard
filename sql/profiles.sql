@@ -1,29 +1,32 @@
 -- SQL Editor > New query
+-- https://supabase.com/docs/guides/auth/managing-user-data
 
-drop table public.profiles;
+drop table if exists profiles;
 
-create table public.profiles (
-  id uuid not null primary key default uuid_generate_v4(),
+create table profiles (
+  id uuid not null references auth.users on delete cascade primary key,
   created_at timestamptz default now(),
-  updated_at timestamptz,
-  user_id uuid not null references auth.users on delete cascade,
-  avatar_url text default ''::text,
-  email text default ''::text,
-  full_name text default ''::text,
-  name text default ''::text,
-  picture text default ''::text,
-  bio text default ''::text,
-  deleted_at timestamptz
+  updated_at timestamptz default now(),
+  username varchar(255) not null unique,
+  email varchar(255) not null unique,
+  avatar_url text,
+  full_name text,
+  name text,
+  bio text,
+  has_set_password bool default false
 );
 
-alter table public.profiles enable row level security;
+-- Secure the table
+alter table profiles enable row level security;
 
--- Indexes
-
-create index profiles_user_id_idx on profiles using btree (user_id);
+-- Add row-level security
+create policy "Public profiles are visible to everyone." on profiles for select to authenticated, anon using ( true );
+-- create policy "Users can create a profile." on profiles for insert to authenticated with check ( auth.uid() = id );
+create policy "Users can update their own profile." on profiles for update to authenticated using ( auth.uid() = id );
+-- create policy "Users can delete a profile." on profiles for delete to authenticated using ( auth.uid() = id );
 
 -- Update a column timestamp on every update.
-create extension if not exists moddatetime schema extensions;
+-- create extension if not exists moddatetime schema extensions;
 
 -- assuming the table name is "profiles", and a timestamp column "updated_at"
 -- this trigger will set the "updated_at" column to the current timestamp for every update
@@ -32,52 +35,108 @@ drop trigger if exists handle_updated_at on profiles;
 create trigger handle_updated_at before update on profiles
   for each row execute procedure moddatetime (updated_at);
 
--- inserts a row into public.profiles
-create or replace function public.handle_new_user()
+-- Trigger the function every time a user is created
+drop trigger if exists on_auth_user_created on auth.users;
+drop function if exists handle_new_user;
+
+create or replace function handle_new_user()
 returns trigger
-language plpgsql
-security definer set search_path = public
 as $$
 begin
   insert into
-    public.profiles (user_id,avatar_url,email,full_name,name,picture)
+    profiles (id, username, email, avatar_url, full_name, name, has_set_password)
   values (
     new.id,
+    generate_username(new.email),
+    new.email,
     new.raw_user_meta_data ->> 'avatar_url',
-    new.raw_user_meta_data ->> 'email',
     new.raw_user_meta_data ->> 'full_name',
     new.raw_user_meta_data ->> 'name',
-    new.raw_user_meta_data ->> 'picture'
+    case when (r.encrypted_password is null or r.encrypted_password = '') then false else true end
   );
   return new;
 end;
-$$;
-
--- trigger the function every time a user is created
-drop trigger if exists on_auth_user_created on auth.users;
+$$ language plpgsql security definer set search_path = public;
 
 create trigger on_auth_user_created
   after insert on auth.users
-  for each row execute procedure public.handle_new_user();
+  for each row execute procedure handle_new_user();
 
--- policies
+-- Trigger the function every time a user password is updated
+drop trigger if exists on_auth_user_password_updated on auth.users;
+drop function if exists handle_update_user_password_status;
 
-create policy "Public profiles are visible to everyone."
-  on profiles for select
-  using ( true );
+create or replace function handle_update_user_password_status()
+returns trigger
+as $$
+begin
+  update profiles
+  set has_set_password = case when (r.encrypted_password is null or r.encrypted_password = '') then false else true end
+  where id = new.id;
+  return new;
+end;
+$$ language plpgsql security definer set search_path = public;
 
-create policy "Users can create a profile."
-  on profiles for insert
-  to authenticated
-  with check ( auth.uid() = user_id );
+create trigger on_auth_user_password_updated
+  after update of encrypted_password on auth.users
+  for each row execute function handle_update_user_password_status();
 
-create policy "Users can update their own profile."
-  on profiles for update
-  to authenticated
-  using ( auth.uid() = user_id )
-  with check ( auth.uid() = user_id );
+-- Generate unique username
+drop function if exists generate_username;
 
-create policy "Users can delete a profile."
-  on profiles for delete
-  to authenticated
-  using ( auth.uid() = user_id );
+create or replace function generate_username(email text)
+returns text
+as $$
+declare
+  username_new text;
+  username_exists boolean;
+begin
+  -- generate username based on email address
+  username_new = lower(split_part(email, '@', 1));
+
+  -- check if username already exists in profiles table
+  select exists(select 1 from profiles where username = username_new) into username_exists;
+
+  -- increase username length gradually if needed
+  while username_exists loop
+    username_new = username_new || '_' || to_char(trunc(random()*1000000), 'fm000000');
+    select exists(select 1 from profiles where username = username_new) into username_exists;
+  end loop;
+
+  return username_new;
+end;
+$$ language plpgsql security definer;
+
+-- Insert all of the user's profiles
+drop function if exists inserts_profiles;
+
+create or replace function inserts_profiles()
+returns void
+as $$
+declare
+  r record;
+begin
+
+  alter table profiles drop constraint profiles_pkey;
+  alter table profiles drop constraint profiles_id_fkey;
+
+  for r in (select * from auth.users) LOOP
+    insert into profiles (id, username, email, avatar_url, full_name, name, has_set_password)
+    values (
+      r.id,
+      generate_username(r.email),
+      r.email,
+      r.raw_user_meta_data ->> 'avatar_url',
+      r.raw_user_meta_data ->> 'full_name',
+      r.raw_user_meta_data ->> 'name',
+      case when r.encrypted_password = '' then false else true end
+    );
+  END LOOP;
+
+  alter table profiles add constraint profiles_id_fkey foreign key(id) references auth.users(id) on delete cascade;
+  alter table profiles add primary key (id);
+
+end;
+$$ language plpgsql security definer;
+
+select inserts_profiles();

@@ -31,8 +31,6 @@ export function SignOutButton(props: SignOutButtonProps) {
 
       router.replace('/')
       router.refresh()
-
-      toast.success(t('FormMessage.you_have_been_logged_out_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     }

@@ -8,8 +8,8 @@ interface FetchData {
   error: Error | null
 }
 
-export function useProfile(userId: string | null) {
-  const fetchUrl = userId ? `/api/v1/profile/${userId}` : null
+export function useProfile(id: string | null) {
+  const fetchUrl = id ? `/api/v1/profile/${id}` : null
   const {
     data: api,
     error,

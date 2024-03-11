@@ -59,13 +59,15 @@ export function SignUpForm() {
   const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
+      const email = formValues.email
+      const username = email.split('@')[0]
       const user_metadata: SignInWithGoogleUserMetadata = {
         avatar_url: null,
-        email: formValues.email,
+        email,
         email_verified: false,
-        full_name: formValues.email.split('@')[0],
+        full_name: username,
         iss: null,
-        name: formValues.email.split('@')[0],
+        name: username,
         phone_verified: false,
         picture: null,
         provider_id: null,
@@ -74,7 +76,7 @@ export function SignUpForm() {
 
       const supabase = createClient()
       const signedIn = await supabase.auth.signUp({
-        email: formValues.email,
+        email,
         password: formValues.newPassword,
         options: { data: user_metadata },
       })

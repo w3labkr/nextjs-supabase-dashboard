@@ -23,46 +23,43 @@ export type Database = {
           avatar_url: string | null
           bio: string | null
           created_at: string | null
-          deleted_at: string | null
-          email: string | null
+          email: string
           full_name: string | null
+          has_set_password: boolean | null
           id: string
           name: string | null
-          picture: string | null
           updated_at: string | null
-          user_id: string
+          username: string
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string | null
-          deleted_at?: string | null
-          email?: string | null
+          email: string
           full_name?: string | null
-          id?: string
+          has_set_password?: boolean | null
+          id: string
           name?: string | null
-          picture?: string | null
           updated_at?: string | null
-          user_id: string
+          username: string
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string | null
-          deleted_at?: string | null
-          email?: string | null
+          email?: string
           full_name?: string | null
+          has_set_password?: boolean | null
           id?: string
           name?: string | null
-          picture?: string | null
           updated_at?: string | null
-          user_id?: string
+          username?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'profiles_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
+            foreignKeyName: 'profiles_id_fkey'
+            columns: ['id']
+            isOneToOne: true
             referencedRelation: 'users'
             referencedColumns: ['id']
           },
@@ -76,6 +73,12 @@ export type Database = {
       delete_user: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      generate_username: {
+        Args: {
+          email: string
+        }
+        Returns: string
       }
       verify_user_email_and_password: {
         Args: {
