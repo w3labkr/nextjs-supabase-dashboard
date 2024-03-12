@@ -26,8 +26,8 @@ import { useAuth } from '@/hooks/use-auth'
 
 const formSchema = z
   .object({
-    newPassword: z.string().trim().min(6).max(72),
-    confirmNewPassword: z.string().trim().min(6).max(72),
+    newPassword: z.string().nonempty().min(6).max(72),
+    confirmNewPassword: z.string().nonempty().min(6).max(72),
   })
   .refine((val) => val.newPassword === val.confirmNewPassword, {
     path: ['confirmNewPassword'],

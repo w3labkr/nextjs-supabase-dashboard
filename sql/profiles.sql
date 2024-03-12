@@ -71,7 +71,7 @@ returns trigger
 as $$
 begin
   update profiles
-  set has_set_password = case when (r.encrypted_password is null or r.encrypted_password = '') then false else true end
+  set has_set_password = case when (new.encrypted_password is null or new.encrypted_password = '') then false else true end
   where id = new.id;
   return new;
 end;

@@ -26,8 +26,8 @@ import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 
 const formSchema = z.object({
-  email: z.string().trim().max(255).email(),
-  password: z.string().trim().min(6).max(72),
+  email: z.string().nonempty().max(255).email(),
+  password: z.string().nonempty().min(6).max(72),
 })
 
 type FormValues = z.infer<typeof formSchema>

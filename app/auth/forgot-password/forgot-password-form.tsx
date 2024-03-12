@@ -23,7 +23,7 @@ import { SubmitButton } from '@/components/submit-button'
 import { createClient } from '@/lib/supabase/client'
 
 const formSchema = z.object({
-  email: z.string().trim().max(255).email(),
+  email: z.string().nonempty().max(255).email(),
 })
 
 type FormValues = z.infer<typeof formSchema>

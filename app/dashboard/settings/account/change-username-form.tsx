@@ -23,13 +23,13 @@ import { SubmitButton } from '@/components/submit-button'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
-import { fetcher } from '@/lib/utils'
-import { useAuth } from '@/hooks/use-auth'
-import { useProfile } from '@/hooks/api/use-profile'
 import useSWRMutation from 'swr/mutation'
+import { User } from '@supabase/supabase-js'
+import { fetcher } from '@/lib/utils'
+import { useProfile } from '@/hooks/api/use-profile'
 
 const formSchema = z.object({
-  username: z.string().trim().min(2).max(30),
+  username: z.string().nonempty().min(2).max(30),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -45,10 +45,9 @@ async function updateProfile(url: string, { arg }: { arg: FormValues }) {
   })
 }
 
-export function ChangeUsernameForm() {
+export function ChangeUsernameForm({ user }: { user: User | null }) {
   const { t } = useTranslation()
-  const { user } = useAuth()
-  const { data: profile } = useProfile(user?.id ?? null)
+  const { data: profile, isLoading } = useProfile(user?.id ?? null)
   const { trigger } = useSWRMutation(
     user?.id ? `/api/v1/profile/${user?.id}` : null,
     updateProfile
@@ -87,6 +86,8 @@ export function ChangeUsernameForm() {
       setIsSubmitting(false)
     }
   }
+
+  if (isLoading) return null
 
   return (
     <div className="space-y-4">

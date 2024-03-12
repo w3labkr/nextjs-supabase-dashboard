@@ -34,6 +34,7 @@ import { SubmitButton } from '@/components/submit-button'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
+import { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 import { useProfile } from '@/hooks/api/use-profile'
@@ -55,11 +56,10 @@ const defaultValues: Partial<FormValues> = {
   confirmationPhrase: '',
 }
 
-export function DeleteUserForm() {
+export function DeleteUserForm({ user }: { user: User | null }) {
   const router = useRouter()
   const auth = useAuth()
-  const userId = auth?.user?.id ?? null
-  const { data: profile } = useProfile(userId)
+  const { data: profile, isLoading } = useProfile(user?.id ?? null)
   const { t } = useTranslation()
 
   const form = useForm<FormValues>({
@@ -121,6 +121,8 @@ export function DeleteUserForm() {
       setIsSubmitting(false)
     }
   }
+
+  if (isLoading) return null
 
   return (
     <div className="space-y-4">

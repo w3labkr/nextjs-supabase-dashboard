@@ -22,7 +22,9 @@ import { useProfile } from '@/hooks/api/use-profile'
 export function AccountMenu() {
   const { t } = useTranslation()
   const { user } = useAuth()
-  const { data: profile } = useProfile(user?.id ?? null)
+  const { data: profile, isLoading } = useProfile(user?.id ?? null)
+
+  if (isLoading) return null
 
   return (
     <DropdownMenu>

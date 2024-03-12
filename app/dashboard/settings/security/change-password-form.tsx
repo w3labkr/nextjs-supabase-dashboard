@@ -23,14 +23,16 @@ import { SubmitButton } from '@/components/submit-button'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
+import { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
+import { useProfile } from '@/hooks/api/use-profile'
 
 const formSchema = z
   .object({
     // If the password is larger than 72 chars, it will be truncated to the first 72 chars.
-    oldPassword: z.string().trim().min(6).max(72),
-    newPassword: z.string().trim().min(6).max(72),
-    confirmNewPassword: z.string().trim().min(6).max(72),
+    oldPassword: z.string().nonempty().min(6).max(72).optional(),
+    newPassword: z.string().nonempty().min(6).max(72),
+    confirmNewPassword: z.string().nonempty().min(6).max(72),
   })
   .refine((val) => val.newPassword === val.confirmNewPassword, {
     path: ['confirmNewPassword'],
@@ -45,29 +47,38 @@ const defaultValues: Partial<FormValues> = {
   confirmNewPassword: '',
 }
 
-export function ChangePasswordForm() {
+export function ChangePasswordForm({ user }: { user: User | null }) {
   const { t } = useTranslation()
-
+  const { data: profile, isLoading, mutate } = useProfile(user?.id ?? null)
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
   })
+  const { register, unregister } = form
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+  const has_set_password = profile?.has_set_password
+
+  React.useEffect(() => {
+    has_set_password ? register('oldPassword') : unregister('oldPassword')
+  }, [register, unregister, has_set_password])
 
   const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
       const supabase = createClient()
-      const verified = await supabase.rpc('verify_user_password', {
-        password: formValues.oldPassword,
-      })
 
-      if (verified?.error) throw new Error(verified?.error?.message)
-      if (verified?.data === false)
-        throw new Error('Old password does not match.')
+      if (has_set_password) {
+        const verified = await supabase.rpc('verify_user_password', {
+          password: formValues?.oldPassword as string,
+        })
+        if (verified?.error) throw new Error(verified?.error?.message)
+        if (verified?.data === false) {
+          throw new Error('Old password does not match.')
+        }
+      }
 
       const updated = await supabase.auth.updateUser({
-        password: formValues.newPassword,
+        password: formValues?.newPassword as string,
       })
 
       if (updated?.error) throw new Error(updated?.error?.message)
@@ -75,6 +86,7 @@ export function ChangePasswordForm() {
       toast.success(t('FormMessage.password_has_been_successfully_changed'))
 
       form.reset()
+      mutate()
     } catch (e: unknown) {
       switch ((e as Error)?.message) {
         case 'Old password does not match.':
@@ -83,7 +95,7 @@ export function ChangePasswordForm() {
           })
           break
         case 'New password should be different from the old password.':
-          form.setError('oldPassword', {
+          form.setError('newPassword', {
             message: t(
               'FormMessage.new_password_should_be_different_from_the_old_password'
             ),
@@ -98,6 +110,8 @@ export function ChangePasswordForm() {
     }
   }
 
+  if (isLoading) return null
+
   return (
     <div className="space-y-4">
       <Title text="ChangePasswordForm.title" translate="yes" />
@@ -110,27 +124,29 @@ export function ChangePasswordForm() {
           noValidate
           className="space-y-4"
         >
-          <FormField
-            control={form.control}
-            name="oldPassword"
-            render={({ field }) => (
-              <FormItem className="max-w-80">
-                <FormLabel>{t('FormLabel.old_password')}</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    autoCapitalize="none"
-                    autoComplete="current-password"
-                    autoCorrect="off"
-                    placeholder={t('FormLabel.old_password')}
-                    {...field}
-                  />
-                </FormControl>
-                {/* <FormDescription></FormDescription> */}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {has_set_password && (
+            <FormField
+              control={form.control}
+              name="oldPassword"
+              render={({ field }) => (
+                <FormItem className="max-w-80">
+                  <FormLabel>{t('FormLabel.old_password')}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      autoCapitalize="none"
+                      autoComplete="current-password"
+                      autoCorrect="off"
+                      placeholder={t('FormLabel.old_password')}
+                      {...field}
+                    />
+                  </FormControl>
+                  {/* <FormDescription></FormDescription> */}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
           <FormField
             control={form.control}
             name="newPassword"

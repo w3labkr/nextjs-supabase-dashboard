@@ -27,10 +27,10 @@ import { useAuth } from '@/hooks/use-auth'
 
 const formSchema = z
   .object({
-    email: z.string().trim().max(255).email(),
+    email: z.string().nonempty().max(255).email(),
     // If the password is larger than 72 chars, it will be truncated to the first 72 chars.
-    newPassword: z.string().trim().min(6).max(72),
-    confirmNewPassword: z.string().trim().min(6).max(72),
+    newPassword: z.string().nonempty().min(6).max(72),
+    confirmNewPassword: z.string().nonempty().min(6).max(72),
   })
   .refine((val) => val.newPassword === val.confirmNewPassword, {
     path: ['confirmNewPassword'],
