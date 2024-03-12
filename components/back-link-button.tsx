@@ -29,7 +29,7 @@ export const BackLinkButton = React.forwardRef<
     endIconName,
     endIconClassName,
     translate,
-    text = 'BackLinkButton.back',
+    text = 'Back',
     ...rest
   } = props
   const router = useRouter()

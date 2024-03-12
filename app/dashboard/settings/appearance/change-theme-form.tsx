@@ -1,6 +1,8 @@
 'use client'
 
 import * as React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useTheme } from 'next-themes'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -28,27 +30,17 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>
 
-// This can come from your database or API.
-const defaultValues: Partial<FormValues> = {
-  theme: 'light',
-}
-
 export function ChangeThemeForm() {
+  const { t } = useTranslation()
+  const { theme, setTheme } = useTheme()
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues,
+    defaultValues: { theme },
   })
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
-    setIsSubmitting(true)
-    try {
-      // if (error) throw new Error(error?.message)
-    } catch (e: unknown) {
-      // console.error((e as Error)?.message)
-    } finally {
-      setIsSubmitting(false)
-    }
+    setTheme(formValues?.theme)
+    toast.success(t('FormMessage.theme_has_been_successfully_changed'))
   }
 
   return (
@@ -132,12 +124,7 @@ export function ChangeThemeForm() {
               </FormItem>
             )}
           />
-          <SubmitButton
-            isSubmitting={isSubmitting}
-            text="ChangeThemeForm.submit"
-            translate="yes"
-            disabled
-          />
+          <SubmitButton text="ChangeThemeForm.submit" translate="yes" />
         </form>
       </Form>
     </div>
