@@ -12,11 +12,22 @@ export interface CommandItemsProps {
   items: Languages[]
   language: ResolvedLanguage
   onSelect: (value: string) => void
+  className?: string
 }
 
-export function CommandItems({ items, language, onSelect }: CommandItemsProps) {
+export function CommandItems({
+  items,
+  language,
+  onSelect,
+  className,
+}: CommandItemsProps) {
   return items.map((item) => (
-    <CommandItem key={item.value} value={item.value} onSelect={onSelect}>
+    <CommandItem
+      key={item.value}
+      value={item.value}
+      onSelect={onSelect}
+      className={cn('cursor-pointer', className)}
+    >
       <LucideIcon
         name="Check"
         className={cn(

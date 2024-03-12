@@ -36,6 +36,12 @@
     "submit": "Update theme"
   },
 
+  "ChangeLanguageForm": {
+    "title": "Language",
+    "description": "Select the language for the dashboard.",
+    "submit": "Update language"
+  },
+
   "ChangeUsernameForm": {
     "title": "Username",
     "description": "",

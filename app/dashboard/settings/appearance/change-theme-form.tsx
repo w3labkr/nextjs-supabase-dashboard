@@ -25,7 +25,7 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
 const formSchema = z.object({
-  theme: z.enum(['light', 'dark']),
+  theme: z.string().nonempty(),
 })
 
 type FormValues = z.infer<typeof formSchema>
