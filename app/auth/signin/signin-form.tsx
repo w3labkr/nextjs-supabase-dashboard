@@ -52,18 +52,18 @@ export function SignInForm() {
     setIsSubmitting(true)
     try {
       const supabase = createClient()
-      const signedIn = await supabase.auth.signInWithPassword({
+      const signed = await supabase.auth.signInWithPassword({
         email: formValues.email,
         password: formValues.password,
       })
 
-      if (signedIn?.error) throw new Error(signedIn?.error?.message)
-      if (!signedIn?.data?.user) throw new Error('User data is invalid.')
+      if (signed?.error) throw new Error(signed?.error?.message)
+      if (!signed?.data?.user) throw new Error('User data is invalid.')
 
       toast.success(t('FormMessage.you_have_successfully_logged_in'))
 
-      auth.setSession(signedIn?.data?.session)
-      auth.setUser(signedIn?.data?.user)
+      auth.setSession(signed?.data?.session)
+      auth.setUser(signed?.data?.user)
 
       router.replace('/dashboard/dashboard')
       router.refresh()

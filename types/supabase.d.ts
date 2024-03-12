@@ -80,13 +80,6 @@ export type Database = {
         }
         Returns: string
       }
-      verify_user_email_and_password: {
-        Args: {
-          user_email: string
-          user_password: string
-        }
-        Returns: boolean
-      }
       verify_user_password: {
         Args: {
           password: string

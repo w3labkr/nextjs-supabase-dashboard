@@ -48,7 +48,7 @@ async function updateProfile(url: string, { arg }: { arg: FormValues }) {
 export function ChangeUsernameForm() {
   const { t } = useTranslation()
   const { user } = useAuth()
-  const { data: values } = useProfile(user?.id ?? null)
+  const { data: profile } = useProfile(user?.id ?? null)
   const { trigger } = useSWRMutation(
     user?.id ? `/api/v1/profile/${user?.id}` : null,
     updateProfile
@@ -58,7 +58,7 @@ export function ChangeUsernameForm() {
     resolver: zodResolver(formSchema),
     defaultValues,
     values: {
-      username: values?.username ?? '',
+      username: profile?.username ?? '',
     },
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -66,7 +66,7 @@ export function ChangeUsernameForm() {
   const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
-      if (values?.username === formValues?.username) {
+      if (profile?.username === formValues?.username) {
         throw new Error('Nothing has changed.')
       }
       const response = await trigger(formValues)

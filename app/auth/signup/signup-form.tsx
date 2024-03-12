@@ -57,6 +57,7 @@ export function SignUpForm() {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
+    console.log(formValues)
     setIsSubmitting(true)
     try {
       const email = formValues.email
@@ -75,18 +76,17 @@ export function SignUpForm() {
       }
 
       const supabase = createClient()
-      const signedIn = await supabase.auth.signUp({
+      const signed = await supabase.auth.signUp({
         email,
         password: formValues.newPassword,
         options: { data: user_metadata },
       })
 
-      if (signedIn?.error) throw new Error(signedIn?.error?.message)
-      if (!signedIn?.data?.user) throw new Error('User data is invalid.')
+      if (signed?.error) throw new Error(signed?.error?.message)
+      if (!signed?.data?.user) throw new Error('User data is invalid.')
 
-      const signedOut = await supabase.auth.signOut()
-
-      if (signedOut?.error) throw new Error(signedOut?.error?.message)
+      const unsigned = await supabase.auth.signOut()
+      if (unsigned?.error) throw new Error(unsigned?.error?.message)
 
       auth.setSession(null)
       auth.setUser(null)

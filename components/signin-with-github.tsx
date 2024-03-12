@@ -22,7 +22,7 @@ export function SignInWithGithub({
   const onSubmit = async () => {
     try {
       const supabase = createClient()
-      const signedIn = await supabase.auth.signInWithOAuth({
+      const signed = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
           // A URL to send the user to after they are confirmed.
@@ -33,7 +33,7 @@ export function SignInWithGithub({
         },
       })
 
-      if (signedIn?.error) throw new Error(signedIn?.error?.message)
+      if (signed?.error) throw new Error(signed?.error?.message)
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     }

@@ -45,7 +45,7 @@ const defaultValues: Partial<FormValues> = {
   confirmNewPassword: '',
 }
 
-export function ChangePasswordForm() {
+export function ChangePasswordWithEmail() {
   const { t } = useTranslation()
 
   const form = useForm<FormValues>({

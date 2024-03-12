@@ -63,9 +63,9 @@ export function ResetPasswordForm() {
       if (updated?.error) throw new Error(updated?.error?.message)
       if (!updated?.data?.user) throw new Error('User data is invalid.')
 
-      const signedOut = await supabase.auth.signOut()
+      const unsigned = await supabase.auth.signOut()
 
-      if (signedOut?.error) throw new Error(signedOut?.error?.message)
+      if (unsigned?.error) throw new Error(unsigned?.error?.message)
 
       toast.success(t('FormMessage.password_has_been_successfully_changed'))
 

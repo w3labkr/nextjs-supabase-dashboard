@@ -52,7 +52,7 @@ begin
     new.raw_user_meta_data ->> 'avatar_url',
     new.raw_user_meta_data ->> 'full_name',
     new.raw_user_meta_data ->> 'name',
-    case when (r.encrypted_password is null or r.encrypted_password = '') then false else true end
+    case when new.encrypted_password is null or new.encrypted_password = '' then false else true end
   );
   return new;
 end;
@@ -64,9 +64,9 @@ create trigger on_auth_user_created
 
 -- Trigger the function every time a user password is updated
 drop trigger if exists on_auth_user_password_updated on auth.users;
-drop function if exists handle_update_user_password_status;
+drop function if exists handle_has_set_password;
 
-create or replace function handle_update_user_password_status()
+create or replace function handle_has_set_password()
 returns trigger
 as $$
 begin
@@ -79,7 +79,7 @@ $$ language plpgsql security definer set search_path = public;
 
 create trigger on_auth_user_password_updated
   after update of encrypted_password on auth.users
-  for each row execute function handle_update_user_password_status();
+  for each row execute function handle_has_set_password();
 
 -- Generate unique username
 drop function if exists generate_username;
@@ -129,7 +129,7 @@ begin
       r.raw_user_meta_data ->> 'avatar_url',
       r.raw_user_meta_data ->> 'full_name',
       r.raw_user_meta_data ->> 'name',
-      case when r.encrypted_password = '' then false else true end
+      case when r.encrypted_password is null or r.encrypted_password = '' then false else true end
     );
   END LOOP;
 

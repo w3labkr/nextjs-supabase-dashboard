@@ -35,13 +35,15 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
 import { createClient } from '@/lib/supabase/client'
+import { useAuth } from '@/hooks/use-auth'
+import { useProfile } from '@/hooks/api/use-profile'
 
 const formSchema = z.object({
-  email: z.string().trim().max(255).email(),
-  password: z.string().trim().min(6).max(72),
+  email: z.string().nonempty().max(255).email(),
+  password: z.string().nonempty().min(6).max(72).optional(),
   confirmationPhrase: z
     .string()
-    .trim()
+    .nonempty()
     .refine((val) => val === 'delete my account'),
 })
 
@@ -55,43 +57,60 @@ const defaultValues: Partial<FormValues> = {
 
 export function DeleteUserForm() {
   const router = useRouter()
+  const auth = useAuth()
+  const userId = auth?.user?.id ?? null
+  const { data: profile } = useProfile(userId)
   const { t } = useTranslation()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
   })
+  const { register, unregister } = form
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+  const has_set_password = profile?.has_set_password
+
+  React.useEffect(() => {
+    has_set_password ? register('password') : unregister('password')
+  }, [register, unregister, has_set_password])
 
   const onSubmit = async (formValues: FormValues) => {
     setIsSubmitting(true)
     try {
       const supabase = createClient()
-      const verified = await supabase.rpc('verify_user_email_and_password', {
-        user_email: formValues.email,
-        user_password: formValues.password,
-      })
 
-      if (verified?.error) throw new Error(verified?.error?.message)
-      if (verified?.data === false)
-        throw new Error('Your account information is invalid.')
+      if (formValues?.email !== profile?.email) {
+        throw new Error('Your email address is invalid.')
+      }
+
+      if (has_set_password) {
+        const verified = await supabase.rpc('verify_user_password', {
+          password: formValues?.password as string,
+        })
+        if (verified?.error) throw new Error(verified?.error?.message)
+        if (verified?.data === false) {
+          throw new Error('Your password is invalid.')
+        }
+      }
 
       const deleted = await supabase.rpc('delete_user')
-
       if (deleted?.error) throw new Error(deleted?.error?.message)
 
       toast.success(t('FormMessage.account_has_been_successfully_deleted'))
+
+      auth.setSession(null)
+      auth.setUser(null)
 
       router.replace('/')
       router.refresh()
     } catch (e: unknown) {
       switch ((e as Error)?.message) {
-        case 'Your account information is invalid.':
-          form.setError('email', {
-            message: t('FormMessage.account_information_is_invalid'),
-          })
+        case 'Your email address is invalid.':
+          form.setError('email', { message: t('FormMessage.email_is_invalid') })
+          break
+        case 'Your password is invalid.':
           form.setError('password', {
-            message: t('FormMessage.account_information_is_invalid'),
+            message: t('FormMessage.password_is_invalid'),
           })
           break
         default:
@@ -146,29 +165,31 @@ export function DeleteUserForm() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      {t('FormLabel.confirm_your_password')}:
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        autoCapitalize="none"
-                        autoComplete="current-password"
-                        autoCorrect="off"
-                        placeholder={t('FormLabel.password')}
-                        {...field}
-                      />
-                    </FormControl>
-                    {/* <FormDescription></FormDescription> */}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {has_set_password && (
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {t('FormLabel.confirm_your_password')}:
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          autoCapitalize="none"
+                          autoComplete="current-password"
+                          autoCorrect="off"
+                          placeholder={t('FormLabel.password')}
+                          {...field}
+                        />
+                      </FormControl>
+                      {/* <FormDescription></FormDescription> */}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
               <FormField
                 control={form.control}
                 name="confirmationPhrase"

@@ -139,11 +139,13 @@
   "FormMessage": {
     "account_has_been_successfully_deleted": "계정이 성공적으로 삭제되었습니다.",
     "account_information_is_invalid": "계정 정보가 유효하지 않습니다.",
+    "email_is_invalid": "이메일이 유효하지 않습니다.",
     "failed_to_fetch": "데이터를 가져오지 못했습니다.",
     "invalid_login_credentials": "이메일 또는 비밀번호가 일치하지 않습니다.",
     "new_password_should_be_different_from_the_old_password": "새 비밀번호는 이전 비밀번호와 달라야 합니다.",
     "nothing_has_changed": "변경된 내용이 없습니다.",
     "old_password_does_not_match": "이전 비밀번호가 일치하지 않습니다.",
+    "password_is_invalid": "비밀번호가 유효하지 않습니다.",
     "password_has_been_successfully_changed": "비밀번호가 성공적으로 변경되었습니다.",
     "profile_has_been_successfully_changed": "프로필이 성공적으로 변경되었습니다.",
     "the_email_has_been_sent_successfully": "이메일이 성공적으로 전송되었습니다.",

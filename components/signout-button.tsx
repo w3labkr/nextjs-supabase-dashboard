@@ -22,9 +22,9 @@ export function SignOutButton(props: SignOutButtonProps) {
   const onSubmit = async () => {
     try {
       const supabase = createClient()
-      const signedOut = await supabase.auth.signOut()
+      const unsigned = await supabase.auth.signOut()
 
-      if (signedOut?.error) throw new Error(signedOut?.error?.message)
+      if (unsigned?.error) throw new Error(unsigned?.error?.message)
 
       auth.setSession(null)
       auth.setUser(null)
