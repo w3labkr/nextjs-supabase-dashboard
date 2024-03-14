@@ -18,50 +18,121 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      accounts: {
+        Row: {
+          created_at: string | null
+          has_set_password: boolean | null
+          id: string
+          updated_at: string | null
+          username: string
+        }
+        Insert: {
+          created_at?: string | null
+          has_set_password?: boolean | null
+          id: string
+          updated_at?: string | null
+          username: string
+        }
+        Update: {
+          created_at?: string | null
+          has_set_password?: boolean | null
+          id?: string
+          updated_at?: string | null
+          username?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'accounts_id_fkey'
+            columns: ['id']
+            isOneToOne: true
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      emails: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          email_confirmed_at: string | null
+          id: number
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          email_confirmed_at?: string | null
+          id?: number
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          email_confirmed_at?: string | null
+          id?: number
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'emails_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           bio: string | null
           created_at: string | null
-          email: string
-          full_name: string | null
-          has_set_password: boolean | null
-          id: string
+          email: string | null
+          id: number
           name: string | null
           updated_at: string | null
+          user_id: string
           username: string
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string | null
-          email: string
-          full_name?: string | null
-          has_set_password?: boolean | null
-          id: string
+          email?: string | null
+          id?: number
           name?: string | null
           updated_at?: string | null
+          user_id: string
           username: string
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string | null
-          email?: string
-          full_name?: string | null
-          has_set_password?: boolean | null
-          id?: string
+          email?: string | null
+          id?: number
           name?: string | null
           updated_at?: string | null
+          user_id?: string
           username?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'profiles_id_fkey'
-            columns: ['id']
+            foreignKeyName: 'profiles_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: true
             referencedRelation: 'users'
             referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'profiles_username_fkey'
+            columns: ['username']
+            isOneToOne: false
+            referencedRelation: 'accounts'
+            referencedColumns: ['username']
           },
         ]
       }

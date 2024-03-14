@@ -23,6 +23,7 @@ import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -36,19 +37,15 @@ import useSWRMutation from 'swr/mutation'
 import { User } from '@supabase/supabase-js'
 import { fetcher } from '@/lib/utils'
 import { useProfile } from '@/hooks/api/use-profile'
+import { useEmails } from '@/hooks/api/use-emails'
 
-const formSchema = z.object({
+const FormSchema = z.object({
   name: z.string().nonempty().min(2),
-  email: z.string().nonempty().max(255).email().optional(),
-  bio: z.string().nonempty().max(160).optional(),
+  email: z.string().max(255).optional(),
+  bio: z.string().max(160).optional(),
 })
 
-type FormValues = z.infer<typeof formSchema>
-
-const defaultValues: Partial<FormValues> = {
-  name: '',
-  bio: '',
-}
+type FormValues = z.infer<typeof FormSchema>
 
 async function updateProfile(url: string, { arg }: { arg: FormValues }) {
   return await fetcher(url, {
@@ -57,28 +54,39 @@ async function updateProfile(url: string, { arg }: { arg: FormValues }) {
   })
 }
 
-export function ProfileForm({ user }: { user: User | null }) {
+export function ProfileForm({ user }: { user: User }) {
   const { t } = useTranslation()
-  const { data: profile, isLoading } = useProfile(user?.id ?? null)
+
+  const fetchProfile = useProfile(user?.id ?? null)
+  const { data: profile } = fetchProfile
+
+  const fetchEmails = useEmails(user?.id ?? null)
+  const { data: emails } = fetchEmails
+
   const { trigger } = useSWRMutation(
     user?.id ? `/api/v1/profile/${user?.id}` : null,
     updateProfile
   )
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues,
+    resolver: zodResolver(FormSchema),
+    mode: 'onSubmit',
     values: {
       name: profile?.name ?? '',
+      email: profile?.email ?? 'unassigned',
       bio: profile?.bio ?? '',
     },
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
-    setIsSubmitting(true)
     try {
-      const response = await trigger(formValues)
+      setIsSubmitting(true)
+      const setEmail = (s: string) => (s === 'unassigned' ? '' : s)
+      const response = await trigger({
+        ...formValues,
+        email: setEmail(formValues?.email ?? ''),
+      })
       if (response?.error) throw new Error(response?.error?.message)
       toast.success(t('FormMessage.profile_has_been_successfully_changed'))
     } catch (e: unknown) {
@@ -88,7 +96,9 @@ export function ProfileForm({ user }: { user: User | null }) {
     }
   }
 
-  if (isLoading) return null
+  if (fetchProfile?.isLoading || fetchEmails?.isLoading) {
+    return null
+  }
 
   return (
     <div className="space-y-4">
@@ -126,11 +136,7 @@ export function ProfileForm({ user }: { user: User | null }) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('FormLabel.email')}</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  disabled
-                >
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl className="max-w-72">
                     <SelectTrigger>
                       <SelectValue
@@ -141,12 +147,16 @@ export function ProfileForm({ user }: { user: User | null }) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="name@example.com">
-                      name@example.com
-                    </SelectItem>
-                    <SelectItem value="name@google.com">
-                      name@google.com
-                    </SelectItem>
+                    <SelectGroup>
+                      <SelectItem value="unassigned">
+                        {t('SelectValue.select_a_verified_email_to_display')}
+                      </SelectItem>
+                      {emails?.map(({ id, email }) => (
+                        <SelectItem key={id} value={email ?? ''}>
+                          {email}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
                   </SelectContent>
                 </Select>
                 <FormDescription>

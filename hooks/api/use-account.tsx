@@ -4,13 +4,13 @@ import useSWR from 'swr'
 import { Tables } from '@/types/supabase'
 
 type FetchData =
-  | { data: Tables<'profiles'>; error: null }
+  | { data: Tables<'accounts'>; error: null }
   | { data: null; error: Error }
 
-export type Profile = Tables<'profiles'>
+export type Account = Tables<'accounts'>
 
-export function useProfile(id: string | null) {
-  const fetchUrl = id ? `/api/v1/profile/${id}` : null
+export function useAccount(id: string | null) {
+  const fetchUrl = id ? `/api/v1/account/${id}` : null
   const {
     data: api,
     error,

@@ -22,11 +22,11 @@ import { SubmitButton } from '@/components/submit-button'
 
 import { createClient } from '@/lib/supabase/client'
 
-const formSchema = z.object({
+const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
 })
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = z.infer<typeof FormSchema>
 
 const defaultValues: Partial<FormValues> = {
   email: '',
@@ -36,14 +36,15 @@ export function ForgotPasswordForm() {
   const { t } = useTranslation()
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(FormSchema),
+    mode: 'onSubmit',
     defaultValues,
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
-    setIsSubmitting(true)
     try {
+      setIsSubmitting(true)
       const supabase = createClient()
       const { error } = await supabase.auth.resetPasswordForEmail(
         formValues.email,

@@ -5,6 +5,7 @@ import { ProfileForm } from './profile-form'
 
 export default async function ProfilePage() {
   const { authenticated, user } = await authenticate()
+  if (!user) return null
 
   return (
     <main className="flex-1 overflow-auto p-10 pb-16">

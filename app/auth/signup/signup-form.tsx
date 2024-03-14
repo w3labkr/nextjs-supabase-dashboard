@@ -25,7 +25,7 @@ import { SignInWithGoogleUserMetadata } from '@/types/api'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 
-const formSchema = z
+const FormSchema = z
   .object({
     email: z.string().nonempty().max(255).email(),
     // If the password is larger than 72 chars, it will be truncated to the first 72 chars.
@@ -37,7 +37,7 @@ const formSchema = z
     params: { i18n: 'invalid_confirm_password' },
   })
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = z.infer<typeof FormSchema>
 
 const defaultValues: Partial<FormValues> = {
   email: '',
@@ -51,16 +51,16 @@ export function SignUpForm() {
   const { t } = useTranslation()
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(FormSchema),
+    mode: 'onSubmit',
     defaultValues,
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
-    console.log(formValues)
-    setIsSubmitting(true)
     try {
-      const email = formValues.email
+      setIsSubmitting(true)
+      const email = formValues?.email
       const username = email.split('@')[0]
       const user_metadata: SignInWithGoogleUserMetadata = {
         avatar_url: null,
@@ -78,7 +78,7 @@ export function SignUpForm() {
       const supabase = createClient()
       const signed = await supabase.auth.signUp({
         email,
-        password: formValues.newPassword,
+        password: formValues?.newPassword,
         options: { data: user_metadata },
       })
 

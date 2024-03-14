@@ -24,7 +24,7 @@ import { SubmitButton } from '@/components/submit-button'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 
-const formSchema = z
+const FormSchema = z
   .object({
     newPassword: z.string().nonempty().min(6).max(72),
     confirmNewPassword: z.string().nonempty().min(6).max(72),
@@ -34,7 +34,7 @@ const formSchema = z
     params: { i18n: 'invalid_confirm_password' },
   })
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = z.infer<typeof FormSchema>
 
 const defaultValues: Partial<FormValues> = {
   newPassword: '',
@@ -47,14 +47,15 @@ export function ResetPasswordForm() {
   const { t } = useTranslation()
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(FormSchema),
+    mode: 'onSubmit',
     defaultValues,
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
-    setIsSubmitting(true)
     try {
+      setIsSubmitting(true)
       const supabase = createClient()
       const updated = await supabase.auth.updateUser({
         password: formValues.newPassword,

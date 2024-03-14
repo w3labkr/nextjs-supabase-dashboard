@@ -26,46 +26,45 @@ import { Description } from '@/components/description'
 import useSWRMutation from 'swr/mutation'
 import { User } from '@supabase/supabase-js'
 import { fetcher } from '@/lib/utils'
-import { useProfile } from '@/hooks/api/use-profile'
+import { useAccount } from '@/hooks/api/use-account'
 
-const formSchema = z.object({
+const FormSchema = z.object({
   username: z.string().nonempty().min(2).max(30),
 })
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = z.infer<typeof FormSchema>
 
-const defaultValues: Partial<FormValues> = {
-  username: '',
-}
-
-async function updateProfile(url: string, { arg }: { arg: FormValues }) {
+async function updateAccount(url: string, { arg }: { arg: FormValues }) {
   return await fetcher(url, {
     method: 'POST',
     body: JSON.stringify(arg),
   })
 }
 
-export function ChangeUsernameForm({ user }: { user: User | null }) {
+export function ChangeUsernameForm({ user }: { user: User }) {
   const { t } = useTranslation()
-  const { data: profile, isLoading } = useProfile(user?.id ?? null)
-  const { trigger } = useSWRMutation(
-    user?.id ? `/api/v1/profile/${user?.id}` : null,
-    updateProfile
-  )
+
+  const fetchAccount = useAccount(user?.id ?? null)
+  const { data: account } = fetchAccount
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues,
+    resolver: zodResolver(FormSchema),
+    mode: 'onSubmit',
     values: {
-      username: profile?.username ?? '',
+      username: account?.username ?? '',
     },
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
+  const { trigger } = useSWRMutation(
+    user?.id ? `/api/v1/account/${user?.id}` : null,
+    updateAccount
+  )
+
   const onSubmit = async (formValues: FormValues) => {
-    setIsSubmitting(true)
     try {
-      if (profile?.username === formValues?.username) {
+      setIsSubmitting(true)
+      if (account?.username === formValues?.username) {
         throw new Error('Nothing has changed.')
       }
       const response = await trigger(formValues)
@@ -87,7 +86,7 @@ export function ChangeUsernameForm({ user }: { user: User | null }) {
     }
   }
 
-  if (isLoading) return null
+  if (fetchAccount?.isLoading) return null
 
   return (
     <div className="space-y-4">

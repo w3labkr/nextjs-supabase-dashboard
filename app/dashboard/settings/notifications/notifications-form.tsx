@@ -23,7 +23,7 @@ import { SubmitButton } from '@/components/submit-button'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
-const formSchema = z.object({
+const FormSchema = z.object({
   type: z.enum(['all', 'mentions', 'none']),
   communication_emails: z.boolean().default(false).optional(),
   social_emails: z.boolean().default(false).optional(),
@@ -31,7 +31,7 @@ const formSchema = z.object({
   security_emails: z.boolean(),
 })
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = z.infer<typeof FormSchema>
 
 // This can come from your database or API.
 const defaultValues: Partial<FormValues> = {
@@ -43,14 +43,15 @@ const defaultValues: Partial<FormValues> = {
 
 export function NotificationsForm() {
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(FormSchema),
+    mode: 'onSubmit',
     defaultValues,
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
-    setIsSubmitting(true)
     try {
+      setIsSubmitting(true)
       // if (error) throw new Error(error?.message)
     } catch (e: unknown) {
       // console.error((e as Error)?.message)

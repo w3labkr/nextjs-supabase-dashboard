@@ -8,11 +8,7 @@ export async function GET(
 ) {
   try {
     const supabase = createClient()
-    const response = await supabase
-      .from('profiles')
-      .select()
-      .eq('user_id', id)
-      .single()
+    const response = await supabase.from('emails').select().eq('user_id', id)
 
     if (response?.error) throw new Error(response?.error?.message)
 
@@ -51,7 +47,7 @@ export async function POST(
     const data = await request.json()
     const supabase = createClient()
     const response = await supabase
-      .from('profiles')
+      .from('emails')
       .update(data)
       .eq('user_id', id)
 

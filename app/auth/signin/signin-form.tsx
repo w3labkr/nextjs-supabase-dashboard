@@ -25,12 +25,12 @@ import { RelatedLink } from '@/components/related-link'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 
-const formSchema = z.object({
+const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
   password: z.string().nonempty().min(6).max(72),
 })
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = z.infer<typeof FormSchema>
 
 const defaultValues: Partial<FormValues> = {
   email: '',
@@ -43,14 +43,15 @@ export function SignInForm() {
   const { t } = useTranslation()
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(FormSchema),
+    mode: 'onSubmit',
     defaultValues,
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
-    setIsSubmitting(true)
     try {
+      setIsSubmitting(true)
       const supabase = createClient()
       const signed = await supabase.auth.signInWithPassword({
         email: formValues.email,

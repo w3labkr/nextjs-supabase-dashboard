@@ -9,9 +9,9 @@ export async function GET(
   try {
     const supabase = createClient()
     const response = await supabase
-      .from('profiles')
+      .from('accounts')
       .select()
-      .eq('user_id', id)
+      .eq('id', id)
       .single()
 
     if (response?.error) throw new Error(response?.error?.message)
@@ -50,10 +50,7 @@ export async function POST(
   try {
     const data = await request.json()
     const supabase = createClient()
-    const response = await supabase
-      .from('profiles')
-      .update(data)
-      .eq('user_id', id)
+    const response = await supabase.from('accounts').update(data).eq('id', id)
 
     if (response?.error) throw new Error(response?.error?.message)
 

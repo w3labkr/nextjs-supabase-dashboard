@@ -37,9 +37,9 @@ import { Description } from '@/components/description'
 import { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
-import { useProfile } from '@/hooks/api/use-profile'
+import { useAccount } from '@/hooks/api/use-account'
 
-const formSchema = z.object({
+const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
   password: z.string().nonempty().min(6).max(72).optional(),
   confirmationPhrase: z
@@ -48,7 +48,7 @@ const formSchema = z.object({
     .refine((val) => val === 'delete my account'),
 })
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = z.infer<typeof FormSchema>
 
 const defaultValues: Partial<FormValues> = {
   email: '',
@@ -56,34 +56,41 @@ const defaultValues: Partial<FormValues> = {
   confirmationPhrase: '',
 }
 
-export function DeleteUserForm({ user }: { user: User | null }) {
+export function DeleteUserForm({ user }: { user: User }) {
   const router = useRouter()
-  const auth = useAuth()
-  const { data: profile, isLoading } = useProfile(user?.id ?? null)
   const { t } = useTranslation()
 
+  const auth = useAuth()
+  const fetchAccount = useAccount(user?.id ?? null)
+  const { data: account } = fetchAccount
+  const hasSetPassword = React.useMemo(
+    () => account?.has_set_password,
+    [account?.has_set_password]
+  )
+
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(FormSchema),
+    mode: 'onSubmit',
     defaultValues,
+    shouldUnregister: true,
   })
   const { register, unregister } = form
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
-  const has_set_password = profile?.has_set_password
 
   React.useEffect(() => {
-    has_set_password ? register('password') : unregister('password')
-  }, [register, unregister, has_set_password])
+    hasSetPassword ? register('password') : unregister('password')
+  }, [register, unregister, hasSetPassword])
 
   const onSubmit = async (formValues: FormValues) => {
-    setIsSubmitting(true)
     try {
+      setIsSubmitting(true)
       const supabase = createClient()
 
-      if (formValues?.email !== profile?.email) {
+      if (formValues?.email !== user?.email) {
         throw new Error('Your email address is invalid.')
       }
 
-      if (has_set_password) {
+      if (hasSetPassword) {
         const verified = await supabase.rpc('verify_user_password', {
           password: formValues?.password as string,
         })
@@ -122,7 +129,7 @@ export function DeleteUserForm({ user }: { user: User | null }) {
     }
   }
 
-  if (isLoading) return null
+  if (fetchAccount?.isLoading) return null
 
   return (
     <div className="space-y-4">
@@ -167,7 +174,7 @@ export function DeleteUserForm({ user }: { user: User | null }) {
                   </FormItem>
                 )}
               />
-              {has_set_password && (
+              {hasSetPassword && (
                 <FormField
                   control={form.control}
                   name="password"

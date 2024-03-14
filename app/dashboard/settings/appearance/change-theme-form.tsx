@@ -24,17 +24,18 @@ import { SubmitButton } from '@/components/submit-button'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
-const formSchema = z.object({
+const FormSchema = z.object({
   theme: z.string().nonempty(),
 })
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = z.infer<typeof FormSchema>
 
 export function ChangeThemeForm() {
   const { t } = useTranslation()
   const { theme, setTheme } = useTheme()
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(FormSchema),
+    mode: 'onSubmit',
     defaultValues: { theme },
   })
 

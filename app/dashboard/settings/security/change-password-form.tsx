@@ -25,9 +25,9 @@ import { Description } from '@/components/description'
 
 import { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
-import { useProfile } from '@/hooks/api/use-profile'
+import { useAccount } from '@/hooks/api/use-account'
 
-const formSchema = z
+const FormSchema = z
   .object({
     // If the password is larger than 72 chars, it will be truncated to the first 72 chars.
     oldPassword: z.string().nonempty().min(6).max(72).optional(),
@@ -39,7 +39,7 @@ const formSchema = z
     params: { i18n: 'invalid_confirm_password' },
   })
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = z.infer<typeof FormSchema>
 
 const defaultValues: Partial<FormValues> = {
   oldPassword: '',
@@ -47,27 +47,35 @@ const defaultValues: Partial<FormValues> = {
   confirmNewPassword: '',
 }
 
-export function ChangePasswordForm({ user }: { user: User | null }) {
+export function ChangePasswordForm({ user }: { user: User }) {
   const { t } = useTranslation()
-  const { data: profile, isLoading, mutate } = useProfile(user?.id ?? null)
+
+  const fetchAccount = useAccount(user?.id ?? null)
+  const { data: account } = fetchAccount
+  const hasSetPassword = React.useMemo(
+    () => account?.has_set_password,
+    [account?.has_set_password]
+  )
+
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(FormSchema),
+    mode: 'onSubmit',
+    shouldUnregister: true,
     defaultValues,
   })
   const { register, unregister } = form
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
-  const has_set_password = profile?.has_set_password
 
   React.useEffect(() => {
-    has_set_password ? register('oldPassword') : unregister('oldPassword')
-  }, [register, unregister, has_set_password])
+    hasSetPassword ? register('oldPassword') : unregister('oldPassword')
+  }, [register, unregister, hasSetPassword])
 
   const onSubmit = async (formValues: FormValues) => {
-    setIsSubmitting(true)
     try {
+      setIsSubmitting(true)
       const supabase = createClient()
 
-      if (has_set_password) {
+      if (hasSetPassword) {
         const verified = await supabase.rpc('verify_user_password', {
           password: formValues?.oldPassword as string,
         })
@@ -86,7 +94,7 @@ export function ChangePasswordForm({ user }: { user: User | null }) {
       toast.success(t('FormMessage.password_has_been_successfully_changed'))
 
       form.reset()
-      mutate()
+      fetchAccount?.mutate()
     } catch (e: unknown) {
       switch ((e as Error)?.message) {
         case 'Old password does not match.':
@@ -110,7 +118,7 @@ export function ChangePasswordForm({ user }: { user: User | null }) {
     }
   }
 
-  if (isLoading) return null
+  if (fetchAccount?.isLoading) return null
 
   return (
     <div className="space-y-4">
@@ -124,7 +132,7 @@ export function ChangePasswordForm({ user }: { user: User | null }) {
           noValidate
           className="space-y-4"
         >
-          {has_set_password && (
+          {hasSetPassword ? (
             <FormField
               control={form.control}
               name="oldPassword"
@@ -146,7 +154,7 @@ export function ChangePasswordForm({ user }: { user: User | null }) {
                 </FormItem>
               )}
             />
-          )}
+          ) : null}
           <FormField
             control={form.control}
             name="newPassword"
