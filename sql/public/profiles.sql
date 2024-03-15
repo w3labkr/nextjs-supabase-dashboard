@@ -9,10 +9,10 @@ create table profiles (
   updated_at timestamptz default now(),
   user_id uuid not null references auth.users on delete cascade unique,
   username varchar(255) not null references accounts (username) on update cascade,
-  email varchar(255) default ''::character varying,
-  name text default ''::text,
-  avatar_url text default ''::text,
-  bio text default ''::text
+  email varchar(255),
+  name text,
+  avatar_url text,
+  bio text
 );
 
 -- Secure the table

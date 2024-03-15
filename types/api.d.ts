@@ -3,7 +3,6 @@ import {
   User,
   WeakPassword,
   Provider,
-  Pagination,
   AuthError,
   PostgrestError,
 } from '@supabase/supabase-js'
@@ -63,12 +62,4 @@ export interface SignInWithGoogleUserMetadata {
   picture: string | null
   provider_id: string | null
   sub: string | null
-}
-
-export type AdminListUsers = {
-  data: {
-    users: User[] | []
-    aud?: string | undefined
-  } & Pagination
-  error: AuthError | null
 }

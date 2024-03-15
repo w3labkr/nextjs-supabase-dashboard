@@ -7,7 +7,8 @@ type FetchData =
   | { data: Tables<'emails'>[]; error: null }
   | { data: null; error: Error }
 
-export type Account = Tables<'emails'>
+export type Email = Tables<'emails'>
+export type Emails = Tables<'emails'>[]
 
 export function useEmails(id: string | null) {
   const fetchUrl = id ? `/api/v1/emails/${id}` : null

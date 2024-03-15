@@ -37,7 +37,7 @@ type FormValues = z.infer<typeof FormSchema>
 const defaultValues: Partial<FormValues> = {
   communication_emails: false,
   marketing_emails: false,
-  social_emails: true,
+  social_emails: false,
   security_emails: true,
 }
 

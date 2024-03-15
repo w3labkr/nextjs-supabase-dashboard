@@ -174,7 +174,7 @@ export function DeleteUserForm({ user }: { user: User }) {
                   </FormItem>
                 )}
               />
-              {hasSetPassword && (
+              {hasSetPassword ? (
                 <FormField
                   control={form.control}
                   name="password"
@@ -198,7 +198,7 @@ export function DeleteUserForm({ user }: { user: User }) {
                     </FormItem>
                   )}
                 />
-              )}
+              ) : null}
               <FormField
                 control={form.control}
                 name="confirmationPhrase"

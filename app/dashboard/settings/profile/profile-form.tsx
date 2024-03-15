@@ -151,11 +151,14 @@ export function ProfileForm({ user }: { user: User }) {
                       <SelectItem value="unassigned">
                         {t('SelectValue.select_a_verified_email_to_display')}
                       </SelectItem>
-                      {emails?.map(({ id, email }) => (
-                        <SelectItem key={id} value={email ?? ''}>
-                          {email}
-                        </SelectItem>
-                      ))}
+                      {emails?.map(({ id, email, email_confirmed_at }) => {
+                        if (!email_confirmed_at) return null
+                        return (
+                          <SelectItem key={id} value={email ?? ''}>
+                            {email}
+                          </SelectItem>
+                        )
+                      })}
                     </SelectGroup>
                   </SelectContent>
                 </Select>

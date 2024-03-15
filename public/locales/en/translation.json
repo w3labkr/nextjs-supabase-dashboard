@@ -295,5 +295,34 @@
     "lastText": "Last",
     "lastAriaLabel": "Go to last page",
     "ellipsisText": "More pages"
+  },
+
+  "EmailListItem": {
+    "title": "Primary",
+    "description": "This email will be used for account-related notifications and may also be used to reset your password."
+  },
+
+  "ReceivesNotifications": {
+    "title": "Receives notifications",
+    "description": "This email address is the default used for notifications."
+  },
+
+  "UnverifiedEmails": {
+    "title": "Unverified",
+    "description": "Unverified email addresses cannot receive notifications and cannot be used to reset your password."
+  },
+
+  "ResendVerificationButton": {
+    "label": "Resend verification email"
+  },
+
+  "VisibleInEmails": {
+    "title": "Visible in emails",
+    "description": "This email may be used as your profile and author address."
+  },
+
+  "NotVisibleInEmails": {
+    "title": "Not visible in emails",
+    "description": "This email cannot be used as your profile or author address."
   }
 }
