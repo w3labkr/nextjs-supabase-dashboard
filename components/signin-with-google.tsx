@@ -19,7 +19,7 @@ export function SignInWithGoogle({
 }: SignInWithGoogleProps) {
   const { t } = useTranslation()
 
-  const onSubmit = async () => {
+  const handleClick = async () => {
     try {
       const supabase = createClient()
       const signed = await supabase.auth.signInWithOAuth({
@@ -46,7 +46,7 @@ export function SignInWithGoogle({
   }
 
   return (
-    <Button variant={variant} onClick={onSubmit} {...props}>
+    <Button variant={variant} onClick={handleClick} {...props}>
       <FcGoogle className="mr-2 size-4 min-w-4" />
       {t('SignInWithGoogle.label')}
     </Button>

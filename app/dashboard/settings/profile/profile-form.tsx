@@ -34,8 +34,8 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
 import useSWRMutation from 'swr/mutation'
-import { User } from '@supabase/supabase-js'
 import { fetcher } from '@/lib/utils'
+import { User } from '@supabase/supabase-js'
 import { useProfile } from '@/hooks/api/use-profile'
 import { useEmails } from '@/hooks/api/use-emails'
 
@@ -47,7 +47,7 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-async function updateProfile(url: string, { arg }: { arg: FormValues }) {
+async function sendRequest(url: string, { arg }: { arg: FormValues }) {
   return await fetcher(url, {
     method: 'POST',
     body: JSON.stringify(arg),
@@ -63,10 +63,8 @@ export function ProfileForm({ user }: { user: User }) {
   const fetchEmails = useEmails(user?.id ?? null)
   const { data: emails } = fetchEmails
 
-  const { trigger } = useSWRMutation(
-    user?.id ? `/api/v1/profile/${user?.id}` : null,
-    updateProfile
-  )
+  const requestUrl = user?.id ? `/api/v1/profile/${user?.id}` : null
+  const { trigger } = useSWRMutation(requestUrl, sendRequest)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -118,7 +116,7 @@ export function ProfileForm({ user }: { user: User }) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('FormLabel.name')}</FormLabel>
-                <FormControl className="max-w-72">
+                <FormControl className="w-[180px]">
                   <Input placeholder={t('FormLabel.your_name')} {...field} />
                 </FormControl>
                 <FormDescription>
@@ -137,8 +135,8 @@ export function ProfileForm({ user }: { user: User }) {
               <FormItem>
                 <FormLabel>{t('FormLabel.email')}</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl className="max-w-72">
-                    <SelectTrigger>
+                  <FormControl>
+                    <SelectTrigger className="w-[180px]">
                       <SelectValue
                         placeholder={t(
                           'SelectValue.select_a_verified_email_to_display'
@@ -177,7 +175,7 @@ export function ProfileForm({ user }: { user: User }) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t('FormLabel.bio')}</FormLabel>
-                <FormControl className="max-w-96">
+                <FormControl className="w-[360px]">
                   <Textarea
                     placeholder={t(
                       'Textarea.please_tell_us_a_little_about_yourself'

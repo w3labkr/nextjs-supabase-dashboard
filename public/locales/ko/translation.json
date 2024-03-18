@@ -146,6 +146,9 @@
     "account_has_been_successfully_deleted": "계정이 성공적으로 삭제되었습니다.",
     "account_information_is_invalid": "계정 정보가 유효하지 않습니다.",
     "email_is_invalid": "이메일이 유효하지 않습니다.",
+    "email_has_been_added_successfully": "이메일이 성공적으로 추가되었습니다.",
+    "email_has_been_successfully_deleted": "이메일이 성공적으로 삭제되었습니다.",
+    "email_address_is_already_registered": "이미 가입되어 있는 이메일 주소입니다.",
     "failed_to_fetch": "데이터를 가져오지 못했습니다.",
     "invalid_login_credentials": "이메일 또는 비밀번호가 일치하지 않습니다.",
     "new_password_should_be_different_from_the_old_password": "새 비밀번호는 이전 비밀번호와 달라야 합니다.",
@@ -168,6 +171,17 @@
   "FormDescription": {
     "this_is_the_name_that_appears_on_your_profile_and_email": "프로필과 이메일에 표시되는 이름입니다.",
     "you_can_manage_your_email_address_in_your_email_settings": "<link1>이메일 설정</link1>에서 확인된 이메일 주소를 관리할 수 있습니다."
+  },
+
+  "FormSubmit": {
+    "add": "추가",
+    "edit": "수정",
+    "del": "삭제",
+    "save": "저장",
+    "insert": "추가하기",
+    "update": "수정하기",
+    "delete": "삭제하기",
+    "submit": "제출하기"
   },
 
   "SelectValue": {
@@ -324,5 +338,15 @@
   "NotVisibleInEmails": {
     "title": "이메일에 표시되지 않음",
     "description": "이 이메일은 프로필이나 작성자 주소로 사용할 수 없습니다."
+  },
+
+  "AddEmailAddress": {
+    "title": "이메일 주소 추가",
+    "description": ""
+  },
+
+  "PrimaryEmailAddress": {
+    "title": "기본 이메일 주소",
+    "description": "기본 이메일 주소는 계정 관련 알림을 받고 비밀번호를 재설정하는 데 사용될 수 있습니다."
   }
 }

@@ -24,7 +24,7 @@ export function LanguageToggleButton({
   const [language, setLanguage] = React.useState<string>(resolvedLanguage)
   const { i18n } = useTranslation()
 
-  const onClick = () => {
+  const handleClick = () => {
     const currentValue = language === lng ? fallbackLng : lng
     i18n.changeLanguage(currentValue)
     document.documentElement.lang = currentValue
@@ -36,7 +36,7 @@ export function LanguageToggleButton({
     <button
       type="button"
       className={cn('text-sm underline underline-offset-4', className)}
-      onClick={onClick}
+      onClick={handleClick}
       {...props}
     >
       {(language === lng ? fallbackLng : lng)?.toUpperCase()}

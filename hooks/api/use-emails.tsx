@@ -3,7 +3,7 @@
 import useSWR from 'swr'
 import { Tables } from '@/types/supabase'
 
-type FetchData =
+export type FetchData =
   | { data: Tables<'emails'>[]; error: null }
   | { data: null; error: Error }
 
