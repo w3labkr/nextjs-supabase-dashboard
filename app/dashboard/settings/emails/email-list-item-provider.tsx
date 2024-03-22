@@ -7,6 +7,7 @@ export interface EmailListItemProviderProps {
   isPrimary: boolean
   email: string | null
   email_confirmed_at: string | null
+  user_id: string | null
 }
 
 export const EmailListItemContext =
@@ -15,6 +16,7 @@ export const EmailListItemContext =
     isPrimary: false,
     email: null,
     email_confirmed_at: null,
+    user_id: null,
   })
 
 export function EmailListItemProvider({

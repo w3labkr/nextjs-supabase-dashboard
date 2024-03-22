@@ -6,20 +6,28 @@ export async function authenticate() {
     data: { user },
     error,
   } = await supabase.auth.getUser()
-
   return {
-    authenticated: !(error || !user),
-    role: user?.role,
+    isAuthenticated: !(error || !user),
     user,
+    role: user?.role,
   }
 }
 
-export async function authorize(role: string) {
+export async function authorize(id: string, role?: string | undefined) {
   const supabase = createClient()
   const {
     data: { user },
     error,
   } = await supabase.auth.getUser()
+  const isAuthenticated: boolean = !(error || !user)
+  let isAuthorized: boolean = false
 
-  return { authorized: user?.role === role }
+  if (isAuthenticated && id) isAuthorized = user?.id === id
+  if (isAuthenticated && role) isAuthorized = user?.role === role
+
+  return {
+    isAuthorized,
+    user,
+    role: user?.role,
+  }
 }

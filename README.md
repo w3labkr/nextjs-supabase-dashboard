@@ -341,6 +341,19 @@ Day.js 2kB immutable date-time library alternative to Moment.js with the same mo
 npm install dayjs
 ```
 
+Send e-mails with Node.JS
+
+```shell
+npm install nodemailer
+npm install --save-dev @types/nodemailer
+```
+
+JsonWebToken implementation for node.js
+
+```shell
+npm install jsonwebtoken @types/jsonwebtoken
+```
+
 ### ESLint
 
 ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.

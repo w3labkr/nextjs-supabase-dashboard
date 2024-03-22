@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { authenticate } from '@/lib/supabase/auth'
+import { authorize } from '@/lib/supabase/auth'
 
 export async function GET(
   request: NextRequest,
@@ -29,21 +29,12 @@ export async function POST(
   request: NextRequest,
   { params: { id } }: { params: { id: string } }
 ) {
-  const { authenticated, user } = await authenticate()
+  const { isAuthorized } = await authorize(id)
 
-  // This is not required if using RLS(Row Level Security) with Supabase Auth.
-  if (!authenticated) {
+  if (!isAuthorized) {
     return NextResponse.json(
       { data: null, error: { message: 'Unauthorized' } },
       { status: 401 }
-    )
-  }
-
-  // This is not required if using RLS(Row Level Security) with Supabase Auth.
-  if (user?.id !== id) {
-    return NextResponse.json(
-      { data: null, error: { message: 'Forbidden' } },
-      { status: 403 }
     )
   }
 

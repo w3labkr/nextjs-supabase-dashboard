@@ -54,7 +54,7 @@ async function sendRequest(url: string, { arg }: { arg: FormValues }) {
   })
 }
 
-export function ProfileForm({ user }: { user: User }) {
+export function ProfileForm({ user }: { user: User | null }) {
   const { t } = useTranslation()
 
   const fetchProfile = useProfile(user?.id ?? null)

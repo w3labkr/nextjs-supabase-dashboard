@@ -44,5 +44,10 @@ export async function updateSession(request: NextRequest) {
     error,
   } = await supabase.auth.getUser()
 
-  return { response, authenticated: !(error || !user), role: user?.role }
+  return {
+    response,
+    isAuthenticated: !(error || !user),
+    user,
+    role: user?.role,
+  }
 }

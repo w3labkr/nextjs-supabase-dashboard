@@ -20,10 +20,10 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
-import useSWRMutation from 'swr/mutation'
+import { useSWRConfig } from 'swr'
 import { fetcher } from '@/lib/utils'
-import { User } from '@supabase/supabase-js'
 import { useEmails } from '@/hooks/api/use-emails'
+import { User } from '@supabase/supabase-js'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
@@ -35,40 +35,44 @@ const defaultValues: Partial<FormValues> = {
   email: '',
 }
 
-async function sendRequest(url: string, { arg }: { arg: FormValues }) {
-  return await fetcher(url, {
-    method: 'PUT',
-    body: JSON.stringify(arg),
-  })
-}
-
-export function AddEmailAddress({ user }: { user: User }) {
+export function AddEmailAddress({ user }: { user: User | null }) {
   const { t } = useTranslation()
 
   const fetchEmails = useEmails(user?.id ?? null)
   const { data: emails } = fetchEmails
-
-  const fetchUrl = user?.id ? `/api/v1/emails/${user?.id}` : null
-  const { trigger } = useSWRMutation(fetchUrl, sendRequest)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     defaultValues,
   })
+
+  const { mutate } = useSWRConfig()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
 
-      if (emails?.find((v) => v.email === formValues?.email)) {
-        throw new Error(t('FormMessage.email_address_is_already_registered'))
+      if (emails?.find((values) => values.email === formValues?.email)) {
+        throw new Error(t('FormMessage.email_has_already_been_added'))
       }
 
-      const response = await trigger({ ...formValues, user_id: user?.id })
-      if (response?.error) throw new Error(response?.error?.message)
+      if (!user?.id) throw new Error('Something went wrong.')
 
+      const inserted = await fetcher(`/api/v1/email/${user?.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(formValues),
+      })
+      if (inserted?.error) throw new Error(inserted?.error?.message)
+
+      const sent = await fetcher(`/api/v1/email/verify/${user?.id}`, {
+        method: 'POST',
+        body: JSON.stringify(formValues),
+      })
+      if (sent?.error) throw new Error(sent?.error?.message)
+
+      mutate(`/api/v1/emails/${user?.id}`)
       form.reset()
       toast.success(t('FormMessage.email_has_been_added_successfully'))
     } catch (e: unknown) {

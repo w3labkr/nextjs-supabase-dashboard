@@ -5,40 +5,28 @@ import { useTranslation } from 'react-i18next'
 
 import { toast } from 'sonner'
 import { LucideIcon } from '@/lib/lucide-icon'
-
 import { EmailListItemContext } from './email-list-item-provider'
 
-import useSWRMutation from 'swr/mutation'
+import { useSWRConfig } from 'swr'
 import { fetcher } from '@/lib/utils'
 import { User } from '@supabase/supabase-js'
 
-interface SendRequestArg {
-  user_id: string
-  email: string
-}
-
-async function sendRequest(url: string, { arg }: { arg: SendRequestArg }) {
-  return await fetcher(url, {
-    method: 'DELETE',
-    body: JSON.stringify(arg),
-  })
-}
-
-export function DeleteEmailAddress({ user }: { user: User }) {
+export function DeleteEmailAddress({ user }: { user: User | null }) {
   const state = React.useContext(EmailListItemContext)
   const { t } = useTranslation()
-
-  const requestUrl = user?.id ? `/api/v1/emails/${user?.id}` : null
-  const { trigger } = useSWRMutation(requestUrl, sendRequest)
+  const { mutate } = useSWRConfig()
 
   const handleClick = async () => {
     try {
-      const response = await trigger({
-        user_id: user?.id,
-        email: state?.email,
-      })
-      if (response?.error) throw new Error(response?.error?.message)
+      if (!user?.id) throw new Error('Something went wrong.')
 
+      const deleted = await fetcher(`/api/v1/email/${user?.id}`, {
+        method: 'DELETE',
+        body: JSON.stringify({ email: state?.email }),
+      })
+      if (deleted?.error) throw new Error(deleted?.error?.message)
+
+      mutate(`/api/v1/emails/${user?.id}`)
       toast.success(t('FormMessage.email_has_been_successfully_deleted'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)

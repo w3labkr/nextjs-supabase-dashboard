@@ -6,9 +6,9 @@ import { DeleteUserForm } from './delete-user-form'
 import { authenticate } from '@/lib/supabase/auth'
 
 export default async function AccountPage() {
-  const { authenticated, user } = await authenticate()
+  const { isAuthenticated, user } = await authenticate()
 
-  if (!user) return null
+  if (!isAuthenticated) return null
 
   return (
     <main className="flex-1 overflow-auto p-10 pb-16">

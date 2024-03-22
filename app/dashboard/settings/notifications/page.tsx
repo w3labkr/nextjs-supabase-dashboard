@@ -1,11 +1,12 @@
 import * as React from 'react'
-
-import { NotificationsForm } from './notifications-form'
 import { authenticate } from '@/lib/supabase/auth'
 
+import { NotificationsForm } from './notifications-form'
+
 export default async function NotificationsPage() {
-  const { authenticated, user } = await authenticate()
-  if (!user) return null
+  const { isAuthenticated, user } = await authenticate()
+
+  if (!isAuthenticated) return null
 
   return (
     <main className="flex-1 p-10 pb-16">

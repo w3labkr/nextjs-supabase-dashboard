@@ -5,15 +5,15 @@ export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs))
 }
 
-export function absoluteUrl(path: string): string {
-  return `${process.env.NEXT_PUBLIC_SITE_URL}${path}`
-}
-
 export function fetcher<JSON = any>(
   input: string,
   init?: RequestInit | undefined
 ): Promise<JSON> {
   return fetch(input, init).then((res) => res.json())
+}
+
+export function absoluteUrl(path: string): string {
+  return `${process.env.NEXT_PUBLIC_SITE_URL}${path}`
 }
 
 export function isObject(obj: any): boolean {
@@ -38,19 +38,4 @@ export function isNumber(obj: any): boolean {
 
 export function isString(obj: any): boolean {
   return obj !== undefined && obj !== null && obj.constructor == String
-}
-
-export function isInstanced(obj: any): boolean {
-  if (obj === undefined || obj === null) {
-    return false
-  }
-
-  if (isArray(obj)) return false
-  if (isBoolean(obj)) return false
-  if (isFunction(obj)) return false
-  if (isNumber(obj)) return false
-  if (isObject(obj)) return false
-  if (isString(obj)) return false
-
-  return true
 }

@@ -3,9 +3,9 @@ import { createAdminClient } from '@/lib/supabase/server'
 import { authenticate } from '@/lib/supabase/auth'
 
 export async function GET(request: NextRequest) {
-  const { authenticated, user } = await authenticate()
+  const { isAuthenticated, user } = await authenticate()
 
-  if (!authenticated) {
+  if (!isAuthenticated) {
     return NextResponse.json(
       { data: null, error: { message: 'Unauthorized' } },
       { status: 401 }
@@ -21,8 +21,8 @@ export async function GET(request: NextRequest) {
 
   try {
     const searchParams = request.nextUrl.searchParams
-    const supabase = createAdminClient()
-    const response = await supabase.auth.admin.listUsers({
+    const supabaseAdmin = createAdminClient()
+    const response = await supabaseAdmin.listUsers({
       page: +(searchParams.get('page') as string) ?? 1,
       perPage: +(searchParams.get('perPage') as string) ?? 50,
     })

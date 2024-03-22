@@ -41,7 +41,7 @@ async function updateAccount(url: string, { arg }: { arg: FormValues }) {
   })
 }
 
-export function ChangeUsernameForm({ user }: { user: User }) {
+export function ChangeUsernameForm({ user }: { user: User | null }) {
   const { t } = useTranslation()
 
   const fetchAccount = useAccount(user?.id ?? null)

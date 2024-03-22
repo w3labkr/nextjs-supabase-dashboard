@@ -143,9 +143,9 @@ export function ResetPasswordForm() {
         />
         <SubmitButton
           isSubmitting={isSubmitting}
-          className="w-full"
           text="ResetPasswordForm.submit"
           translate="yes"
+          className="w-full"
         />
       </form>
     </Form>

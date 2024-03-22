@@ -11,15 +11,22 @@ import {
   EmailListItemProvider,
 } from './email-list-item-provider'
 import { DeleteEmailAddress } from './delete-email-address'
-import { ResendVerificationButton } from './resend-verification-button'
+import { ResendVerifyEmail } from './resend-verify-email'
 
-export function EmailListItem({ item, user }: { item: Email; user: User }) {
+export function EmailListItem({
+  item,
+  user,
+}: {
+  item: Email
+  user: User | null
+}) {
   const state = React.useMemo(
     () => ({
       isVerified: !!item?.email_confirmed_at,
       isPrimary: item?.email === user?.email,
       email: item?.email,
       email_confirmed_at: item?.email_confirmed_at,
+      user_id: user?.id ?? null,
     }),
     [item, user]
   )
@@ -102,7 +109,7 @@ function UnverifiedEmails() {
           {t('UnverifiedEmails.title')}
         </span>
         &nbsp;&nbsp;
-        <ResendVerificationButton />
+        <ResendVerifyEmail />
       </div>
       <p>{t('UnverifiedEmails.description')}</p>
     </li>

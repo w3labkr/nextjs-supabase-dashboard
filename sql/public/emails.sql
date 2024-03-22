@@ -18,7 +18,7 @@ alter table emails enable row level security;
 -- Add row-level security
 create policy "Public emails are viewable by users who created them." on emails for select to authenticated using ( auth.uid() = user_id );
 create policy "Users can insert their own email." on emails for insert to authenticated with check ( auth.uid() = user_id );
--- create policy "Users can update their own email." on emails for update to authenticated using ( auth.uid() = user_id );
+create policy "Users can update their own email." on emails for update to authenticated using ( auth.uid() = user_id );
 create policy "Users can delete their own email." on emails for delete to authenticated using ( auth.uid() = user_id );
 
 -- Update a column timestamp on every update.

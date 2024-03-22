@@ -8,26 +8,26 @@ export const accessDenied: AccessDenied[] = [
   {
     from: '/dashboard',
     to: '/auth/signin',
-    authenticated: false,
+    isAuthenticated: false,
   },
   {
     from: '/auth/reset-password',
     to: '/auth/signin',
-    authenticated: false,
+    isAuthenticated: false,
   },
   {
     from: '/api/v1',
     to: '/auth/signin',
-    authenticated: false,
+    isAuthenticated: false,
   },
   {
     from: '/auth/signin',
     to: '/dashboard/settings/profile',
-    authenticated: true,
+    isAuthenticated: true,
   },
   {
     from: '/auth/signup',
     to: '/dashboard/settings/profile',
-    authenticated: true,
+    isAuthenticated: true,
   },
 ]

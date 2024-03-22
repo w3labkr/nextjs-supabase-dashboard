@@ -11,7 +11,7 @@ import { Database } from '@/types/supabase'
 export function createClient() {
   const cookieStore = cookies()
 
-  return createServerClient<Database>(
+  const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -40,6 +40,8 @@ export function createClient() {
       },
     }
   )
+
+  return supabase
 }
 
 /**
@@ -50,9 +52,9 @@ export function createClient() {
 export function createAdminClient() {
   const cookieStore = cookies()
 
-  return createServerClient<Database>(
+  const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SERVICE_ROLE_KEY!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {
       auth: {
         autoRefreshToken: false,
@@ -83,4 +85,9 @@ export function createAdminClient() {
       },
     }
   )
+
+  // Access auth admin api
+  const adminAuthClient = supabase.auth.admin
+
+  return adminAuthClient
 }

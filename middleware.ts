@@ -12,11 +12,11 @@ export async function middleware(request: NextRequest) {
     console.log('middleware #:', counter)
   }
 
-  const { response, authenticated } = await updateSession(request)
+  const { response, isAuthenticated } = await updateSession(request)
 
   const denied = accessDenied.filter((deny) => {
     if (!request.nextUrl.pathname.startsWith(deny.from)) return
-    if (authenticated !== deny?.authenticated) return
+    if (isAuthenticated !== deny?.isAuthenticated) return
     return deny
   })[0]
 

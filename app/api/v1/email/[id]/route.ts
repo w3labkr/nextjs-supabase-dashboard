@@ -2,39 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { authorize } from '@/lib/supabase/auth'
 
-export async function GET(
-  request: NextRequest,
-  { params: { id } }: { params: { id: string } }
-) {
-  const { isAuthorized } = await authorize(id)
-
-  if (!isAuthorized) {
-    return NextResponse.json(
-      { data: null, error: { message: 'Unauthorized' } },
-      { status: 401 }
-    )
-  }
-
-  try {
-    const supabase = createClient()
-    const response = await supabase
-      .from('accounts')
-      .select()
-      .eq('id', id)
-      .single()
-
-    if (response?.error) throw new Error(response?.error?.message)
-
-    return NextResponse.json({ data: response?.data, error: null })
-  } catch (e: unknown) {
-    return NextResponse.json(
-      { data: null, error: { message: (e as Error)?.message } },
-      { status: 400 }
-    )
-  }
-}
-
-export async function POST(
+export async function PUT(
   request: NextRequest,
   { params: { id } }: { params: { id: string } }
 ) {
@@ -49,10 +17,49 @@ export async function POST(
 
   try {
     const data = await request.json()
-    const supabase = createClient()
-    const response = await supabase.from('accounts').update(data).eq('id', id)
+    if (!data?.email) throw new Error('Required field is not defined.')
 
-    if (response?.error) throw new Error(response?.error?.message)
+    const supabase = createClient()
+    const inserted = await supabase
+      .from('emails')
+      .insert({ ...data, user_id: id })
+
+    if (inserted?.error) throw new Error(inserted?.error?.message)
+
+    return NextResponse.json({ data: null, error: null })
+  } catch (e: unknown) {
+    return NextResponse.json(
+      { data: null, error: { message: (e as Error)?.message } },
+      { status: 400 }
+    )
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params: { id } }: { params: { id: string } }
+) {
+  const { isAuthorized } = await authorize(id)
+
+  if (!isAuthorized) {
+    return NextResponse.json(
+      { data: null, error: { message: 'Unauthorized' } },
+      { status: 401 }
+    )
+  }
+
+  try {
+    const data = await request.json()
+    if (!data?.email) throw new Error('Required field is not defined.')
+
+    const supabase = createClient()
+    const deleted = await supabase
+      .from('emails')
+      .delete()
+      .eq('user_id', id)
+      .eq('email', data?.email)
+
+    if (deleted?.error) throw new Error(deleted?.error?.message)
 
     return NextResponse.json({ data: null, error: null })
   } catch (e: unknown) {

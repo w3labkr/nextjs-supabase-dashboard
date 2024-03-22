@@ -4,8 +4,9 @@ import { authenticate } from '@/lib/supabase/auth'
 import { ProfileForm } from './profile-form'
 
 export default async function ProfilePage() {
-  const { authenticated, user } = await authenticate()
-  if (!user) return null
+  const { isAuthenticated, user } = await authenticate()
+
+  if (!isAuthenticated) return null
 
   return (
     <main className="flex-1 overflow-auto p-10 pb-16">

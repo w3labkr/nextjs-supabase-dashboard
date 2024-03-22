@@ -36,7 +36,7 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-export function PrimaryEmailAddress({ user }: { user: User }) {
+export function PrimaryEmailAddress({ user }: { user: User | null }) {
   const { t } = useTranslation()
 
   const fetchEmails = useEmails(user?.id ?? null)
@@ -46,7 +46,8 @@ export function PrimaryEmailAddress({ user }: { user: User }) {
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     values: {
-      email: emails?.email ?? 'unassigned',
+      // email: emails?.email ?? 'unassigned',
+      email: 'unassigned',
     },
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -62,6 +63,11 @@ export function PrimaryEmailAddress({ user }: { user: User }) {
       }
 
       console.log(email)
+
+      // const { data, error } = await supabase.auth.updateUser({
+      //   email: 'new@email.com'
+      // })
+
       // if (response?.error) throw new Error(response?.error?.message)
       // toast.success(t('FormMessage.profile_has_been_successfully_changed'))
     } catch (e: unknown) {
