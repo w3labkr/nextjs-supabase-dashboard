@@ -13,13 +13,7 @@ import {
 import { DeleteEmailAddress } from './delete-email-address'
 import { ResendVerifyEmail } from './resend-verify-email'
 
-export function EmailListItem({
-  item,
-  user,
-}: {
-  item: Email
-  user: User | null
-}) {
+export function EmailListItem({ item, user }: { item: Email; user: User }) {
   const state = React.useMemo(
     () => ({
       isVerified: !!item?.email_confirmed_at,

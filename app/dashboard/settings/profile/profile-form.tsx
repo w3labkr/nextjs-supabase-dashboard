@@ -54,7 +54,7 @@ async function sendRequest(url: string, { arg }: { arg: FormValues }) {
   })
 }
 
-export function ProfileForm({ user }: { user: User | null }) {
+export function ProfileForm({ user }: { user: User }) {
   const { t } = useTranslation()
 
   const fetchProfile = useProfile(user?.id ?? null)
@@ -80,12 +80,20 @@ export function ProfileForm({ user }: { user: User | null }) {
   const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
+
+      if (!form?.formState?.isDirty) {
+        toast(t('FormMessage.nothing_has_changed'))
+        return false
+      }
+
       const setEmail = (s: string) => (s === 'unassigned' ? '' : s)
-      const response = await trigger({
+      const updated = await trigger({
         ...formValues,
         email: setEmail(formValues?.email ?? ''),
       })
-      if (response?.error) throw new Error(response?.error?.message)
+
+      if (updated?.error) throw new Error(updated?.error?.message)
+
       toast.success(t('FormMessage.profile_has_been_successfully_changed'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)

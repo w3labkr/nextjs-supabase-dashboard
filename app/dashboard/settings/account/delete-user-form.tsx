@@ -56,7 +56,7 @@ const defaultValues: Partial<FormValues> = {
   confirmationPhrase: '',
 }
 
-export function DeleteUserForm({ user }: { user: User | null }) {
+export function DeleteUserForm({ user }: { user: User }) {
   const router = useRouter()
   const { t } = useTranslation()
 

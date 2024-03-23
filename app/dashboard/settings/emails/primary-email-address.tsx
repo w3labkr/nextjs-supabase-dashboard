@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
 import { useForm } from 'react-hook-form'
@@ -28,6 +29,7 @@ import {
 import { SubmitButton } from '@/components/submit-button'
 
 import { User } from '@supabase/supabase-js'
+import { fetcher } from '@/lib/utils'
 import { useEmails } from '@/hooks/api/use-emails'
 
 const FormSchema = z.object({
@@ -36,40 +38,43 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-export function PrimaryEmailAddress({ user }: { user: User | null }) {
+export function PrimaryEmailAddress({ user }: { user: User }) {
+  const router = useRouter()
   const { t } = useTranslation()
 
   const fetchEmails = useEmails(user?.id ?? null)
   const { data: emails } = fetchEmails
 
+  const primaryEmail = React.useMemo(
+    () => emails?.find((x) => x.email === user?.email && x.email_confirmed_at),
+    [emails, user]
+  )
+
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
-    values: {
-      // email: emails?.email ?? 'unassigned',
-      email: 'unassigned',
-    },
+    values: { email: primaryEmail?.email ?? 'unassigned' },
   })
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
-      const setEmail = (s: string) => (s === 'unassigned' ? '' : s)
-      const email = setEmail(formValues?.email ?? '')
 
-      if (email === '' || email === user?.email) {
-        throw new Error('Nothing has changed.')
+      if (!form?.formState?.isDirty) {
+        toast(t('FormMessage.nothing_has_changed'))
+        return false
       }
 
-      console.log(email)
+      const updated = await fetcher(`/api/v1/email/${user?.id}`, {
+        method: 'POST',
+        body: JSON.stringify(formValues),
+      })
 
-      // const { data, error } = await supabase.auth.updateUser({
-      //   email: 'new@email.com'
-      // })
+      if (updated?.error) throw new Error(updated?.error?.message)
 
-      // if (response?.error) throw new Error(response?.error?.message)
-      // toast.success(t('FormMessage.profile_has_been_successfully_changed'))
+      toast.success(t('FormMessage.email_has_been_successfully_changed'))
+      router.refresh()
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -110,9 +115,11 @@ export function PrimaryEmailAddress({ user }: { user: User | null }) {
                   </FormControl>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value="unassigned">
-                        {t('SelectValue.select_a_verified_email_to_display')}
-                      </SelectItem>
+                      {!primaryEmail ? (
+                        <SelectItem value="unassigned">
+                          {t('SelectValue.select_a_verified_email_to_display')}
+                        </SelectItem>
+                      ) : null}
                       {emails?.map(({ id, email, email_confirmed_at }) => {
                         return email_confirmed_at ? (
                           <SelectItem key={id} value={email ?? ''}>

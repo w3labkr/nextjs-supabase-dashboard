@@ -147,6 +147,7 @@
     "account_information_is_invalid": "계정 정보가 유효하지 않습니다.",
     "email_is_invalid": "이메일이 유효하지 않습니다.",
     "email_has_been_added_successfully": "이메일이 성공적으로 추가되었습니다.",
+    "email_has_been_successfully_changed": "이메일이 성공적으로 변경되었습니다.",
     "email_has_been_successfully_deleted": "이메일이 성공적으로 삭제되었습니다.",
     "email_has_already_been_added": "이 이메일 주소는 이미 추가되었습니다.",
     "email_has_already_been_registered": "이미 가입되어 있는 이메일 주소입니다.",
@@ -350,5 +351,12 @@
   "PrimaryEmailAddress": {
     "title": "기본 이메일 주소",
     "description": "기본 이메일 주소는 계정 관련 알림을 받고 비밀번호를 재설정하는 데 사용될 수 있습니다."
+  },
+
+  "DeleteEmailAddress": {
+    "AlertDialogTitle": "정말로 귀하의 계정에서 이 이메일을 삭제하시겠습니까?",
+    "AlertDialogDescription": "삭제되면 이 이메일 주소는 더 이상 귀하의 계정과 연결되지 않습니다.",
+    "AlertDialogCancel": "취소",
+    "AlertDialogAction": "계속"
   }
 }

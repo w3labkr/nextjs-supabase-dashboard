@@ -1,5 +1,14 @@
 import { createClient } from '@/lib/supabase/server'
 
+export async function getUser() {
+  const supabase = createClient()
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
+  return error || !user ? null : user
+}
+
 export async function authenticate() {
   const supabase = createClient()
   const {
@@ -9,7 +18,6 @@ export async function authenticate() {
   return {
     isAuthenticated: !(error || !user),
     user,
-    role: user?.role,
   }
 }
 

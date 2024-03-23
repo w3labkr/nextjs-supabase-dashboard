@@ -47,7 +47,7 @@ const defaultValues: Partial<FormValues> = {
   confirmNewPassword: '',
 }
 
-export function ChangePasswordForm({ user }: { user: User | null }) {
+export function ChangePasswordForm({ user }: { user: User }) {
   const { t } = useTranslation()
 
   const fetchAccount = useAccount(user?.id ?? null)

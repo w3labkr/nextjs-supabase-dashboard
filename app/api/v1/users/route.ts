@@ -21,10 +21,13 @@ export async function GET(request: NextRequest) {
 
   try {
     const searchParams = request.nextUrl.searchParams
+    const page = searchParams.get('page') as string
+    const perPage = searchParams.get('perPage') as string
+
     const supabaseAdmin = createAdminClient()
     const response = await supabaseAdmin.listUsers({
-      page: +(searchParams.get('page') as string) ?? 1,
-      perPage: +(searchParams.get('perPage') as string) ?? 50,
+      page: +page ?? 1,
+      perPage: +perPage ?? 50,
     })
 
     if (response?.error) throw new Error(response?.error?.message)

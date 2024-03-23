@@ -20,10 +20,10 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
-import { useSWRConfig } from 'swr'
+import { User } from '@supabase/supabase-js'
 import { fetcher } from '@/lib/utils'
 import { useEmails } from '@/hooks/api/use-emails'
-import { User } from '@supabase/supabase-js'
+import { useSWRConfig } from 'swr'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
@@ -35,7 +35,7 @@ const defaultValues: Partial<FormValues> = {
   email: '',
 }
 
-export function AddEmailAddress({ user }: { user: User | null }) {
+export function AddEmailAddress({ user }: { user: User }) {
   const { t } = useTranslation()
 
   const fetchEmails = useEmails(user?.id ?? null)
@@ -58,18 +58,18 @@ export function AddEmailAddress({ user }: { user: User | null }) {
         throw new Error(t('FormMessage.email_has_already_been_added'))
       }
 
-      if (!user?.id) throw new Error('Something went wrong.')
-
       const inserted = await fetcher(`/api/v1/email/${user?.id}`, {
         method: 'PUT',
         body: JSON.stringify(formValues),
       })
+
       if (inserted?.error) throw new Error(inserted?.error?.message)
 
       const sent = await fetcher(`/api/v1/email/verify/${user?.id}`, {
         method: 'POST',
         body: JSON.stringify(formValues),
       })
+
       if (sent?.error) throw new Error(sent?.error?.message)
 
       mutate(`/api/v1/emails/${user?.id}`)

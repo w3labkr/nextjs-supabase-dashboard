@@ -41,7 +41,7 @@ async function updateAccount(url: string, { arg }: { arg: FormValues }) {
   })
 }
 
-export function ChangeUsernameForm({ user }: { user: User | null }) {
+export function ChangeUsernameForm({ user }: { user: User }) {
   const { t } = useTranslation()
 
   const fetchAccount = useAccount(user?.id ?? null)
@@ -64,11 +64,15 @@ export function ChangeUsernameForm({ user }: { user: User | null }) {
   const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
-      if (account?.username === formValues?.username) {
-        throw new Error('Nothing has changed.')
+
+      if (!form?.formState?.isDirty) {
+        toast(t('FormMessage.nothing_has_changed'))
+        return false
       }
-      const response = await trigger(formValues)
-      if (response?.error) throw new Error(response?.error?.message)
+
+      const updated = await trigger(formValues)
+      if (updated?.error) throw new Error(updated?.error?.message)
+
       toast.success(t('FormMessage.username_has_been_successfully_changed'))
     } catch (e: unknown) {
       switch ((e as Error)?.message) {

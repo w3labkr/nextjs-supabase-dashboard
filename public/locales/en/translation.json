@@ -147,6 +147,7 @@
     "account_information_is_invalid": "Your account information is invalid.",
     "email_is_invalid": "Your email is invalid.",
     "email_has_been_added_successfully": "Your email has been added successfully.",
+    "email_has_been_successfully_changed": "Your email has been successfully changed.",
     "email_has_been_successfully_deleted": "Your email has been successfully deleted.",
     "email_has_already_been_added": "This email has already been added.",
     "email_has_already_been_registered": "This email has already been registered.",
@@ -350,5 +351,12 @@
   "PrimaryEmailAddress": {
     "title": "Primary email address",
     "description": "Your primary email address may be used to receive account-related notifications and reset your password."
+  },
+
+  "DeleteEmailAddress": {
+    "AlertDialogTitle": "Are you sure you want to remove this email from your account?",
+    "AlertDialogDescription": "Once deleted, this email address will no longer be associated with your account.",
+    "AlertDialogCancel": "Cancel",
+    "AlertDialogAction": "Continue"
   }
 }

@@ -29,15 +29,20 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const data = { email_confirmed_at: new Date().toISOString() }
     const supabase = createClient()
-    const response = await supabase
+    const updatedEmail = await supabase
       .from('emails')
-      .update(data)
+      .update({ email_confirmed_at: new Date().toISOString() })
       .eq('user_id', payload?.user_id)
       .eq('email', payload?.email)
 
-    if (response?.error) throw new Error(response?.error?.message)
+    if (updatedEmail?.error) throw new Error(updatedEmail?.error?.message)
+
+    const updatedUser = await supabase.auth.updateUser({
+      data: { email_verified: true },
+    })
+
+    if (updatedUser?.error) throw new Error(updatedUser?.error?.message)
 
     return NextResponse.redirect(redirectTo)
   } catch (e: unknown) {

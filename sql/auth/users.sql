@@ -31,13 +31,7 @@ begin
     new.raw_user_meta_data ->> 'avatar_url'
   );
 
-  insert into
-    emails (user_id, email, email_confirmed_at)
-  values (
-    new.id,
-    new.email,
-    new.email_confirmed_at
-  );
+  insert into emails (user_id, email) values (new.id, new.email);
 
   return new;
 end;
