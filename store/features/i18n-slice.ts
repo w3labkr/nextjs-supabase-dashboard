@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { lng } from '@/i18next.config'
+import { defaultLng } from '@/i18next.config'
 
 // Define a type for the slice state
 export interface I18nState {
@@ -8,7 +8,7 @@ export interface I18nState {
 
 // Define the initial state using that type
 const initialState: I18nState = {
-  resolvedLanguage: lng,
+  resolvedLanguage: defaultLng,
 }
 
 export const i18nSlice = createSlice({

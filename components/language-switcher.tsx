@@ -3,7 +3,8 @@
 import * as React from 'react'
 
 import { useTranslation } from 'react-i18next'
-import { languages } from '@/i18next.config'
+import { languageItems } from '@/i18next.config'
+import { ResolvedLanguage, LanguageItem } from '@/types/i18next'
 
 import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
@@ -12,6 +13,7 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
+  CommandItem,
   CommandInput,
 } from '@/components/ui/command'
 import {
@@ -23,32 +25,27 @@ import {
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
 import { setResolvedLanguage } from '@/store/features/i18n-slice'
 
-import { CommandItems } from './command-items'
-
-export interface LanguageSwitcherProps {
-  className?: string | undefined
-  triggerClassName?: string | undefined
-  contentClassName?: string | undefined
-}
-
 export function LanguageSwitcher({
   className,
   triggerClassName,
   contentClassName,
-}: LanguageSwitcherProps) {
-  const dispatch = useAppDispatch()
-  const resolvedLanguage = useAppSelector(
-    (state) => state.i18n.resolvedLanguage
-  )
-  const [open, setOpen] = React.useState<boolean>(false)
-  const [language, setLanguage] = React.useState<string>(resolvedLanguage)
+}: {
+  className?: string | undefined
+  triggerClassName?: string | undefined
+  contentClassName?: string | undefined
+}) {
   const { t, i18n } = useTranslation()
 
-  const handleChange = (currentValue: string) => {
-    if (currentValue === language) return false
+  const dispatch = useAppDispatch()
+  const resolvedLanguage = useAppSelector(
+    (state) => state?.i18n?.resolvedLanguage
+  )
+  const [open, setOpen] = React.useState<boolean>(false)
+
+  const handleSelect = (currentValue: string) => {
+    if (currentValue === resolvedLanguage) return false
     i18n.changeLanguage(currentValue)
     document.documentElement.lang = currentValue
-    setLanguage(currentValue)
     dispatch(setResolvedLanguage(currentValue))
     setOpen(false)
   }
@@ -62,8 +59,8 @@ export function LanguageSwitcher({
           aria-expanded={open}
           className={cn('w-50 justify-between', className, triggerClassName)}
         >
-          {language
-            ? languages.find((l) => l.value === language)?.label
+          {resolvedLanguage
+            ? languageItems.find((l) => l.value === resolvedLanguage)?.label
             : t('LanguageSwitcher.label')}
           <LucideIcon
             name="ChevronsUpDown"
@@ -76,14 +73,44 @@ export function LanguageSwitcher({
           <CommandInput placeholder={t('LanguageSwitcher.placeholder')} />
           <CommandEmpty>{t('LanguageSwitcher.empty')}</CommandEmpty>
           <CommandGroup>
-            <CommandItems
-              items={languages}
-              language={language}
-              onSelect={handleChange}
-            />
+            {languageItems.map((item) => (
+              <LanguageSwitcherItem
+                key={item.value}
+                item={item}
+                resolvedLanguage={resolvedLanguage}
+                onSelect={handleSelect}
+              />
+            ))}
           </CommandGroup>
         </Command>
       </PopoverContent>
     </Popover>
+  )
+}
+
+export function LanguageSwitcherItem({
+  item,
+  resolvedLanguage,
+  onSelect,
+}: {
+  item: LanguageItem
+  resolvedLanguage: ResolvedLanguage
+  onSelect: (value: string) => void
+}) {
+  return (
+    <CommandItem
+      value={item?.value}
+      onSelect={onSelect}
+      className="cursor-pointer"
+    >
+      <LucideIcon
+        name="Check"
+        className={cn(
+          'mr-2 h-4 w-4',
+          item?.value === resolvedLanguage ? 'opacity-100' : 'opacity-0'
+        )}
+      />
+      {item.label}
+    </CommandItem>
   )
 }

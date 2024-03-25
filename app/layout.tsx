@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
 import { Analytics } from '@/components/analytics'
 
-import { lng } from '@/i18next.config'
+import { defaultLng } from '@/i18next.config'
 import { AppProvider } from '@/context/app-provider'
 
 import { cn } from '@/lib/utils'
@@ -29,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang={lng} suppressHydrationWarning>
+    <html lang={defaultLng} suppressHydrationWarning>
       <body className={cn('font-sans antialiased', fontSans.variable)}>
         <AppProvider>
           <div id="__next">{children}</div>

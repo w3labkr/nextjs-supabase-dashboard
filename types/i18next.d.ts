@@ -1,4 +1,4 @@
-export type Lng = string
+export type DefaultLng = string
 
 export type FallbackLng = string
 
@@ -6,7 +6,9 @@ export type DefaultNS = string | string[]
 
 export type ResolvedLanguage = string | undefined
 
-export interface Languages {
+export type DefaultLabel = string
+
+export interface LanguageItem {
   value: string
   label: string
 }
