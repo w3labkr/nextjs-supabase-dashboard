@@ -7,7 +7,7 @@ import {
 } from '@/types/dashboard'
 
 export const dashboardConfig: DashboardConfig = {
-  miniDrawerGroupItems: [
+  groups: [
     {
       id: 1,
       separator: false,
@@ -69,7 +69,7 @@ export const dashboardConfig: DashboardConfig = {
 }
 
 export const mediaConfig: MediaConfig = {
-  drawerGroupItems: [
+  groups: [
     {
       id: 1,
       label: '',
@@ -98,7 +98,7 @@ export const mediaConfig: MediaConfig = {
 }
 
 export const postsConfig: PostsConfig = {
-  drawerGroupItems: [
+  groups: [
     {
       id: 1,
       label: '',
@@ -127,7 +127,7 @@ export const postsConfig: PostsConfig = {
 }
 
 export const settingsConfig: SettingsConfig = {
-  drawerGroupItems: [
+  groups: [
     {
       id: 1,
       label: '',
@@ -204,7 +204,7 @@ export const settingsConfig: SettingsConfig = {
 }
 
 export const adminConfig: AdminConfig = {
-  drawerGroupItems: [
+  groups: [
     {
       id: 1,
       label: '',

@@ -24,7 +24,7 @@ export default function PostsLayout({
           <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
             <PersistentDrawer
               className="w-full border-none lg:max-w-full"
-              drawerGroupItems={postsConfig.drawerGroupItems}
+              groups={postsConfig?.groups}
               title="posts"
               translate="yes"
             />

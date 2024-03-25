@@ -10,7 +10,7 @@ export interface MiniDrawerItemProps {
   badge?: number | undefined
 }
 
-export interface MiniDrawerGroupItemProps {
+export interface MiniDrawerGroupProps {
   id: number
   items: MiniDrawerItemProps[]
   separator?: boolean | undefined
@@ -25,7 +25,7 @@ export interface DrawerItemProps {
   disabled?: boolean | undefined
 }
 
-export interface DrawerGroupItemProps {
+export interface DrawerGroupProps {
   id: number
   label: string
   items: DrawerItemProps[]
@@ -34,21 +34,21 @@ export interface DrawerGroupItemProps {
 }
 
 export interface DashboardConfig {
-  miniDrawerGroupItems: MiniDrawerGroupItemProps[]
+  groups: MiniDrawerGroupProps[]
 }
 
 export interface MediaConfig {
-  drawerGroupItems: DrawerGroupItemProps[]
+  groups: DrawerGroupProps[]
 }
 
 export interface PostsConfig {
-  drawerGroupItems: DrawerGroupItemProps[]
+  groups: DrawerGroupProps[]
 }
 
 export interface SettingsConfig {
-  drawerGroupItems: DrawerGroupItemProps[]
+  groups: DrawerGroupProps[]
 }
 
 export interface AdminConfig {
-  drawerGroupItems: DrawerGroupItemProps[]
+  groups: DrawerGroupProps[]
 }

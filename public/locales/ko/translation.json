@@ -195,33 +195,19 @@
     "please_tell_us_a_little_about_yourself": "당신에 대해 조금 알려주세요."
   },
 
-  "MobileNavItems": {
+  "MobileNavigation": {
     "home": "홈",
     "pricing": "가격",
     "contact_us": "연락하기"
   },
 
-  "MiniDrawerItems": {
+  "DashboardNavigation": {
     "dashboard": "대시보드",
     "media": "미디어",
     "posts": "글",
     "settings": "설정",
-    "admin": "관리자"
-  },
-
-  "PersistentDrawer": {
-    "dashboard": "대시보드",
-    "media": "미디어",
-    "posts": "글",
-    "settings": "설정",
-    "admin": "관리자"
-  },
-
-  "DrawerGroupItems": {
-    "access": "접근"
-  },
-
-  "DrawerItems": {
+    "admin": "관리자",
+    "access": "접근",
     "profile": "프로필",
     "account": "계정",
     "appearance": "외형",

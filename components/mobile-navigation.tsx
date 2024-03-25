@@ -5,16 +5,34 @@ import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
+import { LucideIcon } from '@/lib/lucide-icon'
+
+import { siteConfig } from '@/config/site'
 import { MobileNavItemProps } from '@/types'
 
-export interface MobileNavItemsProps {
-  items: MobileNavItemProps[]
+export interface MobileNavigationProps
+  extends React.HTMLAttributes<HTMLDivElement> {}
+
+export function MobileNavigation({ ...props }: MobileNavigationProps) {
+  return (
+    <div className="grid w-full max-w-md gap-4" {...props}>
+      <div className="flex items-center gap-4">
+        <LucideIcon name={siteConfig?.symbol} className="size-6 min-w-6" />
+        <span>{siteConfig?.name}</span>
+      </div>
+      <nav className="grid">
+        {siteConfig?.mobileNavItems?.map((item) => (
+          <MobileNavItem key={item?.id} item={item} />
+        ))}
+      </nav>
+    </div>
+  )
 }
 
-export function MobileNavItems({ items }: MobileNavItemsProps) {
+export function MobileNavItem({ item }: { item: MobileNavItemProps }) {
   const { t } = useTranslation()
 
-  return items.map((item) => (
+  return (
     <Link
       key={item?.id}
       className={cn(
@@ -24,8 +42,8 @@ export function MobileNavItems({ items }: MobileNavItemsProps) {
       href={item?.href}
     >
       {item?.title && item?.translate === 'yes'
-        ? t(`MobileNavItems.${item?.title}`)
+        ? t(`MobileNavigation.${item?.title}`)
         : item?.title}
     </Link>
-  ))
+  )
 }

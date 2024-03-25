@@ -195,33 +195,19 @@
     "please_tell_us_a_little_about_yourself": "Please tell us a little about yourself."
   },
 
-  "MobileNavItems": {
+  "MobileNavigation": {
     "home": "Home",
     "pricing": "Pricing",
     "contact_us": "Contact Us"
   },
 
-  "MiniDrawerItems": {
+  "DashboardNavigation": {
     "dashboard": "Dashboard",
     "media": "Media",
     "posts": "Posts",
     "settings": "Settings",
-    "admin": "Admin"
-  },
-
-  "PersistentDrawer": {
-    "dashboard": "Dashboard",
-    "media": "Media",
-    "posts": "Posts",
-    "settings": "Settings",
-    "admin": "Admin"
-  },
-
-  "DrawerGroupItems": {
-    "access": "Access"
-  },
-
-  "DrawerItems": {
+    "admin": "Admin",
+    "access": "Access",
     "profile": "Profile",
     "account": "Account",
     "appearance": "Appearance",
