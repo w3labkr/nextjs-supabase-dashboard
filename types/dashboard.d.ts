@@ -1,6 +1,6 @@
 import { LucideIconName } from '@/lib/lucide-icon'
 
-export interface MiniDrawerItemProps {
+export interface DashboardMiniNavSubItem {
   id: number
   href: string
   title: string
@@ -10,13 +10,13 @@ export interface MiniDrawerItemProps {
   badge?: number | undefined
 }
 
-export interface MiniDrawerGroupProps {
+export interface DashboardMiniNavItem {
   id: number
-  items: MiniDrawerItemProps[]
+  items: DashboardMiniNavSubItem[]
   separator?: boolean | undefined
 }
 
-export interface DrawerItemProps {
+export interface DashboardNavSubItem {
   id: number
   href: string
   title: string
@@ -25,30 +25,30 @@ export interface DrawerItemProps {
   disabled?: boolean | undefined
 }
 
-export interface DrawerGroupProps {
+export interface DashboardNavItem {
   id: number
   label: string
-  items: DrawerItemProps[]
+  items: DashboardNavSubItem[]
   separator?: boolean | undefined
   translate?: 'yes' | 'no' | undefined
 }
 
 export interface DashboardConfig {
-  groups: MiniDrawerGroupProps[]
+  nav: DashboardMiniNavItem[]
 }
 
 export interface MediaConfig {
-  groups: DrawerGroupProps[]
+  nav: DashboardNavItem[]
 }
 
 export interface PostsConfig {
-  groups: DrawerGroupProps[]
+  nav: DashboardNavItem[]
 }
 
 export interface SettingsConfig {
-  groups: DrawerGroupProps[]
+  nav: DashboardNavItem[]
 }
 
 export interface AdminConfig {
-  groups: DrawerGroupProps[]
+  nav: DashboardNavItem[]
 }

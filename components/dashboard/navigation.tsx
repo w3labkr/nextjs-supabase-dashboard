@@ -9,24 +9,23 @@ import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
 import { LinkButton } from '@/components/link-button'
 
-import { DrawerGroupProps, DrawerItemProps } from '@/types/dashboard'
+import { DashboardNavItem, DashboardNavSubItem } from '@/types/dashboard'
 
-export interface PersistentDrawerProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface NavigationProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string
-  groups: DrawerGroupProps[]
+  nav: DashboardNavItem[]
 }
 
-export function PersistentDrawer({
+export function Navigation({
   className,
   title,
-  groups,
+  nav,
   translate,
   ...props
-}: PersistentDrawerProps) {
+}: NavigationProps) {
   const appBarState = React.useContext(AppBarContext)
-  const { t } = useTranslation()
   const pathname = usePathname()
+  const { t } = useTranslation()
 
   return (
     <div
@@ -50,45 +49,45 @@ export function PersistentDrawer({
         </span>
       </div>
       <div className="flex-1 space-y-1 overflow-auto p-2">
-        {groups?.map((group) => (
-          <DrawerGroup key={group?.id} group={group} pathname={pathname} />
+        {nav?.map((item) => (
+          <NavItem key={item?.id} item={item} pathname={pathname} />
         ))}
       </div>
     </div>
   )
 }
 
-export function DrawerGroup({
-  group,
+function NavItem({
+  item,
   pathname,
 }: {
-  group: DrawerGroupProps
+  item: DashboardNavItem
   pathname: string
 }) {
   const { t } = useTranslation()
 
   return (
     <React.Fragment>
-      {group?.separator && <Separator className="!my-4" />}
-      {group?.label && (
+      {item?.separator && <Separator className="!my-4" />}
+      {item?.label && (
         <span className="flex p-1 text-sm font-semibold text-muted-foreground">
-          {group?.label && group?.translate === 'yes'
-            ? t(`DashboardNavigation.${group?.label}`)
-            : group?.label}
+          {item?.label && item?.translate === 'yes'
+            ? t(`DashboardNavigation.${item?.label}`)
+            : item?.label}
         </span>
       )}
-      {group?.items?.map((item) => (
-        <DrawerItem key={item?.id} item={item} pathname={pathname} />
+      {item?.items?.map((sub) => (
+        <NavSubItem key={sub?.id} item={sub} pathname={pathname} />
       ))}
     </React.Fragment>
   )
 }
 
-export function DrawerItem({
+function NavSubItem({
   item,
   pathname,
 }: {
-  item: DrawerItemProps
+  item: DashboardNavSubItem
   pathname: string
 }) {
   return (

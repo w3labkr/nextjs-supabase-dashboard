@@ -13,11 +13,15 @@ import { TooltipLinkButton } from '@/components/tooltip-link-button'
 
 import { siteConfig } from '@/config/site'
 import { dashboardConfig } from '@/config/dashboard'
-import { MiniDrawerGroupProps, MiniDrawerItemProps } from '@/types/dashboard'
+import {
+  DashboardMiniNavItem,
+  DashboardMiniNavSubItem,
+} from '@/types/dashboard'
 
-export interface MiniDrawerProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface MiniNavigationProps
+  extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function MiniDrawer({ className, ...props }: MiniDrawerProps) {
+export function MiniNavigation({ className, ...props }: MiniNavigationProps) {
   const appBarState = React.useContext(AppBarContext)
   const pathname = usePathname()
 
@@ -42,36 +46,36 @@ export function MiniDrawer({ className, ...props }: MiniDrawerProps) {
         </Link>
       </div>
       <nav className="flex-1 space-y-2 overflow-auto py-2">
-        {dashboardConfig?.groups?.map((group) => (
-          <MiniDrawerGroup key={group?.id} group={group} pathname={pathname} />
+        {dashboardConfig?.nav?.map((item) => (
+          <NavItem key={item?.id} item={item} pathname={pathname} />
         ))}
       </nav>
     </div>
   )
 }
 
-export function MiniDrawerGroup({
-  group,
+function NavItem({
+  item,
   pathname,
 }: {
-  group: MiniDrawerGroupProps
+  item: DashboardMiniNavItem
   pathname: string
 }) {
   return (
     <React.Fragment>
-      {group?.separator && <Separator />}
-      {group?.items?.map((item) => (
-        <MiniDrawerItem key={item?.id} item={item} pathname={pathname} />
+      {item?.separator && <Separator />}
+      {item?.items?.map((sub) => (
+        <NavSubItem key={sub?.id} item={sub} pathname={pathname} />
       ))}
     </React.Fragment>
   )
 }
 
-export function MiniDrawerItem({
+function NavSubItem({
   item,
   pathname,
 }: {
-  item: MiniDrawerItemProps
+  item: DashboardMiniNavSubItem
   pathname: string
 }) {
   return (

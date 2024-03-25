@@ -1,9 +1,9 @@
 import * as React from 'react'
 
 import { AppBarProvider } from '@/components/app-bar/app-bar-provider'
-import { MiniDrawer } from '@/components/mini-drawer'
 import { AppBar } from '@/components/app-bar'
-import { PersistentDrawer } from '@/components/persistent-drawer'
+import { MiniNavigation } from '@/components/dashboard/mini-navigation'
+import { Navigation } from '@/components/dashboard/navigation'
 import {
   ResizableHandle,
   ResizablePanel,
@@ -19,12 +19,12 @@ export default function PostsLayout({
   return (
     <div className="body-overflow-hidden flex h-screen w-screen min-w-[768px]">
       <AppBarProvider value={{ height: 'h-[50px]' }}>
-        <MiniDrawer />
+        <MiniNavigation />
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
-            <PersistentDrawer
+            <Navigation
               className="w-full border-none lg:max-w-full"
-              groups={postsConfig?.groups}
+              nav={postsConfig?.nav}
               title="posts"
               translate="yes"
             />

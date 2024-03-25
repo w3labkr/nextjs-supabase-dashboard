@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { AppBarProvider } from '@/components/app-bar/app-bar-provider'
-import { MiniDrawer } from '@/components/mini-drawer'
+import { MiniNavigation } from '@/components/dashboard/mini-navigation'
 import { AppBar } from '@/components/app-bar'
 
 export default function DashboardLayout({
@@ -12,7 +12,7 @@ export default function DashboardLayout({
   return (
     <div className="body-overflow-hidden flex h-screen w-screen min-w-[768px]">
       <AppBarProvider value={{ height: 'h-[50px]' }}>
-        <MiniDrawer />
+        <MiniNavigation />
         <div className="flex flex-1 flex-col">
           <AppBar />
           {children}
