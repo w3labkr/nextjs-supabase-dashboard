@@ -2,11 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { authorize } from '@/lib/supabase/auth'
 import { createClient } from '@/lib/supabase/server'
 import { jwtVerify } from '@/lib/jsonwebtoken'
-
-interface TokenPayload {
-  user_id: string
-  email: string
-}
+import { VerifyTokenPayload } from '@/types/token'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -21,8 +17,8 @@ export async function GET(request: NextRequest) {
     return new Response(token?.error?.name, { status: 401 })
   }
 
-  const payload = token?.payload as TokenPayload
-  const { isAuthorized } = await authorize(payload?.user_id)
+  const payload = token?.payload as VerifyTokenPayload
+  const { isAuthorized, user } = await authorize(payload?.user_id)
 
   if (!isAuthorized) {
     return new Response('Unauthorized', { status: 401 })
@@ -38,11 +34,13 @@ export async function GET(request: NextRequest) {
 
     if (updatedEmail?.error) throw new Error(updatedEmail?.error?.message)
 
-    const updatedUser = await supabase.auth.updateUser({
-      data: { email_verified: true },
-    })
-
-    if (updatedUser?.error) throw new Error(updatedUser?.error?.message)
+    // If your verification email is your primary email, update it.
+    if (payload?.email === user?.email) {
+      const updatedUser = await supabase.auth.updateUser({
+        data: { email_verified: true },
+      })
+      if (updatedUser?.error) throw new Error(updatedUser?.error?.message)
+    }
 
     return NextResponse.redirect(redirectTo)
   } catch (e: unknown) {

@@ -23,7 +23,7 @@ import { User } from '@supabase/supabase-js'
 import { fetcher } from '@/lib/utils'
 import { useSWRConfig } from 'swr'
 
-export function DeleteEmailAddress({ user }: { user: User }) {
+export function DeleteEmailAddress({ user }: { user: User | null }) {
   const state = React.useContext(EmailListItemContext)
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
@@ -38,6 +38,7 @@ export function DeleteEmailAddress({ user }: { user: User }) {
       if (deleted?.error) throw new Error(deleted?.error?.message)
 
       mutate(`/api/v1/emails/${user?.id}`)
+
       toast.success(t('FormMessage.email_has_been_successfully_deleted'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)

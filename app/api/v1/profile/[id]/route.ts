@@ -8,15 +8,15 @@ export async function GET(
 ) {
   try {
     const supabase = createClient()
-    const response = await supabase
+    const result = await supabase
       .from('profiles')
       .select()
       .eq('user_id', id)
       .single()
 
-    if (response?.error) throw new Error(response?.error?.message)
+    if (result?.error) throw new Error(result?.error?.message)
 
-    return NextResponse.json({ data: response?.data, error: null })
+    return NextResponse.json({ data: result?.data, error: null })
   } catch (e: unknown) {
     return NextResponse.json(
       { data: null, error: { message: (e as Error)?.message } },
@@ -38,15 +38,16 @@ export async function POST(
     )
   }
 
+  const data = await request.json()
+
   try {
-    const data = await request.json()
     const supabase = createClient()
-    const response = await supabase
+    const updated = await supabase
       .from('profiles')
       .update(data)
       .eq('user_id', id)
 
-    if (response?.error) throw new Error(response?.error?.message)
+    if (updated?.error) throw new Error(updated?.error?.message)
 
     return NextResponse.json({ data: null, error: null })
   } catch (e: unknown) {

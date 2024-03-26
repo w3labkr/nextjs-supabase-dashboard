@@ -56,13 +56,12 @@ const defaultValues: Partial<FormValues> = {
   confirmationPhrase: '',
 }
 
-export function DeleteUserForm({ user }: { user: User }) {
+export function DeleteUserForm({ user }: { user: User | null }) {
   const router = useRouter()
   const { t } = useTranslation()
 
   const auth = useAuth()
-  const fetchAccount = useAccount(user?.id ?? null)
-  const { data: account } = fetchAccount
+  const { account } = useAccount(user?.id ?? null)
   const hasSetPassword = React.useMemo(
     () => account?.has_set_password,
     [account?.has_set_password]
@@ -129,7 +128,7 @@ export function DeleteUserForm({ user }: { user: User }) {
     }
   }
 
-  if (fetchAccount?.isLoading) return null
+  if (!account) return null
 
   return (
     <div className="space-y-4">

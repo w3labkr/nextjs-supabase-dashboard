@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { authorize } from '@/lib/supabase/auth'
 import { transporter, sender } from '@/lib/nodemailer'
 import { jwtSign } from '@/lib/jsonwebtoken'
+import { VerifyTokenPayload } from '@/types/token'
 
 export async function POST(
   request: NextRequest,
@@ -21,7 +22,6 @@ export async function POST(
 
   try {
     const info = await transporter.sendMail(mailOptions)
-    // const info = generate_url(data)
 
     return NextResponse.json({ data: info, error: null })
   } catch (e: unknown) {
@@ -32,12 +32,12 @@ export async function POST(
   }
 }
 
-function mailTemplate(data: { user_id: string; email: string }) {
-  const url = generate_url(data)
+function mailTemplate(payload: VerifyTokenPayload) {
+  const url = generate_url(payload)
 
   return {
     from: `"${sender?.name}" <${sender?.email}>`,
-    to: data?.email,
+    to: payload?.email,
     subject: 'Email Verification',
     html: `
       <div>

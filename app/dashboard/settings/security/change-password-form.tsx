@@ -23,6 +23,7 @@ import { SubmitButton } from '@/components/submit-button'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
+import { useSWRConfig } from 'swr'
 import { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 import { useAccount } from '@/hooks/api/use-account'
@@ -47,11 +48,12 @@ const defaultValues: Partial<FormValues> = {
   confirmNewPassword: '',
 }
 
-export function ChangePasswordForm({ user }: { user: User }) {
+export function ChangePasswordForm({ user }: { user: User | null }) {
   const { t } = useTranslation()
 
-  const fetchAccount = useAccount(user?.id ?? null)
-  const { data: account } = fetchAccount
+  const { mutate } = useSWRConfig()
+  const { account } = useAccount(user?.id ?? null)
+
   const hasSetPassword = React.useMemo(
     () => account?.has_set_password,
     [account?.has_set_password]
@@ -73,6 +75,7 @@ export function ChangePasswordForm({ user }: { user: User }) {
   const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
+
       const supabase = createClient()
 
       if (hasSetPassword) {
@@ -91,10 +94,10 @@ export function ChangePasswordForm({ user }: { user: User }) {
 
       if (updated?.error) throw new Error(updated?.error?.message)
 
-      toast.success(t('FormMessage.password_has_been_successfully_changed'))
+      mutate(`/api/v1/account/${user?.id}`)
 
       form.reset()
-      fetchAccount?.mutate()
+      toast.success(t('FormMessage.password_has_been_successfully_changed'))
     } catch (e: unknown) {
       switch ((e as Error)?.message) {
         case 'Old password does not match.':
@@ -118,7 +121,7 @@ export function ChangePasswordForm({ user }: { user: User }) {
     }
   }
 
-  if (fetchAccount?.isLoading) return null
+  if (!account) return null
 
   return (
     <div className="space-y-4">

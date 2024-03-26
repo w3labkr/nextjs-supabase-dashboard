@@ -47,24 +47,18 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-async function sendRequest(url: string, { arg }: { arg: FormValues }) {
+async function updateProfile(url: string, { arg }: { arg: FormValues }) {
   return await fetcher(url, {
     method: 'POST',
     body: JSON.stringify(arg),
   })
 }
 
-export function ProfileForm({ user }: { user: User }) {
+export function ProfileForm({ user }: { user: User | null }) {
   const { t } = useTranslation()
 
-  const fetchProfile = useProfile(user?.id ?? null)
-  const { data: profile } = fetchProfile
-
-  const fetchEmails = useEmails(user?.id ?? null)
-  const { data: emails } = fetchEmails
-
-  const requestUrl = user?.id ? `/api/v1/profile/${user?.id}` : null
-  const { trigger } = useSWRMutation(requestUrl, sendRequest)
+  const { profile } = useProfile(user?.id ?? null)
+  const { emails } = useEmails(user?.id ?? null)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -75,16 +69,22 @@ export function ProfileForm({ user }: { user: User }) {
       bio: profile?.bio ?? '',
     },
   })
+
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
+  const { trigger } = useSWRMutation(
+    user?.id ? `/api/v1/profile/${user?.id}` : null,
+    updateProfile
+  )
+
   const onSubmit = async (formValues: FormValues) => {
+    if (!form?.formState?.isDirty) {
+      toast(t('FormMessage.nothing_has_changed'))
+      return false
+    }
+
     try {
       setIsSubmitting(true)
-
-      if (!form?.formState?.isDirty) {
-        toast(t('FormMessage.nothing_has_changed'))
-        return false
-      }
 
       const setEmail = (s: string) => (s === 'unassigned' ? '' : s)
       const updated = await trigger({
@@ -102,9 +102,7 @@ export function ProfileForm({ user }: { user: User }) {
     }
   }
 
-  if (fetchProfile?.isLoading || fetchEmails?.isLoading) {
-    return null
-  }
+  if (!profile || !emails) return null
 
   return (
     <div className="space-y-4">

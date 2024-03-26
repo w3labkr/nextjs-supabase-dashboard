@@ -8,19 +8,19 @@ type FetchData =
   | { data: { users: [] }; error: AuthError }
 
 export function useUsers(page: number, perPage: number) {
-  const fetchUrl =
+  const url =
     page && perPage ? `/api/v1/users?page=${page}&perPage=${perPage}` : null
   const {
-    data: api,
+    data: response,
     error,
     isLoading,
     isValidating,
     mutate,
-  } = useSWR<FetchData, Error>(fetchUrl)
+  } = useSWR<FetchData, Error>(url)
 
   return {
-    data: api?.data,
-    error: error ?? api?.error,
+    users: response?.data?.users ?? [],
+    isError: error ?? response?.error ?? null,
     isLoading,
     isValidating,
     mutate,

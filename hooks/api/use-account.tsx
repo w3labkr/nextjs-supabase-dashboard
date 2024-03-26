@@ -7,21 +7,19 @@ type FetchData =
   | { data: Tables<'accounts'>; error: null }
   | { data: null; error: Error }
 
-export type Account = Tables<'accounts'>
-
 export function useAccount(id: string | null) {
-  const fetchUrl = id ? `/api/v1/account/${id}` : null
+  const url = id ? `/api/v1/account/${id}` : null
   const {
-    data: api,
+    data: response,
     error,
     isLoading,
     isValidating,
     mutate,
-  } = useSWR<FetchData, Error>(fetchUrl)
+  } = useSWR<FetchData, Error>(url)
 
   return {
-    data: api?.data,
-    error: error ?? api?.error,
+    account: response?.data ?? null,
+    isError: error ?? response?.error ?? null,
     isLoading,
     isValidating,
     mutate,

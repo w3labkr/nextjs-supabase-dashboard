@@ -75,7 +75,7 @@ export function LanguageSwitcher({
           <CommandGroup>
             {languageItems.map((item) => (
               <LanguageSwitcherItem
-                key={item.value}
+                key={item?.value}
                 item={item}
                 resolvedLanguage={resolvedLanguage}
                 onSelect={handleSelect}

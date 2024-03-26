@@ -41,11 +41,10 @@ async function updateAccount(url: string, { arg }: { arg: FormValues }) {
   })
 }
 
-export function ChangeUsernameForm({ user }: { user: User }) {
+export function ChangeUsernameForm({ user }: { user: User | null }) {
   const { t } = useTranslation()
 
-  const fetchAccount = useAccount(user?.id ?? null)
-  const { data: account } = fetchAccount
+  const { account } = useAccount(user?.id ?? null)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -54,6 +53,7 @@ export function ChangeUsernameForm({ user }: { user: User }) {
       username: account?.username ?? '',
     },
   })
+
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { trigger } = useSWRMutation(
@@ -90,7 +90,7 @@ export function ChangeUsernameForm({ user }: { user: User }) {
     }
   }
 
-  if (fetchAccount?.isLoading) return null
+  if (!account) return null
 
   return (
     <div className="space-y-4">

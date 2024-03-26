@@ -1,14 +1,14 @@
 'use client'
 
 import useSWR from 'swr'
-import { Tables } from '@/types/supabase'
+import { Appearance } from '@/types/database'
 
 type FetchData =
-  | { data: Tables<'profiles'>; error: null }
+  | { data: Appearance; error: null }
   | { data: null; error: Error }
 
-export function useProfile(id: string | null) {
-  const url = id ? `/api/v1/profile/${id}` : null
+export function useAppearance(id: string | null) {
+  const url = id ? `/api/v1/appearance/${id}` : null
   const {
     data: response,
     error,
@@ -18,7 +18,7 @@ export function useProfile(id: string | null) {
   } = useSWR<FetchData, Error>(url)
 
   return {
-    profile: response?.data ?? null,
+    appearance: response?.data ?? null,
     isError: error ?? response?.error ?? null,
     isLoading,
     isValidating,

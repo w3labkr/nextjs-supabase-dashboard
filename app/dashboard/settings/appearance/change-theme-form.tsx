@@ -24,24 +24,61 @@ import { SubmitButton } from '@/components/submit-button'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
+import useSWRMutation from 'swr/mutation'
+import { User } from '@supabase/supabase-js'
+import { fetcher } from '@/lib/utils'
+import { useAppearance } from '@/hooks/api/use-appearance'
+
 const FormSchema = z.object({
-  theme: z.string().nonempty(),
+  theme: z.string(),
 })
 
 type FormValues = z.infer<typeof FormSchema>
 
-export function ChangeThemeForm() {
+async function updateAppearance(url: string, { arg }: { arg: FormValues }) {
+  return await fetcher(url, {
+    method: 'POST',
+    body: JSON.stringify(arg),
+  })
+}
+
+export function ChangeThemeForm({ user }: { user: User | null }) {
   const { t } = useTranslation()
   const { theme, setTheme } = useTheme()
+  const { appearance } = useAppearance(user?.id ?? null)
+
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
-    defaultValues: { theme },
+    values: { theme: appearance?.theme ?? theme ?? 'light' },
   })
 
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
+  const { trigger } = useSWRMutation(
+    user?.id ? `/api/v1/appearance/${user?.id}` : null,
+    updateAppearance
+  )
+
   const onSubmit = async (formValues: FormValues) => {
-    setTheme(formValues?.theme)
-    toast.success(t('FormMessage.theme_has_been_successfully_changed'))
+    if (formValues.theme === appearance?.theme) {
+      toast(t('FormMessage.nothing_has_changed'))
+      return false
+    }
+
+    try {
+      setIsSubmitting(true)
+      setTheme(formValues.theme)
+
+      const updated = await trigger({ ...appearance, theme: formValues.theme })
+      if (updated?.error) throw new Error(updated?.error?.message)
+
+      toast.success(t('FormMessage.theme_has_been_successfully_changed'))
+    } catch (e: unknown) {
+      toast.error((e as Error)?.message)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -125,7 +162,11 @@ export function ChangeThemeForm() {
               </FormItem>
             )}
           />
-          <SubmitButton text="ChangeThemeForm.submit" translate="yes" />
+          <SubmitButton
+            isSubmitting={isSubmitting}
+            text="ChangeThemeForm.submit"
+            translate="yes"
+          />
         </form>
       </Form>
     </div>

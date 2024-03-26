@@ -25,7 +25,10 @@ export async function GET(
 
     if (result?.error) throw new Error(result?.error?.message)
 
-    return NextResponse.json({ data: result?.data, error: null })
+    return NextResponse.json({
+      data: result?.data?.raw_appearance,
+      error: null,
+    })
   } catch (e: unknown) {
     return NextResponse.json(
       { data: null, error: { message: (e as Error)?.message } },
@@ -51,7 +54,10 @@ export async function POST(
 
   try {
     const supabase = createClient()
-    const updated = await supabase.from('accounts').update(data).eq('id', id)
+    const updated = await supabase
+      .from('accounts')
+      .update({ raw_appearance: data })
+      .eq('id', id)
 
     if (updated?.error) throw new Error(updated?.error?.message)
 

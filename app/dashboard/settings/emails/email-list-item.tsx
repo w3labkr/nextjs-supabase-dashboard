@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { User } from '@supabase/supabase-js'
-import { Email } from '@/hooks/api/use-emails'
+import { Tables } from '@/types/supabase'
 
 import {
   EmailListItemContext,
@@ -13,7 +13,13 @@ import {
 import { DeleteEmailAddress } from './delete-email-address'
 import { ResendVerifyEmail } from './resend-verify-email'
 
-export function EmailListItem({ item, user }: { item: Email; user: User }) {
+export function EmailListItem({
+  item,
+  user,
+}: {
+  item: Tables<'emails'>
+  user: User | null
+}) {
   const state = React.useMemo(
     () => ({
       isVerified: !!item?.email_confirmed_at,

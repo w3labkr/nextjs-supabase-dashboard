@@ -25,13 +25,9 @@ export function UserList() {
   const [page, setPage] = React.useState<number>(1)
   const [perPage, setPerPage] = React.useState<number>(50)
 
-  const fetchUsers = useUsers(page, perPage)
-  const { data } = fetchUsers
-  const users = data?.users
-  const total = data?.users?.length
+  const { users, isLoading } = useUsers(page, perPage)
 
-  // if (fetchUsers?.error) return <div>failed to load</div>
-  // if (fetchUsers?.isLoading) return <div>loading...</div>
+  if (isLoading) return null
 
   return (
     <>
@@ -62,7 +58,7 @@ export function UserList() {
         page={page}
         perPage={perPage}
         setPage={setPage}
-        total={total ?? 0}
+        total={users?.length ?? 0}
       />
     </>
   )

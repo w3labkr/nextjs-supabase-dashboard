@@ -17,15 +17,15 @@ export function ResendVerifyEmail() {
   const handleClick = async () => {
     try {
       setIsSubmitting(true)
+
       if (!state?.user_id) throw new Error('Something went wrong.')
 
-      const arg = { email: state?.email }
-      const response = await fetcher(`/api/v1/email/verify/${state?.user_id}`, {
+      const result = await fetcher(`/api/v1/email/verify/${state?.user_id}`, {
         method: 'POST',
-        body: JSON.stringify(arg),
+        body: JSON.stringify({ email: state?.email }),
       })
 
-      if (response?.error) throw new Error(response?.error?.message)
+      if (result?.error) throw new Error(result?.error?.message)
 
       toast.success(t('FormMessage.email_has_been_successfully_sent'))
     } catch (e: unknown) {

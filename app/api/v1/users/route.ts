@@ -25,14 +25,14 @@ export async function GET(request: NextRequest) {
     const perPage = searchParams.get('perPage') as string
 
     const supabaseAdmin = createAdminClient()
-    const response = await supabaseAdmin.listUsers({
+    const result = await supabaseAdmin.listUsers({
       page: +page ?? 1,
       perPage: +perPage ?? 50,
     })
 
-    if (response?.error) throw new Error(response?.error?.message)
+    if (result?.error) throw new Error(result?.error?.message)
 
-    return NextResponse.json({ data: response?.data, error: null })
+    return NextResponse.json({ data: result?.data, error: null })
   } catch (e: unknown) {
     return NextResponse.json(
       { data: null, error: { message: (e as Error)?.message } },

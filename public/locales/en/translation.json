@@ -154,6 +154,7 @@
     "email_has_been_successfully_sent": "Your email has been sent successfully.",
     "failed_to_fetch": "Failed to fetch",
     "invalid_login_credentials": "Your email or password does not match.",
+    "language_has_been_changed_successfully": "The language has been changed successfully.",
     "new_password_should_be_different_from_the_old_password": "New password should be different from the old password.",
     "nothing_has_changed": "Nothing has changed.",
     "old_password_does_not_match": "Old password does not match.",

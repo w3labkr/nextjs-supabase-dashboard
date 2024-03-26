@@ -20,10 +20,10 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
+import { useSWRConfig } from 'swr'
 import { User } from '@supabase/supabase-js'
 import { fetcher } from '@/lib/utils'
 import { useEmails } from '@/hooks/api/use-emails'
-import { useSWRConfig } from 'swr'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
@@ -35,19 +35,17 @@ const defaultValues: Partial<FormValues> = {
   email: '',
 }
 
-export function AddEmailAddress({ user }: { user: User }) {
+export function AddEmailAddress({ user }: { user: User | null }) {
   const { t } = useTranslation()
 
-  const fetchEmails = useEmails(user?.id ?? null)
-  const { data: emails } = fetchEmails
+  const { mutate } = useSWRConfig()
+  const { emails } = useEmails(user?.id ?? null)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     defaultValues,
   })
-
-  const { mutate } = useSWRConfig()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
@@ -73,6 +71,7 @@ export function AddEmailAddress({ user }: { user: User }) {
       if (sent?.error) throw new Error(sent?.error?.message)
 
       mutate(`/api/v1/emails/${user?.id}`)
+
       form.reset()
       toast.success(t('FormMessage.email_has_been_added_successfully'))
     } catch (e: unknown) {
@@ -82,7 +81,7 @@ export function AddEmailAddress({ user }: { user: User }) {
     }
   }
 
-  if (fetchEmails?.isLoading) return null
+  if (!emails) return null
 
   return (
     <div className="space-y-2">

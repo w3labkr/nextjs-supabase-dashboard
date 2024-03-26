@@ -3,26 +3,23 @@
 import useSWR from 'swr'
 import { Tables } from '@/types/supabase'
 
-export type FetchData =
+type FetchData =
   | { data: Tables<'emails'>[]; error: null }
   | { data: null; error: Error }
 
-export type Email = Tables<'emails'>
-export type Emails = Tables<'emails'>[]
-
 export function useEmails(id: string | null) {
-  const fetchUrl = id ? `/api/v1/emails/${id}` : null
+  const url = id ? `/api/v1/emails/${id}` : null
   const {
-    data: api,
+    data: response,
     error,
     isLoading,
     isValidating,
     mutate,
-  } = useSWR<FetchData, Error>(fetchUrl)
+  } = useSWR<FetchData, Error>(url)
 
   return {
-    data: api?.data,
-    error: error ?? api?.error,
+    emails: response?.data ?? null,
+    isError: error ?? response?.error ?? null,
     isLoading,
     isValidating,
     mutate,

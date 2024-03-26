@@ -15,10 +15,16 @@ export async function POST(
     )
   }
 
-  try {
-    const data = await request.json()
-    if (!data?.email) throw new Error('Required field is not defined.')
+  const data = await request.json()
 
+  if (!data?.email) {
+    return NextResponse.json(
+      { data: null, error: { message: 'Required field is not defined.' } },
+      { status: 400 }
+    )
+  }
+
+  try {
     const supabaseAdmin = createAdminClient()
     const updated = await supabaseAdmin.updateUserById(id, {
       email: data?.email,
@@ -49,10 +55,16 @@ export async function PUT(
     )
   }
 
-  try {
-    const data = await request.json()
-    if (!data?.email) throw new Error('Required field is not defined.')
+  const data = await request.json()
 
+  if (!data?.email) {
+    return NextResponse.json(
+      { data: null, error: { message: 'Required field is not defined.' } },
+      { status: 400 }
+    )
+  }
+
+  try {
     const supabase = createClient()
     const inserted = await supabase
       .from('emails')
@@ -82,10 +94,16 @@ export async function DELETE(
     )
   }
 
-  try {
-    const data = await request.json()
-    if (!data?.email) throw new Error('Required field is not defined.')
+  const data = await request.json()
 
+  if (!data?.email) {
+    return NextResponse.json(
+      { data: null, error: { message: 'Required field is not defined.' } },
+      { status: 400 }
+    )
+  }
+
+  try {
     const supabase = createClient()
     const deleted = await supabase
       .from('emails')
@@ -102,4 +120,8 @@ export async function DELETE(
       { status: 400 }
     )
   }
+}
+
+function NextResponseJson(body: unknown, init?: ResponseInit | undefined) {
+  return NextResponse.json(body, init)
 }

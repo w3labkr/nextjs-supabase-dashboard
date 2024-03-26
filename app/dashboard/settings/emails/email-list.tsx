@@ -13,11 +13,10 @@ import { EmailListItem } from './email-list-item'
 import { AddEmailAddress } from './add-email-address'
 import { PrimaryEmailAddress } from './primary-email-address'
 
-export function EmailList({ user }: { user: User }) {
-  const fetchEmails = useEmails(user?.id ?? null)
-  const { data: emails } = fetchEmails
+export function EmailList({ user }: { user: User | null }) {
+  const { emails } = useEmails(user?.id ?? null)
 
-  if (fetchEmails?.isLoading) return null
+  if (!emails) return null
 
   return (
     <div className="space-y-4">

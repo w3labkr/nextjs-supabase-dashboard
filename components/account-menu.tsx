@@ -23,10 +23,9 @@ export function AccountMenu() {
   const { t } = useTranslation()
 
   const { user } = useAuth()
-  const fetchProfile = useProfile(user?.id ?? null)
-  const { data: profile } = fetchProfile
+  const { profile } = useProfile(user?.id ?? null)
 
-  if (fetchProfile?.isLoading) return null
+  if (!profile) return null
 
   return (
     <DropdownMenu>

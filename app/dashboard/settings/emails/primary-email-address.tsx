@@ -38,13 +38,11 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-export function PrimaryEmailAddress({ user }: { user: User }) {
+export function PrimaryEmailAddress({ user }: { user: User | null }) {
   const router = useRouter()
   const { t } = useTranslation()
 
-  const fetchEmails = useEmails(user?.id ?? null)
-  const { data: emails } = fetchEmails
-
+  const { emails } = useEmails(user?.id ?? null)
   const primaryEmail = React.useMemo(
     () => emails?.find((x) => x.email === user?.email && x.email_confirmed_at),
     [emails, user]
@@ -104,7 +102,7 @@ export function PrimaryEmailAddress({ user }: { user: User }) {
               <FormItem>
                 {/* <FormLabel></FormLabel> */}
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl className="max-w-72">
+                  <FormControl>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue
                         placeholder={t(

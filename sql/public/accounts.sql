@@ -9,6 +9,7 @@ create table accounts (
   created_at timestamptz default now(),
   updated_at timestamptz default now(),
   username varchar(255) not null unique,
+  raw_appearance jsonb,
   has_set_password bool default false
 );
 
