@@ -23,7 +23,7 @@ begin
   );
 
   insert into
-    profiles (user_id, username, name, avatar_url)
+    profiles (id, username, name, avatar_url)
   values (
     new.id,
     new_username,

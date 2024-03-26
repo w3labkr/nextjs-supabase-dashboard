@@ -20,26 +20,26 @@ export type Database = {
     Tables: {
       accounts: {
         Row: {
-          raw_appearance: Json | null
           created_at: string | null
           has_set_password: boolean | null
           id: string
+          raw_appearance: Json | null
           updated_at: string | null
           username: string
         }
         Insert: {
-          raw_appearance?: Json | null
           created_at?: string | null
           has_set_password?: boolean | null
           id: string
+          raw_appearance?: Json | null
           updated_at?: string | null
           username: string
         }
         Update: {
-          raw_appearance?: Json | null
           created_at?: string | null
           has_set_password?: boolean | null
           id?: string
+          raw_appearance?: Json | null
           updated_at?: string | null
           username?: string
         }
@@ -94,10 +94,9 @@ export type Database = {
           bio: string | null
           created_at: string | null
           email: string | null
-          id: number
+          id: string
           name: string | null
           updated_at: string | null
-          user_id: string
           username: string
         }
         Insert: {
@@ -105,10 +104,9 @@ export type Database = {
           bio?: string | null
           created_at?: string | null
           email?: string | null
-          id?: number
+          id: string
           name?: string | null
           updated_at?: string | null
-          user_id: string
           username: string
         }
         Update: {
@@ -116,16 +114,15 @@ export type Database = {
           bio?: string | null
           created_at?: string | null
           email?: string | null
-          id?: number
+          id?: string
           name?: string | null
           updated_at?: string | null
-          user_id?: string
           username?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'profiles_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: 'profiles_id_fkey'
+            columns: ['id']
             isOneToOne: true
             referencedRelation: 'users'
             referencedColumns: ['id']

@@ -11,7 +11,7 @@ export async function GET(
     const result = await supabase
       .from('profiles')
       .select()
-      .eq('user_id', id)
+      .eq('id', id)
       .single()
 
     if (result?.error) throw new Error(result?.error?.message)
@@ -42,10 +42,7 @@ export async function POST(
 
   try {
     const supabase = createClient()
-    const updated = await supabase
-      .from('profiles')
-      .update(data)
-      .eq('user_id', id)
+    const updated = await supabase.from('profiles').update(data).eq('id', id)
 
     if (updated?.error) throw new Error(updated?.error?.message)
 

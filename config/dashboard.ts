@@ -61,7 +61,7 @@ export const dashboardConfig: DashboardConfig = {
           title: 'admin',
           badge: 0,
           translate: 'yes',
-          disabled: false,
+          disabled: true,
         },
       ],
     },

@@ -11,11 +11,19 @@ import {
 } from '@/components/ui/resizable'
 import { adminConfig } from '@/config/dashboard'
 
-export default function AdminLayout({
+import { authenticate } from '@/lib/supabase/auth'
+
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const { user } = await authenticate()
+
+  if (user?.role !== 'admin') {
+    return 'Unauthorized'
+  }
+
   return (
     <div className="body-overflow-hidden flex h-screen w-screen min-w-[768px]">
       <AppBarProvider>
