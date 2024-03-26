@@ -22,7 +22,7 @@ export interface MiniNavigationProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function MiniNavigation({ className, ...props }: MiniNavigationProps) {
-  const appBarState = React.useContext(AppBarContext)
+  const state = React.useContext(AppBarContext)
   const pathname = usePathname()
 
   return (
@@ -37,7 +37,7 @@ export function MiniNavigation({ className, ...props }: MiniNavigationProps) {
       <div
         className={cn(
           'flex items-center justify-center border-b',
-          appBarState?.height ?? 'h-[50px]'
+          state?.height
         )}
       >
         <Link href="/">

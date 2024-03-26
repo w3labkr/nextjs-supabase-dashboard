@@ -81,8 +81,6 @@ export function AddEmailAddress({ user }: { user: User | null }) {
     }
   }
 
-  if (!emails) return null
-
   return (
     <div className="space-y-2">
       <div>

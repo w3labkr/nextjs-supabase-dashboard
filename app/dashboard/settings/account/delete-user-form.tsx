@@ -58,9 +58,9 @@ const defaultValues: Partial<FormValues> = {
 
 export function DeleteUserForm({ user }: { user: User | null }) {
   const router = useRouter()
+  const auth = useAuth()
   const { t } = useTranslation()
 
-  const auth = useAuth()
   const { account } = useAccount(user?.id ?? null)
   const hasSetPassword = React.useMemo(
     () => account?.has_set_password,
@@ -110,25 +110,20 @@ export function DeleteUserForm({ user }: { user: User | null }) {
       router.replace('/')
       router.refresh()
     } catch (e: unknown) {
-      switch ((e as Error)?.message) {
-        case 'Your email address is invalid.':
-          form.setError('email', { message: t('FormMessage.email_is_invalid') })
-          break
-        case 'Your password is invalid.':
-          form.setError('password', {
-            message: t('FormMessage.password_is_invalid'),
-          })
-          break
-        default:
-          toast.error((e as Error)?.message)
-          break
+      const err = (e as Error)?.message
+      if (err.startsWith('Your email address is invalid')) {
+        form.setError('email', { message: t('FormMessage.email_is_invalid') })
+      } else if (err.startsWith('Your password is invalid')) {
+        form.setError('password', {
+          message: t('FormMessage.password_is_invalid'),
+        })
+      } else {
+        toast.error(err)
       }
     } finally {
       setIsSubmitting(false)
     }
   }
-
-  if (!account) return null
 
   return (
     <div className="space-y-4">

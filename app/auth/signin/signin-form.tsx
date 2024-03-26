@@ -69,18 +69,16 @@ export function SignInForm() {
       router.replace('/dashboard/dashboard')
       router.refresh()
     } catch (e: unknown) {
-      switch ((e as Error)?.message) {
-        case 'Invalid login credentials':
-          form.setError('email', {
-            message: t('FormMessage.invalid_login_credentials'),
-          })
-          form.setError('password', {
-            message: t('FormMessage.invalid_login_credentials'),
-          })
-          break
-        default:
-          toast.error((e as Error)?.message)
-          break
+      const err = (e as Error)?.message
+      if (err.startsWith('Invalid login credentials')) {
+        form.setError('email', {
+          message: t('FormMessage.invalid_login_credentials'),
+        })
+        form.setError('password', {
+          message: t('FormMessage.invalid_login_credentials'),
+        })
+      } else {
+        toast.error(err)
       }
     } finally {
       setIsSubmitting(false)

@@ -76,17 +76,17 @@ export function ResetPasswordForm() {
       router.replace('/auth/signin')
       router.refresh()
     } catch (e: unknown) {
-      switch ((e as Error)?.message) {
-        case 'New password should be different from the old password.':
-          form.setError('newPassword', {
-            message: t(
-              'FormMessage.new_password_should_be_different_from_the_old_password'
-            ),
-          })
-          break
-        default:
-          toast.error((e as Error)?.message)
-          break
+      const err = (e as Error)?.message
+      if (
+        err.startsWith('New password should be different from the old password')
+      ) {
+        form.setError('newPassword', {
+          message: t(
+            'FormMessage.new_password_should_be_different_from_the_old_password'
+          ),
+        })
+      } else {
+        toast.error(err)
       }
     } finally {
       setIsSubmitting(false)

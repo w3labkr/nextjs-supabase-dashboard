@@ -33,7 +33,7 @@ import { fetcher } from '@/lib/utils'
 import { useEmails } from '@/hooks/api/use-emails'
 
 const FormSchema = z.object({
-  email: z.string().max(255).optional(),
+  email: z.string().max(255),
 })
 
 type FormValues = z.infer<typeof FormSchema>
@@ -56,13 +56,13 @@ export function PrimaryEmailAddress({ user }: { user: User | null }) {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
+    if (formValues?.email === user?.email) {
+      toast(t('FormMessage.nothing_has_changed'))
+      return false
+    }
+
     try {
       setIsSubmitting(true)
-
-      if (!form?.formState?.isDirty) {
-        toast(t('FormMessage.nothing_has_changed'))
-        return false
-      }
 
       const updated = await fetcher(`/api/v1/email/${user?.id}`, {
         method: 'POST',

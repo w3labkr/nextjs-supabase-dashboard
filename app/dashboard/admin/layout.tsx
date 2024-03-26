@@ -18,7 +18,7 @@ export default function AdminLayout({
 }) {
   return (
     <div className="body-overflow-hidden flex h-screen w-screen min-w-[768px]">
-      <AppBarProvider value={{ height: 'h-[50px]' }}>
+      <AppBarProvider>
         <MiniNavigation />
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">

@@ -43,7 +43,6 @@ async function updateAccount(url: string, { arg }: { arg: FormValues }) {
 
 export function ChangeUsernameForm({ user }: { user: User | null }) {
   const { t } = useTranslation()
-
   const { account } = useAccount(user?.id ?? null)
 
   const form = useForm<FormValues>({
@@ -62,35 +61,31 @@ export function ChangeUsernameForm({ user }: { user: User | null }) {
   )
 
   const onSubmit = async (formValues: FormValues) => {
+    if (formValues?.username === account?.username) {
+      toast(t('FormMessage.nothing_has_changed'))
+      return false
+    }
+
     try {
       setIsSubmitting(true)
-
-      if (!form?.formState?.isDirty) {
-        toast(t('FormMessage.nothing_has_changed'))
-        return false
-      }
 
       const updated = await trigger(formValues)
       if (updated?.error) throw new Error(updated?.error?.message)
 
       toast.success(t('FormMessage.username_has_been_successfully_changed'))
     } catch (e: unknown) {
-      switch ((e as Error)?.message) {
-        case 'duplicate key value violates unique constraint "profiles_username_key"':
-          form.setError('username', {
-            message: t('FormMessage.username_already_registered'),
-          })
-          break
-        default:
-          toast.error((e as Error)?.message)
-          break
+      const err = (e as Error)?.message
+      if (err.startsWith('duplicate key value violates unique constraint')) {
+        form.setError('username', {
+          message: t('FormMessage.username_already_registered'),
+        })
+      } else {
+        toast.error(err)
       }
     } finally {
       setIsSubmitting(false)
     }
   }
-
-  if (!account) return null
 
   return (
     <div className="space-y-4">

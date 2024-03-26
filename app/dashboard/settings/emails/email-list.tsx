@@ -16,8 +16,6 @@ import { PrimaryEmailAddress } from './primary-email-address'
 export function EmailList({ user }: { user: User | null }) {
   const { emails } = useEmails(user?.id ?? null)
 
-  if (!emails) return null
-
   return (
     <div className="space-y-4">
       <Title text="ChangeEmailForm.title" translate="yes" />

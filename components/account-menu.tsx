@@ -25,8 +25,6 @@ export function AccountMenu() {
   const { user } = useAuth()
   const { profile } = useProfile(user?.id ?? null)
 
-  if (!profile) return null
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

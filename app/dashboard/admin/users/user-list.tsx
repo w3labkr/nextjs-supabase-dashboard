@@ -27,8 +27,6 @@ export function UserList() {
 
   const { users, isLoading } = useUsers(page, perPage)
 
-  if (isLoading) return null
-
   return (
     <>
       <div className="space-y-4">

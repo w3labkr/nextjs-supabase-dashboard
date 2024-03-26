@@ -98,15 +98,13 @@ export function SignUpForm() {
       router.replace('/auth/signin')
       router.refresh()
     } catch (e: unknown) {
-      switch ((e as Error)?.message) {
-        case 'User already registered':
-          form.setError('email', {
-            message: t('FormMessage.user_already_registered'),
-          })
-          break
-        default:
-          toast.error((e as Error)?.message)
-          break
+      const err = (e as Error)?.message
+      if (err.startsWith('User already registered')) {
+        form.setError('email', {
+          message: t('FormMessage.user_already_registered'),
+        })
+      } else {
+        toast.error(err)
       }
     } finally {
       setIsSubmitting(false)

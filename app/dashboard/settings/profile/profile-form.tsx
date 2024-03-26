@@ -41,8 +41,8 @@ import { useEmails } from '@/hooks/api/use-emails'
 
 const FormSchema = z.object({
   name: z.string().nonempty().min(2),
-  email: z.string().max(255).optional(),
-  bio: z.string().max(160).optional(),
+  email: z.string().max(255),
+  bio: z.string().max(160),
 })
 
 type FormValues = z.infer<typeof FormSchema>
@@ -78,7 +78,11 @@ export function ProfileForm({ user }: { user: User | null }) {
   )
 
   const onSubmit = async (formValues: FormValues) => {
-    if (!form?.formState?.isDirty) {
+    if (
+      formValues?.name === profile?.name &&
+      formValues?.email === profile?.email &&
+      formValues?.bio === profile?.bio
+    ) {
       toast(t('FormMessage.nothing_has_changed'))
       return false
     }
@@ -89,7 +93,7 @@ export function ProfileForm({ user }: { user: User | null }) {
       const setEmail = (s: string) => (s === 'unassigned' ? '' : s)
       const updated = await trigger({
         ...formValues,
-        email: setEmail(formValues?.email ?? ''),
+        email: setEmail(formValues?.email),
       })
 
       if (updated?.error) throw new Error(updated?.error?.message)
@@ -101,8 +105,6 @@ export function ProfileForm({ user }: { user: User | null }) {
       setIsSubmitting(false)
     }
   }
-
-  if (!profile || !emails) return null
 
   return (
     <div className="space-y-4">

@@ -11,13 +11,13 @@ import { AppBarContext } from './app-bar-provider'
 export interface AppBarProps extends React.HTMLAttributes<HTMLElement> {}
 
 export function AppBar({ children, className, ...props }: AppBarProps) {
-  const appBarState = React.useContext(AppBarContext)
+  const state = React.useContext(AppBarContext)
 
   return (
     <header
       className={cn(
         'flex w-full items-center gap-4 border-b bg-background px-6',
-        appBarState?.height ?? 'h-[50px]',
+        state?.height,
         className
       )}
       {...props}

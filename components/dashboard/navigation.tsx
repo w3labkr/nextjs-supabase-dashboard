@@ -23,7 +23,7 @@ export function Navigation({
   translate,
   ...props
 }: NavigationProps) {
-  const appBarState = React.useContext(AppBarContext)
+  const state = React.useContext(AppBarContext)
   const pathname = usePathname()
   const { t } = useTranslation()
 
@@ -39,7 +39,7 @@ export function Navigation({
       <div
         className={cn(
           'flex flex-row items-center gap-2 border-b px-4',
-          appBarState?.height ?? 'h-[50px]'
+          state?.height
         )}
       >
         <span className="font-semibold">

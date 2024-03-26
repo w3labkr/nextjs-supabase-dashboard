@@ -6,17 +6,13 @@ export interface AppBarProviderProps {
   height: string
 }
 
-export const AppBarContext = React.createContext<AppBarProviderProps | null>(
-  null
-)
+export const AppBarContext = React.createContext<AppBarProviderProps>({
+  height: '',
+})
 
-export function AppBarProvider({
-  children,
-  value,
-}: {
-  children: React.ReactNode
-  value: AppBarProviderProps
-}) {
+export function AppBarProvider({ children }: { children: React.ReactNode }) {
+  const value = React.useMemo(() => ({ height: 'h-[50px]' }), [])
+
   return (
     <AppBarContext.Provider value={value}>{children}</AppBarContext.Provider>
   )

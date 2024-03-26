@@ -11,7 +11,7 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="body-overflow-hidden flex h-screen w-screen min-w-[768px]">
-      <AppBarProvider value={{ height: 'h-[50px]' }}>
+      <AppBarProvider>
         <MiniNavigation />
         <div className="flex flex-1 flex-col">
           <AppBar />

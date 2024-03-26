@@ -40,7 +40,9 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
   const { theme, setTheme } = useTheme()
 
   React.useEffect(() => {
-    if (value && theme !== value) setTheme(value)
+    if (value && theme !== value) {
+      setTheme(value)
+    }
   }, [value, setTheme, theme])
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
