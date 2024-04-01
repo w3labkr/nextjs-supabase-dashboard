@@ -18,6 +18,41 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      appearances: {
+        Row: {
+          created_at: string | null
+          id: number
+          language: string | null
+          theme: Database['public']['Enums']['app_theme'] | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          language?: string | null
+          theme?: Database['public']['Enums']['app_theme'] | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          language?: string | null
+          theme?: Database['public']['Enums']['app_theme'] | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'appearances_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       emails: {
         Row: {
           created_at: string | null
@@ -202,7 +237,7 @@ export type Database = {
         Insert: {
           created_at?: string | null
           id?: number
-          role: Database['public']['Enums']['user_role']
+          role?: Database['public']['Enums']['user_role']
           updated_at?: string | null
           user_id: string
         }
@@ -231,7 +266,6 @@ export type Database = {
           has_set_password: boolean | null
           id: string
           is_ban: boolean | null
-          raw_appearance: Json | null
           updated_at: string | null
           username: string
         }
@@ -242,7 +276,6 @@ export type Database = {
           has_set_password?: boolean | null
           id: string
           is_ban?: boolean | null
-          raw_appearance?: Json | null
           updated_at?: string | null
           username: string
         }
@@ -253,7 +286,6 @@ export type Database = {
           has_set_password?: boolean | null
           id?: string
           is_ban?: boolean | null
-          raw_appearance?: Json | null
           updated_at?: string | null
           username?: string
         }
@@ -290,6 +322,7 @@ export type Database = {
       }
     }
     Enums: {
+      app_theme: 'system' | 'light' | 'dark'
       user_permission: 'posts.delete'
       user_role: 'guest' | 'user' | 'admin' | 'superadmin'
     }

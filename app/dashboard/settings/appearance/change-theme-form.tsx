@@ -70,7 +70,8 @@ export function ChangeThemeForm() {
     try {
       setIsSubmitting(true)
       setTheme(formValues?.theme)
-      await trigger({ ...appearance, theme: formValues?.theme })
+
+      await trigger(formValues)
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)

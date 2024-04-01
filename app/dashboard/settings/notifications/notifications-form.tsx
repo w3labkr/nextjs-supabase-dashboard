@@ -26,7 +26,7 @@ import { Description } from '@/components/description'
 import useSWRMutation from 'swr/mutation'
 import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
-import { useNotification } from '@/hooks/sync/use-notifications'
+import { useNotification } from '@/hooks/sync/use-notification'
 
 const FormSchema = z.object({
   marketing_emails: z.boolean(),
@@ -56,7 +56,7 @@ export function NotificationsForm() {
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     values: {
-      marketing_emails: notification?.marketing,
+      marketing_emails: notification?.marketing_emails ?? false,
       security_emails: true,
     },
   })

@@ -19,8 +19,9 @@ begin
   insert into users (id, username, has_set_password) values (new.id, new_username, new_has_set_password);
   insert into profiles (user_id, name, avatar_url) values (new.id, new_username, new.raw_user_meta_data ->> 'avatar_url');
   insert into emails (user_id, email) values (new.id, new.email);
-  insert into user_roles (user_id, role) values (new.id, 'user');
+  insert into user_roles (user_id) values (new.id);
   insert into notifications (user_id) values (new.id);
+  insert into appearances (user_id) values (new.id);
 
   return new;
 end;

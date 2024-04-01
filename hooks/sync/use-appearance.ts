@@ -1,10 +1,10 @@
 'use client'
 
 import useSWR from 'swr'
-import { Appearance } from '@/types/database'
+import { Tables } from '@/types/supabase'
 
 type FetchData =
-  | { data: Appearance; error: null }
+  | { data: Tables<'appearances'>; error: null }
   | { data: null; error: Error }
 
 export function useAppearance(id: string | null) {

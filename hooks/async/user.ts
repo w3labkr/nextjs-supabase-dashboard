@@ -23,7 +23,7 @@ export async function getUser() {
   const { data } = await supabase
     .from('users')
     .select(
-      `username, has_set_password, is_ban, banned_until, raw_appearance, deleted_at,
+      `username, has_set_password, is_ban, banned_until, deleted_at,
        user_roles(role)`
     )
     .eq('id', user?.id)

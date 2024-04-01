@@ -43,9 +43,9 @@ const defaultValues: Partial<FormValues> = {
 
 export function ResetPasswordForm() {
   const router = useRouter()
-  const auth = useAuth()
   const { t } = useTranslation()
 
+  const { setSession, setUser } = useAuth()
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
@@ -67,8 +67,8 @@ export function ResetPasswordForm() {
       const unsigned = await supabase.auth.signOut()
       if (unsigned?.error) throw new Error(unsigned?.error?.message)
 
-      auth.setSession(null)
-      auth.setUser(null)
+      setSession(null)
+      setUser(null)
 
       toast.success(t('FormMessage.changed_successfully'))
 

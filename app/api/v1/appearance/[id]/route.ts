@@ -12,15 +12,15 @@ export async function GET(
 
   const supabase = createClient()
   const { data, error } = await supabase
-    .from('users')
+    .from('appearances')
     .select()
-    .eq('id', id)
+    .eq('user_id', id)
     .limit(1)
     .single()
 
   if (error) return responseJson(400, { error: error?.message })
 
-  return responseJson(200, { data: data?.raw_appearance })
+  return responseJson(200, { data })
 }
 
 export async function POST(
@@ -31,11 +31,16 @@ export async function POST(
   if (!user) return responseJson(401)
 
   const body = await request.json()
+
+  if (!body) {
+    return responseJson(400, { error: 'Require is not defined.' })
+  }
+
   const supabase = createClient()
   const { error } = await supabase
-    .from('users')
-    .update({ raw_appearance: body })
-    .eq('id', id)
+    .from('appearances')
+    .update(body)
+    .eq('user_id', id)
 
   if (error) return responseJson(400, { error: error?.message })
 

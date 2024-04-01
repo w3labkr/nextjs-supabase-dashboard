@@ -5,6 +5,8 @@ drop table if exists emails;
 drop table if exists posts;
 drop table if exists profiles;
 drop table if exists user_roles;
+drop table if exists notifications;
+drop table if exists appearances;
 drop table if exists users;
 
 create table users (
@@ -13,7 +15,6 @@ create table users (
   updated_at timestamptz default now(),
   deleted_at timestamptz,
   username text not null,
-  raw_appearance jsonb,
   has_set_password boolean default false,
   is_ban boolean default false,
   banned_until timestamptz,

@@ -9,9 +9,16 @@ import { useAppearance } from '@/hooks/sync/use-appearance'
 
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
 import { setResolvedLanguage } from '@/store/features/i18n-slice'
-import { Appearance } from '@/types/database'
 
-export const AppearanceContext = React.createContext<Appearance | null>(null)
+export interface AppearanceContextProps {
+  theme: string | null
+  language: string | null
+}
+
+export const AppearanceContext = React.createContext<AppearanceContextProps>({
+  theme: null,
+  language: null,
+})
 
 export function AppearanceProvider({
   children,
@@ -20,7 +27,13 @@ export function AppearanceProvider({
 }) {
   const { user } = useAuth()
   const { appearance } = useAppearance(user?.id ?? null)
-  const value = React.useMemo(() => appearance, [appearance])
+  const value = React.useMemo(
+    () => ({
+      theme: appearance?.theme ?? null,
+      language: appearance?.language ?? null,
+    }),
+    [appearance]
+  )
 
   return (
     <AppearanceContext.Provider value={value}>
@@ -31,7 +44,7 @@ export function AppearanceProvider({
   )
 }
 
-const ThemeContext = React.createContext<string | undefined>(undefined)
+const ThemeContext = React.createContext<string | null>(null)
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
   const appearance = React.useContext(AppearanceContext)
@@ -42,12 +55,12 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (value && theme !== value) {
       setTheme(value)
     }
-  }, [value, setTheme, theme])
+  }, [theme, setTheme, value])
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }
 
-const LanguageContext = React.createContext<string | undefined>(undefined)
+const LanguageContext = React.createContext<string | null>(null)
 
 function LanguageProvider({ children }: { children: React.ReactNode }) {
   const appearance = React.useContext(AppearanceContext)
@@ -68,7 +81,7 @@ function LanguageProvider({ children }: { children: React.ReactNode }) {
       document.documentElement.lang = value
       dispatch(setResolvedLanguage(value))
     }
-  }, [resolvedLanguage, value, dispatch, i18n])
+  }, [i18n, resolvedLanguage, dispatch, value])
 
   return (
     <LanguageContext.Provider value={value}>

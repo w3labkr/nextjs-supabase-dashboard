@@ -26,6 +26,6 @@ begin
 end;
 $$;
 
-select create_new_user('w3labkr@naver.com', 'qweqwe');
+select create_new_user('username@example.com', '123456789');
 
 drop function create_new_user;

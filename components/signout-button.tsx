@@ -16,8 +16,9 @@ interface SignOutButtonProps
 
 export function SignOutButton(props: SignOutButtonProps) {
   const router = useRouter()
-  const auth = useAuth()
   const { t } = useTranslation()
+
+  const { setSession, setUser } = useAuth()
 
   const handleClick = async () => {
     try {
@@ -26,8 +27,8 @@ export function SignOutButton(props: SignOutButtonProps) {
 
       if (unsigned?.error) throw new Error(unsigned?.error?.message)
 
-      auth.setSession(null)
-      auth.setUser(null)
+      setSession(null)
+      setUser(null)
 
       router.replace('/')
       router.refresh()

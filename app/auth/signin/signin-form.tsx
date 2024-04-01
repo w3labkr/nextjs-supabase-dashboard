@@ -39,14 +39,15 @@ const defaultValues: Partial<FormValues> = {
 
 export function SignInForm() {
   const router = useRouter()
-  const auth = useAuth()
   const { t } = useTranslation()
 
+  const { setSession, setUser } = useAuth()
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     defaultValues,
   })
+
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
@@ -61,8 +62,8 @@ export function SignInForm() {
       if (signed?.error) throw new Error(signed?.error?.message)
       if (!signed?.data?.user) throw new Error('User data is invalid.')
 
-      auth.setSession(signed?.data?.session)
-      auth.setUser(signed?.data?.user)
+      setSession(signed?.data?.session)
+      setUser(signed?.data?.user)
 
       toast.success(t('FormMessage.you_have_successfully_logged_in'))
 
