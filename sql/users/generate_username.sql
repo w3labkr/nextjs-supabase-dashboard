@@ -14,13 +14,13 @@ begin
   -- generate username based on email address
   new_username := lower(split_part(email, '@', 1));
 
-  -- check if username already exists in accounts table
-  select exists(select 1 from accounts where username = new_username) into username_exists;
+  -- check if username already exists in users table
+  select exists(select 1 from users where username = new_username) into username_exists;
 
   -- increase username length gradually if needed
   while username_exists loop
     new_username := new_username || '_' || to_char(trunc(random()*1000000), 'fm000000');
-    select exists(select 1 from accounts where username = new_username) into username_exists;
+    select exists(select 1 from users where username = new_username) into username_exists;
   end loop;
 
   return new_username;

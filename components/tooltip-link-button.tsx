@@ -13,7 +13,7 @@ import { TooltipContentProps } from '@radix-ui/react-tooltip'
 import { LinkButton, LinkButtonProps } from '@/components/link-button'
 
 export interface TooltipLinkButtonProps extends LinkButtonProps {
-  tooltipContent?: TooltipContentProps | undefined
+  tooltipContent?: TooltipContentProps
 }
 
 export function TooltipLinkButton({

@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 export interface RelatedLinkProps
   extends LinkProps,
     Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
-  text?: string | undefined
+  text?: string
 }
 
 export function RelatedLink({

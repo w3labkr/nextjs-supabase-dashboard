@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 import { siteConfig } from '@/config/site'
 
 export interface LogoProps {
-  className?: string | undefined
+  className?: string
 }
 
 export function Logo({ className }: LogoProps) {

@@ -3,6 +3,7 @@ import * as React from 'react'
 import { AppBarProvider } from '@/components/app-bar/app-bar-provider'
 import { MiniNavigation } from '@/components/dashboard/mini-navigation'
 import { AppBar } from '@/components/app-bar'
+import { dashboardConfig } from '@/config/dashboard'
 
 export default function DashboardLayout({
   children,
@@ -12,7 +13,7 @@ export default function DashboardLayout({
   return (
     <div className="body-overflow-hidden flex h-screen w-screen min-w-[768px]">
       <AppBarProvider>
-        <MiniNavigation />
+        <MiniNavigation nav={dashboardConfig?.nav} />
         <div className="flex flex-1 flex-col">
           <AppBar />
           {children}

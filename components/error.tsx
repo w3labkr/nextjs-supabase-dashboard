@@ -2,19 +2,17 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-
 import { cn } from '@/lib/utils'
-import { HttpStatusCode } from '@/types'
 
 export interface ErrorProps extends React.HTMLAttributes<HTMLDivElement> {
-  statusCode: HttpStatusCode
-  statusText?: string | undefined
-  message?: string | undefined
-  className?: string | undefined
+  status: string
+  statusText?: string
+  message?: string
+  className?: string
 }
 
 export function Error({
-  statusCode,
+  status,
   statusText,
   message,
   className,
@@ -25,13 +23,13 @@ export function Error({
   return (
     <div className={cn('flex h-screen w-screen', className)} {...props}>
       <div className="container flex max-w-[768px] items-center justify-center">
-        <h1 className="text-2xl font-medium">{statusCode}</h1>
+        <h1 className="text-2xl font-medium">{status}</h1>
         <div className="ml-6 border-l border-solid border-[rgba(0,0,0,.3)] py-1 pl-6 dark:border-[rgba(255,255,255,.3)]">
           <h2 className="font-medium">
-            {statusText ?? t(`${statusCode}.statusText`)}
+            {statusText ?? t(`${status}.statusText`)}
           </h2>
           <p className="text-sm text-muted-foreground">
-            {message ?? t(`${statusCode}.message`)}
+            {message ?? t(`${status}.message`)}
           </p>
         </div>
       </div>

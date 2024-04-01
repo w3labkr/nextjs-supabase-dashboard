@@ -25,9 +25,9 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
 import useSWRMutation from 'swr/mutation'
-import { User } from '@supabase/supabase-js'
 import { fetcher } from '@/lib/utils'
-import { useAppearance } from '@/hooks/api/use-appearance'
+import { useAuth } from '@/hooks/use-auth'
+import { useAppearance } from '@/hooks/sync/use-appearance'
 
 const FormSchema = z.object({
   theme: z.string(),
@@ -35,17 +35,23 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-async function updateAppearance(url: string, { arg }: { arg: FormValues }) {
+async function sendRequest(url: string, { arg }: { arg: FormValues }) {
   return await fetcher(url, {
     method: 'POST',
     body: JSON.stringify(arg),
   })
 }
 
-export function ChangeThemeForm({ user }: { user: User | null }) {
+export function ChangeThemeForm() {
   const { t } = useTranslation()
   const { theme, setTheme } = useTheme()
+
+  const { user } = useAuth()
   const { appearance } = useAppearance(user?.id ?? null)
+  const { trigger } = useSWRMutation(
+    user?.id ? `/api/v1/appearance/${user?.id}` : null,
+    sendRequest
+  )
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -55,23 +61,18 @@ export function ChangeThemeForm({ user }: { user: User | null }) {
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const { trigger } = useSWRMutation(
-    user?.id ? `/api/v1/appearance/${user?.id}` : null,
-    updateAppearance
-  )
-
   const onSubmit = async (formValues: FormValues) => {
-    if (formValues.theme === appearance?.theme) {
+    if (formValues?.theme === appearance?.theme) {
       toast(t('FormMessage.nothing_has_changed'))
       return false
     }
 
     try {
       setIsSubmitting(true)
-      setTheme(formValues.theme)
+      setTheme(formValues?.theme)
 
-      const updated = await trigger({ ...appearance, theme: formValues.theme })
-      if (updated?.error) throw new Error(updated?.error?.message)
+      const result = await trigger({ ...appearance, theme: formValues?.theme })
+      if (result?.error) throw new Error(result?.error?.message)
 
       toast.success(t('FormMessage.theme_has_been_successfully_changed'))
     } catch (e: unknown) {

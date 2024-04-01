@@ -161,6 +161,7 @@
     "password_is_invalid": "Your password is invalid.",
     "password_has_been_successfully_changed": "Your password has been successfully changed.",
     "profile_has_been_successfully_changed": "Your profile has been successfully changed.",
+    "require_is_not_defined": "Require is not defined.",
     "the_email_has_been_sent_successfully": "The email has been sent successfully.",
     "theme_has_been_successfully_changed": "Your theme has been successfully changed.",
     "user_already_registered": "User already registered.",

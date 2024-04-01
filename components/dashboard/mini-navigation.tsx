@@ -12,16 +12,18 @@ import { Badge } from '@/components/ui/badge'
 import { TooltipLinkButton } from '@/components/tooltip-link-button'
 
 import { siteConfig } from '@/config/site'
-import { dashboardConfig } from '@/config/dashboard'
-import {
-  DashboardMiniNavItem,
-  DashboardMiniNavSubItem,
-} from '@/types/dashboard'
+import { DashboardMiniNavItem, DashboardMiniNavSubItem } from '@/types/config'
 
 export interface MiniNavigationProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+  extends React.HTMLAttributes<HTMLDivElement> {
+  nav: DashboardMiniNavItem[]
+}
 
-export function MiniNavigation({ className, ...props }: MiniNavigationProps) {
+export function MiniNavigation({
+  className,
+  nav,
+  ...props
+}: MiniNavigationProps) {
   const state = React.useContext(AppBarContext)
   const pathname = usePathname()
 
@@ -46,9 +48,11 @@ export function MiniNavigation({ className, ...props }: MiniNavigationProps) {
         </Link>
       </div>
       <nav className="flex-1 space-y-2 overflow-auto py-2">
-        {dashboardConfig?.nav?.map((item) => (
-          <NavItem key={item?.id} item={item} pathname={pathname} />
-        ))}
+        {nav?.map((item) => {
+          return item?.roles && !item?.roles?.includes(state?.role) ? null : (
+            <NavItem key={item?.id} item={item} pathname={pathname} />
+          )
+        })}
       </nav>
     </div>
   )
@@ -61,12 +65,16 @@ function NavItem({
   item: DashboardMiniNavItem
   pathname: string
 }) {
+  const state = React.useContext(AppBarContext)
+
   return (
     <React.Fragment>
       {item?.separator && <Separator />}
-      {item?.items?.map((sub) => (
-        <NavSubItem key={sub?.id} item={sub} pathname={pathname} />
-      ))}
+      {item?.items?.map((value) => {
+        return value?.roles && !value?.roles?.includes(state?.role) ? null : (
+          <NavSubItem key={value?.id} item={value} pathname={pathname} />
+        )
+      })}
     </React.Fragment>
   )
 }

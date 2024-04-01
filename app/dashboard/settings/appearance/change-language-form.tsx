@@ -32,9 +32,9 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
 import useSWRMutation from 'swr/mutation'
-import { User } from '@supabase/supabase-js'
 import { fetcher } from '@/lib/utils'
-import { useAppearance } from '@/hooks/api/use-appearance'
+import { useAuth } from '@/hooks/use-auth'
+import { useAppearance } from '@/hooks/sync/use-appearance'
 
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
 import { setResolvedLanguage } from '@/store/features/i18n-slice'
@@ -45,22 +45,26 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-async function updateAppearance(url: string, { arg }: { arg: FormValues }) {
+async function sendRequest(url: string, { arg }: { arg: FormValues }) {
   return await fetcher(url, {
     method: 'POST',
     body: JSON.stringify(arg),
   })
 }
 
-export function ChangeLanguageForm({ user }: { user: User | null }) {
+export function ChangeLanguageForm() {
   const { t, i18n } = useTranslation()
-
   const dispatch = useAppDispatch()
   const resolvedLanguage = useAppSelector(
     (state) => state?.i18n?.resolvedLanguage
   )
 
+  const { user } = useAuth()
   const { appearance } = useAppearance(user?.id ?? null)
+  const { trigger } = useSWRMutation(
+    user?.id ? `/api/v1/appearance/${user?.id}` : null,
+    sendRequest
+  )
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -70,13 +74,10 @@ export function ChangeLanguageForm({ user }: { user: User | null }) {
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const { trigger } = useSWRMutation(
-    user?.id ? `/api/v1/appearance/${user?.id}` : null,
-    updateAppearance
-  )
-
   const onSubmit = async (formValues: FormValues) => {
-    if (formValues.language === appearance?.language) {
+    const language: string = formValues?.language
+
+    if (language === appearance?.language) {
       toast(t('FormMessage.nothing_has_changed'))
       return false
     }
@@ -84,16 +85,12 @@ export function ChangeLanguageForm({ user }: { user: User | null }) {
     try {
       setIsSubmitting(true)
 
-      i18n.changeLanguage(formValues.language)
-      document.documentElement.lang = formValues.language!
-      dispatch(setResolvedLanguage(formValues.language!))
+      i18n.changeLanguage(language)
+      document.documentElement.lang = language
+      dispatch(setResolvedLanguage(language))
 
-      const updated = await trigger({
-        ...appearance,
-        language: formValues.language,
-      })
-
-      if (updated?.error) throw new Error(updated?.error?.message)
+      const result = await trigger({ ...appearance, language })
+      if (result?.error) throw new Error(result?.error?.message)
 
       toast.success(t('FormMessage.language_has_been_changed_successfully'))
     } catch (e: unknown) {

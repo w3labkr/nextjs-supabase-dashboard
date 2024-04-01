@@ -1,6 +1,5 @@
 import * as React from 'react'
 
-import { mediaConfig } from '@/config/dashboard'
 import { AppBarProvider } from '@/components/app-bar/app-bar-provider'
 import { AppBar } from '@/components/app-bar'
 import { MiniNavigation } from '@/components/dashboard/mini-navigation'
@@ -10,6 +9,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
+import { dashboardConfig, mediaConfig } from '@/config/dashboard'
 
 export default function MediaLayout({
   children,
@@ -19,7 +19,7 @@ export default function MediaLayout({
   return (
     <div className="body-overflow-hidden flex h-screen w-screen min-w-[768px]">
       <AppBarProvider>
-        <MiniNavigation />
+        <MiniNavigation nav={dashboardConfig?.nav} />
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
             <Navigation

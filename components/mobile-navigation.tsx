@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 
 import { mobileSiteConfig } from '@/config/site'
-import { MobileNavItem } from '@/types'
+import { MobileNavItem } from '@/types/config'
 
 export interface MobileNavigationProps
   extends React.HTMLAttributes<HTMLDivElement> {}

@@ -34,10 +34,9 @@ import { SubmitButton } from '@/components/submit-button'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
-import { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
-import { useAccount } from '@/hooks/api/use-account'
+import { useUser } from '@/hooks/sync/use-user'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
@@ -56,16 +55,13 @@ const defaultValues: Partial<FormValues> = {
   confirmationPhrase: '',
 }
 
-export function DeleteUserForm({ user }: { user: User | null }) {
+export function DeleteUserForm() {
   const router = useRouter()
-  const auth = useAuth()
   const { t } = useTranslation()
 
-  const { account } = useAccount(user?.id ?? null)
-  const hasSetPassword = React.useMemo(
-    () => account?.has_set_password,
-    [account?.has_set_password]
-  )
+  const { user: _user, setSession, setUser } = useAuth()
+  const { user } = useUser(_user?.id ?? null)
+  const hasSetPassword: boolean = user?.user?.has_set_password ?? false
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -83,11 +79,12 @@ export function DeleteUserForm({ user }: { user: User | null }) {
   const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
-      const supabase = createClient()
 
       if (formValues?.email !== user?.email) {
         throw new Error('Your email address is invalid.')
       }
+
+      const supabase = createClient()
 
       if (hasSetPassword) {
         const verified = await supabase.rpc('verify_user_password', {
@@ -102,10 +99,10 @@ export function DeleteUserForm({ user }: { user: User | null }) {
       const deleted = await supabase.rpc('delete_user')
       if (deleted?.error) throw new Error(deleted?.error?.message)
 
-      toast.success(t('FormMessage.account_has_been_successfully_deleted'))
+      setSession(null)
+      setUser(null)
 
-      auth.setSession(null)
-      auth.setUser(null)
+      toast.success(t('FormMessage.account_has_been_successfully_deleted'))
 
       router.replace('/')
       router.refresh()

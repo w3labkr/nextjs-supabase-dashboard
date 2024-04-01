@@ -4,8 +4,8 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
 
-import { User } from '@supabase/supabase-js'
-import { useAppearance } from '@/hooks/api/use-appearance'
+import { useAuth } from '@/hooks/use-auth'
+import { useAppearance } from '@/hooks/sync/use-appearance'
 
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
 import { setResolvedLanguage } from '@/store/features/i18n-slice'
@@ -15,11 +15,10 @@ export const AppearanceContext = React.createContext<Appearance | null>(null)
 
 export function AppearanceProvider({
   children,
-  user,
 }: {
   children: React.ReactNode
-  user: User | null
 }) {
+  const { user } = useAuth()
   const { appearance } = useAppearance(user?.id ?? null)
   const value = React.useMemo(() => appearance, [appearance])
 

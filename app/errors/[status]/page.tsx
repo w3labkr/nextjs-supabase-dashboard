@@ -1,13 +1,12 @@
 import * as React from 'react'
 
-import { ButtonLink } from '@/components/button-link'
 import { Error } from '@/components/error'
-import { HttpStatusCode } from '@/types'
+import { ButtonLink } from '@/components/button-link'
 
 export default function NotFound({
-  params: { code },
+  params: { status },
 }: {
-  params: { code: HttpStatusCode }
+  params: { status: string }
 }) {
   return (
     <div className="relative">
@@ -18,7 +17,7 @@ export default function NotFound({
         text="ButtonLink.home"
         translate="yes"
       />
-      <Error statusCode={code} />
+      <Error status={status} />
     </div>
   )
 }

@@ -10,15 +10,15 @@ import { Button, ButtonProps } from '@/components/ui/button'
 interface SubmitButtonProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
-  disabled?: boolean | undefined
-  startIconName?: LucideIconName | undefined
-  startIconClassName?: string | undefined
-  endIconName?: LucideIconName | undefined
-  endIconClassName?: string | undefined
-  text?: string | undefined
-  isSubmitting?: boolean | undefined
-  submittingIconName?: LucideIconName | undefined
-  submittingIconClassName?: string | undefined
+  disabled?: boolean
+  startIconName?: LucideIconName
+  startIconClassName?: string
+  endIconName?: LucideIconName
+  endIconClassName?: string
+  text?: string
+  isSubmitting?: boolean
+  submittingIconName?: LucideIconName
+  submittingIconClassName?: string
 }
 
 export function SubmitButton({

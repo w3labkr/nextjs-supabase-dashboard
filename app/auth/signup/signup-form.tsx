@@ -21,7 +21,6 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
-import { SignInWithGoogleUserMetadata } from '@/types/api'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 
@@ -61,27 +60,11 @@ export function SignUpForm() {
     try {
       setIsSubmitting(true)
 
-      const username = formValues?.email?.split('@')[0]
-      const user_metadata: SignInWithGoogleUserMetadata = {
-        avatar_url: null,
-        email: formValues?.email,
-        email_verified: false,
-        full_name: username,
-        iss: null,
-        name: username,
-        phone_verified: false,
-        picture: null,
-        provider_id: null,
-        sub: null,
-      }
-
       const supabase = createClient()
       const signed = await supabase.auth.signUp({
         email: formValues?.email,
         password: formValues?.newPassword,
-        options: { data: user_metadata },
       })
-
       if (signed?.error) throw new Error(signed?.error?.message)
       if (!signed?.data?.user) throw new Error('User data is invalid.')
 
@@ -98,6 +81,7 @@ export function SignUpForm() {
       router.replace('/auth/signin')
       router.refresh()
     } catch (e: unknown) {
+      console.log(e)
       const err = (e as Error)?.message
       if (err.startsWith('User already registered')) {
         form.setError('email', {

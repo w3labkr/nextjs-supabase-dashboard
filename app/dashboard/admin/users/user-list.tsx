@@ -19,13 +19,12 @@ import { Description } from '@/components/description'
 import { Paginate } from '@/components/paginate'
 
 import { User } from '@supabase/supabase-js'
-import { useUsers } from '@/hooks/api/use-users'
+import { useUsers } from '@/hooks/sync/use-users'
 
 export function UserList() {
   const [page, setPage] = React.useState<number>(1)
   const [perPage, setPerPage] = React.useState<number>(50)
-
-  const { users, isLoading } = useUsers(page, perPage)
+  const { users } = useUsers(page, perPage)
 
   return (
     <>

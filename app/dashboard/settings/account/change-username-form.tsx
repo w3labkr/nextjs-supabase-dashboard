@@ -24,9 +24,9 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
 import useSWRMutation from 'swr/mutation'
-import { User } from '@supabase/supabase-js'
 import { fetcher } from '@/lib/utils'
-import { useAccount } from '@/hooks/api/use-account'
+import { useAuth } from '@/hooks/use-auth'
+import { useUser } from '@/hooks/sync/use-user'
 
 const FormSchema = z.object({
   username: z.string().nonempty().min(2).max(30),
@@ -34,34 +34,35 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-async function updateAccount(url: string, { arg }: { arg: FormValues }) {
+async function sendRequest(url: string, { arg }: { arg: FormValues }) {
   return await fetcher(url, {
     method: 'POST',
     body: JSON.stringify(arg),
   })
 }
 
-export function ChangeUsernameForm({ user }: { user: User | null }) {
+export function ChangeUsernameForm() {
   const { t } = useTranslation()
-  const { account } = useAccount(user?.id ?? null)
+
+  const { user: _user } = useAuth()
+  const { user } = useUser(_user?.id ?? null)
+  const { trigger } = useSWRMutation(
+    user?.id ? `/api/v1/user/${user?.id}` : null,
+    sendRequest
+  )
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     values: {
-      username: account?.username ?? '',
+      username: user?.user?.username ?? '',
     },
   })
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const { trigger } = useSWRMutation(
-    user?.id ? `/api/v1/account/${user?.id}` : null,
-    updateAccount
-  )
-
   const onSubmit = async (formValues: FormValues) => {
-    if (formValues?.username === account?.username) {
+    if (formValues?.username === user?.user?.username) {
       toast(t('FormMessage.nothing_has_changed'))
       return false
     }
@@ -69,8 +70,8 @@ export function ChangeUsernameForm({ user }: { user: User | null }) {
     try {
       setIsSubmitting(true)
 
-      const updated = await trigger(formValues)
-      if (updated?.error) throw new Error(updated?.error?.message)
+      const result = await trigger(formValues)
+      if (result?.error) throw new Error(result?.error?.message)
 
       toast.success(t('FormMessage.username_has_been_successfully_changed'))
     } catch (e: unknown) {

@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { authorize } from '@/lib/supabase/auth'
+import { responseJson } from '@/lib/utils'
+import { authorize } from '@/hooks/async/user'
+
 import { transporter, sender } from '@/lib/nodemailer'
 import { jwtSign } from '@/lib/jsonwebtoken'
 import { VerifyTokenPayload } from '@/types/token'
@@ -8,27 +10,18 @@ export async function POST(
   request: NextRequest,
   { params: { id } }: { params: { id: string } }
 ) {
-  const { isAuthorized } = await authorize(id)
+  const { user } = await authorize(id)
+  if (!user) return responseJson(401)
 
-  if (!isAuthorized) {
-    return NextResponse.json(
-      { data: null, error: { message: 'Unauthorized' } },
-      { status: 401 }
-    )
-  }
-
-  const data = await request.json()
-  const mailOptions = mailTemplate({ ...data, user_id: id })
+  const body = await request.json()
+  const mailOptions = mailTemplate({ ...body, user_id: id })
 
   try {
     const info = await transporter.sendMail(mailOptions)
 
-    return NextResponse.json({ data: info, error: null })
+    return responseJson(200, { data: info })
   } catch (e: unknown) {
-    return NextResponse.json(
-      { data: null, error: { message: (e as Error)?.message } },
-      { status: 400 }
-    )
+    return responseJson(400, { error: (e as Error)?.message })
   }
 }
 

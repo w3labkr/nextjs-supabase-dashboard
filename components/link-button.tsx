@@ -12,11 +12,11 @@ export interface LinkButtonProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
   href: string
-  text?: string | undefined
-  startIconName?: LucideIconName | undefined
-  startIconClassName?: string | undefined
-  endIconName?: LucideIconName | undefined
-  endIconClassName?: string | undefined
+  text?: string
+  startIconName?: LucideIconName
+  startIconClassName?: string
+  endIconName?: LucideIconName
+  endIconClassName?: string
 }
 
 export const LinkButton = React.forwardRef<HTMLButtonElement, LinkButtonProps>(

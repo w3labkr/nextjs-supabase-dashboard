@@ -30,9 +30,9 @@ export function LanguageSwitcher({
   triggerClassName,
   contentClassName,
 }: {
-  className?: string | undefined
-  triggerClassName?: string | undefined
-  contentClassName?: string | undefined
+  className?: string
+  triggerClassName?: string
+  contentClassName?: string
 }) {
   const { t, i18n } = useTranslation()
 

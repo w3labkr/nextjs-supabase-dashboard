@@ -13,7 +13,7 @@ export default function NotFound() {
         text="ButtonLink.home"
         translate="yes"
       />
-      <Error statusCode="404" />
+      <Error status="404" />
     </div>
   )
 }

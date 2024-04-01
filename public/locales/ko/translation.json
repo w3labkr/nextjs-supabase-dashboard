@@ -161,6 +161,7 @@
     "password_is_invalid": "비밀번호가 유효하지 않습니다.",
     "password_has_been_successfully_changed": "비밀번호가 성공적으로 변경되었습니다.",
     "profile_has_been_successfully_changed": "프로필이 성공적으로 변경되었습니다.",
+    "require_is_not_defined": "요구 사항이 정의되지 않았습니다.",
     "the_email_has_been_sent_successfully": "이메일이 성공적으로 전송되었습니다.",
     "theme_has_been_successfully_changed": "테마가 성공적으로 변경되었습니다.",
     "user_already_registered": "이미 등록된 사용자입니다.",

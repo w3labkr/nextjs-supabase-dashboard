@@ -1,42 +1,24 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
-import { authenticate } from '@/lib/supabase/auth'
+import { responseJson } from '@/lib/utils'
+import { getUser } from '@/hooks/async/user'
 
 export async function GET(request: NextRequest) {
-  const { isAuthenticated, user } = await authenticate()
+  const { user } = await getUser()
+  if (!user) return responseJson(401)
+  if (!user?.user_role?.isAdmin) return responseJson(403)
 
-  if (!isAuthenticated) {
-    return NextResponse.json(
-      { data: null, error: { message: 'Unauthorized' } },
-      { status: 401 }
-    )
-  }
+  const searchParams = request.nextUrl.searchParams
+  const page = searchParams.get('page') as string
+  const perPage = searchParams.get('perPage') as string
 
-  // if (user?.role !== 'admin') {
-  //   return NextResponse.json(
-  //     { data: null, error: { message: 'Forbidden' } },
-  //     { status: 403 }
-  //   )
-  // }
+  const supabaseAdmin = createAdminClient()
+  const { data, error } = await supabaseAdmin.listUsers({
+    page: +page ?? 1,
+    perPage: +perPage ?? 50,
+  })
 
-  try {
-    const searchParams = request.nextUrl.searchParams
-    const page = searchParams.get('page') as string
-    const perPage = searchParams.get('perPage') as string
+  if (error) return responseJson(400, { error: error?.message })
 
-    const supabaseAdmin = createAdminClient()
-    const result = await supabaseAdmin.listUsers({
-      page: +page ?? 1,
-      perPage: +perPage ?? 50,
-    })
-
-    if (result?.error) throw new Error(result?.error?.message)
-
-    return NextResponse.json({ data: result?.data, error: null })
-  } catch (e: unknown) {
-    return NextResponse.json(
-      { data: null, error: { message: (e as Error)?.message } },
-      { status: 400 }
-    )
-  }
+  return responseJson(200, { data })
 }

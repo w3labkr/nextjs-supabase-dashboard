@@ -9,7 +9,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
-import { postsConfig } from '@/config/dashboard'
+import { dashboardConfig, postsConfig } from '@/config/dashboard'
 
 export default function PostsLayout({
   children,
@@ -19,7 +19,7 @@ export default function PostsLayout({
   return (
     <div className="body-overflow-hidden flex h-screen w-screen min-w-[768px]">
       <AppBarProvider>
-        <MiniNavigation />
+        <MiniNavigation nav={dashboardConfig?.nav} />
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
             <Navigation

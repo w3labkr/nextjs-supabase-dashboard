@@ -45,9 +45,10 @@ export function ForgotPasswordForm() {
   const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
+
       const supabase = createClient()
       const { error } = await supabase.auth.resetPasswordForEmail(
-        formValues.email,
+        formValues?.email,
         {
           // A URL to send the user to after they are confirmed.
           // Don't forget to change the URL in supabase's email template.

@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 
 export interface DescriptionProps
   extends React.HTMLAttributes<HTMLParagraphElement> {
-  text?: string | undefined
+  text?: string
 }
 
 export function Description({

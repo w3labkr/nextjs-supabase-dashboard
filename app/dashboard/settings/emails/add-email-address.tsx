@@ -20,10 +20,10 @@ import {
 } from '@/components/ui/form'
 import { SubmitButton } from '@/components/submit-button'
 
-import { useSWRConfig } from 'swr'
-import { User } from '@supabase/supabase-js'
+import useSWRMutation from 'swr/mutation'
 import { fetcher } from '@/lib/utils'
-import { useEmails } from '@/hooks/api/use-emails'
+import { useAuth } from '@/hooks/use-auth'
+import { useEmails } from '@/hooks/sync/use-emails'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
@@ -35,11 +35,22 @@ const defaultValues: Partial<FormValues> = {
   email: '',
 }
 
-export function AddEmailAddress({ user }: { user: User | null }) {
+async function sendRequest(url: string, { arg }: { arg: FormValues }) {
+  return await fetcher(url, {
+    method: 'PUT',
+    body: JSON.stringify(arg),
+  })
+}
+
+export function AddEmailAddress() {
   const { t } = useTranslation()
 
-  const { mutate } = useSWRConfig()
+  const { user } = useAuth()
   const { emails } = useEmails(user?.id ?? null)
+  const { trigger } = useSWRMutation(
+    user?.id ? `/api/v1/emails/${user?.id}` : null,
+    sendRequest
+  )
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -56,21 +67,14 @@ export function AddEmailAddress({ user }: { user: User | null }) {
         throw new Error(t('FormMessage.email_has_already_been_added'))
       }
 
-      const inserted = await fetcher(`/api/v1/email/${user?.id}`, {
-        method: 'PUT',
-        body: JSON.stringify(formValues),
-      })
-
-      if (inserted?.error) throw new Error(inserted?.error?.message)
+      const result = await trigger(formValues)
+      if (result?.error) throw new Error(result?.error?.message)
 
       const sent = await fetcher(`/api/v1/email/verify/${user?.id}`, {
         method: 'POST',
         body: JSON.stringify(formValues),
       })
-
       if (sent?.error) throw new Error(sent?.error?.message)
-
-      mutate(`/api/v1/emails/${user?.id}`)
 
       form.reset()
       toast.success(t('FormMessage.email_has_been_added_successfully'))

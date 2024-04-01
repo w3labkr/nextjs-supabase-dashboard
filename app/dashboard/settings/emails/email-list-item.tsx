@@ -3,9 +3,6 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { User } from '@supabase/supabase-js'
-import { Tables } from '@/types/supabase'
-
 import {
   EmailListItemContext,
   EmailListItemProvider,
@@ -13,24 +10,22 @@ import {
 import { DeleteEmailAddress } from './delete-email-address'
 import { ResendVerifyEmail } from './resend-verify-email'
 
-export function EmailListItem({
-  item,
-  user,
-}: {
-  item: Tables<'emails'>
-  user: User | null
-}) {
+import { Tables } from '@/types/supabase'
+import { useAuth } from '@/hooks/use-auth'
+
+export function EmailListItem({ item }: { item: Tables<'emails'> }) {
+  const { t } = useTranslation()
+
+  const { user } = useAuth()
   const state = React.useMemo(
     () => ({
       isVerified: !!item?.email_confirmed_at,
       isPrimary: item?.email === user?.email,
       email: item?.email,
       email_confirmed_at: item?.email_confirmed_at,
-      user_id: user?.id ?? null,
     }),
-    [item, user]
+    [item, user?.email]
   )
-  const { t } = useTranslation()
 
   return (
     <EmailListItemProvider value={state}>
@@ -49,7 +44,7 @@ export function EmailListItem({
               ) : null}
             </div>
             <div className="ml-auto">
-              {!state?.isPrimary ? <DeleteEmailAddress user={user} /> : null}
+              {!state?.isPrimary ? <DeleteEmailAddress /> : null}
             </div>
           </div>
           {state?.isPrimary ? (

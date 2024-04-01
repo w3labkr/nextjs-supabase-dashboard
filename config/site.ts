@@ -1,4 +1,4 @@
-import { SiteConfig, MobileSiteConfig } from '@/types'
+import { SiteConfig, MobileSiteConfig } from '@/types/config'
 
 export const siteConfig: SiteConfig = {
   name: 'Acme Inc',

@@ -8,23 +8,23 @@ import { SubmitButton } from '@/components/submit-button'
 import { EmailListItemContext } from './email-list-item-provider'
 
 import { fetcher } from '@/lib/utils'
+import { useAuth } from '@/hooks/use-auth'
 
 export function ResendVerifyEmail() {
   const state = React.useContext(EmailListItemContext)
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
   const { t } = useTranslation()
+
+  const { user } = useAuth()
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const handleClick = async () => {
     try {
       setIsSubmitting(true)
 
-      if (!state?.user_id) throw new Error('Something went wrong.')
-
-      const result = await fetcher(`/api/v1/email/verify/${state?.user_id}`, {
+      const result = await fetcher(`/api/v1/email/verify/${user?.id}`, {
         method: 'POST',
         body: JSON.stringify({ email: state?.email }),
       })
-
       if (result?.error) throw new Error(result?.error?.message)
 
       toast.success(t('FormMessage.email_has_been_successfully_sent'))

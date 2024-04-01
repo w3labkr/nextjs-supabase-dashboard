@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
 import { LinkButton } from '@/components/link-button'
 
-import { DashboardNavItem, DashboardNavSubItem } from '@/types/dashboard'
+import { DashboardNavItem, DashboardNavSubItem } from '@/types/config'
 
 export interface NavigationProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string
@@ -49,9 +49,11 @@ export function Navigation({
         </span>
       </div>
       <div className="flex-1 space-y-1 overflow-auto p-2">
-        {nav?.map((item) => (
-          <NavItem key={item?.id} item={item} pathname={pathname} />
-        ))}
+        {nav?.map((item) => {
+          return item?.roles && !item?.roles?.includes(state?.role) ? null : (
+            <NavItem key={item?.id} item={item} pathname={pathname} />
+          )
+        })}
       </div>
     </div>
   )
@@ -64,6 +66,7 @@ function NavItem({
   item: DashboardNavItem
   pathname: string
 }) {
+  const state = React.useContext(AppBarContext)
   const { t } = useTranslation()
 
   return (
@@ -76,9 +79,11 @@ function NavItem({
             : item?.label}
         </span>
       )}
-      {item?.items?.map((sub) => (
-        <NavSubItem key={sub?.id} item={sub} pathname={pathname} />
-      ))}
+      {item?.items?.map((value) => {
+        return value?.roles && !value?.roles?.includes(state?.role) ? null : (
+          <NavSubItem key={value?.id} item={value} pathname={pathname} />
+        )
+      })}
     </React.Fragment>
   )
 }

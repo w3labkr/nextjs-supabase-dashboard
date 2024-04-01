@@ -1,56 +1,45 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { authorize } from '@/lib/supabase/auth'
+import { responseJson } from '@/lib/utils'
+import { authorize } from '@/hooks/async/user'
 
 export async function GET(
   request: NextRequest,
   { params: { id } }: { params: { id: string } }
 ) {
-  try {
-    const supabase = createClient()
-    const result = await supabase
-      .from('profiles')
-      .select()
-      .eq('id', id)
-      .single()
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('profiles')
+    .select()
+    .eq('user_id', id)
+    .limit(1)
+    .single()
 
-    if (result?.error) throw new Error(result?.error?.message)
+  if (error) return responseJson(400, { error: error?.message })
 
-    return NextResponse.json({ data: result?.data, error: null })
-  } catch (e: unknown) {
-    return NextResponse.json(
-      { data: null, error: { message: (e as Error)?.message } },
-      { status: 400 }
-    )
-  }
+  return responseJson(200, { data })
 }
 
 export async function POST(
   request: NextRequest,
   { params: { id } }: { params: { id: string } }
 ) {
-  const { isAuthorized } = await authorize(id)
+  const { user } = await authorize(id)
+  if (!user) return responseJson(401)
 
-  if (!isAuthorized) {
-    return NextResponse.json(
-      { data: null, error: { message: 'Unauthorized' } },
-      { status: 401 }
-    )
+  const body = await request.json()
+
+  if (!body) {
+    return responseJson(400, { error: 'Require is not defined.' })
   }
 
-  const data = await request.json()
+  const supabase = createClient()
+  const { error } = await supabase
+    .from('profiles')
+    .update(body)
+    .eq('user_id', id)
 
-  try {
-    const supabase = createClient()
-    const updated = await supabase.from('profiles').update(data).eq('id', id)
+  if (error) return responseJson(400, { error: error?.message })
 
-    if (updated?.error) throw new Error(updated?.error?.message)
-
-    return NextResponse.json({ data: null, error: null })
-  } catch (e: unknown) {
-    return NextResponse.json(
-      { data: null, error: { message: (e as Error)?.message } },
-      { status: 400 }
-    )
-  }
+  return responseJson(200)
 }

@@ -28,9 +28,9 @@ import {
 } from '@/components/ui/select'
 import { SubmitButton } from '@/components/submit-button'
 
-import { User } from '@supabase/supabase-js'
 import { fetcher } from '@/lib/utils'
-import { useEmails } from '@/hooks/api/use-emails'
+import { useAuth } from '@/hooks/use-auth'
+import { useEmails } from '@/hooks/sync/use-emails'
 
 const FormSchema = z.object({
   email: z.string().max(255),
@@ -38,14 +38,15 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-export function PrimaryEmailAddress({ user }: { user: User | null }) {
+export function PrimaryEmailAddress() {
   const router = useRouter()
   const { t } = useTranslation()
 
+  const { user } = useAuth()
   const { emails } = useEmails(user?.id ?? null)
   const primaryEmail = React.useMemo(
     () => emails?.find((x) => x.email === user?.email && x.email_confirmed_at),
-    [emails, user]
+    [emails, user?.email]
   )
 
   const form = useForm<FormValues>({
@@ -64,12 +65,12 @@ export function PrimaryEmailAddress({ user }: { user: User | null }) {
     try {
       setIsSubmitting(true)
 
-      const updated = await fetcher(`/api/v1/email/${user?.id}`, {
+      const result = await fetcher(`/api/v1/email/${user?.id}`, {
         method: 'POST',
         body: JSON.stringify(formValues),
       })
 
-      if (updated?.error) throw new Error(updated?.error?.message)
+      if (result?.error) throw new Error(result?.error?.message)
 
       toast.success(t('FormMessage.email_has_been_successfully_changed'))
       router.refresh()

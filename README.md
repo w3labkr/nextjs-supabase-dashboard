@@ -11,6 +11,7 @@ Denpendency
 - Redux Toolkit + Redux Persist
 - Supabase OAuth with PKCE flow (@supabase/ssr)
 - Supabase Email Auth with PKCE flow (@supabase/ssr)
+- Supabase Role-based Access Control (RBAC)
 
 > The administrator page cannot be viewed on the demo page.  
 > Check the files in the `app/dashboard/admin` directory.
@@ -480,8 +481,8 @@ Server side: `route.ts`
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function POST(request: NextRequest) {
-  const res = await request.json()
-  return NextResponse.json({ res })
+  const body = await request.json()
+  return NextResponse.json({ body })
 }
 ```
 
@@ -494,7 +495,7 @@ import { fetcher } from '@/lib/utils'
 
 const onSubmit = async (formValues: FormValues) => {
   const formData = new FormData()
-  formData.append('email', formValues.email)
+  formData.append('email', formValues?.email)
   const { data, error } = await fetcher<FetchData>('https://...', {
     method: 'POST',
     body: formData,

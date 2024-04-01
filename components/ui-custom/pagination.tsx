@@ -40,9 +40,9 @@ PaginationItem.displayName = 'PaginationItem'
 
 type PaginationLinkProps = {
   isActive?: boolean
-  text?: string | undefined
-  ariaLabel?: string | undefined
-  iconName?: LucideIconName | undefined
+  text?: string
+  ariaLabel?: string
+  iconName?: LucideIconName
 } & Pick<ButtonProps, 'size'> &
   React.ComponentProps<typeof Link>
 
@@ -119,8 +119,8 @@ const PaginationNext = ({
 PaginationNext.displayName = 'PaginationNext'
 
 type PaginationEllipsisProps = {
-  text?: string | undefined
-  iconName?: LucideIconName | undefined
+  text?: string
+  iconName?: LucideIconName
 } & React.ComponentProps<'span'>
 
 const PaginationEllipsis = ({

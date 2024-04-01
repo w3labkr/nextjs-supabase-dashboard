@@ -13,7 +13,7 @@ export default function AuthCodeError() {
         text="ButtonLink.signin"
         translate="yes"
       />
-      <Error statusCode="500" />
+      <Error status="500" />
     </div>
   )
 }

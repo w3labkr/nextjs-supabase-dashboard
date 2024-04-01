@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
 import { useForm } from 'react-hook-form'
@@ -24,9 +25,9 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
 import { useSWRConfig } from 'swr'
-import { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
-import { useAccount } from '@/hooks/api/use-account'
+import { useAuth } from '@/hooks/use-auth'
+import { useUser } from '@/hooks/sync/use-user'
 
 const FormSchema = z
   .object({
@@ -48,16 +49,14 @@ const defaultValues: Partial<FormValues> = {
   confirmNewPassword: '',
 }
 
-export function ChangePasswordForm({ user }: { user: User | null }) {
+export function ChangePasswordForm() {
+  const router = useRouter()
   const { t } = useTranslation()
 
+  const { user: _user } = useAuth()
+  const { user } = useUser(_user?.id ?? null)
   const { mutate } = useSWRConfig()
-  const { account } = useAccount(user?.id ?? null)
-
-  const hasSetPassword = React.useMemo(
-    () => account?.has_set_password,
-    [account?.has_set_password]
-  )
+  const hasSetPassword: boolean = user?.user?.has_set_password ?? false
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -91,12 +90,12 @@ export function ChangePasswordForm({ user }: { user: User | null }) {
       const updated = await supabase.auth.updateUser({
         password: formValues?.newPassword as string,
       })
-
       if (updated?.error) throw new Error(updated?.error?.message)
 
-      mutate(`/api/v1/account/${user?.id}`)
-
+      mutate(`/api/v1/user/${user?.id}`)
       form.reset()
+      router.refresh()
+
       toast.success(t('FormMessage.password_has_been_successfully_changed'))
     } catch (e: unknown) {
       const err = (e as Error)?.message
@@ -119,6 +118,8 @@ export function ChangePasswordForm({ user }: { user: User | null }) {
       setIsSubmitting(false)
     }
   }
+
+  if (!user) return <div>Loading...</div>
 
   return (
     <div className="space-y-4">

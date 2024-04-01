@@ -24,11 +24,7 @@ export const AuthContext = React.createContext<AuthContextProps>({
   setUser: () => void 0,
 })
 
-export interface AuthProviderProps {
-  children: React.ReactNode
-}
-
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = React.useState<Session | null>(null)
   const [user, setUser] = React.useState<User | null>(null)
 

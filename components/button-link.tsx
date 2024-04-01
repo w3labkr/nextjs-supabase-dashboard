@@ -11,11 +11,11 @@ import { ButtonProps, buttonVariants } from '@/components/ui/button'
 export interface ButtonLinkProps
   extends LinkProps,
     Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
-  startIconName?: LucideIconName | undefined
-  startIconClassName?: string | undefined
-  endIconName?: LucideIconName | undefined
-  endIconClassName?: string | undefined
-  text?: string | undefined
+  startIconName?: LucideIconName
+  startIconClassName?: string
+  endIconName?: LucideIconName
+  endIconClassName?: string
+  text?: string
   variant?: ButtonProps['variant']
 }
 

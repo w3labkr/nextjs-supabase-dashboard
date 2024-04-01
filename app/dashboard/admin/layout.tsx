@@ -9,25 +9,23 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
-import { adminConfig } from '@/config/dashboard'
+import { dashboardConfig, adminConfig } from '@/config/dashboard'
 
-import { authenticate } from '@/lib/supabase/auth'
+import { getUser } from '@/hooks/async/user'
 
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const { user } = await authenticate()
+  const { user } = await getUser()
 
-  if (user?.role !== 'admin') {
-    return 'Unauthorized'
-  }
+  if (!user?.user_role?.isAdmin) return <div>Unauthorized</div>
 
   return (
     <div className="body-overflow-hidden flex h-screen w-screen min-w-[768px]">
       <AppBarProvider>
-        <MiniNavigation />
+        <MiniNavigation nav={dashboardConfig?.nav} />
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
             <Navigation

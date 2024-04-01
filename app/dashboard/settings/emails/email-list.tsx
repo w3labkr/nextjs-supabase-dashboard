@@ -6,15 +6,18 @@ import { Separator } from '@/components/ui/separator'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
-import { User } from '@supabase/supabase-js'
-import { useEmails } from '@/hooks/api/use-emails'
-
 import { EmailListItem } from './email-list-item'
 import { AddEmailAddress } from './add-email-address'
 import { PrimaryEmailAddress } from './primary-email-address'
 
-export function EmailList({ user }: { user: User | null }) {
+import { useAuth } from '@/hooks/use-auth'
+import { useEmails } from '@/hooks/sync/use-emails'
+
+export function EmailList() {
+  const { user } = useAuth()
   const { emails } = useEmails(user?.id ?? null)
+
+  if (!emails) return <div>Loading...</div>
 
   return (
     <div className="space-y-4">
@@ -22,13 +25,11 @@ export function EmailList({ user }: { user: User | null }) {
       <Separator />
       <Description text="ChangeEmailForm.description" translate="yes" />
       <div className="flex flex-col gap-2">
-        {emails?.map((item) => (
-          <EmailListItem key={item?.id} item={item} user={user} />
-        ))}
+        {emails?.map((item) => <EmailListItem key={item?.id} item={item} />)}
       </div>
-      <AddEmailAddress user={user} />
+      <AddEmailAddress />
       <Separator />
-      <PrimaryEmailAddress user={user} />
+      <PrimaryEmailAddress />
     </div>
   )
 }

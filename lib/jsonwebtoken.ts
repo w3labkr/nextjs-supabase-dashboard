@@ -11,7 +11,7 @@ export const secret: Secret = process.env.JWT_SECRET!
 
 export function jwtSign(
   payload: string | object | Buffer,
-  options?: SignOptions | undefined
+  options?: SignOptions
 ): string {
   return jwt.sign(payload, secret, { algorithm: 'HS256', ...options })
 }
@@ -22,7 +22,7 @@ export type JwtVerify =
 
 export function jwtVerify(
   token: string,
-  options?: (VerifyOptions & { complete?: false | undefined }) | undefined
+  options?: VerifyOptions & { complete?: false }
 ): JwtVerify {
   try {
     const decoded = jwt.verify(token, secret, options)

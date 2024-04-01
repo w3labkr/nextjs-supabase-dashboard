@@ -1,4 +1,6 @@
-export type Appearance = {
-  theme?: string | undefined
-  language?: string | undefined
+export interface Appearance {
+  theme?: string
+  language?: string
 }
+
+export type UserRole = 'guest' | 'user' | 'admin' | 'superadmin' | undefined

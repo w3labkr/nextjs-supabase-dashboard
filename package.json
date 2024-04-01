@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "clean:dir": "rm -rf node_modules",
+    "clean:dir": "rm -rf ./node_modules && rm -rf ./.next",
     "clean:cache": "npm cache clean --force",
     "clean": "npm run clean:dir && npm run clean:cache",
     "reinstall": "npm run clean && npm install"

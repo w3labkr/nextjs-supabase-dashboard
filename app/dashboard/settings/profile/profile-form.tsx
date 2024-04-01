@@ -35,9 +35,9 @@ import { Description } from '@/components/description'
 
 import useSWRMutation from 'swr/mutation'
 import { fetcher } from '@/lib/utils'
-import { User } from '@supabase/supabase-js'
-import { useProfile } from '@/hooks/api/use-profile'
-import { useEmails } from '@/hooks/api/use-emails'
+import { useAuth } from '@/hooks/use-auth'
+import { useProfile } from '@/hooks/sync/use-profile'
+import { useEmails } from '@/hooks/sync/use-emails'
 
 const FormSchema = z.object({
   name: z.string().nonempty().min(2),
@@ -47,18 +47,23 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-async function updateProfile(url: string, { arg }: { arg: FormValues }) {
+async function sendRequest(url: string, { arg }: { arg: FormValues }) {
   return await fetcher(url, {
     method: 'POST',
     body: JSON.stringify(arg),
   })
 }
 
-export function ProfileForm({ user }: { user: User | null }) {
+export function ProfileForm() {
   const { t } = useTranslation()
 
+  const { user } = useAuth()
   const { profile } = useProfile(user?.id ?? null)
   const { emails } = useEmails(user?.id ?? null)
+  const { trigger } = useSWRMutation(
+    user?.id ? `/api/v1/profile/${user?.id}` : null,
+    sendRequest
+  )
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -71,11 +76,6 @@ export function ProfileForm({ user }: { user: User | null }) {
   })
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
-
-  const { trigger } = useSWRMutation(
-    user?.id ? `/api/v1/profile/${user?.id}` : null,
-    updateProfile
-  )
 
   const onSubmit = async (formValues: FormValues) => {
     if (
@@ -91,12 +91,11 @@ export function ProfileForm({ user }: { user: User | null }) {
       setIsSubmitting(true)
 
       const setEmail = (s: string) => (s === 'unassigned' ? '' : s)
-      const updated = await trigger({
+      const result = await trigger({
         ...formValues,
         email: setEmail(formValues?.email),
       })
-
-      if (updated?.error) throw new Error(updated?.error?.message)
+      if (result?.error) throw new Error(result?.error?.message)
 
       toast.success(t('FormMessage.profile_has_been_successfully_changed'))
     } catch (e: unknown) {
