@@ -27,7 +27,7 @@ alter table user_roles enable row level security;
 
 -- Add row-level security
 create policy "Users can view their roles." on user_roles for select to authenticated using ( auth.uid() = user_id );
-create policy "Users can insert their own role." on user_roles for insert to authenticated with check ( auth.uid() = user_id );
+-- create policy "Users can insert their own role." on user_roles for insert to authenticated with check ( auth.uid() = user_id );
 create policy "Users can update their own role." on user_roles for update to authenticated using ( auth.uid() = user_id );
 -- create policy "Users can delete their own role." on user_roles for delete to authenticated using ( auth.uid() = user_id );
 

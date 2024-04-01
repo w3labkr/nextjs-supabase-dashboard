@@ -72,7 +72,15 @@
   "NotificationsForm": {
     "title": "알림",
     "description": "",
-    "submit": "알림 변경"
+    "submit": "알림 변경",
+    "marketing_emails": {
+      "label": "마케팅 이메일",
+      "description": "새로운 제품, 기능 등에 대한 이메일을 받아보세요."
+    },
+    "security_emails": {
+      "label": "보안 이메일",
+      "description": "계정 활동 및 보안에 대한 이메일을 받으세요."
+    }
   },
 
   "ResetPasswordForm": {
@@ -143,31 +151,25 @@
   },
 
   "FormMessage": {
-    "account_has_been_successfully_deleted": "계정이 성공적으로 삭제되었습니다.",
     "account_information_is_invalid": "계정 정보가 유효하지 않습니다.",
+    "added_successfully": "성공적으로 추가되었습니다.",
+    "changed_successfully": "성공적으로 변경되었습니다.",
+    "deleted_successfully": "성공적으로 삭제되었습니다.",
     "email_is_invalid": "이메일이 유효하지 않습니다.",
-    "email_has_been_added_successfully": "이메일이 성공적으로 추가되었습니다.",
-    "email_has_been_successfully_changed": "이메일이 성공적으로 변경되었습니다.",
-    "email_has_been_successfully_deleted": "이메일이 성공적으로 삭제되었습니다.",
     "email_has_already_been_added": "이 이메일 주소는 이미 추가되었습니다.",
     "email_has_already_been_registered": "이미 가입되어 있는 이메일 주소입니다.",
     "email_has_been_successfully_sent": "이메일이 성공적으로 전송되었습니다",
     "failed_to_fetch": "데이터를 가져오지 못했습니다.",
     "invalid_login_credentials": "이메일 또는 비밀번호가 일치하지 않습니다.",
-    "language_has_been_changed_successfully": "언어가 성공적으로 변경되었습니다.",
     "new_password_should_be_different_from_the_old_password": "새 비밀번호는 이전 비밀번호와 달라야 합니다.",
     "nothing_has_changed": "변경된 내용이 없습니다.",
     "old_password_does_not_match": "이전 비밀번호가 일치하지 않습니다.",
     "password_is_invalid": "비밀번호가 유효하지 않습니다.",
-    "password_has_been_successfully_changed": "비밀번호가 성공적으로 변경되었습니다.",
-    "profile_has_been_successfully_changed": "프로필이 성공적으로 변경되었습니다.",
     "require_is_not_defined": "요구 사항이 정의되지 않았습니다.",
-    "the_email_has_been_sent_successfully": "이메일이 성공적으로 전송되었습니다.",
-    "theme_has_been_successfully_changed": "테마가 성공적으로 변경되었습니다.",
+    "something_went_wrong": "뭔가 잘못되었습니다.",
     "user_already_registered": "이미 등록된 사용자입니다.",
     "user_data_is_invalid": "사용자 데이터가 유효하지 않습니다.",
     "username_already_registered": "이미 등록된 사용자이름입니다.",
-    "username_has_been_successfully_changed": "사용자이름이 성공적으로 변경되었습니다.",
     "you_have_been_logged_out_successfully": "성공적으로 로그아웃되었습니다.",
     "you_have_successfully_logged_in": "성공적으로 로그인되었습니다.",
     "you_have_successfully_registered_as_a_member": "성공적으로 회원가입이 완료되었습니다."

@@ -96,7 +96,7 @@ export function ChangePasswordForm() {
       form.reset()
       router.refresh()
 
-      toast.success(t('FormMessage.password_has_been_successfully_changed'))
+      toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Old password does not match')) {

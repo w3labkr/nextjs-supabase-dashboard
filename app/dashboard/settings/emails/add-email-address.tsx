@@ -67,8 +67,7 @@ export function AddEmailAddress() {
         throw new Error(t('FormMessage.email_has_already_been_added'))
       }
 
-      const result = await trigger(formValues)
-      if (result?.error) throw new Error(result?.error?.message)
+      await trigger(formValues)
 
       const sent = await fetcher(`/api/v1/email/verify/${user?.id}`, {
         method: 'POST',
@@ -77,7 +76,7 @@ export function AddEmailAddress() {
       if (sent?.error) throw new Error(sent?.error?.message)
 
       form.reset()
-      toast.success(t('FormMessage.email_has_been_added_successfully'))
+      toast.success(t('FormMessage.added_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {

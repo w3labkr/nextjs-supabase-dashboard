@@ -60,7 +60,7 @@ export function ForgotPasswordForm() {
 
       if (error) throw new Error(error?.message)
 
-      toast.success(t('FormMessage.the_email_has_been_sent_successfully'))
+      toast.success(t('FormMessage.email_has_been_successfully_sent'))
 
       form.reset()
     } catch (e: unknown) {

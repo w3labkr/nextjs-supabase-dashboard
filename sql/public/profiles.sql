@@ -19,7 +19,7 @@ alter table profiles enable row level security;
 
 -- Add row-level security
 create policy "Public profiles are viewable by everyone." on profiles for select to authenticated, anon using ( true );
-create policy "Users can insert their own profile." on profiles for insert to authenticated with check ( auth.uid() = user_id );
+-- create policy "Users can insert their own profile." on profiles for insert to authenticated with check ( auth.uid() = user_id );
 create policy "Users can update their own profile." on profiles for update to authenticated using ( auth.uid() = user_id );
 -- create policy "Users can delete their own profile." on profiles for delete to authenticated using ( auth.uid() = user_id );
 

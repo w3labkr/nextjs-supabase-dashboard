@@ -91,13 +91,12 @@ export function ProfileForm() {
       setIsSubmitting(true)
 
       const setEmail = (s: string) => (s === 'unassigned' ? '' : s)
-      const result = await trigger({
+      await trigger({
         ...formValues,
         email: setEmail(formValues?.email),
       })
-      if (result?.error) throw new Error(result?.error?.message)
 
-      toast.success(t('FormMessage.profile_has_been_successfully_changed'))
+      toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {

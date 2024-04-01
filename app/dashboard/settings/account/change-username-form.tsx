@@ -69,11 +69,8 @@ export function ChangeUsernameForm() {
 
     try {
       setIsSubmitting(true)
-
-      const result = await trigger(formValues)
-      if (result?.error) throw new Error(result?.error?.message)
-
-      toast.success(t('FormMessage.username_has_been_successfully_changed'))
+      await trigger(formValues)
+      toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {

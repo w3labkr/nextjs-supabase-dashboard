@@ -72,7 +72,7 @@ export function PrimaryEmailAddress() {
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      toast.success(t('FormMessage.email_has_been_successfully_changed'))
+      toast.success(t('FormMessage.changed_successfully'))
       router.refresh()
     } catch (e: unknown) {
       toast.error((e as Error)?.message)

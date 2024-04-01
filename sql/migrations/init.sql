@@ -21,6 +21,8 @@ begin
     insert into profiles (user_id, name, avatar_url) values (r.id, new_username, r.raw_user_meta_data ->> 'avatar_url');
     insert into emails (user_id, email) values (r.id, r.email);
     insert into user_roles (user_id, role) values (r.id, 'user');
+    insert into notifications (user_id) values (r.id);
+
   END LOOP;
 
 end;

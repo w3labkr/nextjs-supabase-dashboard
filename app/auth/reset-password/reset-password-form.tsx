@@ -70,7 +70,7 @@ export function ResetPasswordForm() {
       auth.setSession(null)
       auth.setUser(null)
 
-      toast.success(t('FormMessage.password_has_been_successfully_changed'))
+      toast.success(t('FormMessage.changed_successfully'))
 
       router.replace('/auth/signin')
       router.refresh()

@@ -102,7 +102,7 @@ export function DeleteUserForm() {
       setSession(null)
       setUser(null)
 
-      toast.success(t('FormMessage.account_has_been_successfully_deleted'))
+      toast.success(t('FormMessage.deleted_successfully'))
 
       router.replace('/')
       router.refresh()

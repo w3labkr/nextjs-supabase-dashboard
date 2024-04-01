@@ -26,7 +26,7 @@ alter table users enable row level security;
 
 -- Add row-level security
 create policy "Users can view their users." on users for select to authenticated using ( auth.uid() = id );
-create policy "Users can insert their own user." on users for insert to authenticated with check ( auth.uid() = id );
+-- create policy "Users can insert their own user." on users for insert to authenticated with check ( auth.uid() = id );
 create policy "Users can update their own user." on users for update to authenticated using ( auth.uid() = id );
 -- create policy "Users can delete their own user." on users for delete to authenticated using ( auth.uid() = id );
 

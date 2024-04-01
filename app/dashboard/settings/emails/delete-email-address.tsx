@@ -43,13 +43,14 @@ export function DeleteEmailAddress() {
   )
 
   const handleClick = async () => {
+    if (!state?.email) {
+      toast(t('FormMessage.something_went_wrong'))
+      return false
+    }
+
     try {
-      if (!state?.email) throw new Error('Require is not defined.')
-
-      const result = await trigger({ email: state?.email })
-      if (result?.error) throw new Error(result?.error?.message)
-
-      toast.success(t('FormMessage.email_has_been_successfully_deleted'))
+      await trigger({ email: state?.email })
+      toast.success(t('FormMessage.deleted_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     }

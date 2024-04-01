@@ -89,10 +89,8 @@ export function ChangeLanguageForm() {
       document.documentElement.lang = language
       dispatch(setResolvedLanguage(language))
 
-      const result = await trigger({ ...appearance, language })
-      if (result?.error) throw new Error(result?.error?.message)
-
-      toast.success(t('FormMessage.language_has_been_changed_successfully'))
+      await trigger({ ...appearance, language })
+      toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
