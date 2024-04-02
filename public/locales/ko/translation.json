@@ -106,16 +106,6 @@
     "submit": "가입하기"
   },
 
-  "NewMediaForm": {
-    "title": "새 미디어",
-    "description": ""
-  },
-
-  "EditMediaForm": {
-    "title": "미디어 수정",
-    "description": ""
-  },
-
   "NewPostForm": {
     "title": "새 글",
     "description": ""
@@ -207,7 +197,6 @@
 
   "DashboardNavigation": {
     "dashboard": "대시보드",
-    "media": "미디어",
     "posts": "글",
     "settings": "설정",
     "admin": "관리자",
@@ -219,8 +208,6 @@
     "emails": "이메일",
     "security": "보안",
     "sessions": "세션",
-    "new_media": "새 미디어",
-    "edit_media": "미디어 수정",
     "new_post": "새 글",
     "edit_post": "글 수정",
     "users": "사용자"

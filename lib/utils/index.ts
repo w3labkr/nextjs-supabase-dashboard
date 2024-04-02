@@ -3,7 +3,9 @@ export { fetcher } from './fetcher'
 export {
   httpStatusCodes,
   type HttpStatusCode,
-  unknownStatusCode,
+  httpUnknownStatusCode,
+  httpStatusCode,
+  httpStatusText,
+  httpStatusMessage,
 } from './http-status-codes'
-export { responseJson } from './xhr'
-export { generateUserRole } from './user-role'
+export { generateUserRole } from './user'

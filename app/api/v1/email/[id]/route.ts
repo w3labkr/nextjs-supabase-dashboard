@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
-import { responseJson } from '@/lib/utils'
+import { httpStatusText } from '@/lib/utils'
 import { authorize } from '@/hooks/async/user'
 
 export async function POST(
@@ -8,21 +8,27 @@ export async function POST(
   { params: { id } }: { params: { id: string } }
 ) {
   const { user } = await authorize(id)
-  if (!user) return responseJson(401)
 
-  const body = await request.json()
-
-  if (!body?.email) {
-    return responseJson(400, { error: 'Require is not defined.' })
+  if (!user) {
+    return NextResponse.json(
+      { data: null, error: { message: httpStatusText(401) } },
+      { status: 401 }
+    )
   }
 
+  const body = await request.json()
   const supabaseAdmin = createAdminClient()
-  const { error } = await supabaseAdmin.updateUserById(id, {
+  const result = await supabaseAdmin.updateUserById(id, {
     email: body?.email,
     user_metadata: { email: body?.email },
   })
 
-  if (error) return responseJson(400, { error: error?.message })
+  if (result?.error) {
+    return NextResponse.json(
+      { data: null, error: { message: result?.error?.message } },
+      { status: 400 }
+    )
+  }
 
-  return responseJson(200)
+  return NextResponse.json({ data: null, error: null })
 }

@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { responseJson } from '@/lib/utils'
+import { httpStatusText } from '@/lib/utils'
 import { authorize } from '@/hooks/async/user'
 
 export async function GET(
@@ -8,19 +8,30 @@ export async function GET(
   { params: { id } }: { params: { id: string } }
 ) {
   const { user } = await authorize(id)
-  if (!user) return responseJson(401)
+
+  if (!user) {
+    return NextResponse.json(
+      { data: null, error: { message: httpStatusText(401) } },
+      { status: 401 }
+    )
+  }
 
   const supabase = createClient()
-  const { data, error } = await supabase
+  const result = await supabase
     .from('notifications')
     .select()
     .eq('user_id', id)
     .limit(1)
     .single()
 
-  if (error) return responseJson(400, { error: error?.message })
+  if (result?.error) {
+    return NextResponse.json(
+      { data: null, error: { message: result?.error?.message } },
+      { status: 400 }
+    )
+  }
 
-  return responseJson(200, { data })
+  return NextResponse.json({ data: result?.data, error: null })
 }
 
 export async function POST(
@@ -28,21 +39,27 @@ export async function POST(
   { params: { id } }: { params: { id: string } }
 ) {
   const { user } = await authorize(id)
-  if (!user) return responseJson(401)
 
-  const body = await request.json()
-
-  if (!body) {
-    return responseJson(400, { error: 'Require is not defined.' })
+  if (!user) {
+    return NextResponse.json(
+      { data: null, error: { message: httpStatusText(401) } },
+      { status: 401 }
+    )
   }
 
+  const body = await request.json()
   const supabase = createClient()
-  const { error } = await supabase
+  const result = await supabase
     .from('notifications')
     .update(body)
     .eq('user_id', id)
 
-  if (error) return responseJson(400, { error: error?.message })
+  if (result?.error) {
+    return NextResponse.json(
+      { data: null, error: { message: result?.error?.message } },
+      { status: 400 }
+    )
+  }
 
-  return responseJson(200)
+  return NextResponse.json({ data: null, error: null })
 }

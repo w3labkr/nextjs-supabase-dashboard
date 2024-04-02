@@ -75,8 +75,28 @@ export const httpStatusCodes: HttpStatusCode[] = [
   { status: 511, statusText: "Network Authentication Required", message: "Indicates that the client needs to authenticate to gain network access." }
 ]
 
-export const unknownStatusCode: HttpStatusCode = {
+export const httpUnknownStatusCode: HttpStatusCode = {
   status: 520,
   statusText: 'Unknown error',
   message: 'Web server is returning an unknown error.',
+}
+
+export function httpStatusCode(status: number): HttpStatusCode {
+  return (
+    httpStatusCodes.find((v) => v.status === status) ?? httpUnknownStatusCode
+  )
+}
+
+export function httpStatusText(status: number): string {
+  return (
+    httpStatusCodes.find((v) => v.status === status)?.statusText ??
+    httpUnknownStatusCode?.statusText
+  )
+}
+
+export function httpStatusMessage(status: number): string {
+  return (
+    httpStatusCodes.find((v) => v.status === status)?.message ??
+    httpUnknownStatusCode?.message
+  )
 }

@@ -19,16 +19,6 @@ export const dashboardConfig: DashboardConfig = {
         },
         {
           id: 2,
-          href: '/dashboard/media',
-          iconName: 'Image',
-          title: 'media',
-          badge: 0,
-          translate: 'yes',
-          disabled: true,
-          // roles: ['user'],
-        },
-        {
-          id: 3,
           href: '/dashboard/posts',
           iconName: 'StickyNote',
           title: 'posts',
@@ -63,38 +53,6 @@ export const dashboardConfig: DashboardConfig = {
           translate: 'yes',
           disabled: false,
           roles: ['admin', 'superadmin'],
-        },
-      ],
-    },
-  ],
-}
-
-export const mediaConfig: DashboardPageConfig = {
-  nav: [
-    {
-      id: 1,
-      label: '',
-      separator: false,
-      translate: 'no',
-      // roles: ['user'],
-      items: [
-        {
-          id: 1,
-          title: 'new_media',
-          href: '/dashboard/media/new-media',
-          // iconName: '',
-          translate: 'yes',
-          disabled: false,
-          // roles: ['user'],
-        },
-        {
-          id: 2,
-          title: 'edit_media',
-          href: '/dashboard/media/edit-media',
-          // iconName: '',
-          translate: 'yes',
-          disabled: false,
-          // roles: ['user'],
         },
       ],
     },

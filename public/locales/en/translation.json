@@ -106,16 +106,6 @@
     "submit": "Sign Up"
   },
 
-  "NewMediaForm": {
-    "title": "New Media",
-    "description": ""
-  },
-
-  "EditMediaForm": {
-    "title": "Edit Media",
-    "description": ""
-  },
-
   "NewPostForm": {
     "title": "New Post",
     "description": ""
@@ -207,7 +197,6 @@
 
   "DashboardNavigation": {
     "dashboard": "Dashboard",
-    "media": "Media",
     "posts": "Posts",
     "settings": "Settings",
     "admin": "Admin",
@@ -219,8 +208,6 @@
     "emails": "Emails",
     "security": "Security",
     "sessions": "Sessions",
-    "new_media": "New Media",
-    "edit_media": "Edit Media",
     "new_post": "New Post",
     "edit_post": "Edit Post",
     "users": "Users"

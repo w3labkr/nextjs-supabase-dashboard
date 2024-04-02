@@ -20,7 +20,7 @@ export async function getUser() {
 
   if (!user) return { user: null }
 
-  const { data } = await supabase
+  const result = await supabase
     .from('users')
     .select(
       `username, has_set_password, is_ban, banned_until, deleted_at,
@@ -30,15 +30,15 @@ export async function getUser() {
     .limit(1)
     .single()
 
-  if (!data) return { user: null }
+  if (result?.error) return { user: null }
 
-  const { user_roles, ...users } = data
+  const { user_roles, ...users } = result.data
 
-  return {
-    user: {
-      ...user,
-      user: users,
-      user_role: generateUserRole(user_roles[0]?.role),
-    },
+  const data = {
+    ...user,
+    user: users,
+    user_role: generateUserRole(user_roles[0]?.role),
   }
+
+  return { user: data }
 }

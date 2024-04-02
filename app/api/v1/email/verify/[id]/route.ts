@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { responseJson } from '@/lib/utils'
+import { httpStatusText } from '@/lib/utils'
 import { authorize } from '@/hooks/async/user'
 
 import { transporter, sender } from '@/lib/nodemailer'
@@ -11,7 +11,13 @@ export async function POST(
   { params: { id } }: { params: { id: string } }
 ) {
   const { user } = await authorize(id)
-  if (!user) return responseJson(401)
+
+  if (!user) {
+    return NextResponse.json(
+      { data: null, error: { message: httpStatusText(401) } },
+      { status: 401 }
+    )
+  }
 
   const body = await request.json()
   const mailOptions = mailTemplate({ ...body, user_id: id })
@@ -19,9 +25,12 @@ export async function POST(
   try {
     const info = await transporter.sendMail(mailOptions)
 
-    return responseJson(200, { data: info })
+    return NextResponse.json({ data: info, error: null })
   } catch (e: unknown) {
-    return responseJson(400, { error: (e as Error)?.message })
+    return NextResponse.json(
+      { data: null, error: { message: (e as Error)?.message } },
+      { status: 400 }
+    )
   }
 }
 
