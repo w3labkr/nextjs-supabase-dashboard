@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 // Define a type for the slice state
-export interface AppState {
+interface AppState {
   value: any
 }
 

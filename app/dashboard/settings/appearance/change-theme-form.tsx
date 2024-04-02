@@ -24,45 +24,26 @@ import { SubmitButton } from '@/components/submit-button'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
-import useSWRMutation from 'swr/mutation'
-import { fetcher } from '@/lib/utils'
-import { useAuth } from '@/hooks/use-auth'
-import { useAppearance } from '@/hooks/sync/use-appearance'
-
 const FormSchema = z.object({
   theme: z.string(),
 })
 
 type FormValues = z.infer<typeof FormSchema>
 
-async function sendRequest(url: string, { arg }: { arg: FormValues }) {
-  return await fetcher(url, {
-    method: 'POST',
-    body: JSON.stringify(arg),
-  })
-}
-
 export function ChangeThemeForm() {
   const { t } = useTranslation()
   const { theme, setTheme } = useTheme()
 
-  const { user } = useAuth()
-  const { appearance } = useAppearance(user?.id ?? null)
-  const { trigger } = useSWRMutation(
-    user?.id ? `/api/v1/appearance/${user?.id}` : null,
-    sendRequest
-  )
-
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
-    values: { theme: appearance?.theme ?? theme ?? 'light' },
+    values: { theme: theme ?? 'light' },
   })
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
-    if (formValues?.theme === appearance?.theme) {
+    if (formValues?.theme === theme) {
       toast(t('FormMessage.nothing_has_changed'))
       return false
     }
@@ -71,7 +52,6 @@ export function ChangeThemeForm() {
       setIsSubmitting(true)
       setTheme(formValues?.theme)
 
-      await trigger(formValues)
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)

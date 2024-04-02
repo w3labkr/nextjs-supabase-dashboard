@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { defaultLng } from '@/i18next.config'
 
 // Define a type for the slice state
-export interface I18nState {
+interface I18nState {
   resolvedLanguage: string
 }
 

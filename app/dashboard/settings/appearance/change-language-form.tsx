@@ -31,11 +31,6 @@ import { Separator } from '@/components/ui/separator'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
-import useSWRMutation from 'swr/mutation'
-import { fetcher } from '@/lib/utils'
-import { useAuth } from '@/hooks/use-auth'
-import { useAppearance } from '@/hooks/sync/use-appearance'
-
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
 import { setResolvedLanguage } from '@/store/features/i18n-slice'
 
@@ -45,13 +40,6 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-async function sendRequest(url: string, { arg }: { arg: FormValues }) {
-  return await fetcher(url, {
-    method: 'POST',
-    body: JSON.stringify(arg),
-  })
-}
-
 export function ChangeLanguageForm() {
   const { t, i18n } = useTranslation()
   const dispatch = useAppDispatch()
@@ -59,17 +47,10 @@ export function ChangeLanguageForm() {
     (state) => state?.i18n?.resolvedLanguage
   )
 
-  const { user } = useAuth()
-  const { appearance } = useAppearance(user?.id ?? null)
-  const { trigger } = useSWRMutation(
-    user?.id ? `/api/v1/appearance/${user?.id}` : null,
-    sendRequest
-  )
-
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
-    values: { language: appearance?.language ?? resolvedLanguage },
+    values: { language: resolvedLanguage },
   })
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -77,7 +58,7 @@ export function ChangeLanguageForm() {
   const onSubmit = async (formValues: FormValues) => {
     const language: string = formValues?.language
 
-    if (language === appearance?.language) {
+    if (language === resolvedLanguage) {
       toast(t('FormMessage.nothing_has_changed'))
       return false
     }
@@ -89,7 +70,6 @@ export function ChangeLanguageForm() {
       document.documentElement.lang = language
       dispatch(setResolvedLanguage(language))
 
-      await trigger(formValues)
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
