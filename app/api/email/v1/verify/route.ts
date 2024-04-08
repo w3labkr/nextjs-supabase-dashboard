@@ -25,14 +25,17 @@ export async function GET(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const updatedEmail = await supabase
+  const result = await supabase
     .from('emails')
     .update({ email_confirmed_at: new Date().toISOString() })
     .eq('user_id', payload?.user_id)
     .eq('email', payload?.email)
+    .select()
+    .limit(1)
+    .single()
 
-  if (updatedEmail?.error) {
-    return new Response(updatedEmail?.error?.message, { status: 400 })
+  if (result?.error) {
+    return new Response(result?.error?.message, { status: 400 })
   }
 
   // If your verification email is your primary email, update it.
@@ -40,11 +43,11 @@ export async function GET(request: NextRequest) {
     user?.app_metadata?.provider === 'email' &&
     payload?.email === user?.email
   ) {
-    const updatedUser = await supabase.auth.updateUser({
+    const updated = await supabase.auth.updateUser({
       data: { email_verified: true },
     })
-    if (updatedUser?.error) {
-      return new Response(updatedUser?.error?.message, { status: 400 })
+    if (updated?.error) {
+      return new Response(updated?.error?.message, { status: 400 })
     }
   }
 

@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
+import { cn, fetcher } from '@/lib/utils'
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import {
@@ -21,19 +22,15 @@ import {
 import { SubmitButton } from '@/components/submit-button'
 
 import useSWRMutation from 'swr/mutation'
-import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useEmails } from '@/hooks/sync/use-emails'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
+  user_id: z.string().nonempty().uuid(),
 })
 
 type FormValues = z.infer<typeof FormSchema>
-
-const defaultValues: Partial<FormValues> = {
-  email: '',
-}
 
 async function sendRequest(url: string, { arg }: { arg: FormValues }) {
   return await fetcher(url, {
@@ -52,6 +49,11 @@ export function AddEmailAddress() {
     sendRequest
   )
 
+  const defaultValues: Partial<FormValues> = {
+    email: '',
+    user_id: user?.id,
+  }
+
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
@@ -60,14 +62,18 @@ export function AddEmailAddress() {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
+    if (emails?.find((value) => value?.email === formValues?.email)) {
+      toast.error(t('FormMessage.email_has_already_been_added'))
+      return false
+    }
+
     try {
       setIsSubmitting(true)
 
-      if (emails?.find((values) => values.email === formValues?.email)) {
-        throw new Error(t('FormMessage.email_has_already_been_added'))
-      }
+      if (!user?.id) throw new Error('Require is not defined.')
 
-      await trigger(formValues)
+      const result = await trigger(formValues)
+      if (result?.error) throw new Error(result?.error?.message)
 
       const sent = await fetcher(`/api/v1/email/verify/${user?.id}`, {
         method: 'POST',

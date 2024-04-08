@@ -19,44 +19,48 @@
     "description": "아래에 새로운 비밀번호를 입력해주세요."
   },
 
-  "ChangeEmailForm": {
-    "title": "이메일",
-    "description": ""
-  },
-
-  "ChangePasswordForm": {
-    "title": "비밀번호 변경",
-    "description": "비밀번호는 6자 이상이어야 하며 이전 비밀번호와 달라야 합니다.",
-    "submit": "비밀번호 변경"
-  },
-
-  "ChangeThemeForm": {
-    "title": "테마",
-    "description": "대시보드의 테마를 선택합니다.",
-    "submit": "테마 변경"
-  },
-
-  "ChangeLanguageForm": {
-    "title": "언어",
-    "description": "대시보드의 언어를 선택합니다.",
-    "submit": "언어 변경"
-  },
-
-  "ChangeUsernameForm": {
-    "title": "사용자 이름",
-    "description": "",
-    "submit": "사용자 이름 변경"
-  },
-
-  "DashboardForm": {
+  "DashboardPage": {
     "title": "대시보드",
     "description": ""
   },
 
-  "DeleteUserForm": {
-    "title": "계정 삭제",
-    "description": "계정 삭제는 되돌릴 수 없습니다.",
-    "submit": "계정 삭제"
+  "NotificationsPage": {
+    "title": "알림",
+    "description": ""
+  },
+
+  "PostsPage": {
+    "title": "글",
+    "description": "게시물을 작성하고 관리하세요."
+  },
+
+  "ProfilePage": {
+    "title": "프로필",
+    "description": ""
+  },
+
+  "SecurityPage": {
+    "title": "비밀번호 변경",
+    "description": "비밀번호는 6자 이상이어야 하며 이전 비밀번호와 달라야 합니다."
+  },
+
+  "AppearancePage": {
+    "title1": "테마",
+    "description1": "대시보드의 테마를 선택합니다.",
+    "title2": "언어",
+    "description2": "대시보드의 언어를 선택합니다."
+  },
+
+  "AccountPage": {
+    "title1": "사용자 이름",
+    "description1": "",
+    "title2": "계정 삭제",
+    "description2": "계정 삭제는 되돌릴 수 없습니다."
+  },
+
+  "EmailsPage": {
+    "title": "이메일",
+    "description": ""
   },
 
   "DeleteAccountDialog": {
@@ -65,14 +69,7 @@
     "trigger": "계정 삭제"
   },
 
-  "ForgotPasswordForm": {
-    "submit": "비밀번호 재설정"
-  },
-
   "NotificationsForm": {
-    "title": "알림",
-    "description": "",
-    "submit": "알림 변경",
     "marketing_emails": {
       "label": "마케팅 이메일",
       "description": "새로운 제품, 기능 등에 대한 이메일을 받아보세요."
@@ -83,36 +80,8 @@
     }
   },
 
-  "ResetPasswordForm": {
-    "submit": "비밀번호 변경"
-  },
-
-  "ProfileForm": {
-    "title": "프로필",
-    "description": "",
-    "submit": "프로필 변경"
-  },
-
   "SessionsForm": {
     "title": "세션",
-    "description": ""
-  },
-
-  "SignInForm": {
-    "submit": "로그인"
-  },
-
-  "SignUpForm": {
-    "submit": "가입하기"
-  },
-
-  "NewPostForm": {
-    "title": "새 글",
-    "description": ""
-  },
-
-  "EditPostForm": {
-    "title": "글 수정",
     "description": ""
   },
 
@@ -178,7 +147,17 @@
     "insert": "추가하기",
     "update": "수정하기",
     "delete": "삭제하기",
-    "submit": "제출하기"
+    "submit": "제출하기",
+
+    "change_password": "비밀번호 변경",
+    "change_username": "사용자 이름 변경",
+    "delete_your_account": "계정 삭제",
+    "reset_my_password": "비밀번호 재설정",
+    "signin": "로그인",
+    "signup": "가입하기",
+    "update_profile": "프로필 변경",
+    "update_notifications": "알림 변경",
+    "update_theme": "테마 변경"
   },
 
   "SelectValue": {
@@ -197,7 +176,7 @@
 
   "DashboardNavigation": {
     "dashboard": "대시보드",
-    "posts": "글",
+    "posts": "게시판",
     "settings": "설정",
     "admin": "관리자",
     "access": "접근",
@@ -208,8 +187,7 @@
     "emails": "이메일",
     "security": "보안",
     "sessions": "세션",
-    "new_post": "새 글",
-    "edit_post": "글 수정",
+    "post": "포스트",
     "users": "사용자"
   },
 
@@ -335,5 +313,14 @@
     "AlertDialogDescription": "삭제되면 이 이메일 주소는 더 이상 귀하의 계정과 연결되지 않습니다.",
     "AlertDialogCancel": "취소",
     "AlertDialogAction": "계속"
+  },
+
+  "EmptyPostItem": {
+    "title": "작성된 게시물이 없습니다.",
+    "description": "아직 게시물이 없습니다. 콘텐츠 제작을 시작하세요."
+  },
+
+  "AddNewPost": {
+    "label": "새로운 게시물"
   }
 }

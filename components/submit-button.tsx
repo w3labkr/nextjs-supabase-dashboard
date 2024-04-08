@@ -31,7 +31,7 @@ export function SubmitButton({
   translate,
   text = 'Submit',
   isSubmitting = false,
-  submittingIconName = 'Loader2',
+  submittingIconName = 'LoaderCircle',
   submittingIconClassName = '',
   ...props
 }: SubmitButtonProps) {

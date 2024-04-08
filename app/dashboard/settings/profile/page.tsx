@@ -1,10 +1,18 @@
 import * as React from 'react'
+
+import { Title } from '@/components/title'
+import { Description } from '@/components/description'
+import { Separator } from '@/components/ui/separator'
+
 import { ProfileForm } from './profile-form'
 
-export default async function ProfilePage() {
+export default function ProfilePage() {
   return (
-    <main className="flex-1 overflow-auto p-10 pb-16">
-      <div className="space-y-16">
+    <main className="flex-1 space-y-16 overflow-auto p-10 pb-16">
+      <div className="space-y-4">
+        <Title text="ProfilePage.title" translate="yes" />
+        <Separator />
+        <Description text="ProfilePage.description" translate="yes" />
         <ProfileForm />
       </div>
     </main>

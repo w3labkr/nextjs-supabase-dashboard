@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-export interface EmailListItemProviderProps {
+export interface EmailListItemContextProps {
   isVerified: boolean
   isPrimary: boolean
   email: string | null
@@ -10,7 +10,7 @@ export interface EmailListItemProviderProps {
 }
 
 export const EmailListItemContext =
-  React.createContext<EmailListItemProviderProps>({
+  React.createContext<EmailListItemContextProps>({
     isVerified: false,
     isPrimary: false,
     email: null,
@@ -22,7 +22,7 @@ export function EmailListItemProvider({
   value,
 }: {
   children: React.ReactNode
-  value: EmailListItemProviderProps
+  value: EmailListItemContextProps
 }) {
   return (
     <EmailListItemContext.Provider value={value}>

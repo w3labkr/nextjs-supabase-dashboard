@@ -8,8 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { cn, fetcher } from '@/lib/utils'
 import { toast } from 'sonner'
-import { Separator } from '@/components/ui/separator'
 import {
   Form,
   FormControl,
@@ -30,11 +30,8 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { SubmitButton } from '@/components/submit-button'
-import { Title } from '@/components/title'
-import { Description } from '@/components/description'
 
 import useSWRMutation from 'swr/mutation'
-import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useProfile } from '@/hooks/sync/use-profile'
 import { useEmails } from '@/hooks/sync/use-emails'
@@ -91,10 +88,11 @@ export function ProfileForm() {
       setIsSubmitting(true)
 
       const setEmail = (s: string) => (s === 'unassigned' ? '' : s)
-      await trigger({
+      const result = await trigger({
         ...formValues,
         email: setEmail(formValues?.email),
       })
+      if (result?.error) throw new Error(result?.error?.message)
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
@@ -105,104 +103,99 @@ export function ProfileForm() {
   }
 
   return (
-    <div className="space-y-4">
-      <Title text="ProfileForm.title" translate="yes" />
-      <Separator />
-      <Description text="ProfileForm.description" translate="yes" />
-      <Form {...form}>
-        <form
-          method="POST"
-          onSubmit={form.handleSubmit(onSubmit)}
-          noValidate
-          className="space-y-4"
-        >
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('FormLabel.name')}</FormLabel>
-                <FormControl className="w-[180px]">
-                  <Input placeholder={t('FormLabel.your_name')} {...field} />
+    <Form {...form}>
+      <form
+        method="POST"
+        onSubmit={form.handleSubmit(onSubmit)}
+        noValidate
+        className="space-y-4"
+      >
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('FormLabel.name')}</FormLabel>
+              <FormControl className="w-[180px]">
+                <Input placeholder={t('FormLabel.your_name')} {...field} />
+              </FormControl>
+              <FormDescription>
+                {t(
+                  'FormDescription.this_is_the_name_that_appears_on_your_profile_and_email'
+                )}
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('FormLabel.email')}</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue
+                      placeholder={t(
+                        'SelectValue.select_a_verified_email_to_display'
+                      )}
+                    />
+                  </SelectTrigger>
                 </FormControl>
-                <FormDescription>
-                  {t(
-                    'FormDescription.this_is_the_name_that_appears_on_your_profile_and_email'
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="unassigned">
+                      {t('SelectValue.select_a_verified_email_to_display')}
+                    </SelectItem>
+                    {emails?.map(({ id, email, email_confirmed_at }) => {
+                      if (!email_confirmed_at) return null
+                      return (
+                        <SelectItem key={id} value={email ?? ''}>
+                          {email}
+                        </SelectItem>
+                      )
+                    })}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                <Trans components={{ link1: <Link1 /> }}>
+                  FormDescription.you_can_manage_your_email_address_in_your_email_settings
+                </Trans>
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="bio"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('FormLabel.bio')}</FormLabel>
+              <FormControl className="w-[360px]">
+                <Textarea
+                  placeholder={t(
+                    'Textarea.please_tell_us_a_little_about_yourself'
                   )}
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('FormLabel.email')}</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue
-                        placeholder={t(
-                          'SelectValue.select_a_verified_email_to_display'
-                        )}
-                      />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="unassigned">
-                        {t('SelectValue.select_a_verified_email_to_display')}
-                      </SelectItem>
-                      {emails?.map(({ id, email, email_confirmed_at }) => {
-                        if (!email_confirmed_at) return null
-                        return (
-                          <SelectItem key={id} value={email ?? ''}>
-                            {email}
-                          </SelectItem>
-                        )
-                      })}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <FormDescription>
-                  <Trans components={{ link1: <Link1 /> }}>
-                    FormDescription.you_can_manage_your_email_address_in_your_email_settings
-                  </Trans>
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="bio"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('FormLabel.bio')}</FormLabel>
-                <FormControl className="w-[360px]">
-                  <Textarea
-                    placeholder={t(
-                      'Textarea.please_tell_us_a_little_about_yourself'
-                    )}
-                    className="resize-none"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription></FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <SubmitButton
-            isSubmitting={isSubmitting}
-            text="ProfileForm.submit"
-            translate="yes"
-          />
-        </form>
-      </Form>
-    </div>
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription></FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <SubmitButton
+          isSubmitting={isSubmitting}
+          text="FormSubmit.update_profile"
+          translate="yes"
+        />
+      </form>
+    </Form>
   )
 }
 

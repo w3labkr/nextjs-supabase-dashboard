@@ -31,6 +31,7 @@ Denpendency
     - [Supabase Cloud Functions](#supabase-cloud-functions)
     - [Supabase Auth](#supabase-auth)
     - [Firebase Auth](#firebase-auth)
+    - [Rich Text Editor](#rich-text-editor)
     - [Utils](#utils)
     - [ESLint](#eslint)
   - [Configuration](#configuration)
@@ -40,6 +41,7 @@ Denpendency
     - [Error Handling](#error-handling)
   - [Deploying](#deploying)
   - [Troubleshooting](#troubleshooting)
+  - [Reference](#reference)
 
 ## Screenshots
 
@@ -230,8 +232,6 @@ NEXT_PUBLIC_SUPABASE_URL=<your_supabase_project_url>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<your_supabase_anon_key>
 ```
 
-Reference
-
 - [Setting up Server-Side Auth for Next.js](https://supabase.com/docs/guides/auth/server-side/nextjs)
 - [Auth rate limits](https://supabase.com/docs/guides/platform/going-into-prod#auth-rate-limits)
 
@@ -302,6 +302,20 @@ Start firebase deployment.
 
 ```shell
 firebase deploy
+```
+
+### Rich Text Editor
+
+A block-style editor with clean JSON output
+
+```shell
+npm install @editorjs/editorjs @editorjs/header @editorjs/embed @editorjs/table @editorjs/list @editorjs/code @editorjs/link @editorjs/inline-code
+```
+
+`<textarea />` component for React which grows with content
+
+```shell
+npm install react-textarea-autosize
 ```
 
 ### Utils
@@ -599,3 +613,10 @@ module.exports = {
 ## Troubleshooting
 
 ...
+
+## Reference
+
+- [shadcn-ui/ui](https://github.com/shadcn-ui/ui)
+- [shadcn-ui/taxonomy](https://github.com/shadcn-ui/taxonomy)
+- [nextjs-slack-clone](https://github.com/supabase/supabase/tree/master/examples/slack-clone/nextjs-slack-clone)
+- [nextjs-subscription-payments](https://github.com/vercel/nextjs-subscription-payments)

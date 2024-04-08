@@ -8,4 +8,4 @@ export {
   httpStatusText,
   httpStatusMessage,
 } from './http-status-codes'
-export { generateUserRole } from './user'
+export { ApiError } from './error'

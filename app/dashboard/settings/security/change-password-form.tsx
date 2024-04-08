@@ -9,7 +9,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { toast } from 'sonner'
-import { Separator } from '@/components/ui/separator'
 import {
   Form,
   FormControl,
@@ -21,8 +20,6 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { SubmitButton } from '@/components/submit-button'
-import { Title } from '@/components/title'
-import { Description } from '@/components/description'
 
 import { useSWRConfig } from 'swr'
 import { createClient } from '@/lib/supabase/client'
@@ -53,8 +50,8 @@ export function ChangePasswordForm() {
   const router = useRouter()
   const { t } = useTranslation()
 
-  const { user: _user } = useAuth()
-  const { user } = useUser(_user?.id ?? null)
+  const { session } = useAuth()
+  const { user } = useUser(session?.user?.id ?? null)
   const { mutate } = useSWRConfig()
   const hasSetPassword: boolean = user?.user?.has_set_password ?? false
 
@@ -78,8 +75,9 @@ export function ChangePasswordForm() {
       const supabase = createClient()
 
       if (hasSetPassword) {
+        if (!formValues?.oldPassword) throw new Error('Require is not defined.')
         const verified = await supabase.rpc('verify_user_password', {
-          password: formValues?.oldPassword as string,
+          password: formValues?.oldPassword,
         })
         if (verified?.error) throw new Error(verified?.error?.message)
         if (verified?.data === false) {
@@ -87,8 +85,10 @@ export function ChangePasswordForm() {
         }
       }
 
+      if (!formValues?.newPassword) throw new Error('Require is not defined.')
+
       const updated = await supabase.auth.updateUser({
-        password: formValues?.newPassword as string,
+        password: formValues?.newPassword,
       })
       if (updated?.error) throw new Error(updated?.error?.message)
 
@@ -122,53 +122,27 @@ export function ChangePasswordForm() {
   if (!user) return <div>Loading...</div>
 
   return (
-    <div className="space-y-4">
-      <Title text="ChangePasswordForm.title" translate="yes" />
-      <Separator />
-      <Description text="ChangePasswordForm.description" translate="yes" />
-      <Form {...form}>
-        <form
-          method="POST"
-          onSubmit={form.handleSubmit(onSubmit)}
-          noValidate
-          className="space-y-4"
-        >
-          {hasSetPassword ? (
-            <FormField
-              control={form.control}
-              name="oldPassword"
-              render={({ field }) => (
-                <FormItem className="max-w-80">
-                  <FormLabel>{t('FormLabel.old_password')}</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      autoCapitalize="none"
-                      autoComplete="current-password"
-                      autoCorrect="off"
-                      placeholder={t('FormLabel.old_password')}
-                      {...field}
-                    />
-                  </FormControl>
-                  {/* <FormDescription></FormDescription> */}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ) : null}
+    <Form {...form}>
+      <form
+        method="POST"
+        onSubmit={form.handleSubmit(onSubmit)}
+        noValidate
+        className="space-y-4"
+      >
+        {hasSetPassword ? (
           <FormField
             control={form.control}
-            name="newPassword"
+            name="oldPassword"
             render={({ field }) => (
               <FormItem className="max-w-80">
-                <FormLabel>{t('FormLabel.new_password')}</FormLabel>
+                <FormLabel>{t('FormLabel.old_password')}</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
                     autoCapitalize="none"
-                    autoComplete="new-password"
+                    autoComplete="current-password"
                     autoCorrect="off"
-                    placeholder={t('FormLabel.new_password')}
+                    placeholder={t('FormLabel.old_password')}
                     {...field}
                   />
                 </FormControl>
@@ -177,34 +151,55 @@ export function ChangePasswordForm() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="confirmNewPassword"
-            render={({ field }) => (
-              <FormItem className="max-w-80">
-                <FormLabel>{t('FormLabel.confirm_new_password')}</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    autoCapitalize="none"
-                    autoComplete="new-password"
-                    autoCorrect="off"
-                    placeholder={t('FormLabel.confirm_new_password')}
-                    {...field}
-                  />
-                </FormControl>
-                {/* <FormDescription></FormDescription> */}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <SubmitButton
-            isSubmitting={isSubmitting}
-            text="ChangePasswordForm.submit"
-            translate="yes"
-          />
-        </form>
-      </Form>
-    </div>
+        ) : null}
+        <FormField
+          control={form.control}
+          name="newPassword"
+          render={({ field }) => (
+            <FormItem className="max-w-80">
+              <FormLabel>{t('FormLabel.new_password')}</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  autoCapitalize="none"
+                  autoComplete="new-password"
+                  autoCorrect="off"
+                  placeholder={t('FormLabel.new_password')}
+                  {...field}
+                />
+              </FormControl>
+              {/* <FormDescription></FormDescription> */}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="confirmNewPassword"
+          render={({ field }) => (
+            <FormItem className="max-w-80">
+              <FormLabel>{t('FormLabel.confirm_new_password')}</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  autoCapitalize="none"
+                  autoComplete="new-password"
+                  autoCorrect="off"
+                  placeholder={t('FormLabel.confirm_new_password')}
+                  {...field}
+                />
+              </FormControl>
+              {/* <FormDescription></FormDescription> */}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <SubmitButton
+          isSubmitting={isSubmitting}
+          text="FormSubmit.change_password"
+          translate="yes"
+        />
+      </form>
+    </Form>
   )
 }

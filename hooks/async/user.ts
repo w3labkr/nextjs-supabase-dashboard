@@ -1,44 +1,45 @@
 import { createClient } from '@/lib/supabase/server'
-import { generateUserRole } from '@/lib/utils'
+import { User, Role } from '@/types/database'
 
 export async function authorize(id: string) {
-  const supabase = createClient()
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser()
-  return error || !user
-    ? { user: null }
-    : { user: user?.id === id ? user : null }
+  const { user, role } = await getUser()
+
+  if (!user) return { user: null, role: null }
+
+  return user?.id === id ? { user, role } : { user: null, role: null }
 }
 
 export async function getUser() {
   const supabase = createClient()
   const {
-    data: { user },
+    data: { user: session },
   } = await supabase.auth.getUser()
 
-  if (!user) return { user: null }
+  if (!session) return { user: null, role: null }
 
   const result = await supabase
     .from('users')
-    .select(
-      `username, has_set_password, is_ban, banned_until, deleted_at,
-       user_roles(role)`
-    )
-    .eq('id', user?.id)
+    .select(`*, user_roles(role)`)
+    .eq('id', session?.id)
     .limit(1)
     .single()
 
-  if (result?.error) return { user: null }
+  if (result?.error) return { user: null, role: null }
 
   const { user_roles, ...users } = result.data
 
-  const data = {
-    ...user,
+  const user: User = {
+    ...session,
     user: users,
-    user_role: generateUserRole(user_roles[0]?.role),
+    user_role: user_roles[0]?.role,
   }
 
-  return { user: data }
+  const role: Role = {
+    isGuest: ['guest'].includes(user?.user_role),
+    isUser: ['user'].includes(user?.user_role),
+    isAdmin: ['admin', 'superadmin'].includes(user?.user_role),
+    isSuperAdmin: ['superadmin'].includes(user?.user_role),
+  }
+
+  return { user, role }
 }

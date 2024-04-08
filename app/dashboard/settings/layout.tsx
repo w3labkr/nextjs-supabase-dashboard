@@ -11,20 +11,28 @@ import {
 } from '@/components/ui/resizable'
 import { dashboardConfig, settingsConfig } from '@/config/dashboard'
 
-export default function SettingsLayout({
+import { getUser } from '@/hooks/async/user'
+
+export default async function SettingsLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const { user } = await getUser()
+
   return (
     <div className="body-overflow-hidden flex h-screen w-screen min-w-[768px]">
       <AppBarProvider>
-        <MiniNavigation nav={dashboardConfig?.nav} />
+        <MiniNavigation
+          nav={dashboardConfig?.nav}
+          user_role={user?.user_role}
+        />
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
             <Navigation
               className="w-full border-none lg:max-w-full"
               nav={settingsConfig?.nav}
+              user_role={user?.user_role}
               title="settings"
               translate="yes"
             />

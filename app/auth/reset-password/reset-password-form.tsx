@@ -72,8 +72,8 @@ export function ResetPasswordForm() {
 
       toast.success(t('FormMessage.changed_successfully'))
 
-      router.replace('/auth/signin')
       router.refresh()
+      router.replace('/auth/signin')
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (
@@ -142,7 +142,7 @@ export function ResetPasswordForm() {
         />
         <SubmitButton
           isSubmitting={isSubmitting}
-          text="ResetPasswordForm.submit"
+          text="FormSubmit.change_password"
           translate="yes"
           className="w-full"
         />

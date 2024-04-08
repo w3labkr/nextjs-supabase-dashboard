@@ -9,22 +9,24 @@ import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
 import { LinkButton } from '@/components/link-button'
 
+import { UserRole } from '@/types/database'
 import { DashboardNavItem, DashboardNavSubItem } from '@/types/config'
 
 export interface NavigationProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string
   nav: DashboardNavItem[]
+  user_role?: UserRole
 }
 
 export function Navigation({
   className,
-  title,
   nav,
+  user_role,
+  title,
   translate,
   ...props
 }: NavigationProps) {
-  const state = React.useContext(AppBarContext)
-  const pathname = usePathname()
+  const { height } = React.useContext(AppBarContext)
   const { t } = useTranslation()
 
   return (
@@ -37,10 +39,7 @@ export function Navigation({
       {...props}
     >
       <div
-        className={cn(
-          'flex flex-row items-center gap-2 border-b px-4',
-          state?.height
-        )}
+        className={cn('flex flex-row items-center gap-2 border-b px-4', height)}
       >
         <span className="font-semibold">
           {title && translate === 'yes'
@@ -49,66 +48,66 @@ export function Navigation({
         </span>
       </div>
       <div className="flex-1 space-y-1 overflow-auto p-2">
-        {nav?.map((item) => {
-          return item?.roles && !item?.roles?.includes(state?.role) ? null : (
-            <NavItem key={item?.id} item={item} pathname={pathname} />
-          )
+        {nav?.map((item: DashboardNavItem) => {
+          const { id, roles } = item
+          if (roles && user_role && !roles?.includes(user_role)) return null
+          return <NavItem key={id} item={item} user_role={user_role} />
         })}
       </div>
     </div>
   )
 }
 
-function NavItem({
-  item,
-  pathname,
-}: {
+interface NavItemProps {
   item: DashboardNavItem
-  pathname: string
-}) {
-  const state = React.useContext(AppBarContext)
+  user_role?: UserRole
+}
+
+function NavItem({ item, user_role }: NavItemProps) {
   const { t } = useTranslation()
+  const { separator, label, translate, items } = item
 
   return (
     <React.Fragment>
-      {item?.separator && <Separator className="!my-4" />}
-      {item?.label && (
+      {separator && <Separator className="!my-4" />}
+      {label && (
         <span className="flex p-1 text-sm font-semibold text-muted-foreground">
-          {item?.label && item?.translate === 'yes'
-            ? t(`DashboardNavigation.${item?.label}`)
-            : item?.label}
+          {label && translate === 'yes'
+            ? t(`DashboardNavigation.${label}`)
+            : label}
         </span>
       )}
-      {item?.items?.map((value) => {
-        return value?.roles && !value?.roles?.includes(state?.role) ? null : (
-          <NavSubItem key={value?.id} item={value} pathname={pathname} />
-        )
+      {items?.map((sub: DashboardNavSubItem) => {
+        const { id, roles } = sub
+        if (roles && user_role && !roles?.includes(user_role)) return null
+        return <NavSubItem key={id} item={sub} />
       })}
     </React.Fragment>
   )
 }
 
-function NavSubItem({
-  item,
-  pathname,
-}: {
+interface NavSubItemProps {
   item: DashboardNavSubItem
-  pathname: string
-}) {
+}
+
+function NavSubItem({ item }: NavSubItemProps) {
+  const { href, iconName, title, translate, disabled } = item
+  const pathname = usePathname()
+
   return (
     <LinkButton
       variant="ghost"
-      href={item?.href}
+      href={href}
       className={cn(
         'relative flex h-auto rounded px-1 py-0.5 text-sm transition-all',
         'text-gray-500 hover:bg-transparent hover:text-gray-900',
         'dark:text-gray-400 dark:hover:text-gray-50',
-        pathname.startsWith(item?.href) ? 'text-gray-900 dark:text-gray-50' : ''
+        pathname?.startsWith(href) ? 'text-gray-900 dark:text-gray-50' : ''
       )}
-      startIconName={item?.iconName}
-      text={`DashboardNavigation.${item?.title}`}
-      translate={item?.translate}
-      disabled={item?.disabled}
+      startIconName={iconName}
+      text={`DashboardNavigation.${title}`}
+      translate={translate}
+      disabled={disabled}
     />
   )
 }

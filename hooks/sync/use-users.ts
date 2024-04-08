@@ -1,11 +1,7 @@
 'use client'
 
 import useSWR from 'swr'
-import { User, Pagination, AuthError } from '@supabase/supabase-js'
-
-type FetchData =
-  | { data: { users: User[]; aud: string } & Pagination; error: null }
-  | { data: { users: [] }; error: AuthError }
+import { UsersAPI } from '@/types/api'
 
 export function useUsers(page: number, perPage: number) {
   const url =
@@ -16,7 +12,7 @@ export function useUsers(page: number, perPage: number) {
     isLoading,
     isValidating,
     mutate,
-  } = useSWR<FetchData, Error>(url)
+  } = useSWR<UsersAPI, Error>(url)
 
   return {
     users: response?.data?.users ?? [],

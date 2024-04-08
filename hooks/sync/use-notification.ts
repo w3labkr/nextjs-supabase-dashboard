@@ -1,21 +1,17 @@
 'use client'
 
 import useSWR from 'swr'
-import { Tables } from '@/types/supabase'
+import { NotificationAPI } from '@/types/api'
 
-type FetchData =
-  | { data: Tables<'notifications'>; error: null }
-  | { data: null; error: Error }
-
-export function useNotification(id: string | null) {
-  const url = id ? `/api/v1/notification/${id}` : null
+export function useNotification(uid: string | null) {
+  const url = uid ? `/api/v1/notification/${uid}` : null
   const {
     data: response,
     error,
     isLoading,
     isValidating,
     mutate,
-  } = useSWR<FetchData, Error>(url)
+  } = useSWR<NotificationAPI, Error>(url)
 
   return {
     notification: response?.data ?? null,

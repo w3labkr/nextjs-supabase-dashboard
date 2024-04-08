@@ -10,10 +10,10 @@ import {
 import { DeleteEmailAddress } from './delete-email-address'
 import { ResendVerifyEmail } from './resend-verify-email'
 
-import { Tables } from '@/types/supabase'
+import { Email } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 
-export function EmailListItem({ item }: { item: Tables<'emails'> }) {
+export function EmailListItem({ item }: { item: Email }) {
   const { t } = useTranslation()
 
   const { user } = useAuth()

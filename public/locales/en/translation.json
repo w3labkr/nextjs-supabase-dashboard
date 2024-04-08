@@ -19,44 +19,48 @@
     "description": "Please enter your new password below."
   },
 
-  "ChangeEmailForm": {
-    "title": "Emails",
-    "description": ""
-  },
-
-  "ChangePasswordForm": {
-    "title": "Change Password",
-    "description": "Your password must be at least 6 characters long and must be different from your previous password.",
-    "submit": "Change Password"
-  },
-
-  "ChangeThemeForm": {
-    "title": "Theme",
-    "description": "Select the theme for the dashboard.",
-    "submit": "Update theme"
-  },
-
-  "ChangeLanguageForm": {
-    "title": "Language",
-    "description": "Select the language for the dashboard.",
-    "submit": "Update language"
-  },
-
-  "ChangeUsernameForm": {
-    "title": "Username",
-    "description": "",
-    "submit": "Change username"
-  },
-
-  "DashboardForm": {
+  "DashboardPage": {
     "title": "Dashboard",
     "description": ""
   },
 
-  "DeleteUserForm": {
-    "title": "Delete Account",
-    "description": "Deleting your account cannot be reversed.",
-    "submit": "Delete your account"
+  "NotificationsPage": {
+    "title": "Notifications",
+    "description": ""
+  },
+
+  "PostsPage": {
+    "title": "Post",
+    "description": "Create and manage posts."
+  },
+
+  "ProfilePage": {
+    "title": "Profile",
+    "description": ""
+  },
+
+  "SecurityPage": {
+    "title": "Change Password",
+    "description": "Your password must be at least 6 characters long and must be different from your previous password."
+  },
+
+  "AppearancePage": {
+    "title1": "Theme",
+    "description1": "Select the theme for the dashboard.",
+    "title2": "Language",
+    "description2": "Select the language for the dashboard."
+  },
+
+  "AccountPage": {
+    "title1": "Username",
+    "description1": "",
+    "title2": "Delete Account",
+    "description2": "Deleting your account cannot be reversed."
+  },
+
+  "EmailsPage": {
+    "title": "Emails",
+    "description": ""
   },
 
   "DeleteAccountDialog": {
@@ -65,14 +69,7 @@
     "trigger": "Delete your account"
   },
 
-  "ForgotPasswordForm": {
-    "submit": "Reset my password"
-  },
-
   "NotificationsForm": {
-    "title": "Notifications",
-    "description": "",
-    "submit": "Update notifications",
     "marketing_emails": {
       "label": "Marketing emails",
       "description": "Receive emails about new products, features, and more."
@@ -83,36 +80,8 @@
     }
   },
 
-  "ResetPasswordForm": {
-    "submit": "Change Password"
-  },
-
-  "ProfileForm": {
-    "title": "Profile",
-    "description": "",
-    "submit": "Update profile"
-  },
-
   "SessionsForm": {
     "title": "Session",
-    "description": ""
-  },
-
-  "SignInForm": {
-    "submit": "Sign In"
-  },
-
-  "SignUpForm": {
-    "submit": "Sign Up"
-  },
-
-  "NewPostForm": {
-    "title": "New Post",
-    "description": ""
-  },
-
-  "EditPostForm": {
-    "title": "Edit Post",
     "description": ""
   },
 
@@ -178,7 +147,17 @@
     "insert": "Insert",
     "update": "Update",
     "delete": "Delete",
-    "submit": "Submit"
+    "submit": "Submit",
+
+    "change_password": "Change Password",
+    "change_username": "Change username",
+    "delete_your_account": "Delete your account",
+    "reset_my_password": "Reset my password",
+    "signin": "Sign In",
+    "signup": "Sign Up",
+    "update_profile": "Update profile",
+    "update_notifications": "Update notifications",
+    "update_theme": "Update theme"
   },
 
   "SelectValue": {
@@ -208,8 +187,7 @@
     "emails": "Emails",
     "security": "Security",
     "sessions": "Sessions",
-    "new_post": "New Post",
-    "edit_post": "Edit Post",
+    "post": "Post",
     "users": "Users"
   },
 
@@ -335,5 +313,14 @@
     "AlertDialogDescription": "Once deleted, this email address will no longer be associated with your account.",
     "AlertDialogCancel": "Cancel",
     "AlertDialogAction": "Continue"
+  },
+
+  "EmptyPostItem": {
+    "title": "No posts created",
+    "description": "You don't have any posts yet. Start creating content."
+  },
+
+  "AddNewPost": {
+    "label": "New post"
   }
 }

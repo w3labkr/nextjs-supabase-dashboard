@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
+import { cn, fetcher } from '@/lib/utils'
 import { toast } from 'sonner'
 import {
   Form,
@@ -28,7 +29,6 @@ import {
 } from '@/components/ui/select'
 import { SubmitButton } from '@/components/submit-button'
 
-import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useEmails } from '@/hooks/sync/use-emails'
 
@@ -65,14 +65,16 @@ export function PrimaryEmailAddress() {
     try {
       setIsSubmitting(true)
 
+      if (!user?.id) throw new Error('Require is not defined.')
+
       const result = await fetcher(`/api/v1/email/${user?.id}`, {
         method: 'POST',
         body: JSON.stringify(formValues),
       })
-
       if (result?.error) throw new Error(result?.error?.message)
 
       toast.success(t('FormMessage.changed_successfully'))
+
       router.refresh()
     } catch (e: unknown) {
       toast.error((e as Error)?.message)

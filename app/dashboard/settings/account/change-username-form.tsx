@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
+import { cn, fetcher } from '@/lib/utils'
 import { toast } from 'sonner'
-import { Separator } from '@/components/ui/separator'
 import {
   Form,
   FormControl,
@@ -20,11 +20,8 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { SubmitButton } from '@/components/submit-button'
-import { Title } from '@/components/title'
-import { Description } from '@/components/description'
 
 import useSWRMutation from 'swr/mutation'
-import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useUser } from '@/hooks/sync/use-user'
 
@@ -44,8 +41,8 @@ async function sendRequest(url: string, { arg }: { arg: FormValues }) {
 export function ChangeUsernameForm() {
   const { t } = useTranslation()
 
-  const { user: _user } = useAuth()
-  const { user } = useUser(_user?.id ?? null)
+  const { session } = useAuth()
+  const { user } = useUser(session?.user?.id ?? null)
   const { trigger } = useSWRMutation(
     user?.id ? `/api/v1/user/${user?.id}` : null,
     sendRequest
@@ -69,7 +66,10 @@ export function ChangeUsernameForm() {
 
     try {
       setIsSubmitting(true)
-      await trigger(formValues)
+
+      const result = await trigger(formValues)
+      if (result?.error) throw new Error(result?.error?.message)
+
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
       const err = (e as Error)?.message
@@ -86,38 +86,33 @@ export function ChangeUsernameForm() {
   }
 
   return (
-    <div className="space-y-4">
-      <Title text="ChangeUsernameForm.title" translate="yes" />
-      <Separator />
-      <Description text="ChangeUsernameForm.description" translate="yes" />
-      <Form {...form}>
-        <form
-          method="POST"
-          onSubmit={form.handleSubmit(onSubmit)}
-          noValidate
-          className="space-y-4"
-        >
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('FormLabel.username')}</FormLabel>
-                <FormControl className="max-w-60">
-                  <Input placeholder="Username" {...field} />
-                </FormControl>
-                {/* <FormDescription></FormDescription> */}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <SubmitButton
-            isSubmitting={isSubmitting}
-            text="ChangeUsernameForm.submit"
-            translate="yes"
-          />
-        </form>
-      </Form>
-    </div>
+    <Form {...form}>
+      <form
+        method="POST"
+        onSubmit={form.handleSubmit(onSubmit)}
+        noValidate
+        className="space-y-4"
+      >
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('FormLabel.username')}</FormLabel>
+              <FormControl className="max-w-60">
+                <Input placeholder="Username" {...field} />
+              </FormControl>
+              {/* <FormDescription></FormDescription> */}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <SubmitButton
+          isSubmitting={isSubmitting}
+          text="FormSubmit.change_username"
+          translate="yes"
+        />
+      </form>
+    </Form>
   )
 }

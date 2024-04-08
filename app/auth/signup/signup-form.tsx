@@ -78,10 +78,9 @@ export function SignUpForm() {
         t('FormMessage.you_have_successfully_registered_as_a_member')
       )
 
-      router.replace('/auth/signin')
       router.refresh()
+      router.replace('/auth/signin')
     } catch (e: unknown) {
-      console.log(e)
       const err = (e as Error)?.message
       if (err.startsWith('User already registered')) {
         form.setError('email', {
@@ -168,7 +167,7 @@ export function SignUpForm() {
         />
         <SubmitButton
           isSubmitting={isSubmitting}
-          text="SignUpForm.submit"
+          text="FormSubmit.signup"
           translate="yes"
           className="w-full"
         />

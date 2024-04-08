@@ -10,7 +10,6 @@ import { z } from 'zod'
 
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 import {
   Dialog,
   DialogContent,
@@ -31,8 +30,6 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { SubmitButton } from '@/components/submit-button'
-import { Title } from '@/components/title'
-import { Description } from '@/components/description'
 
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
@@ -59,8 +56,8 @@ export function DeleteUserForm() {
   const router = useRouter()
   const { t } = useTranslation()
 
-  const { user: _user, setSession, setUser } = useAuth()
-  const { user } = useUser(_user?.id ?? null)
+  const { session, setSession, setUser } = useAuth()
+  const { user } = useUser(session?.user?.id ?? null)
   const hasSetPassword: boolean = user?.user?.has_set_password ?? false
 
   const form = useForm<FormValues>({
@@ -77,18 +74,20 @@ export function DeleteUserForm() {
   }, [register, unregister, hasSetPassword])
 
   const onSubmit = async (formValues: FormValues) => {
+    if (formValues?.email !== user?.email) {
+      toast.error('Your email address is invalid.')
+      return false
+    }
+
     try {
       setIsSubmitting(true)
-
-      if (formValues?.email !== user?.email) {
-        throw new Error('Your email address is invalid.')
-      }
 
       const supabase = createClient()
 
       if (hasSetPassword) {
+        if (!formValues?.password) throw new Error('Require is not defined.')
         const verified = await supabase.rpc('verify_user_password', {
-          password: formValues?.password as string,
+          password: formValues?.password,
         })
         if (verified?.error) throw new Error(verified?.error?.message)
         if (verified?.data === false) {
@@ -104,8 +103,8 @@ export function DeleteUserForm() {
 
       toast.success(t('FormMessage.deleted_successfully'))
 
-      router.replace('/')
       router.refresh()
+      router.replace('/')
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Your email address is invalid')) {
@@ -123,103 +122,94 @@ export function DeleteUserForm() {
   }
 
   return (
-    <div className="space-y-4">
-      <Title
-        text="DeleteUserForm.title"
-        translate="yes"
-        className="text-destructive"
-      />
-      <Separator />
-      <Description text="DeleteUserForm.description" translate="yes" />
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="outline" className="text-destructive">
-            {t('DeleteAccountDialog.trigger')}
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="max-w-[480px]">
-          <DialogHeader>
-            <DialogTitle>{t('DeleteAccountDialog.title')}</DialogTitle>
-            <DialogDescription className="text-destructive">
-              {t('DeleteAccountDialog.description')}
-            </DialogDescription>
-          </DialogHeader>
-          <Form {...form}>
-            <form
-              method="POST"
-              onSubmit={form.handleSubmit(onSubmit)}
-              noValidate
-              className="space-y-4"
-            >
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline" className="text-destructive">
+          {t('DeleteAccountDialog.trigger')}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-[480px]">
+        <DialogHeader>
+          <DialogTitle>{t('DeleteAccountDialog.title')}</DialogTitle>
+          <DialogDescription className="text-destructive">
+            {t('DeleteAccountDialog.description')}
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form
+            method="POST"
+            onSubmit={form.handleSubmit(onSubmit)}
+            noValidate
+            className="space-y-4"
+          >
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('FormLabel.your_email')}:</FormLabel>
+                  <FormControl>
+                    <Input placeholder="name@example.com" {...field} />
+                  </FormControl>
+                  {/* <FormDescription></FormDescription> */}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {hasSetPassword ? (
               <FormField
                 control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('FormLabel.your_email')}:</FormLabel>
-                    <FormControl>
-                      <Input placeholder="name@example.com" {...field} />
-                    </FormControl>
-                    {/* <FormDescription></FormDescription> */}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {hasSetPassword ? (
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        {t('FormLabel.confirm_your_password')}:
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          autoCapitalize="none"
-                          autoComplete="current-password"
-                          autoCorrect="off"
-                          placeholder={t('FormLabel.password')}
-                          {...field}
-                        />
-                      </FormControl>
-                      {/* <FormDescription></FormDescription> */}
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              ) : null}
-              <FormField
-                control={form.control}
-                name="confirmationPhrase"
+                name="password"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      <Trans components={{ i: <i /> }}>
-                        FormLabel.verify_delete_my_account
-                      </Trans>
+                      {t('FormLabel.confirm_your_password')}:
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="delete my account" {...field} />
+                      <Input
+                        type="password"
+                        autoCapitalize="none"
+                        autoComplete="current-password"
+                        autoCorrect="off"
+                        placeholder={t('FormLabel.password')}
+                        {...field}
+                      />
                     </FormControl>
                     {/* <FormDescription></FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <SubmitButton
-                variant="destructive"
-                disabled={!form?.formState?.isValid || isSubmitting}
-                isSubmitting={isSubmitting}
-                text="DeleteUserForm.submit"
-                translate="yes"
-              />
-            </form>
-          </Form>
-          {/* <DialogFooter></DialogFooter> */}
-        </DialogContent>
-      </Dialog>
-    </div>
+            ) : null}
+            <FormField
+              control={form.control}
+              name="confirmationPhrase"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <Trans components={{ i: <i /> }}>
+                      FormLabel.verify_delete_my_account
+                    </Trans>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="delete my account" {...field} />
+                  </FormControl>
+                  {/* <FormDescription></FormDescription> */}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <SubmitButton
+              variant="destructive"
+              disabled={!form?.formState?.isValid || isSubmitting}
+              isSubmitting={isSubmitting}
+              text="FormSubmit.delete_your_account"
+              translate="yes"
+            />
+          </form>
+        </Form>
+        {/* <DialogFooter></DialogFooter> */}
+      </DialogContent>
+    </Dialog>
   )
 }

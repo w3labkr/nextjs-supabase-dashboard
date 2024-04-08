@@ -13,9 +13,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Separator } from '@/components/ui/separator'
-import { Title } from '@/components/title'
-import { Description } from '@/components/description'
 import { Paginate } from '@/components/paginate'
 
 import { User } from '@supabase/supabase-js'
@@ -28,29 +25,24 @@ export function UserList() {
 
   return (
     <>
-      <div className="space-y-4">
-        <Title text="ListUsers.title" translate="yes" />
-        <Separator />
-        <Description text="ListUsers.description" translate="yes" />
-        <Table>
-          <TableCaption></TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>created_at</TableHead>
-              <TableHead>updated_at</TableHead>
-              <TableHead>role</TableHead>
-              <TableHead>email</TableHead>
-              <TableHead>email_confirmed_at</TableHead>
-              <TableHead>phone</TableHead>
-              <TableHead>last_sign_in_at</TableHead>
-              <TableHead>provider</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {users?.map((item) => <ListItem key={item?.id} item={item} />)}
-          </TableBody>
-        </Table>
-      </div>
+      <Table>
+        <TableCaption></TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>created_at</TableHead>
+            <TableHead>updated_at</TableHead>
+            <TableHead>role</TableHead>
+            <TableHead>email</TableHead>
+            <TableHead>email_confirmed_at</TableHead>
+            <TableHead>phone</TableHead>
+            <TableHead>last_sign_in_at</TableHead>
+            <TableHead>provider</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {users?.map((item) => <ListItem key={item?.id} item={item} />)}
+        </TableBody>
+      </Table>
       <Paginate
         page={page}
         perPage={perPage}

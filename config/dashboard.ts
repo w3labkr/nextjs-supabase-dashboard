@@ -59,38 +59,6 @@ export const dashboardConfig: DashboardConfig = {
   ],
 }
 
-export const postsConfig: DashboardPageConfig = {
-  nav: [
-    {
-      id: 1,
-      label: '',
-      separator: false,
-      translate: 'no',
-      // roles: ['user'],
-      items: [
-        {
-          id: 1,
-          title: 'new_post',
-          href: '/dashboard/posts/new-post',
-          // iconName: '',
-          translate: 'yes',
-          disabled: false,
-          // roles: ['user'],
-        },
-        {
-          id: 2,
-          title: 'edit_post',
-          href: '/dashboard/posts/edit-post',
-          // iconName: '',
-          translate: 'yes',
-          disabled: false,
-          // roles: ['user'],
-        },
-      ],
-    },
-  ],
-}
-
 export const settingsConfig: DashboardPageConfig = {
   nav: [
     {

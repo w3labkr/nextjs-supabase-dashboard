@@ -67,8 +67,8 @@ export function SignInForm() {
 
       toast.success(t('FormMessage.you_have_successfully_logged_in'))
 
-      router.replace('/dashboard/dashboard')
       router.refresh()
+      router.replace('/dashboard/dashboard')
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Invalid login credentials')) {
@@ -146,7 +146,7 @@ export function SignInForm() {
         />
         <SubmitButton
           isSubmitting={isSubmitting}
-          text="SignInForm.submit"
+          text="FormSubmit.signin"
           translate="yes"
           className="w-full"
         />

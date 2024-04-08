@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { httpStatusText } from '@/lib/utils'
+import { ApiError } from '@/lib/utils'
 import { authorize } from '@/hooks/async/user'
 
 import { transporter, sender } from '@/lib/nodemailer'
@@ -8,19 +8,19 @@ import { VerifyTokenPayload } from '@/types/token'
 
 export async function POST(
   request: NextRequest,
-  { params: { id } }: { params: { id: string } }
+  { params: { uid } }: { params: { uid: string } }
 ) {
-  const { user } = await authorize(id)
+  const { user } = await authorize(uid)
 
   if (!user) {
     return NextResponse.json(
-      { data: null, error: { message: httpStatusText(401) } },
+      { data: null, error: new ApiError(401) },
       { status: 401 }
     )
   }
 
   const body = await request.json()
-  const mailOptions = mailTemplate({ ...body, user_id: id })
+  const mailOptions = mailTemplate(body)
 
   try {
     const info = await transporter.sendMail(mailOptions)
@@ -28,7 +28,7 @@ export async function POST(
     return NextResponse.json({ data: info, error: null })
   } catch (e: unknown) {
     return NextResponse.json(
-      { data: null, error: { message: (e as Error)?.message } },
+      { data: null, error: new ApiError(400, (e as Error)?.message) },
       { status: 400 }
     )
   }

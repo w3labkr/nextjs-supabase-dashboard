@@ -30,8 +30,8 @@ export function SignOutButton(props: SignOutButtonProps) {
       setSession(null)
       setUser(null)
 
-      router.replace('/')
       router.refresh()
+      router.replace('/')
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     }

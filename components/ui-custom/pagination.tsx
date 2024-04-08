@@ -126,7 +126,7 @@ type PaginationEllipsisProps = {
 const PaginationEllipsis = ({
   className,
   text = 'More pages',
-  iconName = 'MoreHorizontal',
+  iconName = 'Ellipsis',
   translate,
   ...props
 }: PaginationEllipsisProps) => {

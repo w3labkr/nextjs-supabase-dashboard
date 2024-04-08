@@ -20,9 +20,9 @@ export interface PaginateProps {
 
 export function Paginate({
   page = 1,
-  perPage,
+  perPage = 50,
   setPage,
-  total,
+  total = 0,
   pageSize = 10,
 }: PaginateProps) {
   if (page < 1) page = 1

@@ -1,21 +1,17 @@
 'use client'
 
 import useSWR from 'swr'
-import { Tables } from '@/types/supabase'
+import { ProfileAPI } from '@/types/api'
 
-type FetchData =
-  | { data: Tables<'profiles'>; error: null }
-  | { data: null; error: Error }
-
-export function useProfile(id: string | null) {
-  const url = id ? `/api/v1/profile/${id}` : null
+export function useProfile(uid: string | null) {
+  const url = uid ? `/api/v1/profile/${uid}` : null
   const {
     data: response,
     error,
     isLoading,
     isValidating,
     mutate,
-  } = useSWR<FetchData, Error>(url)
+  } = useSWR<ProfileAPI, Error>(url)
 
   return {
     profile: response?.data ?? null,

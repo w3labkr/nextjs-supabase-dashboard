@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { cn, fetcher } from '@/lib/utils'
 import { toast } from 'sonner'
 import { LucideIcon } from '@/lib/lucide-icon'
 import {
@@ -17,10 +18,12 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { EmailListItemContext } from './email-list-item-provider'
+import {
+  EmailListItemContext,
+  EmailListItemContextProps,
+} from './email-list-item-provider'
 
 import useSWRMutation from 'swr/mutation'
-import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 
 type FormValues = { email: string }
@@ -42,17 +45,25 @@ export function DeleteEmailAddress() {
     sendRequest
   )
 
-  const handleClick = async () => {
-    if (!state?.email) {
-      toast(t('FormMessage.something_went_wrong'))
-      return false
-    }
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
+  const handleClick = async (values: EmailListItemContextProps) => {
     try {
-      await trigger({ email: state?.email })
+      setIsSubmitting(true)
+
+      if (!values?.email) throw new Error('Require is not defined.')
+
+      const formValues: FormValues = {
+        email: values?.email,
+      }
+      const result = await trigger(formValues)
+      if (result?.error) throw new Error(result?.error?.message)
+
       toast.success(t('FormMessage.deleted_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -81,7 +92,7 @@ export function DeleteEmailAddress() {
           <AlertDialogCancel>
             {t('DeleteEmailAddress.AlertDialogCancel')}
           </AlertDialogCancel>
-          <AlertDialogAction onClick={handleClick}>
+          <AlertDialogAction onClick={() => handleClick(state)}>
             {t('DeleteEmailAddress.AlertDialogAction')}
           </AlertDialogAction>
         </AlertDialogFooter>

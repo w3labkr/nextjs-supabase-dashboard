@@ -57,7 +57,6 @@ export function ForgotPasswordForm() {
             '/api/auth/v1/confirm?next=/auth/reset-password',
         }
       )
-
       if (error) throw new Error(error?.message)
 
       toast.success(t('FormMessage.email_has_been_successfully_sent'))
@@ -100,7 +99,7 @@ export function ForgotPasswordForm() {
         />
         <SubmitButton
           isSubmitting={isSubmitting}
-          text="ForgotPasswordForm.submit"
+          text="FormSubmit.reset_my_password"
           translate="yes"
           className="w-full"
         />
