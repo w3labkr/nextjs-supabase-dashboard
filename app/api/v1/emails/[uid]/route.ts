@@ -44,12 +44,7 @@ export async function PUT(
 
   const body = await request.json()
   const supabase = createClient()
-  const result = await supabase
-    .from('emails')
-    .insert(body)
-    .select()
-    .limit(1)
-    .single()
+  const result = await supabase.from('emails').insert(body).select().single()
 
   if (result?.error) {
     return NextResponse.json(

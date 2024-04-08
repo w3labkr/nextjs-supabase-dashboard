@@ -16,8 +16,8 @@ export type NotificationAPI =
 export type PostAPI = { data: Post; error: null } | { data: null; error: Error }
 
 export type PostsAPI =
-  | { data: Post[]; count: number; error: null }
-  | { data: null; count: null; error: Error }
+  | { data: Post[]; total: number; error: null }
+  | { data: null; total: null; error: Error }
 
 export type ProfileAPI =
   | { data: Profile; error: null }

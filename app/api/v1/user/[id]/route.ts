@@ -39,7 +39,6 @@ export async function POST(
     .update(body)
     .eq('id', id)
     .select()
-    .limit(1)
     .single()
 
   if (result?.error) {

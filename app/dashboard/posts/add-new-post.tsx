@@ -12,33 +12,32 @@ import { ButtonProps, buttonVariants } from '@/components/ui/button'
 import { PostAPI } from '@/types/api'
 import { useAuth } from '@/hooks/use-auth'
 
-type FormValues = Partial<PostAPI>
+interface FormValues {
+  title: string
+}
 
 export function AddNewPost({ className, variant, ...props }: ButtonProps) {
   const router = useRouter()
   const { t } = useTranslation()
   const { user } = useAuth()
 
-  const values: FormValues = {
-    user_id: user?.id,
-    title: 'Untitled Post',
-  }
-
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const handleClick = async function (formValues: FormValues) {
+  const handleClick = async function () {
     try {
       setIsSubmitting(true)
 
+      if (!user?.id) throw new Error('Require is not defined.')
+
+      const formValues: FormValues = { title: 'Untitled Post' }
       const result = await fetcher<PostAPI>(`/api/v1/post/new/${user?.id}`, {
         method: 'PUT',
         body: JSON.stringify(formValues),
       })
-      console.log(result)
+
       if (result?.error) throw new Error(result?.error?.message)
 
-      const post = result?.data
-      router.push(`/dashboard/posts/${post?.id}`)
+      router.push(`/dashboard/posts/${result?.data?.id}`)
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -48,7 +47,7 @@ export function AddNewPost({ className, variant, ...props }: ButtonProps) {
 
   return (
     <button
-      onClick={() => handleClick(values)}
+      onClick={handleClick}
       className={cn(
         buttonVariants({ variant }),
         { 'cursor-not-allowed opacity-60': isSubmitting },

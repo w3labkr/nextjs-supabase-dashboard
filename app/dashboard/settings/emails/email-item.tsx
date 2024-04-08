@@ -3,17 +3,14 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  EmailListItemContext,
-  EmailListItemProvider,
-} from './email-list-item-provider'
+import { EmailItemContext, EmailItemProvider } from './email-item-provider'
 import { DeleteEmailAddress } from './delete-email-address'
 import { ResendVerifyEmail } from './resend-verify-email'
 
 import { Email } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 
-export function EmailListItem({ item }: { item: Email }) {
+export function EmailItem({ item }: { item: Email }) {
   const { t } = useTranslation()
 
   const { user } = useAuth()
@@ -28,7 +25,7 @@ export function EmailListItem({ item }: { item: Email }) {
   )
 
   return (
-    <EmailListItemProvider value={state}>
+    <EmailItemProvider value={state}>
       <div className="space-y-2 rounded-lg border p-4">
         <div className="flex flex-col">
           <div className="flex items-center">
@@ -37,9 +34,7 @@ export function EmailListItem({ item }: { item: Email }) {
               {state?.isPrimary ? (
                 <>
                   <span>{' - '}</span>
-                  <span className="text-green-700">
-                    {t('EmailListItem.title')}
-                  </span>
+                  <span className="text-green-700">{t('EmailItem.title')}</span>
                 </>
               ) : null}
             </div>
@@ -48,7 +43,7 @@ export function EmailListItem({ item }: { item: Email }) {
             </div>
           </div>
           {state?.isPrimary ? (
-            <div className="text-xs">{t('EmailListItem.description')}</div>
+            <div className="text-xs">{t('EmailItem.description')}</div>
           ) : null}
         </div>
         <ul className="list-outside list-disc space-y-2 pl-5">
@@ -58,12 +53,12 @@ export function EmailListItem({ item }: { item: Email }) {
           <NotVisibleInEmails />
         </ul>
       </div>
-    </EmailListItemProvider>
+    </EmailItemProvider>
   )
 }
 
 function VisibleInEmails() {
-  const state = React.useContext(EmailListItemContext)
+  const state = React.useContext(EmailItemContext)
   const { t } = useTranslation()
 
   if (!state?.isVerified) return null
@@ -77,7 +72,7 @@ function VisibleInEmails() {
 }
 
 function ReceivesNotifications() {
-  const state = React.useContext(EmailListItemContext)
+  const state = React.useContext(EmailItemContext)
   const { t } = useTranslation()
 
   if (!state?.isVerified) return null
@@ -92,7 +87,7 @@ function ReceivesNotifications() {
 }
 
 function UnverifiedEmails() {
-  const state = React.useContext(EmailListItemContext)
+  const state = React.useContext(EmailItemContext)
   const { t } = useTranslation()
 
   if (state?.isVerified) return null
@@ -112,7 +107,7 @@ function UnverifiedEmails() {
 }
 
 function NotVisibleInEmails() {
-  const state = React.useContext(EmailListItemContext)
+  const state = React.useContext(EmailItemContext)
   const { t } = useTranslation()
 
   if (state?.isVerified) return null

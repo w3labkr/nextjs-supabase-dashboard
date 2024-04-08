@@ -18,10 +18,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import {
-  EmailListItemContext,
-  EmailListItemContextProps,
-} from './email-list-item-provider'
+import { EmailItemContext } from './email-item-provider'
 
 import useSWRMutation from 'swr/mutation'
 import { useAuth } from '@/hooks/use-auth'
@@ -36,7 +33,7 @@ async function sendRequest(url: string, { arg }: { arg: FormValues }) {
 }
 
 export function DeleteEmailAddress() {
-  const state = React.useContext(EmailListItemContext)
+  const state = React.useContext(EmailItemContext)
   const { t } = useTranslation()
 
   const { user } = useAuth()
@@ -47,16 +44,15 @@ export function DeleteEmailAddress() {
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const handleClick = async (values: EmailListItemContextProps) => {
+  const handleClick = async () => {
     try {
       setIsSubmitting(true)
 
-      if (!values?.email) throw new Error('Require is not defined.')
+      if (!state?.email) throw new Error('Require is not defined.')
 
-      const formValues: FormValues = {
-        email: values?.email,
-      }
+      const formValues: FormValues = { email: state?.email }
       const result = await trigger(formValues)
+
       if (result?.error) throw new Error(result?.error?.message)
 
       toast.success(t('FormMessage.deleted_successfully'))
@@ -92,7 +88,7 @@ export function DeleteEmailAddress() {
           <AlertDialogCancel>
             {t('DeleteEmailAddress.AlertDialogCancel')}
           </AlertDialogCancel>
-          <AlertDialogAction onClick={() => handleClick(state)}>
+          <AlertDialogAction onClick={handleClick}>
             {t('DeleteEmailAddress.AlertDialogAction')}
           </AlertDialogAction>
         </AlertDialogFooter>

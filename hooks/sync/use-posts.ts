@@ -21,7 +21,7 @@ export function usePosts(
 
   return {
     posts: response?.data ?? null,
-    count: response?.count ?? null,
+    total: response?.total ?? null,
     isError: error ?? response?.error ?? null,
     isLoading,
     isValidating,

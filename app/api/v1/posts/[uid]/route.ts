@@ -17,7 +17,7 @@ export async function GET(
 
   if (total?.error) {
     return NextResponse.json(
-      { data: null, count: null, error: total?.error },
+      { data: null, total: null, error: total?.error },
       { status: 400 }
     )
   }
@@ -26,19 +26,20 @@ export async function GET(
     .from('posts')
     .select('*, user:users(*)')
     .eq('user_id', uid)
+    .neq('status', 'trash')
     .range((page - 1) * perPage, page * perPage - 1)
     .order('id', { ascending: false })
 
   if (result?.error) {
     return NextResponse.json(
-      { data: null, count: null, error: result?.error },
+      { data: null, total: null, error: result?.error },
       { status: 400 }
     )
   }
 
   return NextResponse.json({
     data: result?.data,
-    count: total?.count,
+    total: total?.count,
     error: null,
   })
 }

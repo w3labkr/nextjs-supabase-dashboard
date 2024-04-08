@@ -18,6 +18,8 @@ import {
 } from '@/components/ui/table'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Paginate } from '@/components/paginate'
+
+import { PostListProvider } from './post-list-provider'
 import { AddNewPost } from './add-new-post'
 import { EditPost } from './edit-post'
 import { TrashPost } from './trash-post'
@@ -28,17 +30,17 @@ import { useAuth } from '@/hooks/use-auth'
 import { usePosts } from '@/hooks/sync/use-posts'
 
 export function PostList() {
+  const { user } = useAuth()
+
   const [page, setPage] = React.useState<number>(1)
   const [perPage, setPerPage] = React.useState<number>(50)
-
-  const { user } = useAuth()
-  const { posts, count } = usePosts(user?.id ?? null, page, perPage)
+  const { posts, total } = usePosts(user?.id ?? null, page, perPage)
 
   if (!posts) return null
-  if (!posts?.length) return <EmptyListItem />
+  if (!posts?.length) return <EmptyPostItem />
 
   return (
-    <>
+    <PostListProvider value={{ page, perPage }}>
       <Table>
         <TableCaption></TableCaption>
         <TableHeader>
@@ -52,20 +54,20 @@ export function PostList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {posts?.map((post) => <ListItem key={post?.id} post={post} />)}
+          {posts?.map((post) => <PostItem key={post?.id} post={post} />)}
         </TableBody>
       </Table>
       <Paginate
         page={page}
         perPage={perPage}
         setPage={setPage}
-        total={count ?? 0}
+        total={total ?? 0}
       />
-    </>
+    </PostListProvider>
   )
 }
 
-function ListItem({ post }: { post: Post }) {
+function PostItem({ post }: { post: Post }) {
   return (
     <TableRow>
       <TableCell className="w-[50px]">
@@ -86,7 +88,7 @@ function ListItem({ post }: { post: Post }) {
   )
 }
 
-function EmptyListItem() {
+function EmptyPostItem() {
   const { t } = useTranslation()
 
   return (

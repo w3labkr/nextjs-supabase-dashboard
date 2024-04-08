@@ -269,7 +269,7 @@
     "ellipsisText": "More pages"
   },
 
-  "EmailListItem": {
+  "EmailItem": {
     "title": "Primary",
     "description": "This email will be used for account-related notifications and may also be used to reset your password."
   },

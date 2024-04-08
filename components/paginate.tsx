@@ -63,6 +63,7 @@ export function Paginate({
   // Modify to fit page size
   if (exceedPage > 0) pageSize = pageSize - exceedPage
   if (pageSize > lastPage) pageSize = lastPage
+  if (pageSize < 1) pageSize = firstPage
 
   return (
     <Pagination>
