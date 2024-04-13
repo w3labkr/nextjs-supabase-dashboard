@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-ninja",
+  "name": "nextjs-with-supabase-auth",
   "version": "0.1.0",
   "private": true,
   "scripts": {

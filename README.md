@@ -1,6 +1,6 @@
-# NextJS Ninja
+# NextJS with Supabase Auth
 
-NextJS Ninja is a starter template for the [NextJS](https://nextjs.org/) 14 app router based on [shadcn-ui](https://ui.shadcn.com/).
+This is a starter template for the [NextJS](https://nextjs.org/) 14 app router with supabase auth based on [shadcn-ui](https://ui.shadcn.com/).
 
 Denpendency
 
@@ -18,7 +18,7 @@ Denpendency
 
 ## Table of Contents
 
-- [NextJS Ninja](#nextjs-ninja)
+- [NextJS with Supabase Auth](#nextjs-with-supabase-auth)
   - [Table of Contents](#table-of-contents)
   - [Screenshots](#screenshots)
   - [Folder and file Structure](#folder-and-file-structure)
