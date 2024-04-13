@@ -96,10 +96,12 @@ export type Database = {
           excerpt: string | null
           id: number
           password: string | null
-          status: string | null
+          status: Database['public']['Enums']['post_status'] | null
+          thumbnail: string | null
           title: string | null
           updated_at: string | null
           user_id: string | null
+          view: number | null
         }
         Insert: {
           content?: Json | null
@@ -108,10 +110,12 @@ export type Database = {
           excerpt?: string | null
           id?: number
           password?: string | null
-          status?: string | null
+          status?: Database['public']['Enums']['post_status'] | null
+          thumbnail?: string | null
           title?: string | null
           updated_at?: string | null
           user_id?: string | null
+          view?: number | null
         }
         Update: {
           content?: Json | null
@@ -120,10 +124,12 @@ export type Database = {
           excerpt?: string | null
           id?: number
           password?: string | null
-          status?: string | null
+          status?: Database['public']['Enums']['post_status'] | null
+          thumbnail?: string | null
           title?: string | null
           updated_at?: string | null
           user_id?: string | null
+          view?: number | null
         }
         Relationships: [
           {
@@ -278,9 +284,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      delete_user: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
+      count_posts: {
+        Args: {
+          uid: string
+        }
+        Returns: {
+          status: Database['public']['Enums']['post_status']
+          count: number
+        }[]
       }
       generate_username: {
         Args: {
@@ -288,8 +299,25 @@ export type Database = {
         }
         Returns: string
       }
+      get_user: {
+        Args: {
+          uid: string
+        }
+        Returns: {
+          id: string
+          created_at: string
+          updated_at: string
+          deleted_at: string
+          username: string
+          has_set_password: boolean
+          is_ban: boolean
+          banned_until: string
+          role: Database['public']['Enums']['user_role']
+        }[]
+      }
       verify_user_password: {
         Args: {
+          uid: string
           password: string
         }
         Returns: boolean

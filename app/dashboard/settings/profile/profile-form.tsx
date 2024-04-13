@@ -33,8 +33,8 @@ import { SubmitButton } from '@/components/submit-button'
 
 import useSWRMutation from 'swr/mutation'
 import { useAuth } from '@/hooks/use-auth'
-import { useProfile } from '@/hooks/sync/use-profile'
-import { useEmails } from '@/hooks/sync/use-emails'
+import { useProfile } from '@/hooks/api/use-profile'
+import { useEmails } from '@/hooks/api/use-emails'
 
 const FormSchema = z.object({
   name: z.string().nonempty().min(2),

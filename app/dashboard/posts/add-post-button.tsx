@@ -9,14 +9,13 @@ import { LucideIcon } from '@/lib/lucide-icon'
 import { toast } from 'sonner'
 import { ButtonProps, buttonVariants } from '@/components/ui/button'
 
-import { PostAPI } from '@/types/api'
 import { useAuth } from '@/hooks/use-auth'
 
 interface FormValues {
   title: string
 }
 
-export function AddNewPost({ className, variant, ...props }: ButtonProps) {
+export function AddPostButton({ className, variant, ...props }: ButtonProps) {
   const router = useRouter()
   const { t } = useTranslation()
   const { user } = useAuth()
@@ -30,7 +29,7 @@ export function AddNewPost({ className, variant, ...props }: ButtonProps) {
       if (!user?.id) throw new Error('Require is not defined.')
 
       const formValues: FormValues = { title: 'Untitled Post' }
-      const result = await fetcher<PostAPI>(`/api/v1/post/new/${user?.id}`, {
+      const result = await fetcher(`/api/v1/post/new/${user?.id}`, {
         method: 'PUT',
         body: JSON.stringify(formValues),
       })
@@ -61,7 +60,7 @@ export function AddNewPost({ className, variant, ...props }: ButtonProps) {
       ) : (
         <LucideIcon name="Plus" className="mr-2 h-4 w-4" />
       )}
-      {t('AddNewPost.label')}
+      {t('AddPostButton.label')}
     </button>
   )
 }

@@ -6,7 +6,6 @@ drop table if exists posts;
 drop table if exists profiles;
 drop table if exists user_roles;
 drop table if exists notifications;
-drop table if exists appearances;
 drop table if exists users;
 
 create table users (

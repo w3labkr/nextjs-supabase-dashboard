@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { ApiError } from '@/lib/utils'
-import { authorize } from '@/hooks/async/user'
+import { authorize } from '@/hooks/async/auth'
 
 export async function PUT(
   request: NextRequest,
@@ -21,7 +21,7 @@ export async function PUT(
   const result = await supabase
     .from('posts')
     .insert({ ...body, user_id: uid })
-    .select('*, users(*)')
+    .select('*, user:users(*)')
     .single()
 
   if (result?.error) {

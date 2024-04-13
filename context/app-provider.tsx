@@ -3,10 +3,11 @@
 import * as React from 'react'
 
 import { ReduxProvider } from '@/lib/redux/redux-provider'
-import { AuthProvider } from '@/lib/supabase/auth-provider'
-import { I18nProvider } from '@/lib/i18n/i18n-provider'
-import { SWRProvider } from '@/lib/swr/swr-provider'
-import { ThemeProvider } from '@/lib/next-themes/theme-provider'
+
+import { ThemeProvider } from './theme-provider'
+import { I18nProvider } from './i18n-provider'
+import { AuthProvider } from './auth-provider'
+import { SWRProvider } from './swr-provider'
 
 const providers = [
   ReduxProvider,

@@ -2,15 +2,15 @@
 
 import useSWR from 'swr'
 import { PostsAPI } from '@/types/api'
+import { createQueryString } from '@/lib/utils'
 
 export function usePosts(
   uid: string | null,
-  page: number = 1,
-  perPage: number = 50
+  params: { page: number; perPage: number; status: string }
 ) {
-  const url = uid
-    ? `/api/v1/posts/${uid}?page=${page}&perPage=${perPage}`
-    : null
+  const queryString = createQueryString(params)
+  const url = uid ? `/api/v1/posts/${uid}?${queryString}` : null
+
   const {
     data: response,
     error,
@@ -21,7 +21,7 @@ export function usePosts(
 
   return {
     posts: response?.data ?? null,
-    total: response?.total ?? null,
+    total: response?.count ?? null,
     isError: error ?? response?.error ?? null,
     isLoading,
     isValidating,

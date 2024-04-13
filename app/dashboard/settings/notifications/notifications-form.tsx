@@ -23,7 +23,7 @@ import { SubmitButton } from '@/components/submit-button'
 
 import useSWRMutation from 'swr/mutation'
 import { useAuth } from '@/hooks/use-auth'
-import { useNotification } from '@/hooks/sync/use-notification'
+import { useNotification } from '@/hooks/api/use-notification'
 
 const FormSchema = z.object({
   marketing_emails: z.boolean(),
@@ -61,13 +61,15 @@ export function NotificationsForm() {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
-    if (formValues?.marketing_emails === notification?.marketing_emails) {
-      toast(t('FormMessage.nothing_has_changed'))
-      return false
-    }
-
     try {
       setIsSubmitting(true)
+
+      if (notification?.marketing_emails == null) {
+        throw new Error('Require is not defined.')
+      }
+      if (formValues?.marketing_emails === notification?.marketing_emails) {
+        throw new Error(t('FormMessage.nothing_has_changed'))
+      }
 
       const result = await trigger(formValues)
       if (result?.error) throw new Error(result?.error?.message)

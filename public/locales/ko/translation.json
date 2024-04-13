@@ -315,12 +315,44 @@
     "AlertDialogAction": "계속"
   },
 
-  "EmptyPostItem": {
-    "title": "작성된 게시물이 없습니다.",
-    "description": "아직 게시물이 없습니다. 콘텐츠 제작을 시작하세요."
+  "PostList": {
+    "EditPostButton": "수정",
+    "TrashPostButton": "휴지통",
+    "RestorePostButton": "복구",
+    "ViewPostButton": "보기",
+    "DeletePostButton": "삭제"
   },
 
-  "AddNewPost": {
+  "PostStatus": {
+    "all": "모두",
+    "publish": "발행",
+    "future": "예약",
+    "draft": "임시",
+    "pending": "대기",
+    "private": "비공개",
+    "trash": "휴지통"
+  },
+
+  "TableHead": {
+    "num": "번호",
+    "id": "아이디",
+    "status": "상태",
+    "title": "제목",
+    "excerpt": "설명",
+    "description": "설명",
+    "author": "작성자",
+    "view": "조회수",
+    "created_at": "생성일",
+    "updated_at": "수정일",
+    "deleted_at": "삭제일"
+  },
+
+  "TableCell": {
+    "empty_post": "아직 게시물이 없습니다.",
+    "is_loading": "로딩..."
+  },
+
+  "AddPostButton": {
     "label": "새로운 게시물"
   }
 }

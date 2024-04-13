@@ -10,7 +10,7 @@ import {
   PaginationPrevious,
 } from '@/components/ui-custom/pagination'
 
-export interface PaginateProps {
+export interface PagingProps {
   page: number // Current page number
   perPage: number // Number of posts to display per page
   setPage: React.Dispatch<React.SetStateAction<number>>
@@ -18,13 +18,13 @@ export interface PaginateProps {
   pageSize?: number // Number of page buttons to display
 }
 
-export function Paginate({
+export function Paging({
   page = 1,
   perPage = 50,
   setPage,
   total = 0,
   pageSize = 10,
-}: PaginateProps) {
+}: PagingProps) {
   if (page < 1) page = 1
 
   // A number indicating which set the current button belongs to

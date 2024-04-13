@@ -1,37 +1,19 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { ApiError } from '@/lib/utils'
-import { authorize } from '@/hooks/async/auth'
 
-export async function GET(
-  request: NextRequest,
-  { params: { uid } }: { params: { uid: string } }
-) {
-  const { user } = await authorize(uid)
-
-  if (!user) {
-    return NextResponse.json(
-      { data: null, error: new ApiError(401) },
-      { status: 401 }
-    )
-  }
-
+export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
+  const user_id = searchParams.get('user_id') as string
   const page = +((searchParams.get('page') as string) ?? '1')
   const perPage = +((searchParams.get('perPage') as string) ?? '50')
-  const status = (searchParams.get('status') as string) ?? 'all'
 
   const supabase = createClient()
   const totalQuery = supabase
     .from('posts')
     .select('*', { count: 'exact', head: true })
-    .eq('user_id', uid)
+    .eq('status', 'publish')
 
-  if (status === 'all') {
-    totalQuery.neq('status', 'trash')
-  } else {
-    totalQuery.eq('status', status)
-  }
+  if (user_id) totalQuery.eq('user_id', user_id)
 
   const total = await totalQuery
 
@@ -45,13 +27,9 @@ export async function GET(
   const listQuery = supabase
     .from('posts')
     .select('*, user:users!inner(*)')
-    .eq('user_id', uid)
+    .eq('status', 'publish')
 
-  if (status === 'all') {
-    listQuery.neq('status', 'trash')
-  } else {
-    listQuery.eq('status', status)
-  }
+  if (user_id) listQuery.eq('user_id', user_id)
 
   const list = await listQuery
     .range((page - 1) * perPage, page * perPage - 1)

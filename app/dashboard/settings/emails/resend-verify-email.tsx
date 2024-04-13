@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { cn, fetcher } from '@/lib/utils'
 import { toast } from 'sonner'
 import { SubmitButton } from '@/components/submit-button'
-import { EmailItemContext } from './email-item-provider'
+import { useEmailItem } from './email-item-provider'
 
 import { useAuth } from '@/hooks/use-auth'
 import { VerifyTokenPayload } from '@/types/token'
@@ -14,8 +14,8 @@ import { VerifyTokenPayload } from '@/types/token'
 type FormValues = VerifyTokenPayload
 
 export function ResendVerifyEmail() {
-  const state = React.useContext(EmailItemContext)
   const { t } = useTranslation()
+  const { email, isVerified } = useEmailItem()
 
   const { user } = useAuth()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -24,11 +24,11 @@ export function ResendVerifyEmail() {
     try {
       setIsSubmitting(true)
 
-      if (!state?.email) throw new Error('Require is not defined.')
+      if (!email) throw new Error('Require is not defined.')
       if (!user?.id) throw new Error('Require is not defined.')
 
       const formValues: FormValues = {
-        email: state?.email,
+        email,
         user_id: user?.id,
       }
       const result = await fetcher(`/api/v1/email/verify/${user?.id}`, {
@@ -45,7 +45,7 @@ export function ResendVerifyEmail() {
     }
   }
 
-  if (state?.isVerified) return null
+  if (isVerified) return null
 
   return (
     <SubmitButton

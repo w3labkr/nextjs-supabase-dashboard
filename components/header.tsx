@@ -9,7 +9,7 @@ import { Navigation } from '@/components/navigation'
 import { MobileNavigation } from '@/components/mobile-navigation'
 import { LinkButton } from '@/components/link-button'
 
-import { getUser } from '@/hooks/async/user'
+import { getUser } from '@/hooks/async/auth'
 
 export async function Header() {
   const { user } = await getUser()

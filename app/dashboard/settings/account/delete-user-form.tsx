@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
+import { cn, fetcher } from '@/lib/utils'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
@@ -33,7 +34,7 @@ import { SubmitButton } from '@/components/submit-button'
 
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
-import { useUser } from '@/hooks/sync/use-user'
+import { useUser } from '@/hooks/api/use-user'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
@@ -74,19 +75,21 @@ export function DeleteUserForm() {
   }, [register, unregister, hasSetPassword])
 
   const onSubmit = async (formValues: FormValues) => {
-    if (formValues?.email !== user?.email) {
-      toast.error('Your email address is invalid.')
-      return false
-    }
-
     try {
       setIsSubmitting(true)
+
+      if (!user?.id) throw new Error('Require is not defined.')
+      if (!user?.email) throw new Error('Require is not defined.')
+      if (formValues?.email !== user?.email) {
+        throw new Error('Your email address is invalid.')
+      }
 
       const supabase = createClient()
 
       if (hasSetPassword) {
         if (!formValues?.password) throw new Error('Require is not defined.')
         const verified = await supabase.rpc('verify_user_password', {
+          uid: user?.id,
           password: formValues?.password,
         })
         if (verified?.error) throw new Error(verified?.error?.message)
@@ -95,7 +98,9 @@ export function DeleteUserForm() {
         }
       }
 
-      const deleted = await supabase.rpc('delete_user')
+      const deleted = await fetcher(`/api/v1/user/${user?.id}`, {
+        method: 'DELETE',
+      })
       if (deleted?.error) throw new Error(deleted?.error?.message)
 
       setSession(null)
@@ -103,8 +108,8 @@ export function DeleteUserForm() {
 
       toast.success(t('FormMessage.deleted_successfully'))
 
-      router.refresh()
       router.replace('/')
+      router.refresh()
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Your email address is invalid')) {

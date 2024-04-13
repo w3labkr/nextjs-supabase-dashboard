@@ -17,28 +17,18 @@ export async function getUser() {
 
   if (!session) return { user: null, role: null }
 
-  const result = await supabase
-    .from('users')
-    .select(`*, user_roles(role)`)
-    .eq('id', session?.id)
-    .limit(1)
-    .single()
+  const result = await supabase.rpc('get_user', { uid: session?.id }).single()
 
   if (result?.error) return { user: null, role: null }
 
-  const { user_roles, ...users } = result.data
-
-  const user: User = {
-    ...session,
-    user: users,
-    user_role: user_roles[0]?.role,
-  }
+  const user: User = { ...session, user: result?.data }
+  const user_role = user?.user?.role
 
   const role: Role = {
-    isGuest: ['guest'].includes(user?.user_role),
-    isUser: ['user'].includes(user?.user_role),
-    isAdmin: ['admin', 'superadmin'].includes(user?.user_role),
-    isSuperAdmin: ['superadmin'].includes(user?.user_role),
+    isGuest: ['guest'].includes(user_role),
+    isUser: ['user'].includes(user_role),
+    isAdmin: ['admin', 'superadmin'].includes(user_role),
+    isSuperAdmin: ['superadmin'].includes(user_role),
   }
 
   return { user, role }

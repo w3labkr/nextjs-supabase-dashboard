@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
 import { ApiError } from '@/lib/utils'
-import { authorize } from '@/hooks/async/user'
+import { authorize } from '@/hooks/async/auth'
 
 export async function POST(
   request: NextRequest,

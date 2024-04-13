@@ -23,7 +23,7 @@ import { SubmitButton } from '@/components/submit-button'
 
 import useSWRMutation from 'swr/mutation'
 import { useAuth } from '@/hooks/use-auth'
-import { useEmails } from '@/hooks/sync/use-emails'
+import { useEmails } from '@/hooks/api/use-emails'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
@@ -62,15 +62,13 @@ export function AddEmailAddress() {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
-    if (emails?.find((value) => value?.email === formValues?.email)) {
-      toast.error(t('FormMessage.email_has_already_been_added'))
-      return false
-    }
-
     try {
       setIsSubmitting(true)
 
       if (!user?.id) throw new Error('Require is not defined.')
+      if (emails?.find((value) => value?.email === formValues?.email)) {
+        throw new Error(t('FormMessage.email_has_already_been_added'))
+      }
 
       const result = await trigger(formValues)
       if (result?.error) throw new Error(result?.error?.message)

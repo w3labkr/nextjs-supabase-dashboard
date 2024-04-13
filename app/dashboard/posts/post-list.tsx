@@ -4,8 +4,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 
-import { cn, fetcher } from '@/lib/utils'
-import { LucideIcon } from '@/lib/lucide-icon'
+import { cn } from '@/lib/utils'
 import {
   Table,
   TableBody,
@@ -17,94 +16,175 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Paginate } from '@/components/paginate'
-
-import { PostListProvider } from './post-list-provider'
-import { AddNewPost } from './add-new-post'
-import { EditPost } from './edit-post'
-import { TrashPost } from './trash-post'
-import { ViewPost } from './view-post'
+import { Button } from '@/components/ui/button'
+import { PagingProvider, usePaging } from '@/components/paging/paging-provider'
+import { Paging } from '@/components/paging'
 
 import { Post } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
-import { usePosts } from '@/hooks/sync/use-posts'
+import { usePosts } from '@/hooks/api/use-posts'
+import { useCountPosts } from '@/hooks/api/use-count-posts'
+
+import { EditPostButton } from './edit-post-button'
+import { ViewPostButton } from './view-post-button'
+import { TrashPostButton } from './trash-post-button'
+import { RestorePostButton } from './restore-post-button'
+import { DeletePostButton } from './delete-post-button'
 
 export function PostList() {
-  const { user } = useAuth()
-
-  const [page, setPage] = React.useState<number>(1)
-  const [perPage, setPerPage] = React.useState<number>(50)
-  const { posts, total } = usePosts(user?.id ?? null, page, perPage)
-
-  if (!posts) return null
-  if (!posts?.length) return <EmptyPostItem />
-
   return (
-    <PostListProvider value={{ page, perPage }}>
-      <Table>
-        <TableCaption></TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>
-              <Checkbox />
-            </TableHead>
-            <TableHead>Title</TableHead>
-            <TableHead>Author</TableHead>
-            <TableHead>Updated At</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {posts?.map((post) => <PostItem key={post?.id} post={post} />)}
-        </TableBody>
-      </Table>
-      <Paginate
-        page={page}
-        perPage={perPage}
-        setPage={setPage}
-        total={total ?? 0}
-      />
-    </PostListProvider>
+    <PagingProvider>
+      <Header />
+      <Body />
+      <Footer />
+    </PagingProvider>
   )
 }
 
-function PostItem({ post }: { post: Post }) {
+function Header() {
+  const { t } = useTranslation()
+
+  const { status, setStatus } = usePaging()
+  const { user } = useAuth()
+  const { data } = useCountPosts(user?.id ?? null)
+
+  return (
+    <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+      {data?.map((obj) => {
+        return obj.count > 0 ? (
+          <React.Fragment key={obj.status}>
+            {obj.status !== 'all' && <span>|</span>}
+            <Button
+              variant="link"
+              className={cn(
+                'h-auto p-0',
+                status === obj.status
+                  ? 'text-foreground'
+                  : 'text-muted-foreground'
+              )}
+              onClick={() => setStatus(obj.status)}
+            >
+              {t(`PostStatus.${obj.status}`)}({obj.count})
+            </Button>
+          </React.Fragment>
+        ) : null
+      })}
+    </div>
+  )
+}
+
+function Footer() {
+  const { user } = useAuth()
+  const { page, perPage, status } = usePaging()
+  const { total } = usePosts(user?.id ?? null, {
+    page,
+    perPage,
+    status,
+  })
+
+  if (total === null) return null
+
+  return <Paging total={total} />
+}
+
+function Body() {
+  const { t } = useTranslation()
+
+  const { user } = useAuth()
+  const { page, perPage, status } = usePaging()
+  const { posts } = usePosts(user?.id ?? null, {
+    page,
+    perPage,
+    status,
+  })
+
+  return (
+    <Table>
+      <TableCaption></TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[50px]">
+            <Checkbox />
+          </TableHead>
+          <TableHead className="w-[70px]">{t('TableHead.num')}</TableHead>
+          <TableHead>{t('TableHead.title')}</TableHead>
+          <TableHead className="w-[100px]">{t('TableHead.author')}</TableHead>
+          <TableHead className="w-[200px]">
+            {t('TableHead.updated_at')}
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {posts === null ? (
+          <LoadingItem />
+        ) : posts?.length > 0 ? (
+          posts?.map((post) => <ListItem key={post?.id} post={post} />)
+        ) : (
+          <EmptyItem />
+        )}
+      </TableBody>
+    </Table>
+  )
+}
+
+function ListItem({ post }: { post: Post }) {
+  const { t } = useTranslation()
+  const { status } = usePaging()
+
   return (
     <TableRow>
-      <TableCell className="w-[50px]">
+      <TableCell>
         <Checkbox />
       </TableCell>
+      <TableCell>{post?.id}</TableCell>
       <TableCell>
         <div>{post?.title}</div>
-        <div>
-          <EditPost post={post} /> | <TrashPost post={post} /> |{' '}
-          <ViewPost post={post} />
+        <div className="flex items-center space-x-1">
+          {status === 'trash' ? (
+            <>
+              <RestorePostButton post={post} />
+              <span>|</span>
+              <DeletePostButton post={post} />
+            </>
+          ) : (
+            <>
+              <EditPostButton post={post} />
+              <span>|</span>
+              <TrashPostButton post={post} />
+            </>
+          )}
+          <span>|</span>
+          <ViewPostButton post={post} />
         </div>
       </TableCell>
-      <TableCell className="w-[100px]">{post?.user?.username}</TableCell>
-      <TableCell className="w-[200px]">
+      <TableCell>{post?.user?.username}</TableCell>
+      <TableCell>
         {dayjs(post?.updated_at).format('YYYY-MM-DD HH:mm')}
       </TableCell>
     </TableRow>
   )
 }
 
-function EmptyPostItem() {
+function EmptyItem() {
   const { t } = useTranslation()
 
   return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center rounded-md border border-dashed p-8 text-center animate-in fade-in-50">
-      <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
-        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
-          <LucideIcon name="StickyNote" className="size-10 min-w-10" />
-        </div>
-        <h2 className="mt-6 text-xl font-semibold">
-          {t('EmptyPostItem.title')}
-        </h2>
-        <p className="mb-8 mt-2 text-center text-sm font-normal leading-6 text-muted-foreground">
-          {t('EmptyPostItem.description')}
-        </p>
-        <AddNewPost variant="outline" />
-      </div>
-    </div>
+    <TableRow className="hover:bg-inherit">
+      <TableCell colSpan={6} align="center">
+        {t('TableCell.empty_post')}
+      </TableCell>
+    </TableRow>
+  )
+}
+
+function LoadingItem() {
+  const { t } = useTranslation()
+
+  return (
+    <TableRow className="hover:bg-inherit">
+      <TableCell colSpan={5} align="center">
+        {t('TableCell.is_loading')}
+      </TableCell>
+    </TableRow>
   )
 }

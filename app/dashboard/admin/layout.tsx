@@ -10,7 +10,7 @@ import {
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
 import { dashboardConfig, adminConfig } from '@/config/dashboard'
-import { getUser } from '@/hooks/async/user'
+import { getUser } from '@/hooks/async/auth'
 
 export default async function AdminLayout({
   children,
@@ -26,14 +26,14 @@ export default async function AdminLayout({
       <AppBarProvider>
         <MiniNavigation
           nav={dashboardConfig?.nav}
-          user_role={user?.user_role}
+          user_role={user?.user?.role}
         />
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
             <Navigation
               className="w-full border-none lg:max-w-full"
               nav={adminConfig?.nav}
-              user_role={user?.user_role}
+              user_role={user?.user?.role}
               title="admin"
               translate="yes"
             />

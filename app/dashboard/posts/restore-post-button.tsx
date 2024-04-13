@@ -4,24 +4,17 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { toast } from 'sonner'
-import { cn, fetcher } from '@/lib/utils'
+import { cn, fetcher, createQueryString } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 
-import { PostListContext } from './post-list-provider'
+import { usePaging } from '@/components/paging/paging-provider'
 
 import { useSWRConfig } from 'swr'
 import { Post } from '@/types/database'
-import { PostAPI } from '@/types/api'
 
-interface FormValues {
-  user_id: string
-  status: string
-  deleted_at: string
-}
-
-export function TrashPost({ post }: { post: Post }) {
+export function RestorePostButton({ post }: { post: Post }) {
   const { t } = useTranslation()
-  const state = React.useContext(PostListContext)
+  const { page, perPage, status } = usePaging()
 
   const { mutate } = useSWRConfig()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -30,28 +23,29 @@ export function TrashPost({ post }: { post: Post }) {
     try {
       setIsSubmitting(true)
 
-      const { page, perPage } = state
       const { id, user_id } = post
 
-      if (!page) throw new Error('Require is not defined.')
-      if (!perPage) throw new Error('Require is not defined.')
       if (!user_id) throw new Error('Require is not defined.')
 
-      const formValues: FormValues = {
+      const formValues = {
         user_id,
-        status: 'trash',
-        deleted_at: new Date().toISOString(),
+        status: 'draft',
+        deleted_at: null,
       }
-      const result = await fetcher<PostAPI>(`/api/v1/post/${id}`, {
+      const result = await fetcher(`/api/v1/post/${id}`, {
         method: 'POST',
         body: JSON.stringify(formValues),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      mutate(`/api/v1/posts/${user_id}?page=${page}&perPage=${perPage}`)
+      const params = { page, perPage, status }
+      const queryString = createQueryString(params)
 
-      toast.success(t('FormMessage.deleted_successfully'))
+      mutate(`/api/v1/posts/${user_id}?${queryString}`)
+      mutate(`/api/v1/posts/${user_id}/count`)
+
+      toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -62,11 +56,11 @@ export function TrashPost({ post }: { post: Post }) {
   return (
     <Button
       variant="ghost"
-      className="h-auto p-0 text-xs font-normal text-red-700 hover:underline"
+      className="h-auto p-0 text-xs font-normal text-blue-700 hover:underline"
       onClick={handleClick}
       disabled={isSubmitting}
     >
-      Trash
+      {t('PostList.RestorePostButton')}
     </Button>
   )
 }

@@ -21,7 +21,6 @@ begin
   insert into emails (user_id, email) values (new.id, new.email);
   insert into user_roles (user_id) values (new.id);
   insert into notifications (user_id) values (new.id);
-  insert into appearances (user_id) values (new.id);
 
   return new;
 end;

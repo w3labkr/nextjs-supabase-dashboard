@@ -23,7 +23,7 @@ import { SubmitButton } from '@/components/submit-button'
 
 import useSWRMutation from 'swr/mutation'
 import { useAuth } from '@/hooks/use-auth'
-import { useUser } from '@/hooks/sync/use-user'
+import { useUser } from '@/hooks/api/use-user'
 
 const FormSchema = z.object({
   username: z.string().nonempty().min(2).max(30),
@@ -59,13 +59,13 @@ export function ChangeUsernameForm() {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
-    if (formValues?.username === user?.user?.username) {
-      toast(t('FormMessage.nothing_has_changed'))
-      return false
-    }
-
     try {
       setIsSubmitting(true)
+
+      if (!user?.user?.username) throw new Error('Require is not defined.')
+      if (formValues?.username === user?.user?.username) {
+        throw new Error(t('FormMessage.nothing_has_changed'))
+      }
 
       const result = await trigger(formValues)
       if (result?.error) throw new Error(result?.error?.message)

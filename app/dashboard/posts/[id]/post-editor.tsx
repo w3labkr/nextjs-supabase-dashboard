@@ -17,16 +17,13 @@ import { LucideIcon } from '@/lib/lucide-icon'
 import { buttonVariants } from '@/components/ui/button'
 
 import useSWRMutation from 'swr/mutation'
-import { Post } from '@/types/database'
-import { useAuth } from '@/hooks/use-auth'
-import { usePost } from '@/hooks/sync/use-post'
+import { usePost } from '@/hooks/api/use-post'
 
 import './editor.css'
 
 const FormSchema = z.object({
+  user_id: z.string().uuid().optional(),
   title: z.string().min(3).max(128).optional(),
-
-  // TODO: Type this properly from editorjs block types?
   content: z.any().optional(),
 })
 
@@ -43,7 +40,6 @@ export function PostEditor({ id }: { id: string }) {
   const router = useRouter()
   const ref = React.useRef<EditorJS>()
 
-  // const { user } = useAuth()
   const { post } = usePost(id)
   const { trigger } = useSWRMutation(`/api/v1/post/${id}`, sendRequest)
 
@@ -113,12 +109,15 @@ export function PostEditor({ id }: { id: string }) {
     try {
       setIsSubmitting(true)
 
+      if (!post?.user_id) throw new Error('Require is not defined.')
+
       const blocks = await ref.current?.save()
       const result = await trigger({
+        user_id: post?.user_id,
         title: formValues?.title,
         content: blocks,
       })
-      console.log(result)
+
       if (result?.error) throw new Error(result?.error?.message)
 
       router.refresh()

@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { ApiError } from '@/lib/utils'
-import { authorize } from '@/hooks/async/user'
+import { authorize } from '@/hooks/async/auth'
 
 import { transporter, sender } from '@/lib/nodemailer'
 import { jwtSign } from '@/lib/jsonwebtoken'

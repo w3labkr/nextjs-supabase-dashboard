@@ -2,10 +2,10 @@ import * as React from 'react'
 
 import { Separator } from '@/components/ui/separator'
 import { Title } from '@/components/title'
-import { Description } from '@/components/description'
+// import { Description } from '@/components/description'
 
-import { AddNewPost } from './add-new-post'
 import { PostList } from './post-list'
+import { AddPostButton } from './add-post-button'
 
 export default function PostsPage() {
   return (
@@ -13,10 +13,10 @@ export default function PostsPage() {
       <div className="space-y-4">
         <div className="flex justify-between">
           <Title text="PostsPage.title" translate="yes" />
-          <AddNewPost />
+          <AddPostButton />
         </div>
         <Separator />
-        <Description text="PostsPage.description" translate="yes" />
+        {/* <Description text="PostsPage.description" translate="yes" /> */}
         <PostList />
       </div>
     </main>

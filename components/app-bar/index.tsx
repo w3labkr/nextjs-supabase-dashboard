@@ -6,18 +6,18 @@ import { cn } from '@/lib/utils'
 import { Notify } from '@/components/notify'
 import { AccountMenu } from '@/components/account-menu'
 
-import { AppBarContext } from './app-bar-provider'
+import { useAppBar } from './app-bar-provider'
 
 export interface AppBarProps extends React.HTMLAttributes<HTMLElement> {}
 
 export function AppBar({ children, className, ...props }: AppBarProps) {
-  const state = React.useContext(AppBarContext)
+  const { height } = useAppBar()
 
   return (
     <header
       className={cn(
         'flex w-full items-center gap-4 border-b bg-background px-6',
-        state?.height,
+        height,
         className
       )}
       {...props}

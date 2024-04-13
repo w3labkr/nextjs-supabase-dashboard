@@ -4,12 +4,12 @@ import * as React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { AppBarContext } from '@/components/app-bar/app-bar-provider'
 import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 import { TooltipLinkButton } from '@/components/tooltip-link-button'
+import { useAppBar } from '@/components/app-bar/app-bar-provider'
 
 import { UserRole } from '@/types/database'
 import { siteConfig } from '@/config/site'
@@ -27,7 +27,7 @@ export function MiniNavigation({
   user_role,
   ...props
 }: MiniNavigationProps) {
-  const { height } = React.useContext(AppBarContext)
+  const { height } = useAppBar()
 
   return (
     <div

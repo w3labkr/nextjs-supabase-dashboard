@@ -3,7 +3,7 @@
 drop function if exists migration_user_data;
 
 create or replace function migration_user_data()
-returns void language plpgsql
+returns void
 security definer
 as $$
 declare
@@ -22,12 +22,11 @@ begin
     insert into emails (user_id, email) values (r.id, r.email);
     insert into user_roles (user_id) values (r.id);
     insert into notifications (user_id) values (r.id);
-    insert into appearances (user_id) values (r.id);
 
   END LOOP;
 
 end;
-$$;
+$$ language plpgsql;
 
 select migration_user_data();
 

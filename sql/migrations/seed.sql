@@ -3,7 +3,7 @@
 drop function if exists create_new_user;
 
 create or replace function create_new_user(email text, password text)
-returns uuid language plpgsql
+returns uuid
 as $$
 declare
   user_id uuid;
@@ -24,7 +24,7 @@ begin
 
   return user_id;
 end;
-$$;
+$$ language plpgsql;
 
 select create_new_user('username@example.com', '123456789');
 

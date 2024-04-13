@@ -15,9 +15,13 @@ export type Post = Tables<'posts'> & {
   user: Tables<'users'>
 }
 
+export type CountPosts = {
+  status: PostStatus | 'all'
+  count: number
+}
+
 export type User = AuthUser & {
-  user: Tables<'users'>
-  user_role: UserRole
+  user: Tables<'users'> & { role: UserRole }
 }
 
 export type Role = {

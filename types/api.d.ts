@@ -1,5 +1,12 @@
 import { User as AuthUser, AuthError, Pagination } from '@supabase/supabase-js'
-import { Email, Notification, Post, Profile, User } from '@/types/database'
+import {
+  Email,
+  Notification,
+  Post,
+  CountPosts,
+  Profile,
+  User,
+} from '@/types/database'
 
 export type EmailAPI =
   | { data: Email; error: null }
@@ -16,8 +23,12 @@ export type NotificationAPI =
 export type PostAPI = { data: Post; error: null } | { data: null; error: Error }
 
 export type PostsAPI =
-  | { data: Post[]; total: number; error: null }
-  | { data: null; total: null; error: Error }
+  | { data: Post[]; count: number; error: null }
+  | { data: null; count: null; error: Error }
+
+export type CountPostsAPI =
+  | { data: CountPosts[]; error: null }
+  | { data: null; error: Error }
 
 export type ProfileAPI =
   | { data: Profile; error: null }

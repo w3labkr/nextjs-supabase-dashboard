@@ -9,12 +9,9 @@ export interface EmailItemContextProps {
   email_confirmed_at: string | null
 }
 
-export const EmailItemContext = React.createContext<EmailItemContextProps>({
-  isVerified: false,
-  isPrimary: false,
-  email: null,
-  email_confirmed_at: null,
-})
+export const EmailItemContext = React.createContext<
+  EmailItemContextProps | undefined
+>(undefined)
 
 export function EmailItemProvider({
   children,
@@ -28,4 +25,16 @@ export function EmailItemProvider({
       {children}
     </EmailItemContext.Provider>
   )
+}
+
+export function useEmailItem() {
+  const context = React.useContext<EmailItemContextProps | undefined>(
+    EmailItemContext
+  )
+
+  if (context === undefined) {
+    throw new Error('useEmailItem must be used within EmailItemProvider')
+  }
+
+  return context
 }

@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/resizable'
 import { dashboardConfig, settingsConfig } from '@/config/dashboard'
 
-import { getUser } from '@/hooks/async/user'
+import { getUser } from '@/hooks/async/auth'
 
 export default async function SettingsLayout({
   children,
@@ -25,14 +25,14 @@ export default async function SettingsLayout({
       <AppBarProvider>
         <MiniNavigation
           nav={dashboardConfig?.nav}
-          user_role={user?.user_role}
+          user_role={user?.user?.role}
         />
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
             <Navigation
               className="w-full border-none lg:max-w-full"
               nav={settingsConfig?.nav}
-              user_role={user?.user_role}
+              user_role={user?.user?.role}
               title="settings"
               translate="yes"
             />

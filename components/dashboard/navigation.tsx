@@ -4,10 +4,10 @@ import * as React from 'react'
 import { usePathname } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
-import { AppBarContext } from '@/components/app-bar/app-bar-provider'
 import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
 import { LinkButton } from '@/components/link-button'
+import { useAppBar } from '@/components/app-bar/app-bar-provider'
 
 import { UserRole } from '@/types/database'
 import { DashboardNavItem, DashboardNavSubItem } from '@/types/config'
@@ -26,7 +26,7 @@ export function Navigation({
   translate,
   ...props
 }: NavigationProps) {
-  const { height } = React.useContext(AppBarContext)
+  const { height } = useAppBar()
   const { t } = useTranslation()
 
   return (

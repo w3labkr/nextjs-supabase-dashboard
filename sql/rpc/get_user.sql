@@ -1,0 +1,29 @@
+-- SQL Editor > New query
+-- const { data, error } = await supabase.rpc('get_user', { uid: '' });
+
+drop function if exists get_user;
+
+create or replace function get_user(uid uuid)
+returns table(
+    id uuid,
+    created_at timestamptz,
+    updated_at timestamptz,
+    deleted_at timestamptz,
+    username text,
+    has_set_password boolean,
+    is_ban boolean,
+    banned_until timestamptz,
+    role public.user_role
+)
+security definer
+as $$
+begin
+	return query
+    select u.*, ur."role"
+    from users u
+        join user_roles ur on u.id = ur.user_id
+    where user_id = uid;
+end;
+$$ language plpgsql;
+
+-- select * from get_user('uid');

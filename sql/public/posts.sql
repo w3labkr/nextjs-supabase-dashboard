@@ -13,7 +13,7 @@ create table posts (
   created_at timestamptz default now(),
   updated_at timestamptz default now(),
   deleted_at timestamptz,
-  user_id uuid references users(id) on delete set null,
+  user_id uuid references users(id),
   status public.post_status default 'draft'::post_status,
   password varchar(255),
   title text,

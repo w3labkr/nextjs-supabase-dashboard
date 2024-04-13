@@ -13,10 +13,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Paginate } from '@/components/paginate'
+import { Paging } from './paginate'
 
 import { User } from '@supabase/supabase-js'
-import { useUsers } from '@/hooks/sync/use-users'
+import { useUsers } from '@/hooks/api/use-users'
 
 export function UserList() {
   const [page, setPage] = React.useState<number>(1)
@@ -43,7 +43,7 @@ export function UserList() {
           {users?.map((item) => <ListItem key={item?.id} item={item} />)}
         </TableBody>
       </Table>
-      <Paginate
+      <Paging
         page={page}
         perPage={perPage}
         setPage={setPage}

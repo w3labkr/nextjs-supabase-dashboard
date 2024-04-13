@@ -30,7 +30,7 @@ import {
 import { SubmitButton } from '@/components/submit-button'
 
 import { useAuth } from '@/hooks/use-auth'
-import { useEmails } from '@/hooks/sync/use-emails'
+import { useEmails } from '@/hooks/api/use-emails'
 
 const FormSchema = z.object({
   email: z.string().max(255),
@@ -57,15 +57,14 @@ export function PrimaryEmailAddress() {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
-    if (formValues?.email === user?.email) {
-      toast(t('FormMessage.nothing_has_changed'))
-      return false
-    }
-
     try {
       setIsSubmitting(true)
 
       if (!user?.id) throw new Error('Require is not defined.')
+      if (!user?.email) throw new Error('Require is not defined.')
+      if (formValues?.email === user?.email) {
+        throw new Error(t('FormMessage.nothing_has_changed'))
+      }
 
       const result = await fetcher(`/api/v1/email/${user?.id}`, {
         method: 'POST',

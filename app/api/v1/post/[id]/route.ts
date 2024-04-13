@@ -1,8 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { ApiError } from '@/lib/utils'
-import { authorize } from '@/hooks/async/user'
-import { Tables } from '@/types/supabase'
+import { authorize } from '@/hooks/async/auth'
 
 export async function GET(
   request: NextRequest,
@@ -13,6 +12,7 @@ export async function GET(
     .from('posts')
     .select('*, user:users(*)')
     .eq('id', id)
+    .single()
 
   if (result?.error) {
     return NextResponse.json(
@@ -44,7 +44,7 @@ export async function POST(
     .update({ ...body })
     .eq('id', id)
     .eq('user_id', user_id)
-    .select('*, users(*)')
+    .select('*, user:users(*)')
     .single()
 
   if (result?.error) {
@@ -61,8 +61,8 @@ export async function DELETE(
   request: NextRequest,
   { params: { id } }: { params: { id: string } }
 ) {
-  const body = await request.json()
-  const { user } = await authorize(body?.user_id)
+  const { user_id } = await request.json()
+  const { user } = await authorize(user_id)
 
   if (!user) {
     return NextResponse.json(
@@ -76,8 +76,7 @@ export async function DELETE(
     .from('posts')
     .delete()
     .eq('id', id)
-    .select('*, users(*)')
-    .single()
+    .eq('user_id', user_id)
 
   if (result?.error) {
     return NextResponse.json(
@@ -86,5 +85,5 @@ export async function DELETE(
     )
   }
 
-  return NextResponse.json({ data: result?.data, error: null })
+  return NextResponse.json({ data: null, error: null })
 }

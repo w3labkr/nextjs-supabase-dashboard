@@ -1,4 +1,7 @@
+'use client'
+
 import * as React from 'react'
+import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
@@ -6,7 +9,9 @@ import { buttonVariants } from '@/components/ui/button'
 
 import { Post } from '@/types/database'
 
-export function EditPost({ post }: { post: Post }) {
+export function EditPostButton({ post }: { post: Post }) {
+  const { t } = useTranslation()
+
   return (
     <Link
       href={`/dashboard/posts/${post?.id}`}
@@ -15,7 +20,7 @@ export function EditPost({ post }: { post: Post }) {
         'h-auto p-0 text-xs font-normal text-blue-700 hover:underline'
       )}
     >
-      Edit
+      {t('PostList.EditPostButton')}
     </Link>
   )
 }

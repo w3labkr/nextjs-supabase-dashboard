@@ -24,7 +24,7 @@ import { SubmitButton } from '@/components/submit-button'
 import { useSWRConfig } from 'swr'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
-import { useUser } from '@/hooks/sync/use-user'
+import { useUser } from '@/hooks/api/use-user'
 
 const FormSchema = z
   .object({
@@ -72,11 +72,14 @@ export function ChangePasswordForm() {
     try {
       setIsSubmitting(true)
 
+      if (!user?.id) throw new Error('Require is not defined.')
+
       const supabase = createClient()
 
       if (hasSetPassword) {
         if (!formValues?.oldPassword) throw new Error('Require is not defined.')
         const verified = await supabase.rpc('verify_user_password', {
+          uid: user?.id,
           password: formValues?.oldPassword,
         })
         if (verified?.error) throw new Error(verified?.error?.message)
