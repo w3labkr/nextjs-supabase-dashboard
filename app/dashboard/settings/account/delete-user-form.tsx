@@ -130,14 +130,14 @@ export function DeleteUserForm() {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline" className="text-destructive">
-          {t('DeleteAccountDialog.trigger')}
+          {t('DeleteUserDialog.trigger')}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[480px]">
         <DialogHeader>
-          <DialogTitle>{t('DeleteAccountDialog.title')}</DialogTitle>
+          <DialogTitle>{t('DeleteUserDialog.title')}</DialogTitle>
           <DialogDescription className="text-destructive">
-            {t('DeleteAccountDialog.description')}
+            {t('DeleteUserDialog.description')}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

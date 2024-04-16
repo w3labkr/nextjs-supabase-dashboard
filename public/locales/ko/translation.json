@@ -44,28 +44,34 @@
     "description": "비밀번호는 6자 이상이어야 하며 이전 비밀번호와 달라야 합니다."
   },
 
-  "AppearancePage": {
-    "title1": "테마",
-    "description1": "대시보드의 테마를 선택합니다.",
-    "title2": "언어",
-    "description2": "대시보드의 언어를 선택합니다."
-  },
-
-  "AccountPage": {
-    "title1": "사용자 이름",
-    "description1": "",
-    "title2": "계정 삭제",
-    "description2": "계정 삭제는 되돌릴 수 없습니다."
-  },
-
   "EmailsPage": {
     "title": "이메일",
     "description": ""
   },
 
-  "DeleteAccountDialog": {
+  "ChangeTheme": {
+    "title": "테마",
+    "description": "대시보드의 테마를 선택합니다."
+  },
+
+  "ChangeLanguage": {
+    "title": "언어",
+    "description": "대시보드의 언어를 선택합니다."
+  },
+
+  "ChangeUsername": {
+    "title": "사용자 이름",
+    "description": ""
+  },
+
+  "DeleteUser": {
     "title": "계정 삭제",
-    "description": "계정 삭제는 되돌릴 수 없습니다.",
+    "description": "계정을 삭제하면 게시물 등 다른 관련 정보가 영구적으로 삭제되며 다시 복구할 수 없습니다."
+  },
+
+  "DeleteUserDialog": {
+    "title": "계정 삭제",
+    "description": "계정을 삭제하면 게시물 등 다른 관련 정보가 영구적으로 삭제되며 다시 복구할 수 없습니다.",
     "trigger": "계정 삭제"
   },
 

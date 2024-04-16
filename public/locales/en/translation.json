@@ -44,28 +44,34 @@
     "description": "Your password must be at least 6 characters long and must be different from your previous password."
   },
 
-  "AppearancePage": {
-    "title1": "Theme",
-    "description1": "Select the theme for the dashboard.",
-    "title2": "Language",
-    "description2": "Select the language for the dashboard."
-  },
-
-  "AccountPage": {
-    "title1": "Username",
-    "description1": "",
-    "title2": "Delete Account",
-    "description2": "Deleting your account cannot be reversed."
-  },
-
   "EmailsPage": {
     "title": "Emails",
     "description": ""
   },
 
-  "DeleteAccountDialog": {
+  "ChangeTheme": {
+    "title": "Theme",
+    "description": "Select the theme for the dashboard."
+  },
+
+  "ChangeLanguage": {
+    "title": "Language",
+    "description": "Select the language for the dashboard."
+  },
+
+  "ChangeUsername": {
+    "title": "Username",
+    "description": ""
+  },
+
+  "DeleteUser": {
     "title": "Delete Account",
-    "description": "Deleting your account cannot be reversed.",
+    "description": "If you delete your account, your posts and other related information will be permanently deleted and cannot be recovered."
+  },
+
+  "DeleteUserDialog": {
+    "title": "Delete Account",
+    "description": "If you delete your account, your posts and other related information will be permanently deleted and cannot be recovered.",
     "trigger": "Delete your account"
   },
 
