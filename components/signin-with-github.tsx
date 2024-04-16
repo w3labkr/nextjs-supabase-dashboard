@@ -29,7 +29,7 @@ export function SignInWithGithub({
           // Don't forget to change the URL in supabase's email template.
           redirectTo:
             process.env.NEXT_PUBLIC_SITE_URL +
-            '/api/auth/v1/callback?next=/dashboard/dashboard',
+            '/api/auth/callback?next=/dashboard',
         },
       })
 

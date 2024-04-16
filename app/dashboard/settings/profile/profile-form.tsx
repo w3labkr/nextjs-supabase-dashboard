@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { cn, fetcher } from '@/lib/utils'
+import { fetcher } from '@/lib/utils'
 import { toast } from 'sonner'
 import {
   Form,
@@ -33,11 +33,10 @@ import { SubmitButton } from '@/components/submit-button'
 
 import useSWRMutation from 'swr/mutation'
 import { useAuth } from '@/hooks/use-auth'
-import { useProfile } from '@/hooks/api/use-profile'
-import { useEmails } from '@/hooks/api/use-emails'
+import { useProfile, useEmails } from '@/hooks/api'
 
 const FormSchema = z.object({
-  name: z.string().nonempty().min(2),
+  full_name: z.string().nonempty().min(2),
   email: z.string().max(255),
   bio: z.string().max(160),
 })
@@ -66,7 +65,7 @@ export function ProfileForm() {
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     values: {
-      name: profile?.name ?? '',
+      full_name: profile?.full_name ?? '',
       email: profile?.email ?? 'unassigned',
       bio: profile?.bio ?? '',
     },
@@ -76,7 +75,7 @@ export function ProfileForm() {
 
   const onSubmit = async (formValues: FormValues) => {
     if (
-      formValues?.name === profile?.name &&
+      formValues?.full_name === profile?.full_name &&
       formValues?.email === profile?.email &&
       formValues?.bio === profile?.bio
     ) {
@@ -112,12 +111,12 @@ export function ProfileForm() {
       >
         <FormField
           control={form.control}
-          name="name"
+          name="full_name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('FormLabel.name')}</FormLabel>
+              <FormLabel>{t('FormLabel.full_name')}</FormLabel>
               <FormControl className="w-[180px]">
-                <Input placeholder={t('FormLabel.your_name')} {...field} />
+                <Input placeholder={t('FormLabel.your_full_name')} {...field} />
               </FormControl>
               <FormDescription>
                 {t(

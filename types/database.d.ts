@@ -13,6 +13,7 @@ export type Profile = Tables<'profiles'>
 
 export type Post = Tables<'posts'> & {
   user: Tables<'users'>
+  profile: Tables<'profiles'>
 }
 
 export type CountPosts = {

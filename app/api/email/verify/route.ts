@@ -31,7 +31,6 @@ export async function GET(request: NextRequest) {
     .eq('user_id', payload?.user_id)
     .eq('email', payload?.email)
     .select()
-    .limit(1)
     .single()
 
   if (result?.error) {

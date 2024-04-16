@@ -13,11 +13,10 @@ create table users (
   created_at timestamptz default now(),
   updated_at timestamptz default now(),
   deleted_at timestamptz,
-  username text not null,
+  username_changed_at timestamptz,
   has_set_password boolean default false,
   is_ban boolean default false,
-  banned_until timestamptz,
-  unique (username)
+  banned_until timestamptz
 );
 comment on column users.has_set_password is 'handle_has_set_password';
 

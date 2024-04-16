@@ -53,12 +53,13 @@ export function ChangeLanguageForm() {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
+    if (formValues?.language === resolvedLanguage) {
+      toast(t('FormMessage.nothing_has_changed'))
+      return false
+    }
+
     try {
       setIsSubmitting(true)
-
-      if (formValues?.language === resolvedLanguage) {
-        throw new Error(t('FormMessage.nothing_has_changed'))
-      }
 
       i18n.changeLanguage(formValues?.language)
       document.documentElement.lang = formValues?.language

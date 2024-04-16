@@ -17,7 +17,7 @@ import { LucideIcon } from '@/lib/lucide-icon'
 import { buttonVariants } from '@/components/ui/button'
 
 import useSWRMutation from 'swr/mutation'
-import { usePost } from '@/hooks/api/use-post'
+import { usePost } from '@/hooks/api'
 
 import './editor.css'
 

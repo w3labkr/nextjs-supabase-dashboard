@@ -5,7 +5,7 @@ drop trigger if exists on_auth_user_password_updated on auth.users;
 drop function if exists handle_has_set_password;
 
 create or replace function handle_has_set_password()
-returns trigger language plpgsql
+returns trigger
 security definer set search_path = public
 as $$
 declare
@@ -15,7 +15,7 @@ begin
   update users set has_set_password = new_has_set_password where id = new.id;
   return new;
 end;
-$$;
+$$ language plpgsql;
 
 create trigger on_auth_user_password_updated
   after update of encrypted_password on auth.users

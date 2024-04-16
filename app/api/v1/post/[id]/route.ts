@@ -10,8 +10,9 @@ export async function GET(
   const supabase = createClient()
   const result = await supabase
     .from('posts')
-    .select('*, user:users(*)')
+    .select('*, user:users(*), profile:profiles(*)')
     .eq('id', id)
+    .limit(1)
     .single()
 
   if (result?.error) {
@@ -44,7 +45,7 @@ export async function POST(
     .update({ ...body })
     .eq('id', id)
     .eq('user_id', user_id)
-    .select('*, user:users(*)')
+    .select('*, user:users(*), profile:profiles(*)')
     .single()
 
   if (result?.error) {

@@ -17,7 +17,7 @@ import {
 import { SignOutButton } from '@/components/signout-button'
 
 import { useAuth } from '@/hooks/use-auth'
-import { useProfile } from '@/hooks/api/use-profile'
+import { useProfile } from '@/hooks/api'
 
 export function AccountMenu() {
   const { t } = useTranslation()
@@ -34,22 +34,25 @@ export function AccountMenu() {
           variant="ghost"
         >
           <Avatar className="h-8 w-8">
-            <AvatarImage src="" alt="Avatar" />
-            <AvatarFallback>A</AvatarFallback>
+            <AvatarImage
+              src={profile?.avatar_url ?? undefined}
+              alt={`@${profile?.username}`}
+            />
+            <AvatarFallback>{profile?.username?.charAt(0)}</AvatarFallback>
           </Avatar>
           <span className="sr-only">Toggle account menu</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel className="grid font-normal">
-          <span>{profile?.name}</span>
+          <span>{profile?.full_name}</span>
           <span className="text-xs text-muted-foreground">
             {profile?.email}
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/dashboard/settings/profile" className="cursor-pointer">
+          <Link href={`/${profile?.username}`} className="cursor-pointer">
             {t('AccountMenu.profile')}
           </Link>
         </DropdownMenuItem>

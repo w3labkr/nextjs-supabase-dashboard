@@ -68,7 +68,7 @@ export function SignInForm() {
       toast.success(t('FormMessage.you_have_successfully_logged_in'))
 
       router.refresh()
-      router.replace('/dashboard/dashboard')
+      router.replace('/dashboard')
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Invalid login credentials')) {

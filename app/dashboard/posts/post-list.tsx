@@ -20,10 +20,9 @@ import { Button } from '@/components/ui/button'
 import { PagingProvider, usePaging } from '@/components/paging/paging-provider'
 import { Paging } from '@/components/paging'
 
-import { Post } from '@/types/database'
+import { Post, CountPosts } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
-import { usePosts } from '@/hooks/api/use-posts'
-import { useCountPosts } from '@/hooks/api/use-count-posts'
+import { usePosts, useCountPosts } from '@/hooks/api'
 
 import { EditPostButton } from './edit-post-button'
 import { ViewPostButton } from './view-post-button'
@@ -42,32 +41,23 @@ export function PostList() {
 }
 
 function Header() {
-  const { t } = useTranslation()
-
-  const { status, setStatus } = usePaging()
   const { user } = useAuth()
-  const { data } = useCountPosts(user?.id ?? null)
+  const { data: counting } = useCountPosts(user?.id ?? null)
 
   return (
     <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-      {data?.map((obj) => {
-        return obj.count > 0 ? (
-          <React.Fragment key={obj.status}>
-            {obj.status !== 'all' && <span>|</span>}
-            <Button
-              variant="link"
-              className={cn(
-                'h-auto p-0',
-                status === obj.status
-                  ? 'text-foreground'
-                  : 'text-muted-foreground'
-              )}
-              onClick={() => setStatus(obj.status)}
-            >
-              {t(`PostStatus.${obj.status}`)}({obj.count})
-            </Button>
+      {counting?.map((data: CountPosts) => {
+        return (
+          <React.Fragment key={data?.status}>
+            {data?.status === 'all' ? <StatusLink data={data} /> : null}
+            {data?.status !== 'all' && data?.count > 0 ? (
+              <>
+                <span>|</span>
+                <StatusLink data={data} />
+              </>
+            ) : null}
           </React.Fragment>
-        ) : null
+        )
       })}
     </div>
   )
@@ -128,7 +118,6 @@ function Body() {
 }
 
 function ListItem({ post }: { post: Post }) {
-  const { t } = useTranslation()
   const { status } = usePaging()
 
   return (
@@ -157,7 +146,7 @@ function ListItem({ post }: { post: Post }) {
           <ViewPostButton post={post} />
         </div>
       </TableCell>
-      <TableCell>{post?.user?.username}</TableCell>
+      <TableCell>{post?.profile?.full_name}</TableCell>
       <TableCell>
         {dayjs(post?.updated_at).format('YYYY-MM-DD HH:mm')}
       </TableCell>
@@ -186,5 +175,23 @@ function LoadingItem() {
         {t('TableCell.is_loading')}
       </TableCell>
     </TableRow>
+  )
+}
+
+function StatusLink({ data }: { data: CountPosts }) {
+  const { t } = useTranslation()
+  const { status, setStatus } = usePaging()
+
+  return (
+    <Button
+      variant="link"
+      className={cn(
+        'h-auto p-0',
+        status === data?.status ? 'text-foreground' : 'text-muted-foreground'
+      )}
+      onClick={() => setStatus(data?.status)}
+    >
+      {t(`PostStatus.${data?.status}`)}({data?.count})
+    </Button>
   )
 }

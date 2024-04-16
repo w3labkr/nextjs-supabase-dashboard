@@ -1,6 +1,7 @@
 -- SQL Editor > New query
 
 drop table if exists posts;
+drop function if exists count_posts;
 drop type if exists public.post_status;
 
 create type public.post_status as enum ('publish', 'future', 'draft', 'pending', 'private', 'trash');
@@ -13,14 +14,17 @@ create table posts (
   created_at timestamptz default now(),
   updated_at timestamptz default now(),
   deleted_at timestamptz,
-  user_id uuid references users(id),
+  user_id uuid references users(id) on delete set null,
+  profile_id uuid references profiles(id) on delete set null,
   status public.post_status default 'draft'::post_status,
   password varchar(255),
   title text,
   excerpt text,
   content jsonb,
   thumbnail text,
-  view integer
+  view integer,
+  is_ban boolean default false,
+  banned_until timestamptz
 );
 comment on column posts.status is 'publish, future, draft, pending, private, trash';
 

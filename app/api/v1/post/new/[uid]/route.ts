@@ -20,8 +20,8 @@ export async function PUT(
   const supabase = createClient()
   const result = await supabase
     .from('posts')
-    .insert({ ...body, user_id: uid })
-    .select('*, user:users(*)')
+    .insert({ ...body, user_id: uid, profile_id: uid })
+    .select('*, user:users(*), profile:profiles(*)')
     .single()
 
   if (result?.error) {

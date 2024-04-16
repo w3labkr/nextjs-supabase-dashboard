@@ -33,3 +33,17 @@ export async function getUser() {
 
   return { user, role }
 }
+
+export async function getProfile(username: string) {
+  const supabase = createClient()
+  const result = await supabase
+    .from('profiles')
+    .select()
+    .eq('username', username)
+    .limit(1)
+    .single()
+
+  if (result?.error) return { profile: null }
+
+  return { profile: result?.data }
+}

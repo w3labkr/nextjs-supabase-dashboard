@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { cn, fetcher } from '@/lib/utils'
+import { fetcher } from '@/lib/utils'
 import { toast } from 'sonner'
 import {
   Form,
@@ -23,7 +23,7 @@ import { SubmitButton } from '@/components/submit-button'
 
 import useSWRMutation from 'swr/mutation'
 import { useAuth } from '@/hooks/use-auth'
-import { useUser } from '@/hooks/api/use-user'
+import { useProfile } from '@/hooks/api'
 
 const FormSchema = z.object({
   username: z.string().nonempty().min(2).max(30),
@@ -42,9 +42,9 @@ export function ChangeUsernameForm() {
   const { t } = useTranslation()
 
   const { session } = useAuth()
-  const { user } = useUser(session?.user?.id ?? null)
+  const { profile } = useProfile(session?.user?.id ?? null)
   const { trigger } = useSWRMutation(
-    user?.id ? `/api/v1/user/${user?.id}` : null,
+    profile?.id ? `/api/v1/profile/${profile?.id}` : null,
     sendRequest
   )
 
@@ -52,20 +52,22 @@ export function ChangeUsernameForm() {
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     values: {
-      username: user?.user?.username ?? '',
+      username: profile?.username ?? '',
     },
   })
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
+    if (formValues?.username === profile?.username) {
+      toast(t('FormMessage.nothing_has_changed'))
+      return false
+    }
+
     try {
       setIsSubmitting(true)
 
-      if (!user?.user?.username) throw new Error('Require is not defined.')
-      if (formValues?.username === user?.user?.username) {
-        throw new Error(t('FormMessage.nothing_has_changed'))
-      }
+      if (!profile?.username) throw new Error('Require is not defined.')
 
       const result = await trigger(formValues)
       if (result?.error) throw new Error(result?.error?.message)
@@ -77,6 +79,11 @@ export function ChangeUsernameForm() {
         form.setError('username', {
           message: t('FormMessage.username_already_registered'),
         })
+      } else if (err.startsWith('You can change it after')) {
+        const count = err?.replace(/[^0-9]/g, '') ?? '0'
+        toast.error(
+          t('FormMessage.you_can_change_it_in_a_few_days', { count: +count })
+        )
       } else {
         toast.error(err)
       }
@@ -102,7 +109,11 @@ export function ChangeUsernameForm() {
               <FormControl className="max-w-60">
                 <Input placeholder="Username" {...field} />
               </FormControl>
-              {/* <FormDescription></FormDescription> */}
+              <FormDescription>
+                {t('FormMessage.you_can_change_it_only_once_every_few_days', {
+                  count: 30,
+                })}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

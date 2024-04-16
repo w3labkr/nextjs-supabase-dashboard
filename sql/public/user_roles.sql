@@ -3,6 +3,7 @@
 
 drop table if exists role_permissions;
 drop table if exists user_roles;
+drop function if exists get_user;
 drop type if exists public.user_permission;
 drop type if exists public.user_role;
 

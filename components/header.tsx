@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from 'react'
 
 import { LucideIcon } from '@/lib/lucide-icon'
@@ -9,10 +11,10 @@ import { Navigation } from '@/components/navigation'
 import { MobileNavigation } from '@/components/mobile-navigation'
 import { LinkButton } from '@/components/link-button'
 
-import { getUser } from '@/hooks/async/auth'
+import { useAuth } from '@/hooks/use-auth'
 
-export async function Header() {
-  const { user } = await getUser()
+export function Header() {
+  const { user } = useAuth()
 
   return (
     <Sheet>
@@ -42,7 +44,7 @@ function SignedInButton() {
   return (
     <LinkButton
       variant="outline"
-      href="/dashboard/dashboard"
+      href="/dashboard"
       text="LinkButton.dashboard"
       translate="yes"
     />

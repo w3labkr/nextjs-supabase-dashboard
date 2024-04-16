@@ -9,7 +9,7 @@ export const dashboardConfig: DashboardConfig = {
       items: [
         {
           id: 1,
-          href: '/dashboard/dashboard',
+          href: '/dashboard',
           iconName: 'LayoutDashboard',
           title: 'dashboard',
           badge: 1,

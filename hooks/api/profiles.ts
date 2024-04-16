@@ -3,8 +3,12 @@
 import useSWR from 'swr'
 import { ProfileAPI } from '@/types/api'
 
-export function useProfile(uid: string | null) {
-  const url = uid ? `/api/v1/profile/${uid}` : null
+export function useProfile(id?: string | null, params?: { username?: string }) {
+  let url: string | null = null
+
+  if (id) url = `/api/v1/profile/${id}`
+  if (params?.username) url = `/api/profile/${params?.username}`
+
   const {
     data: response,
     error,

@@ -56,9 +56,9 @@ export function AddPostButton({ className, variant, ...props }: ButtonProps) {
       {...props}
     >
       {isSubmitting ? (
-        <LucideIcon name="LoaderCircle" className="mr-2 h-4 w-4 animate-spin" />
+        <LucideIcon name="LoaderCircle" className="mr-2 size-4 animate-spin" />
       ) : (
-        <LucideIcon name="Plus" className="mr-2 h-4 w-4" />
+        <LucideIcon name="Plus" className="mr-2 size-4" />
       )}
       {t('AddPostButton.label')}
     </button>

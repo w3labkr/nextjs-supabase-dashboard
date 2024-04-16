@@ -54,7 +54,7 @@ export function ForgotPasswordForm() {
           // Don't forget to change the URL in supabase's email template.
           redirectTo:
             process.env.NEXT_PUBLIC_SITE_URL +
-            '/api/auth/v1/confirm?next=/auth/reset-password',
+            '/api/auth/confirm?next=/auth/reset-password',
         }
       )
       if (error) throw new Error(error?.message)

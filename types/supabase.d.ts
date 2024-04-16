@@ -90,12 +90,15 @@ export type Database = {
       }
       posts: {
         Row: {
+          banned_until: string | null
           content: Json | null
           created_at: string | null
           deleted_at: string | null
           excerpt: string | null
           id: number
+          is_ban: boolean | null
           password: string | null
+          profile_id: string | null
           status: Database['public']['Enums']['post_status'] | null
           thumbnail: string | null
           title: string | null
@@ -104,12 +107,15 @@ export type Database = {
           view: number | null
         }
         Insert: {
+          banned_until?: string | null
           content?: Json | null
           created_at?: string | null
           deleted_at?: string | null
           excerpt?: string | null
           id?: number
+          is_ban?: boolean | null
           password?: string | null
+          profile_id?: string | null
           status?: Database['public']['Enums']['post_status'] | null
           thumbnail?: string | null
           title?: string | null
@@ -118,12 +124,15 @@ export type Database = {
           view?: number | null
         }
         Update: {
+          banned_until?: string | null
           content?: Json | null
           created_at?: string | null
           deleted_at?: string | null
           excerpt?: string | null
           id?: number
+          is_ban?: boolean | null
           password?: string | null
+          profile_id?: string | null
           status?: Database['public']['Enums']['post_status'] | null
           thumbnail?: string | null
           title?: string | null
@@ -132,6 +141,13 @@ export type Database = {
           view?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: 'posts_profile_id_fkey'
+            columns: ['profile_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
           {
             foreignKeyName: 'posts_user_id_fkey'
             columns: ['user_id']
@@ -143,40 +159,52 @@ export type Database = {
       }
       profiles: {
         Row: {
+          age: number | null
           avatar_url: string | null
           bio: string | null
           created_at: string | null
           email: string | null
-          id: number
-          name: string | null
+          first_name: string | null
+          full_name: string | null
+          id: string
+          last_name: string | null
           updated_at: string | null
-          user_id: string
+          username: string
+          website: string | null
         }
         Insert: {
+          age?: number | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string | null
           email?: string | null
-          id?: number
-          name?: string | null
+          first_name?: string | null
+          full_name?: string | null
+          id: string
+          last_name?: string | null
           updated_at?: string | null
-          user_id: string
+          username: string
+          website?: string | null
         }
         Update: {
+          age?: number | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string | null
           email?: string | null
-          id?: number
-          name?: string | null
+          first_name?: string | null
+          full_name?: string | null
+          id?: string
+          last_name?: string | null
           updated_at?: string | null
-          user_id?: string
+          username?: string
+          website?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: 'profiles_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
+            foreignKeyName: 'profiles_id_fkey'
+            columns: ['id']
+            isOneToOne: true
             referencedRelation: 'users'
             referencedColumns: ['id']
           },
@@ -247,7 +275,7 @@ export type Database = {
           id: string
           is_ban: boolean | null
           updated_at: string | null
-          username: string
+          username_changed_at: string | null
         }
         Insert: {
           banned_until?: string | null
@@ -257,7 +285,7 @@ export type Database = {
           id: string
           is_ban?: boolean | null
           updated_at?: string | null
-          username: string
+          username_changed_at?: string | null
         }
         Update: {
           banned_until?: string | null
@@ -267,7 +295,7 @@ export type Database = {
           id?: string
           is_ban?: boolean | null
           updated_at?: string | null
-          username?: string
+          username_changed_at?: string | null
         }
         Relationships: [
           {
@@ -308,7 +336,7 @@ export type Database = {
           created_at: string
           updated_at: string
           deleted_at: string
-          username: string
+          username_changed_at: string
           has_set_password: boolean
           is_ban: boolean
           banned_until: string

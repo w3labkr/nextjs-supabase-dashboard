@@ -3,15 +3,17 @@ import { createClient } from '@/lib/supabase/server'
 import { ApiError } from '@/lib/utils'
 import { authorize } from '@/hooks/async/auth'
 
+import dayjs from 'dayjs'
+
 export async function GET(
   request: NextRequest,
-  { params: { uid } }: { params: { uid: string } }
+  { params: { id } }: { params: { id: string } }
 ) {
   const supabase = createClient()
   const result = await supabase
     .from('profiles')
     .select()
-    .eq('user_id', uid)
+    .eq('id', id)
     .limit(1)
     .single()
 
@@ -27,9 +29,9 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params: { uid } }: { params: { uid: string } }
+  { params: { id } }: { params: { id: string } }
 ) {
-  const { user } = await authorize(uid)
+  const { user } = await authorize(id)
 
   if (!user) {
     return NextResponse.json(
@@ -39,11 +41,26 @@ export async function POST(
   }
 
   const body = await request.json()
+  const username_changed_at = user?.user?.username_changed_at
+
+  if (body?.username && username_changed_at) {
+    const d1 = dayjs(username_changed_at)
+    const d2 = d1.add(1, 'month')
+    const diff = d2.diff(d1, 'days')
+    if (d1 < d2) {
+      const error = `You can change it after ${diff} days.`
+      return NextResponse.json(
+        { data: null, error: new ApiError(403, error) },
+        { status: 403 }
+      )
+    }
+  }
+
   const supabase = createClient()
   const result = await supabase
     .from('profiles')
     .update(body)
-    .eq('user_id', uid)
+    .eq('id', id)
     .select()
     .single()
 

@@ -9,7 +9,7 @@ returns table(
     created_at timestamptz,
     updated_at timestamptz,
     deleted_at timestamptz,
-    username text,
+    username_changed_at timestamptz,
     has_set_password boolean,
     is_ban boolean,
     banned_until timestamptz,
@@ -22,7 +22,7 @@ begin
     select u.*, ur."role"
     from users u
         join user_roles ur on u.id = ur.user_id
-    where user_id = uid;
+    where u.id = uid;
 end;
 $$ language plpgsql;
 

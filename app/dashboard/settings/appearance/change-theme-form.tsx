@@ -40,13 +40,13 @@ export function ChangeThemeForm() {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
+    if (formValues?.theme === theme) {
+      toast(t('FormMessage.nothing_has_changed'))
+      return false
+    }
+
     try {
       setIsSubmitting(true)
-
-      if (formValues?.theme === theme) {
-        throw new Error(t('FormMessage.nothing_has_changed'))
-      }
-
       setTheme(formValues?.theme)
 
       toast.success(t('FormMessage.changed_successfully'))

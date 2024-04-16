@@ -44,7 +44,7 @@ export async function GET(
 
   const listQuery = supabase
     .from('posts')
-    .select('*, user:users!inner(*)')
+    .select('*, user:users(*), profile:profiles(*)')
     .eq('user_id', uid)
 
   if (status === 'all') {

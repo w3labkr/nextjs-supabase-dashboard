@@ -93,6 +93,12 @@
   "FormLabel": {
     "name": "Name",
     "your_name": "Your name",
+    "full_name": "Full name",
+    "your_full_name": "Your full name",
+    "first_name": "First name",
+    "your_first_name": "Your first name",
+    "last_name": "Last name",
+    "your_last_name": "Your last name",
     "username": "Username",
     "your_username": "Your username",
     "password": "Password",
@@ -129,6 +135,8 @@
     "user_already_registered": "User already registered.",
     "user_data_is_invalid": "User data is invalid.",
     "username_already_registered": "Username already registered.",
+    "you_can_change_it_in_a_few_days": "You can change it after {{count}} days.",
+    "you_can_change_it_only_once_every_few_days": "You can change it only once every {{count}} days.",
     "you_have_been_logged_out_successfully": "You have been logged out successfully.",
     "you_have_successfully_logged_in": "You have successfully logged in.",
     "you_have_successfully_registered_as_a_member": "You have successfully registered as a member."

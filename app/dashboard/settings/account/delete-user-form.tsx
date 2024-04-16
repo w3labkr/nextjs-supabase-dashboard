@@ -34,7 +34,7 @@ import { SubmitButton } from '@/components/submit-button'
 
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
-import { useUser } from '@/hooks/api/use-user'
+import { useUser } from '@/hooks/api'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),

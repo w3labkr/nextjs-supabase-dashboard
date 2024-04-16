@@ -23,7 +23,7 @@ import { SubmitButton } from '@/components/submit-button'
 
 import useSWRMutation from 'swr/mutation'
 import { useAuth } from '@/hooks/use-auth'
-import { useEmails } from '@/hooks/api/use-emails'
+import { useEmails } from '@/hooks/api'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
