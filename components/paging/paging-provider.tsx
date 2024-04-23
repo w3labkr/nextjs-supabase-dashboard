@@ -1,16 +1,13 @@
 'use client'
 
 import * as React from 'react'
+import { useSearchParams } from 'next/navigation'
 
 interface PagingContextProps {
   page: number
   perPage: number
   pageSize: number
   status: string
-  setPage: React.Dispatch<React.SetStateAction<number>>
-  setPerPage: React.Dispatch<React.SetStateAction<number>>
-  setPageSize: React.Dispatch<React.SetStateAction<number>>
-  setStatus: React.Dispatch<React.SetStateAction<string>>
 }
 
 const PagingContext = React.createContext<PagingContextProps | undefined>(
@@ -18,10 +15,12 @@ const PagingContext = React.createContext<PagingContextProps | undefined>(
 )
 
 export function PagingProvider({ children }: { children: React.ReactNode }) {
-  const [page, setPage] = React.useState<number>(1)
-  const [perPage, setPerPage] = React.useState<number>(50)
-  const [pageSize, setPageSize] = React.useState<number>(10)
-  const [status, setStatus] = React.useState<string>('all')
+  const searchParams = useSearchParams()
+
+  const page = +(searchParams.get('page') ?? '1')
+  const perPage = +(searchParams.get('perPage') ?? '50')
+  const pageSize = +(searchParams.get('pageSize') ?? '10')
+  const status = searchParams.get('status') ?? 'all'
 
   const value = React.useMemo(() => {
     return {
@@ -29,21 +28,8 @@ export function PagingProvider({ children }: { children: React.ReactNode }) {
       perPage,
       pageSize,
       status,
-      setPage,
-      setPerPage,
-      setPageSize,
-      setStatus,
     }
-  }, [
-    page,
-    perPage,
-    pageSize,
-    status,
-    setPage,
-    setPerPage,
-    setPageSize,
-    setStatus,
-  ])
+  }, [page, perPage, pageSize, status])
 
   return (
     <PagingContext.Provider value={value}>{children}</PagingContext.Provider>

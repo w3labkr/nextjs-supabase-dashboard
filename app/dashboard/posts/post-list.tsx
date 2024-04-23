@@ -1,10 +1,12 @@
 'use client'
 
 import * as React from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 
-import { cn } from '@/lib/utils'
+import { cn, qs } from '@/lib/utils'
 import {
   Table,
   TableBody,
@@ -16,7 +18,6 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Button } from '@/components/ui/button'
 import { PagingProvider, usePaging } from '@/components/paging/paging-provider'
 import { Paging } from '@/components/paging'
 
@@ -72,19 +73,19 @@ function HeadLink({
   count: number
 }) {
   const { t } = useTranslation()
-  const { status: pagingStatus, setStatus } = usePaging()
+  const { status: qsStatus } = usePaging()
+  const pathname = usePathname()
 
   return (
-    <Button
-      variant="link"
+    <Link
+      href={pathname + '?' + qs({ status, page: '1' })}
       className={cn(
         'h-auto p-0',
-        pagingStatus === status ? 'text-foreground' : 'text-muted-foreground'
+        qsStatus === status ? 'text-foreground' : 'text-muted-foreground'
       )}
-      onClick={() => setStatus(status)}
     >
       {t(`PostStatus.${status}`)}({count})
-    </Button>
+    </Link>
   )
 }
 

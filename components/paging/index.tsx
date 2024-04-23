@@ -1,7 +1,9 @@
 'use client'
 
 import * as React from 'react'
+import { usePathname } from 'next/navigation'
 
+import { qs } from '@/lib/utils'
 import {
   Pagination,
   PaginationContent,
@@ -13,7 +15,7 @@ import {
 } from '@/components/ui-custom/pagination'
 import { usePaging } from '@/components/paging/paging-provider'
 
-interface NewPaging {
+interface Calculate {
   page: number
   perPage: number
   pageSize: number
@@ -31,32 +33,31 @@ interface NewPaging {
 }
 
 export function Paging({ total = 0 }: { total: number }) {
-  const paging = useNewPaging(total)
+  const calculate = useCalculate(total)
 
   return (
     <Pagination>
       <PaginationContent>
-        <FirstItem paging={paging} />
-        <PreviousItem paging={paging} />
-        <PagingItem paging={paging} />
-        <NextItem paging={paging} />
-        <LastItem paging={paging} />
+        <FirstItem calculate={calculate} />
+        <PreviousItem calculate={calculate} />
+        <PagingItem calculate={calculate} />
+        <NextItem calculate={calculate} />
+        <LastItem calculate={calculate} />
       </PaginationContent>
     </Pagination>
   )
 }
 
-function PagingItem({ paging }: { paging: NewPaging }) {
-  const { setPage } = usePaging()
-  const { pageSize, startPage, page } = paging
+function PagingItem({ calculate }: { calculate: Calculate }) {
+  const { pageSize, startPage, page } = calculate
+  const pathname = usePathname()
 
   return Array(pageSize)
     .fill(startPage)
     .map((_, i) => (
       <PaginationItem key={i}>
         <PaginationLink
-          href="#"
-          onClick={() => setPage(startPage + i)}
+          href={pathname + '?' + qs({ page: startPage + i })}
           isActive={page === startPage + i}
         >
           {startPage + i}
@@ -65,91 +66,87 @@ function PagingItem({ paging }: { paging: NewPaging }) {
     ))
 }
 
-function FirstItem({ paging }: { paging: NewPaging }) {
-  const { setPage } = usePaging()
-  const { currentSet, firstPage } = paging
+function FirstItem({ calculate }: { calculate: Calculate }) {
+  const { currentSet, firstPage } = calculate
+  const pathname = usePathname()
 
   if (currentSet > 1 === false) return null
 
   return (
     <PaginationItem>
       <PaginationPrevious
-        href="#"
+        href={pathname + '?' + qs({ page: firstPage })}
         text=""
         className="p-0"
         iconName="ChevronsLeft"
         ariaLabel="Pagination.firstAriaLabel"
         translate="yes"
-        onClick={() => setPage(firstPage)}
       />
     </PaginationItem>
   )
 }
 
-function PreviousItem({ paging }: { paging: NewPaging }) {
-  const { setPage } = usePaging()
-  const { currentSet, previousPage } = paging
+function PreviousItem({ calculate }: { calculate: Calculate }) {
+  const { currentSet, previousPage } = calculate
+  const pathname = usePathname()
 
   if (currentSet > 1 === false) return null
 
   return (
     <PaginationItem>
       <PaginationPrevious
-        href="#"
+        href={pathname + '?' + qs({ page: previousPage })}
         text=""
         className="p-0"
         iconName="ChevronLeft"
         ariaLabel="Pagination.previousAriaLabel"
         translate="yes"
-        onClick={() => setPage(previousPage)}
       />
     </PaginationItem>
   )
 }
 
-function NextItem({ paging }: { paging: NewPaging }) {
-  const { setPage } = usePaging()
-  const { totalSet, currentSet, nextPage } = paging
+function NextItem({ calculate }: { calculate: Calculate }) {
+  const { totalSet, currentSet, nextPage } = calculate
+  const pathname = usePathname()
 
   if (totalSet > currentSet === false) return null
 
   return (
     <PaginationItem>
       <PaginationNext
-        href="#"
+        href={pathname + '?' + qs({ page: nextPage })}
         text=""
         iconName="ChevronRight"
         className="p-0"
         ariaLabel="Pagination.nextAriaLabel"
         translate="yes"
-        onClick={() => setPage(nextPage)}
       />
     </PaginationItem>
   )
 }
 
-function LastItem({ paging }: { paging: NewPaging }) {
-  const { setPage } = usePaging()
-  const { totalSet, currentSet, lastPage } = paging
+function LastItem({ calculate }: { calculate: Calculate }) {
+  const { totalSet, currentSet, lastPage } = calculate
+  const pathname = usePathname()
 
   if (totalSet > currentSet === false) return null
 
   return (
     <PaginationItem>
       <PaginationNext
-        href="#"
+        href={pathname + '?' + qs({ page: lastPage })}
         text=""
         className="p-0"
         iconName="ChevronsRight"
         ariaLabel="Pagination.lastAriaLabel"
         translate="yes"
-        onClick={() => setPage(lastPage)}
       />
     </PaginationItem>
   )
 }
 
-function useNewPaging(total: number = 0) {
+function useCalculate(total: number = 0) {
   const {
     page: oldPage,
     perPage: oldPerPage,
@@ -219,5 +216,5 @@ function useNewPaging(total: number = 0) {
     }
   }, [oldPage, oldPerPage, oldPageSize, total])
 
-  return { ...values }
+  return values
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import useSWR from 'swr'
-import { createQueryString } from '@/lib/utils'
+import { qs } from '@/lib/utils'
 import { PostAPI, PostsAPI, CountPostsAPI } from '@/types/api'
 
 export function usePostAPI(id: string | null) {
@@ -27,7 +27,7 @@ export function usePostsAPI(
   uid: string | null,
   params: { page: number; perPage: number; status: string }
 ) {
-  const queryString = createQueryString(params)
+  const queryString = qs(params)
   const url = uid ? `/api/v1/posts/${uid}?${queryString}` : null
 
   const {

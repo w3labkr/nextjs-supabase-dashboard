@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
-import { LucideIcon } from '@/lib/lucide-icon'
+import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
 import { toast } from 'sonner'
 import { Button, ButtonProps } from '@/components/ui/button'
 
@@ -13,8 +13,8 @@ import { useAuth } from '@/hooks/use-auth'
 
 interface AddPostButtonProps extends ButtonProps {
   text?: string
-  startIconName?: string
-  endIconName?: string
+  startIconName?: LucideIconName
+  endIconName?: LucideIconName
 }
 
 export function AddPostButton({

@@ -5,9 +5,7 @@ export function absoluteUrl(pathname?: string): string {
   return url.toString()
 }
 
-export function createQueryString<T extends Record<string, any>>(
-  object: T
-): string {
+export function qs<T extends Record<string, any>>(object: T): string {
   const params = Object.keys(object).reduce((acc: T, key: string) => {
     acc[key as keyof T] = object[key]
     return acc

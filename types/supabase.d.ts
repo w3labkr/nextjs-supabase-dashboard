@@ -99,6 +99,7 @@ export type Database = {
           is_ban: boolean | null
           password: string | null
           profile_id: string | null
+          published_at: string | null
           slug: string | null
           status: string | null
           thumbnail: string | null
@@ -118,6 +119,7 @@ export type Database = {
           is_ban?: boolean | null
           password?: string | null
           profile_id?: string | null
+          published_at?: string | null
           slug?: string | null
           status?: string | null
           thumbnail?: string | null
@@ -137,6 +139,7 @@ export type Database = {
           is_ban?: boolean | null
           password?: string | null
           profile_id?: string | null
+          published_at?: string | null
           slug?: string | null
           status?: string | null
           thumbnail?: string | null

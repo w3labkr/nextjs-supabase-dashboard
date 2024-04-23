@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { toast } from 'sonner'
-import { fetcher, createQueryString } from '@/lib/utils'
+import { fetcher, qs } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 
 import { usePaging } from '@/components/paging/paging-provider'
@@ -41,8 +41,7 @@ export function RestorePostButton() {
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      const params = { page, perPage, status }
-      const queryString = createQueryString(params)
+      const queryString = qs({ page, perPage, status })
 
       mutate(`/api/v1/posts/${user_id}?${queryString}`)
       mutate(`/api/v1/posts/${user_id}/count`)

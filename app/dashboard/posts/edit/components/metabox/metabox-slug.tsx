@@ -28,8 +28,8 @@ export function MetaboxSlug() {
   const { form } = usePostForm()
   const { control, watch, setValue } = form
 
-  const title: string = watch('title')
-  const slug: string = watch('slug')
+  const title = watch('title')
+  const slug = watch('slug')
 
   const debounceSetValue = React.useCallback(
     debounce((value: string) => setValue('slug', value), 1000),

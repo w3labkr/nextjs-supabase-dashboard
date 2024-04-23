@@ -11,8 +11,8 @@ export function Permalink() {
   const { t } = useTranslation()
   const { form, post } = usePostForm()
 
-  const slug: string = form.watch('slug')
-  const username: string = post?.profile?.username ?? ''
+  const slug = form.watch('slug')
+  const username = post?.profile?.username ?? ''
   const [permalink, setPermalink] = React.useState<string>('')
 
   React.useEffect(() => {
