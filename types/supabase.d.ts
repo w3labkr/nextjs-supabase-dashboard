@@ -223,45 +223,77 @@ export type Database = {
         Row: {
           created_at: string | null
           id: number
-          permission: Database['public']['Enums']['user_permission']
-          role: Database['public']['Enums']['user_role']
+          permission: string
+          role: string
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
           id?: number
-          permission: Database['public']['Enums']['user_permission']
-          role: Database['public']['Enums']['user_role']
+          permission: string
+          role: string
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
           id?: number
-          permission?: Database['public']['Enums']['user_permission']
-          role?: Database['public']['Enums']['user_role']
+          permission?: string
+          role?: string
           updated_at?: string | null
         }
         Relationships: []
+      }
+      user_plans: {
+        Row: {
+          created_at: string | null
+          id: number
+          plan: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          plan?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          plan?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'user_plans_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
       }
       user_roles: {
         Row: {
           created_at: string | null
           id: number
-          role: Database['public']['Enums']['user_role']
+          role: string
           updated_at: string | null
           user_id: string
         }
         Insert: {
           created_at?: string | null
           id?: number
-          role?: Database['public']['Enums']['user_role']
+          role?: string
           updated_at?: string | null
           user_id: string
         }
         Update: {
           created_at?: string | null
           id?: number
-          role?: Database['public']['Enums']['user_role']
+          role?: string
           updated_at?: string | null
           user_id?: string
         }
@@ -349,7 +381,8 @@ export type Database = {
           has_set_password: boolean
           is_ban: boolean
           banned_until: string
-          role: Database['public']['Enums']['user_role']
+          role: string
+          plan: string
         }[]
       }
       verify_user_password: {
@@ -361,8 +394,7 @@ export type Database = {
       }
     }
     Enums: {
-      user_permission: 'posts.delete'
-      user_role: 'guest' | 'user' | 'admin' | 'superadmin'
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never

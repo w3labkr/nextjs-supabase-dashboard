@@ -11,14 +11,13 @@ import { Badge } from '@/components/ui/badge'
 import { TooltipLinkButton } from '@/components/tooltip-link-button'
 import { useAppBar } from '@/components/app-bar/app-bar-provider'
 
-import { UserRole } from '@/types/database'
 import { siteConfig } from '@/config/site'
 import { DashboardMiniNavItem, DashboardMiniNavSubItem } from '@/types/config'
 
 export interface MiniNavigationProps
   extends React.HTMLAttributes<HTMLDivElement> {
   nav: DashboardMiniNavItem[]
-  user_role?: UserRole
+  user_role?: string
 }
 
 export function MiniNavigation({
@@ -57,7 +56,7 @@ export function MiniNavigation({
 
 interface NavItemProps {
   item: DashboardMiniNavItem
-  user_role?: UserRole
+  user_role?: string
 }
 
 function NavItem({ item, user_role }: NavItemProps) {

@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import { User, Role } from '@/types/database'
 
 export async function authorize(id: string) {
   const { user, role } = await getUser()
@@ -21,10 +20,10 @@ export async function getUser() {
 
   if (result?.error) return { user: null, role: null }
 
-  const user: User = { ...session, user: result?.data }
+  const user = { ...session, user: result?.data }
   const user_role = user?.user?.role
 
-  const role: Role = {
+  const role = {
     isGuest: ['guest'].includes(user_role),
     isUser: ['user'].includes(user_role),
     isAdmin: ['admin', 'superadmin'].includes(user_role),

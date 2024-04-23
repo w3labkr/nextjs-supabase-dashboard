@@ -13,15 +13,17 @@ returns table(
     has_set_password boolean,
     is_ban boolean,
     banned_until timestamptz,
-    role public.user_role
+    role text,
+    plan text
 )
 security definer
 as $$
 begin
 	return query
-    select u.*, ur."role"
+    select u.*, ur."role", up."plan"
     from users u
         join user_roles ur on u.id = ur.user_id
+        join user_plans up on u.id = up.user_id
     where u.id = uid;
 end;
 $$ language plpgsql;

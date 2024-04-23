@@ -15,6 +15,28 @@ export async function PUT(request: NextRequest) {
   }
 
   const supabase = createClient()
+  const total = await supabase
+    .from('posts')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', user_id)
+
+  const plan = user?.user?.plan
+  const count = total?.count ?? 0
+
+  if (total?.error) {
+    return NextResponse.json(
+      { data: null, error: total?.error },
+      { status: 400 }
+    )
+  }
+
+  if (plan === 'free' && count > 2) {
+    return NextResponse.json(
+      { data: null, error: new ApiError(402) },
+      { status: 402 }
+    )
+  }
+
   const result = await supabase
     .from('posts')
     .insert({ ...body, user_id, profile_id: user_id })

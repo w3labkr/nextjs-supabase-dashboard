@@ -20,6 +20,7 @@ begin
   insert into profiles (id, username, full_name, avatar_url) values (new.id, new_username, new_username, new.raw_user_meta_data ->> 'avatar_url');
   insert into emails (user_id, email) values (new.id, new.email);
   insert into user_roles (user_id) values (new.id);
+  insert into user_plans (user_id) values (new.id);
   insert into notifications (user_id) values (new.id);
 
   return new;

@@ -66,7 +66,7 @@ export async function GET(
 
   return NextResponse.json({
     data: list?.data,
-    count: total?.count,
+    count: total?.count ?? 0,
     error: null,
   })
 }

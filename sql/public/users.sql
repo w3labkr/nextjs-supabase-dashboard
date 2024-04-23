@@ -5,6 +5,7 @@ drop table if exists emails;
 drop table if exists posts;
 drop table if exists profiles;
 drop table if exists user_roles;
+drop table if exists user_plans;
 drop table if exists notifications;
 drop table if exists users;
 

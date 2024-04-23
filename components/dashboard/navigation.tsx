@@ -9,13 +9,12 @@ import { Separator } from '@/components/ui/separator'
 import { LinkButton } from '@/components/link-button'
 import { useAppBar } from '@/components/app-bar/app-bar-provider'
 
-import { UserRole } from '@/types/database'
 import { DashboardNavItem, DashboardNavSubItem } from '@/types/config'
 
 export interface NavigationProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string
   nav: DashboardNavItem[]
-  user_role?: UserRole
+  user_role?: string
 }
 
 export function Navigation({
@@ -60,7 +59,7 @@ export function Navigation({
 
 interface NavItemProps {
   item: DashboardNavItem
-  user_role?: UserRole
+  user_role?: string
 }
 
 function NavItem({ item, user_role }: NavItemProps) {

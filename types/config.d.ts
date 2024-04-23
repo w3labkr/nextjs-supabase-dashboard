@@ -1,5 +1,4 @@
 import { LucideIconName } from '@/lib/lucide-icon'
-import { UserRole } from '@/types/database'
 
 export interface SiteConfig {
   name: string
@@ -31,14 +30,14 @@ export interface DashboardMiniNavSubItem {
   translate?: 'yes' | 'no'
   disabled?: boolean
   badge?: number
-  roles?: UserRole[]
+  roles?: string[]
 }
 
 export interface DashboardMiniNavItem {
   id: number
   items: DashboardMiniNavSubItem[]
   separator?: boolean
-  roles?: UserRole[]
+  roles?: string[]
 }
 
 export interface DashboardNavSubItem {
@@ -48,7 +47,7 @@ export interface DashboardNavSubItem {
   iconName?: LucideIconName
   translate?: 'yes' | 'no'
   disabled?: boolean
-  roles?: UserRole[]
+  roles?: string[]
 }
 
 export interface DashboardNavItem {
@@ -57,7 +56,7 @@ export interface DashboardNavItem {
   items: DashboardNavSubItem[]
   translate?: 'yes' | 'no'
   separator?: boolean
-  roles?: UserRole[]
+  roles?: string[]
 }
 
 export interface DashboardConfig {

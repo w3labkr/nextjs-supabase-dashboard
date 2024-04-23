@@ -2,7 +2,6 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { ApiError } from '@/lib/utils'
 import { authorize } from '@/hooks/async/auth'
-import { CountPosts } from '@/types/database'
 
 export async function GET(
   request: NextRequest,

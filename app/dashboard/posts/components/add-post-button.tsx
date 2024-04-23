@@ -47,7 +47,12 @@ export function AddPostButton({
 
       router.push(`/dashboard/posts/edit?id=${result?.data?.id}`)
     } catch (e: unknown) {
-      toast.error((e as Error)?.message)
+      const err = (e as Error)?.message
+      if (err.startsWith('Payment Required')) {
+        toast.error(t('402.statusText', { ns: 'httpstatuscode' }))
+      } else {
+        toast.error((e as Error)?.message)
+      }
     } finally {
       setIsSubmitting(false)
     }

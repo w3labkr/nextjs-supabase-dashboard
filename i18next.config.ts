@@ -13,7 +13,12 @@ export const defaultLng: DefaultLng = 'en'
 export const fallbackLng: FallbackLng = 'en'
 
 // If passing the ns option, the defaultNS will, by default, be set to the first ns passed.
-export const defaultNS: DefaultNS = ['translation', 'zod', 'zod-custom']
+export const defaultNS: DefaultNS = [
+  'translation',
+  'zod',
+  'zod-custom',
+  'httpstatuscode',
+]
 
 // LanguageStatus
 export const defaultLabel: DefaultLabel = 'English (United States)'
