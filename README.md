@@ -31,7 +31,7 @@ Denpendency
     - [Supabase Cloud Functions](#supabase-cloud-functions)
     - [Supabase Auth](#supabase-auth)
     - [Firebase Auth](#firebase-auth)
-    - [Rich Text Editor](#rich-text-editor)
+    - [Text Editor](#text-editor)
     - [Utils](#utils)
     - [ESLint](#eslint)
   - [Configuration](#configuration)
@@ -304,19 +304,20 @@ Start firebase deployment.
 firebase deploy
 ```
 
-### Rich Text Editor
+### Text Editor
 
-A block-style editor with clean JSON output
+Powerful rich text editor framework with a modular architecture, modern integrations, and features like collaborative editing.
 
-```shell
-npm install @editorjs/editorjs @editorjs/header @editorjs/embed @editorjs/table @editorjs/list @editorjs/code @editorjs/link @editorjs/inline-code
-```
+Download the files from [Online Builder](https://ckeditor.com/ckeditor-5/online-builder/) and unzip them into the ckeditor5 folder. However, exclude the [Watchdog](https://ckeditor.com/docs/ckeditor5/latest/installation/integrations/react.html#using-the-ckeditor-5-online-builder) feature.
 
-`<textarea />` component for React which grows with content
+And run the script below:
 
 ```shell
-npm install react-textarea-autosize
+npm install file:./ckeditor5
+npm install @ckeditor/ckeditor5-react
 ```
+
+- [Integrate CKEditor 5 with Next.js](https://ckeditor.com/docs/ckeditor5/latest/installation/integrations/next-js.html)
 
 ### Utils
 
