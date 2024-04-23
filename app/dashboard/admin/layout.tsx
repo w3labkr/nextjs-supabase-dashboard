@@ -22,7 +22,7 @@ export default async function AdminLayout({
   if (!role?.isAdmin) return <div>Unauthorized</div>
 
   return (
-    <div className="body-overflow-hidden flex h-screen w-screen min-w-[768px]">
+    <div className="body-overflow-hidden flex h-screen w-screen">
       <AppBarProvider>
         <MiniNavigation
           nav={dashboardConfig?.nav}

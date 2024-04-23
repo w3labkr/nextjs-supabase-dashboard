@@ -29,9 +29,16 @@
     "description": ""
   },
 
-  "PostsPage": {
+  "PostListPage": {
     "title": "Post",
-    "description": "Create and manage posts."
+    "description": "Create and manage posts.",
+    "AddPostButton": "New post"
+  },
+
+  "PostEditPage": {
+    "title": "Edit Post",
+    "description": "",
+    "AddPostButton": "Add New"
   },
 
   "ProfilePage": {
@@ -140,7 +147,8 @@
     "something_went_wrong": "Something went wrong.",
     "user_already_registered": "User already registered.",
     "user_data_is_invalid": "User data is invalid.",
-    "username_already_registered": "Username already registered.",
+    "duplicate_username_message": "This username has already been registered.",
+    "duplicate_slug_message": "This slug has already been registered.",
     "you_can_change_it_in_a_few_days": "You can change it after {{count}} days.",
     "you_can_change_it_only_once_every_few_days": "You can change it only once every {{count}} days.",
     "you_have_been_logged_out_successfully": "You have been logged out successfully.",
@@ -162,7 +170,6 @@
     "update": "Update",
     "delete": "Delete",
     "submit": "Submit",
-
     "change_password": "Change Password",
     "change_username": "Change username",
     "delete_your_account": "Delete your account",
@@ -175,10 +182,15 @@
   },
 
   "SelectValue": {
-    "select_a_verified_email_to_display": "Select a verified email to display"
+    "select_a_verified_email_to_display": "Select a verified email to display."
+  },
+
+  "Input": {
+    "please_enter_your_text": "Please enter your text."
   },
 
   "Textarea": {
+    "please_enter_your_message": "Please enter your message.",
     "please_tell_us_a_little_about_yourself": "Please tell us a little about yourself."
   },
 
@@ -330,10 +342,10 @@
   },
 
   "PostList": {
-    "EditPostButton": "Edit",
+    "EditPostLink": "Edit",
+    "ViewPostLink": "View",
     "TrashPostButton": "Trash",
     "RestorePostButton": "Restore",
-    "ViewPostButton": "View",
     "DeletePostButton": "Delete"
   },
 
@@ -345,6 +357,29 @@
     "pending": "Pending",
     "private": "Private",
     "trash": "Trash"
+  },
+
+  "PostMetabox": {
+    "excerpt": "Excerpt",
+    "publish": "Publish",
+    "publish_on": "Publish on",
+    "future": "Future",
+    "schedule_for": "Schedule for",
+    "immediately": "Immediately",
+    "public": "Public",
+    "private": "Private",
+    "slug": "Slug",
+    "status": "Status",
+    "visibility": "Visibility",
+    "post_views": "Post Views",
+    "revisions": "Revisions",
+    "thumbnail": "Thumbnail",
+    "featured_image": "Featured image",
+    "set_featured_image": "Set featured image",
+    "save_draft": "Save Draft",
+    "preview": "Preview",
+    "move_to_trash": "Move to Trash",
+    "permalink": "Permalink"
   },
 
   "TableHead": {
@@ -364,9 +399,5 @@
   "TableCell": {
     "empty_post": "No posts yet.",
     "is_loading": "Loading..."
-  },
-
-  "AddPostButton": {
-    "label": "New post"
   }
 }

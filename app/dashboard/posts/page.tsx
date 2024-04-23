@@ -2,21 +2,23 @@ import * as React from 'react'
 
 import { Separator } from '@/components/ui/separator'
 import { Title } from '@/components/title'
-// import { Description } from '@/components/description'
-
+import { AddPostButton } from './components/add-post-button'
 import { PostList } from './post-list'
-import { AddPostButton } from './add-post-button'
 
-export default function PostsPage() {
+export default function PostListPage() {
   return (
     <main className="flex-1 space-y-16 overflow-auto p-10 pb-16">
       <div className="space-y-4">
         <div className="flex justify-between">
-          <Title text="PostsPage.title" translate="yes" />
-          <AddPostButton />
+          <Title text="PostListPage.title" translate="yes" />
+          <AddPostButton
+            variant="default"
+            text="PostListPage.AddPostButton"
+            translate="yes"
+            startIconName="Plus"
+          />
         </div>
         <Separator />
-        {/* <Description text="PostsPage.description" translate="yes" /> */}
         <PostList />
       </div>
     </main>

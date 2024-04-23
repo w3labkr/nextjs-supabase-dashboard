@@ -4,7 +4,7 @@
 drop function if exists count_posts;
 
 create or replace function count_posts(uid uuid)
-returns table(status public.post_status, count bigint)
+returns table(status text, count bigint)
 security definer
 as $$
 begin

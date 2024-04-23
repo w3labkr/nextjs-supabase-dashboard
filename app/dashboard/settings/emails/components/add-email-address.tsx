@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { cn, fetcher } from '@/lib/utils'
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import {
@@ -22,12 +21,13 @@ import {
 import { SubmitButton } from '@/components/submit-button'
 
 import useSWRMutation from 'swr/mutation'
+import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
-import { useEmails } from '@/hooks/api'
+import { useEmailsAPI } from '@/hooks/api'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
-  user_id: z.string().nonempty().uuid(),
+  user_id: z.string().uuid(),
 })
 
 type FormValues = z.infer<typeof FormSchema>
@@ -43,7 +43,7 @@ export function AddEmailAddress() {
   const { t } = useTranslation()
 
   const { user } = useAuth()
-  const { emails } = useEmails(user?.id ?? null)
+  const { emails } = useEmailsAPI(user?.id ?? null)
   const { trigger } = useSWRMutation(
     user?.id ? `/api/v1/emails/${user?.id}` : null,
     sendRequest

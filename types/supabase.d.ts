@@ -91,7 +91,7 @@ export type Database = {
       posts: {
         Row: {
           banned_until: string | null
-          content: Json | null
+          content: string | null
           created_at: string | null
           deleted_at: string | null
           excerpt: string | null
@@ -99,16 +99,18 @@ export type Database = {
           is_ban: boolean | null
           password: string | null
           profile_id: string | null
-          status: Database['public']['Enums']['post_status'] | null
+          slug: string | null
+          status: string | null
           thumbnail: string | null
           title: string | null
+          type: string | null
           updated_at: string | null
           user_id: string | null
-          view: number | null
+          views: number | null
         }
         Insert: {
           banned_until?: string | null
-          content?: Json | null
+          content?: string | null
           created_at?: string | null
           deleted_at?: string | null
           excerpt?: string | null
@@ -116,16 +118,18 @@ export type Database = {
           is_ban?: boolean | null
           password?: string | null
           profile_id?: string | null
-          status?: Database['public']['Enums']['post_status'] | null
+          slug?: string | null
+          status?: string | null
           thumbnail?: string | null
           title?: string | null
+          type?: string | null
           updated_at?: string | null
           user_id?: string | null
-          view?: number | null
+          views?: number | null
         }
         Update: {
           banned_until?: string | null
-          content?: Json | null
+          content?: string | null
           created_at?: string | null
           deleted_at?: string | null
           excerpt?: string | null
@@ -133,12 +137,14 @@ export type Database = {
           is_ban?: boolean | null
           password?: string | null
           profile_id?: string | null
-          status?: Database['public']['Enums']['post_status'] | null
+          slug?: string | null
+          status?: string | null
           thumbnail?: string | null
           title?: string | null
+          type?: string | null
           updated_at?: string | null
           user_id?: string | null
-          view?: number | null
+          views?: number | null
         }
         Relationships: [
           {
@@ -317,7 +323,7 @@ export type Database = {
           uid: string
         }
         Returns: {
-          status: Database['public']['Enums']['post_status']
+          status: string
           count: number
         }[]
       }
@@ -352,13 +358,6 @@ export type Database = {
       }
     }
     Enums: {
-      post_status:
-        | 'publish'
-        | 'future'
-        | 'draft'
-        | 'pending'
-        | 'private'
-        | 'trash'
       user_permission: 'posts.delete'
       user_role: 'guest' | 'user' | 'admin' | 'superadmin'
     }

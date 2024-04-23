@@ -16,7 +16,7 @@ export default async function DashboardPage() {
   const { user } = await getUser()
 
   return (
-    <div className="body-overflow-hidden flex h-screen w-screen min-w-[768px]">
+    <div className="body-overflow-hidden flex h-screen w-screen">
       <AppBarProvider>
         <MiniNavigation
           nav={dashboardConfig?.nav}

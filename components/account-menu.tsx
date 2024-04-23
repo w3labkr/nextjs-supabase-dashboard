@@ -17,13 +17,13 @@ import {
 import { SignOutButton } from '@/components/signout-button'
 
 import { useAuth } from '@/hooks/use-auth'
-import { useProfile } from '@/hooks/api'
+import { useProfileAPI } from '@/hooks/api'
 
 export function AccountMenu() {
   const { t } = useTranslation()
 
   const { user } = useAuth()
-  const { profile } = useProfile(user?.id ?? null)
+  const { profile } = useProfileAPI(user?.id ?? null)
 
   return (
     <DropdownMenu>

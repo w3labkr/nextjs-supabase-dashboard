@@ -1,0 +1,12 @@
+.ck-powered-by {
+  display: none;
+}
+
+.ck-editor__editable[role="textbox"] {
+  min-height: 300px;
+}
+
+.ck-content .image {
+  max-width: 100%;
+  margin: 20px auto;
+}

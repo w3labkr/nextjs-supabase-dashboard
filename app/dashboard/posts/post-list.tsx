@@ -20,15 +20,16 @@ import { Button } from '@/components/ui/button'
 import { PagingProvider, usePaging } from '@/components/paging/paging-provider'
 import { Paging } from '@/components/paging'
 
-import { Post, CountPosts } from '@/types/database'
-import { useAuth } from '@/hooks/use-auth'
-import { usePosts, useCountPosts } from '@/hooks/api'
+import { PostItemProvider } from './components/post-item-provider'
+import { EditPostLink } from './components/edit-post-link'
+import { ViewPostLink } from './components/view-post-link'
+import { TrashPostButton } from './components/trash-post-button'
+import { RestorePostButton } from './components/restore-post-button'
+import { DeletePostButton } from './components/delete-post-button'
 
-import { EditPostButton } from './edit-post-button'
-import { ViewPostButton } from './view-post-button'
-import { TrashPostButton } from './trash-post-button'
-import { RestorePostButton } from './restore-post-button'
-import { DeletePostButton } from './delete-post-button'
+import { Post, CountPosts, PostStatus } from '@/types/database'
+import { useAuth } from '@/hooks/use-auth'
+import { usePostsAPI, useCountPostsAPI } from '@/hooks/api'
 
 export function PostList() {
   return (
@@ -42,18 +43,18 @@ export function PostList() {
 
 function Header() {
   const { user } = useAuth()
-  const { data: counting } = useCountPosts(user?.id ?? null)
+  const { data, count } = useCountPostsAPI(user?.id ?? null)
 
   return (
     <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-      {counting?.map((data: CountPosts) => {
+      <HeadLink status="all" count={count ?? 0} />
+      {data?.map((posts: CountPosts) => {
         return (
-          <React.Fragment key={data?.status}>
-            {data?.status === 'all' ? <StatusLink data={data} /> : null}
-            {data?.status !== 'all' && data?.count > 0 ? (
+          <React.Fragment key={posts?.status}>
+            {posts?.count > 0 ? (
               <>
                 <span>|</span>
-                <StatusLink data={data} />
+                <HeadLink status={posts?.status} count={posts?.count} />
               </>
             ) : null}
           </React.Fragment>
@@ -63,18 +64,42 @@ function Header() {
   )
 }
 
+function HeadLink({
+  status,
+  count,
+}: {
+  status: PostStatus | 'all'
+  count: number
+}) {
+  const { t } = useTranslation()
+  const { status: pagingStatus, setStatus } = usePaging()
+
+  return (
+    <Button
+      variant="link"
+      className={cn(
+        'h-auto p-0',
+        pagingStatus === status ? 'text-foreground' : 'text-muted-foreground'
+      )}
+      onClick={() => setStatus(status)}
+    >
+      {t(`PostStatus.${status}`)}({count})
+    </Button>
+  )
+}
+
 function Footer() {
   const { user } = useAuth()
   const { page, perPage, status } = usePaging()
-  const { total } = usePosts(user?.id ?? null, {
+  const { count } = usePostsAPI(user?.id ?? null, {
     page,
     perPage,
     status,
   })
 
-  if (total === null) return null
+  if (count === null) return null
 
-  return <Paging total={total} />
+  return <Paging total={count} />
 }
 
 function Body() {
@@ -82,7 +107,7 @@ function Body() {
 
   const { user } = useAuth()
   const { page, perPage, status } = usePaging()
-  const { posts } = usePosts(user?.id ?? null, {
+  const { posts } = usePostsAPI(user?.id ?? null, {
     page,
     perPage,
     status,
@@ -100,7 +125,7 @@ function Body() {
           <TableHead>{t('TableHead.title')}</TableHead>
           <TableHead className="w-[100px]">{t('TableHead.author')}</TableHead>
           <TableHead className="w-[200px]">
-            {t('TableHead.updated_at')}
+            {t('TableHead.created_at')}
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -118,39 +143,33 @@ function Body() {
 }
 
 function ListItem({ post }: { post: Post }) {
+  const { t } = useTranslation()
   const { status } = usePaging()
 
   return (
-    <TableRow>
-      <TableCell>
-        <Checkbox />
-      </TableCell>
-      <TableCell>{post?.id}</TableCell>
-      <TableCell>
-        <div>{post?.title}</div>
-        <div className="flex items-center space-x-1">
-          {status === 'trash' ? (
-            <>
-              <RestorePostButton post={post} />
-              <span>|</span>
-              <DeletePostButton post={post} />
-            </>
-          ) : (
-            <>
-              <EditPostButton post={post} />
-              <span>|</span>
-              <TrashPostButton post={post} />
-            </>
-          )}
-          <span>|</span>
-          <ViewPostButton post={post} />
-        </div>
-      </TableCell>
-      <TableCell>{post?.profile?.full_name}</TableCell>
-      <TableCell>
-        {dayjs(post?.updated_at).format('YYYY-MM-DD HH:mm')}
-      </TableCell>
-    </TableRow>
+    <PostItemProvider value={{ post }}>
+      <TableRow>
+        <TableCell>
+          <Checkbox />
+        </TableCell>
+        <TableCell>{post?.id}</TableCell>
+        <TableCell>
+          <div>
+            {post?.title}
+            {post?.status !== 'publish'
+              ? ` - ${t(`PostStatus.${post?.status}`)}`
+              : null}
+          </div>
+          <div className="flex items-center space-x-1">
+            {status === 'trash' ? <TrashActions /> : <DefaultActions />}
+          </div>
+        </TableCell>
+        <TableCell>{post?.profile?.full_name}</TableCell>
+        <TableCell>
+          {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm')}
+        </TableCell>
+      </TableRow>
+    </PostItemProvider>
   )
 }
 
@@ -178,20 +197,30 @@ function LoadingItem() {
   )
 }
 
-function StatusLink({ data }: { data: CountPosts }) {
-  const { t } = useTranslation()
-  const { status, setStatus } = usePaging()
-
+function DefaultActions() {
   return (
-    <Button
-      variant="link"
-      className={cn(
-        'h-auto p-0',
-        status === data?.status ? 'text-foreground' : 'text-muted-foreground'
-      )}
-      onClick={() => setStatus(data?.status)}
-    >
-      {t(`PostStatus.${data?.status}`)}({data?.count})
-    </Button>
+    <>
+      <EditPostLink
+        className="text-blue-700"
+        text="PostList.EditPostLink"
+        translate="yes"
+      />
+      <span>|</span>
+      <TrashPostButton />
+      <span>|</span>
+      <ViewPostLink />
+    </>
+  )
+}
+
+function TrashActions() {
+  return (
+    <>
+      <RestorePostButton />
+      <span>|</span>
+      <DeletePostButton />
+      <span>|</span>
+      <EditPostLink text="PostList.ViewPostLink" translate="yes" />
+    </>
   )
 }

@@ -4,7 +4,7 @@ import useSWR from 'swr'
 import { createQueryString } from '@/lib/utils'
 import { PostAPI, PostsAPI, CountPostsAPI } from '@/types/api'
 
-export function usePost(id: string | null) {
+export function usePostAPI(id: string | null) {
   const url = id ? `/api/v1/post/${id}` : null
   const {
     data: response,
@@ -23,7 +23,7 @@ export function usePost(id: string | null) {
   }
 }
 
-export function usePosts(
+export function usePostsAPI(
   uid: string | null,
   params: { page: number; perPage: number; status: string }
 ) {
@@ -40,7 +40,7 @@ export function usePosts(
 
   return {
     posts: response?.data ?? null,
-    total: response?.count ?? null,
+    count: response?.count ?? null,
     isError: error ?? response?.error ?? null,
     isLoading,
     isValidating,
@@ -48,7 +48,7 @@ export function usePosts(
   }
 }
 
-export function useCountPosts(uid: string | null) {
+export function useCountPostsAPI(uid: string | null) {
   const url = uid ? `/api/v1/posts/${uid}/count` : null
 
   const {
@@ -61,6 +61,7 @@ export function useCountPosts(uid: string | null) {
 
   return {
     data: response?.data ?? null,
+    count: response?.count ?? null,
     isError: error ?? response?.error ?? null,
     isLoading,
     isValidating,

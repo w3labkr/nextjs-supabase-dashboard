@@ -4,16 +4,16 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { toast } from 'sonner'
-import { cn, fetcher, createQueryString } from '@/lib/utils'
+import { fetcher, createQueryString } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 
 import { usePaging } from '@/components/paging/paging-provider'
-
+import { usePostItem } from './post-item-provider'
 import { useSWRConfig } from 'swr'
-import { Post } from '@/types/database'
 
-export function TrashPostButton({ post }: { post: Post }) {
+export function DeletePostButton() {
   const { t } = useTranslation()
+  const { post } = usePostItem()
   const { page, perPage, status } = usePaging()
 
   const { mutate } = useSWRConfig()
@@ -23,17 +23,15 @@ export function TrashPostButton({ post }: { post: Post }) {
     try {
       setIsSubmitting(true)
 
-      const { id, user_id } = post
+      const id = post?.id
+      const user_id = post?.user_id
 
+      if (!id) throw new Error('Require is not defined.')
       if (!user_id) throw new Error('Require is not defined.')
 
-      const formValues = {
-        user_id,
-        status: 'trash',
-        deleted_at: new Date().toISOString(),
-      }
+      const formValues = { user_id }
       const result = await fetcher(`/api/v1/post/${id}`, {
-        method: 'POST',
+        method: 'DELETE',
         body: JSON.stringify(formValues),
       })
 
@@ -60,7 +58,7 @@ export function TrashPostButton({ post }: { post: Post }) {
       onClick={handleClick}
       disabled={isSubmitting}
     >
-      {t('PostList.TrashPostButton')}
+      {t('PostList.DeletePostButton')}
     </Button>
   )
 }

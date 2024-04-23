@@ -3,7 +3,7 @@
 import useSWR from 'swr'
 import { UserAPI, UsersAPI } from '@/types/api'
 
-export function useUser(id: string | null) {
+export function useUserAPI(id: string | null) {
   const url = id ? `/api/v1/user/${id}` : null
   const {
     data: response,
@@ -22,7 +22,7 @@ export function useUser(id: string | null) {
   }
 }
 
-export function useUsers(page: number, perPage: number) {
+export function useUsersAPI(page: number, perPage: number) {
   const url =
     page && perPage ? `/api/v1/users?page=${page}&perPage=${perPage}` : null
   const {

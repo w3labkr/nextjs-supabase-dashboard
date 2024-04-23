@@ -29,9 +29,16 @@
     "description": ""
   },
 
-  "PostsPage": {
+  "PostListPage": {
     "title": "글",
-    "description": "게시물을 작성하고 관리하세요."
+    "description": "게시물을 작성하고 관리하세요.",
+    "AddPostButton": "새로운 게시물"
+  },
+
+  "PostEditPage": {
+    "title": "글 수정",
+    "description": "",
+    "AddPostButton": "새 글"
   },
 
   "ProfilePage": {
@@ -140,7 +147,8 @@
     "something_went_wrong": "뭔가 잘못되었습니다.",
     "user_already_registered": "이미 등록된 사용자입니다.",
     "user_data_is_invalid": "사용자 데이터가 유효하지 않습니다.",
-    "username_already_registered": "이미 등록된 사용자이름입니다.",
+    "duplicate_username": "이미 등록된 사용자이름입니다.",
+    "duplicate_slug": "이미 등록된 슬러그입니다.",
     "you_can_change_it_in_a_few_days": "{{count}}일 이후에 변경하실 수 있습니다.",
     "you_can_change_it_only_once_every_few_days": "{{count}}일에 한 번만 변경할 수 있습니다.",
     "you_have_been_logged_out_successfully": "성공적으로 로그아웃되었습니다.",
@@ -162,7 +170,6 @@
     "update": "수정하기",
     "delete": "삭제하기",
     "submit": "제출하기",
-
     "change_password": "비밀번호 변경",
     "change_username": "사용자 이름 변경",
     "delete_your_account": "계정 삭제",
@@ -175,10 +182,15 @@
   },
 
   "SelectValue": {
-    "select_a_verified_email_to_display": "이메일을 선택하세요"
+    "select_a_verified_email_to_display": "이메일을 선택하세요."
+  },
+
+  "Input": {
+    "please_enter_your_text": "텍스트를 입력해주세요."
   },
 
   "Textarea": {
+    "please_enter_your_message": "메시지를 입력해주세요.",
     "please_tell_us_a_little_about_yourself": "당신에 대해 조금 알려주세요."
   },
 
@@ -330,10 +342,10 @@
   },
 
   "PostList": {
-    "EditPostButton": "수정",
+    "EditPostLink": "수정",
+    "ViewPostLink": "보기",
     "TrashPostButton": "휴지통",
     "RestorePostButton": "복구",
-    "ViewPostButton": "보기",
     "DeletePostButton": "삭제"
   },
 
@@ -345,6 +357,29 @@
     "pending": "대기",
     "private": "비공개",
     "trash": "휴지통"
+  },
+
+  "PostMetabox": {
+    "excerpt": "요약",
+    "publish": "발행",
+    "publish_on": "발행일",
+    "future": "예약",
+    "Schedule for": "일정",
+    "immediately": "즉시",
+    "public": "공개",
+    "private": "비공개",
+    "slug": "슬러그",
+    "status": "상태",
+    "visibility": "가시성",
+    "post_views": "조회수",
+    "revisions": "리비전",
+    "thumbnail": "썸네일",
+    "featured_image": "추천 이미지",
+    "set_featured_image": "추천 이미지 설정",
+    "save_draft": "임시 저장",
+    "preview": "미리보기",
+    "move_to_trash": "휴지통으로 이동",
+    "permalink": "고유주소"
   },
 
   "TableHead": {
@@ -364,9 +399,5 @@
   "TableCell": {
     "empty_post": "아직 게시물이 없습니다.",
     "is_loading": "로딩..."
-  },
-
-  "AddPostButton": {
-    "label": "새로운 게시물"
   }
 }

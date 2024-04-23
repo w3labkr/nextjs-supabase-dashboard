@@ -13,14 +13,14 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 
 import { Profile } from '@/types/database'
-import { useProfile } from '@/hooks/api'
+import { useProfileAPI } from '@/hooks/api'
 
-export default function ProfilePage({
+export default function UserPage({
   params: { username },
 }: {
   params: { username: string }
 }) {
-  const { profile } = useProfile(null, { username })
+  const { profile } = useProfileAPI(null, { username })
 
   return (
     <div>

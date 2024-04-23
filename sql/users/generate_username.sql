@@ -4,7 +4,7 @@
 drop function if exists generate_username;
 
 create or replace function generate_username(email text)
-returns text language plpgsql
+returns text
 security definer
 as $$
 declare
@@ -25,4 +25,4 @@ begin
 
   return new_username;
 end;
-$$;
+$$ language plpgsql;

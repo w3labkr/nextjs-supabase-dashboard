@@ -1,5 +1,8 @@
-export function absoluteUrl(path: string): string {
-  return `${process.env.NEXT_PUBLIC_SITE_URL}${path}`
+export function absoluteUrl(pathname?: string): string {
+  const url = new URL(process.env.NEXT_PUBLIC_SITE_URL!)
+  if (pathname) url.pathname = pathname
+
+  return url.toString()
 }
 
 export function createQueryString<T extends Record<string, any>>(

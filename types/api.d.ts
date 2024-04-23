@@ -27,8 +27,8 @@ export type PostsAPI =
   | { data: null; count: null; error: Error }
 
 export type CountPostsAPI =
-  | { data: CountPosts[]; error: null }
-  | { data: null; error: Error }
+  | { data: CountPosts[]; count: number; error: null }
+  | { data: null; count: null; error: Error }
 
 export type ProfileAPI =
   | { data: Profile; error: null }

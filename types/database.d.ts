@@ -1,7 +1,15 @@
 import { Tables, Enums } from '@/types/supabase'
 import { User as AuthUser } from '@supabase/supabase-js'
 
-export type PostStatus = Enums<'post_status'>
+export type PostStatus =
+  | 'publish'
+  | 'future'
+  | 'draft'
+  | 'pending'
+  | 'private'
+  | 'trash'
+
+export type PostType = 'post' | 'revision'
 
 export type UserRole = Enums<'user_role'>
 
@@ -17,7 +25,7 @@ export type Post = Tables<'posts'> & {
 }
 
 export type CountPosts = {
-  status: PostStatus | 'all'
+  status: PostStatus
   count: number
 }
 

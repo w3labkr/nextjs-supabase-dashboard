@@ -4,16 +4,16 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { toast } from 'sonner'
-import { cn, fetcher, createQueryString } from '@/lib/utils'
+import { fetcher, createQueryString } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 
 import { usePaging } from '@/components/paging/paging-provider'
-
+import { usePostItem } from './post-item-provider'
 import { useSWRConfig } from 'swr'
-import { Post } from '@/types/database'
 
-export function DeletePostButton({ post }: { post: Post }) {
+export function RestorePostButton() {
   const { t } = useTranslation()
+  const { post } = usePostItem()
   const { page, perPage, status } = usePaging()
 
   const { mutate } = useSWRConfig()
@@ -23,13 +23,19 @@ export function DeletePostButton({ post }: { post: Post }) {
     try {
       setIsSubmitting(true)
 
-      const { id, user_id } = post
+      const id = post?.id
+      const user_id = post?.user_id
 
+      if (!id) throw new Error('Require is not defined.')
       if (!user_id) throw new Error('Require is not defined.')
 
-      const formValues = { user_id }
+      const formValues = {
+        user_id,
+        status: 'draft',
+        deleted_at: null,
+      }
       const result = await fetcher(`/api/v1/post/${id}`, {
-        method: 'DELETE',
+        method: 'POST',
         body: JSON.stringify(formValues),
       })
 
@@ -41,7 +47,7 @@ export function DeletePostButton({ post }: { post: Post }) {
       mutate(`/api/v1/posts/${user_id}?${queryString}`)
       mutate(`/api/v1/posts/${user_id}/count`)
 
-      toast.success(t('FormMessage.deleted_successfully'))
+      toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -52,11 +58,11 @@ export function DeletePostButton({ post }: { post: Post }) {
   return (
     <Button
       variant="ghost"
-      className="h-auto p-0 text-xs font-normal text-red-700 hover:underline"
+      className="h-auto p-0 text-xs font-normal text-blue-700 hover:underline"
       onClick={handleClick}
       disabled={isSubmitting}
     >
-      {t('PostList.DeletePostButton')}
+      {t('PostList.RestorePostButton')}
     </Button>
   )
 }

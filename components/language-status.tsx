@@ -3,7 +3,6 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { defaultLabel, languageItems } from '@/i18next.config'
-
 import { useAppSelector } from '@/lib/redux/hooks'
 
 export function LanguageStatus() {

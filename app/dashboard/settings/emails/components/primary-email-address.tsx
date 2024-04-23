@@ -30,7 +30,7 @@ import {
 import { SubmitButton } from '@/components/submit-button'
 
 import { useAuth } from '@/hooks/use-auth'
-import { useEmails } from '@/hooks/api'
+import { useEmailsAPI } from '@/hooks/api'
 
 const FormSchema = z.object({
   email: z.string().max(255),
@@ -43,7 +43,7 @@ export function PrimaryEmailAddress() {
   const { t } = useTranslation()
 
   const { user } = useAuth()
-  const { emails } = useEmails(user?.id ?? null)
+  const { emails } = useEmailsAPI(user?.id ?? null)
   const primaryEmail = React.useMemo(
     () => emails?.find((x) => x.email === user?.email && x.email_confirmed_at),
     [emails, user?.email]

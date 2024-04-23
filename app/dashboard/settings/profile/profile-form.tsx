@@ -33,10 +33,10 @@ import { SubmitButton } from '@/components/submit-button'
 
 import useSWRMutation from 'swr/mutation'
 import { useAuth } from '@/hooks/use-auth'
-import { useProfile, useEmails } from '@/hooks/api'
+import { useProfileAPI, useEmailsAPI } from '@/hooks/api'
 
 const FormSchema = z.object({
-  full_name: z.string().nonempty().min(2),
+  full_name: z.string().nonempty(),
   email: z.string().max(255),
   bio: z.string().max(160),
 })
@@ -54,8 +54,8 @@ export function ProfileForm() {
   const { t } = useTranslation()
 
   const { user } = useAuth()
-  const { profile } = useProfile(user?.id ?? null)
-  const { emails } = useEmails(user?.id ?? null)
+  const { profile } = useProfileAPI(user?.id ?? null)
+  const { emails } = useEmailsAPI(user?.id ?? null)
   const { trigger } = useSWRMutation(
     user?.id ? `/api/v1/profile/${user?.id}` : null,
     sendRequest

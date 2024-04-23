@@ -24,10 +24,12 @@ export async function GET(request: NextRequest) {
     return new Response('Unauthorized', { status: 401 })
   }
 
+  const email_confirmed_at = new Date().toISOString()
+
   const supabase = createClient()
   const result = await supabase
     .from('emails')
-    .update({ email_confirmed_at: new Date().toISOString() })
+    .update({ email_confirmed_at })
     .eq('user_id', payload?.user_id)
     .eq('email', payload?.email)
     .select()

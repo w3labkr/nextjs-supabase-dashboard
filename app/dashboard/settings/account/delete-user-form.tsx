@@ -34,7 +34,7 @@ import { SubmitButton } from '@/components/submit-button'
 
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
-import { useUser } from '@/hooks/api'
+import { useUserAPI } from '@/hooks/api'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
@@ -58,7 +58,7 @@ export function DeleteUserForm() {
   const { t } = useTranslation()
 
   const { session, setSession, setUser } = useAuth()
-  const { user } = useUser(session?.user?.id ?? null)
+  const { user } = useUserAPI(session?.user?.id ?? null)
   const hasSetPassword: boolean = user?.user?.has_set_password ?? false
 
   const form = useForm<FormValues>({

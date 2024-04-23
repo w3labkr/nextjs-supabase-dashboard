@@ -24,7 +24,7 @@ import { SubmitButton } from '@/components/submit-button'
 import { useSWRConfig } from 'swr'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
-import { useUser } from '@/hooks/api'
+import { useUserAPI } from '@/hooks/api'
 
 const FormSchema = z
   .object({
@@ -51,7 +51,7 @@ export function ChangePasswordForm() {
   const { t } = useTranslation()
 
   const { session } = useAuth()
-  const { user } = useUser(session?.user?.id ?? null)
+  const { user } = useUserAPI(session?.user?.id ?? null)
   const { mutate } = useSWRConfig()
   const hasSetPassword: boolean = user?.user?.has_set_password ?? false
 

@@ -4,15 +4,6 @@ import { ApiError } from '@/lib/utils'
 import { authorize } from '@/hooks/async/auth'
 import { CountPosts } from '@/types/database'
 
-const defaultValues: CountPosts[] = [
-  { status: 'publish', count: 0 },
-  { status: 'future', count: 0 },
-  { status: 'draft', count: 0 },
-  { status: 'pending', count: 0 },
-  { status: 'private', count: 0 },
-  { status: 'trash', count: 0 },
-]
-
 export async function GET(
   request: NextRequest,
   { params: { uid } }: { params: { uid: string } }
@@ -21,7 +12,7 @@ export async function GET(
 
   if (!user) {
     return NextResponse.json(
-      { data: null, error: new ApiError(401) },
+      { data: null, count: null, error: new ApiError(401) },
       { status: 401 }
     )
   }
@@ -31,23 +22,20 @@ export async function GET(
 
   if (result?.error) {
     return NextResponse.json(
-      { data: null, error: result?.error },
+      { data: null, count: null, error: result?.error },
       { status: 400 }
     )
   }
 
-  const merged = defaultValues.map((val) => {
-    const obj = result?.data?.find((o) => o.status === val.status)
-    return obj ? { ...val, count: obj.count } : val
-  })
+  const data = result?.data
+  const count = data?.reduce((acc, obj) => acc + obj.count, 0)
 
-  const data: CountPosts[] = [
-    {
-      status: 'all',
-      count: merged.reduce((acc, obj) => acc + obj.count, 0),
-    },
-    ...merged,
-  ]
+  const orderBy = ['publish', 'draft', 'pending', 'private', 'future', 'trash']
+  const sorted = data.sort(
+    (a, b) => orderBy.indexOf(a.status) - orderBy.indexOf(b.status)
+  )
+  // const sorted = data.sort((a, b) => (a.status > b.status ? 1 : -1)) // ASC
+  // const sorted = data.sort((a, b) => (a.status > b.status ? -1 : 1)) // DESC
 
-  return NextResponse.json({ data, error: null })
+  return NextResponse.json({ data: sorted, count, error: null })
 }

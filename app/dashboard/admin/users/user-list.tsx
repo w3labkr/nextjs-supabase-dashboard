@@ -16,12 +16,12 @@ import {
 import { Paging } from './paginate'
 
 import { User } from '@supabase/supabase-js'
-import { useUsers } from '@/hooks/api'
+import { useUsersAPI } from '@/hooks/api'
 
 export function UserList() {
   const [page, setPage] = React.useState<number>(1)
   const [perPage, setPerPage] = React.useState<number>(50)
-  const { users } = useUsers(page, perPage)
+  const { users } = useUsersAPI(page, perPage)
 
   return (
     <>

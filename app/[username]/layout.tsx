@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 
 import { getProfile } from '@/hooks/async/auth'
 
-export default async function ProfileLayout({
+export default async function UserLayout({
   children,
   params: { username },
 }: {

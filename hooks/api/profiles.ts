@@ -3,7 +3,10 @@
 import useSWR from 'swr'
 import { ProfileAPI } from '@/types/api'
 
-export function useProfile(id?: string | null, params?: { username?: string }) {
+export function useProfileAPI(
+  id?: string | null,
+  params?: { username?: string }
+) {
   let url: string | null = null
 
   if (id) url = `/api/v1/profile/${id}`

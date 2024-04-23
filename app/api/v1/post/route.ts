@@ -3,11 +3,9 @@ import { createClient } from '@/lib/supabase/server'
 import { ApiError } from '@/lib/utils'
 import { authorize } from '@/hooks/async/auth'
 
-export async function PUT(
-  request: NextRequest,
-  { params: { uid } }: { params: { uid: string } }
-) {
-  const { user } = await authorize(uid)
+export async function PUT(request: NextRequest) {
+  const { user_id, ...body } = await request.json()
+  const { user } = await authorize(user_id)
 
   if (!user) {
     return NextResponse.json(
@@ -16,11 +14,10 @@ export async function PUT(
     )
   }
 
-  const body = await request.json()
   const supabase = createClient()
   const result = await supabase
     .from('posts')
-    .insert({ ...body, user_id: uid, profile_id: uid })
+    .insert({ ...body, user_id, profile_id: user_id })
     .select('*, user:users(*), profile:profiles(*)')
     .single()
 

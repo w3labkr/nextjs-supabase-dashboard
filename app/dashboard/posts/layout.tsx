@@ -7,7 +7,7 @@ import { dashboardConfig } from '@/config/dashboard'
 
 import { getUser } from '@/hooks/async/auth'
 
-export default async function PostsLayout({
+export default async function PostListLayout({
   children,
 }: {
   children: React.ReactNode
@@ -15,7 +15,7 @@ export default async function PostsLayout({
   const { user } = await getUser()
 
   return (
-    <div className="body-overflow-hidden flex h-screen w-screen min-w-[768px]">
+    <div className="body-overflow-hidden flex h-screen w-screen">
       <AppBarProvider>
         <MiniNavigation
           nav={dashboardConfig?.nav}

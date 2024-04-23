@@ -23,7 +23,7 @@ import { SubmitButton } from '@/components/submit-button'
 
 import useSWRMutation from 'swr/mutation'
 import { useAuth } from '@/hooks/use-auth'
-import { useNotification } from '@/hooks/api'
+import { useNotificationAPI } from '@/hooks/api'
 
 const FormSchema = z.object({
   marketing_emails: z.boolean(),
@@ -43,7 +43,7 @@ export function NotificationsForm() {
   const { t } = useTranslation()
 
   const { user } = useAuth()
-  const { notification } = useNotification(user?.id ?? null)
+  const { notification } = useNotificationAPI(user?.id ?? null)
   const { trigger } = useSWRMutation(
     user?.id ? `/api/v1/notification/${user?.id}` : null,
     sendRequest

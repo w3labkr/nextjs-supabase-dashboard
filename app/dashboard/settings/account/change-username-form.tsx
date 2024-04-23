@@ -23,7 +23,7 @@ import { SubmitButton } from '@/components/submit-button'
 
 import useSWRMutation from 'swr/mutation'
 import { useAuth } from '@/hooks/use-auth'
-import { useProfile } from '@/hooks/api'
+import { useProfileAPI } from '@/hooks/api'
 
 const FormSchema = z.object({
   username: z.string().nonempty().min(2).max(30),
@@ -42,7 +42,7 @@ export function ChangeUsernameForm() {
   const { t } = useTranslation()
 
   const { session } = useAuth()
-  const { profile } = useProfile(session?.user?.id ?? null)
+  const { profile } = useProfileAPI(session?.user?.id ?? null)
   const { trigger } = useSWRMutation(
     profile?.id ? `/api/v1/profile/${profile?.id}` : null,
     sendRequest
@@ -77,7 +77,7 @@ export function ChangeUsernameForm() {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
         form.setError('username', {
-          message: t('FormMessage.username_already_registered'),
+          message: t('FormMessage.duplicate_username'),
         })
       } else if (err.startsWith('You can change it after')) {
         const count = err?.replace(/[^0-9]/g, '') ?? '0'

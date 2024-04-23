@@ -9,11 +9,11 @@ import { ResendVerifyEmail } from './resend-verify-email'
 
 import { Email } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
-import { useEmails } from '@/hooks/api'
+import { useEmailsAPI } from '@/hooks/api'
 
 export function EmailList() {
   const { user } = useAuth()
-  const { emails } = useEmails(user?.id ?? null)
+  const { emails } = useEmailsAPI(user?.id ?? null)
 
   if (!emails) return <div>Loading...</div>
 
