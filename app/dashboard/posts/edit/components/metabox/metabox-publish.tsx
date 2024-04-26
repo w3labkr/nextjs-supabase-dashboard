@@ -15,21 +15,19 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
-
-import useSWRMutation from 'swr/mutation'
-import { fetcher } from '@/lib/utils'
 import { usePostForm } from '../post-form-provider'
 
-async function sendRequest(url: string, { arg }: { arg: any }) {
-  return await fetcher(url, {
-    method: 'POST',
-    body: JSON.stringify(arg),
-  })
-}
+import { useSWRConfig } from 'swr'
+import { fetcher, absoluteUrl } from '@/lib/utils'
+import { PostAPI } from '@/types/api'
 
 export function MetaboxPublish() {
   const { t } = useTranslation()
   const { post } = usePostForm()
+
+  const status = post?.status
+  const published_at = post?.published_at
+  const views = post?.views
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
@@ -38,31 +36,31 @@ export function MetaboxPublish() {
         <AccordionContent className="space-y-4">
           <div className="flex justify-between">
             <DraftButton />
-            <PreviewButton />
+            {status === 'draft' && <PreviewButton />}
           </div>
           <ul className="space-y-1">
             <li className="flex items-center">
               <LucideIcon name="Signpost" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.status')}: `}
-              {post?.status && t(`PostStatus.${post?.status}`)}
+              {status && t(`PostStatus.${status}`)}
             </li>
             <li className="flex items-center">
               <LucideIcon name="Eye" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.visibility')}: `}
-              {post?.status === 'publish'
+              {status === 'publish'
                 ? t('PostMetabox.public')
                 : t('PostMetabox.private')}
             </li>
             <li className="flex items-center">
               <LucideIcon name="CalendarDays" className="mr-2 size-4 min-w-4" />
-              {post?.published_at
-                ? `${t('PostMetabox.publish_on')}: ${dayjs(post?.published_at).format('YYYY-MM-DD HH:mm')}`
+              {published_at
+                ? `${t('PostMetabox.publish_on')}: ${dayjs(published_at).format('YYYY-MM-DD HH:mm')}`
                 : `${t('PostMetabox.publish')}: ${t('PostMetabox.immediately')}`}
             </li>
             <li className="flex items-center">
               <LucideIcon name="BarChart" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.post_views')}: `}
-              {post?.views != null && post?.views}
+              {views === null || views === undefined ? 0 : views}
             </li>
           </ul>
           <div className="flex justify-between">
@@ -78,26 +76,32 @@ export function MetaboxPublish() {
 function DraftButton() {
   const { t } = useTranslation()
   const { form, post } = usePostForm()
+  const { mutate } = useSWRConfig()
 
-  const { trigger } = useSWRMutation(
-    post?.id ? `/api/v1/post/${post?.id}` : null,
-    sendRequest
-  )
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
+      const id = post?.id
       const user_id = post?.user_id
+
+      if (!id) throw new Error('Require is not defined.')
       if (!user_id) throw new Error('Require is not defined.')
 
       const formValues = form.getValues()
-      const slug = kebabCase(formValues.slug)
-      const values = { ...formValues, slug, user_id, status: 'draft' }
+      const slug = kebabCase(formValues?.slug)
 
-      const result = await trigger(values)
+      const fetchUrl = `/api/v1/post?id=${id}`
+      const result = await fetcher<PostAPI>(fetchUrl, {
+        method: 'POST',
+        body: JSON.stringify({ ...formValues, slug, user_id, status: 'draft' }),
+      })
+
       if (result?.error) throw new Error(result?.error?.message)
+
+      mutate(fetchUrl)
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
@@ -126,30 +130,45 @@ function DraftButton() {
 }
 
 function PreviewButton() {
+  const router = useRouter()
   const { t } = useTranslation()
   const { form, post } = usePostForm()
+  const { mutate } = useSWRConfig()
 
-  const { trigger } = useSWRMutation(
-    post?.id ? `/api/v1/post/${post?.id}` : null,
-    sendRequest
-  )
+  const username = post?.profile?.username
+  const slug = form.watch('slug')
+  const permalink = React.useMemo(() => {
+    return absoluteUrl(`/${username}/${slug}?preview=true`)
+  }, [username, slug])
+
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
+      const id = post?.id
       const user_id = post?.user_id
+
+      if (!id) throw new Error('Require is not defined.')
       if (!user_id) throw new Error('Require is not defined.')
 
       const formValues = form.getValues()
       const slug = kebabCase(formValues.slug)
       const values = { ...formValues, slug, user_id, status: 'draft' }
 
-      const result = await trigger(values)
+      const fetchUrl = `/api/v1/post?id=${id}`
+      const result = await fetcher<PostAPI>(fetchUrl, {
+        method: 'POST',
+        body: JSON.stringify(values),
+      })
+
       if (result?.error) throw new Error(result?.error?.message)
 
-      toast.success(t('FormMessage.changed_successfully'))
+      mutate(fetchUrl)
+
+      // window.open(permalink, '_blank', 'noopener,noreferrer')
+      router.push(permalink)
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
@@ -168,8 +187,7 @@ function PreviewButton() {
       variant="secondary"
       size="sm"
       onClick={form.handleSubmit(onSubmit)}
-      // disabled={isSubmitting}
-      disabled
+      disabled={isSubmitting}
     >
       {t('PostMetabox.preview')}
     </Button>
@@ -182,10 +200,6 @@ function TrashButton() {
 
   const { form, post } = usePostForm()
   const { unregister } = form
-  const { trigger } = useSWRMutation(
-    post?.id ? `/api/v1/post/${post?.id}` : null,
-    sendRequest
-  )
 
   React.useEffect(() => {
     unregister('slug')
@@ -198,16 +212,22 @@ function TrashButton() {
     try {
       setIsSubmitting(true)
 
+      const id = post?.id
       const user_id = post?.user_id
+
+      if (!id) throw new Error('Require is not defined.')
       if (!user_id) throw new Error('Require is not defined.')
 
-      const values = {
-        user_id,
-        status: 'trash',
-        deleted_at: new Date().toISOString(),
-      }
+      const fetchUrl = `/api/v1/post?id=${id}`
+      const result = await fetcher<PostAPI>(fetchUrl, {
+        method: 'POST',
+        body: JSON.stringify({
+          user_id,
+          status: 'trash',
+          deleted_at: new Date().toISOString(),
+        }),
+      })
 
-      const result = await trigger(values)
       if (result?.error) throw new Error(result?.error?.message)
 
       toast.success(t('FormMessage.changed_successfully'))
@@ -242,18 +262,18 @@ function TrashButton() {
 function PublishButton() {
   const { t } = useTranslation()
   const { form, post } = usePostForm()
+  const { mutate } = useSWRConfig()
 
-  const { trigger } = useSWRMutation(
-    post?.id ? `/api/v1/post/${post?.id}` : null,
-    sendRequest
-  )
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
+      const id = post?.id
       const user_id = post?.user_id
+
+      if (!id) throw new Error('Require is not defined.')
       if (!user_id) throw new Error('Require is not defined.')
 
       const formValues = form.getValues()
@@ -265,8 +285,15 @@ function PublishButton() {
         ? { ...formValues, slug, user_id, status }
         : { ...formValues, slug, user_id, status, published_at }
 
-      const result = await trigger(values)
+      const fetchUrl = `/api/v1/post?id=${id}`
+      const result = await fetcher<PostAPI>(fetchUrl, {
+        method: 'POST',
+        body: JSON.stringify(values),
+      })
+
       if (result?.error) throw new Error(result?.error?.message)
+
+      mutate(fetchUrl)
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
@@ -289,7 +316,9 @@ function PublishButton() {
       onClick={form.handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
-      {t('PostMetabox.publish')}
+      {post?.status === 'draft'
+        ? t('PostMetabox.publish')
+        : t('PostMetabox.update')}
     </Button>
   )
 }

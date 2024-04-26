@@ -16,12 +16,15 @@ import {
 import { Paging } from './paginate'
 
 import { User } from '@supabase/supabase-js'
+import { useAuth } from '@/hooks/use-auth'
 import { useUsersAPI } from '@/hooks/api'
 
 export function UserList() {
   const [page, setPage] = React.useState<number>(1)
   const [perPage, setPerPage] = React.useState<number>(50)
-  const { users } = useUsersAPI(page, perPage)
+
+  const { user } = useAuth()
+  const { users } = useUsersAPI(user?.id ?? null, { page, perPage })
 
   return (
     <>
@@ -40,7 +43,7 @@ export function UserList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users?.map((item) => <ListItem key={item?.id} item={item} />)}
+          {users?.map((item: User) => <ListItem key={item?.id} item={item} />)}
         </TableBody>
       </Table>
       <Paging

@@ -98,13 +98,13 @@ export type Database = {
           id: number
           is_ban: boolean | null
           password: string | null
+          post_type: string | null
           profile_id: string | null
           published_at: string | null
           slug: string | null
           status: string | null
           thumbnail: string | null
           title: string | null
-          type: string | null
           updated_at: string | null
           user_id: string | null
           views: number | null
@@ -118,13 +118,13 @@ export type Database = {
           id?: number
           is_ban?: boolean | null
           password?: string | null
+          post_type?: string | null
           profile_id?: string | null
           published_at?: string | null
           slug?: string | null
           status?: string | null
           thumbnail?: string | null
           title?: string | null
-          type?: string | null
           updated_at?: string | null
           user_id?: string | null
           views?: number | null
@@ -138,13 +138,13 @@ export type Database = {
           id?: number
           is_ban?: boolean | null
           password?: string | null
+          post_type?: string | null
           profile_id?: string | null
           published_at?: string | null
           slug?: string | null
           status?: string | null
           thumbnail?: string | null
           title?: string | null
-          type?: string | null
           updated_at?: string | null
           user_id?: string | null
           views?: number | null
@@ -384,6 +384,12 @@ export type Database = {
           role: string
           plan: string
         }[]
+      }
+      set_post_views: {
+        Args: {
+          post_id: number
+        }
+        Returns: number
       }
       verify_user_password: {
         Args: {

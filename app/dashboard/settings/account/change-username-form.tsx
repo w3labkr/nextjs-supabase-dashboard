@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { fetcher } from '@/lib/utils'
 import { toast } from 'sonner'
 import {
   Form,
@@ -19,11 +18,13 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { SubmitButton } from '@/components/submit-button'
+import { Button } from '@/components/ui/button'
 
-import useSWRMutation from 'swr/mutation'
+import { useSWRConfig } from 'swr'
+import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useProfileAPI } from '@/hooks/api'
+import { ProfileAPI } from '@/types/api'
 
 const FormSchema = z.object({
   username: z.string().nonempty().min(2).max(30),
@@ -31,22 +32,12 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-async function sendRequest(url: string, { arg }: { arg: FormValues }) {
-  return await fetcher(url, {
-    method: 'POST',
-    body: JSON.stringify(arg),
-  })
-}
-
 export function ChangeUsernameForm() {
   const { t } = useTranslation()
 
-  const { session } = useAuth()
-  const { profile } = useProfileAPI(session?.user?.id ?? null)
-  const { trigger } = useSWRMutation(
-    profile?.id ? `/api/v1/profile/${profile?.id}` : null,
-    sendRequest
-  )
+  const { user } = useAuth()
+  const { profile } = useProfileAPI(user?.id ?? null)
+  const { mutate } = useSWRConfig()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -67,10 +58,19 @@ export function ChangeUsernameForm() {
     try {
       setIsSubmitting(true)
 
-      if (!profile?.username) throw new Error('Require is not defined.')
+      if (!user?.id) throw new Error('Require is not defined.')
 
-      const result = await trigger(formValues)
+      const result = await fetcher<ProfileAPI>(
+        `/api/v1/profile?id=${user?.id}`,
+        {
+          method: 'POST',
+          body: JSON.stringify(formValues),
+        }
+      )
+
       if (result?.error) throw new Error(result?.error?.message)
+
+      mutate(`/api/v1/profile?id=${user?.id}`)
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
@@ -118,11 +118,9 @@ export function ChangeUsernameForm() {
             </FormItem>
           )}
         />
-        <SubmitButton
-          isSubmitting={isSubmitting}
-          text="FormSubmit.change_username"
-          translate="yes"
-        />
+        <Button disabled={isSubmitting}>
+          {t('FormSubmit.change_username')}
+        </Button>
       </form>
     </Form>
   )

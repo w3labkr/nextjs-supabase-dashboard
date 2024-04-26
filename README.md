@@ -533,7 +533,7 @@ export async function POST(request: NextRequest) {
 ### Error Handling
 
 ```javascript
-import { SubmitButton } from '@/components/submit-button'
+import { Button } from '@/components/ui/button'
 
 export function Component() {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -551,7 +551,7 @@ export function Component() {
     }
   }
   
-  return <SubmitButton isSubmitting={isSubmitting} />
+  return <Button disabled={isSubmitting}>Submit</Button>
 }
 ```
 

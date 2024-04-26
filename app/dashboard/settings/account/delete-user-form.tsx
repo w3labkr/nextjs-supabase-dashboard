@@ -8,7 +8,6 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { cn, fetcher } from '@/lib/utils'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
@@ -30,8 +29,8 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { SubmitButton } from '@/components/submit-button'
 
+import { fetcher } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 import { useUserAPI } from '@/hooks/api'
@@ -46,6 +45,8 @@ const FormSchema = z.object({
 })
 
 type FormValues = z.infer<typeof FormSchema>
+
+type FetchAPI = { data: null; error: Error } | { data: null; error: null }
 
 const defaultValues: Partial<FormValues> = {
   email: '',
@@ -98,7 +99,7 @@ export function DeleteUserForm() {
         }
       }
 
-      const deleted = await fetcher(`/api/v1/user/${user?.id}`, {
+      const deleted = await fetcher<FetchAPI>(`/api/v1/user?id=${user?.id}`, {
         method: 'DELETE',
       })
       if (deleted?.error) throw new Error(deleted?.error?.message)
@@ -204,13 +205,12 @@ export function DeleteUserForm() {
                 </FormItem>
               )}
             />
-            <SubmitButton
+            <Button
               variant="destructive"
               disabled={!form?.formState?.isValid || isSubmitting}
-              isSubmitting={isSubmitting}
-              text="FormSubmit.delete_your_account"
-              translate="yes"
-            />
+            >
+              {t('FormSubmit.delete_your_account')}
+            </Button>
           </form>
         </Form>
         {/* <DialogFooter></DialogFooter> */}

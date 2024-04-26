@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { Separator } from '@/components/ui/separator'
 import { Title } from '@/components/title'
-import { AddPostButton } from './components/add-post-button'
+import { AddButton } from './components/add-button'
 import { PostList } from './post-list'
 
 export default function PostListPage() {
@@ -11,9 +11,9 @@ export default function PostListPage() {
       <div className="space-y-4">
         <div className="flex justify-between">
           <Title text="PostListPage.title" translate="yes" />
-          <AddPostButton
+          <AddButton
             variant="default"
-            text="PostListPage.AddPostButton"
+            text="PostListPage.AddButton"
             translate="yes"
             startIconName="Plus"
           />

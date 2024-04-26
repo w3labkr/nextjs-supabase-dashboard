@@ -19,11 +19,12 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Switch } from '@/components/ui/switch'
-import { SubmitButton } from '@/components/submit-button'
+import { Button } from '@/components/ui/button'
 
-import useSWRMutation from 'swr/mutation'
+import { useSWRConfig } from 'swr'
 import { useAuth } from '@/hooks/use-auth'
 import { useNotificationAPI } from '@/hooks/api'
+import { NotificationAPI } from '@/types/api'
 
 const FormSchema = z.object({
   marketing_emails: z.boolean(),
@@ -32,22 +33,12 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-async function sendRequest(url: string, { arg }: { arg: FormValues }) {
-  return await fetcher(url, {
-    method: 'POST',
-    body: JSON.stringify(arg),
-  })
-}
-
 export function NotificationsForm() {
   const { t } = useTranslation()
 
   const { user } = useAuth()
   const { notification } = useNotificationAPI(user?.id ?? null)
-  const { trigger } = useSWRMutation(
-    user?.id ? `/api/v1/notification/${user?.id}` : null,
-    sendRequest
-  )
+  const { mutate } = useSWRConfig()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -69,12 +60,17 @@ export function NotificationsForm() {
     try {
       setIsSubmitting(true)
 
-      if (notification?.marketing_emails == null) {
-        throw new Error('Require is not defined.')
-      }
+      if (!user?.id) throw new Error('Require is not defined.')
 
-      const result = await trigger(formValues)
+      const fetchUrl = `/api/v1/notification?uid=${user?.id}`
+      const result = await fetcher<NotificationAPI>(fetchUrl, {
+        method: 'POST',
+        body: JSON.stringify(formValues),
+      })
+
       if (result?.error) throw new Error(result?.error?.message)
+
+      mutate(fetchUrl)
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
@@ -138,11 +134,9 @@ export function NotificationsForm() {
             </FormItem>
           )}
         />
-        <SubmitButton
-          isSubmitting={isSubmitting}
-          text="FormSubmit.update_notifications"
-          translate="yes"
-        />
+        <Button disabled={isSubmitting}>
+          {t('FormSubmit.update_notifications')}
+        </Button>
       </form>
     </Form>
   )

@@ -4,7 +4,7 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 import { Separator } from '@/components/ui/separator'
 
-import { EmailList } from './components/email-list'
+import { EmailList } from './email-list'
 import { AddEmailAddress } from './components/add-email-address'
 import { PrimaryEmailAddress } from './components/primary-email-address'
 

@@ -30,15 +30,15 @@
   },
 
   "PostListPage": {
-    "title": "글",
+    "title": "글 목록",
     "description": "게시물을 작성하고 관리하세요.",
-    "AddPostButton": "새로운 게시물"
+    "AddButton": "새로운 게시물"
   },
 
   "PostEditPage": {
     "title": "글 수정",
     "description": "",
-    "AddPostButton": "새 글"
+    "AddButton": "새 글"
   },
 
   "ProfilePage": {
@@ -342,11 +342,13 @@
   },
 
   "PostList": {
-    "EditPostLink": "수정",
-    "ViewPostLink": "보기",
-    "TrashPostButton": "휴지통",
-    "RestorePostButton": "복구",
-    "DeletePostButton": "삭제"
+    "EditLink": "수정",
+    "ViewLink": "보기",
+    "PreviewLink": "미리보기",
+    "TrashButton": "휴지통",
+    "ClonePostButton": "복사",
+    "RestoreButton": "복구",
+    "DeleteButton": "삭제"
   },
 
   "PostStatus": {
@@ -363,6 +365,7 @@
     "excerpt": "요약",
     "publish": "발행",
     "publish_on": "발행일",
+    "update": "업데이트",
     "future": "예약",
     "Schedule for": "일정",
     "immediately": "즉시",
@@ -382,7 +385,7 @@
     "permalink": "고유주소"
   },
 
-  "TableHead": {
+  "Table": {
     "num": "번호",
     "id": "아이디",
     "status": "상태",
@@ -390,14 +393,16 @@
     "excerpt": "설명",
     "description": "설명",
     "author": "작성자",
-    "view": "조회수",
+    "views": "조회수",
     "created_at": "생성일",
     "updated_at": "수정일",
-    "deleted_at": "삭제일"
+    "deleted_at": "삭제일",
+    "empty_post": "아직 게시물이 없습니다.",
+    "is_loading": "로드 중..."
   },
 
-  "TableCell": {
-    "empty_post": "아직 게시물이 없습니다.",
-    "is_loading": "로딩..."
+  "Alert": {
+    "heads_up": "주의하세요!",
+    "this_is_a_preview_screen": "미리보기 화면입니다."
   }
 }

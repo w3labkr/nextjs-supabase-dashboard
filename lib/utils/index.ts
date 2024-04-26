@@ -9,4 +9,4 @@ export {
   httpStatusMessage,
 } from './http-status-codes'
 export { ApiError } from './error'
-export { absoluteUrl, qs } from './url'
+export { absoluteUrl, getSearchParams, setSearchParams } from './url'

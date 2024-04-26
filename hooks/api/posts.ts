@@ -1,11 +1,11 @@
 'use client'
 
 import useSWR from 'swr'
-import { qs } from '@/lib/utils'
+import { setSearchParams } from '@/lib/utils'
 import { PostAPI, PostsAPI, CountPostsAPI } from '@/types/api'
 
 export function usePostAPI(id: string | null) {
-  const url = id ? `/api/v1/post/${id}` : null
+  const url = id ? `/api/v1/post?id=${id}` : null
   const {
     data: response,
     error,
@@ -27,8 +27,8 @@ export function usePostsAPI(
   uid: string | null,
   params: { page: number; perPage: number; status: string }
 ) {
-  const queryString = qs(params)
-  const url = uid ? `/api/v1/posts/${uid}?${queryString}` : null
+  const searchParams = setSearchParams({ uid, ...params })
+  const url = uid ? `/api/v1/post/list?${searchParams}` : null
 
   const {
     data: response,
@@ -49,7 +49,7 @@ export function usePostsAPI(
 }
 
 export function useCountPostsAPI(uid: string | null) {
-  const url = uid ? `/api/v1/posts/${uid}/count` : null
+  const url = uid ? `/api/v1/post/count?uid=${uid}` : null
 
   const {
     data: response,

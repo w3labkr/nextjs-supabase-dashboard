@@ -9,8 +9,8 @@ export function useProfileAPI(
 ) {
   let url: string | null = null
 
-  if (id) url = `/api/v1/profile/${id}`
-  if (params?.username) url = `/api/profile/${params?.username}`
+  if (id) url = `/api/v1/profile?id=${id}`
+  if (params?.username) url = `/api/v1/profile?username=${params?.username}`
 
   const {
     data: response,

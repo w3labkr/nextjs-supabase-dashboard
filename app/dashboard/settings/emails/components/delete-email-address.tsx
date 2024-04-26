@@ -18,29 +18,18 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { useEmailItem } from './email-item-provider'
+import { useEmailItem } from '../context/email-item-provider'
 
-import useSWRMutation from 'swr/mutation'
+import { useSWRConfig } from 'swr'
 import { useAuth } from '@/hooks/use-auth'
-
-type FormValues = { email: string }
-
-async function sendRequest(url: string, { arg }: { arg: FormValues }) {
-  return await fetcher(url, {
-    method: 'DELETE',
-    body: JSON.stringify(arg),
-  })
-}
+import { EmailsAPI } from '@/types/api'
 
 export function DeleteEmailAddress() {
   const { t } = useTranslation()
   const { email, isPrimary } = useEmailItem()
 
   const { user } = useAuth()
-  const { trigger } = useSWRMutation(
-    user?.id ? `/api/v1/emails/${user?.id}` : null,
-    sendRequest
-  )
+  const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -48,12 +37,18 @@ export function DeleteEmailAddress() {
     try {
       setIsSubmitting(true)
 
+      if (!user?.id) throw new Error('Require is not defined.')
       if (!email) throw new Error('Require is not defined.')
 
-      const formValues: FormValues = { email }
-      const result = await trigger(formValues)
+      const fetchUrl = `/api/v1/email/list?uid=${user?.id}`
+      const result = await fetcher<EmailsAPI>(fetchUrl, {
+        method: 'DELETE',
+        body: JSON.stringify({ email }),
+      })
 
       if (result?.error) throw new Error(result?.error?.message)
+
+      mutate(fetchUrl)
 
       toast.success(t('FormMessage.deleted_successfully'))
     } catch (e: unknown) {
@@ -71,6 +66,7 @@ export function DeleteEmailAddress() {
         <Button
           variant="outline"
           className="h-auto p-1.5 text-red-700 hover:bg-red-700 hover:text-white"
+          disabled={isSubmitting}
         >
           <LucideIcon name="Trash" className="size-4 min-w-4" />
         </Button>

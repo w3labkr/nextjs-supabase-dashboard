@@ -26,7 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { SubmitButton } from '@/components/submit-button'
+import { Button } from '@/components/ui/button'
 
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
 import { setResolvedLanguage } from '@/store/features/i18n-slice'
@@ -108,11 +108,7 @@ export function ChangeLanguageForm() {
             </FormItem>
           )}
         />
-        <SubmitButton
-          isSubmitting={isSubmitting}
-          text="FormSubmit.save"
-          translate="yes"
-        />
+        <Button disabled={isSubmitting}>{t('FormSubmit.save')}</Button>
       </form>
     </Form>
   )

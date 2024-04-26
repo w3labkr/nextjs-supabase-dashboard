@@ -25,7 +25,7 @@ import { usePostForm } from '../post-form-provider'
 
 export function MetaboxSlug() {
   const { t } = useTranslation()
-  const { form } = usePostForm()
+  const { form, post } = usePostForm()
   const { control, watch, setValue } = form
 
   const title = watch('title')
@@ -37,8 +37,12 @@ export function MetaboxSlug() {
   )
 
   React.useEffect(() => {
-    if (!slug) setValue('slug', kebabCase(title))
-  }, [setValue, slug, title])
+    if (!slug && post?.slug) {
+      setValue('slug', post?.slug)
+    } else if (!slug) {
+      setValue('slug', kebabCase(title))
+    }
+  }, [setValue, slug, title, post?.slug])
 
   React.useEffect(() => {
     if (slug) debounceSetValue(kebabCase(slug))

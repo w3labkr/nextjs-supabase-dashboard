@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { SubmitButton } from '@/components/submit-button'
+import { Button } from '@/components/ui/button'
 
 const FormSchema = z.object({
   theme: z.string(),
@@ -134,11 +134,7 @@ export function ChangeThemeForm() {
             </FormItem>
           )}
         />
-        <SubmitButton
-          isSubmitting={isSubmitting}
-          text="FormSubmit.update_theme"
-          translate="yes"
-        />
+        <Button disabled={isSubmitting}>{t('FormSubmit.update_theme')}</Button>
       </form>
     </Form>
   )

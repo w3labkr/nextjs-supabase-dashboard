@@ -27,10 +27,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { SubmitButton } from '@/components/submit-button'
+import { Button } from '@/components/ui/button'
 
+import { useSWRConfig } from 'swr'
 import { useAuth } from '@/hooks/use-auth'
 import { useEmailsAPI } from '@/hooks/api'
+import { EmailAPI } from '@/types/api'
 
 const FormSchema = z.object({
   email: z.string().max(255),
@@ -44,6 +46,8 @@ export function PrimaryEmailAddress() {
 
   const { user } = useAuth()
   const { emails } = useEmailsAPI(user?.id ?? null)
+  const { mutate } = useSWRConfig()
+
   const primaryEmail = React.useMemo(
     () => emails?.find((x) => x.email === user?.email && x.email_confirmed_at),
     [emails, user?.email]
@@ -68,11 +72,15 @@ export function PrimaryEmailAddress() {
       if (!user?.id) throw new Error('Require is not defined.')
       if (!user?.email) throw new Error('Require is not defined.')
 
-      const result = await fetcher(`/api/v1/email/${user?.id}`, {
+      const fetchUrl = `/api/v1/email?uid=${user?.id}`
+      const result = await fetcher<EmailAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify(formValues),
       })
+
       if (result?.error) throw new Error(result?.error?.message)
+
+      mutate(fetchUrl)
 
       toast.success(t('FormMessage.changed_successfully'))
 
@@ -137,11 +145,7 @@ export function PrimaryEmailAddress() {
               </FormItem>
             )}
           />
-          <SubmitButton
-            isSubmitting={isSubmitting}
-            text="FormSubmit.save"
-            translate="yes"
-          />
+          <Button disabled={isSubmitting}>{t('FormSubmit.save')}</Button>
         </form>
       </Form>
     </div>

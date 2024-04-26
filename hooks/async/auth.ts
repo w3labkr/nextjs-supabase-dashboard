@@ -1,11 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 
 export async function authorize(id: string) {
-  const { user, role } = await getUser()
+  const { user, role, plan } = await getUser()
 
-  if (!user) return { user: null, role: null }
+  if (!user) return { user: null, role: null, plan: null }
 
-  return user?.id === id ? { user, role } : { user: null, role: null }
+  return user?.id === id
+    ? { user, role, plan }
+    : { user: null, role: null, plan: null }
 }
 
 export async function getUser() {
@@ -14,35 +16,32 @@ export async function getUser() {
     data: { user: session },
   } = await supabase.auth.getUser()
 
-  if (!session) return { user: null, role: null }
+  if (!session) return { user: null, role: null, plan: null }
 
-  const result = await supabase.rpc('get_user', { uid: session?.id }).single()
-
-  if (result?.error) return { user: null, role: null }
-
-  const user = { ...session, user: result?.data }
-  const user_role = user?.user?.role
-
-  const role = {
-    isGuest: ['guest'].includes(user_role),
-    isUser: ['user'].includes(user_role),
-    isAdmin: ['admin', 'superadmin'].includes(user_role),
-    isSuperAdmin: ['superadmin'].includes(user_role),
-  }
-
-  return { user, role }
-}
-
-export async function getProfile(username: string) {
-  const supabase = createClient()
   const result = await supabase
-    .from('profiles')
-    .select()
-    .eq('username', username)
+    .rpc('get_user', { uid: session?.id })
     .limit(1)
     .single()
 
-  if (result?.error) return { profile: null }
+  if (result?.error) return { user: null, role: null, plan: null }
 
-  return { profile: result?.data }
+  const user = { ...session, user: result?.data }
+  const user_role = user?.user?.role
+  const user_plan = user?.user?.plan
+
+  const role = {
+    isGuest: user_role === 'guest',
+    isUser: user_role === 'user',
+    isAdmin: ['admin', 'superadmin'].includes(user_role),
+    isSuperAdmin: user_role === 'superadmin',
+  }
+
+  const plan = {
+    isFree: user_plan === 'free',
+    isBasic: user_plan === 'basic',
+    isStandard: user_plan === 'standard',
+    isPremium: user_plan === 'premium',
+  }
+
+  return { user, role, plan }
 }

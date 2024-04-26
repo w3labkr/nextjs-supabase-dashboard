@@ -11,20 +11,21 @@ export function Permalink() {
   const { t } = useTranslation()
   const { form, post } = usePostForm()
 
+  const username = post?.profile?.username
   const slug = form.watch('slug')
-  const username = post?.profile?.username ?? ''
-  const [permalink, setPermalink] = React.useState<string>('')
-
-  React.useEffect(() => {
-    const pathname = `${username}/posts/${slug}`
-    const url = absoluteUrl(pathname)
-    setPermalink(url)
+  const permalink = React.useMemo(() => {
+    return absoluteUrl(`/${username}/${slug}`)
   }, [username, slug])
 
   return (
     <div className="text-sm">
       {`${t('PostMetabox.permalink')}: `}
-      <Link href={permalink} className="text-blue-700" target="_blank">
+      <Link
+        href={permalink}
+        className="text-blue-700 underline-offset-4 hover:underline"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         {decodeURIComponent(permalink)}
       </Link>
     </div>

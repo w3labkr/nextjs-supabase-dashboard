@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { SubmitButton } from '@/components/submit-button'
+import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
 import { createClient } from '@/lib/supabase/client'
@@ -53,7 +53,8 @@ export function ChangePasswordForm() {
   const { session } = useAuth()
   const { user } = useUserAPI(session?.user?.id ?? null)
   const { mutate } = useSWRConfig()
-  const hasSetPassword: boolean = user?.user?.has_set_password ?? false
+
+  const hasSetPassword = user?.user?.has_set_password ?? false
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -88,14 +89,13 @@ export function ChangePasswordForm() {
         }
       }
 
-      if (!formValues?.newPassword) throw new Error('Require is not defined.')
-
       const updated = await supabase.auth.updateUser({
         password: formValues?.newPassword,
       })
       if (updated?.error) throw new Error(updated?.error?.message)
 
-      mutate(`/api/v1/user/${user?.id}`)
+      mutate(`/api/v1/user?id=${user?.id}`)
+
       form.reset()
       router.refresh()
 
@@ -197,11 +197,9 @@ export function ChangePasswordForm() {
             </FormItem>
           )}
         />
-        <SubmitButton
-          isSubmitting={isSubmitting}
-          text="FormSubmit.change_password"
-          translate="yes"
-        />
+        <Button disabled={isSubmitting}>
+          {t('FormSubmit.change_password')}
+        </Button>
       </form>
     </Form>
   )

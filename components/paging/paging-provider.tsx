@@ -1,36 +1,25 @@
 'use client'
 
 import * as React from 'react'
-import { useSearchParams } from 'next/navigation'
 
 interface PagingContextProps {
   page: number
   perPage: number
   pageSize: number
-  status: string
+  [key: string]: any
 }
 
 const PagingContext = React.createContext<PagingContextProps | undefined>(
   undefined
 )
 
-export function PagingProvider({ children }: { children: React.ReactNode }) {
-  const searchParams = useSearchParams()
-
-  const page = +(searchParams.get('page') ?? '1')
-  const perPage = +(searchParams.get('perPage') ?? '50')
-  const pageSize = +(searchParams.get('pageSize') ?? '10')
-  const status = searchParams.get('status') ?? 'all'
-
-  const value = React.useMemo(() => {
-    return {
-      page,
-      perPage,
-      pageSize,
-      status,
-    }
-  }, [page, perPage, pageSize, status])
-
+export function PagingProvider({
+  children,
+  value,
+}: {
+  children: React.ReactNode
+  value: PagingContextProps
+}) {
   return (
     <PagingContext.Provider value={value}>{children}</PagingContext.Provider>
   )

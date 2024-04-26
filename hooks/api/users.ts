@@ -1,10 +1,11 @@
 'use client'
 
 import useSWR from 'swr'
+import { setSearchParams } from '@/lib/utils'
 import { UserAPI, UsersAPI } from '@/types/api'
 
 export function useUserAPI(id: string | null) {
-  const url = id ? `/api/v1/user/${id}` : null
+  const url = id ? `/api/v1/user?id=${id}` : null
   const {
     data: response,
     error,
@@ -22,9 +23,13 @@ export function useUserAPI(id: string | null) {
   }
 }
 
-export function useUsersAPI(page: number, perPage: number) {
-  const url =
-    page && perPage ? `/api/v1/users?page=${page}&perPage=${perPage}` : null
+export function useUsersAPI(
+  uid: string | null,
+  params: { page: number; perPage: number }
+) {
+  const searchParams = setSearchParams({ uid, ...params })
+  const url = uid ? `/api/v1/user/list?${searchParams}` : null
+
   const {
     data: response,
     error,

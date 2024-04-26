@@ -29,11 +29,12 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { SubmitButton } from '@/components/submit-button'
+import { Button } from '@/components/ui/button'
 
-import useSWRMutation from 'swr/mutation'
+import { useSWRConfig } from 'swr'
 import { useAuth } from '@/hooks/use-auth'
 import { useProfileAPI, useEmailsAPI } from '@/hooks/api'
+import { ProfileAPI } from '@/types/api'
 
 const FormSchema = z.object({
   full_name: z.string().nonempty(),
@@ -43,23 +44,13 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-async function sendRequest(url: string, { arg }: { arg: FormValues }) {
-  return await fetcher(url, {
-    method: 'POST',
-    body: JSON.stringify(arg),
-  })
-}
-
 export function ProfileForm() {
   const { t } = useTranslation()
 
   const { user } = useAuth()
   const { profile } = useProfileAPI(user?.id ?? null)
   const { emails } = useEmailsAPI(user?.id ?? null)
-  const { trigger } = useSWRMutation(
-    user?.id ? `/api/v1/profile/${user?.id}` : null,
-    sendRequest
-  )
+  const { mutate } = useSWRConfig()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -86,12 +77,22 @@ export function ProfileForm() {
     try {
       setIsSubmitting(true)
 
+      if (!user?.id) throw new Error('Require is not defined.')
+
       const setEmail = (s: string) => (s === 'unassigned' ? '' : s)
-      const result = await trigger({
-        ...formValues,
-        email: setEmail(formValues?.email),
+
+      const fetchUrl = `/api/v1/profile?id=${user?.id}`
+      const result = await fetcher<ProfileAPI>(fetchUrl, {
+        method: 'POST',
+        body: JSON.stringify({
+          ...formValues,
+          email: setEmail(formValues?.email),
+        }),
       })
+
       if (result?.error) throw new Error(result?.error?.message)
+
+      mutate(fetchUrl)
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
@@ -188,11 +189,9 @@ export function ProfileForm() {
             </FormItem>
           )}
         />
-        <SubmitButton
-          isSubmitting={isSubmitting}
-          text="FormSubmit.update_profile"
-          translate="yes"
-        />
+        <Button disabled={isSubmitting}>
+          {t('FormSubmit.update_profile')}
+        </Button>
       </form>
     </Form>
   )

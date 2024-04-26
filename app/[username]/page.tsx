@@ -15,7 +15,7 @@ import { Footer } from '@/components/footer'
 import { Profile } from '@/types/database'
 import { useProfileAPI } from '@/hooks/api'
 
-export default function UserPage({
+export default function PublicProfilePage({
   params: { username },
 }: {
   params: { username: string }

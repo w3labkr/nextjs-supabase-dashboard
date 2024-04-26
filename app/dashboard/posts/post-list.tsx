@@ -2,11 +2,12 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 
-import { cn, qs } from '@/lib/utils'
+import { cn } from '@/lib/utils'
+import { LucideIcon } from '@/lib/lucide-icon'
 import {
   Table,
   TableBody,
@@ -18,23 +19,41 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Checkbox } from '@/components/ui/checkbox'
+
 import { PagingProvider, usePaging } from '@/components/paging/paging-provider'
 import { Paging } from '@/components/paging'
 
-import { PostItemProvider } from './components/post-item-provider'
-import { EditPostLink } from './components/edit-post-link'
-import { ViewPostLink } from './components/view-post-link'
-import { TrashPostButton } from './components/trash-post-button'
-import { RestorePostButton } from './components/restore-post-button'
-import { DeletePostButton } from './components/delete-post-button'
+import { PostItemProvider, usePostItem } from './context/post-item-provider'
+import { EditLink } from './components/edit-link'
+import { ViewLink } from './components/view-link'
+import { TrashButton } from './components/trash-button'
+import { RestoreButton } from './components/restore-button'
+import { DeleteButton } from './components/delete-button'
 
 import { Post, CountPosts, PostStatus } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
+import { useQueryString } from '@/hooks/use-query-string'
 import { usePostsAPI, useCountPostsAPI } from '@/hooks/api'
 
 export function PostList() {
+  const searchParams = useSearchParams()
+
+  const page = +(searchParams.get('page') ?? '1')
+  const perPage = +(searchParams.get('perPage') ?? '5')
+  const pageSize = +(searchParams.get('pageSize') ?? '10')
+  const status = searchParams.get('status')
+
+  const value = React.useMemo(() => {
+    return {
+      page,
+      perPage,
+      pageSize,
+      status,
+    }
+  }, [page, perPage, pageSize, status])
+
   return (
-    <PagingProvider>
+    <PagingProvider value={value}>
       <Header />
       <Body />
       <Footer />
@@ -48,16 +67,16 @@ function Header() {
 
   return (
     <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-      <HeadLink status="all" count={count ?? 0} />
+      <HeadLink value={null} label="all" count={count ?? 0} />
       {data?.map((posts: CountPosts) => {
         return (
           <React.Fragment key={posts?.status}>
-            {posts?.count > 0 ? (
-              <>
-                <span>|</span>
-                <HeadLink status={posts?.status} count={posts?.count} />
-              </>
-            ) : null}
+            <span>|</span>
+            <HeadLink
+              value={posts?.status}
+              label={posts?.status}
+              count={posts?.count}
+            />
           </React.Fragment>
         )
       })}
@@ -66,25 +85,28 @@ function Header() {
 }
 
 function HeadLink({
-  status,
+  value,
+  label,
   count,
 }: {
-  status: PostStatus | 'all'
+  value: PostStatus | null
+  label: PostStatus | 'all'
   count: number
 }) {
   const { t } = useTranslation()
-  const { status: qsStatus } = usePaging()
+  const { status } = usePaging()
+  const { qs } = useQueryString()
   const pathname = usePathname()
 
   return (
     <Link
-      href={pathname + '?' + qs({ status, page: '1' })}
+      href={pathname + '?' + qs({ status: value, page: 1 })}
       className={cn(
         'h-auto p-0',
-        qsStatus === status ? 'text-foreground' : 'text-muted-foreground'
+        value === status ? 'text-foreground' : 'text-muted-foreground'
       )}
     >
-      {t(`PostStatus.${status}`)}({count})
+      {t(`PostStatus.${label}`)}({count})
     </Link>
   )
 }
@@ -122,11 +144,21 @@ function Body() {
           <TableHead className="w-[50px]">
             <Checkbox />
           </TableHead>
-          <TableHead className="w-[70px]">{t('TableHead.num')}</TableHead>
-          <TableHead>{t('TableHead.title')}</TableHead>
-          <TableHead className="w-[100px]">{t('TableHead.author')}</TableHead>
-          <TableHead className="w-[200px]">
-            {t('TableHead.created_at')}
+          <TableHead className="w-[70px] text-center">
+            {t('Table.num')}
+          </TableHead>
+          <TableHead>{t('Table.title')}</TableHead>
+          <TableHead className="w-[120px] text-center">
+            {t('Table.author')}
+          </TableHead>
+          <TableHead className="w-[70px] text-center">
+            {t('Table.status')}
+          </TableHead>
+          <TableHead className="w-[100px] text-center">
+            {t('Table.views')}
+          </TableHead>
+          <TableHead className="w-[170px] text-center">
+            {t('Table.created_at')}
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -145,7 +177,7 @@ function Body() {
 
 function ListItem({ post }: { post: Post }) {
   const { t } = useTranslation()
-  const { status } = usePaging()
+  const { id, created_at, title, status, profile } = post
 
   return (
     <PostItemProvider value={{ post }}>
@@ -153,21 +185,35 @@ function ListItem({ post }: { post: Post }) {
         <TableCell>
           <Checkbox />
         </TableCell>
-        <TableCell>{post?.id}</TableCell>
+        <TableCell align="center">{id}</TableCell>
         <TableCell>
-          <div>
-            {post?.title}
-            {post?.status !== 'publish'
-              ? ` - ${t(`PostStatus.${post?.status}`)}`
-              : null}
+          <div className="line-clamp-1">
+            {title}
+            {status !== 'publish' ? ` - ${t(`PostStatus.${status}`)}` : null}
           </div>
           <div className="flex items-center space-x-1">
-            {status === 'trash' ? <TrashActions /> : <DefaultActions />}
+            {status === 'publish' || status === 'private' ? (
+              <DefaultActions />
+            ) : status === 'trash' ? (
+              <TrashActions />
+            ) : (
+              <DraftActions />
+            )}
           </div>
         </TableCell>
-        <TableCell>{post?.profile?.full_name}</TableCell>
-        <TableCell>
-          {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm')}
+        <TableCell align="center">{profile?.full_name}</TableCell>
+        <TableCell align="center">
+          {status === 'private' ? (
+            <LucideIcon name="LockKeyhole" className="size-4 min-w-4" />
+          ) : (
+            <LucideIcon name="LockKeyholeOpen" className="size-4 min-w-4" />
+          )}
+        </TableCell>
+        <TableCell align="center">
+          {post?.views?.toLocaleString('en-US')}
+        </TableCell>
+        <TableCell align="center">
+          {dayjs(created_at).format('YYYY-MM-DD HH:mm')}
         </TableCell>
       </TableRow>
     </PostItemProvider>
@@ -180,7 +226,7 @@ function EmptyItem() {
   return (
     <TableRow className="hover:bg-inherit">
       <TableCell colSpan={6} align="center">
-        {t('TableCell.empty_post')}
+        {t('Table.empty_post')}
       </TableCell>
     </TableRow>
   )
@@ -192,7 +238,7 @@ function LoadingItem() {
   return (
     <TableRow className="hover:bg-inherit">
       <TableCell colSpan={5} align="center">
-        {t('TableCell.is_loading')}
+        {t('Table.is_loading')}
       </TableCell>
     </TableRow>
   )
@@ -201,15 +247,21 @@ function LoadingItem() {
 function DefaultActions() {
   return (
     <>
-      <EditPostLink
-        className="text-blue-700"
-        text="PostList.EditPostLink"
-        translate="yes"
-      />
+      <EditLink />
       <span>|</span>
-      <TrashPostButton />
+      <TrashButton />
       <span>|</span>
-      <ViewPostLink />
+      <ViewLink />
+    </>
+  )
+}
+
+function DraftActions() {
+  return (
+    <>
+      <EditLink />
+      <span>|</span>
+      <TrashButton />
     </>
   )
 }
@@ -217,11 +269,9 @@ function DefaultActions() {
 function TrashActions() {
   return (
     <>
-      <RestorePostButton />
+      <RestoreButton />
       <span>|</span>
-      <DeletePostButton />
-      <span>|</span>
-      <EditPostLink text="PostList.ViewPostLink" translate="yes" />
+      <DeleteButton />
     </>
   )
 }

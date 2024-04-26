@@ -1,16 +1,18 @@
 import * as React from 'react'
 import { notFound } from 'next/navigation'
 
-import { getProfile } from '@/hooks/async/auth'
+import { fetcher } from '@/lib/utils'
+import { ProfileAPI } from '@/types/api'
 
-export default async function UserLayout({
+export default async function PublicProfileLayout({
   children,
   params: { username },
 }: {
   children: React.ReactNode
   params: { username: string }
 }) {
-  const { profile } = await getProfile(username)
+  const fetchUrl = `/api/v1/profile?username=${username}`
+  const { data: profile } = await fetcher<ProfileAPI>(fetchUrl)
 
   if (!profile) notFound()
 

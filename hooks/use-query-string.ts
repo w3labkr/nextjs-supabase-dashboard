@@ -7,12 +7,18 @@ export function useQueryString() {
   const searchParams = useSearchParams()
 
   const qs = React.useCallback(
-    (name?: string, value?: string) => {
+    <T extends Record<string, any>>(object: T): string => {
       const params = new URLSearchParams(searchParams.toString())
 
-      if (!name && !value) return Object.fromEntries(params.entries())
-      if (name && !value) return params.get(name)
-      if (name && value) params.set(name, value)
+      if (object) {
+        Object.keys(object).forEach((key: string) => {
+          if (object[key] === null || object[key] === undefined) {
+            params.delete(key)
+            return
+          }
+          params.set(key, object[key])
+        })
+      }
 
       return params.toString()
     },

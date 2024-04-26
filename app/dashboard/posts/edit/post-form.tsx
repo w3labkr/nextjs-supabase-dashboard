@@ -25,7 +25,7 @@ const Editor = dynamic(() => import('./components/editor'), { ssr: false })
 
 const FormSchema = z.object({
   title: z.string().nonempty(),
-  slug: z.string().nonempty().optional(),
+  slug: z.string().nonempty(),
   content: z.string().optional(),
   excerpt: z.string().optional(),
 })

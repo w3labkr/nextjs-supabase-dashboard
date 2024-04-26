@@ -11,7 +11,7 @@ create table posts (
   published_at timestamptz,
   user_id uuid references users(id) on delete cascade,
   profile_id uuid references profiles(id),
-  type text default 'post'::text,
+  post_type text default 'post'::text,
   status text default 'draft'::text,
   password varchar(255),
   slug text,
@@ -29,6 +29,7 @@ comment on column posts.status is 'publish, future, draft, pending, private, tra
 
 -- Index the table
 create index posts_slug_idx on posts using btree (slug);
+create index posts_post_type_idx on public.posts using btree (post_type, status, created_at, id);
 
 -- Secure the table
 alter table posts enable row level security;

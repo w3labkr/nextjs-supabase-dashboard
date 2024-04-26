@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { SubmitButton } from '@/components/submit-button'
+import { Button } from '@/components/ui/button'
 
 import { createClient } from '@/lib/supabase/client'
 
@@ -97,12 +97,9 @@ export function ForgotPasswordForm() {
             </FormItem>
           )}
         />
-        <SubmitButton
-          isSubmitting={isSubmitting}
-          text="FormSubmit.reset_my_password"
-          translate="yes"
-          className="w-full"
-        />
+        <Button disabled={isSubmitting} className="w-full">
+          {t('FormSubmit.reset_my_password')}
+        </Button>
       </form>
     </Form>
   )

@@ -10,6 +10,7 @@ import { z } from 'zod'
 
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -19,7 +20,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { SubmitButton } from '@/components/submit-button'
 
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
@@ -140,12 +140,9 @@ export function ResetPasswordForm() {
             </FormItem>
           )}
         />
-        <SubmitButton
-          isSubmitting={isSubmitting}
-          text="FormSubmit.change_password"
-          translate="yes"
-          className="w-full"
-        />
+        <Button disabled={isSubmitting} className="w-full">
+          {t('FormSubmit.change_password')}
+        </Button>
       </form>
     </Form>
   )

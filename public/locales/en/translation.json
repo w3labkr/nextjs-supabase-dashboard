@@ -30,15 +30,15 @@
   },
 
   "PostListPage": {
-    "title": "Post",
+    "title": "Posts",
     "description": "Create and manage posts.",
-    "AddPostButton": "New post"
+    "AddButton": "New post"
   },
 
   "PostEditPage": {
     "title": "Edit Post",
     "description": "",
-    "AddPostButton": "Add New"
+    "AddButton": "Add New"
   },
 
   "ProfilePage": {
@@ -342,11 +342,13 @@
   },
 
   "PostList": {
-    "EditPostLink": "Edit",
-    "ViewPostLink": "View",
-    "TrashPostButton": "Trash",
-    "RestorePostButton": "Restore",
-    "DeletePostButton": "Delete"
+    "EditLink": "Edit",
+    "ViewLink": "View",
+    "PreviewLink": "Preview",
+    "TrashButton": "Trash",
+    "ClonePostButton": "Clone",
+    "RestoreButton": "Restore",
+    "DeleteButton": "Delete"
   },
 
   "PostStatus": {
@@ -363,6 +365,7 @@
     "excerpt": "Excerpt",
     "publish": "Publish",
     "publish_on": "Publish on",
+    "update": "Update",
     "future": "Future",
     "schedule_for": "Schedule for",
     "immediately": "Immediately",
@@ -382,7 +385,7 @@
     "permalink": "Permalink"
   },
 
-  "TableHead": {
+  "Table": {
     "num": "Num",
     "id": "ID",
     "status": "Status",
@@ -390,14 +393,16 @@
     "excerpt": "Excerpt",
     "description": "Description",
     "author": "Author",
-    "view": "View",
+    "views": "Views",
     "created_at": "Created At",
     "updated_at": "Updated At",
-    "deleted_at": "Deleted At"
-  },
-
-  "TableCell": {
+    "deleted_at": "Deleted At",
     "empty_post": "No posts yet.",
     "is_loading": "Loading..."
+  },
+
+  "Alert": {
+    "heads_up": "Heads up!",
+    "this_is_a_preview_screen": "This is a preview screen."
   }
 }

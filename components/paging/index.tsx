@@ -3,7 +3,6 @@
 import * as React from 'react'
 import { usePathname } from 'next/navigation'
 
-import { qs } from '@/lib/utils'
 import {
   Pagination,
   PaginationContent,
@@ -13,7 +12,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui-custom/pagination'
-import { usePaging } from '@/components/paging/paging-provider'
+
+import { usePaging } from './paging-provider'
+import { useQueryString } from '@/hooks/use-query-string'
 
 interface Calculate {
   page: number
@@ -50,6 +51,7 @@ export function Paging({ total = 0 }: { total: number }) {
 
 function PagingItem({ calculate }: { calculate: Calculate }) {
   const { pageSize, startPage, page } = calculate
+  const { qs } = useQueryString()
   const pathname = usePathname()
 
   return Array(pageSize)
@@ -68,6 +70,7 @@ function PagingItem({ calculate }: { calculate: Calculate }) {
 
 function FirstItem({ calculate }: { calculate: Calculate }) {
   const { currentSet, firstPage } = calculate
+  const { qs } = useQueryString()
   const pathname = usePathname()
 
   if (currentSet > 1 === false) return null
@@ -88,6 +91,7 @@ function FirstItem({ calculate }: { calculate: Calculate }) {
 
 function PreviousItem({ calculate }: { calculate: Calculate }) {
   const { currentSet, previousPage } = calculate
+  const { qs } = useQueryString()
   const pathname = usePathname()
 
   if (currentSet > 1 === false) return null
@@ -108,6 +112,7 @@ function PreviousItem({ calculate }: { calculate: Calculate }) {
 
 function NextItem({ calculate }: { calculate: Calculate }) {
   const { totalSet, currentSet, nextPage } = calculate
+  const { qs } = useQueryString()
   const pathname = usePathname()
 
   if (totalSet > currentSet === false) return null
@@ -128,6 +133,7 @@ function NextItem({ calculate }: { calculate: Calculate }) {
 
 function LastItem({ calculate }: { calculate: Calculate }) {
   const { totalSet, currentSet, lastPage } = calculate
+  const { qs } = useQueryString()
   const pathname = usePathname()
 
   if (totalSet > currentSet === false) return null

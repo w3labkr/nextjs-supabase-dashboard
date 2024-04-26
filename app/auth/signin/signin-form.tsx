@@ -10,6 +10,7 @@ import { z } from 'zod'
 
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -19,7 +20,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { SubmitButton } from '@/components/submit-button'
 import { RelatedLink } from '@/components/related-link'
 
 import { createClient } from '@/lib/supabase/client'
@@ -144,12 +144,9 @@ export function SignInForm() {
             </FormItem>
           )}
         />
-        <SubmitButton
-          isSubmitting={isSubmitting}
-          text="FormSubmit.signin"
-          translate="yes"
-          className="w-full"
-        />
+        <Button disabled={isSubmitting} className="w-full">
+          {t('FormSubmit.signin')}
+        </Button>
       </form>
     </Form>
   )
