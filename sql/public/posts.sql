@@ -24,7 +24,7 @@ create table posts (
   banned_until timestamptz,
   unique(user_id, slug)
 );
-comment on column posts.type is 'post, revision';
+comment on column posts.post_type is 'post, revision';
 comment on column posts.status is 'publish, future, draft, pending, private, trash';
 
 -- Index the table

@@ -38,11 +38,11 @@ export function MetaboxSlug() {
 
   React.useEffect(() => {
     if (!slug && post?.slug) {
-      setValue('slug', post?.slug)
+      debounceSetValue(kebabCase(post?.slug))
     } else if (!slug) {
-      setValue('slug', kebabCase(title))
+      debounceSetValue(kebabCase(title))
     }
-  }, [setValue, slug, title, post?.slug])
+  }, [debounceSetValue, post?.slug, slug, title])
 
   React.useEffect(() => {
     if (slug) debounceSetValue(kebabCase(slug))
