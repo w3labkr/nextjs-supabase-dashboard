@@ -1,11 +1,11 @@
 import * as React from 'react'
 
 import { AppBarProvider } from '@/components/app-bar/app-bar-provider'
-import { MiniNavigation } from '@/components/dashboard/mini-navigation'
 import { AppBar } from '@/components/app-bar'
-import { dashboardConfig } from '@/config/dashboard'
+import { MiniNavigation } from '@/app/dashboard/components/mini-navigation'
 
-import { getUser } from '@/hooks/async'
+import { dashboardConfig } from '@/config/dashboard'
+import { getUser } from '@/queries/async'
 
 export default async function PostListLayout({
   children,

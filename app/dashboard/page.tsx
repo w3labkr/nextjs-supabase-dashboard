@@ -1,16 +1,15 @@
 import * as React from 'react'
 
-import { AppBarProvider } from '@/components/app-bar/app-bar-provider'
-import { MiniNavigation } from '@/components/dashboard/mini-navigation'
-import { AppBar } from '@/components/app-bar'
-import { dashboardConfig } from '@/config/dashboard'
-
 import { Separator } from '@/components/ui/separator'
+import { AppBarProvider } from '@/components/app-bar/app-bar-provider'
+import { AppBar } from '@/components/app-bar'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
+import { MiniNavigation } from '@/app/dashboard/components/mini-navigation'
 import { DashboardForm } from './dashboard/dashboard-form'
 
-import { getUser } from '@/hooks/async'
+import { dashboardConfig } from '@/config/dashboard'
+import { getUser } from '@/queries/async'
 
 export default async function DashboardPage() {
   const { user } = await getUser()

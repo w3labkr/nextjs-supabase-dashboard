@@ -380,6 +380,7 @@
     "featured_image": "Featured image",
     "set_featured_image": "Set featured image",
     "save_draft": "Save Draft",
+    "view": "View",
     "preview": "Preview",
     "move_to_trash": "Move to Trash",
     "permalink": "Permalink"
@@ -403,6 +404,6 @@
 
   "Alert": {
     "heads_up": "Heads up!",
-    "this_is_a_preview_screen": "This is a preview screen."
+    "this_is_a_preview_page": "This is a preview page."
   }
 }

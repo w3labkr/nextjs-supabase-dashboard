@@ -9,7 +9,7 @@ import { ResendVerifyEmail } from './components/resend-verify-email'
 
 import { Email } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
-import { useEmailsAPI } from '@/hooks/api'
+import { useEmailsAPI } from '@/queries/sync'
 
 export function EmailList() {
   const { user } = useAuth()

@@ -18,7 +18,7 @@ import {
 import { TitleField } from './components/field'
 import { Permalink } from './components/permalink'
 
-import { usePostAPI } from '@/hooks/api'
+import { usePostAPI } from '@/queries/sync'
 import { PostFormProvider } from './components/post-form-provider'
 
 const Editor = dynamic(() => import('./components/editor'), { ssr: false })

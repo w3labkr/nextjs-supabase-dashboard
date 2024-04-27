@@ -33,7 +33,7 @@ import { Input } from '@/components/ui/input'
 import { fetcher } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
-import { useUserAPI } from '@/hooks/api'
+import { useUserAPI } from '@/queries/sync'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),

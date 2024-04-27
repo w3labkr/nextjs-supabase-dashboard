@@ -1,16 +1,17 @@
 import * as React from 'react'
 
-import { AppBarProvider } from '@/components/app-bar/app-bar-provider'
-import { AppBar } from '@/components/app-bar'
-import { MiniNavigation } from '@/components/dashboard/mini-navigation'
-import { Navigation } from '@/components/dashboard/navigation'
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
+import { AppBarProvider } from '@/components/app-bar/app-bar-provider'
+import { AppBar } from '@/components/app-bar'
+import { MiniNavigation } from '@/app/dashboard/components/mini-navigation'
+import { Navigation } from '@/app/dashboard/components/navigation'
+
 import { dashboardConfig, adminConfig } from '@/config/dashboard'
-import { getUser } from '@/hooks/async'
+import { getUser } from '@/queries/async'
 
 export default async function AdminLayout({
   children,

@@ -31,7 +31,7 @@ import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
 import { useAuth } from '@/hooks/use-auth'
-import { useEmailsAPI } from '@/hooks/api'
+import { useEmailsAPI } from '@/queries/sync'
 import { EmailAPI } from '@/types/api'
 
 const FormSchema = z.object({

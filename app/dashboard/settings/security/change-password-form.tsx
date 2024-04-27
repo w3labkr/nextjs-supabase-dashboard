@@ -24,7 +24,7 @@ import { Button } from '@/components/ui/button'
 import { useSWRConfig } from 'swr'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
-import { useUserAPI } from '@/hooks/api'
+import { useUserAPI } from '@/queries/sync'
 
 const FormSchema = z
   .object({

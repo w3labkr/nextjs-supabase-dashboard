@@ -36,7 +36,7 @@ export function MetaboxPublish() {
         <AccordionContent className="space-y-4">
           <div className="flex justify-between">
             <DraftButton />
-            {status === 'draft' && <PreviewButton />}
+            {status === 'draft' ? <PreviewButton /> : <ViewButton />}
           </div>
           <ul className="space-y-1">
             <li className="flex items-center">
@@ -130,6 +130,29 @@ function DraftButton() {
       disabled={isSubmitting}
     >
       {t('PostMetabox.save_draft')}
+    </Button>
+  )
+}
+
+function ViewButton() {
+  const router = useRouter()
+  const { t } = useTranslation()
+  const { form, post } = usePostForm()
+
+  const username = post?.profile?.username
+  const slug = form.watch('slug')
+  const permalink = React.useMemo(() => {
+    return absoluteUrl(`/${username}/${slug}?preview=true`)
+  }, [username, slug])
+
+  return (
+    <Button
+      type="button"
+      variant="secondary"
+      size="sm"
+      onClick={() => router.push(permalink)}
+    >
+      {t('PostMetabox.preview')}
     </Button>
   )
 }

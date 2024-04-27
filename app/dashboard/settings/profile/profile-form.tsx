@@ -33,7 +33,7 @@ import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
 import { useAuth } from '@/hooks/use-auth'
-import { useProfileAPI, useEmailsAPI } from '@/hooks/api'
+import { useProfileAPI, useEmailsAPI } from '@/queries/sync'
 import { ProfileAPI } from '@/types/api'
 
 const FormSchema = z.object({

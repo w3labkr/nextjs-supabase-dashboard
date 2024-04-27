@@ -17,7 +17,7 @@ import {
 import { SignOutButton } from '@/components/signout-button'
 
 import { useAuth } from '@/hooks/use-auth'
-import { useProfileAPI } from '@/hooks/api'
+import { useProfileAPI } from '@/queries/sync'
 
 export function AccountMenu() {
   const { t } = useTranslation()

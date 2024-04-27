@@ -23,7 +23,7 @@ import { Button } from '@/components/ui/button'
 import { useSWRConfig } from 'swr'
 import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
-import { useProfileAPI } from '@/hooks/api'
+import { useProfileAPI } from '@/queries/sync'
 import { ProfileAPI } from '@/types/api'
 
 const FormSchema = z.object({

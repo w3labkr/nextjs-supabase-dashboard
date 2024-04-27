@@ -23,7 +23,7 @@ import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
 import { useAuth } from '@/hooks/use-auth'
-import { useNotificationAPI } from '@/hooks/api'
+import { useNotificationAPI } from '@/queries/sync'
 import { NotificationAPI } from '@/types/api'
 
 const FormSchema = z.object({

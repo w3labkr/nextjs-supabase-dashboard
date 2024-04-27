@@ -33,7 +33,7 @@ import { DeleteButton } from './components/delete-button'
 import { Post, CountPosts, PostStatus } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 import { useQueryString } from '@/hooks/use-query-string'
-import { usePostsAPI, useCountPostsAPI } from '@/hooks/api'
+import { usePostsAPI, useCountPostsAPI } from '@/queries/sync'
 
 export function PostList() {
   const searchParams = useSearchParams()
