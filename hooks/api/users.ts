@@ -1,7 +1,7 @@
 'use client'
 
 import useSWR from 'swr'
-import { setSearchParams } from '@/lib/utils'
+import { setQueryString } from '@/lib/utils'
 import { UserAPI, UsersAPI } from '@/types/api'
 
 export function useUserAPI(id: string | null) {
@@ -27,8 +27,8 @@ export function useUsersAPI(
   uid: string | null,
   params: { page: number; perPage: number }
 ) {
-  const searchParams = setSearchParams({ uid, ...params })
-  const url = uid ? `/api/v1/user/list?${searchParams}` : null
+  const query = setQueryString({ uid, ...params })
+  const url = uid ? `/api/v1/user/list?${query}` : null
 
   const {
     data: response,

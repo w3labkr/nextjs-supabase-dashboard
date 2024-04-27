@@ -4,7 +4,7 @@ import useSWR from 'swr'
 import { ProfileAPI } from '@/types/api'
 
 export function useProfileAPI(
-  id?: string | null,
+  id: string | null,
   params?: { username?: string }
 ) {
   let url: string | null = null

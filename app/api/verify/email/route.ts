@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { authorize } from '@/hooks/async/auth'
+import { authorize } from '@/hooks/async'
 import { createClient } from '@/lib/supabase/server'
 import { jwtVerify } from '@/lib/jsonwebtoken'
 import { VerifyTokenPayload } from '@/types/token'

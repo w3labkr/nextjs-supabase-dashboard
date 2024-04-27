@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { ApiError } from '@/lib/utils'
-import { authorize } from '@/hooks/async/auth'
+import { authorize } from '@/hooks/async'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
   const supabase = createClient()
   const result = await supabase
     .from('posts')
-    .select('*, user:users(*), profile:profiles(*)')
+    .select('*, profile:profiles(*)')
     .match(match)
     .limit(1)
     .single()
@@ -41,7 +41,8 @@ export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const id = searchParams.get('id') as string
 
-  const { user_id, ...body } = await request.json()
+  const { formData, options } = await request.json()
+  const { user_id, ...body } = formData
   const { user } = await authorize(user_id)
 
   if (!user) {
@@ -56,7 +57,7 @@ export async function POST(request: NextRequest) {
     .from('posts')
     .update(body)
     .match({ id, user_id })
-    .select('*, user:users(*), profile:profiles(*)')
+    .select('*, profile:profiles(*)')
     .single()
 
   if (result?.error) {
@@ -66,19 +67,87 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const slug = result?.data?.slug
-  const username = result?.data?.profile?.username
+  const pathname = options?.revalidatePath
 
-  revalidatePath(`/${username}/${slug}`)
+  if (pathname && typeof pathname === 'string') {
+    revalidatePath(pathname)
+  } else if (pathname && Array.isArray(pathname)) {
+    pathname.forEach((pathname: string) => revalidatePath(pathname))
+  }
 
-  return NextResponse.json({ data: result?.data, error: null })
+  return pathname
+    ? NextResponse.json({ data: result?.data, error: null, revalidated: true })
+    : NextResponse.json({ data: result?.data, error: null })
+}
+
+export async function PUT(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams
+  const uid = searchParams.get('uid') as string
+
+  const { formData, options } = await request.json()
+  const { user, plan } = await authorize(uid)
+
+  if (!user) {
+    return NextResponse.json(
+      { data: null, error: new ApiError(401) },
+      { status: 401 }
+    )
+  }
+
+  const supabase = createClient()
+  const total = await supabase
+    .from('posts')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', uid)
+
+  if (total?.error) {
+    return NextResponse.json(
+      { data: null, error: total?.error },
+      { status: 400 }
+    )
+  }
+
+  const count = total?.count ?? 0
+
+  if (plan === 'free' && count > 2) {
+    return NextResponse.json(
+      { data: null, error: new ApiError(402) },
+      { status: 402 }
+    )
+  }
+
+  const result = await supabase
+    .from('posts')
+    .insert({ ...formData, user_id: uid, profile_id: uid })
+    .select('*, profile:profiles(*)')
+    .single()
+
+  if (result?.error) {
+    return NextResponse.json(
+      { data: null, error: result?.error },
+      { status: 400 }
+    )
+  }
+
+  const pathname = options?.revalidatePath
+
+  if (pathname && typeof pathname === 'string') {
+    revalidatePath(pathname)
+  } else if (pathname && Array.isArray(pathname)) {
+    pathname.forEach((path: string) => revalidatePath(path))
+  }
+
+  return pathname
+    ? NextResponse.json({ data: result?.data, error: null, revalidated: true })
+    : NextResponse.json({ data: result?.data, error: null })
 }
 
 export async function DELETE(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const id = searchParams.get('id') as string
 
-  const { user_id } = await request.json()
+  const { formData, options } = await request.json()
+  const { user_id } = formData
   const { user } = await authorize(user_id)
 
   if (!user) {
@@ -93,7 +162,7 @@ export async function DELETE(request: NextRequest) {
     .from('posts')
     .delete()
     .match({ id, user_id })
-    .select('*, user:users(*), profile:profiles(*)')
+    .select('*, profile:profiles(*)')
     .single()
 
   if (result?.error) {
@@ -103,59 +172,15 @@ export async function DELETE(request: NextRequest) {
     )
   }
 
-  const slug = result?.data?.slug
-  const username = result?.data?.profile?.username
+  const pathname = options?.revalidatePath
 
-  revalidatePath(`/${username}/${slug}`)
-
-  return NextResponse.json({ data: result?.data, error: null })
-}
-
-export async function PUT(request: NextRequest) {
-  const { user_id, ...body } = await request.json()
-  const { user, plan } = await authorize(user_id)
-
-  if (!user) {
-    return NextResponse.json(
-      { data: null, error: new ApiError(401) },
-      { status: 401 }
-    )
+  if (pathname && typeof pathname === 'string') {
+    revalidatePath(pathname)
+  } else if (pathname && Array.isArray(pathname)) {
+    pathname.forEach((path: string) => revalidatePath(path))
   }
 
-  const supabase = createClient()
-  const total = await supabase
-    .from('posts')
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', user_id)
-
-  if (total?.error) {
-    return NextResponse.json(
-      { data: null, error: total?.error },
-      { status: 400 }
-    )
-  }
-
-  const count = total?.count ?? 0
-
-  if (plan?.isFree && count > 2) {
-    return NextResponse.json(
-      { data: null, error: new ApiError(402) },
-      { status: 402 }
-    )
-  }
-
-  const result = await supabase
-    .from('posts')
-    .insert({ ...body, user_id, profile_id: user_id })
-    .select('*, user:users(*), profile:profiles(*)')
-    .single()
-
-  if (result?.error) {
-    return NextResponse.json(
-      { data: null, error: result?.error },
-      { status: 400 }
-    )
-  }
-
-  return NextResponse.json({ data: result?.data, error: null })
+  return pathname
+    ? NextResponse.json({ data: result?.data, error: null, revalidated: true })
+    : NextResponse.json({ data: result?.data, error: null })
 }

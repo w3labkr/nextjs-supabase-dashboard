@@ -58,19 +58,24 @@ export function ChangeUsernameForm() {
     try {
       setIsSubmitting(true)
 
-      if (!user?.id) throw new Error('Require is not defined.')
+      const uid = user?.id
+      const username = profile?.username
 
-      const result = await fetcher<ProfileAPI>(
-        `/api/v1/profile?id=${user?.id}`,
-        {
-          method: 'POST',
-          body: JSON.stringify(formValues),
-        }
-      )
+      if (!uid) throw new Error('Require is not defined.')
+      if (!username) throw new Error('Require is not defined.')
+
+      const fetchUrl = `/api/v1/profile?id=${uid}`
+      const result = await fetcher<ProfileAPI>(fetchUrl, {
+        method: 'POST',
+        body: JSON.stringify({
+          formData: formValues,
+          options: { revalidatePath: `/${username}` },
+        }),
+      })
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      mutate(`/api/v1/profile?id=${user?.id}`)
+      mutate(fetchUrl)
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {

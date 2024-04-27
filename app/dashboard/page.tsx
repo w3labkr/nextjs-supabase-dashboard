@@ -10,7 +10,7 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 import { DashboardForm } from './dashboard/dashboard-form'
 
-import { getUser } from '@/hooks/async/auth'
+import { getUser } from '@/hooks/async'
 
 export default async function DashboardPage() {
   const { user } = await getUser()

@@ -22,6 +22,7 @@ create table posts (
   views integer default 0,
   is_ban boolean default false,
   banned_until timestamptz,
+  metadata jsonb,
   unique(user_id, slug)
 );
 comment on column posts.post_type is 'post, revision';

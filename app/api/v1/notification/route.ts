@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { ApiError } from '@/lib/utils'
-import { authorize } from '@/hooks/async/auth'
+import { authorize } from '@/hooks/async'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const uid = searchParams.get('uid') as string
 
+  const { formData, options } = await request.json()
   const { user } = await authorize(uid)
 
   if (!user) {
@@ -48,11 +49,10 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const body = await request.json()
   const supabase = createClient()
   const result = await supabase
     .from('notifications')
-    .update(body)
+    .update(formData)
     .eq('user_id', uid)
     .select()
     .single()
@@ -64,5 +64,15 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  return NextResponse.json({ data: result?.data, error: null })
+  const pathname = options?.revalidatePath
+
+  if (pathname && typeof pathname === 'string') {
+    revalidatePath(pathname)
+  } else if (pathname && Array.isArray(pathname)) {
+    pathname.forEach((path: string) => revalidatePath(path))
+  }
+
+  return pathname
+    ? NextResponse.json({ data: null, error: null, revalidated: true })
+    : NextResponse.json({ data: null, error: null })
 }

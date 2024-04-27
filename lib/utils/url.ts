@@ -1,15 +1,17 @@
 export function absoluteUrl(pathname?: string): string {
   const origin = process.env.NEXT_PUBLIC_SITE_URL!
-  const url = new URL(`${origin}${pathname}`)
+  const uri = `${origin}/${pathname}`
+  const sanitized = uri.replace(/\/+/g, '/').replace(/\/+$/, '')
+  const url = new URL(sanitized)
 
   return url.toString()
 }
 
-export function getSearchParams(searchParams: URLSearchParams) {
+export function getQueryString(searchParams: URLSearchParams) {
   return Object.fromEntries(searchParams?.entries())
 }
 
-export function setSearchParams<T extends Record<string, any>>(
+export function setQueryString<T extends Record<string, any>>(
   object: T
 ): string {
   const params = Object.keys(object).reduce((acc: T, key: string) => {

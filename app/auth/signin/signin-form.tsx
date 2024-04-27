@@ -60,7 +60,6 @@ export function SignInForm() {
         password: formValues?.password,
       })
       if (signed?.error) throw new Error(signed?.error?.message)
-      if (!signed?.data?.user) throw new Error('User data is invalid.')
 
       setSession(signed?.data?.session)
       setUser(signed?.data?.user)

@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { ApiError } from '@/lib/utils'
-import { authorize } from '@/hooks/async/auth'
+import { authorize } from '@/hooks/async'
 
 import dayjs from 'dayjs'
 
@@ -37,6 +37,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const id = searchParams.get('id') as string
+
   const { user } = await authorize(id)
 
   if (!user) {
@@ -46,10 +47,10 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const body = await request.json()
+  const { formData, options } = await request.json()
   const username_changed_at = user?.user?.username_changed_at
 
-  if (body?.username && username_changed_at) {
+  if (formData?.username && username_changed_at) {
     const d1 = dayjs(username_changed_at)
     const d2 = d1.add(1, 'month')
     const diff = d2.diff(d1, 'days')
@@ -65,7 +66,7 @@ export async function POST(request: NextRequest) {
   const supabase = createClient()
   const result = await supabase
     .from('profiles')
-    .update(body)
+    .update(formData)
     .eq('id', id)
     .select()
     .single()
@@ -77,9 +78,15 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const username = result?.data?.username
+  const pathname = options?.revalidatePath
 
-  revalidatePath(`/${username}`)
+  if (pathname && typeof pathname === 'string') {
+    revalidatePath(pathname)
+  } else if (pathname && Array.isArray(pathname)) {
+    pathname.forEach((path: string) => revalidatePath(path))
+  }
 
-  return NextResponse.json({ data: result?.data, error: null })
+  return pathname
+    ? NextResponse.json({ data: result?.data, error: null, revalidated: true })
+    : NextResponse.json({ data: result?.data, error: null })
 }

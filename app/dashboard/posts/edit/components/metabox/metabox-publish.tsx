@@ -85,18 +85,23 @@ function DraftButton() {
       setIsSubmitting(true)
 
       const id = post?.id
-      const user_id = post?.user_id
+      const uid = post?.user_id
+      const username = post?.profile?.username
 
       if (!id) throw new Error('Require is not defined.')
-      if (!user_id) throw new Error('Require is not defined.')
+      if (!uid) throw new Error('Require is not defined.')
+      if (!username) throw new Error('Require is not defined.')
 
       const formValues = form.getValues()
-      const slug = kebabCase(formValues?.slug)
+      const slug = kebabCase(formValues.slug)
 
       const fetchUrl = `/api/v1/post?id=${id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ ...formValues, slug, user_id, status: 'draft' }),
+        body: JSON.stringify({
+          formData: { ...formValues, slug, user_id: uid, status: 'draft' },
+          options: { revalidatePath: slug ? `/${username}/${slug}` : null },
+        }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
@@ -148,19 +153,23 @@ function PreviewButton() {
       setIsSubmitting(true)
 
       const id = post?.id
-      const user_id = post?.user_id
+      const uid = post?.user_id
+      const username = post?.profile?.username
 
       if (!id) throw new Error('Require is not defined.')
-      if (!user_id) throw new Error('Require is not defined.')
+      if (!uid) throw new Error('Require is not defined.')
+      if (!username) throw new Error('Require is not defined.')
 
       const formValues = form.getValues()
       const slug = kebabCase(formValues.slug)
-      const values = { ...formValues, slug, user_id, status: 'draft' }
 
       const fetchUrl = `/api/v1/post?id=${id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          formData: { ...formValues, slug, user_id: uid, status: 'draft' },
+          options: { revalidatePath: slug ? `/${username}/${slug}` : null },
+        }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
@@ -213,18 +222,24 @@ function TrashButton() {
       setIsSubmitting(true)
 
       const id = post?.id
-      const user_id = post?.user_id
+      const uid = post?.user_id
+      const username = post?.profile?.username
+      const slug = post?.slug
 
       if (!id) throw new Error('Require is not defined.')
-      if (!user_id) throw new Error('Require is not defined.')
+      if (!uid) throw new Error('Require is not defined.')
+      if (!username) throw new Error('Require is not defined.')
 
       const fetchUrl = `/api/v1/post?id=${id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          user_id,
-          status: 'trash',
-          deleted_at: new Date().toISOString(),
+          formData: {
+            user_id: uid,
+            status: 'trash',
+            deleted_at: new Date().toISOString(),
+          },
+          options: { revalidatePath: slug ? `/${username}/${slug}` : null },
         }),
       })
 
@@ -271,24 +286,26 @@ function PublishButton() {
       setIsSubmitting(true)
 
       const id = post?.id
-      const user_id = post?.user_id
+      const uid = post?.user_id
+      const username = post?.profile?.username
 
       if (!id) throw new Error('Require is not defined.')
-      if (!user_id) throw new Error('Require is not defined.')
+      if (!uid) throw new Error('Require is not defined.')
+      if (!username) throw new Error('Require is not defined.')
 
       const formValues = form.getValues()
       const slug = kebabCase(formValues.slug)
-      const status = 'publish'
-      const published_at = new Date().toISOString()
-
-      const values = post?.published_at
-        ? { ...formValues, slug, user_id, status }
-        : { ...formValues, slug, user_id, status, published_at }
+      const formData = { ...formValues, slug, user_id: uid, status: 'publish' }
 
       const fetchUrl = `/api/v1/post?id=${id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          formData: post?.published_at
+            ? { ...formData }
+            : { ...formData, published_at: new Date().toISOString() },
+          options: { revalidatePath: slug ? `/${username}/${slug}` : null },
+        }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

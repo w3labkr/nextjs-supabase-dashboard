@@ -1,12 +1,13 @@
 import { NextResponse, type NextRequest } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { ApiError } from '@/lib/utils'
-import { authorize } from '@/hooks/async/auth'
+import { authorize } from '@/hooks/async'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
 
-  const user_id = searchParams.get('uid') as string
+  const uid = searchParams.get('uid') as string
   const page = +((searchParams.get('page') as string) ?? '1')
   const perPage = +((searchParams.get('perPage') as string) ?? '50')
   const status = searchParams.get('status') as string
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
 
   let match = {}
 
-  if (user_id) match = { ...match, user_id }
+  if (uid) match = { ...match, user_id: uid }
   if (status) match = { ...match, status }
   if (post_type) match = { ...match, post_type }
 
@@ -37,7 +38,7 @@ export async function GET(request: NextRequest) {
 
   const listQuery = supabase
     .from('posts')
-    .select('*, user:users(*), profile:profiles(*)')
+    .select('*, profile:profiles(*)')
     .match(match)
     .range((page - 1) * perPage, page * perPage - 1)
     .order('created_at', { ascending: false })

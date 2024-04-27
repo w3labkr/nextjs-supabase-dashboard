@@ -4,13 +4,11 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
-
 import { usePaging } from '@/components/paging/paging-provider'
 import { usePostItem } from '../context/post-item-provider'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, setSearchParams } from '@/lib/utils'
+import { fetcher, setQueryString } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 
 export function DeleteButton() {
@@ -26,25 +24,30 @@ export function DeleteButton() {
       setIsSubmitting(true)
 
       const id = post?.id
-      const user_id = post?.user_id
+      const uid = post?.user_id
+      const username = post?.profile?.username
+      const slug = post?.slug
 
       if (!id) throw new Error('Require is not defined.')
-      if (!user_id) throw new Error('Require is not defined.')
+      if (!uid) throw new Error('Require is not defined.')
+      if (!username) throw new Error('Require is not defined.')
 
       const fetchUrl = `/api/v1/post?id=${id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'DELETE',
-        body: JSON.stringify({ user_id }),
+        body: JSON.stringify({
+          formData: { user_id: uid },
+          options: { revalidatePath: slug ? `/${username}/${slug}` : null },
+        }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
+      const query = setQueryString({ uid, page, perPage, status })
+
       mutate(fetchUrl)
-      mutate(
-        '/api/v1/post/list?' +
-          setSearchParams({ uid: user_id, page, perPage, status })
-      )
-      mutate(`/api/v1/post/count?uid=${user_id}`)
+      mutate(`/api/v1/post/list?${query}`)
+      mutate(`/api/v1/post/count?uid=${uid}`)
 
       toast.success(t('FormMessage.deleted_successfully'))
     } catch (e: unknown) {

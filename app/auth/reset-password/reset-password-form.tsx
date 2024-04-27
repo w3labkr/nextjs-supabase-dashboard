@@ -62,7 +62,6 @@ export function ResetPasswordForm() {
         password: formValues?.newPassword,
       })
       if (updated?.error) throw new Error(updated?.error?.message)
-      if (!updated?.data?.user) throw new Error('User data is invalid.')
 
       const unsigned = await supabase.auth.signOut()
       if (unsigned?.error) throw new Error(unsigned?.error?.message)

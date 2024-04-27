@@ -1,23 +1,17 @@
 import * as React from 'react'
 import { notFound } from 'next/navigation'
 
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
 import { PreviewAlert } from './preview-alert'
+import { getUser, getPost, setPostViews } from '@/hooks/async'
 
-import { fetcher } from '@/lib/utils'
-import { PostAPI } from '@/types/api'
-import { getUser, setPostViews } from '@/hooks/async'
-
-export default async function PublicPostPage({
+export default async function PostPage({
   params: { username, slug },
   searchParams: { preview },
 }: {
   params: { username: string; slug: string }
   searchParams: { preview?: string }
 }) {
-  const fetchUrl = `/api/v1/post?username=${username}&slug=${slug}`
-  const { data: post } = await fetcher<PostAPI>(fetchUrl)
+  const { post } = await getPost(null, { username, slug })
   const { user } = await getUser()
 
   if (!post) notFound()
@@ -31,16 +25,12 @@ export default async function PublicPostPage({
   if (!preview) setPostViews(post?.id)
 
   return (
-    <>
+    <main className="min-h-[80vh] pb-40 pt-10">
       {preview && <PreviewAlert />}
-      <Header />
-      <main className="min-h-[80vh] pb-40 pt-10">
-        <div className="container flex-1 overflow-auto">
-          <h1>{post?.title}</h1>
-          <div dangerouslySetInnerHTML={{ __html: post?.content ?? '' }}></div>
-        </div>
-      </main>
-      <Footer />
-    </>
+      <div className="container flex-1 overflow-auto">
+        <h1>{post?.title}</h1>
+        <div dangerouslySetInnerHTML={{ __html: post?.content ?? '' }}></div>
+      </div>
+    </main>
   )
 }

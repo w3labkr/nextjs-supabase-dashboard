@@ -23,13 +23,15 @@ export function ResendVerifyEmail() {
     try {
       setIsSubmitting(true)
 
-      if (!user?.id) throw new Error('Require is not defined.')
+      const uid = user?.id
+
+      if (!uid) throw new Error('Require is not defined.')
       if (!email) throw new Error('Require is not defined.')
 
-      const fetchUrl = `/api/v1/email/verify?uid=${user?.id}`
+      const fetchUrl = `/api/v1/email/verify?uid=${uid}`
       const result = await fetcher(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ formData: { email } }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

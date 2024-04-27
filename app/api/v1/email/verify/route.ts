@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server'
+import { revalidatePath } from 'next/cache'
+import { createClient } from '@/lib/supabase/server'
 import { ApiError } from '@/lib/utils'
-import { authorize } from '@/hooks/async/auth'
+import { authorize } from '@/hooks/async'
 
 import { transporter, sender } from '@/lib/nodemailer'
 import { jwtSign } from '@/lib/jsonwebtoken'
@@ -10,6 +12,7 @@ export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const uid = searchParams.get('uid') as string
 
+  const { formData, options } = await request.json()
   const { user } = await authorize(uid)
 
   if (!user) {
@@ -19,14 +22,22 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const body = await request.json()
-  const payload: VerifyTokenPayload = { ...body, user_id: uid }
+  const payload: VerifyTokenPayload = { email: formData?.email, user_id: uid }
   const mailOptions = mailTemplate(payload)
 
   try {
     const info = await transporter.sendMail(mailOptions)
+    const pathname = options?.revalidatePath
 
-    return NextResponse.json({ data: info, error: null })
+    if (pathname && typeof pathname === 'string') {
+      revalidatePath(pathname)
+    } else if (pathname && Array.isArray(pathname)) {
+      pathname.forEach((path: string) => revalidatePath(path))
+    }
+
+    return pathname
+      ? NextResponse.json({ data: info, error: null, revalidated: true })
+      : NextResponse.json({ data: info, error: null })
   } catch (e: unknown) {
     return NextResponse.json(
       { data: null, error: new ApiError(400, (e as Error)?.message) },

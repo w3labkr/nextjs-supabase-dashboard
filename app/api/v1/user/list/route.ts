@@ -1,8 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/server'
 import { ApiError } from '@/lib/utils'
-import { authorize } from '@/hooks/async/auth'
+import { authorize } from '@/hooks/async'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -19,7 +18,9 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  if (!role?.isAdmin) {
+  const isAdmin = role === 'admin' || role === 'superadmin'
+
+  if (!isAdmin) {
     return NextResponse.json(
       { data: null, error: new ApiError(403) },
       { status: 403 }

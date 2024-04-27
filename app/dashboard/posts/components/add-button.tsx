@@ -35,12 +35,14 @@ export function AddButton({
     try {
       setIsSubmitting(true)
 
-      if (!user?.id) throw new Error('Require is not defined.')
+      const uid = user?.id
 
-      const formValues = { user_id: user?.id, title: 'Untitled Post' }
-      const result = await fetcher(`/api/v1/post`, {
+      if (!uid) throw new Error('Require is not defined.')
+
+      const fetchUrl = `/api/v1/post?uid=${uid}`
+      const result = await fetcher(fetchUrl, {
         method: 'PUT',
-        body: JSON.stringify(formValues),
+        body: JSON.stringify({ formData: { title: 'Untitled Post' } }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

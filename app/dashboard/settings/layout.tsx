@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/resizable'
 import { dashboardConfig, settingsConfig } from '@/config/dashboard'
 
-import { getUser } from '@/hooks/async/auth'
+import { getUser } from '@/hooks/async'
 
 export default async function SettingsLayout({
   children,

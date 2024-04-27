@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { ApiError } from '@/lib/utils'
-import { authorize } from '@/hooks/async/auth'
+import { authorize } from '@/hooks/async'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -24,6 +24,7 @@ export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const id = searchParams.get('id') as string
 
+  const { formData, options } = await request.json()
   const { user } = await authorize(id)
 
   if (!user) {
@@ -33,11 +34,10 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const body = await request.json()
   const supabase = createClient()
   const result = await supabase
     .from('users')
-    .update(body)
+    .update(formData)
     .eq('id', id)
     .select()
     .single()
@@ -49,13 +49,24 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  return NextResponse.json({ data: result?.data, error: null })
+  const pathname = options?.revalidatePath
+
+  if (pathname && typeof pathname === 'string') {
+    revalidatePath(pathname)
+  } else if (pathname && Array.isArray(pathname)) {
+    pathname.forEach((path: string) => revalidatePath(path))
+  }
+
+  return pathname
+    ? NextResponse.json({ data: result?.data, error: null, revalidated: true })
+    : NextResponse.json({ data: result?.data, error: null })
 }
 
 export async function DELETE(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const id = searchParams.get('id') as string
 
+  const { formData, options } = await request.json()
   const { user } = await authorize(id)
 
   if (!user) {
@@ -75,5 +86,15 @@ export async function DELETE(request: NextRequest) {
     )
   }
 
-  return NextResponse.json({ data: null, error: null })
+  const pathname = options?.revalidatePath
+
+  if (pathname && typeof pathname === 'string') {
+    revalidatePath(pathname)
+  } else if (pathname && Array.isArray(pathname)) {
+    pathname.forEach((path: string) => revalidatePath(path))
+  }
+
+  return pathname
+    ? NextResponse.json({ data: null, error: null, revalidated: true })
+    : NextResponse.json({ data: null, error: null })
 }

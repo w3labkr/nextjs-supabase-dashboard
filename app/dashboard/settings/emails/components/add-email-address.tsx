@@ -59,22 +59,23 @@ export function AddEmailAddress() {
     try {
       setIsSubmitting(true)
 
-      if (!user?.id) throw new Error('Require is not defined.')
+      const uid = user?.id
 
-      const fetchUrl = `/api/v1/email/list?uid=${user?.id}`
-      const result = await fetcher<EmailsAPI>(fetchUrl, {
+      if (!uid) throw new Error('Require is not defined.')
+
+      const result = await fetcher<EmailsAPI>(`/api/v1/email?uid=${uid}`, {
         method: 'PUT',
-        body: JSON.stringify(formValues),
+        body: JSON.stringify({ formData: formValues }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      mutate(fetchUrl)
+      mutate(`/api/v1/email/list?uid=${uid}`)
 
-      const sentUrl = `/api/v1/email/verify?uid=${user?.id}`
+      const sentUrl = `/api/v1/email/verify?uid=${uid}`
       const sent = await fetcher(sentUrl, {
         method: 'POST',
-        body: JSON.stringify(formValues),
+        body: JSON.stringify({ formData: formValues }),
       })
 
       if (sent?.error) throw new Error(sent?.error?.message)

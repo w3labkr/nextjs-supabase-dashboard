@@ -66,7 +66,6 @@ export function SignUpForm() {
         password: formValues?.newPassword,
       })
       if (signed?.error) throw new Error(signed?.error?.message)
-      if (!signed?.data?.user) throw new Error('User data is invalid.')
 
       const unsigned = await supabase.auth.signOut()
       if (unsigned?.error) throw new Error(unsigned?.error?.message)

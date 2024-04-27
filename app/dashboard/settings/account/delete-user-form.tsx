@@ -79,7 +79,11 @@ export function DeleteUserForm() {
     try {
       setIsSubmitting(true)
 
-      if (!user?.id) throw new Error('Require is not defined.')
+      const uid = user?.id
+      const username = user?.profile?.username
+
+      if (!uid) throw new Error('Require is not defined.')
+      if (!username) throw new Error('Require is not defined.')
       if (!user?.email) throw new Error('Require is not defined.')
       if (formValues?.email !== user?.email) {
         throw new Error('Your email address is invalid.')
@@ -90,7 +94,7 @@ export function DeleteUserForm() {
       if (hasSetPassword) {
         if (!formValues?.password) throw new Error('Require is not defined.')
         const verified = await supabase.rpc('verify_user_password', {
-          uid: user?.id,
+          uid,
           password: formValues?.password,
         })
         if (verified?.error) throw new Error(verified?.error?.message)
@@ -99,8 +103,12 @@ export function DeleteUserForm() {
         }
       }
 
-      const deleted = await fetcher<FetchAPI>(`/api/v1/user?id=${user?.id}`, {
+      const fetchUrl = `/api/v1/user?id=${uid}`
+      const deleted = await fetcher<FetchAPI>(fetchUrl, {
         method: 'DELETE',
+        body: JSON.stringify({
+          options: { revalidatePath: `/${username}` },
+        }),
       })
       if (deleted?.error) throw new Error(deleted?.error?.message)
 

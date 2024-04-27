@@ -60,12 +60,14 @@ export function NotificationsForm() {
     try {
       setIsSubmitting(true)
 
-      if (!user?.id) throw new Error('Require is not defined.')
+      const uid = user?.id
 
-      const fetchUrl = `/api/v1/notification?uid=${user?.id}`
+      if (!uid) throw new Error('Require is not defined.')
+
+      const fetchUrl = `/api/v1/notification?uid=${uid}`
       const result = await fetcher<NotificationAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify(formValues),
+        body: JSON.stringify({ formData: formValues }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

@@ -77,16 +77,20 @@ export function ProfileForm() {
     try {
       setIsSubmitting(true)
 
-      if (!user?.id) throw new Error('Require is not defined.')
+      const uid = user?.id
+      const username = profile?.username
 
-      const setEmail = (s: string) => (s === 'unassigned' ? '' : s)
+      if (!uid) throw new Error('Require is not defined.')
+      if (!username) throw new Error('Require is not defined.')
 
-      const fetchUrl = `/api/v1/profile?id=${user?.id}`
+      const email = formValues?.email === 'unassigned' ? '' : formValues?.email
+
+      const fetchUrl = `/api/v1/profile?id=${uid}`
       const result = await fetcher<ProfileAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          ...formValues,
-          email: setEmail(formValues?.email),
+          formData: { ...formValues, email },
+          options: { revalidatePath: `/${username}` },
         }),
       })
 

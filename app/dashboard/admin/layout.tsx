@@ -10,7 +10,7 @@ import {
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
 import { dashboardConfig, adminConfig } from '@/config/dashboard'
-import { getUser } from '@/hooks/async/auth'
+import { getUser } from '@/hooks/async'
 
 export default async function AdminLayout({
   children,
@@ -19,7 +19,9 @@ export default async function AdminLayout({
 }) {
   const { user, role } = await getUser()
 
-  if (!role?.isAdmin) return <div>Unauthorized</div>
+  const isAdmin = role === 'admin' || role === 'superadmin'
+
+  if (!isAdmin) return <div>Unauthorized</div>
 
   return (
     <div className="body-overflow-hidden flex h-screen w-screen">

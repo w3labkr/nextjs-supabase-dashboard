@@ -37,18 +37,19 @@ export function DeleteEmailAddress() {
     try {
       setIsSubmitting(true)
 
-      if (!user?.id) throw new Error('Require is not defined.')
+      const uid = user?.id
+
+      if (!uid) throw new Error('Require is not defined.')
       if (!email) throw new Error('Require is not defined.')
 
-      const fetchUrl = `/api/v1/email/list?uid=${user?.id}`
-      const result = await fetcher<EmailsAPI>(fetchUrl, {
+      const result = await fetcher<EmailsAPI>(`/api/v1/email?uid=${uid}`, {
         method: 'DELETE',
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ formData: { email } }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      mutate(fetchUrl)
+      mutate(`/api/v1/email/list?uid=${uid}`)
 
       toast.success(t('FormMessage.deleted_successfully'))
     } catch (e: unknown) {

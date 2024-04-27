@@ -73,14 +73,15 @@ export function ChangePasswordForm() {
     try {
       setIsSubmitting(true)
 
-      if (!user?.id) throw new Error('Require is not defined.')
-
       const supabase = createClient()
+      const uid = user?.id
+
+      if (!uid) throw new Error('Require is not defined.')
 
       if (hasSetPassword) {
         if (!formValues?.oldPassword) throw new Error('Require is not defined.')
         const verified = await supabase.rpc('verify_user_password', {
-          uid: user?.id,
+          uid,
           password: formValues?.oldPassword,
         })
         if (verified?.error) throw new Error(verified?.error?.message)
@@ -94,7 +95,7 @@ export function ChangePasswordForm() {
       })
       if (updated?.error) throw new Error(updated?.error?.message)
 
-      mutate(`/api/v1/user?id=${user?.id}`)
+      mutate(`/api/v1/user?id=${uid}`)
 
       form.reset()
       router.refresh()
