@@ -8,7 +8,7 @@ export default function RootPage() {
   return (
     <div>
       <Header />
-      <main className="min-h-screen pb-40">
+      <main className="min-h-[80vh] pb-40">
         <Hero />
         <div className="container">
           <div className="columns-2 gap-4 space-y-4 md:columns-3 lg:columns-4">

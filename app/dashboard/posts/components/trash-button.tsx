@@ -40,7 +40,9 @@ export function TrashButton() {
         method: 'POST',
         body: JSON.stringify({
           formData: { user_id: uid, status: 'trash', deleted_at },
-          options: { revalidatePath: slug ? `/${username}/${slug}` : null },
+          options: {
+            revalidatePath: slug ? `/${username}/posts/${slug}` : null,
+          },
         }),
       })
 

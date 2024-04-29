@@ -13,7 +13,7 @@ export function Permalink() {
 
   const username = post?.profile?.username
   const slug = form.watch('slug')
-  const permalink = absoluteUrl(`/${username}/${slug}`)
+  const permalink = absoluteUrl(`/${username}/posts/${slug}`)
 
   return (
     <div className="text-sm">

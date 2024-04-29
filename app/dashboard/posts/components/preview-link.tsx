@@ -13,7 +13,7 @@ export function PreviewLink() {
 
   const username = post?.profile?.username
   const slug = post?.slug
-  const permalink = absoluteUrl(`/${username}/${slug}`)
+  const permalink = absoluteUrl(`/${username}/posts/${slug}`)
 
   return (
     <Link href={permalink} className="text-xs text-blue-700 hover:underline">

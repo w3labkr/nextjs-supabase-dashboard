@@ -37,7 +37,9 @@ export function DeleteButton() {
         method: 'DELETE',
         body: JSON.stringify({
           formData: { user_id: uid },
-          options: { revalidatePath: slug ? `/${username}/${slug}` : null },
+          options: {
+            revalidatePath: slug ? `/${username}/posts/${slug}` : null,
+          },
         }),
       })
 

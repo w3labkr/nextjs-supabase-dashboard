@@ -67,7 +67,7 @@ function Header() {
 
   return (
     <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-      <HeadLink value={null} label="all" count={total ?? 0} />
+      <HeadLink value={undefined} label="all" count={total ?? 0} />
       {data?.map(({ status, count }: CountPosts) => {
         return (
           <React.Fragment key={status}>
@@ -85,7 +85,7 @@ function HeadLink({
   label,
   count,
 }: {
-  value: PostStatus | null
+  value?: PostStatus
   label: PostStatus | 'all'
   count: number
 }) {
@@ -118,7 +118,7 @@ function Footer() {
 
   if (!posts) return null
 
-  return <Paging />
+  return <Paging className="mt-16" />
 }
 
 function Body() {

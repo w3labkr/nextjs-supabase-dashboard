@@ -18,7 +18,7 @@ create table posts (
   title text,
   content text,
   excerpt text,
-  thumbnail text,
+  thumbnail_url text,
   views integer default 0,
   is_ban boolean default false,
   banned_until timestamptz,

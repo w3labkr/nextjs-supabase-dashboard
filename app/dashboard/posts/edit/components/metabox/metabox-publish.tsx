@@ -100,7 +100,9 @@ function DraftButton() {
         method: 'POST',
         body: JSON.stringify({
           formData: { ...formValues, slug, user_id: uid, status: 'draft' },
-          options: { revalidatePath: slug ? `/${username}/${slug}` : null },
+          options: {
+            revalidatePath: slug ? `/${username}/posts/${slug}` : null,
+          },
         }),
       })
 
@@ -141,7 +143,7 @@ function ViewButton() {
 
   const username = post?.profile?.username
   const slug = form.watch('slug')
-  const permalink = absoluteUrl(`/${username}/${slug}?preview=true`)
+  const permalink = absoluteUrl(`/${username}/posts/${slug}?preview=true`)
 
   return (
     <Button
@@ -163,7 +165,7 @@ function PreviewButton() {
 
   const username = post?.profile?.username
   const slug = form.watch('slug')
-  const permalink = absoluteUrl(`/${username}/${slug}?preview=true`)
+  const permalink = absoluteUrl(`/${username}/posts/${slug}?preview=true`)
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -187,7 +189,9 @@ function PreviewButton() {
         method: 'POST',
         body: JSON.stringify({
           formData: { ...formValues, slug, user_id: uid, status: 'draft' },
-          options: { revalidatePath: slug ? `/${username}/${slug}` : null },
+          options: {
+            revalidatePath: slug ? `/${username}/posts/${slug}` : null,
+          },
         }),
       })
 
@@ -258,7 +262,9 @@ function TrashButton() {
             status: 'trash',
             deleted_at: new Date().toISOString(),
           },
-          options: { revalidatePath: slug ? `/${username}/${slug}` : null },
+          options: {
+            revalidatePath: slug ? `/${username}/posts/${slug}` : null,
+          },
         }),
       })
 
@@ -323,7 +329,9 @@ function PublishButton() {
           formData: post?.published_at
             ? { ...formData }
             : { ...formData, published_at: new Date().toISOString() },
-          options: { revalidatePath: slug ? `/${username}/${slug}` : null },
+          options: {
+            revalidatePath: slug ? `/${username}/posts/${slug}` : null,
+          },
         }),
       })
 

@@ -8,8 +8,8 @@ import { Separator } from '@/components/ui/separator'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { PagingProvider } from '@/components/paging/paging-provider'
+import { LatestPosts } from '@/components/latest-posts'
 import { Aside } from './aside'
-import { LatestPosts } from './latest-posts'
 
 import { getProfileAPI, getPostsAPI } from '@/queries/async'
 
@@ -37,7 +37,7 @@ export default async function ProfilePage({
   return (
     <>
       <Header />
-      <main className="min-h-screen pb-40">
+      <main className="min-h-[80vh] pb-40">
         <div className="container flex-1 overflow-auto">
           <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-4 pb-14 pt-11 md:grid-cols-3 md:gap-8 lg:grid-cols-4 lg:gap-[60px]">
             <div className="relative flex flex-col gap-4">
@@ -59,7 +59,10 @@ export default async function ProfilePage({
                 <PagingProvider
                   value={{ total: total ?? 0, page, perPage, pageSize, status }}
                 >
-                  <LatestPosts posts={posts} />
+                  <LatestPosts
+                    posts={posts}
+                    className="columns-1 gap-8 space-y-8"
+                  />
                 </PagingProvider>
               </TabsContent>
               <TabsContent value="stars">

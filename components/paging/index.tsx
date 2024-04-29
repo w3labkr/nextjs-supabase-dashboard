@@ -16,9 +16,9 @@ import {
 import { usePaging } from './paging-provider'
 import { useQueryString } from '@/hooks/use-query-string'
 
-export function Paging() {
+export function Paging({ className, ...props }: React.ComponentProps<'nav'>) {
   return (
-    <Pagination>
+    <Pagination className={className} {...props}>
       <PaginationContent>
         <FirstItem />
         <PreviousItem />

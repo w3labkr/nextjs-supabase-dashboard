@@ -38,7 +38,9 @@ export function RestoreButton() {
         method: 'POST',
         body: JSON.stringify({
           formData: { user_id: uid, status: 'draft', deleted_at: null },
-          options: { revalidatePath: slug ? `/${username}/${slug}` : null },
+          options: {
+            revalidatePath: slug ? `/${username}/posts/${slug}` : null,
+          },
         }),
       })
 
