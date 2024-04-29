@@ -12,7 +12,7 @@ export async function getProfileAPI(
 
   if (!url) return { profile: null }
 
-  const { data } = await fetcher<ProfileAPI>(url)
+  const { data, error } = await fetcher<ProfileAPI>(url)
 
-  return { profile: data }
+  return { profile: data, error }
 }

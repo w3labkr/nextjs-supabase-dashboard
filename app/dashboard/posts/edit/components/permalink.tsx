@@ -13,9 +13,7 @@ export function Permalink() {
 
   const username = post?.profile?.username
   const slug = form.watch('slug')
-  const permalink = React.useMemo(() => {
-    return absoluteUrl(`/${username}/${slug}`)
-  }, [username, slug])
+  const permalink = absoluteUrl(`/${username}/${slug}`)
 
   return (
     <div className="text-sm">

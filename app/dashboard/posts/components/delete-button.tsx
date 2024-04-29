@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { toast } from 'sonner'
 import { usePaging } from '@/components/paging/paging-provider'
-import { usePostItem } from '../context/post-item-provider'
+import { usePost } from '../context/post-provider'
 
 import { useSWRConfig } from 'swr'
 import { fetcher, setQueryString } from '@/lib/utils'
@@ -13,7 +13,7 @@ import { PostAPI } from '@/types/api'
 
 export function DeleteButton() {
   const { t } = useTranslation()
-  const { post } = usePostItem()
+  const { post } = usePost()
   const { page, perPage, status } = usePaging()
 
   const { mutate } = useSWRConfig()

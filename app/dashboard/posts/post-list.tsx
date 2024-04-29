@@ -23,7 +23,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { PagingProvider, usePaging } from '@/components/paging/paging-provider'
 import { Paging } from '@/components/paging'
 
-import { PostItemProvider, usePostItem } from './context/post-item-provider'
+import { PostProvider } from './context/post-provider'
 import { EditLink } from './components/edit-link'
 import { ViewLink } from './components/view-link'
 import { TrashButton } from './components/trash-button'
@@ -39,21 +39,21 @@ export function PostList() {
   const searchParams = useSearchParams()
 
   const page = +(searchParams.get('page') ?? '1')
-  const perPage = +(searchParams.get('perPage') ?? '5')
+  const perPage = +(searchParams.get('perPage') ?? '50')
   const pageSize = +(searchParams.get('pageSize') ?? '10')
-  const status = searchParams.get('status')
+  const status = searchParams.get('status') ?? undefined
 
-  const value = React.useMemo(() => {
-    return {
-      page,
-      perPage,
-      pageSize,
-      status,
-    }
-  }, [page, perPage, pageSize, status])
+  const { user } = useAuth()
+  const { count } = usePostsAPI(user?.id ?? null, {
+    page,
+    perPage,
+    status,
+  })
 
   return (
-    <PagingProvider value={value}>
+    <PagingProvider
+      value={{ total: count ?? 0, page, perPage, pageSize, status }}
+    >
       <Header />
       <Body />
       <Footer />
@@ -63,20 +63,16 @@ export function PostList() {
 
 function Header() {
   const { user } = useAuth()
-  const { data, count } = useCountPostsAPI(user?.id ?? null)
+  const { data, count: total } = useCountPostsAPI(user?.id ?? null)
 
   return (
     <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-      <HeadLink value={null} label="all" count={count ?? 0} />
-      {data?.map((posts: CountPosts) => {
+      <HeadLink value={null} label="all" count={total ?? 0} />
+      {data?.map(({ status, count }: CountPosts) => {
         return (
-          <React.Fragment key={posts?.status}>
+          <React.Fragment key={status}>
             <span>|</span>
-            <HeadLink
-              value={posts?.status}
-              label={posts?.status}
-              count={posts?.count}
-            />
+            <HeadLink value={status} label={status} count={count} />
           </React.Fragment>
         )
       })}
@@ -114,15 +110,15 @@ function HeadLink({
 function Footer() {
   const { user } = useAuth()
   const { page, perPage, status } = usePaging()
-  const { count } = usePostsAPI(user?.id ?? null, {
+  const { posts } = usePostsAPI(user?.id ?? null, {
     page,
     perPage,
     status,
   })
 
-  if (count === null) return null
+  if (!posts) return null
 
-  return <Paging total={count} />
+  return <Paging />
 }
 
 function Body() {
@@ -166,7 +162,7 @@ function Body() {
         {posts === null ? (
           <LoadingItem />
         ) : posts?.length > 0 ? (
-          posts?.map((post) => <ListItem key={post?.id} post={post} />)
+          posts?.map((post: Post) => <PostItem key={post?.id} post={post} />)
         ) : (
           <EmptyItem />
         )}
@@ -175,35 +171,36 @@ function Body() {
   )
 }
 
-function ListItem({ post }: { post: Post }) {
+function PostItem({ post }: { post: Post }) {
   const { t } = useTranslation()
-  const { id, created_at, title, status, profile } = post
 
   return (
-    <PostItemProvider value={{ post }}>
+    <PostProvider value={{ post }}>
       <TableRow>
         <TableCell>
           <Checkbox />
         </TableCell>
-        <TableCell align="center">{id}</TableCell>
+        <TableCell align="center">{post?.id}</TableCell>
         <TableCell>
           <div className="line-clamp-1">
-            {title}
-            {status !== 'publish' ? ` - ${t(`PostStatus.${status}`)}` : null}
+            {post?.title}
+            {post?.status !== 'publish'
+              ? ` - ${t(`PostStatus.${post?.status}`)}`
+              : null}
           </div>
           <div className="flex items-center space-x-1">
-            {status === 'publish' || status === 'private' ? (
+            {post?.status === 'publish' || post?.status === 'private' ? (
               <DefaultActions />
-            ) : status === 'trash' ? (
+            ) : post?.status === 'trash' ? (
               <TrashActions />
             ) : (
               <DraftActions />
             )}
           </div>
         </TableCell>
-        <TableCell align="center">{profile?.full_name}</TableCell>
+        <TableCell align="center">{post?.profile?.full_name}</TableCell>
         <TableCell align="center">
-          {status === 'private' ? (
+          {post?.status === 'private' ? (
             <LucideIcon name="LockKeyhole" className="size-4 min-w-4" />
           ) : (
             <LucideIcon name="LockKeyholeOpen" className="size-4 min-w-4" />
@@ -213,10 +210,10 @@ function ListItem({ post }: { post: Post }) {
           {post?.views?.toLocaleString('en-US')}
         </TableCell>
         <TableCell align="center">
-          {dayjs(created_at).format('YYYY-MM-DD HH:mm')}
+          {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm')}
         </TableCell>
       </TableRow>
-    </PostItemProvider>
+    </PostProvider>
   )
 }
 

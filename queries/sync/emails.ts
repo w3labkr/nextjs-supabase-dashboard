@@ -15,7 +15,7 @@ export function useEmailsAPI(uid: string | null) {
 
   return {
     emails: response?.data ?? null,
-    isError: error ?? response?.error ?? null,
+    error: error ?? response?.error ?? null,
     isLoading,
     isValidating,
     mutate,

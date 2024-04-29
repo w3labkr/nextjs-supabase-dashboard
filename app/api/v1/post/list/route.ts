@@ -8,9 +8,10 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
 
   const uid = searchParams.get('uid') as string
-  const page = +((searchParams.get('page') as string) ?? '1')
-  const perPage = +((searchParams.get('perPage') as string) ?? '50')
+  const page = searchParams.get('page') as string
+  const perPage = searchParams.get('perPage') as string
   const status = searchParams.get('status') as string
+  const limit = searchParams.get('limit') as string
   const post_type = (searchParams.get('post_type') as string) ?? 'post'
 
   let match = {}
@@ -40,12 +41,14 @@ export async function GET(request: NextRequest) {
     .from('posts')
     .select('*, profile:profiles(*)')
     .match(match)
-    .range((page - 1) * perPage, page * perPage - 1)
-    .order('created_at', { ascending: false })
 
   if (!status) listQuery.neq('status', 'trash')
+  if (page && perPage) {
+    listQuery.range((+page - 1) * +perPage, +page * +perPage - 1)
+  }
+  if (limit) listQuery.limit(limit)
 
-  const list = await listQuery
+  const list = await listQuery.order('created_at', { ascending: false })
 
   if (list?.error) {
     return NextResponse.json(

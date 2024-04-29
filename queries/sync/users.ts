@@ -16,7 +16,7 @@ export function useUserAPI(id: string | null) {
 
   return {
     user: response?.data ?? null,
-    isError: error ?? response?.error ?? null,
+    error: error ?? response?.error ?? null,
     isLoading,
     isValidating,
     mutate,
@@ -25,10 +25,10 @@ export function useUserAPI(id: string | null) {
 
 export function useUsersAPI(
   uid: string | null,
-  params: { page: number; perPage: number }
+  params?: { page?: number; perPage?: number }
 ) {
   const query = setQueryString({ uid, ...params })
-  const url = uid ? `/api/v1/user/list?${query}` : null
+  const url = query ? `/api/v1/user/list?${query}` : null
 
   const {
     data: response,
@@ -40,7 +40,7 @@ export function useUsersAPI(
 
   return {
     users: response?.data?.users ?? [],
-    isError: error ?? response?.error ?? null,
+    error: error ?? response?.error ?? null,
     isLoading,
     isValidating,
     mutate,

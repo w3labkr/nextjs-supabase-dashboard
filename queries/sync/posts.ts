@@ -16,7 +16,7 @@ export function usePostAPI(id: string | null) {
 
   return {
     post: response?.data ?? null,
-    isError: error ?? response?.error ?? null,
+    error: error ?? response?.error ?? null,
     isLoading,
     isValidating,
     mutate,
@@ -25,10 +25,10 @@ export function usePostAPI(id: string | null) {
 
 export function usePostsAPI(
   uid: string | null,
-  params: { page: number; perPage: number; status: string }
+  params?: { page?: number; perPage?: number; status?: string; limit?: string }
 ) {
   const query = setQueryString({ uid, ...params })
-  const url = uid ? `/api/v1/post/list?${query}` : null
+  const url = query ? `/api/v1/post/list?${query}` : null
 
   const {
     data: response,
@@ -41,7 +41,7 @@ export function usePostsAPI(
   return {
     posts: response?.data ?? null,
     count: response?.count ?? null,
-    isError: error ?? response?.error ?? null,
+    error: error ?? response?.error ?? null,
     isLoading,
     isValidating,
     mutate,
@@ -62,7 +62,7 @@ export function useCountPostsAPI(uid: string | null) {
   return {
     data: response?.data ?? null,
     count: response?.count ?? null,
-    isError: error ?? response?.error ?? null,
+    error: error ?? response?.error ?? null,
     isLoading,
     isValidating,
     mutate,

@@ -141,9 +141,7 @@ function ViewButton() {
 
   const username = post?.profile?.username
   const slug = form.watch('slug')
-  const permalink = React.useMemo(() => {
-    return absoluteUrl(`/${username}/${slug}?preview=true`)
-  }, [username, slug])
+  const permalink = absoluteUrl(`/${username}/${slug}?preview=true`)
 
   return (
     <Button
@@ -165,9 +163,7 @@ function PreviewButton() {
 
   const username = post?.profile?.username
   const slug = form.watch('slug')
-  const permalink = React.useMemo(() => {
-    return absoluteUrl(`/${username}/${slug}?preview=true`)
-  }, [username, slug])
+  const permalink = absoluteUrl(`/${username}/${slug}?preview=true`)
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 

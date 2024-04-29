@@ -1,14 +1,14 @@
 import { createClient } from '@/lib/supabase/server'
-import { fetcher } from '@/lib/utils'
-import { PostAPI } from '@/types/api'
+import { fetcher, setQueryString } from '@/lib/utils'
+import { PostAPI, PostsAPI } from '@/types/api'
 
 export async function setPostViews(id: number) {
   const supabase = createClient()
-  const { data } = await supabase.rpc('set_post_views', { post_id: id })
+  const { data, error } = await supabase.rpc('set_post_views', { post_id: id })
 
   if (data === null) return { views: -1 }
 
-  return { views: data }
+  return { views: data, error }
 }
 
 export async function getPostAPI(
@@ -24,25 +24,21 @@ export async function getPostAPI(
 
   if (!url) return { post: null }
 
-  const { data } = await fetcher<PostAPI>(url)
+  const { data, error } = await fetcher<PostAPI>(url)
 
-  return { post: data }
+  return { post: data, error }
 }
 
 export async function getPostsAPI(
-  id: string | null,
-  params?: { username?: string; slug?: string }
+  uid: string | null,
+  params?: { page?: number; perPage?: number; status?: string; limit?: string }
 ) {
-  let url: string | null = null
+  const query = setQueryString({ uid, ...params })
+  const url = query ? `/api/v1/post/list?${query}` : null
 
-  if (id) url = `/api/v1/post?id=${id}`
-  if (params?.username && params?.slug) {
-    url = `/api/v1/post?username=${params?.username}&slug=${params?.slug}`
-  }
+  if (!url) return { posts: null }
 
-  if (!url) return { post: null }
+  const { data, count, error } = await fetcher<PostsAPI>(url)
 
-  const { data } = await fetcher<PostAPI>(url)
-
-  return { post: data }
+  return { posts: data, count, error }
 }
