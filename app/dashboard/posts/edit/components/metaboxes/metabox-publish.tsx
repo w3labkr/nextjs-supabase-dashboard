@@ -15,10 +15,10 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
-import { usePostForm } from '../post-form-provider'
+import { usePostForm } from '../../context/post-form-provider'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, absoluteUrl } from '@/lib/utils'
+import { fetcher, getPostPath } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 
 export function MetaboxPublish() {
@@ -74,35 +74,29 @@ export function MetaboxPublish() {
 }
 
 function DraftButton() {
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
   const { t } = useTranslation()
   const { form, post } = usePostForm()
   const { mutate } = useSWRConfig()
-
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
-      const id = post?.id
-      const uid = post?.user_id
-      const username = post?.profile?.username
+      if (!post) throw new Error('Require is not defined.')
 
-      if (!id) throw new Error('Require is not defined.')
-      if (!uid) throw new Error('Require is not defined.')
-      if (!username) throw new Error('Require is not defined.')
+      const { slug, ...formValues } = form.getValues()
+      const slugified = kebabCase(slug)
+      const now = new Date().toISOString()
+      const values = { slug: slugified, status: 'draft', updated_at: now }
 
-      const formValues = form.getValues()
-      const slug = kebabCase(formValues.slug)
-
-      const fetchUrl = `/api/v1/post?id=${id}`
+      const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          formData: { ...formValues, slug, user_id: uid, status: 'draft' },
-          options: {
-            revalidatePath: slug ? `/${username}/posts/${slug}` : null,
-          },
+          formData: Object.assign({}, formValues, values),
+          options: { revalidatePath: getPostPath(post) },
         }),
       })
 
@@ -116,7 +110,7 @@ function DraftButton() {
       if (err.startsWith('duplicate key value violates unique constraint')) {
         form.setError('slug', { message: t('FormMessage.duplicate_slug') })
       } else {
-        toast.error((e as Error)?.message)
+        toast.error(err)
       }
     } finally {
       setIsSubmitting(false)
@@ -137,20 +131,35 @@ function DraftButton() {
 }
 
 function ViewButton() {
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
   const router = useRouter()
   const { t } = useTranslation()
   const { form, post } = usePostForm()
 
-  const username = post?.profile?.username
-  const slug = form.watch('slug')
-  const permalink = absoluteUrl(`/${username}/posts/${slug}?preview=true`)
+  const onSubmit = async () => {
+    try {
+      setIsSubmitting(true)
+
+      if (!post) throw new Error('Require is not defined.')
+
+      const postPath = getPostPath(post)
+
+      if (postPath) router.push(`${postPath}?preview=true`)
+    } catch (e: unknown) {
+      toast.error((e as Error)?.message)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <Button
       type="button"
       variant="secondary"
       size="sm"
-      onClick={() => router.push(permalink)}
+      onClick={form.handleSubmit(onSubmit)}
+      disabled={isSubmitting}
     >
       {t('PostMetabox.preview')}
     </Button>
@@ -158,40 +167,31 @@ function ViewButton() {
 }
 
 function PreviewButton() {
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
   const router = useRouter()
   const { t } = useTranslation()
   const { form, post } = usePostForm()
   const { mutate } = useSWRConfig()
 
-  const username = post?.profile?.username
-  const slug = form.watch('slug')
-  const permalink = absoluteUrl(`/${username}/posts/${slug}?preview=true`)
-
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
-
   const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
-      const id = post?.id
-      const uid = post?.user_id
-      const username = post?.profile?.username
+      if (!post) throw new Error('Require is not defined.')
 
-      if (!id) throw new Error('Require is not defined.')
-      if (!uid) throw new Error('Require is not defined.')
-      if (!username) throw new Error('Require is not defined.')
+      const { slug, ...formValues } = form.getValues()
+      const slugified = kebabCase(slug)
+      const now = new Date().toISOString()
+      const values = { slug: slugified, status: 'draft', updated_at: now }
 
-      const formValues = form.getValues()
-      const slug = kebabCase(formValues.slug)
-
-      const fetchUrl = `/api/v1/post?id=${id}`
+      const fetchUrl = `/api/v1/post?id=${post?.id}`
+      const postPath = getPostPath(post)
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          formData: { ...formValues, slug, user_id: uid, status: 'draft' },
-          options: {
-            revalidatePath: slug ? `/${username}/posts/${slug}` : null,
-          },
+          formData: Object.assign({}, formValues, values),
+          options: { revalidatePath: postPath },
         }),
       })
 
@@ -199,14 +199,13 @@ function PreviewButton() {
 
       mutate(fetchUrl)
 
-      // window.open(permalink, '_blank', 'noopener,noreferrer')
-      router.push(permalink)
+      if (postPath) router.push(postPath + '?preview=true')
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
         form.setError('slug', { message: t('FormMessage.duplicate_slug') })
       } else {
-        toast.error((e as Error)?.message)
+        toast.error(err)
       }
     } finally {
       setIsSubmitting(false)
@@ -227,9 +226,10 @@ function PreviewButton() {
 }
 
 function TrashButton() {
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
   const router = useRouter()
   const { t } = useTranslation()
-
   const { form, post } = usePostForm()
   const { unregister } = form
 
@@ -238,33 +238,20 @@ function TrashButton() {
     router.refresh()
   }, [unregister, router])
 
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
-
   const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
-      const id = post?.id
-      const uid = post?.user_id
-      const username = post?.profile?.username
-      const slug = post?.slug
+      if (!post) throw new Error('Require is not defined.')
 
-      if (!id) throw new Error('Require is not defined.')
-      if (!uid) throw new Error('Require is not defined.')
-      if (!username) throw new Error('Require is not defined.')
+      const now = new Date().toISOString()
 
-      const fetchUrl = `/api/v1/post?id=${id}`
+      const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          formData: {
-            user_id: uid,
-            status: 'trash',
-            deleted_at: new Date().toISOString(),
-          },
-          options: {
-            revalidatePath: slug ? `/${username}/posts/${slug}` : null,
-          },
+          formData: { status: 'trash', deleted_at: now },
+          options: { revalidatePath: getPostPath(post) },
         }),
       })
 
@@ -278,7 +265,7 @@ function TrashButton() {
       if (err.startsWith('duplicate key value violates unique constraint')) {
         form.setError('slug', { message: t('FormMessage.duplicate_slug') })
       } else {
-        toast.error((e as Error)?.message)
+        toast.error(err)
       }
     } finally {
       setIsSubmitting(false)
@@ -300,38 +287,31 @@ function TrashButton() {
 }
 
 function PublishButton() {
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
   const { t } = useTranslation()
   const { form, post } = usePostForm()
   const { mutate } = useSWRConfig()
-
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
-      const id = post?.id
-      const uid = post?.user_id
-      const username = post?.profile?.username
+      if (!post) throw new Error('Require is not defined.')
 
-      if (!id) throw new Error('Require is not defined.')
-      if (!uid) throw new Error('Require is not defined.')
-      if (!username) throw new Error('Require is not defined.')
+      const { slug, ...formValues } = form.getValues()
+      const slugified = kebabCase(slug)
+      const now = new Date().toISOString()
+      const values = { slug: slugified, status: 'publish', updated_at: now }
 
-      const formValues = form.getValues()
-      const slug = kebabCase(formValues.slug)
-      const formData = { ...formValues, slug, user_id: uid, status: 'publish' }
-
-      const fetchUrl = `/api/v1/post?id=${id}`
+      const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
           formData: post?.published_at
-            ? { ...formData }
-            : { ...formData, published_at: new Date().toISOString() },
-          options: {
-            revalidatePath: slug ? `/${username}/posts/${slug}` : null,
-          },
+            ? Object.assign({}, formValues, values)
+            : Object.assign({}, formValues, values, { publish_at: now }),
+          options: { revalidatePath: getPostPath(post) },
         }),
       })
 
@@ -345,7 +325,7 @@ function PublishButton() {
       if (err.startsWith('duplicate key value violates unique constraint')) {
         form.setError('slug', { message: t('FormMessage.duplicate_slug') })
       } else {
-        toast.error((e as Error)?.message)
+        toast.error(err)
       }
     } finally {
       setIsSubmitting(false)

@@ -25,7 +25,7 @@ export function usePostAPI(id: string | null) {
 
 export function usePostsAPI(
   uid: string | null,
-  params?: { page?: number; perPage?: number; status?: string; limit?: string }
+  params?: { page?: number; perPage?: number; status?: string; limit?: number }
 ) {
   const query = setQueryString({ uid, ...params })
   const url = query ? `/api/v1/post/list?${query}` : null

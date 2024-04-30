@@ -9,4 +9,12 @@ export {
   httpStatusMessage,
 } from './http-status-codes'
 export { ApiError } from './error'
-export { absoluteUrl, getQueryString, setQueryString } from './url'
+export {
+  absoluteUrl,
+  getQueryString,
+  setQueryString,
+  getPostPath,
+  getPostUrl,
+  getAuthorPath,
+  getAuthorUrl,
+} from './url'

@@ -1,5 +1,6 @@
 -- SQL Editor > New query
 -- const { data, error } = await supabase.rpc('verify_user_password', { uid: '', password: '' });
+-- select * from verify_user_password('uid', 'password');
 
 drop function if exists verify_user_password;
 

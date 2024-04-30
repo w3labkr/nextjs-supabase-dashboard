@@ -1,5 +1,5 @@
--- SQL Editor > New query
 -- const { data, error } = await supabase.rpc('get_user', { uid: '' });
+-- select * from get_user('uid');
 
 drop function if exists get_user;
 
@@ -27,5 +27,3 @@ begin
     where u.id = uid;
 end;
 $$ language plpgsql;
-
--- select * from get_user('uid');

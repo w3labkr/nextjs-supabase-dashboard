@@ -11,13 +11,15 @@ export async function GET(request: NextRequest) {
   const username = searchParams.get('username') as string
   const slug = searchParams.get('slug') as string
   const status = searchParams.get('status') as string
+  const postType = (searchParams.get('postType') as string) ?? 'post'
 
   let match = {}
 
   if (id) match = { ...match, id }
+  if (postType) match = { ...match, type: postType }
+  if (status) match = { ...match, status }
   if (username) match = { ...match, 'profile.username': username }
   if (slug) match = { ...match, slug }
-  if (status) match = { ...match, status }
 
   const supabase = createClient()
   const result = await supabase

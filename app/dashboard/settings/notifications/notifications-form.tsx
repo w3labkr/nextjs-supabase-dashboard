@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { cn, fetcher } from '@/lib/utils'
 import { toast } from 'sonner'
 import {
   Form,
@@ -22,6 +21,7 @@ import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
+import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useNotificationAPI } from '@/queries/sync'
 import { NotificationAPI } from '@/types/api'

@@ -59,8 +59,8 @@ export function ChangePasswordForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
-    shouldUnregister: true,
     defaultValues,
+    shouldUnregister: true,
   })
   const { register, unregister } = form
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)

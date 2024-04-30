@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import { useTranslation } from 'react-i18next'
 
 import {
   Form,
@@ -13,22 +12,20 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { usePostForm } from '../post-form-provider'
+import { usePostForm } from '../../context/post-form-provider'
 
-export function TitleField() {
-  const { t } = useTranslation()
+export function UserIdField() {
   const { form } = usePostForm()
 
   return (
     <FormField
       control={form.control}
-      name="title"
+      name="user_id"
       render={({ field }) => (
         <FormItem>
           <FormControl>
-            <Input placeholder={t('Input.please_enter_your_text')} {...field} />
+            <Input type="hidden" {...field} />
           </FormControl>
-          <FormMessage />
         </FormItem>
       )}
     />

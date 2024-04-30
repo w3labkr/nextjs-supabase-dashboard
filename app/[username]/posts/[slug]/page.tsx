@@ -1,14 +1,23 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+
 import dayjs from 'dayjs'
+import { getAuthorUrl } from '@/lib/utils'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { RelatedPosts } from '@/components/related-posts'
+
 import { PreviewAlert } from './preview-alert'
 
 import { Post } from '@/types/database'
-import { getUser, getPostAPI, setPostViews } from '@/queries/async'
+import {
+  getUser,
+  getPostAPI,
+  getAdjacentPostAPI,
+  setPostViews,
+} from '@/queries/async'
 
 export default async function PostPage({
   params: { username, slug },
@@ -17,11 +26,18 @@ export default async function PostPage({
   params: { username: string; slug: string }
   searchParams?: { preview?: string }
 }) {
-  const { user } = await getUser()
-  const { post } = await getPostAPI(null, { username, slug })
+  const { post } = await getPostAPI(null, {
+    username,
+    slug: decodeURIComponent(slug),
+  })
+  const { previousPost, nextPost } = await getAdjacentPostAPI(
+    post?.id ?? null,
+    { uid: post?.user_id ?? null }
+  )
 
   if (!post) notFound()
 
+  const { user } = await getUser()
   const preview = searchParams?.preview
 
   if (preview === 'true') {
@@ -42,6 +58,7 @@ export default async function PostPage({
           <PostMeta post={post} />
           <PostThumbnail post={post} />
           <PostContent post={post} />
+          <RelatedPosts previousPost={previousPost} nextPost={nextPost} />
         </div>
       </main>
       <Footer />
@@ -65,7 +82,7 @@ function PostMeta({ post }: { post: Post }) {
       <time dateTime={datetime}>{dayjs(datetime).format('MMMM D, YYYY')}</time>
       <span>— by</span>
       <Link
-        href={`/${post?.profile?.username}`}
+        href={getAuthorUrl(post) ?? '#'}
         className="underline-offset-4 hover:underline"
       >
         {post?.profile?.full_name}

@@ -24,7 +24,7 @@ export type PostStatus =
   | 'private'
   | 'trash'
 
-export type PostType = 'post' | 'revision'
+export type PostType = 'post' | 'page' | 'revision'
 
 export type Post = Tables<'posts'> & {
   profile: Tables<'profiles'>

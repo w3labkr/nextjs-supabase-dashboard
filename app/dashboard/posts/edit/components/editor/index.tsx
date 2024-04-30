@@ -8,7 +8,7 @@ import EventInfo from '@ckeditor/ckeditor5-utils/src/eventinfo'
 
 import { defaultLng } from '@/i18next.config'
 import { useAppSelector } from '@/lib/redux/hooks'
-import { usePostForm } from '../post-form-provider'
+import { usePostForm } from '../../context/post-form-provider'
 
 import '@/ckeditor5/build/translations/ko.js'
 import './style.css'

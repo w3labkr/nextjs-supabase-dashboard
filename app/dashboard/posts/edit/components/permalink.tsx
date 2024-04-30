@@ -4,16 +4,20 @@ import * as React from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 
-import { absoluteUrl } from '@/lib/utils'
-import { usePostForm } from './post-form-provider'
+import { getPostUrl } from '@/lib/utils'
+import { usePostForm } from '../context/post-form-provider'
 
 export function Permalink() {
+  const [permalink, setPermalink] = React.useState<string>('')
+
   const { t } = useTranslation()
   const { form, post } = usePostForm()
-
-  const username = post?.profile?.username
   const slug = form.watch('slug')
-  const permalink = absoluteUrl(`/${username}/posts/${slug}`)
+
+  React.useEffect(() => {
+    const url = getPostUrl(post, slug)
+    if (url) setPermalink(url)
+  }, [post, slug])
 
   return (
     <div className="text-sm">

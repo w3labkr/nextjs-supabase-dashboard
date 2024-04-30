@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { toast } from 'sonner'
-import { useEmailItem } from '../context/email-item-provider'
+import { useEmail } from '../context/email-provider'
 
 import { useSWRConfig } from 'swr'
 import { fetcher } from '@/lib/utils'
@@ -12,10 +12,9 @@ import { useAuth } from '@/hooks/use-auth'
 
 export function ResendVerifyEmail() {
   const { t } = useTranslation()
-  const { email, isVerified } = useEmailItem()
-
   const { user } = useAuth()
   const { mutate } = useSWRConfig()
+  const { email, isVerified } = useEmail()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 

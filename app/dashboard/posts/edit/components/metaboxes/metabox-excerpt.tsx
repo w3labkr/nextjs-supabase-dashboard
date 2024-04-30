@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 
-import { usePostForm } from '../post-form-provider'
+import { usePostForm } from '../../context/post-form-provider'
 
 export function MetaboxExcerpt() {
   const { t } = useTranslation()
@@ -42,6 +42,7 @@ export function MetaboxExcerpt() {
                 <FormControl>
                   <Textarea
                     placeholder={t('Textarea.please_enter_your_message')}
+                    rows={5}
                     {...field}
                   />
                 </FormControl>

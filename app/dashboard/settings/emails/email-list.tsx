@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { EmailItemProvider, useEmailItem } from './context/email-item-provider'
+import { EmailProvider, useEmail } from './context/email-provider'
 import { DeleteEmailAddress } from './components/delete-email-address'
 import { ResendVerifyEmail } from './components/resend-verify-email'
 
@@ -38,7 +38,7 @@ function EmailItem({ item }: { item: Email }) {
   }, [item, user?.email])
 
   return (
-    <EmailItemProvider value={value}>
+    <EmailProvider value={value}>
       <div className="space-y-2 rounded-lg border p-4">
         <div className="flex flex-col">
           <div className="flex items-center">
@@ -66,13 +66,13 @@ function EmailItem({ item }: { item: Email }) {
           <NotVisibleInEmails />
         </ul>
       </div>
-    </EmailItemProvider>
+    </EmailProvider>
   )
 }
 
 function VisibleInEmails() {
   const { t } = useTranslation()
-  const { isVerified } = useEmailItem()
+  const { isVerified } = useEmail()
 
   if (!isVerified) return null
 
@@ -86,7 +86,7 @@ function VisibleInEmails() {
 
 function ReceivesNotifications() {
   const { t } = useTranslation()
-  const { isVerified, isPrimary } = useEmailItem()
+  const { isVerified, isPrimary } = useEmail()
 
   if (!isVerified) return null
   if (!isPrimary) return null
@@ -101,7 +101,7 @@ function ReceivesNotifications() {
 
 function UnverifiedEmails() {
   const { t } = useTranslation()
-  const { isVerified } = useEmailItem()
+  const { isVerified } = useEmail()
 
   if (isVerified) return null
 
@@ -121,7 +121,7 @@ function UnverifiedEmails() {
 
 function NotVisibleInEmails() {
   const { t } = useTranslation()
-  const { isVerified } = useEmailItem()
+  const { isVerified } = useEmail()
 
   if (isVerified) return null
 

@@ -8,7 +8,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { fetcher } from '@/lib/utils'
 import { toast } from 'sonner'
 import {
   Form,
@@ -32,6 +31,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
+import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useProfileAPI, useEmailsAPI } from '@/queries/sync'
 import { ProfileAPI } from '@/types/api'
@@ -184,7 +184,7 @@ export function ProfileForm() {
                   placeholder={t(
                     'Textarea.please_tell_us_a_little_about_yourself'
                   )}
-                  className="resize-none"
+                  rows={5}
                   {...field}
                 />
               </FormControl>

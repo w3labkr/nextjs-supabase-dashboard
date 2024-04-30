@@ -3,7 +3,6 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { cn, fetcher } from '@/lib/utils'
 import { toast } from 'sonner'
 import { LucideIcon } from '@/lib/lucide-icon'
 import {
@@ -18,18 +17,18 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { useEmailItem } from '../context/email-item-provider'
+import { useEmail } from '../context/email-provider'
 
 import { useSWRConfig } from 'swr'
+import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { EmailsAPI } from '@/types/api'
 
 export function DeleteEmailAddress() {
   const { t } = useTranslation()
-  const { email, isPrimary } = useEmailItem()
-
   const { user } = useAuth()
   const { mutate } = useSWRConfig()
+  const { email, isPrimary } = useEmail()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 

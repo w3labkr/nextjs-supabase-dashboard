@@ -1,5 +1,5 @@
--- SQL Editor > New query
 -- const { data, error } = await supabase.rpc('count_posts', { uid: '' });
+-- select * from count_posts('uid');
 
 drop function if exists count_posts;
 

@@ -98,13 +98,13 @@ export type Database = {
           id: number
           is_ban: boolean | null
           password: string | null
-          post_type: string | null
           profile_id: string | null
           published_at: string | null
           slug: string | null
           status: string | null
           thumbnail_url: string | null
           title: string | null
+          type: string | null
           updated_at: string | null
           user_id: string | null
           views: number | null
@@ -118,13 +118,13 @@ export type Database = {
           id?: number
           is_ban?: boolean | null
           password?: string | null
-          post_type?: string | null
           profile_id?: string | null
           published_at?: string | null
           slug?: string | null
           status?: string | null
           thumbnail_url?: string | null
           title?: string | null
+          type?: string | null
           updated_at?: string | null
           user_id?: string | null
           views?: number | null
@@ -138,13 +138,13 @@ export type Database = {
           id?: number
           is_ban?: boolean | null
           password?: string | null
-          post_type?: string | null
           profile_id?: string | null
           published_at?: string | null
           slug?: string | null
           status?: string | null
           thumbnail_url?: string | null
           title?: string | null
+          type?: string | null
           updated_at?: string | null
           user_id?: string | null
           views?: number | null
@@ -368,6 +368,18 @@ export type Database = {
         }
         Returns: string
       }
+      get_adjacent_post_id: {
+        Args: {
+          pid: number
+          uid: string
+          post_type?: string
+          post_status?: string
+        }
+        Returns: {
+          previous_id: number
+          next_id: number
+        }[]
+      }
       get_user: {
         Args: {
           uid: string
@@ -387,7 +399,7 @@ export type Database = {
       }
       set_post_views: {
         Args: {
-          post_id: number
+          pid: number
         }
         Returns: number
       }

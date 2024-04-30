@@ -9,7 +9,7 @@ import { usePaging } from '@/components/paging/paging-provider'
 import { usePost } from '../context/post-provider'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, setQueryString } from '@/lib/utils'
+import { fetcher, setQueryString, getPostPath } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 
 export function TrashButton() {
@@ -24,25 +24,18 @@ export function TrashButton() {
     try {
       setIsSubmitting(true)
 
-      const id = post?.id
       const uid = post?.user_id
-      const username = post?.profile?.username
-      const slug = post?.slug
 
-      if (!id) throw new Error('Require is not defined.')
       if (!uid) throw new Error('Require is not defined.')
-      if (!username) throw new Error('Require is not defined.')
 
-      const deleted_at = new Date().toISOString()
+      const now = new Date().toISOString()
 
-      const fetchUrl = `/api/v1/post?id=${id}`
+      const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          formData: { user_id: uid, status: 'trash', deleted_at },
-          options: {
-            revalidatePath: slug ? `/${username}/posts/${slug}` : null,
-          },
+          formData: { user_id: uid, status: 'trash', deleted_at: now },
+          options: { revalidatePath: getPostPath(post) },
         }),
       })
 
