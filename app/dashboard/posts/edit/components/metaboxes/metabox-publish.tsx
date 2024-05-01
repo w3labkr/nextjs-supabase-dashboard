@@ -15,19 +15,23 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
-import { usePostForm } from '../../context/post-form-provider'
+
+import { UseFormReturn } from 'react-hook-form'
+import { FormValues } from '../../post-form'
 
 import { useSWRConfig } from 'swr'
 import { fetcher, getPostPath } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
+import { Post } from '@/types/database'
 
-export function MetaboxPublish() {
+export function MetaboxPublish({
+  form,
+  post,
+}: {
+  form: UseFormReturn<FormValues>
+  post: Post | null
+}) {
   const { t } = useTranslation()
-  const { post } = usePostForm()
-
-  const status = post?.status
-  const published_at = post?.published_at
-  const views = post?.views
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
@@ -35,37 +39,43 @@ export function MetaboxPublish() {
         <AccordionTrigger>{t('PostMetabox.publish')}</AccordionTrigger>
         <AccordionContent className="space-y-4">
           <div className="flex justify-between">
-            <DraftButton />
-            {status === 'draft' ? <PreviewButton /> : <ViewButton />}
+            <DraftButton form={form} post={post} />
+            {post?.status === 'draft' ? (
+              <PreviewButton form={form} post={post} />
+            ) : (
+              <ViewButton form={form} post={post} />
+            )}
           </div>
           <ul className="space-y-1">
             <li className="flex items-center">
               <LucideIcon name="Signpost" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.status')}: `}
-              {status && t(`PostStatus.${status}`)}
+              {post?.status && t(`PostStatus.${post?.status}`)}
             </li>
             <li className="flex items-center">
               <LucideIcon name="Eye" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.visibility')}: `}
-              {status === 'publish'
+              {post?.status === 'publish'
                 ? t('PostMetabox.public')
                 : t('PostMetabox.private')}
             </li>
             <li className="flex items-center">
               <LucideIcon name="CalendarDays" className="mr-2 size-4 min-w-4" />
-              {published_at
-                ? `${t('PostMetabox.publish_on')}: ${dayjs(published_at).format('YYYY-MM-DD HH:mm')}`
+              {post?.published_at
+                ? `${t('PostMetabox.publish_on')}: ${dayjs(post?.published_at).format('YYYY-MM-DD HH:mm')}`
                 : `${t('PostMetabox.publish')}: ${t('PostMetabox.immediately')}`}
             </li>
             <li className="flex items-center">
               <LucideIcon name="BarChart" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.post_views')}: `}
-              {views === null || views === undefined ? 0 : views}
+              {post?.views === null || post?.views === undefined
+                ? 0
+                : post?.views}
             </li>
           </ul>
           <div className="flex justify-between">
-            <TrashButton />
-            <PublishButton />
+            <TrashButton form={form} post={post} />
+            <PublishButton form={form} post={post} />
           </div>
         </AccordionContent>
       </AccordionItem>
@@ -73,20 +83,24 @@ export function MetaboxPublish() {
   )
 }
 
-function DraftButton() {
+function DraftButton({
+  form,
+  post,
+}: {
+  form: UseFormReturn<FormValues>
+  post: Post | null
+}) {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
-  const { form, post } = usePostForm()
   const { mutate } = useSWRConfig()
 
-  const onSubmit = async () => {
+  const onSubmit = async ({ slug, ...formValues }: FormValues) => {
     try {
       setIsSubmitting(true)
 
       if (!post) throw new Error('Require is not defined.')
 
-      const { slug, ...formValues } = form.getValues()
       const slugified = kebabCase(slug)
       const now = new Date().toISOString()
       const values = { slug: slugified, status: 'draft', updated_at: now }
@@ -130,12 +144,17 @@ function DraftButton() {
   )
 }
 
-function ViewButton() {
+function ViewButton({
+  form,
+  post,
+}: {
+  form: UseFormReturn<FormValues>
+  post: Post | null
+}) {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
   const { t } = useTranslation()
-  const { form, post } = usePostForm()
 
   const onSubmit = async () => {
     try {
@@ -166,21 +185,25 @@ function ViewButton() {
   )
 }
 
-function PreviewButton() {
+function PreviewButton({
+  form,
+  post,
+}: {
+  form: UseFormReturn<FormValues>
+  post: Post | null
+}) {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
   const { t } = useTranslation()
-  const { form, post } = usePostForm()
   const { mutate } = useSWRConfig()
 
-  const onSubmit = async () => {
+  const onSubmit = async ({ slug, ...formValues }: FormValues) => {
     try {
       setIsSubmitting(true)
 
       if (!post) throw new Error('Require is not defined.')
 
-      const { slug, ...formValues } = form.getValues()
       const slugified = kebabCase(slug)
       const now = new Date().toISOString()
       const values = { slug: slugified, status: 'draft', updated_at: now }
@@ -225,12 +248,17 @@ function PreviewButton() {
   )
 }
 
-function TrashButton() {
+function TrashButton({
+  form,
+  post,
+}: {
+  form: UseFormReturn<FormValues>
+  post: Post | null
+}) {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
   const { t } = useTranslation()
-  const { form, post } = usePostForm()
   const { unregister } = form
 
   React.useEffect(() => {
@@ -238,7 +266,7 @@ function TrashButton() {
     router.refresh()
   }, [unregister, router])
 
-  const onSubmit = async () => {
+  const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
 
@@ -250,7 +278,11 @@ function TrashButton() {
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          formData: { status: 'trash', deleted_at: now },
+          formData: {
+            user_id: formValues?.user_id,
+            status: 'trash',
+            deleted_at: now,
+          },
           options: { revalidatePath: getPostPath(post) },
         }),
       })
@@ -286,20 +318,24 @@ function TrashButton() {
   )
 }
 
-function PublishButton() {
+function PublishButton({
+  form,
+  post,
+}: {
+  form: UseFormReturn<FormValues>
+  post: Post | null
+}) {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
-  const { form, post } = usePostForm()
   const { mutate } = useSWRConfig()
 
-  const onSubmit = async () => {
+  const onSubmit = async ({ slug, ...formValues }: FormValues) => {
     try {
       setIsSubmitting(true)
 
       if (!post) throw new Error('Require is not defined.')
 
-      const { slug, ...formValues } = form.getValues()
       const slugified = kebabCase(slug)
       const now = new Date().toISOString()
       const values = { slug: slugified, status: 'publish', updated_at: now }
@@ -310,7 +346,7 @@ function PublishButton() {
         body: JSON.stringify({
           formData: post?.published_at
             ? Object.assign({}, formValues, values)
-            : Object.assign({}, formValues, values, { publish_at: now }),
+            : Object.assign({}, formValues, values, { published_at: now }),
           options: { revalidatePath: getPostPath(post) },
         }),
       })

@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -33,11 +33,8 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>
 
 export function ChangeUsernameForm() {
-  const { t } = useTranslation()
-
   const { user } = useAuth()
   const { profile } = useProfileAPI(user?.id ?? null)
-  const { mutate } = useSWRConfig()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -47,29 +44,65 @@ export function ChangeUsernameForm() {
     },
   })
 
+  return (
+    <Form {...form}>
+      <form method="POST" noValidate className="space-y-4">
+        <UsernameField form={form} />
+        <SubmitButton form={form} />
+      </form>
+    </Form>
+  )
+}
+
+function UsernameField({ form }: { form: UseFormReturn<FormValues> }) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="username"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{t('FormLabel.username')}</FormLabel>
+          <FormControl className="max-w-60">
+            <Input placeholder="Username" {...field} />
+          </FormControl>
+          <FormDescription>
+            {t('FormMessage.you_can_change_it_only_once_every_few_days', {
+              count: 30,
+            })}
+          </FormDescription>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async (formValues: FormValues) => {
-    if (formValues?.username === profile?.username) {
-      toast(t('FormMessage.nothing_has_changed'))
-      return false
-    }
+  const { t } = useTranslation()
+  const { user } = useAuth()
+  const { profile } = useProfileAPI(user?.id ?? null)
+  const { mutate } = useSWRConfig()
 
+  const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
 
-      const uid = user?.id
-      const username = profile?.username
+      if (!user) throw new Error('Require is not defined.')
+      if (!profile) throw new Error('Require is not defined.')
+      if (formValues?.username === profile?.username) {
+        throw new Error('Nothing has changed.')
+      }
 
-      if (!uid) throw new Error('Require is not defined.')
-      if (!username) throw new Error('Require is not defined.')
-
-      const fetchUrl = `/api/v1/profile?id=${uid}`
+      const fetchUrl = `/api/v1/profile?id=${user?.id}`
       const result = await fetcher<ProfileAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          formData: formValues,
-          options: { revalidatePath: `/${username}` },
+          formData: { username: formValues?.username },
+          options: { revalidatePath: `/${profile?.username}` },
         }),
       })
 
@@ -89,6 +122,8 @@ export function ChangeUsernameForm() {
         toast.error(
           t('FormMessage.you_can_change_it_in_a_few_days', { count: +count })
         )
+      } else if (err.startsWith('Nothing has changed')) {
+        toast(t('FormMessage.nothing_has_changed'))
       } else {
         toast.error(err)
       }
@@ -98,35 +133,12 @@ export function ChangeUsernameForm() {
   }
 
   return (
-    <Form {...form}>
-      <form
-        method="POST"
-        onSubmit={form.handleSubmit(onSubmit)}
-        noValidate
-        className="space-y-4"
-      >
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('FormLabel.username')}</FormLabel>
-              <FormControl className="max-w-60">
-                <Input placeholder="Username" {...field} />
-              </FormControl>
-              <FormDescription>
-                {t('FormMessage.you_can_change_it_only_once_every_few_days', {
-                  count: 30,
-                })}
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button disabled={isSubmitting}>
-          {t('FormSubmit.change_username')}
-        </Button>
-      </form>
-    </Form>
+    <Button
+      type="submit"
+      onClick={form.handleSubmit(onSubmit)}
+      disabled={isSubmitting}
+    >
+      {t('FormSubmit.change_username')}
+    </Button>
   )
 }

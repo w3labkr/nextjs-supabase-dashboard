@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -34,11 +34,8 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>
 
 export function NotificationsForm() {
-  const { t } = useTranslation()
-
   const { user } = useAuth()
   const { notification } = useNotificationAPI(user?.id ?? null)
-  const { mutate } = useSWRConfig()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -49,22 +46,93 @@ export function NotificationsForm() {
     },
   })
 
+  return (
+    <Form {...form}>
+      <form method="POST" noValidate className="space-y-4">
+        <MarketingEmailsField form={form} />
+        <SecurityEmailsField form={form} />
+        <SubmitButton form={form} />
+      </form>
+    </Form>
+  )
+}
+
+function MarketingEmailsField({ form }: { form: UseFormReturn<FormValues> }) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="marketing_emails"
+      render={({ field }) => (
+        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+          <div className="space-y-0.5">
+            <FormLabel className="text-base">
+              {t('NotificationsForm.marketing_emails.label')}
+            </FormLabel>
+            <FormDescription>
+              {t('NotificationsForm.marketing_emails.description')}
+            </FormDescription>
+          </div>
+          <FormControl>
+            <Switch checked={field.value} onCheckedChange={field.onChange} />
+          </FormControl>
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function SecurityEmailsField({ form }: { form: UseFormReturn<FormValues> }) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="security_emails"
+      render={({ field }) => (
+        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+          <div className="space-y-0.5">
+            <FormLabel className="text-base">
+              {t('NotificationsForm.security_emails.label')}
+            </FormLabel>
+            <FormDescription>
+              {t('NotificationsForm.security_emails.description')}
+            </FormDescription>
+          </div>
+          <FormControl>
+            <Switch
+              checked={field.value}
+              onCheckedChange={field.onChange}
+              disabled
+              aria-readonly
+            />
+          </FormControl>
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async (formValues: FormValues) => {
-    if (formValues?.marketing_emails === notification?.marketing_emails) {
-      toast(t('FormMessage.nothing_has_changed'))
-      return false
-    }
+  const { t } = useTranslation()
+  const { user } = useAuth()
+  const { notification } = useNotificationAPI(user?.id ?? null)
+  const { mutate } = useSWRConfig()
 
+  const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
 
-      const uid = user?.id
+      if (!user) throw new Error('Require is not defined.')
+      if (!notification) throw new Error('Require is not defined.')
+      if (formValues?.marketing_emails === notification?.marketing_emails) {
+        throw new Error('Nothing has changed.')
+      }
 
-      if (!uid) throw new Error('Require is not defined.')
-
-      const fetchUrl = `/api/v1/notification?uid=${uid}`
+      const fetchUrl = `/api/v1/notification?uid=${user?.id}`
       const result = await fetcher<NotificationAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({ formData: formValues }),
@@ -76,70 +144,24 @@ export function NotificationsForm() {
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
-      toast.error((e as Error)?.message)
+      const err = (e as Error)?.message
+      if (err.startsWith('Nothing has changed')) {
+        toast(t('FormMessage.nothing_has_changed'))
+      } else {
+        toast.error(err)
+      }
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <Form {...form}>
-      <form
-        method="POST"
-        onSubmit={form.handleSubmit(onSubmit)}
-        noValidate
-        className="space-y-4"
-      >
-        <FormField
-          control={form.control}
-          name="marketing_emails"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel className="text-base">
-                  {t('NotificationsForm.marketing_emails.label')}
-                </FormLabel>
-                <FormDescription>
-                  {t('NotificationsForm.marketing_emails.description')}
-                </FormDescription>
-              </div>
-              <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="security_emails"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel className="text-base">
-                  {t('NotificationsForm.security_emails.label')}
-                </FormLabel>
-                <FormDescription>
-                  {t('NotificationsForm.security_emails.description')}
-                </FormDescription>
-              </div>
-              <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  disabled
-                  aria-readonly
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <Button disabled={isSubmitting}>
-          {t('FormSubmit.update_notifications')}
-        </Button>
-      </form>
-    </Form>
+    <Button
+      type="submit"
+      onClick={form.handleSubmit(onSubmit)}
+      disabled={isSubmitting}
+    >
+      {t('FormSubmit.update_notifications')}
+    </Button>
   )
 }

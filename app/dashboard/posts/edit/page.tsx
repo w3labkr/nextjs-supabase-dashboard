@@ -22,7 +22,7 @@ export default function PostEditPage({
           translate="yes"
         />
       </div>
-      <PostForm id={id} />
+      <PostForm id={+id} />
     </main>
   )
 }

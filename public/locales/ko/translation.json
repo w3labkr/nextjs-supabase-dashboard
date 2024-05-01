@@ -24,7 +24,7 @@
     "description": ""
   },
 
-  "NotificationsPage": {
+  "NotificationsSection": {
     "title": "알림",
     "description": ""
   },
@@ -41,37 +41,37 @@
     "AddButton": "새 글"
   },
 
-  "ProfilePage": {
+  "ProfileSection": {
     "title": "프로필",
     "description": ""
   },
 
-  "SecurityPage": {
+  "ChangePasswordSection": {
     "title": "비밀번호 변경",
     "description": "비밀번호는 6자 이상이어야 하며 이전 비밀번호와 달라야 합니다."
   },
 
-  "EmailsPage": {
+  "EmailsSection": {
     "title": "이메일",
     "description": ""
   },
 
-  "ChangeTheme": {
+  "ChangeThemeSection": {
     "title": "테마",
     "description": "대시보드의 테마를 선택합니다."
   },
 
-  "ChangeLanguage": {
+  "ChangeLanguageSection": {
     "title": "언어",
     "description": "대시보드의 언어를 선택합니다."
   },
 
-  "ChangeUsername": {
+  "ChangeUsernameSection": {
     "title": "사용자 이름",
     "description": ""
   },
 
-  "DeleteUser": {
+  "DeleteUserSection": {
     "title": "계정 삭제",
     "description": "계정을 삭제하면 게시물 등 다른 관련 정보가 영구적으로 삭제되며 다시 복구할 수 없습니다."
   },
@@ -344,7 +344,6 @@
   "PostList": {
     "EditLink": "수정",
     "ViewLink": "보기",
-    "PreviewLink": "미리보기",
     "TrashButton": "휴지통",
     "ClonePostButton": "복사",
     "RestoreButton": "복구",

@@ -5,11 +5,10 @@ import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 
 import { getPostPath } from '@/lib/utils'
-import { usePost } from '../context/post-provider'
+import { Post } from '@/types/database'
 
-export function ViewLink() {
+export function ViewLink({ post }: { post: Post }) {
   const { t } = useTranslation()
-  const { post } = usePost()
 
   return (
     <Link

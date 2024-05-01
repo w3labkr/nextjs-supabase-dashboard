@@ -5,19 +5,18 @@ import { useTranslation } from 'react-i18next'
 
 import { toast } from 'sonner'
 import { usePaging } from '@/components/paging/paging-provider'
-import { usePost } from '../context/post-provider'
 
 import { useSWRConfig } from 'swr'
 import { fetcher, setQueryString, getPostPath } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
+import { Post } from '@/types/database'
 
-export function DeleteButton() {
-  const { t } = useTranslation()
-  const { post } = usePost()
-  const { page, perPage, status } = usePaging()
-
-  const { mutate } = useSWRConfig()
+export function DeleteButton({ post }: { post: Post }) {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
+  const { t } = useTranslation()
+  const { page, perPage, status } = usePaging()
+  const { mutate } = useSWRConfig()
 
   const handleClick = async () => {
     try {

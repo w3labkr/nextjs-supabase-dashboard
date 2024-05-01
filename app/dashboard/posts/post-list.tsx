@@ -23,7 +23,6 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { PagingProvider, usePaging } from '@/components/paging/paging-provider'
 import { Paging } from '@/components/paging'
 
-import { PostProvider } from './context/post-provider'
 import { EditLink } from './components/edit-link'
 import { ViewLink } from './components/view-link'
 import { TrashButton } from './components/trash-button'
@@ -175,45 +174,57 @@ function PostItem({ post }: { post: Post }) {
   const { t } = useTranslation()
 
   return (
-    <PostProvider value={{ post }}>
-      <TableRow>
-        <TableCell>
-          <Checkbox />
-        </TableCell>
-        <TableCell align="center">{post?.id}</TableCell>
-        <TableCell>
-          <div className="line-clamp-1">
-            {post?.title}
-            {post?.status !== 'publish'
-              ? ` - ${t(`PostStatus.${post?.status}`)}`
-              : null}
-          </div>
-          <div className="flex items-center space-x-1">
-            {post?.status === 'publish' || post?.status === 'private' ? (
-              <DefaultActions />
-            ) : post?.status === 'trash' ? (
-              <TrashActions />
-            ) : (
-              <DraftActions />
-            )}
-          </div>
-        </TableCell>
-        <TableCell align="center">{post?.profile?.full_name}</TableCell>
-        <TableCell align="center">
-          {post?.status === 'private' ? (
-            <LucideIcon name="LockKeyhole" className="size-4 min-w-4" />
+    <TableRow>
+      <TableCell>
+        <Checkbox />
+      </TableCell>
+      <TableCell align="center">{post?.id}</TableCell>
+      <TableCell>
+        <div className="line-clamp-1">
+          {post?.title}
+          {post?.status !== 'publish'
+            ? ` - ${t(`PostStatus.${post?.status}`)}`
+            : null}
+        </div>
+        <div className="flex items-center space-x-1">
+          {post?.status === 'publish' || post?.status === 'private' ? (
+            <>
+              <EditLink post={post} />
+              <span>|</span>
+              <TrashButton post={post} />
+              <span>|</span>
+              <ViewLink post={post} />
+            </>
+          ) : post?.status === 'trash' ? (
+            <>
+              <RestoreButton post={post} />
+              <span>|</span>
+              <DeleteButton post={post} />
+            </>
           ) : (
-            <LucideIcon name="LockKeyholeOpen" className="size-4 min-w-4" />
+            <>
+              <EditLink post={post} />
+              <span>|</span>
+              <TrashButton post={post} />
+            </>
           )}
-        </TableCell>
-        <TableCell align="center">
-          {post?.views?.toLocaleString('en-US')}
-        </TableCell>
-        <TableCell align="center">
-          {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm')}
-        </TableCell>
-      </TableRow>
-    </PostProvider>
+        </div>
+      </TableCell>
+      <TableCell align="center">{post?.profile?.full_name}</TableCell>
+      <TableCell align="center">
+        {post?.status === 'private' ? (
+          <LucideIcon name="LockKeyhole" className="size-4 min-w-4" />
+        ) : (
+          <LucideIcon name="LockKeyholeOpen" className="size-4 min-w-4" />
+        )}
+      </TableCell>
+      <TableCell align="center">
+        {post?.views?.toLocaleString('en-US')}
+      </TableCell>
+      <TableCell align="center">
+        {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm')}
+      </TableCell>
+    </TableRow>
   )
 }
 
@@ -238,37 +249,5 @@ function LoadingItem() {
         {t('Table.is_loading')}
       </TableCell>
     </TableRow>
-  )
-}
-
-function DefaultActions() {
-  return (
-    <>
-      <EditLink />
-      <span>|</span>
-      <TrashButton />
-      <span>|</span>
-      <ViewLink />
-    </>
-  )
-}
-
-function DraftActions() {
-  return (
-    <>
-      <EditLink />
-      <span>|</span>
-      <TrashButton />
-    </>
-  )
-}
-
-function TrashActions() {
-  return (
-    <>
-      <RestoreButton />
-      <span>|</span>
-      <DeleteButton />
-    </>
   )
 }

@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -42,16 +42,87 @@ const defaultValues: Partial<FormValues> = {
 }
 
 export function ResetPasswordForm() {
-  const router = useRouter()
-  const { t } = useTranslation()
-
-  const { setSession, setUser } = useAuth()
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     defaultValues,
   })
+
+  return (
+    <Form {...form}>
+      <form method="POST" noValidate className="space-y-4">
+        <NewPasswordField form={form} />
+        <ConfirmNewPasswordField form={form} />
+        <SubmitButton form={form} />
+      </form>
+    </Form>
+  )
+}
+
+function NewPasswordField({ form }: { form: UseFormReturn<FormValues> }) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="newPassword"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{t('FormLabel.new_password')}</FormLabel>
+          <FormControl>
+            <Input
+              type="password"
+              autoCapitalize="none"
+              autoComplete="new-password"
+              autoCorrect="off"
+              placeholder={t('FormLabel.new_password')}
+              {...field}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function ConfirmNewPasswordField({
+  form,
+}: {
+  form: UseFormReturn<FormValues>
+}) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="confirmNewPassword"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{t('FormLabel.confirm_new_password')}</FormLabel>
+          <FormControl>
+            <Input
+              type="password"
+              autoCapitalize="none"
+              autoComplete="new-password"
+              autoCorrect="off"
+              placeholder={t('FormLabel.confirm_new_password')}
+              {...field}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
+  const router = useRouter()
+  const { t } = useTranslation()
+  const { setSession, setUser } = useAuth()
 
   const onSubmit = async (formValues: FormValues) => {
     try {
@@ -92,57 +163,13 @@ export function ResetPasswordForm() {
   }
 
   return (
-    <Form {...form}>
-      <form
-        method="POST"
-        onSubmit={form.handleSubmit(onSubmit)}
-        noValidate
-        className="space-y-4"
-      >
-        <FormField
-          control={form.control}
-          name="newPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('FormLabel.new_password')}</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  autoCapitalize="none"
-                  autoComplete="new-password"
-                  autoCorrect="off"
-                  placeholder={t('FormLabel.new_password')}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="confirmNewPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('FormLabel.confirm_new_password')}</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  autoCapitalize="none"
-                  autoComplete="new-password"
-                  autoCorrect="off"
-                  placeholder={t('FormLabel.confirm_new_password')}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button disabled={isSubmitting} className="w-full">
-          {t('FormSubmit.change_password')}
-        </Button>
-      </form>
-    </Form>
+    <Button
+      type="submit"
+      onClick={form.handleSubmit(onSubmit)}
+      disabled={isSubmitting}
+      className="w-full"
+    >
+      {t('FormSubmit.change_password')}
+    </Button>
   )
 }

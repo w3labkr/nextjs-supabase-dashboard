@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { languageItems } from '@/i18next.config'
 
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -38,8 +38,6 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>
 
 export function ChangeLanguageForm() {
-  const { t, i18n } = useTranslation()
-  const dispatch = useAppDispatch()
   const resolvedLanguage = useAppSelector(
     (state) => state?.i18n?.resolvedLanguage
   )
@@ -50,16 +48,64 @@ export function ChangeLanguageForm() {
     values: { language: resolvedLanguage },
   })
 
+  return (
+    <Form {...form}>
+      <form method="POST" noValidate className="flex w-full max-w-sm space-x-2">
+        <LanguageField form={form} />
+        <SubmitButton form={form} />
+      </form>
+    </Form>
+  )
+}
+
+function LanguageField({ form }: { form: UseFormReturn<FormValues> }) {
+  return (
+    <FormField
+      control={form.control}
+      name="language"
+      render={({ field }) => (
+        <FormItem>
+          {/* <FormLabel></FormLabel> */}
+          <Select onValueChange={field.onChange} value={field.value}>
+            <FormControl>
+              <SelectTrigger className="min-w-[180px]">
+                <SelectValue />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              <SelectGroup>
+                {languageItems?.map((item) => (
+                  <SelectItem key={item?.value} value={item?.value}>
+                    {item?.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {/* <FormDescription></FormDescription> */}
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async (formValues: FormValues) => {
-    if (formValues?.language === resolvedLanguage) {
-      toast(t('FormMessage.nothing_has_changed'))
-      return false
-    }
+  const { t, i18n } = useTranslation()
+  const dispatch = useAppDispatch()
+  const resolvedLanguage = useAppSelector(
+    (state) => state?.i18n?.resolvedLanguage
+  )
 
+  const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
+
+      if (formValues?.language === resolvedLanguage) {
+        throw new Error('Nothing has changed.')
+      }
 
       i18n.changeLanguage(formValues?.language)
       document.documentElement.lang = formValues?.language
@@ -67,49 +113,24 @@ export function ChangeLanguageForm() {
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
-      toast.error((e as Error)?.message)
+      const err = (e as Error)?.message
+      if (err.startsWith('Nothing has changed')) {
+        toast(t('FormMessage.nothing_has_changed'))
+      } else {
+        toast.error(err)
+      }
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <Form {...form}>
-      <form
-        method="POST"
-        onSubmit={form.handleSubmit(onSubmit)}
-        noValidate
-        className="flex w-full max-w-sm space-x-2"
-      >
-        <FormField
-          control={form.control}
-          name="language"
-          render={({ field }) => (
-            <FormItem>
-              {/* <FormLabel></FormLabel> */}
-              <Select onValueChange={field.onChange} value={field.value}>
-                <FormControl>
-                  <SelectTrigger className="min-w-[180px]">
-                    <SelectValue />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectGroup>
-                    {languageItems?.map((item) => (
-                      <SelectItem key={item?.value} value={item?.value}>
-                        {item?.label}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              {/* <FormDescription></FormDescription> */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button disabled={isSubmitting}>{t('FormSubmit.save')}</Button>
-      </form>
-    </Form>
+    <Button
+      type="submit"
+      onClick={form.handleSubmit(onSubmit)}
+      disabled={isSubmitting}
+    >
+      {t('FormSubmit.save')}
+    </Button>
   )
 }

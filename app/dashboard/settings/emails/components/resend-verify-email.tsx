@@ -2,35 +2,31 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-
 import { toast } from 'sonner'
-import { useEmail } from '../context/email-provider'
 
 import { useSWRConfig } from 'swr'
 import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
+import { Email } from '@/types/database'
 
-export function ResendVerifyEmail() {
+export function ResendVerifyEmail({ item }: { item: Email }) {
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
   const { t } = useTranslation()
   const { user } = useAuth()
   const { mutate } = useSWRConfig()
-  const { email, isVerified } = useEmail()
-
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const handleClick = async () => {
     try {
       setIsSubmitting(true)
 
-      const uid = user?.id
+      if (!user) throw new Error('Require is not defined.')
+      if (!item) throw new Error('Require is not defined.')
 
-      if (!uid) throw new Error('Require is not defined.')
-      if (!email) throw new Error('Require is not defined.')
-
-      const fetchUrl = `/api/v1/email/verify?uid=${uid}`
+      const fetchUrl = `/api/v1/email/verify?uid=${user?.id}`
       const result = await fetcher(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ formData: { email } }),
+        body: JSON.stringify({ formData: { email: item?.email } }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
@@ -45,7 +41,7 @@ export function ResendVerifyEmail() {
     }
   }
 
-  if (isVerified) return null
+  if (item?.email_confirmed_at) return null
 
   return (
     <button

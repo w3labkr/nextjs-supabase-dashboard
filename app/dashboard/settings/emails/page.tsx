@@ -12,9 +12,9 @@ export default function EmailsPage() {
   return (
     <main className="flex-1 space-y-16 overflow-auto p-10 pb-16">
       <div className="space-y-4">
-        <Title text="EmailsPage.title" translate="yes" />
+        <Title text="EmailsSection.title" translate="yes" />
         <Separator />
-        <Description text="EmailsPage.description" translate="yes" />
+        <Description text="EmailsSection.description" translate="yes" />
         <EmailList />
         <AddEmailAddress />
         <Separator />

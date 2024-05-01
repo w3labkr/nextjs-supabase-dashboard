@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -45,16 +45,118 @@ const defaultValues: Partial<FormValues> = {
 }
 
 export function SignUpForm() {
-  const router = useRouter()
-  const { t } = useTranslation()
-
-  const { setSession, setUser } = useAuth()
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     defaultValues,
   })
+
+  return (
+    <Form {...form}>
+      <form method="POST" noValidate className="space-y-4">
+        <EmailField form={form} />
+        <NewPasswordField form={form} />
+        <ConfirmNewPasswordField form={form} />
+        <SubmitButton form={form} />
+      </form>
+    </Form>
+  )
+}
+
+function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="email"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{t('FormLabel.email')}</FormLabel>
+          <FormControl>
+            <Input
+              type="email"
+              autoCapitalize="none"
+              autoComplete="email"
+              autoCorrect="off"
+              placeholder="name@example.com"
+              {...field}
+            />
+          </FormControl>
+          {/* <FormDescription></FormDescription> */}
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function NewPasswordField({ form }: { form: UseFormReturn<FormValues> }) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="newPassword"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{t('FormLabel.password')}</FormLabel>
+          <FormControl>
+            <Input
+              type="password"
+              autoCapitalize="none"
+              autoComplete="new-password"
+              autoCorrect="off"
+              placeholder={t('FormLabel.password')}
+              {...field}
+            />
+          </FormControl>
+          {/* <FormDescription></FormDescription> */}
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function ConfirmNewPasswordField({
+  form,
+}: {
+  form: UseFormReturn<FormValues>
+}) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="confirmNewPassword"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{t('FormLabel.confirm_password')}</FormLabel>
+          <FormControl>
+            <Input
+              type="password"
+              autoCapitalize="none"
+              autoComplete="new-password"
+              autoCorrect="off"
+              placeholder={t('FormLabel.confirm_password')}
+              {...field}
+            />
+          </FormControl>
+          {/* <FormDescription></FormDescription> */}
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
+  const router = useRouter()
+  const { t } = useTranslation()
+  const { setSession, setUser } = useAuth()
 
   const onSubmit = async (formValues: FormValues) => {
     try {
@@ -94,80 +196,13 @@ export function SignUpForm() {
   }
 
   return (
-    <Form {...form}>
-      <form
-        method="POST"
-        onSubmit={form.handleSubmit(onSubmit)}
-        noValidate
-        className="space-y-4"
-      >
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('FormLabel.email')}</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  autoCapitalize="none"
-                  autoComplete="email"
-                  autoCorrect="off"
-                  placeholder="name@example.com"
-                  {...field}
-                />
-              </FormControl>
-              {/* <FormDescription></FormDescription> */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="newPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('FormLabel.password')}</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  autoCapitalize="none"
-                  autoComplete="new-password"
-                  autoCorrect="off"
-                  placeholder={t('FormLabel.password')}
-                  {...field}
-                />
-              </FormControl>
-              {/* <FormDescription></FormDescription> */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="confirmNewPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('FormLabel.confirm_password')}</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  autoCapitalize="none"
-                  autoComplete="new-password"
-                  autoCorrect="off"
-                  placeholder={t('FormLabel.confirm_password')}
-                  {...field}
-                />
-              </FormControl>
-              {/* <FormDescription></FormDescription> */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button disabled={isSubmitting} className="w-full">
-          {t('FormSubmit.signup')}
-        </Button>
-      </form>
-    </Form>
+    <Button
+      type="submit"
+      onClick={form.handleSubmit(onSubmit)}
+      disabled={isSubmitting}
+      className="w-full"
+    >
+      {t('FormSubmit.signup')}
+    </Button>
   )
 }

@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -23,6 +23,7 @@ import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
 import { createClient } from '@/lib/supabase/client'
+import { User } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 import { useUserAPI } from '@/queries/sync'
 
@@ -46,16 +47,7 @@ const defaultValues: Partial<FormValues> = {
   confirmNewPassword: '',
 }
 
-export function ChangePasswordForm() {
-  const router = useRouter()
-  const { t } = useTranslation()
-
-  const { session } = useAuth()
-  const { user } = useUserAPI(session?.user?.id ?? null)
-  const { mutate } = useSWRConfig()
-
-  const hasSetPassword = user?.user?.has_set_password ?? false
-
+export function ChangePasswordForm({ user }: { user: User | null }) {
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
@@ -63,25 +55,133 @@ export function ChangePasswordForm() {
     shouldUnregister: true,
   })
   const { register, unregister } = form
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+  const has_set_password = user?.user?.has_set_password
 
   React.useEffect(() => {
-    hasSetPassword ? register('oldPassword') : unregister('oldPassword')
-  }, [register, unregister, hasSetPassword])
+    has_set_password ? register('oldPassword') : unregister('oldPassword')
+  }, [register, unregister, has_set_password])
+
+  return (
+    <Form {...form}>
+      <form method="POST" noValidate className="space-y-4">
+        {has_set_password ? <OldPasswordField form={form} /> : null}
+        <NewPasswordField form={form} />
+        <ConfirmNewPasswordField form={form} />
+        <SubmitButton form={form} />
+      </form>
+    </Form>
+  )
+}
+
+function OldPasswordField({ form }: { form: UseFormReturn<FormValues> }) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="oldPassword"
+      render={({ field }) => (
+        <FormItem className="max-w-80">
+          <FormLabel>{t('FormLabel.old_password')}</FormLabel>
+          <FormControl>
+            <Input
+              type="password"
+              autoCapitalize="none"
+              autoComplete="current-password"
+              autoCorrect="off"
+              placeholder={t('FormLabel.old_password')}
+              {...field}
+            />
+          </FormControl>
+          {/* <FormDescription></FormDescription> */}
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function NewPasswordField({ form }: { form: UseFormReturn<FormValues> }) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="newPassword"
+      render={({ field }) => (
+        <FormItem className="max-w-80">
+          <FormLabel>{t('FormLabel.new_password')}</FormLabel>
+          <FormControl>
+            <Input
+              type="password"
+              autoCapitalize="none"
+              autoComplete="new-password"
+              autoCorrect="off"
+              placeholder={t('FormLabel.new_password')}
+              {...field}
+            />
+          </FormControl>
+          {/* <FormDescription></FormDescription> */}
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function ConfirmNewPasswordField({
+  form,
+}: {
+  form: UseFormReturn<FormValues>
+}) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="confirmNewPassword"
+      render={({ field }) => (
+        <FormItem className="max-w-80">
+          <FormLabel>{t('FormLabel.confirm_new_password')}</FormLabel>
+          <FormControl>
+            <Input
+              type="password"
+              autoCapitalize="none"
+              autoComplete="new-password"
+              autoCorrect="off"
+              placeholder={t('FormLabel.confirm_new_password')}
+              {...field}
+            />
+          </FormControl>
+          {/* <FormDescription></FormDescription> */}
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
+  const router = useRouter()
+  const { t } = useTranslation()
+  const { session } = useAuth()
+  const { user } = useUserAPI(session?.user?.id ?? null)
+  const { mutate } = useSWRConfig()
 
   const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
 
+      if (!user) throw new Error('Require is not defined.')
+
       const supabase = createClient()
-      const uid = user?.id
 
-      if (!uid) throw new Error('Require is not defined.')
-
-      if (hasSetPassword) {
+      if (user?.user?.has_set_password) {
         if (!formValues?.oldPassword) throw new Error('Require is not defined.')
         const verified = await supabase.rpc('verify_user_password', {
-          uid,
+          uid: user?.id,
           password: formValues?.oldPassword,
         })
         if (verified?.error) throw new Error(verified?.error?.message)
@@ -95,7 +195,7 @@ export function ChangePasswordForm() {
       })
       if (updated?.error) throw new Error(updated?.error?.message)
 
-      mutate(`/api/v1/user?id=${uid}`)
+      mutate(`/api/v1/user?id=${user?.id}`)
 
       form.reset()
       router.refresh()
@@ -123,85 +223,13 @@ export function ChangePasswordForm() {
     }
   }
 
-  if (!user) return <div>Loading...</div>
-
   return (
-    <Form {...form}>
-      <form
-        method="POST"
-        onSubmit={form.handleSubmit(onSubmit)}
-        noValidate
-        className="space-y-4"
-      >
-        {hasSetPassword ? (
-          <FormField
-            control={form.control}
-            name="oldPassword"
-            render={({ field }) => (
-              <FormItem className="max-w-80">
-                <FormLabel>{t('FormLabel.old_password')}</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    autoCapitalize="none"
-                    autoComplete="current-password"
-                    autoCorrect="off"
-                    placeholder={t('FormLabel.old_password')}
-                    {...field}
-                  />
-                </FormControl>
-                {/* <FormDescription></FormDescription> */}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        ) : null}
-        <FormField
-          control={form.control}
-          name="newPassword"
-          render={({ field }) => (
-            <FormItem className="max-w-80">
-              <FormLabel>{t('FormLabel.new_password')}</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  autoCapitalize="none"
-                  autoComplete="new-password"
-                  autoCorrect="off"
-                  placeholder={t('FormLabel.new_password')}
-                  {...field}
-                />
-              </FormControl>
-              {/* <FormDescription></FormDescription> */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="confirmNewPassword"
-          render={({ field }) => (
-            <FormItem className="max-w-80">
-              <FormLabel>{t('FormLabel.confirm_new_password')}</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  autoCapitalize="none"
-                  autoComplete="new-password"
-                  autoCorrect="off"
-                  placeholder={t('FormLabel.confirm_new_password')}
-                  {...field}
-                />
-              </FormControl>
-              {/* <FormDescription></FormDescription> */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button disabled={isSubmitting}>
-          {t('FormSubmit.change_password')}
-        </Button>
-      </form>
-    </Form>
+    <Button
+      type="submit"
+      onClick={form.handleSubmit(onSubmit)}
+      disabled={isSubmitting}
+    >
+      {t('FormSubmit.change_password')}
+    </Button>
   )
 }

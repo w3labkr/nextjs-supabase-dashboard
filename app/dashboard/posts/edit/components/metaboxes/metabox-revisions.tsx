@@ -3,8 +3,6 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { toast } from 'sonner'
-import { LucideIcon } from '@/lib/lucide-icon'
 import {
   Accordion,
   AccordionContent,
@@ -12,7 +10,14 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 
-export function MetaboxRevisions() {
+import { UseFormReturn } from 'react-hook-form'
+import { FormValues } from '../../post-form'
+
+export function MetaboxRevisions({
+  form,
+}: {
+  form: UseFormReturn<FormValues>
+}) {
   const { t } = useTranslation()
 
   return (

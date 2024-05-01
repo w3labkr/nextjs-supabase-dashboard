@@ -6,7 +6,7 @@ export type UserRole = 'guest' | 'user' | 'admin' | 'superadmin'
 export type UserPlan = 'free' | 'basic' | 'standard' | 'premium'
 
 export type User = AuthUser & {
-  user: Tables<'users'> & { role: UserRole; plan: UserPlan }
+  user: Tables<'users'> & { role: string; plan: string }
   profile: Tables<'profiles'>
 }
 

@@ -3,8 +3,6 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { toast } from 'sonner'
-import { LucideIcon } from '@/lib/lucide-icon'
 import {
   Accordion,
   AccordionContent,
@@ -22,11 +20,11 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 
-import { usePostForm } from '../../context/post-form-provider'
+import { UseFormReturn } from 'react-hook-form'
+import { FormValues } from '../../post-form'
 
-export function MetaboxExcerpt() {
+export function MetaboxExcerpt({ form }: { form: UseFormReturn<FormValues> }) {
   const { t } = useTranslation()
-  const { form } = usePostForm()
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">

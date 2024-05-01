@@ -24,7 +24,7 @@
     "description": ""
   },
 
-  "NotificationsPage": {
+  "NotificationsSection": {
     "title": "Notifications",
     "description": ""
   },
@@ -41,37 +41,37 @@
     "AddButton": "Add New"
   },
 
-  "ProfilePage": {
+  "ProfileSection": {
     "title": "Profile",
     "description": ""
   },
 
-  "SecurityPage": {
+  "ChangePasswordSection": {
     "title": "Change Password",
     "description": "Your password must be at least 6 characters long and must be different from your previous password."
   },
 
-  "EmailsPage": {
+  "EmailsSection": {
     "title": "Emails",
     "description": ""
   },
 
-  "ChangeTheme": {
+  "ChangeThemeSection": {
     "title": "Theme",
     "description": "Select the theme for the dashboard."
   },
 
-  "ChangeLanguage": {
+  "ChangeLanguageSection": {
     "title": "Language",
     "description": "Select the language for the dashboard."
   },
 
-  "ChangeUsername": {
+  "ChangeUsernameSection": {
     "title": "Username",
     "description": ""
   },
 
-  "DeleteUser": {
+  "DeleteUserSection": {
     "title": "Delete Account",
     "description": "If you delete your account, your posts and other related information will be permanently deleted and cannot be recovered."
   },
@@ -344,7 +344,6 @@
   "PostList": {
     "EditLink": "Edit",
     "ViewLink": "View",
-    "PreviewLink": "Preview",
     "TrashButton": "Trash",
     "ClonePostButton": "Clone",
     "RestoreButton": "Restore",

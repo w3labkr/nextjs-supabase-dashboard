@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -38,17 +38,93 @@ const defaultValues: Partial<FormValues> = {
 }
 
 export function SignInForm() {
-  const router = useRouter()
-  const { t } = useTranslation()
-
-  const { setSession, setUser } = useAuth()
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     defaultValues,
   })
 
+  return (
+    <Form {...form}>
+      <form method="POST" noValidate className="space-y-4">
+        <EmailField form={form} />
+        <PasswordField form={form} />
+        <SubmitButton form={form} />
+      </form>
+    </Form>
+  )
+}
+
+function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="email"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{t('FormLabel.email')}</FormLabel>
+          <FormControl>
+            <Input
+              type="email"
+              autoCapitalize="none"
+              autoComplete="email"
+              autoCorrect="off"
+              placeholder="name@example.com"
+              {...field}
+            />
+          </FormControl>
+          {/* <FormDescription></FormDescription> */}
+          <FormMessage className="font-normal" />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function PasswordField({ form }: { form: UseFormReturn<FormValues> }) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="password"
+      render={({ field }) => (
+        <FormItem>
+          <div className="flex items-center justify-between">
+            <FormLabel>{t('FormLabel.password')}</FormLabel>
+            <RelatedLink
+              href="/auth/forgot-password"
+              className="text-sm"
+              text="RelatedLink.forgot_password"
+              translate="yes"
+            />
+          </div>
+          <FormControl>
+            <Input
+              type="password"
+              autoCapitalize="none"
+              autoComplete="current-password"
+              autoCorrect="off"
+              placeholder={t('FormLabel.password')}
+              {...field}
+            />
+          </FormControl>
+          {/* <FormDescription></FormDescription> */}
+          <FormMessage className="font-normal" />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
+  const router = useRouter()
+  const { t } = useTranslation()
+  const { setSession, setUser } = useAuth()
 
   const onSubmit = async (formValues: FormValues) => {
     try {
@@ -86,67 +162,13 @@ export function SignInForm() {
   }
 
   return (
-    <Form {...form}>
-      <form
-        method="POST"
-        onSubmit={form.handleSubmit(onSubmit)}
-        noValidate
-        className="space-y-4"
-      >
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('FormLabel.email')}</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  autoCapitalize="none"
-                  autoComplete="email"
-                  autoCorrect="off"
-                  placeholder="name@example.com"
-                  {...field}
-                />
-              </FormControl>
-              {/* <FormDescription></FormDescription> */}
-              <FormMessage className="font-normal" />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center justify-between">
-                <FormLabel>{t('FormLabel.password')}</FormLabel>
-                <RelatedLink
-                  href="/auth/forgot-password"
-                  className="text-sm"
-                  text="RelatedLink.forgot_password"
-                  translate="yes"
-                />
-              </div>
-              <FormControl>
-                <Input
-                  type="password"
-                  autoCapitalize="none"
-                  autoComplete="current-password"
-                  autoCorrect="off"
-                  placeholder={t('FormLabel.password')}
-                  {...field}
-                />
-              </FormControl>
-              {/* <FormDescription></FormDescription> */}
-              <FormMessage className="font-normal" />
-            </FormItem>
-          )}
-        />
-        <Button disabled={isSubmitting} className="w-full">
-          {t('FormSubmit.signin')}
-        </Button>
-      </form>
-    </Form>
+    <Button
+      type="submit"
+      onClick={form.handleSubmit(onSubmit)}
+      disabled={isSubmitting}
+      className="w-full"
+    >
+      {t('FormSubmit.signin')}
+    </Button>
   )
 }

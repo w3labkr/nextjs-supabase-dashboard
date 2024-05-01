@@ -3,8 +3,6 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { toast } from 'sonner'
-import { LucideIcon } from '@/lib/lucide-icon'
 import {
   Accordion,
   AccordionContent,
@@ -13,7 +11,14 @@ import {
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 
-export function MetaboxThumbnail() {
+import { UseFormReturn } from 'react-hook-form'
+import { FormValues } from '../../post-form'
+
+export function MetaboxThumbnail({
+  form,
+}: {
+  form: UseFormReturn<FormValues>
+}) {
   const { t } = useTranslation()
 
   return (

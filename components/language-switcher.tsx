@@ -34,13 +34,12 @@ export function LanguageSwitcher({
   triggerClassName?: string
   contentClassName?: string
 }) {
-  const { t, i18n } = useTranslation()
-
   const dispatch = useAppDispatch()
   const resolvedLanguage = useAppSelector(
     (state) => state?.i18n?.resolvedLanguage
   )
   const [open, setOpen] = React.useState<boolean>(false)
+  const { t, i18n } = useTranslation()
 
   const handleSelect = (currentValue: string) => {
     if (currentValue === resolvedLanguage) return false

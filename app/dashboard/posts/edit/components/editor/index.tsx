@@ -8,7 +8,10 @@ import EventInfo from '@ckeditor/ckeditor5-utils/src/eventinfo'
 
 import { defaultLng } from '@/i18next.config'
 import { useAppSelector } from '@/lib/redux/hooks'
-import { usePostForm } from '../../context/post-form-provider'
+
+import { UseFormReturn } from 'react-hook-form'
+import { FormValues } from '../../post-form'
+import { Post } from '@/types/database'
 
 import '@/ckeditor5/build/translations/ko.js'
 import './style.css'
@@ -149,11 +152,16 @@ const editorConfiguration: EditorConfig = {
   // extraPlugins: [],
 }
 
-export default function Editor() {
+export default function Editor({
+  form,
+  post,
+}: {
+  form: UseFormReturn<FormValues>
+  post: Post | null
+}) {
   const resolvedLanguage = useAppSelector(
     (state) => state?.i18n?.resolvedLanguage
   )
-  const { form, post } = usePostForm()
 
   React.useEffect(() => {
     editorConfiguration.language = resolvedLanguage

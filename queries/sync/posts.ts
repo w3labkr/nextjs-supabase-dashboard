@@ -4,7 +4,7 @@ import useSWR from 'swr'
 import { setQueryString } from '@/lib/utils'
 import { PostAPI, PostsAPI, CountPostsAPI } from '@/types/api'
 
-export function usePostAPI(id: string | null) {
+export function usePostAPI(id: number | null) {
   const url = id ? `/api/v1/post?id=${id}` : null
   const {
     data: response,

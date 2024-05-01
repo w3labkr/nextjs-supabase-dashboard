@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation, Trans } from 'react-i18next'
 
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -32,6 +32,7 @@ import { Input } from '@/components/ui/input'
 
 import { fetcher } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
+import { User } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 import { useUserAPI } from '@/queries/sync'
 
@@ -54,14 +55,8 @@ const defaultValues: Partial<FormValues> = {
   confirmationPhrase: '',
 }
 
-export function DeleteUserForm() {
-  const router = useRouter()
+export function DeleteUserForm({ user }: { user: User | null }) {
   const { t } = useTranslation()
-
-  const { session, setSession, setUser } = useAuth()
-  const { user } = useUserAPI(session?.user?.id ?? null)
-  const hasSetPassword: boolean = user?.user?.has_set_password ?? false
-
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
@@ -69,21 +64,130 @@ export function DeleteUserForm() {
     shouldUnregister: true,
   })
   const { register, unregister } = form
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+  const has_set_password = user?.user?.has_set_password
 
   React.useEffect(() => {
-    hasSetPassword ? register('password') : unregister('password')
-  }, [register, unregister, hasSetPassword])
+    has_set_password ? register('password') : unregister('password')
+  }, [register, unregister, has_set_password])
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline" className="text-destructive">
+          {t('DeleteUserDialog.trigger')}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-[480px]">
+        <DialogHeader>
+          <DialogTitle>{t('DeleteUserDialog.title')}</DialogTitle>
+          <DialogDescription className="text-destructive">
+            {t('DeleteUserDialog.description')}
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form method="POST" noValidate className="space-y-4">
+            <EmailField form={form} />
+            {has_set_password ? <PasswordField form={form} /> : null}
+            <ConfirmationPhraseField form={form} />
+            <SubmitButton form={form} />
+          </form>
+        </Form>
+        {/* <DialogFooter></DialogFooter> */}
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="email"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{t('FormLabel.your_email')}:</FormLabel>
+          <FormControl>
+            <Input placeholder="name@example.com" {...field} />
+          </FormControl>
+          {/* <FormDescription></FormDescription> */}
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function PasswordField({ form }: { form: UseFormReturn<FormValues> }) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="password"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{t('FormLabel.confirm_your_password')}:</FormLabel>
+          <FormControl>
+            <Input
+              type="password"
+              autoCapitalize="none"
+              autoComplete="current-password"
+              autoCorrect="off"
+              placeholder={t('FormLabel.password')}
+              {...field}
+            />
+          </FormControl>
+          {/* <FormDescription></FormDescription> */}
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function ConfirmationPhraseField({
+  form,
+}: {
+  form: UseFormReturn<FormValues>
+}) {
+  return (
+    <FormField
+      control={form.control}
+      name="confirmationPhrase"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>
+            <Trans components={{ i: <i /> }}>
+              FormLabel.verify_delete_my_account
+            </Trans>
+          </FormLabel>
+          <FormControl>
+            <Input placeholder="delete my account" {...field} />
+          </FormControl>
+          {/* <FormDescription></FormDescription> */}
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
+  const router = useRouter()
+  const { t } = useTranslation()
+  const { session, setSession, setUser } = useAuth()
+  const { user } = useUserAPI(session?.user?.id ?? null)
 
   const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
 
-      const uid = user?.id
-      const username = user?.profile?.username
-
-      if (!uid) throw new Error('Require is not defined.')
-      if (!username) throw new Error('Require is not defined.')
+      if (!user) throw new Error('Require is not defined.')
+      if (!user?.profile) throw new Error('Require is not defined.')
       if (!user?.email) throw new Error('Require is not defined.')
       if (formValues?.email !== user?.email) {
         throw new Error('Your email address is invalid.')
@@ -91,10 +195,10 @@ export function DeleteUserForm() {
 
       const supabase = createClient()
 
-      if (hasSetPassword) {
+      if (user?.user?.has_set_password) {
         if (!formValues?.password) throw new Error('Require is not defined.')
         const verified = await supabase.rpc('verify_user_password', {
-          uid,
+          uid: user?.id,
           password: formValues?.password,
         })
         if (verified?.error) throw new Error(verified?.error?.message)
@@ -103,11 +207,11 @@ export function DeleteUserForm() {
         }
       }
 
-      const fetchUrl = `/api/v1/user?id=${uid}`
+      const fetchUrl = `/api/v1/user?id=${user?.id}`
       const deleted = await fetcher<FetchAPI>(fetchUrl, {
         method: 'DELETE',
         body: JSON.stringify({
-          options: { revalidatePath: `/${username}` },
+          options: { revalidatePath: `/${user?.profile?.username}` },
         }),
       })
       if (deleted?.error) throw new Error(deleted?.error?.message)
@@ -136,93 +240,13 @@ export function DeleteUserForm() {
   }
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="text-destructive">
-          {t('DeleteUserDialog.trigger')}
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-[480px]">
-        <DialogHeader>
-          <DialogTitle>{t('DeleteUserDialog.title')}</DialogTitle>
-          <DialogDescription className="text-destructive">
-            {t('DeleteUserDialog.description')}
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form
-            method="POST"
-            onSubmit={form.handleSubmit(onSubmit)}
-            noValidate
-            className="space-y-4"
-          >
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('FormLabel.your_email')}:</FormLabel>
-                  <FormControl>
-                    <Input placeholder="name@example.com" {...field} />
-                  </FormControl>
-                  {/* <FormDescription></FormDescription> */}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {hasSetPassword ? (
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      {t('FormLabel.confirm_your_password')}:
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        autoCapitalize="none"
-                        autoComplete="current-password"
-                        autoCorrect="off"
-                        placeholder={t('FormLabel.password')}
-                        {...field}
-                      />
-                    </FormControl>
-                    {/* <FormDescription></FormDescription> */}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ) : null}
-            <FormField
-              control={form.control}
-              name="confirmationPhrase"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <Trans components={{ i: <i /> }}>
-                      FormLabel.verify_delete_my_account
-                    </Trans>
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="delete my account" {...field} />
-                  </FormControl>
-                  {/* <FormDescription></FormDescription> */}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              variant="destructive"
-              disabled={!form?.formState?.isValid || isSubmitting}
-            >
-              {t('FormSubmit.delete_your_account')}
-            </Button>
-          </form>
-        </Form>
-        {/* <DialogFooter></DialogFooter> */}
-      </DialogContent>
-    </Dialog>
+    <Button
+      variant="destructive"
+      type="submit"
+      onClick={form.handleSubmit(onSubmit)}
+      disabled={!form?.formState?.isValid || isSubmitting}
+    >
+      {t('FormSubmit.delete_your_account')}
+    </Button>
   )
 }

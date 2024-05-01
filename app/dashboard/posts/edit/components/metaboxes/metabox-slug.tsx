@@ -21,18 +21,24 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import { usePostForm } from '../../context/post-form-provider'
+import { UseFormReturn } from 'react-hook-form'
+import { FormValues } from '../../post-form'
+import { Post } from '@/types/database'
 
-export function MetaboxSlug() {
+export function MetaboxSlug({
+  form,
+  post,
+}: {
+  form: UseFormReturn<FormValues>
+  post: Post | null
+}) {
   const { t } = useTranslation()
-  const { form, post } = usePostForm()
-  const { control, watch, setValue } = form
 
-  const title = watch('title')
-  const slug = watch('slug')
+  const title = form.watch('title')
+  const slug = form.watch('slug')
 
   const debounceSetValue = React.useCallback(
-    debounce((value: string) => setValue('slug', value), 1000),
+    debounce((value: string) => form.setValue('slug', value), 1000),
     []
   )
 
@@ -54,7 +60,7 @@ export function MetaboxSlug() {
         <AccordionTrigger>{t('PostMetabox.slug')}</AccordionTrigger>
         <AccordionContent className="px-1 py-1 pb-4">
           <FormField
-            control={control}
+            control={form.control}
             name="slug"
             render={({ field }) => (
               <FormItem>

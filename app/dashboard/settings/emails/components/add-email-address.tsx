@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -32,23 +32,73 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
+const defaultValues: Partial<FormValues> = {
+  email: '',
+}
+
 export function AddEmailAddress() {
   const { t } = useTranslation()
-
-  const { user } = useAuth()
-  const { emails } = useEmailsAPI(user?.id ?? null)
-  const { mutate } = useSWRConfig()
-
-  const defaultValues: Partial<FormValues> = {
-    email: '',
-  }
-
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     defaultValues,
   })
+
+  return (
+    <div className="space-y-2">
+      <div>
+        <span className="text-sm font-semibold">
+          {t('AddEmailAddress.title')}
+        </span>
+        {/* <p className="text-xs">{t('AddEmailAddress.description')}</p> */}
+      </div>
+      <Form {...form}>
+        <form
+          method="POST"
+          noValidate
+          className="flex w-full max-w-sm space-x-2"
+        >
+          <EmailField form={form} />
+          <SubmitButton form={form} />
+        </form>
+      </Form>
+    </div>
+  )
+}
+
+function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
+  return (
+    <FormField
+      control={form.control}
+      name="email"
+      render={({ field }) => (
+        <FormItem>
+          {/* <FormLabel>{t('FormLabel.email')}</FormLabel> */}
+          <FormControl className="w-[180px]">
+            <Input
+              type="email"
+              autoCapitalize="none"
+              autoComplete="email"
+              autoCorrect="off"
+              placeholder="name@example.com"
+              {...field}
+            />
+          </FormControl>
+          {/* <FormDescription></FormDescription> */}
+          <FormMessage className="font-normal" />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
+  const { t } = useTranslation()
+  const { user } = useAuth()
+  const { emails } = useEmailsAPI(user?.id ?? null)
+  const { mutate } = useSWRConfig()
 
   const onSubmit = async (formValues: FormValues) => {
     if (emails?.find((value) => value?.email === formValues?.email)) {
@@ -59,23 +109,21 @@ export function AddEmailAddress() {
     try {
       setIsSubmitting(true)
 
-      const uid = user?.id
+      if (!user) throw new Error('Require is not defined.')
 
-      if (!uid) throw new Error('Require is not defined.')
-
-      const result = await fetcher<EmailsAPI>(`/api/v1/email?uid=${uid}`, {
+      const result = await fetcher<EmailsAPI>(`/api/v1/email?uid=${user?.id}`, {
         method: 'PUT',
-        body: JSON.stringify({ formData: formValues }),
+        body: JSON.stringify({ formData: { email: formValues?.email } }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      mutate(`/api/v1/email/list?uid=${uid}`)
+      mutate(`/api/v1/email/list?uid=${user?.id}`)
 
-      const sentUrl = `/api/v1/email/verify?uid=${uid}`
+      const sentUrl = `/api/v1/email/verify?uid=${user?.id}`
       const sent = await fetcher(sentUrl, {
         method: 'POST',
-        body: JSON.stringify({ formData: formValues }),
+        body: JSON.stringify({ formData: { email: formValues?.email } }),
       })
 
       if (sent?.error) throw new Error(sent?.error?.message)
@@ -93,44 +141,12 @@ export function AddEmailAddress() {
   }
 
   return (
-    <div className="space-y-2">
-      <div>
-        <span className="text-sm font-semibold">
-          {t('AddEmailAddress.title')}
-        </span>
-        {/* <p className="text-xs">{t('AddEmailAddress.description')}</p> */}
-      </div>
-      <Form {...form}>
-        <form
-          method="POST"
-          onSubmit={form.handleSubmit(onSubmit)}
-          noValidate
-          className="flex w-full max-w-sm space-x-2"
-        >
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                {/* <FormLabel>{t('FormLabel.email')}</FormLabel> */}
-                <FormControl className="w-[180px]">
-                  <Input
-                    type="email"
-                    autoCapitalize="none"
-                    autoComplete="email"
-                    autoCorrect="off"
-                    placeholder="name@example.com"
-                    {...field}
-                  />
-                </FormControl>
-                {/* <FormDescription></FormDescription> */}
-                <FormMessage className="font-normal" />
-              </FormItem>
-            )}
-          />
-          <Button disabled={isSubmitting}>{t('FormSubmit.add')}</Button>
-        </form>
-      </Form>
-    </div>
+    <Button
+      type="submit"
+      onClick={form.handleSubmit(onSubmit)}
+      disabled={isSubmitting}
+    >
+      {t('FormSubmit.add')}
+    </Button>
   )
 }

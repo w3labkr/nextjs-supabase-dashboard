@@ -10,8 +10,8 @@ export default function NotificationsPage() {
   return (
     <main className="flex-1 space-y-16 overflow-auto p-10 pb-16">
       <div className="space-y-4">
-        <Title text="NotificationsPage.title" translate="yes" />
-        <Description text="NotificationsPage.description" translate="yes" />
+        <Title text="NotificationsSection.title" translate="yes" />
+        <Description text="NotificationsSection.description" translate="yes" />
         <Separator />
         <NotificationsForm />
       </div>

@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -33,14 +33,53 @@ const defaultValues: Partial<FormValues> = {
 }
 
 export function ForgotPasswordForm() {
-  const { t } = useTranslation()
-
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     defaultValues,
   })
+
+  return (
+    <Form {...form}>
+      <form method="POST" noValidate className="space-y-4">
+        <EmailField form={form} />
+        <SubmitButton form={form} />
+      </form>
+    </Form>
+  )
+}
+
+function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
+  const { t } = useTranslation()
+
+  return (
+    <FormField
+      control={form.control}
+      name="email"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{t('FormLabel.email')}</FormLabel>
+          <FormControl>
+            <Input
+              type="email"
+              autoCapitalize="none"
+              autoComplete="email"
+              autoCorrect="off"
+              placeholder="name@example.com"
+              {...field}
+            />
+          </FormControl>
+          <FormMessage className="font-normal" />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
+  const { t } = useTranslation()
 
   const onSubmit = async (formValues: FormValues) => {
     try {
@@ -70,37 +109,13 @@ export function ForgotPasswordForm() {
   }
 
   return (
-    <Form {...form}>
-      <form
-        method="POST"
-        onSubmit={form.handleSubmit(onSubmit)}
-        noValidate
-        className="space-y-4"
-      >
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('FormLabel.email')}</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  autoCapitalize="none"
-                  autoComplete="email"
-                  autoCorrect="off"
-                  placeholder="name@example.com"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="font-normal" />
-            </FormItem>
-          )}
-        />
-        <Button disabled={isSubmitting} className="w-full">
-          {t('FormSubmit.reset_my_password')}
-        </Button>
-      </form>
-    </Form>
+    <Button
+      type="submit"
+      onClick={form.handleSubmit(onSubmit)}
+      disabled={isSubmitting}
+      className="w-full"
+    >
+      {t('FormSubmit.reset_my_password')}
+    </Button>
   )
 }

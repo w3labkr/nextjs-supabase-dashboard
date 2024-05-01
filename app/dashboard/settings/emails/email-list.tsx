@@ -3,13 +3,12 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { EmailProvider, useEmail } from './context/email-provider'
 import { DeleteEmailAddress } from './components/delete-email-address'
 import { ResendVerifyEmail } from './components/resend-verify-email'
 
-import { Email } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 import { useEmailsAPI } from '@/queries/sync'
+import { Email } from '@/types/database'
 
 export function EmailList() {
   const { user } = useAuth()
@@ -28,53 +27,43 @@ function EmailItem({ item }: { item: Email }) {
   const { t } = useTranslation()
   const { user } = useAuth()
 
-  const value = React.useMemo(() => {
-    return {
-      isVerified: !!item?.email_confirmed_at,
-      isPrimary: item?.email === user?.email,
-      email: item?.email,
-      email_confirmed_at: item?.email_confirmed_at,
-    }
-  }, [item, user?.email])
-
   return (
-    <EmailProvider value={value}>
-      <div className="space-y-2 rounded-lg border p-4">
-        <div className="flex flex-col">
-          <div className="flex items-center">
-            <div className="text-sm font-semibold">
-              <span>{item?.email}</span>
-              {value?.isPrimary ? (
-                <>
-                  <span>{' - '}</span>
-                  <span className="text-green-700">{t('EmailItem.title')}</span>
-                </>
-              ) : null}
-            </div>
-            <div className="ml-auto">
-              {!value?.isPrimary ? <DeleteEmailAddress /> : null}
-            </div>
+    <div className="space-y-2 rounded-lg border p-4">
+      <div className="flex flex-col">
+        <div className="flex items-center">
+          <div className="text-sm font-semibold">
+            <span>{item?.email}</span>
+            {item?.email === user?.email ? (
+              <>
+                <span>{' - '}</span>
+                <span className="text-green-700">{t('EmailItem.title')}</span>
+              </>
+            ) : null}
           </div>
-          {value?.isPrimary ? (
-            <div className="text-xs">{t('EmailItem.description')}</div>
-          ) : null}
+          <div className="ml-auto">
+            {item?.email !== user?.email ? (
+              <DeleteEmailAddress item={item} />
+            ) : null}
+          </div>
         </div>
-        <ul className="list-outside list-disc space-y-2 pl-5">
-          <VisibleInEmails />
-          <ReceivesNotifications />
-          <UnverifiedEmails />
-          <NotVisibleInEmails />
-        </ul>
+        {item?.email === user?.email ? (
+          <div className="text-xs">{t('EmailItem.description')}</div>
+        ) : null}
       </div>
-    </EmailProvider>
+      <ul className="list-outside list-disc space-y-2 pl-5">
+        <VisibleInEmails item={item} />
+        <ReceivesNotifications item={item} />
+        <UnverifiedEmails item={item} />
+        <NotVisibleInEmails item={item} />
+      </ul>
+    </div>
   )
 }
 
-function VisibleInEmails() {
+function VisibleInEmails({ item }: { item: Email }) {
   const { t } = useTranslation()
-  const { isVerified } = useEmail()
 
-  if (!isVerified) return null
+  if (!item?.email_confirmed_at) return null
 
   return (
     <li className="text-xs text-muted-foreground">
@@ -84,12 +73,12 @@ function VisibleInEmails() {
   )
 }
 
-function ReceivesNotifications() {
+function ReceivesNotifications({ item }: { item: Email }) {
   const { t } = useTranslation()
-  const { isVerified, isPrimary } = useEmail()
+  const { user } = useAuth()
 
-  if (!isVerified) return null
-  if (!isPrimary) return null
+  if (!item?.email_confirmed_at) return null
+  if (item?.email !== user?.email) return null
 
   return (
     <li className="text-xs text-muted-foreground">
@@ -99,11 +88,10 @@ function ReceivesNotifications() {
   )
 }
 
-function UnverifiedEmails() {
+function UnverifiedEmails({ item }: { item: Email }) {
   const { t } = useTranslation()
-  const { isVerified } = useEmail()
 
-  if (isVerified) return null
+  if (item?.email_confirmed_at) return null
 
   return (
     <li className="text-xs text-muted-foreground">
@@ -112,18 +100,17 @@ function UnverifiedEmails() {
           {t('UnverifiedEmails.title')}
         </span>
         &nbsp;&nbsp;
-        <ResendVerifyEmail />
+        <ResendVerifyEmail item={item} />
       </div>
       <p>{t('UnverifiedEmails.description')}</p>
     </li>
   )
 }
 
-function NotVisibleInEmails() {
+function NotVisibleInEmails({ item }: { item: Email }) {
   const { t } = useTranslation()
-  const { isVerified } = useEmail()
 
-  if (isVerified) return null
+  if (item?.email_confirmed_at) return null
 
   return (
     <li className="text-xs text-muted-foreground">

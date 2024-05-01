@@ -78,15 +78,15 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const pathname = options?.revalidatePath
+  const originalPath = options?.revalidatePath
 
-  if (pathname && typeof pathname === 'string') {
-    revalidatePath(pathname)
-  } else if (pathname && Array.isArray(pathname)) {
-    pathname.forEach((path: string) => revalidatePath(path))
+  if (originalPath && typeof originalPath === 'string') {
+    revalidatePath(originalPath)
+  } else if (originalPath && Array.isArray(originalPath)) {
+    originalPath.forEach((path: string) => revalidatePath(path))
   }
 
-  return pathname
+  return originalPath
     ? NextResponse.json({ data: result?.data, error: null, revalidated: true })
     : NextResponse.json({ data: result?.data, error: null })
 }

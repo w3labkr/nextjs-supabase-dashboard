@@ -3,12 +3,10 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
+import { Post } from '@/types/database'
 
-import { usePost } from '../context/post-provider'
-
-export function EditLink() {
+export function EditLink({ post }: { post: Post }) {
   const { t } = useTranslation()
-  const { post } = usePost()
 
   return (
     <Link

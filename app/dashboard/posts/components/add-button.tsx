@@ -25,21 +25,19 @@ export function AddButton({
   endIconName,
   ...props
 }: AddButtonProps) {
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
   const router = useRouter()
   const { t } = useTranslation()
   const { user } = useAuth()
-
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const handleClick = async function () {
     try {
       setIsSubmitting(true)
 
-      const uid = user?.id
+      if (!user) throw new Error('Require is not defined.')
 
-      if (!uid) throw new Error('Require is not defined.')
-
-      const fetchUrl = `/api/v1/post?uid=${uid}`
+      const fetchUrl = `/api/v1/post?uid=${user?.id}`
       const result = await fetcher(fetchUrl, {
         method: 'PUT',
         body: JSON.stringify({ formData: { title: 'Untitled Post' } }),
