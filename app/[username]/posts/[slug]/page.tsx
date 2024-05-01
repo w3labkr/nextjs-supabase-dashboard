@@ -1,4 +1,5 @@
 import * as React from 'react'
+import type { Metadata, ResolvingMetadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -18,6 +19,33 @@ import {
   getAdjacentPostAPI,
   setPostViews,
 } from '@/queries/async'
+
+export async function generateMetadata(
+  {
+    params: { username, slug },
+    searchParams,
+  }: {
+    params: { username: string; slug: string }
+    searchParams?: { preview?: string }
+  },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { post } = await getPostAPI(null, {
+    username,
+    slug: decodeURIComponent(slug),
+  })
+
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL!),
+    title: post?.title,
+    description: post?.excerpt,
+    openGraph: {
+      title: post?.title ?? undefined,
+      description: post?.excerpt ?? undefined,
+      images: post?.thumbnail_url ?? undefined,
+    },
+  }
+}
 
 export default async function PostPage({
   params: { username, slug },

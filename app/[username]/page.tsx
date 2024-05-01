@@ -1,4 +1,5 @@
 import * as React from 'react'
+import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
@@ -12,6 +13,30 @@ import { LatestPosts } from '@/components/latest-posts'
 import { Aside } from './aside'
 
 import { getProfileAPI, getPostsAPI } from '@/queries/async'
+
+export async function generateMetadata(
+  {
+    params: { username },
+    searchParams,
+  }: {
+    params: { username: string }
+    searchParams?: { page?: string; perPage?: string; pageSize?: string }
+  },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { profile } = await getProfileAPI(null, { username })
+
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL!),
+    title: profile?.full_name,
+    description: profile?.bio,
+    openGraph: {
+      title: profile?.full_name ?? undefined,
+      description: profile?.bio ?? undefined,
+      images: profile?.avatar_url ?? undefined,
+    },
+  }
+}
 
 export default async function ProfilePage({
   params: { username },
