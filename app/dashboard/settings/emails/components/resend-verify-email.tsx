@@ -46,7 +46,7 @@ export function ResendVerifyEmail({ item }: { item: Email }) {
   return (
     <button
       type="button"
-      className="text-xs font-semibold text-blue-700 underline-offset-2 hover:underline"
+      className="text-xs font-semibold text-blue-700 hover:underline"
       onClick={handleClick}
       disabled={isSubmitting}
     >

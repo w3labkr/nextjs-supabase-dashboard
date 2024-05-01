@@ -147,10 +147,7 @@ function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
 
 function Link1({ children }: { children?: React.ReactNode }) {
   return (
-    <Link
-      href="/dashboard/settings/emails"
-      className="text-primary underline underline-offset-4"
-    >
+    <Link href="/dashboard/settings/emails" className="text-primary underline">
       {children}
     </Link>
   )

@@ -66,7 +66,7 @@ export async function DELETE(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const id = searchParams.get('id') as string
 
-  const { formData, options } = await request.json()
+  const { options } = await request.json()
   const { user } = await authorize(id)
 
   if (!user) {

@@ -24,7 +24,7 @@ export function RelatedLink({
   return (
     <Link
       className={cn(
-        'text-primary underline underline-offset-4 hover:text-muted-foreground',
+        'text-primary underline hover:text-muted-foreground',
         className
       )}
       {...props}

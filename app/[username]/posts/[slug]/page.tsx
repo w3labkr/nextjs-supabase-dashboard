@@ -81,10 +81,7 @@ function PostMeta({ post }: { post: Post }) {
     <div className="mb-8 space-x-1">
       <time dateTime={datetime}>{dayjs(datetime).format('MMMM D, YYYY')}</time>
       <span>— by</span>
-      <Link
-        href={getAuthorUrl(post) ?? '#'}
-        className="underline-offset-4 hover:underline"
-      >
+      <Link href={getAuthorUrl(post) ?? '#'} className="hover:underline">
         {post?.profile?.full_name}
       </Link>
     </div>

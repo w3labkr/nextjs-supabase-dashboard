@@ -37,7 +37,7 @@ export function LanguageToggleButton({
   return (
     <button
       type="button"
-      className={cn('text-sm underline underline-offset-4', className)}
+      className={cn('text-sm underline', className)}
       onClick={handleClick}
       {...props}
     >

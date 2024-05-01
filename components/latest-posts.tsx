@@ -38,10 +38,7 @@ function PostItem({ post }: { post: Post }) {
           {dayjs(datetime).format('MMMM D, YYYY')}
         </time>
         <span>— by</span>
-        <Link
-          href={getAuthorUrl(post) ?? '#'}
-          className="underline-offset-4 hover:underline"
-        >
+        <Link href={getAuthorUrl(post) ?? '#'} className="hover:underline">
           {post?.profile?.full_name}
         </Link>
       </div>

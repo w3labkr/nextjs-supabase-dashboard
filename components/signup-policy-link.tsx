@@ -24,10 +24,7 @@ export function SignUpPolicyLink({
 
 function Link1({ children }: { children?: React.ReactNode }) {
   return (
-    <Link
-      href="/policy/terms"
-      className="text-primary underline underline-offset-4"
-    >
+    <Link href="/policy/terms" className="text-primary underline">
       {children}
     </Link>
   )
@@ -35,10 +32,7 @@ function Link1({ children }: { children?: React.ReactNode }) {
 
 function Link2({ children }: { children?: React.ReactNode }) {
   return (
-    <Link
-      href="/policy/privacy"
-      className="text-primary underline underline-offset-4"
-    >
+    <Link href="/policy/privacy" className="text-primary underline">
       {children}
     </Link>
   )

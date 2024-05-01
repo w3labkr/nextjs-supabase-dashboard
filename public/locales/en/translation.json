@@ -19,6 +19,13 @@
     "description": "Please enter your new password below."
   },
 
+  "BlockedPage": {
+    "title": "Your account has been blocked",
+    "description": "We've detected suspicious activity on your account.",
+    "message": "Organizations seeking access are limiting users at risk. Please contact your administrator.",
+    "button": "Sign out and sign in with a different account."
+  },
+
   "DashboardPage": {
     "title": "Dashboard",
     "description": ""
