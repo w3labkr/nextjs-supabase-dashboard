@@ -4,13 +4,13 @@ import { redirect } from 'next/navigation'
 import { Logo } from '@/components/logo'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
-import { RelatedLink } from '@/components/related-link'
+import { Link } from '@/components/link'
 import { ButtonLink } from '@/components/button-link'
 import { LanguageToggleButton } from '@/components/language-toggle-button'
 
 import { ResetPasswordForm } from './reset-password-form'
 
-export default async function ResetPasswordPage({
+export default function ResetPasswordPage({
   searchParams,
 }: {
   searchParams: {
@@ -44,10 +44,11 @@ export default async function ResetPasswordPage({
         <div className="grid gap-6">
           <ResetPasswordForm />
         </div>
-        <div className="flex justify-between text-center text-sm">
-          <RelatedLink
+        <div className="flex items-center justify-between text-sm">
+          <Link
             href="/auth/signup"
-            text="RelatedLink.signup"
+            className="hover:underline"
+            text="AuthLink.signup"
             translate="yes"
           />
           <LanguageToggleButton />

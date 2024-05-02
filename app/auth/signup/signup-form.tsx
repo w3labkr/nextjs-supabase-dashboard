@@ -83,7 +83,6 @@ function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
               {...field}
             />
           </FormControl>
-          {/* <FormDescription></FormDescription> */}
           <FormMessage />
         </FormItem>
       )}
@@ -111,7 +110,6 @@ function NewPasswordField({ form }: { form: UseFormReturn<FormValues> }) {
               {...field}
             />
           </FormControl>
-          {/* <FormDescription></FormDescription> */}
           <FormMessage />
         </FormItem>
       )}
@@ -143,7 +141,6 @@ function ConfirmNewPasswordField({
               {...field}
             />
           </FormControl>
-          {/* <FormDescription></FormDescription> */}
           <FormMessage />
         </FormItem>
       )}

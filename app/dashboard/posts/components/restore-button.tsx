@@ -7,7 +7,12 @@ import { toast } from 'sonner'
 import { usePaging } from '@/components/paging/paging-provider'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, setQueryString, getPostPath } from '@/lib/utils'
+import {
+  fetcher,
+  setQueryString,
+  getPostPath,
+  getAuthorPath,
+} from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
@@ -31,7 +36,7 @@ export function RestoreButton({ post }: { post: Post }) {
         method: 'POST',
         body: JSON.stringify({
           formData: { user_id: uid, status: 'draft', deleted_at: null },
-          options: { revalidatePath: getPostPath(post) },
+          options: { revalidatePath: [getPostPath(post), getAuthorPath(post)] },
         }),
       })
 

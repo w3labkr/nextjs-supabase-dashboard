@@ -36,7 +36,6 @@ export function MetaboxExcerpt({ form }: { form: UseFormReturn<FormValues> }) {
             name="excerpt"
             render={({ field }) => (
               <FormItem>
-                {/* <FormLabel></FormLabel> */}
                 <FormControl>
                   <Textarea
                     placeholder={t('Textarea.please_enter_your_message')}
@@ -44,7 +43,6 @@ export function MetaboxExcerpt({ form }: { form: UseFormReturn<FormValues> }) {
                     {...field}
                   />
                 </FormControl>
-                {/* <FormDescription></FormDescription> */}
                 <FormMessage />
               </FormItem>
             )}

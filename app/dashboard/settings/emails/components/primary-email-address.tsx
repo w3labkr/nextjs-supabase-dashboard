@@ -98,7 +98,6 @@ function EmailField({
       name="email"
       render={({ field }) => (
         <FormItem>
-          {/* <FormLabel></FormLabel> */}
           <Select onValueChange={field.onChange} value={field.value}>
             <FormControl>
               <SelectTrigger className="w-[180px]">
@@ -126,7 +125,6 @@ function EmailField({
               </SelectGroup>
             </SelectContent>
           </Select>
-          {/* <FormDescription></FormDescription> */}
           <FormMessage />
         </FormItem>
       )}

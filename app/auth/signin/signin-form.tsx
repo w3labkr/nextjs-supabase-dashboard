@@ -20,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { RelatedLink } from '@/components/related-link'
+import { Link } from '@/components/link'
 
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
@@ -75,7 +75,6 @@ function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
               {...field}
             />
           </FormControl>
-          {/* <FormDescription></FormDescription> */}
           <FormMessage className="font-normal" />
         </FormItem>
       )}
@@ -94,10 +93,10 @@ function PasswordField({ form }: { form: UseFormReturn<FormValues> }) {
         <FormItem>
           <div className="flex items-center justify-between">
             <FormLabel>{t('FormLabel.password')}</FormLabel>
-            <RelatedLink
+            <Link
               href="/auth/forgot-password"
-              className="text-sm"
-              text="RelatedLink.forgot_password"
+              className="text-sm underline hover:decoration-muted"
+              text="AuthLink.forgot_password"
               translate="yes"
             />
           </div>
@@ -111,7 +110,6 @@ function PasswordField({ form }: { form: UseFormReturn<FormValues> }) {
               {...field}
             />
           </FormControl>
-          {/* <FormDescription></FormDescription> */}
           <FormMessage className="font-normal" />
         </FormItem>
       )}

@@ -2,7 +2,8 @@
 
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
+import { useTrans } from '@/hooks/use-trans'
 
 import { useForm, UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -111,7 +112,6 @@ function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
           <FormControl>
             <Input placeholder="name@example.com" {...field} />
           </FormControl>
-          {/* <FormDescription></FormDescription> */}
           <FormMessage />
         </FormItem>
       )}
@@ -139,7 +139,6 @@ function PasswordField({ form }: { form: UseFormReturn<FormValues> }) {
               {...field}
             />
           </FormControl>
-          {/* <FormDescription></FormDescription> */}
           <FormMessage />
         </FormItem>
       )}
@@ -152,21 +151,20 @@ function ConfirmationPhraseField({
 }: {
   form: UseFormReturn<FormValues>
 }) {
+  const { trans: label } = useTrans('FormLabel.verify_delete_my_account', {
+    components: { i: <i /> },
+  })
+
   return (
     <FormField
       control={form.control}
       name="confirmationPhrase"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>
-            <Trans components={{ i: <i /> }}>
-              FormLabel.verify_delete_my_account
-            </Trans>
-          </FormLabel>
+          <FormLabel>{label}</FormLabel>
           <FormControl>
             <Input placeholder="delete my account" {...field} />
           </FormControl>
-          {/* <FormDescription></FormDescription> */}
           <FormMessage />
         </FormItem>
       )}

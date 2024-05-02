@@ -6,7 +6,8 @@
 
   "SignUpPage": {
     "title": "계정 만들기",
-    "description": "계정을 만들려면 아래에 이메일을 입력하세요."
+    "description": "계정을 만들려면 아래에 이메일을 입력하세요.",
+    "policy": "가입하기를 클릭하면 <link1>서비스 약관</link1> 및 <link2>개인정보 보호정책</link2>에 동의하게 됩니다."
   },
 
   "ForgotPasswordPage": {
@@ -24,6 +25,12 @@
     "description": "귀하의 계정에서 의심스러운 활동이 감지되었습니다.",
     "message": "액세스를 원하는 조직은 위험에 처한 사용자를 제한하고 있습니다. 관리자에게 문의하세요.",
     "button": "로그아웃하고 다른 계정으로 로그인하세요."
+  },
+
+  "AuthLink": {
+    "signup": "계정이 없나요? 가입하기",
+    "signin": "이미 계정이 있습니까? 로그인",
+    "forgot_password": "비밀번호를 잊으셨나요?"
   },
 
   "DashboardPage": {
@@ -267,16 +274,6 @@
     "description": "우리는 귀하의 비즈니스에 고품질의 서비스를 제공합니다.",
     "link1": "시작하기",
     "link2": "알아보기"
-  },
-
-  "SignUpPolicyLink": {
-    "paragraph": "가입하기를 클릭하면 <link1>서비스 약관</link1> 및 <link2>개인정보 보호정책</link2>에 동의하게 됩니다."
-  },
-
-  "RelatedLink": {
-    "signup": "계정이 없나요? 가입하기",
-    "signin": "이미 계정이 있습니까? 로그인",
-    "forgot_password": "비밀번호를 잊으셨나요?"
   },
 
   "ButtonLink": {

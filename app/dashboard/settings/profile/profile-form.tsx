@@ -2,7 +2,8 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
+import { useTrans } from '@/hooks/use-trans'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, UseFormReturn } from 'react-hook-form'
@@ -99,6 +100,19 @@ function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
   const { t } = useTranslation()
   const { user } = useAuth()
   const { emails } = useEmailsAPI(user?.id ?? null)
+  const { trans: description } = useTrans(
+    'FormDescription.you_can_manage_your_email_address_in_your_email_settings',
+    {
+      components: {
+        link1: (
+          <Link
+            href="/dashboard/settings/emails"
+            className="text-primary underline"
+          />
+        ),
+      },
+    }
+  )
 
   return (
     <FormField
@@ -133,23 +147,11 @@ function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <FormDescription>
-            <Trans components={{ link1: <Link1 /> }}>
-              FormDescription.you_can_manage_your_email_address_in_your_email_settings
-            </Trans>
-          </FormDescription>
+          <FormDescription>{description}</FormDescription>
           <FormMessage />
         </FormItem>
       )}
     />
-  )
-}
-
-function Link1({ children }: { children?: React.ReactNode }) {
-  return (
-    <Link href="/dashboard/settings/emails" className="text-primary underline">
-      {children}
-    </Link>
   )
 }
 

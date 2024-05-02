@@ -188,6 +188,25 @@ Useful for translating zod error messages.
 npm install zod-i18n-map
 ```
 
+[Trans component](https://react.i18next.com/latest/trans-component) rendering for the client side
+
+```javascript
+import { useTrans } from '@/hooks/use-trans'
+
+const { trans: description } = useTrans('key', { 
+  components: {
+    i: <i />,
+    link1: <Link href="#" />,
+  },
+  values: {
+    what: 'world'
+  }
+})
+
+// translation.json
+// { "key": "hello <i>beautiful</i> <link1>{{what}}</link1>" }
+```
+
 The configuration for i18next is `i18next.config.ts`.
 
 ### Schema Validation

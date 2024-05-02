@@ -73,7 +73,6 @@ function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
       name="email"
       render={({ field }) => (
         <FormItem>
-          {/* <FormLabel>{t('FormLabel.email')}</FormLabel> */}
           <FormControl className="w-[180px]">
             <Input
               type="email"
@@ -84,7 +83,6 @@ function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
               {...field}
             />
           </FormControl>
-          {/* <FormDescription></FormDescription> */}
           <FormMessage className="font-normal" />
         </FormItem>
       )}

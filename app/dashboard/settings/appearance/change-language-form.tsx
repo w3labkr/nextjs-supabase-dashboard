@@ -65,7 +65,6 @@ function LanguageField({ form }: { form: UseFormReturn<FormValues> }) {
       name="language"
       render={({ field }) => (
         <FormItem>
-          {/* <FormLabel></FormLabel> */}
           <Select onValueChange={field.onChange} value={field.value}>
             <FormControl>
               <SelectTrigger className="min-w-[180px]">
@@ -82,7 +81,6 @@ function LanguageField({ form }: { form: UseFormReturn<FormValues> }) {
               </SelectGroup>
             </SelectContent>
           </Select>
-          {/* <FormDescription></FormDescription> */}
           <FormMessage />
         </FormItem>
       )}

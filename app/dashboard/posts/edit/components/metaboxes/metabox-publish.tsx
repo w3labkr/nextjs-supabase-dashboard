@@ -20,7 +20,7 @@ import { UseFormReturn } from 'react-hook-form'
 import { FormValues } from '../../post-form'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getPostPath } from '@/lib/utils'
+import { fetcher, getPostPath, getAuthorPath } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
@@ -110,7 +110,7 @@ function DraftButton({
         method: 'POST',
         body: JSON.stringify({
           formData: Object.assign({}, formValues, values),
-          options: { revalidatePath: getPostPath(post) },
+          options: { revalidatePath: [getPostPath(post), getAuthorPath(post)] },
         }),
       })
 
@@ -283,7 +283,7 @@ function TrashButton({
             status: 'trash',
             deleted_at: now,
           },
-          options: { revalidatePath: getPostPath(post) },
+          options: { revalidatePath: [getPostPath(post), getAuthorPath(post)] },
         }),
       })
 
@@ -347,7 +347,7 @@ function PublishButton({
           formData: post?.published_at
             ? Object.assign({}, formValues, values)
             : Object.assign({}, formValues, values, { published_at: now }),
-          options: { revalidatePath: getPostPath(post) },
+          options: { revalidatePath: [getPostPath(post), getAuthorPath(post)] },
         }),
       })
 

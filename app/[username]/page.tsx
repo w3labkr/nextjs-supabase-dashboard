@@ -84,10 +84,12 @@ export default async function ProfilePage({
                 <PagingProvider
                   value={{ total: total ?? 0, page, perPage, pageSize, status }}
                 >
-                  <LatestPosts
-                    posts={posts}
-                    className="columns-1 gap-8 space-y-8"
-                  />
+                  {posts ? (
+                    <LatestPosts
+                      posts={posts}
+                      className="columns-1 gap-8 space-y-8"
+                    />
+                  ) : null}
                 </PagingProvider>
               </TabsContent>
               <TabsContent value="stars">

@@ -6,7 +6,8 @@
 
   "SignUpPage": {
     "title": "Create an account",
-    "description": "Enter your email below to create your account."
+    "description": "Enter your email below to create your account.",
+    "policy": "By clicking Sign Up, you agree to our <link1>Terms of Service</link1> and <link2>Privacy Policy</link2>."
   },
 
   "ForgotPasswordPage": {
@@ -24,6 +25,12 @@
     "description": "We've detected suspicious activity on your account.",
     "message": "Organizations seeking access are limiting users at risk. Please contact your administrator.",
     "button": "Sign out and sign in with a different account."
+  },
+
+  "AuthLink": {
+    "signup": "Don't have an account? Sign Up",
+    "signin": "Already have an account? Sign In",
+    "forgot_password": "Forgot your password?"
   },
 
   "DashboardPage": {
@@ -267,16 +274,6 @@
     "description": "We provide high quality services for your business.",
     "link1": "Get Started",
     "link2": "Learn more"
-  },
-
-  "SignUpPolicyLink": {
-    "paragraph": "By clicking Sign Up, you agree to our <link1>Terms of Service</link1> and <link2>Privacy Policy</link2>."
-  },
-
-  "RelatedLink": {
-    "signup": "Don't have an account? Sign Up",
-    "signin": "Already have an account? Sign In",
-    "forgot_password": "Forgot your password?"
   },
 
   "ButtonLink": {

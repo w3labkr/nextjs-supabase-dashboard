@@ -38,10 +38,12 @@ export default async function ArchivePage({
           <PagingProvider
             value={{ total: total ?? 0, page, perPage, pageSize, status }}
           >
-            <LatestPosts
-              posts={posts}
-              className="columns-1 gap-8 space-y-8 md:columns-2 lg:columns-3"
-            />
+            {posts ? (
+              <LatestPosts
+                posts={posts}
+                className="columns-1 gap-8 space-y-8 md:columns-2 lg:columns-3"
+              />
+            ) : null}
           </PagingProvider>
         </div>
       </main>

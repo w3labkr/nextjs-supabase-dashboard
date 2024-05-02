@@ -1,13 +1,7 @@
 import * as React from 'react'
-import type { Metadata } from 'next'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-
-export const metadata: Metadata = {
-  title: 'Terms & Conditions',
-  description: '',
-}
 
 export default function TermsPage() {
   return (

@@ -4,17 +4,18 @@ import * as React from 'react'
 
 import { useTranslation } from 'react-i18next'
 import { defaultLng, fallbackLng } from '@/i18next.config'
+import { Button, ButtonProps } from '@/components/ui/button'
 
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
 import { setResolvedLanguage } from '@/store/features/i18n-slice'
 
-import { cn } from '@/lib/utils'
-
 export interface LanguageToggleProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+  extends ButtonProps,
+    React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 export function LanguageToggleButton({
-  className,
+  variant = 'ghost',
+  size = 'sm',
   ...props
 }: LanguageToggleProps) {
   const dispatch = useAppDispatch()
@@ -35,16 +36,8 @@ export function LanguageToggleButton({
   }
 
   return (
-    <button
-      type="button"
-      className={cn('text-sm underline', className)}
-      onClick={handleClick}
-      {...props}
-    >
-      {(currentLanguage === defaultLng
-        ? fallbackLng
-        : defaultLng
-      )?.toUpperCase()}
-    </button>
+    <Button variant={variant} size={size} onClick={handleClick} {...props}>
+      {currentLanguage?.toUpperCase()}
+    </Button>
   )
 }

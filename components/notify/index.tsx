@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 import { LucideIcon } from '@/lib/lucide-icon'
 import { Button } from '@/components/ui/button'
@@ -24,6 +24,7 @@ import useSWR from 'swr'
 import { NotifyItems } from './notify-items'
 
 export function Notify() {
+  const { t } = useTranslation()
   const fetchUrl = process.env.NEXT_PUBLIC_SITE_URL + '/api/v1/notify'
   const { data } = useSWR<{ data: any[]; count: number }>(fetchUrl)
 
@@ -37,11 +38,9 @@ export function Notify() {
       <PopoverContent className="w-auto p-0" align="end">
         <Card className="w-[360px] border-0">
           <CardHeader>
-            <CardTitle>
-              <Trans>Notify.title</Trans>
-            </CardTitle>
+            <CardTitle>{t('Notify.title')}</CardTitle>
             <CardDescription>
-              <Trans values={{ count: data?.count }}>Notify.description</Trans>
+              {t('Notify.description', { count: data?.count })}
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
@@ -51,7 +50,7 @@ export function Notify() {
           <CardFooter>
             <Button className="w-full">
               <LucideIcon name="Check" className="mr-2 size-4 min-w-4" />
-              <Trans>Notify.submit</Trans>
+              {t('Notify.submit')}
             </Button>
           </CardFooter>
         </Card>

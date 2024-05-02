@@ -1,22 +1,16 @@
 import * as React from 'react'
-import type { Metadata } from 'next'
 
 import { Logo } from '@/components/logo'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 import { SignInWith } from '@/components/signin-with'
-import { RelatedLink } from '@/components/related-link'
+import { Link } from '@/components/link'
 import { ButtonLink } from '@/components/button-link'
 import { LanguageToggleButton } from '@/components/language-toggle-button'
 
 import { SignInForm } from './signin-form'
 
-export const metadata: Metadata = {
-  title: 'Login',
-  description: 'Login to your account',
-}
-
-export default async function SignInPage() {
+export default function SignInPage() {
   return (
     <div className="container flex min-h-screen w-screen flex-col items-center justify-center py-8">
       <ButtonLink
@@ -36,10 +30,11 @@ export default async function SignInPage() {
           <SignInForm />
           <SignInWith />
         </div>
-        <div className="flex justify-between text-center text-sm">
-          <RelatedLink
+        <div className="flex items-center justify-between text-sm">
+          <Link
             href="/auth/signup"
-            text="RelatedLink.signup"
+            className="hover:underline"
+            text="AuthLink.signup"
             translate="yes"
           />
           <LanguageToggleButton />

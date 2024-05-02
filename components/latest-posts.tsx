@@ -11,15 +11,17 @@ export function LatestPosts({
   posts,
   className,
 }: {
-  posts: Post[] | null
+  posts: Post[]
   className?: string
 }) {
   return (
     <div className="space-y-16">
       <div className={cn('columns-1 gap-8 space-y-8', className)}>
-        {posts?.map((post: Post) => <PostItem key={post?.id} post={post} />)}
+        {posts?.length > 0
+          ? posts?.map((post: Post) => <PostItem key={post?.id} post={post} />)
+          : null}
       </div>
-      <Paging />
+      {posts?.length > 0 ? <Paging /> : null}
     </div>
   )
 }

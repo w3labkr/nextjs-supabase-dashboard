@@ -11,12 +11,12 @@ export function useQueryString() {
       const params = new URLSearchParams(searchParams.toString())
 
       if (object) {
-        Object.keys(object).forEach((key: string) => {
-          if (object[key] === null || object[key] === undefined) {
-            params.delete(key)
+        Object.keys(object).forEach((k: string) => {
+          if (object[k] === null || object[k] === undefined) {
+            params.delete(k)
             return
           }
-          params.set(key, object[key])
+          params.set(k, object[k])
         })
       }
 
