@@ -5,6 +5,7 @@ import { ApiError } from '@/lib/utils'
 import { authorize } from '@/queries/async'
 
 import dayjs from 'dayjs'
+// import dayjs from '@/lib/dayjs'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -51,10 +52,11 @@ export async function POST(request: NextRequest) {
   const username_changed_at = user?.user?.username_changed_at
 
   if (formData?.username && username_changed_at) {
-    const d1 = dayjs(username_changed_at)
-    const d2 = d1.add(1, 'month')
-    const diff = d2.diff(d1, 'days')
-    if (d1 < d2) {
+    const now = dayjs()
+    const startDate = dayjs(username_changed_at)
+    const endDate = startDate.add(1, 'month')
+    if (now < endDate) {
+      const diff = endDate.diff(now, 'days')
       const error = `You can change it after ${diff} days.`
       return NextResponse.json(
         { data: null, error: new ApiError(403, error) },
