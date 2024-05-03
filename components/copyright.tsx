@@ -1,5 +1,7 @@
 import * as React from 'react'
 
-export function Copyright() {
+const Copyright = () => {
   return <span>&copy; {' 2024. '}</span>
 }
+
+export { Copyright }

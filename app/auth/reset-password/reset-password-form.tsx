@@ -41,7 +41,7 @@ const defaultValues: Partial<FormValues> = {
   confirmNewPassword: '',
 }
 
-export function ResetPasswordForm() {
+const ResetPasswordForm = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
@@ -59,7 +59,7 @@ export function ResetPasswordForm() {
   )
 }
 
-function NewPasswordField({ form }: { form: UseFormReturn<FormValues> }) {
+const NewPasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const { t } = useTranslation()
 
   return (
@@ -86,11 +86,11 @@ function NewPasswordField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function ConfirmNewPasswordField({
+const ConfirmNewPasswordField = ({
   form,
 }: {
   form: UseFormReturn<FormValues>
-}) {
+}) => {
   const { t } = useTranslation()
 
   return (
@@ -117,7 +117,7 @@ function ConfirmNewPasswordField({
   )
 }
 
-function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
+const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
@@ -173,3 +173,5 @@ function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
     </Button>
   )
 }
+
+export { ResetPasswordForm }

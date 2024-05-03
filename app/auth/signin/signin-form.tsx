@@ -20,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Link } from '@/components/link'
+import { TextLink } from '@/components/text-link'
 
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
@@ -37,7 +37,7 @@ const defaultValues: Partial<FormValues> = {
   password: '',
 }
 
-export function SignInForm() {
+const SignInForm = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
@@ -55,7 +55,7 @@ export function SignInForm() {
   )
 }
 
-function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
+const EmailField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const { t } = useTranslation()
 
   return (
@@ -82,7 +82,7 @@ function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function PasswordField({ form }: { form: UseFormReturn<FormValues> }) {
+const PasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const { t } = useTranslation()
 
   return (
@@ -93,7 +93,7 @@ function PasswordField({ form }: { form: UseFormReturn<FormValues> }) {
         <FormItem>
           <div className="flex items-center justify-between">
             <FormLabel>{t('FormLabel.password')}</FormLabel>
-            <Link
+            <TextLink
               href="/auth/forgot-password"
               className="text-sm underline hover:decoration-muted"
               text="AuthLink.forgot_password"
@@ -117,7 +117,7 @@ function PasswordField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
+const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
@@ -170,3 +170,5 @@ function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
     </Button>
   )
 }
+
+export { SignInForm }

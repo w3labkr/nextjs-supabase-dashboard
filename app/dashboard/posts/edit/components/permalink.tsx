@@ -10,20 +10,21 @@ import { FormValues } from '../post-form'
 import { getPostUrl } from '@/lib/utils'
 import { Post } from '@/types/database'
 
-export function Permalink({
-  form,
-  post,
-}: {
+interface PermalinkProps {
   form: UseFormReturn<FormValues>
   post: Post | null
-}) {
-  const [permalink, setPermalink] = React.useState<string>('')
+}
+
+const Permalink = (props: PermalinkProps) => {
+  const { form, post } = props
   const { t } = useTranslation()
+  const [permalink, setPermalink] = React.useState<string>('')
 
   const slug = form.watch('slug')
 
   React.useEffect(() => {
-    const url = getPostUrl(post, slug)
+    let url: string | null = null
+    if (post) url = getPostUrl(post, slug)
     if (url) setPermalink(url)
   }, [post, slug])
 
@@ -31,7 +32,7 @@ export function Permalink({
     <div className="text-sm">
       {`${t('PostMetabox.permalink')}: `}
       <Link
-        href={permalink}
+        href={permalink ?? '#'}
         className="text-blue-700 hover:underline"
         target="_blank"
         rel="noopener noreferrer"
@@ -41,3 +42,5 @@ export function Permalink({
     </div>
   )
 }
+
+export { Permalink, type PermalinkProps }

@@ -10,10 +10,9 @@ import { LucideIcon } from '@/lib/lucide-icon'
 import { mobileSiteConfig } from '@/config/site'
 import { MobileNavItem } from '@/types/config'
 
-export interface MobileNavigationProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+interface MobileNavigationProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function MobileNavigation({ ...props }: MobileNavigationProps) {
+const MobileNavigation = (props: MobileNavigationProps) => {
   return (
     <div className="grid w-full max-w-md gap-4" {...props}>
       <div className="flex items-center gap-4">
@@ -32,7 +31,8 @@ export function MobileNavigation({ ...props }: MobileNavigationProps) {
   )
 }
 
-function NavItem({ item }: { item: MobileNavItem }) {
+const NavItem = (props: { item: MobileNavItem }) => {
+  const { item } = props
   const { t } = useTranslation()
 
   return (
@@ -50,3 +50,5 @@ function NavItem({ item }: { item: MobileNavItem }) {
     </Link>
   )
 }
+
+export { MobileNavigation, type MobileNavigationProps }

@@ -11,7 +11,13 @@ import { fetcher, setQueryString, getPostPath } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
-export function DeleteButton({ post }: { post: Post }) {
+interface DeleteButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  post: Post
+}
+
+const DeleteButton = (props: DeleteButtonProps) => {
+  const { post, ...rest } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
@@ -31,7 +37,9 @@ export function DeleteButton({ post }: { post: Post }) {
         method: 'DELETE',
         body: JSON.stringify({
           formData: { user_id: uid },
-          options: { revalidatePath: getPostPath(post) },
+          options: {
+            revalidatePath: [getPostPath(post)],
+          },
         }),
       })
 
@@ -56,8 +64,11 @@ export function DeleteButton({ post }: { post: Post }) {
       className="text-xs text-red-700 hover:underline"
       onClick={handleClick}
       disabled={isSubmitting}
+      {...rest}
     >
       {t('PostList.DeleteButton')}
     </button>
   )
 }
+
+export { DeleteButton, type DeleteButtonProps }

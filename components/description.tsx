@@ -5,24 +5,20 @@ import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 
-export interface DescriptionProps
-  extends React.HTMLAttributes<HTMLParagraphElement> {
+interface DescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {
   text?: string
 }
 
-export function Description({
-  children,
-  className,
-  text,
-  translate,
-  ...props
-}: DescriptionProps) {
+const Description = (props: DescriptionProps) => {
+  const { children, className, text, translate, ...rest } = props
   const { t } = useTranslation()
 
   return (
-    <p className={cn('text-sm text-muted-foreground', className)} {...props}>
+    <p className={cn('text-sm text-muted-foreground', className)} {...rest}>
       {text && translate === 'yes' ? t(text) : text}
       {children}
     </p>
   )
 }
+
+export { Description, type DescriptionProps }

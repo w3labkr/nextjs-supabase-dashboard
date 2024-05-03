@@ -7,16 +7,17 @@ import { toast } from 'sonner'
 import { usePaging } from '@/components/paging/paging-provider'
 
 import { useSWRConfig } from 'swr'
-import {
-  fetcher,
-  setQueryString,
-  getPostPath,
-  getAuthorPath,
-} from '@/lib/utils'
+import { fetcher, setQueryString, getPostPath, getUserPath } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
-export function TrashButton({ post }: { post: Post }) {
+interface TrashButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  post: Post
+}
+
+const TrashButton = (props: TrashButtonProps) => {
+  const { post, ...rest } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
@@ -38,7 +39,12 @@ export function TrashButton({ post }: { post: Post }) {
         method: 'POST',
         body: JSON.stringify({
           formData: { user_id: uid, status: 'trash', deleted_at: now },
-          options: { revalidatePath: [getPostPath(post), getAuthorPath(post)] },
+          options: {
+            revalidatePath: [
+              getPostPath(post),
+              getUserPath(post?.profile?.username),
+            ],
+          },
         }),
       })
 
@@ -63,8 +69,11 @@ export function TrashButton({ post }: { post: Post }) {
       className="text-xs text-red-700 hover:underline"
       onClick={handleClick}
       disabled={isSubmitting}
+      {...rest}
     >
       {t('PostList.TrashButton')}
     </button>
   )
 }
+
+export { TrashButton, type TrashButtonProps }

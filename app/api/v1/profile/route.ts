@@ -3,9 +3,7 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { ApiError } from '@/lib/utils'
 import { authorize } from '@/queries/async'
-
 import dayjs from 'dayjs'
-// import dayjs from '@/lib/dayjs'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams

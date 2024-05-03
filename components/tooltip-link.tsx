@@ -12,27 +12,22 @@ import {
 } from '@/components/ui/tooltip'
 import { TooltipContentProps } from '@radix-ui/react-tooltip'
 
-export interface TooltipLinkProps
+interface TooltipLinkProps
   extends LinkProps,
     Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
   tooltipContent?: TooltipContentProps
   text?: string
 }
 
-export function TooltipLink({
-  children,
-  tooltipContent,
-  text,
-  translate,
-  ...props
-}: TooltipLinkProps) {
+const TooltipLink = (props: TooltipLinkProps) => {
+  const { children, tooltipContent, text, translate, ...rest } = props
   const { t } = useTranslation()
 
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Link {...props}>{children}</Link>
+          <Link {...rest}>{children}</Link>
         </TooltipTrigger>
         <TooltipContent {...tooltipContent}>
           {text && translate === 'yes' ? t(text) : text}
@@ -41,3 +36,5 @@ export function TooltipLink({
     </TooltipProvider>
   )
 }
+
+export { TooltipLink, type TooltipLinkProps }

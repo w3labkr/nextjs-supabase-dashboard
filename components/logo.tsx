@@ -5,11 +5,11 @@ import { cn } from '@/lib/utils'
 
 import { siteConfig } from '@/config/site'
 
-export interface LogoProps {
+interface LogoProps {
   className?: string
 }
 
-export function Logo({ className }: LogoProps) {
+const Logo = ({ className }: LogoProps) => {
   return (
     <LucideIcon
       name={siteConfig.symbol}
@@ -17,3 +17,5 @@ export function Logo({ className }: LogoProps) {
     />
   )
 }
+
+export { Logo, type LogoProps }

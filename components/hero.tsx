@@ -4,7 +4,7 @@ import * as React from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 
-export function Hero() {
+const Hero = () => {
   const { t } = useTranslation()
 
   return (
@@ -38,3 +38,5 @@ export function Hero() {
     </section>
   )
 }
+
+export { Hero }

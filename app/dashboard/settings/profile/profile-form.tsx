@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import Link, { LinkProps } from 'next/link'
+import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { useTrans } from '@/hooks/use-trans'
 
@@ -32,7 +32,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
-import { fetcher } from '@/lib/utils'
+import { fetcher, getUserPath } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useProfileAPI, useEmailsAPI } from '@/queries/sync'
 import { ProfileAPI } from '@/types/api'
@@ -45,7 +45,7 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-export const ProfileForm = () => {
+const ProfileForm = () => {
   const { user } = useAuth()
   const { profile } = useProfileAPI(user?.id ?? null)
 
@@ -211,7 +211,7 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
         method: 'POST',
         body: JSON.stringify({
           formData: { ...values, email: email.replace('unassigned', '') },
-          options: { revalidatePath: `/${profile?.username}` },
+          options: { revalidatePath: getUserPath(profile?.username) },
         }),
       })
 
@@ -242,3 +242,5 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
     </Button>
   )
 }
+
+export { ProfileForm }

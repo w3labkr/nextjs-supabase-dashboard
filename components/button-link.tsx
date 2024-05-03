@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
 import { ButtonProps, buttonVariants } from '@/components/ui/button'
 
-export interface ButtonLinkProps
+interface ButtonLinkProps
   extends LinkProps,
     Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
   startIconName?: LucideIconName
@@ -19,36 +19,47 @@ export interface ButtonLinkProps
   variant?: ButtonProps['variant']
 }
 
-export function ButtonLink({
-  children,
-  className,
-  startIconName,
-  startIconClassName,
-  endIconName,
-  endIconClassName,
-  text,
-  translate,
-  variant = 'ghost',
-  ...props
-}: ButtonLinkProps) {
-  const { t } = useTranslation()
+const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
+  (props, ref) => {
+    const {
+      children,
+      className,
+      startIconName,
+      startIconClassName,
+      endIconName,
+      endIconClassName,
+      text,
+      translate,
+      variant = 'ghost',
+      ...rest
+    } = props
+    const { t } = useTranslation()
 
-  return (
-    <Link className={cn(buttonVariants({ variant }), className)} {...props}>
-      {startIconName && (
-        <LucideIcon
-          name={startIconName}
-          className={cn('mr-2 size-4 min-w-4', startIconClassName)}
-        />
-      )}
-      {text && translate === 'yes' ? t(text) : text}
-      {children}
-      {endIconName && (
-        <LucideIcon
-          name={endIconName}
-          className={cn('ml-2 size-4 min-w-4', endIconClassName)}
-        />
-      )}
-    </Link>
-  )
-}
+    return (
+      <Link
+        ref={ref}
+        className={cn(buttonVariants({ variant }), className)}
+        {...rest}
+      >
+        {startIconName && (
+          <LucideIcon
+            name={startIconName}
+            className={cn('mr-2 size-4 min-w-4', startIconClassName)}
+          />
+        )}
+        {text && translate === 'yes' ? t(text) : text}
+        {children}
+        {endIconName && (
+          <LucideIcon
+            name={endIconName}
+            className={cn('ml-2 size-4 min-w-4', endIconClassName)}
+          />
+        )}
+      </Link>
+    )
+  }
+)
+
+ButtonLink.displayName = 'ButtonLink'
+
+export { ButtonLink, type ButtonLinkProps }

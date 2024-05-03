@@ -11,27 +11,24 @@ import { Button, ButtonProps } from '@/components/ui/button'
 import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 
-interface AddButtonProps extends ButtonProps {
+interface AddButtonProps
+  extends ButtonProps,
+    React.ButtonHTMLAttributes<HTMLButtonElement> {
   text?: string
   startIconName?: LucideIconName
   endIconName?: LucideIconName
 }
 
-export function AddButton({
-  children,
-  text,
-  translate,
-  startIconName,
-  endIconName,
-  ...props
-}: AddButtonProps) {
+const AddButton = (props: AddButtonProps) => {
+  const { children, text, translate, startIconName, endIconName, ...rest } =
+    props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
   const { t } = useTranslation()
   const { user } = useAuth()
 
-  const handleClick = async function () {
+  const handleClick = async () => {
     try {
       setIsSubmitting(true)
 
@@ -61,7 +58,7 @@ export function AddButton({
   }
 
   return (
-    <Button onClick={handleClick} disabled={isSubmitting} {...props}>
+    <Button onClick={handleClick} disabled={isSubmitting} {...rest}>
       {startIconName && (
         <LucideIcon name={startIconName} className="mr-2 size-4" />
       )}
@@ -71,3 +68,5 @@ export function AddButton({
     </Button>
   )
 }
+
+export { AddButton, type AddButtonProps }

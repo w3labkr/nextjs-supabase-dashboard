@@ -21,7 +21,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
-import { fetcher } from '@/lib/utils'
+import { fetcher, getUserPath } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useProfileAPI } from '@/queries/sync'
 import { ProfileAPI } from '@/types/api'
@@ -32,7 +32,7 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-export function ChangeUsernameForm() {
+const ChangeUsernameForm = () => {
   const { user } = useAuth()
   const { profile } = useProfileAPI(user?.id ?? null)
 
@@ -54,7 +54,7 @@ export function ChangeUsernameForm() {
   )
 }
 
-function UsernameField({ form }: { form: UseFormReturn<FormValues> }) {
+const UsernameField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const { t } = useTranslation()
 
   return (
@@ -79,7 +79,7 @@ function UsernameField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
+const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
@@ -102,7 +102,9 @@ function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
         method: 'POST',
         body: JSON.stringify({
           formData: { username: formValues?.username },
-          options: { revalidatePath: `/${profile?.username}` },
+          options: {
+            revalidatePath: getUserPath(profile?.username),
+          },
         }),
       })
 
@@ -142,3 +144,5 @@ function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
     </Button>
   )
 }
+
+export { ChangeUsernameForm }

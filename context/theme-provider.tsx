@@ -4,7 +4,7 @@ import * as React from 'react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
 import { type ThemeProviderProps } from 'next-themes/dist/types'
 
-export function ThemeProvider({ children }: ThemeProviderProps) {
+const ThemeProvider = ({ children }: ThemeProviderProps) => {
   return (
     <NextThemesProvider
       attribute="class"
@@ -16,3 +16,5 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     </NextThemesProvider>
   )
 }
+
+export { ThemeProvider }

@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes'
 
 import { LucideIcon } from '@/lib/lucide-icon'
 
-export function ThemeToggle() {
+const ThemeToggle = () => {
   const { theme, setTheme } = useTheme()
 
   return (
@@ -16,3 +16,5 @@ export function ThemeToggle() {
     </button>
   )
 }
+
+export { ThemeToggle }

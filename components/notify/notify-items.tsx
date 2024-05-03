@@ -1,12 +1,12 @@
 import * as React from 'react'
 
-export interface NotifyItemProps {
+interface NotifyItemProps {
   id: number
   title: string
   description: string
 }
 
-export function NotifyItems({ items }: { items: NotifyItemProps[] }) {
+const NotifyItems = ({ items }: { items: NotifyItemProps[] }) => {
   return items.map((item) => (
     <div key={item.id} className="grid grid-cols-[25px_1fr] items-start">
       <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500"></span>
@@ -17,3 +17,5 @@ export function NotifyItems({ items }: { items: NotifyItemProps[] }) {
     </div>
   ))
 }
+
+export { NotifyItems, type NotifyItemProps }

@@ -9,7 +9,7 @@ import {
   Card,
 } from '@/components/ui/card'
 
-export function UpgradeProBanner() {
+const UpgradeProBanner = () => {
   return (
     <div className="mt-auto p-4">
       <Button variant="outline" className="inline-flex w-full lg:hidden">
@@ -31,3 +31,5 @@ export function UpgradeProBanner() {
     </div>
   )
 }
+
+export { UpgradeProBanner }

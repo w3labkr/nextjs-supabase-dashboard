@@ -4,7 +4,7 @@ import * as React from 'react'
 import Link from 'next/link'
 import { useTrans } from '@/hooks/use-trans'
 
-export const Policy = () => {
+const Policy = () => {
   const { trans } = useTrans()
 
   return (
@@ -22,3 +22,5 @@ export const Policy = () => {
     </p>
   )
 }
+
+export { Policy }

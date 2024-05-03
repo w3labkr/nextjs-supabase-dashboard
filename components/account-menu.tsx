@@ -19,7 +19,7 @@ import { SignOutButton } from '@/components/signout-button'
 import { useAuth } from '@/hooks/use-auth'
 import { useProfileAPI } from '@/queries/sync'
 
-export function AccountMenu() {
+const AccountMenu = () => {
   const { t } = useTranslation()
 
   const { user } = useAuth()
@@ -72,3 +72,5 @@ export function AccountMenu() {
     </DropdownMenu>
   )
 }
+
+export { AccountMenu }

@@ -25,13 +25,13 @@ import { UseFormReturn } from 'react-hook-form'
 import { FormValues } from '../../post-form'
 import { Post } from '@/types/database'
 
-export function MetaboxSlug({
-  form,
-  post,
-}: {
+interface MetaboxSlugProps {
   form: UseFormReturn<FormValues>
   post: Post | null
-}) {
+}
+
+const MetaboxSlug = (props: MetaboxSlugProps) => {
+  const { form, post } = props
   const { t } = useTranslation()
 
   const title = form.watch('title')
@@ -43,9 +43,7 @@ export function MetaboxSlug({
   )
 
   React.useEffect(() => {
-    if (!slug && post?.slug) {
-      debounceSetValue(kebabCase(post?.slug))
-    } else if (!slug) {
+    if (!post?.slug) {
       debounceSetValue(kebabCase(title))
     }
   }, [debounceSetValue, post?.slug, slug, title])
@@ -79,3 +77,5 @@ export function MetaboxSlug({
     </Accordion>
   )
 }
+
+export { MetaboxSlug, type MetaboxSlugProps }

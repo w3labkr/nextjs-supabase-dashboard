@@ -6,15 +6,15 @@ import { getPostUrl } from '@/lib/utils'
 
 import { Post } from '@/types/database'
 
-export function RelatedPosts({
-  className,
-  previousPost,
-  nextPost,
-}: {
+interface RelatedPostsProps {
   className?: string
   previousPost: Post | null
   nextPost: Post | null
-}) {
+}
+
+const RelatedPosts = (props: RelatedPostsProps) => {
+  const { className, previousPost, nextPost } = props
+
   return (
     <div className={className}>
       <h2 className="mb-8 font-serif text-6xl font-bold leading-tight tracking-tighter md:text-7xl">
@@ -28,7 +28,7 @@ export function RelatedPosts({
   )
 }
 
-function PreviousPost({ post }: { post: Post | null }) {
+const PreviousPost = ({ post }: { post: Post | null }) => {
   const datetime = post?.published_at ?? post?.created_at ?? undefined
 
   if (!post) {
@@ -46,7 +46,7 @@ function PreviousPost({ post }: { post: Post | null }) {
   )
 }
 
-function NextPost({ post }: { post: Post | null }) {
+const NextPost = ({ post }: { post: Post | null }) => {
   const datetime = post?.published_at ?? post?.created_at ?? undefined
 
   if (!post) {
@@ -63,3 +63,5 @@ function NextPost({ post }: { post: Post | null }) {
     </div>
   )
 }
+
+export { RelatedPosts, type RelatedPostsProps }

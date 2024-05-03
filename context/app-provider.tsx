@@ -17,12 +17,14 @@ const providers = [
   ThemeProvider,
 ]
 
-export interface AppContextProps {
+interface AppContextProps {
   children: React.ReactNode
   providers: Array<React.JSXElementConstructor<React.PropsWithChildren<any>>>
 }
 
-export function AppContext({ children, providers = [] }: AppContextProps) {
+const AppContext = (props: AppContextProps) => {
+  const { children, providers = [] } = props
+
   return (
     <React.Fragment>
       {providers.reduceRight(
@@ -35,10 +37,14 @@ export function AppContext({ children, providers = [] }: AppContextProps) {
   )
 }
 
-export interface AppProviderProps {
+interface AppProviderProps {
   children: React.ReactNode
 }
 
-export function AppProvider({ children }: AppProviderProps) {
+const AppProvider = (props: AppProviderProps) => {
+  const { children } = props
+
   return <AppContext providers={providers}>{children}</AppContext>
 }
+
+export { AppProvider, type AppProviderProps }

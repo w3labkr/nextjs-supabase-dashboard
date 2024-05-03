@@ -11,20 +11,14 @@ import { useAppBar } from '@/components/app-bar/app-bar-provider'
 
 import { DashboardNavItem, DashboardNavSubItem } from '@/types/config'
 
-export interface NavigationProps extends React.HTMLAttributes<HTMLDivElement> {
+interface NavigationProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string
   nav: DashboardNavItem[]
   user_role?: string
 }
 
-export function Navigation({
-  className,
-  nav,
-  user_role,
-  title,
-  translate,
-  ...props
-}: NavigationProps) {
+const Navigation = (props: NavigationProps) => {
+  const { className, nav, user_role, title, translate, ...rest } = props
   const { height } = useAppBar()
   const { t } = useTranslation()
 
@@ -35,7 +29,7 @@ export function Navigation({
         'w-48 min-w-48 lg:w-64',
         className
       )}
-      {...props}
+      {...rest}
     >
       <div
         className={cn('flex flex-row items-center gap-2 border-b px-4', height)}
@@ -62,7 +56,8 @@ interface NavItemProps {
   user_role?: string
 }
 
-function NavItem({ item, user_role }: NavItemProps) {
+const NavItem = (props: NavItemProps) => {
+  const { item, user_role } = props
   const { t } = useTranslation()
   const { separator, label, translate, items } = item
 
@@ -89,7 +84,8 @@ interface NavSubItemProps {
   item: DashboardNavSubItem
 }
 
-function NavSubItem({ item }: NavSubItemProps) {
+const NavSubItem = (props: NavSubItemProps) => {
+  const { item } = props
   const { href, iconName, title, translate, disabled } = item
   const pathname = usePathname()
 
@@ -110,3 +106,5 @@ function NavSubItem({ item }: NavSubItemProps) {
     />
   )
 }
+
+export { Navigation, type NavigationProps }

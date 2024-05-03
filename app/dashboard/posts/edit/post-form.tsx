@@ -39,9 +39,9 @@ const FormSchema = z.object({
   excerpt: z.string().optional(),
 })
 
-export type FormValues = z.infer<typeof FormSchema>
+type FormValues = z.infer<typeof FormSchema>
 
-export function PostForm({ id }: { id: number }) {
+const PostForm = ({ id }: { id: number }) => {
   const { post } = usePostAPI(id)
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -81,7 +81,7 @@ export function PostForm({ id }: { id: number }) {
   )
 }
 
-function UserIdField({ form }: { form: UseFormReturn<FormValues> }) {
+const UserIdField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   return (
     <FormField
       control={form.control}
@@ -97,7 +97,7 @@ function UserIdField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function TitleField({ form }: { form: UseFormReturn<FormValues> }) {
+const TitleField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const { t } = useTranslation()
 
   return (
@@ -115,3 +115,5 @@ function TitleField({ form }: { form: UseFormReturn<FormValues> }) {
     />
   )
 }
+
+export { PostForm, type FormValues }

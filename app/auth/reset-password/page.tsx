@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation'
 import { Logo } from '@/components/logo'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
-import { Link } from '@/components/link'
+import { TextLink } from '@/components/text-link'
 import { ButtonLink } from '@/components/button-link'
 import { LanguageToggleButton } from '@/components/language-toggle-button'
 
@@ -45,7 +45,7 @@ export default function ResetPasswordPage({
           <ResetPasswordForm />
         </div>
         <div className="flex items-center justify-between text-sm">
-          <Link
+          <TextLink
             href="/auth/signup"
             className="hover:underline"
             text="AuthLink.signup"

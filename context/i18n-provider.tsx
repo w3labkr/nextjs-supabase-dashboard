@@ -8,7 +8,7 @@ import { defaultNS } from '@/i18next.config'
 
 import { useAppSelector } from '@/lib/redux/hooks'
 
-export function I18nProvider({ children }: { children: React.ReactNode }) {
+const I18nProvider = ({ children }: { children: React.ReactNode }) => {
   const resolvedLanguage = useAppSelector(
     (state) => state.i18n.resolvedLanguage
   )
@@ -26,3 +26,5 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     </I18nextProvider>
   )
 }
+
+export { I18nProvider }

@@ -1,11 +1,11 @@
 import * as nodemailer from 'nodemailer'
 
-export const sender = {
+const sender = {
   name: process.env.SMTP_SENDER_NAME!,
   email: process.env.SMTP_SENDER_EMAIL!,
 }
 
-export const brevoTransporter = nodemailer.createTransport({
+const brevoTransporter = nodemailer.createTransport({
   host: 'smtp-relay.brevo.com',
   port: 587,
   secure: false, // true for 465, false for other ports
@@ -15,7 +15,7 @@ export const brevoTransporter = nodemailer.createTransport({
   },
 })
 
-export const gmailTransporter = nodemailer.createTransport({
+const gmailTransporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
   secure: true, // true for 465, false for other ports
@@ -25,4 +25,6 @@ export const gmailTransporter = nodemailer.createTransport({
   },
 })
 
-export const transporter = brevoTransporter
+const transporter = brevoTransporter
+
+export { sender, brevoTransporter, gmailTransporter, transporter }

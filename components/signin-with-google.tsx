@@ -13,10 +13,8 @@ interface SignInWithGoogleProps
   extends ButtonProps,
     Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {}
 
-export function SignInWithGoogle({
-  variant = 'outline',
-  ...props
-}: SignInWithGoogleProps) {
+const SignInWithGoogle = (props: SignInWithGoogleProps) => {
+  const { variant = 'outline', ...rest } = props
   const { t } = useTranslation()
 
   const handleClick = async () => {
@@ -46,9 +44,11 @@ export function SignInWithGoogle({
   }
 
   return (
-    <Button variant={variant} onClick={handleClick} {...props}>
+    <Button variant={variant} onClick={handleClick} {...rest}>
       <FcGoogle className="mr-2 size-4 min-w-4" />
       {t('SignInWithGoogle.label')}
     </Button>
   )
 }
+
+export { SignInWithGoogle, type SignInWithGoogleProps }

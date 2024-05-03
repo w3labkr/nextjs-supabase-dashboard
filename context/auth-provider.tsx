@@ -10,21 +10,21 @@ import { createClient } from '@/lib/supabase/client'
  *
  * @link https://supabase.com/docs/reference/javascript/auth-onauthstatechange
  */
-export interface AuthContextProps {
+interface AuthContextProps {
   session: Session | null
   user: User | null
   setSession: React.Dispatch<React.SetStateAction<Session | null>>
   setUser: React.Dispatch<React.SetStateAction<User | null>>
 }
 
-export const AuthContext = React.createContext<AuthContextProps>({
+const AuthContext = React.createContext<AuthContextProps>({
   session: null,
   user: null,
   setSession: () => void 0,
   setUser: () => void 0,
 })
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = React.useState<Session | null>(null)
   const [user, setUser] = React.useState<User | null>(null)
 
@@ -45,3 +45,5 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
+
+export { AuthContext, type AuthContextProps, AuthProvider }

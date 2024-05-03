@@ -47,7 +47,12 @@ const defaultValues: Partial<FormValues> = {
   confirmNewPassword: '',
 }
 
-export function ChangePasswordForm({ user }: { user: User | null }) {
+interface ChangePasswordFormProps {
+  user: User | null
+}
+
+const ChangePasswordForm = (props: ChangePasswordFormProps) => {
+  const { user } = props
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
@@ -73,7 +78,7 @@ export function ChangePasswordForm({ user }: { user: User | null }) {
   )
 }
 
-function OldPasswordField({ form }: { form: UseFormReturn<FormValues> }) {
+const OldPasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const { t } = useTranslation()
 
   return (
@@ -100,7 +105,7 @@ function OldPasswordField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function NewPasswordField({ form }: { form: UseFormReturn<FormValues> }) {
+const NewPasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const { t } = useTranslation()
 
   return (
@@ -127,11 +132,11 @@ function NewPasswordField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function ConfirmNewPasswordField({
+const ConfirmNewPasswordField = ({
   form,
 }: {
   form: UseFormReturn<FormValues>
-}) {
+}) => {
   const { t } = useTranslation()
 
   return (
@@ -158,7 +163,7 @@ function ConfirmNewPasswordField({
   )
 }
 
-function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
+const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
@@ -230,3 +235,5 @@ function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
     </Button>
   )
 }
+
+export { ChangePasswordForm, type ChangePasswordFormProps }

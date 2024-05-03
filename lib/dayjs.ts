@@ -9,15 +9,15 @@ dayjs.extend(timezone)
 // dayjs.locale('fr')
 dayjs.tz.setDefault('Asia/Seoul')
 
-const timezonedDayjs = (...args: any[]) => {
-  return dayjs(...args).tz()
-}
+// const timezonedDayjs = (...args: any[]) => {
+//   return dayjs(...args).tz()
+// }
 
-const timezonedUnix = (value: number) => {
-  return dayjs.unix(value).tz()
-}
+// const timezonedUnix = (value: number) => {
+//   return dayjs.unix(value).tz()
+// }
 
-timezonedDayjs.unix = timezonedUnix
-timezonedDayjs.duration = dayjs.duration
+// timezonedDayjs.unix = timezonedUnix
+// timezonedDayjs.duration = dayjs.duration
 
-export default timezonedDayjs
+// export default timezonedDayjs

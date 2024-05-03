@@ -36,7 +36,7 @@ const defaultValues: Partial<FormValues> = {
   email: '',
 }
 
-export function AddEmailAddress() {
+const AddEmailAddress = () => {
   const { t } = useTranslation()
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -66,7 +66,7 @@ export function AddEmailAddress() {
   )
 }
 
-function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
+const EmailField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   return (
     <FormField
       control={form.control}
@@ -90,7 +90,7 @@ function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
+const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
@@ -148,3 +148,5 @@ function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
     </Button>
   )
 }
+
+export { AddEmailAddress }

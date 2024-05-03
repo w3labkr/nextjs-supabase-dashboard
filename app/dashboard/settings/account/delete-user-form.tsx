@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import { fetcher } from '@/lib/utils'
+import { fetcher, getUserPath } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { User } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
@@ -56,7 +56,12 @@ const defaultValues: Partial<FormValues> = {
   confirmationPhrase: '',
 }
 
-export const DeleteUserForm = ({ user }: { user: User | null }) => {
+interface DeleteUserFormProps {
+  user: User | null
+}
+
+const DeleteUserForm = (props: DeleteUserFormProps) => {
+  const { user } = props
   const { t } = useTranslation()
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -211,7 +216,9 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
       const deleted = await fetcher<FetchAPI>(fetchUrl, {
         method: 'DELETE',
         body: JSON.stringify({
-          options: { revalidatePath: `/${user?.profile?.username}` },
+          options: {
+            revalidatePath: getUserPath(user?.profile?.username),
+          },
         }),
       })
       if (deleted?.error) throw new Error(deleted?.error?.message)
@@ -250,3 +257,5 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
     </Button>
   )
 }
+
+export { DeleteUserForm, type DeleteUserFormProps }

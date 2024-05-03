@@ -33,7 +33,7 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-export function NotificationsForm() {
+const NotificationsForm = () => {
   const { user } = useAuth()
   const { notification } = useNotificationAPI(user?.id ?? null)
 
@@ -57,7 +57,11 @@ export function NotificationsForm() {
   )
 }
 
-function MarketingEmailsField({ form }: { form: UseFormReturn<FormValues> }) {
+const MarketingEmailsField = ({
+  form,
+}: {
+  form: UseFormReturn<FormValues>
+}) => {
   const { t } = useTranslation()
 
   return (
@@ -83,7 +87,7 @@ function MarketingEmailsField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function SecurityEmailsField({ form }: { form: UseFormReturn<FormValues> }) {
+const SecurityEmailsField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const { t } = useTranslation()
 
   return (
@@ -114,7 +118,7 @@ function SecurityEmailsField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
+const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
@@ -165,3 +169,5 @@ function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
     </Button>
   )
 }
+
+export { NotificationsForm }

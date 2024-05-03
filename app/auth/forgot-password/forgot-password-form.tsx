@@ -32,7 +32,7 @@ const defaultValues: Partial<FormValues> = {
   email: '',
 }
 
-export function ForgotPasswordForm() {
+const ForgotPasswordForm = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
@@ -49,7 +49,7 @@ export function ForgotPasswordForm() {
   )
 }
 
-function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
+const EmailField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const { t } = useTranslation()
 
   return (
@@ -76,7 +76,7 @@ function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
+const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
@@ -119,3 +119,5 @@ function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
     </Button>
   )
 }
+
+export { ForgotPasswordForm }

@@ -37,7 +37,7 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-export function ChangeLanguageForm() {
+const ChangeLanguageForm = () => {
   const resolvedLanguage = useAppSelector(
     (state) => state?.i18n?.resolvedLanguage
   )
@@ -58,7 +58,7 @@ export function ChangeLanguageForm() {
   )
 }
 
-function LanguageField({ form }: { form: UseFormReturn<FormValues> }) {
+const LanguageField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   return (
     <FormField
       control={form.control}
@@ -88,7 +88,7 @@ function LanguageField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
+const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t, i18n } = useTranslation()
@@ -132,3 +132,5 @@ function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
     </Button>
   )
 }
+
+export { ChangeLanguageForm }

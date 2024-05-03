@@ -27,7 +27,7 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-export function ChangeThemeForm() {
+const ChangeThemeForm = () => {
   const { theme } = useTheme()
 
   const form = useForm<FormValues>({
@@ -46,7 +46,7 @@ export function ChangeThemeForm() {
   )
 }
 
-function ThemeField({ form }: { form: UseFormReturn<FormValues> }) {
+const ThemeField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   return (
     <FormField
       control={form.control}
@@ -120,7 +120,7 @@ function ThemeField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
+const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
@@ -160,3 +160,5 @@ function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
     </Button>
   )
 }
+
+export { ChangeThemeForm }

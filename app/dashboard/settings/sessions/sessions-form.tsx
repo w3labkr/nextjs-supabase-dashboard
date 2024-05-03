@@ -1,5 +1,7 @@
 import * as React from 'react'
 
-export function SessionsForm() {
+const SessionsForm = () => {
   return <>...</>
 }
+
+export { SessionsForm }

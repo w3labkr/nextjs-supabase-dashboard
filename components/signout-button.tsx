@@ -14,7 +14,7 @@ interface SignOutButtonProps
   extends ButtonProps,
     Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {}
 
-export function SignOutButton(props: SignOutButtonProps) {
+const SignOutButton = (props: SignOutButtonProps) => {
   const router = useRouter()
   const { t } = useTranslation()
 
@@ -43,3 +43,5 @@ export function SignOutButton(props: SignOutButtonProps) {
     </Button>
   )
 }
+
+export { SignOutButton, type SignOutButtonProps }

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { defaultLabel, languageItems } from '@/i18next.config'
 import { useAppSelector } from '@/lib/redux/hooks'
 
-export function LanguageStatus() {
+const LanguageStatus = () => {
   const { t } = useTranslation()
   const resolvedLanguage = useAppSelector(
     (state) => state?.i18n?.resolvedLanguage
@@ -24,3 +24,5 @@ export function LanguageStatus() {
     </span>
   )
 }
+
+export { LanguageStatus }

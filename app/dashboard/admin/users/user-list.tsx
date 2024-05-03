@@ -19,7 +19,7 @@ import { User } from '@supabase/supabase-js'
 import { useAuth } from '@/hooks/use-auth'
 import { useUsersAPI } from '@/queries/sync'
 
-export function UserList() {
+const UserList = () => {
   const [page, setPage] = React.useState<number>(1)
   const [perPage, setPerPage] = React.useState<number>(50)
 
@@ -56,7 +56,7 @@ export function UserList() {
   )
 }
 
-function ListItem({ item }: { item: User }) {
+const ListItem = ({ item }: { item: User }) => {
   return (
     <TableRow>
       <TableCell>
@@ -78,3 +78,5 @@ function ListItem({ item }: { item: User }) {
     </TableRow>
   )
 }
+
+export { UserList }

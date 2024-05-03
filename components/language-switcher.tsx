@@ -25,15 +25,15 @@ import {
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
 import { setResolvedLanguage } from '@/store/features/i18n-slice'
 
-export function LanguageSwitcher({
-  className,
-  triggerClassName,
-  contentClassName,
-}: {
+interface LanguageSwitcherProps {
   className?: string
   triggerClassName?: string
   contentClassName?: string
-}) {
+}
+
+const LanguageSwitcher = (props: LanguageSwitcherProps) => {
+  const { className, triggerClassName, contentClassName } = props
+
   const dispatch = useAppDispatch()
   const resolvedLanguage = useAppSelector(
     (state) => state?.i18n?.resolvedLanguage
@@ -87,7 +87,7 @@ export function LanguageSwitcher({
   )
 }
 
-export function LanguageSwitcherItem({
+const LanguageSwitcherItem = ({
   item,
   resolvedLanguage,
   onSelect,
@@ -95,7 +95,7 @@ export function LanguageSwitcherItem({
   item: LanguageItem
   resolvedLanguage: ResolvedLanguage
   onSelect: (value: string) => void
-}) {
+}) => {
   return (
     <CommandItem
       value={item?.value}
@@ -113,3 +113,5 @@ export function LanguageSwitcherItem({
     </CommandItem>
   )
 }
+
+export { LanguageSwitcher, type LanguageSwitcherProps }

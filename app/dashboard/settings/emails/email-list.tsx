@@ -10,7 +10,7 @@ import { useAuth } from '@/hooks/use-auth'
 import { useEmailsAPI } from '@/queries/sync'
 import { Email } from '@/types/database'
 
-export function EmailList() {
+const EmailList = () => {
   const { user } = useAuth()
   const { emails } = useEmailsAPI(user?.id ?? null)
 
@@ -23,7 +23,7 @@ export function EmailList() {
   )
 }
 
-function EmailItem({ item }: { item: Email }) {
+const EmailItem = ({ item }: { item: Email }) => {
   const { t } = useTranslation()
   const { user } = useAuth()
 
@@ -60,7 +60,7 @@ function EmailItem({ item }: { item: Email }) {
   )
 }
 
-function VisibleInEmails({ item }: { item: Email }) {
+const VisibleInEmails = ({ item }: { item: Email }) => {
   const { t } = useTranslation()
 
   if (!item?.email_confirmed_at) return null
@@ -73,7 +73,7 @@ function VisibleInEmails({ item }: { item: Email }) {
   )
 }
 
-function ReceivesNotifications({ item }: { item: Email }) {
+const ReceivesNotifications = ({ item }: { item: Email }) => {
   const { t } = useTranslation()
   const { user } = useAuth()
 
@@ -88,7 +88,7 @@ function ReceivesNotifications({ item }: { item: Email }) {
   )
 }
 
-function UnverifiedEmails({ item }: { item: Email }) {
+const UnverifiedEmails = ({ item }: { item: Email }) => {
   const { t } = useTranslation()
 
   if (item?.email_confirmed_at) return null
@@ -107,7 +107,7 @@ function UnverifiedEmails({ item }: { item: Email }) {
   )
 }
 
-function NotVisibleInEmails({ item }: { item: Email }) {
+const NotVisibleInEmails = ({ item }: { item: Email }) => {
   const { t } = useTranslation()
 
   if (item?.email_confirmed_at) return null
@@ -119,3 +119,5 @@ function NotVisibleInEmails({ item }: { item: Email }) {
     </li>
   )
 }
+
+export { EmailList }

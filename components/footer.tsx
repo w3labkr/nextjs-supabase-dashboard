@@ -6,7 +6,7 @@ import { Copyright } from '@/components/copyright'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { LanguageSwitcher } from '@/components/language-switcher'
 
-export function Footer() {
+const Footer = () => {
   return (
     <footer className="flex h-20 border-0 border-t border-solid border-input bg-inherit">
       <div className="container flex items-center justify-between bg-inherit">
@@ -24,3 +24,5 @@ export function Footer() {
     </footer>
   )
 }
+
+export { Footer }

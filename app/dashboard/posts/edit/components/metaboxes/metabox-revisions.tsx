@@ -13,11 +13,12 @@ import {
 import { UseFormReturn } from 'react-hook-form'
 import { FormValues } from '../../post-form'
 
-export function MetaboxRevisions({
-  form,
-}: {
+interface MetaboxRevisionsProps {
   form: UseFormReturn<FormValues>
-}) {
+}
+
+const MetaboxRevisions = (props: MetaboxRevisionsProps) => {
+  const { form } = props
   const { t } = useTranslation()
 
   return (
@@ -35,3 +36,5 @@ export function MetaboxRevisions({
     </Accordion>
   )
 }
+
+export { MetaboxRevisions, type MetaboxRevisionsProps }

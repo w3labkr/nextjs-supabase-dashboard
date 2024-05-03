@@ -3,7 +3,7 @@ import * as React from 'react'
 import { SignInWithGoogle } from '@/components/signin-with-google'
 // import { SignInWithGithub } from '@/components/auth/signin-with-github'
 
-export function SignInWith() {
+const SignInWith = () => {
   return (
     <>
       <div className="relative">
@@ -21,3 +21,5 @@ export function SignInWith() {
     </>
   )
 }
+
+export { SignInWith }

@@ -23,7 +23,12 @@ import { Textarea } from '@/components/ui/textarea'
 import { UseFormReturn } from 'react-hook-form'
 import { FormValues } from '../../post-form'
 
-export function MetaboxExcerpt({ form }: { form: UseFormReturn<FormValues> }) {
+interface MetaboxExcerptProps {
+  form: UseFormReturn<FormValues>
+}
+
+const MetaboxExcerpt = (props: MetaboxExcerptProps) => {
+  const { form } = props
   const { t } = useTranslation()
 
   return (
@@ -52,3 +57,5 @@ export function MetaboxExcerpt({ form }: { form: UseFormReturn<FormValues> }) {
     </Accordion>
   )
 }
+
+export { MetaboxExcerpt, type MetaboxExcerptProps }

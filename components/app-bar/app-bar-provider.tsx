@@ -2,15 +2,15 @@
 
 import * as React from 'react'
 
-export interface AppBarContextProps {
+interface AppBarContextProps {
   height: string
 }
 
-export const AppBarContext = React.createContext<
-  AppBarContextProps | undefined
->(undefined)
+const AppBarContext = React.createContext<AppBarContextProps | undefined>(
+  undefined
+)
 
-export function AppBarProvider({ children }: { children: React.ReactNode }) {
+function AppBarProvider({ children }: { children: React.ReactNode }) {
   const value = React.useMemo(() => ({ height: 'h-[50px]' }), [])
 
   return (
@@ -18,7 +18,7 @@ export function AppBarProvider({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function useAppBar() {
+function useAppBar() {
   const context = React.useContext<AppBarContextProps | undefined>(
     AppBarContext
   )
@@ -29,3 +29,5 @@ export function useAppBar() {
 
   return context
 }
+
+export { AppBarProvider, useAppBar }

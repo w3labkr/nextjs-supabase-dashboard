@@ -24,7 +24,7 @@ import { useAuth } from '@/hooks/use-auth'
 import { EmailsAPI } from '@/types/api'
 import { Email } from '@/types/database'
 
-export function DeleteEmailAddress({ item }: { item: Email }) {
+const DeleteEmailAddress = ({ item }: { item: Email }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
@@ -89,3 +89,5 @@ export function DeleteEmailAddress({ item }: { item: Email }) {
     </AlertDialog>
   )
 }
+
+export { DeleteEmailAddress }

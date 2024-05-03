@@ -14,13 +14,13 @@ const PagingContext = React.createContext<PagingContextProps | undefined>(
   undefined
 )
 
-export function PagingProvider({
+const PagingProvider = ({
   children,
   value,
 }: {
   children: React.ReactNode
   value: PagingContextProps
-}) {
+}) => {
   const memoValue = React.useMemo(() => {
     let { total, page, pageSize, perPage, ...rest } = value
 
@@ -91,7 +91,7 @@ export function PagingProvider({
   )
 }
 
-export function usePaging() {
+const usePaging = () => {
   const context = React.useContext<PagingContextProps | undefined>(
     PagingContext
   )
@@ -102,3 +102,5 @@ export function usePaging() {
 
   return context
 }
+
+export { PagingProvider, usePaging }

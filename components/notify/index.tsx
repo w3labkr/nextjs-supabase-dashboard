@@ -23,7 +23,7 @@ import {
 import useSWR from 'swr'
 import { NotifyItems } from './notify-items'
 
-export function Notify() {
+const Notify = () => {
   const { t } = useTranslation()
   const fetchUrl = process.env.NEXT_PUBLIC_SITE_URL + '/api/v1/notify'
   const { data } = useSWR<{ data: any[]; count: number }>(fetchUrl)
@@ -58,3 +58,5 @@ export function Notify() {
     </Popover>
   )
 }
+
+export { Notify }

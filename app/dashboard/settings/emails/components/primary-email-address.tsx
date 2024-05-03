@@ -41,7 +41,7 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-export function PrimaryEmailAddress() {
+const PrimaryEmailAddress = () => {
   const { t } = useTranslation()
   const { user } = useAuth()
   const { emails } = useEmailsAPI(user?.id ?? null)
@@ -81,13 +81,13 @@ export function PrimaryEmailAddress() {
   )
 }
 
-function EmailField({
+const EmailField = ({
   form,
   primaryEmail,
 }: {
   form: UseFormReturn<FormValues>
   primaryEmail: Email | null
-}) {
+}) => {
   const { t } = useTranslation()
   const { user } = useAuth()
   const { emails } = useEmailsAPI(user?.id ?? null)
@@ -132,7 +132,7 @@ function EmailField({
   )
 }
 
-function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
+const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
@@ -184,3 +184,5 @@ function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
     </Button>
   )
 }
+
+export { PrimaryEmailAddress }

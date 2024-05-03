@@ -18,13 +18,13 @@ export interface PagingProps {
   pageSize?: number // Number of page buttons to display
 }
 
-export function Paging({
+const Paging = ({
   page = 1,
   perPage = 50,
   setPage,
   total = 0,
   pageSize = 10,
-}: PagingProps) {
+}: PagingProps) => {
   if (page < 1) page = 1
 
   // A number indicating which set the current button belongs to
@@ -137,3 +137,5 @@ export function Paging({
     </Pagination>
   )
 }
+
+export { Paging, type PagingProps }

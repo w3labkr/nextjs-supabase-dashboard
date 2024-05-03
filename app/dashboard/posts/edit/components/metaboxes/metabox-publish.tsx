@@ -20,17 +20,17 @@ import { UseFormReturn } from 'react-hook-form'
 import { FormValues } from '../../post-form'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getPostPath, getAuthorPath } from '@/lib/utils'
+import { fetcher, getPostPath, getUserPath } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
-export function MetaboxPublish({
-  form,
-  post,
-}: {
+interface MetaboxPublishProps {
   form: UseFormReturn<FormValues>
   post: Post | null
-}) {
+}
+
+const MetaboxPublish = (props: MetaboxPublishProps) => {
+  const { form, post } = props
   const { t } = useTranslation()
 
   return (
@@ -83,13 +83,13 @@ export function MetaboxPublish({
   )
 }
 
-function DraftButton({
+const DraftButton = ({
   form,
   post,
 }: {
   form: UseFormReturn<FormValues>
   post: Post | null
-}) {
+}) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
@@ -110,7 +110,12 @@ function DraftButton({
         method: 'POST',
         body: JSON.stringify({
           formData: Object.assign({}, formValues, values),
-          options: { revalidatePath: [getPostPath(post), getAuthorPath(post)] },
+          options: {
+            revalidatePath: [
+              getPostPath(post),
+              getUserPath(post?.profile?.username),
+            ],
+          },
         }),
       })
 
@@ -144,13 +149,13 @@ function DraftButton({
   )
 }
 
-function ViewButton({
+const ViewButton = ({
   form,
   post,
 }: {
   form: UseFormReturn<FormValues>
   post: Post | null
-}) {
+}) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
@@ -162,9 +167,9 @@ function ViewButton({
 
       if (!post) throw new Error('Require is not defined.')
 
-      const postPath = getPostPath(post)
+      const path = getPostPath(post)
 
-      if (postPath) router.push(`${postPath}?preview=true`)
+      if (path) router.push(`${path}?preview=true`)
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -185,13 +190,13 @@ function ViewButton({
   )
 }
 
-function PreviewButton({
+const PreviewButton = ({
   form,
   post,
 }: {
   form: UseFormReturn<FormValues>
   post: Post | null
-}) {
+}) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
@@ -209,12 +214,12 @@ function PreviewButton({
       const values = { slug: slugified, status: 'draft', updated_at: now }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const postPath = getPostPath(post)
+      const path = getPostPath(post)
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
           formData: Object.assign({}, formValues, values),
-          options: { revalidatePath: postPath },
+          options: { revalidatePath: path },
         }),
       })
 
@@ -222,7 +227,7 @@ function PreviewButton({
 
       mutate(fetchUrl)
 
-      if (postPath) router.push(postPath + '?preview=true')
+      if (path) router.push(path + '?preview=true')
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
@@ -248,13 +253,13 @@ function PreviewButton({
   )
 }
 
-function TrashButton({
+const TrashButton = ({
   form,
   post,
 }: {
   form: UseFormReturn<FormValues>
   post: Post | null
-}) {
+}) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
@@ -283,7 +288,12 @@ function TrashButton({
             status: 'trash',
             deleted_at: now,
           },
-          options: { revalidatePath: [getPostPath(post), getAuthorPath(post)] },
+          options: {
+            revalidatePath: [
+              getPostPath(post),
+              getUserPath(post?.profile?.username),
+            ],
+          },
         }),
       })
 
@@ -318,13 +328,13 @@ function TrashButton({
   )
 }
 
-function PublishButton({
+const PublishButton = ({
   form,
   post,
 }: {
   form: UseFormReturn<FormValues>
   post: Post | null
-}) {
+}) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
@@ -347,7 +357,12 @@ function PublishButton({
           formData: post?.published_at
             ? Object.assign({}, formValues, values)
             : Object.assign({}, formValues, values, { published_at: now }),
-          options: { revalidatePath: [getPostPath(post), getAuthorPath(post)] },
+          options: {
+            revalidatePath: [
+              getPostPath(post),
+              getUserPath(post?.profile?.username),
+            ],
+          },
         }),
       })
 
@@ -382,3 +397,5 @@ function PublishButton({
     </Button>
   )
 }
+
+export { MetaboxPublish, type MetaboxPublishProps }

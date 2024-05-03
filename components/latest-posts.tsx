@@ -7,13 +7,14 @@ import { Paging } from '@/components/paging'
 
 import { Post } from '@/types/database'
 
-export function LatestPosts({
-  posts,
-  className,
-}: {
+interface LatestPostsProps {
   posts: Post[]
   className?: string
-}) {
+}
+
+const LatestPosts = (props: LatestPostsProps) => {
+  const { posts, className } = props
+
   return (
     <div className="space-y-16">
       <div className={cn('columns-1 gap-8 space-y-8', className)}>
@@ -26,7 +27,7 @@ export function LatestPosts({
   )
 }
 
-function PostItem({ post }: { post: Post }) {
+const PostItem = ({ post }: { post: Post }) => {
   const datetime = post?.published_at ?? post?.created_at ?? undefined
 
   return (
@@ -47,3 +48,5 @@ function PostItem({ post }: { post: Post }) {
     </div>
   )
 }
+
+export { LatestPosts, type LatestPostsProps }

@@ -34,7 +34,7 @@ import { useAuth } from '@/hooks/use-auth'
 import { useQueryString } from '@/hooks/use-query-string'
 import { usePostsAPI, useCountPostsAPI } from '@/queries/sync'
 
-export function PostList() {
+const PostList = () => {
   const searchParams = useSearchParams()
 
   const page = +(searchParams.get('page') ?? '1')
@@ -60,7 +60,7 @@ export function PostList() {
   )
 }
 
-function Header() {
+const Header = () => {
   const { user } = useAuth()
   const { data, count: total } = useCountPostsAPI(user?.id ?? null)
 
@@ -79,7 +79,7 @@ function Header() {
   )
 }
 
-function HeadLink({
+const HeadLink = ({
   value,
   label,
   count,
@@ -87,7 +87,7 @@ function HeadLink({
   value?: PostStatus
   label: PostStatus | 'all'
   count: number
-}) {
+}) => {
   const { t } = useTranslation()
   const { status } = usePaging()
   const { qs } = useQueryString()
@@ -106,7 +106,7 @@ function HeadLink({
   )
 }
 
-function Footer() {
+const Footer = () => {
   const { user } = useAuth()
   const { page, perPage, status } = usePaging()
   const { posts } = usePostsAPI(user?.id ?? null, {
@@ -120,7 +120,7 @@ function Footer() {
   return <Paging className="mt-16" />
 }
 
-function Body() {
+const Body = () => {
   const { t } = useTranslation()
 
   const { user } = useAuth()
@@ -170,7 +170,7 @@ function Body() {
   )
 }
 
-function PostItem({ post }: { post: Post }) {
+const PostItem = ({ post }: { post: Post }) => {
   const { t } = useTranslation()
 
   return (
@@ -228,7 +228,7 @@ function PostItem({ post }: { post: Post }) {
   )
 }
 
-function EmptyItem() {
+const EmptyItem = () => {
   const { t } = useTranslation()
 
   return (
@@ -240,7 +240,7 @@ function EmptyItem() {
   )
 }
 
-function LoadingItem() {
+const LoadingItem = () => {
   const { t } = useTranslation()
 
   return (
@@ -251,3 +251,5 @@ function LoadingItem() {
     </TableRow>
   )
 }
+
+export { PostList }

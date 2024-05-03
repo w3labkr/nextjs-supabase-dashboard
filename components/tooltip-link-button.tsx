@@ -12,17 +12,12 @@ import {
 import { TooltipContentProps } from '@radix-ui/react-tooltip'
 import { LinkButton, LinkButtonProps } from '@/components/link-button'
 
-export interface TooltipLinkButtonProps extends LinkButtonProps {
+interface TooltipLinkButtonProps extends LinkButtonProps {
   tooltipContent?: TooltipContentProps
 }
 
-export function TooltipLinkButton({
-  children,
-  text,
-  translate,
-  tooltipContent,
-  ...props
-}: TooltipLinkButtonProps) {
+const TooltipLinkButton = (props: TooltipLinkButtonProps) => {
+  const { children, text, translate, tooltipContent, ...rest } = props
   const { t } = useTranslation()
 
   return (
@@ -30,7 +25,7 @@ export function TooltipLinkButton({
       <Tooltip>
         <TooltipTrigger asChild>
           <div>
-            <LinkButton {...props}>{children}</LinkButton>
+            <LinkButton {...rest}>{children}</LinkButton>
           </div>
         </TooltipTrigger>
         <TooltipContent {...tooltipContent}>
@@ -40,3 +35,5 @@ export function TooltipLinkButton({
     </TooltipProvider>
   )
 }
+
+export { TooltipLinkButton, type TooltipLinkButtonProps }

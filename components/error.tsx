@@ -4,24 +4,19 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 
-export interface ErrorProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ErrorProps extends React.HTMLAttributes<HTMLDivElement> {
   status: string
   statusText?: string
   message?: string
   className?: string
 }
 
-export function Error({
-  status,
-  statusText,
-  message,
-  className,
-  ...props
-}: ErrorProps) {
+const Error = (props: ErrorProps) => {
+  const { status, statusText, message, className, ...rest } = props
   const { t } = useTranslation('httpstatuscode')
 
   return (
-    <div className={cn('flex h-screen w-screen', className)} {...props}>
+    <div className={cn('flex h-screen w-screen', className)} {...rest}>
       <div className="container flex max-w-[768px] items-center justify-center">
         <h1 className="text-2xl font-medium">{status}</h1>
         <div className="ml-6 border-l border-solid border-[rgba(0,0,0,.3)] py-1 pl-6 dark:border-[rgba(255,255,255,.3)]">
@@ -36,3 +31,5 @@ export function Error({
     </div>
   )
 }
+
+export { Error, type ErrorProps }

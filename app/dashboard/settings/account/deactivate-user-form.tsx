@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import { fetcher } from '@/lib/utils'
+import { fetcher, getUserPath } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { User } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
@@ -56,7 +56,12 @@ const defaultValues: Partial<FormValues> = {
   confirmationPhrase: '',
 }
 
-export const DeactivateUserForm = ({ user }: { user: User | null }) => {
+interface DeactivateUserFormProps {
+  user: User | null
+}
+
+const DeactivateUserForm = (props: DeactivateUserFormProps) => {
+  const { user } = props
   const { t } = useTranslation()
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -212,7 +217,9 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
         method: 'POST',
         body: JSON.stringify({
           formData: { deleted: new Date().toISOString() },
-          options: { revalidatePath: `/${user?.profile?.username}` },
+          options: {
+            revalidatePath: getUserPath(user?.profile?.username),
+          },
         }),
       })
       if (deleted?.error) throw new Error(deleted?.error?.message)
@@ -251,3 +258,5 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
     </Button>
   )
 }
+
+export { DeactivateUserForm, type DeactivateUserFormProps }

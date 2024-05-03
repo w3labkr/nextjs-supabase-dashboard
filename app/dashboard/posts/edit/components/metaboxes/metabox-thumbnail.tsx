@@ -14,11 +14,12 @@ import { Button } from '@/components/ui/button'
 import { UseFormReturn } from 'react-hook-form'
 import { FormValues } from '../../post-form'
 
-export function MetaboxThumbnail({
-  form,
-}: {
+interface MetaboxThumbnailProps {
   form: UseFormReturn<FormValues>
-}) {
+}
+
+const MetaboxThumbnail = (props: MetaboxThumbnailProps) => {
+  const { form } = props
   const { t } = useTranslation()
 
   return (
@@ -34,3 +35,5 @@ export function MetaboxThumbnail({
     </Accordion>
   )
 }
+
+export { MetaboxThumbnail, type MetaboxThumbnailProps }

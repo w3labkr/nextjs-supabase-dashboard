@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
 
-export function DarkModeStatus() {
+const DarkModeStatus = () => {
   const [status, setStatus] = React.useState<string>('')
   const { theme } = useTheme()
   const { t } = useTranslation()
@@ -19,3 +19,5 @@ export function DarkModeStatus() {
 
   return <span>{t(status)}</span>
 }
+
+export { DarkModeStatus }

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
-export function PreviewAlert() {
+const PreviewAlert = () => {
   const { t } = useTranslation()
 
   return (
@@ -23,3 +23,5 @@ export function PreviewAlert() {
     </Alert>
   )
 }
+
+export { PreviewAlert }

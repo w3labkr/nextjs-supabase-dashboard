@@ -1,4 +1,6 @@
-export function TailwindIndicator() {
+import * as React from 'react'
+
+const TailwindIndicator = () => {
   if (process.env.NODE_ENV === 'production') return null
 
   return (
@@ -12,3 +14,5 @@ export function TailwindIndicator() {
     </div>
   )
 }
+
+export { TailwindIndicator }

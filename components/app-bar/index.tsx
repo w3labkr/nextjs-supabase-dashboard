@@ -8,9 +8,10 @@ import { AccountMenu } from '@/components/account-menu'
 
 import { useAppBar } from './app-bar-provider'
 
-export interface AppBarProps extends React.HTMLAttributes<HTMLElement> {}
+interface AppBarProps extends React.HTMLAttributes<HTMLElement> {}
 
-export function AppBar({ children, className, ...props }: AppBarProps) {
+const AppBar = (props: AppBarProps) => {
+  const { children, className, ...rest } = props
   const { height } = useAppBar()
 
   return (
@@ -20,7 +21,7 @@ export function AppBar({ children, className, ...props }: AppBarProps) {
         height,
         className
       )}
-      {...props}
+      {...rest}
     >
       {children}
       <div className="flex-1"></div>
@@ -29,3 +30,5 @@ export function AppBar({ children, className, ...props }: AppBarProps) {
     </header>
   )
 }
+
+export { AppBar, type AppBarProps }

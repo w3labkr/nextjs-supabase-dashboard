@@ -5,7 +5,12 @@ import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { Post } from '@/types/database'
 
-export function EditLink({ post }: { post: Post }) {
+interface EditLinkProps {
+  post: Post
+}
+
+const EditLink = (props: EditLinkProps) => {
+  const { post } = props
   const { t } = useTranslation()
 
   return (
@@ -17,3 +22,5 @@ export function EditLink({ post }: { post: Post }) {
     </Link>
   )
 }
+
+export { EditLink, type EditLinkProps }

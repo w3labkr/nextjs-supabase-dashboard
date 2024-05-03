@@ -9,7 +9,7 @@ import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { Email } from '@/types/database'
 
-export function ResendVerifyEmail({ item }: { item: Email }) {
+const ResendVerifyEmail = ({ item }: { item: Email }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
@@ -54,3 +54,5 @@ export function ResendVerifyEmail({ item }: { item: Email }) {
     </button>
   )
 }
+
+export { ResendVerifyEmail }

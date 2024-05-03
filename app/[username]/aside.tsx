@@ -3,7 +3,7 @@ import * as React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Profile } from '@/types/database'
 
-export function Aside({ profile }: { profile: Profile }) {
+const Aside = ({ profile }: { profile: Profile }) => {
   return (
     <div className="flex flex-col gap-2">
       <Avatar className="size-12 min-w-12">
@@ -25,3 +25,5 @@ export function Aside({ profile }: { profile: Profile }) {
     </div>
   )
 }
+
+export { Aside }

@@ -12,8 +12,9 @@ import { MobileNavigation } from '@/components/mobile-navigation'
 import { LinkButton } from '@/components/link-button'
 
 import { useAuth } from '@/hooks/use-auth'
+import { useUserAPI } from '@/queries/sync'
 
-export function Header() {
+const Header = () => {
   const { user } = useAuth()
 
   return (
@@ -40,18 +41,23 @@ export function Header() {
   )
 }
 
-function SignedInButton() {
+const SignedInButton = () => {
+  // const { user: session } = useAuth()
+  // const { user } = useUserAPI(session?.id ?? null)
+
   return (
-    <LinkButton
-      variant="outline"
-      href="/dashboard"
-      text="LinkButton.dashboard"
-      translate="yes"
-    />
+    <>
+      <LinkButton
+        variant="outline"
+        href="/dashboard"
+        text="LinkButton.dashboard"
+        translate="yes"
+      />
+    </>
   )
 }
 
-function SignedOutButton() {
+const SignedOutButton = () => {
   return (
     <>
       <LinkButton
@@ -68,3 +74,5 @@ function SignedOutButton() {
     </>
   )
 }
+
+export { Header }

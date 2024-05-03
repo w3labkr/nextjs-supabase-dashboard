@@ -16,7 +16,7 @@ import {
 import { usePaging } from './paging-provider'
 import { useQueryString } from '@/hooks/use-query-string'
 
-export function Paging({ className, ...props }: React.ComponentProps<'nav'>) {
+const Paging = ({ className, ...props }: React.ComponentProps<'nav'>) => {
   return (
     <Pagination className={className} {...props}>
       <PaginationContent>
@@ -30,7 +30,7 @@ export function Paging({ className, ...props }: React.ComponentProps<'nav'>) {
   )
 }
 
-function PagingItem() {
+const PagingItem = () => {
   const { pageSize, startPage, page } = usePaging()
   const { qs } = useQueryString()
   const pathname = usePathname()
@@ -49,7 +49,7 @@ function PagingItem() {
     ))
 }
 
-function FirstItem() {
+const FirstItem = () => {
   const { currentSet, firstPage } = usePaging()
   const { qs } = useQueryString()
   const pathname = usePathname()
@@ -70,7 +70,7 @@ function FirstItem() {
   )
 }
 
-function PreviousItem() {
+const PreviousItem = () => {
   const { currentSet, previousPage } = usePaging()
   const { qs } = useQueryString()
   const pathname = usePathname()
@@ -91,7 +91,7 @@ function PreviousItem() {
   )
 }
 
-function NextItem() {
+const NextItem = () => {
   const { totalSet, currentSet, nextPage } = usePaging()
   const { qs } = useQueryString()
   const pathname = usePathname()
@@ -112,7 +112,7 @@ function NextItem() {
   )
 }
 
-function LastItem() {
+const LastItem = () => {
   const { totalSet, currentSet, lastPage } = usePaging()
   const { qs } = useQueryString()
   const pathname = usePathname()
@@ -132,3 +132,5 @@ function LastItem() {
     </PaginationItem>
   )
 }
+
+export { Paging }

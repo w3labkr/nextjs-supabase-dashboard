@@ -9,15 +9,12 @@ import { Button, ButtonProps } from '@/components/ui/button'
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
 import { setResolvedLanguage } from '@/store/features/i18n-slice'
 
-export interface LanguageToggleProps
+interface LanguageToggleButtonProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
-export function LanguageToggleButton({
-  variant = 'ghost',
-  size = 'sm',
-  ...props
-}: LanguageToggleProps) {
+const LanguageToggleButton = (props: LanguageToggleButtonProps) => {
+  const { variant = 'ghost', size = 'sm', ...rest } = props
   const dispatch = useAppDispatch()
   const resolvedLanguage = useAppSelector(
     (state) => state.i18n.resolvedLanguage
@@ -36,8 +33,10 @@ export function LanguageToggleButton({
   }
 
   return (
-    <Button variant={variant} size={size} onClick={handleClick} {...props}>
+    <Button variant={variant} size={size} onClick={handleClick} {...rest}>
       {currentLanguage?.toUpperCase()}
     </Button>
   )
 }
+
+export { LanguageToggleButton, type LanguageToggleButtonProps }

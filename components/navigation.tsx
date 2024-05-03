@@ -13,7 +13,7 @@ import {
   NavigationMenu,
 } from '@/components/ui/navigation-menu'
 
-export function Navigation() {
+const Navigation = () => {
   const { t } = useTranslation()
 
   return (
@@ -165,3 +165,5 @@ export function Navigation() {
     </NavigationMenu>
   )
 }
+
+export { Navigation }

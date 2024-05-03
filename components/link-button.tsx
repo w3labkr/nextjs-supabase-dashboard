@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
 import { Button, ButtonProps } from '@/components/ui/button'
 
-export interface LinkButtonProps
+interface LinkButtonProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
   href: string
@@ -19,7 +19,7 @@ export interface LinkButtonProps
   endIconClassName?: string
 }
 
-export const LinkButton = React.forwardRef<HTMLButtonElement, LinkButtonProps>(
+const LinkButton = React.forwardRef<HTMLButtonElement, LinkButtonProps>(
   (props, ref) => {
     const {
       children,
@@ -57,3 +57,5 @@ export const LinkButton = React.forwardRef<HTMLButtonElement, LinkButtonProps>(
 )
 
 LinkButton.displayName = 'LinkButton'
+
+export { LinkButton, type LinkButtonProps }

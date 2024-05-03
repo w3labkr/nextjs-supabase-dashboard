@@ -7,7 +7,12 @@ import { useTranslation } from 'react-i18next'
 import { getPostPath } from '@/lib/utils'
 import { Post } from '@/types/database'
 
-export function ViewLink({ post }: { post: Post }) {
+interface ViewLinkProps {
+  post: Post
+}
+
+const ViewLink = (props: ViewLinkProps) => {
+  const { post } = props
   const { t } = useTranslation()
 
   return (
@@ -21,3 +26,5 @@ export function ViewLink({ post }: { post: Post }) {
     </Link>
   )
 }
+
+export { ViewLink, type ViewLinkProps }
