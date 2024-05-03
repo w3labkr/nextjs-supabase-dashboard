@@ -193,15 +193,23 @@ npm install zod-i18n-map
 ```javascript
 import { useTrans } from '@/hooks/use-trans'
 
-const { trans: description } = useTrans('key', { 
-  components: {
-    i: <i />,
-    link1: <Link href="#" />,
-  },
-  values: {
-    what: 'world'
-  }
-})
+const { trans } = useTrans()
+
+export function App() {
+  return (
+    <div>
+    {trans('key', { 
+      components: {
+        i: <i />,
+        link1: <Link href="#" />,
+      },
+      values: {
+        what: 'world'
+      }
+    })}
+    </div>
+  )
+}
 
 // translation.json
 // { "key": "hello <i>beautiful</i> <link1>{{what}}</link1>" }

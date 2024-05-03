@@ -56,7 +56,7 @@ const defaultValues: Partial<FormValues> = {
   confirmationPhrase: '',
 }
 
-export function DeleteUserForm({ user }: { user: User | null }) {
+export const DeleteUserForm = ({ user }: { user: User | null }) => {
   const { t } = useTranslation()
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -99,7 +99,7 @@ export function DeleteUserForm({ user }: { user: User | null }) {
   )
 }
 
-function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
+const EmailField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const { t } = useTranslation()
 
   return (
@@ -119,7 +119,7 @@ function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function PasswordField({ form }: { form: UseFormReturn<FormValues> }) {
+const PasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const { t } = useTranslation()
 
   return (
@@ -146,14 +146,12 @@ function PasswordField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function ConfirmationPhraseField({
+const ConfirmationPhraseField = ({
   form,
 }: {
   form: UseFormReturn<FormValues>
-}) {
-  const { trans: label } = useTrans('FormLabel.verify_delete_my_account', {
-    components: { i: <i /> },
-  })
+}) => {
+  const { trans } = useTrans()
 
   return (
     <FormField
@@ -161,7 +159,11 @@ function ConfirmationPhraseField({
       name="confirmationPhrase"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          <FormLabel>
+            {trans('FormLabel.verify_delete_my_account', {
+              components: { i: <i /> },
+            })}
+          </FormLabel>
           <FormControl>
             <Input placeholder="delete my account" {...field} />
           </FormControl>
@@ -172,7 +174,7 @@ function ConfirmationPhraseField({
   )
 }
 
-function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
+const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()

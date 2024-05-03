@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import Link from 'next/link'
+import Link, { LinkProps } from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { useTrans } from '@/hooks/use-trans'
 
@@ -45,7 +45,7 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-export function ProfileForm() {
+export const ProfileForm = () => {
   const { user } = useAuth()
   const { profile } = useProfileAPI(user?.id ?? null)
 
@@ -71,7 +71,7 @@ export function ProfileForm() {
   )
 }
 
-function FullNameField({ form }: { form: UseFormReturn<FormValues> }) {
+const FullNameField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const { t } = useTranslation()
 
   return (
@@ -96,23 +96,11 @@ function FullNameField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
+const EmailField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const { t } = useTranslation()
   const { user } = useAuth()
   const { emails } = useEmailsAPI(user?.id ?? null)
-  const { trans: description } = useTrans(
-    'FormDescription.you_can_manage_your_email_address_in_your_email_settings',
-    {
-      components: {
-        link1: (
-          <Link
-            href="/dashboard/settings/emails"
-            className="text-primary underline"
-          />
-        ),
-      },
-    }
-  )
+  const { trans } = useTrans()
 
   return (
     <FormField
@@ -147,7 +135,21 @@ function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <FormDescription>{description}</FormDescription>
+          <FormDescription>
+            {trans(
+              'FormDescription.you_can_manage_your_email_address_in_your_email_settings',
+              {
+                components: {
+                  link1: (
+                    <Link
+                      href="/dashboard/settings/emails"
+                      className="text-primary underline"
+                    />
+                  ),
+                },
+              }
+            )}
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
@@ -155,7 +157,7 @@ function EmailField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function BioField({ form }: { form: UseFormReturn<FormValues> }) {
+const BioField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const { t } = useTranslation()
 
   return (
@@ -180,7 +182,7 @@ function BioField({ form }: { form: UseFormReturn<FormValues> }) {
   )
 }
 
-function SubmitButton({ form }: { form: UseFormReturn<FormValues> }) {
+const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
