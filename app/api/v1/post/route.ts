@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
 
   const id = searchParams.get('id') as string
-  const username = searchParams.get('username') as string
+  const uid = searchParams.get('uid') as string
   const slug = searchParams.get('slug') as string
   const status = searchParams.get('status') as string
   const postType = (searchParams.get('postType') as string) ?? 'post'
@@ -16,9 +16,9 @@ export async function GET(request: NextRequest) {
   let match = {}
 
   if (id) match = { ...match, id }
+  if (uid) match = { ...match, user_id: uid }
   if (postType) match = { ...match, type: postType }
   if (status) match = { ...match, status }
-  if (username) match = { ...match, 'profile.username': username }
   if (slug) match = { ...match, slug }
 
   const supabase = createClient()
@@ -72,9 +72,11 @@ export async function POST(request: NextRequest) {
   const originalPath = options?.revalidatePath
 
   if (originalPath && typeof originalPath === 'string') {
-    revalidatePath(originalPath)
+    revalidatePath(decodeURIComponent(originalPath))
   } else if (originalPath && Array.isArray(originalPath)) {
-    originalPath.forEach((path: string) => revalidatePath(path))
+    originalPath.forEach((path: string) =>
+      revalidatePath(decodeURIComponent(path))
+    )
   }
 
   return originalPath
@@ -134,9 +136,11 @@ export async function PUT(request: NextRequest) {
   const originalPath = options?.revalidatePath
 
   if (originalPath && typeof originalPath === 'string') {
-    revalidatePath(originalPath)
+    revalidatePath(decodeURIComponent(originalPath))
   } else if (originalPath && Array.isArray(originalPath)) {
-    originalPath.forEach((path: string) => revalidatePath(path))
+    originalPath.forEach((path: string) =>
+      revalidatePath(decodeURIComponent(path))
+    )
   }
 
   return originalPath
@@ -177,9 +181,11 @@ export async function DELETE(request: NextRequest) {
   const originalPath = options?.revalidatePath
 
   if (originalPath && typeof originalPath === 'string') {
-    revalidatePath(originalPath)
+    revalidatePath(decodeURIComponent(originalPath))
   } else if (originalPath && Array.isArray(originalPath)) {
-    originalPath.forEach((path: string) => revalidatePath(path))
+    originalPath.forEach((path: string) =>
+      revalidatePath(decodeURIComponent(path))
+    )
   }
 
   return originalPath

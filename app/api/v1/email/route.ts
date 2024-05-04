@@ -34,9 +34,11 @@ export async function POST(request: NextRequest) {
   const originalPath = options?.revalidatePath
 
   if (originalPath && typeof originalPath === 'string') {
-    revalidatePath(originalPath)
+    revalidatePath(decodeURIComponent(originalPath))
   } else if (originalPath && Array.isArray(originalPath)) {
-    originalPath.forEach((path: string) => revalidatePath(path))
+    originalPath.forEach((path: string) =>
+      revalidatePath(decodeURIComponent(path))
+    )
   }
 
   return originalPath
@@ -75,9 +77,11 @@ export async function PUT(request: NextRequest) {
   const originalPath = options?.revalidatePath
 
   if (originalPath && typeof originalPath === 'string') {
-    revalidatePath(originalPath)
+    revalidatePath(decodeURIComponent(originalPath))
   } else if (originalPath && Array.isArray(originalPath)) {
-    originalPath.forEach((path: string) => revalidatePath(path))
+    originalPath.forEach((path: string) =>
+      revalidatePath(decodeURIComponent(path))
+    )
   }
 
   return originalPath
@@ -118,9 +122,11 @@ export async function DELETE(request: NextRequest) {
   const originalPath = options?.revalidatePath
 
   if (originalPath && typeof originalPath === 'string') {
-    revalidatePath(originalPath)
+    revalidatePath(decodeURIComponent(originalPath))
   } else if (originalPath && Array.isArray(originalPath)) {
-    originalPath.forEach((path: string) => revalidatePath(path))
+    originalPath.forEach((path: string) =>
+      revalidatePath(decodeURIComponent(path))
+    )
   }
 
   return originalPath
