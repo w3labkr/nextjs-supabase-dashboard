@@ -17,10 +17,8 @@ import { getProfileAPI, getPostsAPI } from '@/queries/async'
 export async function generateMetadata(
   {
     params: { username },
-    searchParams,
   }: {
     params: { username: string }
-    searchParams?: { page?: string; perPage?: string; pageSize?: string }
   },
   parent: ResolvingMetadata
 ): Promise<Metadata> {

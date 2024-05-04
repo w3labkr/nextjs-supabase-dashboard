@@ -2,7 +2,7 @@ import * as React from 'react'
 import Link from 'next/link'
 import dayjs from 'dayjs'
 
-import { cn, getPostUrl, getAuthorUrl } from '@/lib/utils'
+import { cn, getPostUrl, getUserUrl } from '@/lib/utils'
 import { Paging } from '@/components/paging'
 
 import { Post } from '@/types/database'
@@ -41,7 +41,10 @@ const PostItem = ({ post }: { post: Post }) => {
           {dayjs(datetime).format('MMMM D, YYYY')}
         </time>
         <span>— by</span>
-        <Link href={getAuthorUrl(post) ?? '#'} className="hover:underline">
+        <Link
+          href={getUserUrl(post?.profile?.username) ?? '#'}
+          className="hover:underline"
+        >
           {post?.profile?.full_name}
         </Link>
       </div>

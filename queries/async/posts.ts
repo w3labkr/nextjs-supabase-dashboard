@@ -3,16 +3,9 @@ import { fetcher, setQueryString } from '@/lib/utils'
 import { PostAPI, PostsAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
-export async function setPostViews(id: number) {
-  const supabase = createClient()
-  const { data } = await supabase.rpc('set_post_views', { pid: id })
-
-  return { views: data }
-}
-
 export async function getPostAPI(
   id: number | null,
-  params?: { username?: string; slug?: string }
+  params?: { uid?: string; slug?: string }
 ) {
   const query = setQueryString({ id, ...params })
   const url = query ? `/api/v1/post?${query}` : null

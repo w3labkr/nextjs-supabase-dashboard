@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { SignOutButton } from '@/components/signout-button'
 
+import { getUserUrl } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useProfileAPI } from '@/queries/sync'
 
@@ -52,7 +53,7 @@ const AccountMenu = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href={`/${profile?.username}`} className="cursor-pointer">
+          <Link href={getUserUrl(profile?.username)} className="cursor-pointer">
             {t('AccountMenu.profile')}
           </Link>
         </DropdownMenuItem>

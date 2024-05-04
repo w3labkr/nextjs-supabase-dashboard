@@ -1,11 +1,24 @@
 'use client'
 
 import useSWR from 'swr'
+import { createClient } from '@/lib/supabase/client'
 import { setQueryString } from '@/lib/utils'
 import { PostAPI, PostsAPI, CountPostsAPI } from '@/types/api'
 
-export function usePostAPI(id: number | null) {
-  const url = id ? `/api/v1/post?id=${id}` : null
+export async function setPostViews(id: number) {
+  const supabase = createClient()
+  const { data } = await supabase.rpc('set_post_views', { pid: id })
+
+  return { views: data }
+}
+
+export function usePostAPI(
+  id: number | null,
+  params?: { uid?: string; slug?: string }
+) {
+  const query = setQueryString({ id, ...params })
+  const url = query ? `/api/v1/post?${query}` : null
+
   const {
     data: response,
     error,

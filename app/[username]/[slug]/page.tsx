@@ -4,34 +4,34 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import dayjs from 'dayjs'
-import { getAuthorUrl } from '@/lib/utils'
+import { getUserUrl } from '@/lib/utils'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { RelatedPosts } from '@/components/related-posts'
 
 import { PreviewAlert } from './preview-alert'
+import { Analytics } from './analytics'
 
 import { Post } from '@/types/database'
 import {
   getUser,
   getPostAPI,
   getAdjacentPostAPI,
-  setPostViews,
+  getProfileAPI,
 } from '@/queries/async'
 
 export async function generateMetadata(
   {
     params: { username, slug },
-    searchParams,
   }: {
     params: { username: string; slug: string }
-    searchParams?: { preview?: string }
   },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+  const { profile } = await getProfileAPI(null, { username })
   const { post } = await getPostAPI(null, {
-    username,
+    uid: profile?.id,
     slug: decodeURIComponent(slug),
   })
 
@@ -54,8 +54,9 @@ export default async function PostPage({
   params: { username: string; slug: string }
   searchParams?: { preview?: string }
 }) {
+  const { profile } = await getProfileAPI(null, { username })
   const { post } = await getPostAPI(null, {
-    username,
+    uid: profile?.id,
     slug: decodeURIComponent(slug),
   })
   const { previousPost, nextPost } = await getAdjacentPostAPI(
@@ -66,19 +67,16 @@ export default async function PostPage({
   if (!post) notFound()
 
   const { user } = await getUser()
-  const preview = searchParams?.preview
 
-  if (preview === 'true') {
-    if (post?.user_id !== user?.id) notFound()
+  if (searchParams?.preview === 'true') {
+    if (user && post?.user_id !== user?.id) notFound()
   } else {
     if (post?.status !== 'publish') notFound()
   }
 
-  if (!preview) setPostViews(post?.id)
-
   return (
     <>
-      {preview && <PreviewAlert />}
+      <Analytics post={post} />
       <Header />
       <main className="min-h-[80vh] pb-40 pt-16">
         <div className="container min-w-0 flex-1 overflow-auto">
@@ -109,7 +107,10 @@ function PostMeta({ post }: { post: Post }) {
     <div className="mb-8 space-x-1">
       <time dateTime={datetime}>{dayjs(datetime).format('MMMM D, YYYY')}</time>
       <span>— by</span>
-      <Link href={getAuthorUrl(post) ?? '#'} className="hover:underline">
+      <Link
+        href={getUserUrl(post?.profile?.username) ?? '#'}
+        className="hover:underline"
+      >
         {post?.profile?.full_name}
       </Link>
     </div>

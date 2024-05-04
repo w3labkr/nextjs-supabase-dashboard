@@ -1,4 +1,3 @@
-import { kebabCase } from 'lodash'
 import { Post } from '@/types/database'
 
 export function absoluteUrl(pathname?: string): string {
@@ -28,25 +27,37 @@ export function setQueryString<T extends Record<string, any>>(
   return new URLSearchParams(params).toString()
 }
 
-export function getPostPath(post: Post | null, slug?: string): string | null {
-  const username = post?.profile?.username
-  const slugified = kebabCase(slug ?? post?.slug ?? undefined)
+export function getPostPath(
+  post: Post | null,
+  slug: string | null
+): string | null {
+  if (!post) return null
 
-  return post ? `/${username}/posts/${slugified}` : null
+  const username = post?.profile?.username
+  const postname = slug ?? post?.slug
+
+  return postname ? `/${username}/${postname}` : null
 }
 
-export function getPostUrl(post: Post | null, slug?: string): string | null {
+export function getPostUrl(
+  post: Post | null,
+  slug: string | null
+): string | null {
+  if (!post) return null
+
   const path = getPostPath(post, slug)
 
   return path ? absoluteUrl(path) : null
 }
 
-export function getAuthorPath(post: Post | null): string | null {
-  return post ? `/${post?.profile?.username}` : null
+export function getUserPath(username: string | null): string | null {
+  return username ? `/${username}` : null
 }
 
-export function getAuthorUrl(post: Post | null): string | null {
-  const path = getAuthorPath(post)
+export function getUserUrl(username: string | null): string | null {
+  if (!username) return null
+
+  const path = getUserPath(username)
 
   return path ? absoluteUrl(path) : null
 }
