@@ -7,21 +7,6 @@ export interface SiteConfig {
   description: string
 }
 
-export interface MobileNavItem {
-  id: number
-  href: string
-  title: string
-  translate?: 'yes' | 'no'
-}
-
-export interface MobileSiteConfig {
-  name: string
-  title: string
-  symbol: LucideIconName
-  description: string
-  nav: MobileNavItem[]
-}
-
 export interface DashboardMiniNavSubItem {
   id: number
   href: string

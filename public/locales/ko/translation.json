@@ -208,12 +208,6 @@
     "please_tell_us_a_little_about_yourself": "당신에 대해 조금 알려주세요."
   },
 
-  "MobileNavigation": {
-    "home": "홈",
-    "pricing": "가격",
-    "contact_us": "연락하기"
-  },
-
   "DashboardNavigation": {
     "dashboard": "대시보드",
     "posts": "글",
@@ -284,7 +278,8 @@
   "LinkButton": {
     "signin": "로그인",
     "signup": "가입하기",
-    "dashboard": "대시보드"
+    "dashboard": "대시보드",
+    "profile": "프로필"
   },
 
   "Pagination": {

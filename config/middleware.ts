@@ -22,12 +22,12 @@ export const accessDenied: MiddlewareAccessDenied[] = [
   },
   {
     from: '/auth/signin',
-    to: '/dashboard/settings/profile',
+    to: '/dashboard',
     isAuthenticated: true,
   },
   {
     from: '/auth/signup',
-    to: '/dashboard/settings/profile',
+    to: '/dashboard',
     isAuthenticated: true,
   },
 ]

@@ -208,12 +208,6 @@
     "please_tell_us_a_little_about_yourself": "Please tell us a little about yourself."
   },
 
-  "MobileNavigation": {
-    "home": "Home",
-    "pricing": "Pricing",
-    "contact_us": "Contact Us"
-  },
-
   "DashboardNavigation": {
     "dashboard": "Dashboard",
     "posts": "Posts",
@@ -284,7 +278,8 @@
   "LinkButton": {
     "signin": "Sign In",
     "signup": "Sign Up",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "profile": "Profile"
   },
 
   "Pagination": {
