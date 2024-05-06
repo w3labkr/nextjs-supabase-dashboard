@@ -58,7 +58,7 @@ export async function PUT(request: NextRequest) {
   const result = await supabase
     .from('emails')
     .insert({ email: formData?.email, user_id: uid })
-    .select()
+    .select('*')
     .single()
 
   if (result?.error) {
@@ -98,7 +98,7 @@ export async function DELETE(request: NextRequest) {
     .delete()
     .eq('user_id', uid)
     .eq('email', formData?.email)
-    .select()
+    .select('*')
     .single()
 
   if (result?.error) {

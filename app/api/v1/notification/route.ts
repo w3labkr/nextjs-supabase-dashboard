@@ -19,9 +19,8 @@ export async function GET(request: NextRequest) {
   const supabase = createClient()
   const result = await supabase
     .from('notifications')
-    .select()
+    .select('*')
     .eq('user_id', uid)
-    .limit(1)
     .single()
 
   if (result?.error) {
@@ -53,7 +52,7 @@ export async function POST(request: NextRequest) {
     .from('notifications')
     .update(formData)
     .eq('user_id', uid)
-    .select()
+    .select('*')
     .single()
 
   if (result?.error) {

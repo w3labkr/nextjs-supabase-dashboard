@@ -49,7 +49,6 @@ export async function getAdjacentPostAPI(
       post_type: params?.type ?? 'post',
       post_status: params?.status ?? 'publish',
     })
-    .limit(1)
     .single()
 
   if (adjacent?.previous_id) {

@@ -9,6 +9,7 @@ import { getUserUrl } from '@/lib/utils'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { RelatedPosts } from '@/components/related-posts'
+import { PostProvider } from './post-provider'
 import { Analytics } from './analytics'
 
 import { Post } from '@/types/database'
@@ -18,9 +19,6 @@ import {
   getAdjacentPostAPI,
   getProfileAPI,
 } from '@/queries/async'
-
-// revalidate the data at most every hour
-// export const revalidate = process.env.NODE_ENV === 'production' ? 3600 : 0
 
 export async function generateMetadata(
   {
@@ -77,8 +75,8 @@ export default async function PostPage({
   )
 
   return (
-    <>
-      <Analytics post={post} />
+    <PostProvider value={{ post }}>
+      <Analytics />
       <Header />
       <main className="min-h-[80vh] pb-40 pt-16">
         <div className="container min-w-0 flex-1 overflow-auto">
@@ -90,7 +88,7 @@ export default async function PostPage({
         </div>
       </main>
       <Footer />
-    </>
+    </PostProvider>
   )
 }
 

@@ -401,7 +401,6 @@
   },
 
   "Alert": {
-    "heads_up": "Heads up!",
-    "this_is_a_preview_page": "This is a preview page."
+    "heads_up": "Heads up!"
   }
 }

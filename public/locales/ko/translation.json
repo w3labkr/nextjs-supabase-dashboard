@@ -401,7 +401,6 @@
   },
 
   "Alert": {
-    "heads_up": "주의하세요!",
-    "this_is_a_preview_page": "미리보기 페이지입니다."
+    "heads_up": "주의하세요!"
   }
 }

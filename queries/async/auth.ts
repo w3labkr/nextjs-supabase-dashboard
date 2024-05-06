@@ -20,16 +20,14 @@ export async function getUser() {
 
   const { data: user } = await supabase
     .rpc('get_user', { uid: session?.id })
-    .limit(1)
     .single()
 
   if (!user) return { user: null, role: null, plan: null }
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select()
+    .select('*')
     .eq('id', session?.id)
-    .limit(1)
     .single()
 
   if (!profile) return { user: null, role: null, plan: null }

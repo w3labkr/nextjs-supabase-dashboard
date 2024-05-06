@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const result = await supabase.from('emails').select().eq('user_id', uid)
+  const result = await supabase.from('emails').select('*').eq('user_id', uid)
 
   if (result?.error) {
     return NextResponse.json(

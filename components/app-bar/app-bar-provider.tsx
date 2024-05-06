@@ -11,10 +11,12 @@ const AppBarContext = React.createContext<AppBarContextProps | undefined>(
 )
 
 function AppBarProvider({ children }: { children: React.ReactNode }) {
-  const value = React.useMemo(() => ({ height: 'h-[50px]' }), [])
+  const memoValue = React.useMemo(() => ({ height: 'h-[50px]' }), [])
 
   return (
-    <AppBarContext.Provider value={value}>{children}</AppBarContext.Provider>
+    <AppBarContext.Provider value={memoValue}>
+      {children}
+    </AppBarContext.Provider>
   )
 }
 

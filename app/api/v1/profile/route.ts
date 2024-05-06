@@ -17,9 +17,8 @@ export async function GET(request: NextRequest) {
   const supabase = createClient()
   const result = await supabase
     .from('profiles')
-    .select()
+    .select('*')
     .match(match)
-    .limit(1)
     .single()
 
   if (result?.error) {
@@ -67,7 +66,7 @@ export async function POST(request: NextRequest) {
     .from('profiles')
     .update(formData)
     .eq('id', id)
-    .select()
+    .select('*')
     .single()
 
   if (result?.error) {

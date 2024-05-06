@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     .from('users')
     .update(formData)
     .eq('id', id)
-    .select()
+    .select('*')
     .single()
 
   if (result?.error) {

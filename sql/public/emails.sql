@@ -23,7 +23,7 @@ create policy "Users can update their own email." on emails for update to authen
 create policy "Users can delete their own email." on emails for delete to authenticated using ( auth.uid() = user_id );
 
 -- Update a column timestamp on every update.
--- create extension if not exists moddatetime schema extensions;
+create extension if not exists moddatetime schema extensions;
 
 -- assuming the table name is "emails", and a timestamp column "updated_at"
 -- this trigger will set the "updated_at" column to the current timestamp for every update

@@ -42,8 +42,6 @@ const AddButton = (props: AddButtonProps) => {
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      toast.success(t('FormMessage.added_successfully'))
-
       router.push(`/dashboard/posts/edit?id=${result?.data?.id}`)
     } catch (e: unknown) {
       const err = (e as Error)?.message

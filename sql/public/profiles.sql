@@ -7,7 +7,7 @@ create table profiles (
   id uuid not null references auth.users on delete cascade primary key,
   created_at timestamptz default now(),
   updated_at timestamptz default now(),
-  username text unique not null,
+  username text not null,
   email varchar(255),
   full_name text,
   first_name text,
@@ -15,7 +15,8 @@ create table profiles (
   age integer,
   avatar_url text,
   website text,
-  bio text
+  bio text,
+  unique (username)
 );
 
 -- Secure the table
@@ -51,6 +52,5 @@ begin
 end;
 $$ language plpgsql;
 
-create trigger on_username_updated
-  after update of username on profiles
+create trigger on_username_updated after update of username on profiles
   for each row execute function handle_username_changed_at();

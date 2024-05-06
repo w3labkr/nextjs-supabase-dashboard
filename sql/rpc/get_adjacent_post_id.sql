@@ -13,12 +13,10 @@ returns table(previous_id bigint, next_id bigint)
 security definer
 as $$
 begin
-
   return query
   select max(case when id < pid then id end) as previous,
   min(case when id > pid then id end) as next
   from posts
   where user_id = uid and type = post_type and status = post_status;
-
 end;
 $$ language plpgsql;

@@ -17,6 +17,5 @@ begin
 end;
 $$ language plpgsql;
 
-create trigger on_auth_user_password_updated
-  after update of encrypted_password on auth.users
+create trigger on_auth_user_password_updated after update of encrypted_password on auth.users
   for each row execute function handle_has_set_password();

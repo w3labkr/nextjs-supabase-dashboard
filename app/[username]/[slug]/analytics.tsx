@@ -1,10 +1,12 @@
 'use client'
 
 import * as React from 'react'
-import { Post } from '@/types/database'
 import { setPostViews } from '@/queries/sync'
+import { usePost } from './post-provider'
 
-const Analytics = ({ post }: { post: Post }) => {
+const Analytics = () => {
+  const { post } = usePost()
+
   React.useEffect(() => {
     if (post) {
       const views = async () => {
@@ -13,6 +15,8 @@ const Analytics = ({ post }: { post: Post }) => {
       views()
     }
   }, [post])
+
+  return null
 }
 
 export { Analytics }

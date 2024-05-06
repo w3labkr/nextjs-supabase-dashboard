@@ -8,7 +8,7 @@ import { Paging } from '@/components/paging'
 import { Post } from '@/types/database'
 
 interface LatestPostsProps {
-  posts: Post[]
+  posts: Post[] | null
   className?: string
 }
 
@@ -18,11 +18,13 @@ const LatestPosts = (props: LatestPostsProps) => {
   return (
     <div className="space-y-16">
       <div className={cn('columns-1 gap-8 space-y-8', className)}>
-        {posts?.length > 0
-          ? posts?.map((post: Post) => <PostItem key={post?.id} post={post} />)
-          : null}
+        {posts && posts?.length > 0 ? (
+          posts?.map((post: Post) => <PostItem key={post?.id} post={post} />)
+        ) : (
+          <EmptyItem />
+        )}
       </div>
-      {posts?.length > 0 ? <Paging /> : null}
+      {posts && posts?.length > 0 ? <Paging /> : null}
     </div>
   )
 }
@@ -50,6 +52,10 @@ const PostItem = ({ post }: { post: Post }) => {
       </div>
     </div>
   )
+}
+
+const EmptyItem = () => {
+  return <div>No posts yet.</div>
 }
 
 export { LatestPosts, type LatestPostsProps }

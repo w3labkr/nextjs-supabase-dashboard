@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
     .update({ email_confirmed_at: now })
     .eq('user_id', payload?.user_id)
     .eq('email', payload?.email)
-    .select()
+    .select('*')
     .single()
 
   if (result?.error) {

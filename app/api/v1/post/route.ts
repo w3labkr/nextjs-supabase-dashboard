@@ -25,7 +25,6 @@ export async function GET(request: NextRequest) {
     .from('posts')
     .select('*, profile:profiles(*)')
     .match(match)
-    .limit(1)
     .single()
 
   if (result?.error) {
