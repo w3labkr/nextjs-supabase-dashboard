@@ -29,7 +29,7 @@ export function setQueryString<T extends Record<string, any>>(
 
 export function getPostPath(
   post: Post | null,
-  slug: string | null
+  slug?: string | null
 ): string | null {
   if (!post) return null
 
@@ -41,7 +41,7 @@ export function getPostPath(
 
 export function getPostUrl(
   post: Post | null,
-  slug: string | null
+  slug?: string | null
 ): string | null {
   if (!post) return null
 

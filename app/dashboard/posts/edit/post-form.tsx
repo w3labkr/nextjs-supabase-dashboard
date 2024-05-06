@@ -68,12 +68,12 @@ const PostForm = ({ id }: { id: number }) => {
             </div>
             <Editor form={form} post={post} />
             <MetaboxSlug form={form} post={post} />
-            <MetaboxExcerpt form={form} />
-            {/* <MetaboxRevisions form={form} /> */}
+            <MetaboxExcerpt form={form} post={post} />
+            {/* <MetaboxRevisions form={form} post={post} /> */}
           </div>
           <div className="space-y-0">
             <MetaboxPublish form={form} post={post} />
-            <MetaboxThumbnail form={form} />
+            <MetaboxThumbnail form={form} post={post} />
           </div>
         </div>
       </form>

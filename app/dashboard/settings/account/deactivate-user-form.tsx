@@ -104,7 +104,12 @@ const DeactivateUserForm = (props: DeactivateUserFormProps) => {
   )
 }
 
-const EmailField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+interface FormFieldProps {
+  form: UseFormReturn<FormValues>
+}
+
+const EmailField = (props: FormFieldProps) => {
+  const { form } = props
   const { t } = useTranslation()
 
   return (
@@ -124,7 +129,8 @@ const EmailField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const PasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const PasswordField = (props: FormFieldProps) => {
+  const { form } = props
   const { t } = useTranslation()
 
   return (
@@ -151,11 +157,8 @@ const PasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const ConfirmationPhraseField = ({
-  form,
-}: {
-  form: UseFormReturn<FormValues>
-}) => {
+const ConfirmationPhraseField = (props: FormFieldProps) => {
+  const { form } = props
   const { trans } = useTrans()
 
   return (
@@ -179,7 +182,8 @@ const ConfirmationPhraseField = ({
   )
 }
 
-const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const SubmitButton = (props: FormFieldProps) => {
+  const { form } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
@@ -217,9 +221,7 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
         method: 'POST',
         body: JSON.stringify({
           formData: { deleted: new Date().toISOString() },
-          options: {
-            revalidatePath: getUserPath(user?.profile?.username),
-          },
+          options: { revalidatePaths: getUserPath(user?.profile?.username) },
         }),
       })
       if (deleted?.error) throw new Error(deleted?.error?.message)

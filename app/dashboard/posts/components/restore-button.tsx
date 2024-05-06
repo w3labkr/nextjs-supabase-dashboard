@@ -37,12 +37,7 @@ const RestoreButton = (props: RestoreButtonProps) => {
         method: 'POST',
         body: JSON.stringify({
           formData: { user_id: uid, status: 'draft', deleted_at: null },
-          options: {
-            revalidatePath: [
-              getPostPath(post),
-              getUserPath(post?.profile?.username),
-            ],
-          },
+          options: { revalidatePaths: getPostPath(post) },
         }),
       })
 

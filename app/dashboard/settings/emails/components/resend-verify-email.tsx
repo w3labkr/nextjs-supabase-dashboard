@@ -9,7 +9,12 @@ import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { Email } from '@/types/database'
 
-const ResendVerifyEmail = ({ item }: { item: Email }) => {
+interface ResendVerifyEmailProps {
+  item: Email
+}
+
+const ResendVerifyEmail = (props: ResendVerifyEmailProps) => {
+  const { item } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()

@@ -10,14 +10,16 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 
+import { Post } from '@/types/database'
 import { UseFormReturn } from 'react-hook-form'
 import { FormValues } from '../../post-form'
 
-interface MetaboxRevisionsProps {
+interface MetaboxProps {
   form: UseFormReturn<FormValues>
+  post: Post | null
 }
 
-const MetaboxRevisions = (props: MetaboxRevisionsProps) => {
+const MetaboxRevisions = (props: MetaboxProps) => {
   const { form } = props
   const { t } = useTranslation()
 
@@ -37,4 +39,4 @@ const MetaboxRevisions = (props: MetaboxRevisionsProps) => {
   )
 }
 
-export { MetaboxRevisions, type MetaboxRevisionsProps }
+export { MetaboxRevisions }

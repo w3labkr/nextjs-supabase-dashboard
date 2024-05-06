@@ -53,7 +53,10 @@ const AccountMenu = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href={getUserUrl(profile?.username)} className="cursor-pointer">
+          <Link
+            href={getUserUrl(profile?.username ?? null) ?? '#'}
+            className="cursor-pointer"
+          >
             {t('AccountMenu.profile')}
           </Link>
         </DropdownMenuItem>

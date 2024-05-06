@@ -23,7 +23,12 @@ const EmailList = () => {
   )
 }
 
-const EmailItem = ({ item }: { item: Email }) => {
+interface EmailItemProps {
+  item: Email
+}
+
+const EmailItem = (props: EmailItemProps) => {
+  const { item } = props
   const { t } = useTranslation()
   const { user } = useAuth()
 
@@ -60,7 +65,8 @@ const EmailItem = ({ item }: { item: Email }) => {
   )
 }
 
-const VisibleInEmails = ({ item }: { item: Email }) => {
+const VisibleInEmails = (props: EmailItemProps) => {
+  const { item } = props
   const { t } = useTranslation()
 
   if (!item?.email_confirmed_at) return null
@@ -73,7 +79,8 @@ const VisibleInEmails = ({ item }: { item: Email }) => {
   )
 }
 
-const ReceivesNotifications = ({ item }: { item: Email }) => {
+const ReceivesNotifications = (props: EmailItemProps) => {
+  const { item } = props
   const { t } = useTranslation()
   const { user } = useAuth()
 
@@ -88,7 +95,8 @@ const ReceivesNotifications = ({ item }: { item: Email }) => {
   )
 }
 
-const UnverifiedEmails = ({ item }: { item: Email }) => {
+const UnverifiedEmails = (props: EmailItemProps) => {
+  const { item } = props
   const { t } = useTranslation()
 
   if (item?.email_confirmed_at) return null
@@ -107,7 +115,8 @@ const UnverifiedEmails = ({ item }: { item: Email }) => {
   )
 }
 
-const NotVisibleInEmails = ({ item }: { item: Email }) => {
+const NotVisibleInEmails = (props: EmailItemProps) => {
+  const { item } = props
   const { t } = useTranslation()
 
   if (item?.email_confirmed_at) return null

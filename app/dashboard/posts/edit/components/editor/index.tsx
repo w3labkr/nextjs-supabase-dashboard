@@ -9,9 +9,9 @@ import EventInfo from '@ckeditor/ckeditor5-utils/src/eventinfo'
 import { defaultLng } from '@/i18next.config'
 import { useAppSelector } from '@/lib/redux/hooks'
 
+import { Post } from '@/types/database'
 import { UseFormReturn } from 'react-hook-form'
 import { FormValues } from '../../post-form'
-import { Post } from '@/types/database'
 
 import '@/ckeditor5/build/translations/ko.js'
 import './style.css'
@@ -152,13 +152,13 @@ const editorConfiguration: EditorConfig = {
   // extraPlugins: [],
 }
 
-export default function Editor({
-  form,
-  post,
-}: {
+interface MetaboxProps {
   form: UseFormReturn<FormValues>
   post: Post | null
-}) {
+}
+
+const Editor = (props: MetaboxProps) => {
+  const { form, post } = props
   const resolvedLanguage = useAppSelector(
     (state) => state?.i18n?.resolvedLanguage
   )
@@ -189,3 +189,5 @@ export default function Editor({
     />
   )
 }
+
+export default Editor

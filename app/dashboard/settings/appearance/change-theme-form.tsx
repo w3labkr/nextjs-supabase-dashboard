@@ -46,7 +46,12 @@ const ChangeThemeForm = () => {
   )
 }
 
-const ThemeField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+interface FormFieldProps {
+  form: UseFormReturn<FormValues>
+}
+
+const ThemeField = (props: FormFieldProps) => {
+  const { form } = props
   return (
     <FormField
       control={form.control}
@@ -120,7 +125,8 @@ const ThemeField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const SubmitButton = (props: FormFieldProps) => {
+  const { form } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()

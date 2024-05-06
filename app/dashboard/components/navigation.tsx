@@ -57,9 +57,11 @@ interface NavItemProps {
 }
 
 const NavItem = (props: NavItemProps) => {
-  const { item, user_role } = props
+  const {
+    item: { separator, label, translate, items },
+    user_role,
+  } = props
   const { t } = useTranslation()
-  const { separator, label, translate, items } = item
 
   return (
     <React.Fragment>
@@ -85,8 +87,9 @@ interface NavSubItemProps {
 }
 
 const NavSubItem = (props: NavSubItemProps) => {
-  const { item } = props
-  const { href, iconName, title, translate, disabled } = item
+  const {
+    item: { href, iconName, title, translate, disabled },
+  } = props
   const pathname = usePathname()
 
   return (

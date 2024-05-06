@@ -16,20 +16,20 @@ import {
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 
+import { useSWRConfig } from 'swr'
+import { fetcher, getPostPath, getPostUrl, getUserPath } from '@/lib/utils'
+import { PostAPI } from '@/types/api'
+
+import { Post } from '@/types/database'
 import { UseFormReturn } from 'react-hook-form'
 import { FormValues } from '../../post-form'
 
-import { useSWRConfig } from 'swr'
-import { fetcher, getPostPath, getUserPath } from '@/lib/utils'
-import { PostAPI } from '@/types/api'
-import { Post } from '@/types/database'
-
-interface MetaboxPublishProps {
+interface MetaboxProps {
   form: UseFormReturn<FormValues>
   post: Post | null
 }
 
-const MetaboxPublish = (props: MetaboxPublishProps) => {
+const MetaboxPublish = (props: MetaboxProps) => {
   const { form, post } = props
   const { t } = useTranslation()
 
@@ -83,13 +83,8 @@ const MetaboxPublish = (props: MetaboxPublishProps) => {
   )
 }
 
-const DraftButton = ({
-  form,
-  post,
-}: {
-  form: UseFormReturn<FormValues>
-  post: Post | null
-}) => {
+const DraftButton = (props: MetaboxProps) => {
+  const { form, post } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
@@ -110,12 +105,7 @@ const DraftButton = ({
         method: 'POST',
         body: JSON.stringify({
           formData: Object.assign({}, formValues, values),
-          options: {
-            revalidatePath: [
-              getPostPath(post),
-              getUserPath(post?.profile?.username),
-            ],
-          },
+          options: { revalidatePaths: getPostPath(post) },
         }),
       })
 
@@ -149,13 +139,8 @@ const DraftButton = ({
   )
 }
 
-const ViewButton = ({
-  form,
-  post,
-}: {
-  form: UseFormReturn<FormValues>
-  post: Post | null
-}) => {
+const ViewButton = (props: MetaboxProps) => {
+  const { form, post } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
@@ -169,7 +154,7 @@ const ViewButton = ({
 
       const path = getPostPath(post)
 
-      if (path) router.push(`${path}?preview=true`)
+      if (path) router.push(path)
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -185,18 +170,13 @@ const ViewButton = ({
       onClick={form.handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
-      {t('PostMetabox.preview')}
+      {t('PostMetabox.view')}
     </Button>
   )
 }
 
-const PreviewButton = ({
-  form,
-  post,
-}: {
-  form: UseFormReturn<FormValues>
-  post: Post | null
-}) => {
+const PreviewButton = (props: MetaboxProps) => {
+  const { form, post } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
@@ -219,7 +199,7 @@ const PreviewButton = ({
         method: 'POST',
         body: JSON.stringify({
           formData: Object.assign({}, formValues, values),
-          options: { revalidatePath: path },
+          options: { revalidatePaths: path },
         }),
       })
 
@@ -253,13 +233,8 @@ const PreviewButton = ({
   )
 }
 
-const TrashButton = ({
-  form,
-  post,
-}: {
-  form: UseFormReturn<FormValues>
-  post: Post | null
-}) => {
+const TrashButton = (props: MetaboxProps) => {
+  const { form, post } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
@@ -288,12 +263,7 @@ const TrashButton = ({
             status: 'trash',
             deleted_at: now,
           },
-          options: {
-            revalidatePath: [
-              getPostPath(post),
-              getUserPath(post?.profile?.username),
-            ],
-          },
+          options: { revalidatePaths: getPostPath(post) },
         }),
       })
 
@@ -328,13 +298,8 @@ const TrashButton = ({
   )
 }
 
-const PublishButton = ({
-  form,
-  post,
-}: {
-  form: UseFormReturn<FormValues>
-  post: Post | null
-}) => {
+const PublishButton = (props: MetaboxProps) => {
+  const { form, post } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
@@ -357,12 +322,7 @@ const PublishButton = ({
           formData: post?.published_at
             ? Object.assign({}, formValues, values)
             : Object.assign({}, formValues, values, { published_at: now }),
-          options: {
-            revalidatePath: [
-              getPostPath(post),
-              getUserPath(post?.profile?.username),
-            ],
-          },
+          options: { revalidatePaths: getPostPath(post) },
         }),
       })
 
@@ -398,4 +358,4 @@ const PublishButton = ({
   )
 }
 
-export { MetaboxPublish, type MetaboxPublishProps }
+export { MetaboxPublish }

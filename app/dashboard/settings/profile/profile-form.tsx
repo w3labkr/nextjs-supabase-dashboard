@@ -71,7 +71,12 @@ const ProfileForm = () => {
   )
 }
 
-const FullNameField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+interface FormFieldProps {
+  form: UseFormReturn<FormValues>
+}
+
+const FullNameField = (props: FormFieldProps) => {
+  const { form } = props
   const { t } = useTranslation()
 
   return (
@@ -96,7 +101,8 @@ const FullNameField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const EmailField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const EmailField = (props: FormFieldProps) => {
+  const { form } = props
   const { t } = useTranslation()
   const { user } = useAuth()
   const { emails } = useEmailsAPI(user?.id ?? null)
@@ -157,7 +163,8 @@ const EmailField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const BioField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const BioField = (props: FormFieldProps) => {
+  const { form } = props
   const { t } = useTranslation()
 
   return (
@@ -182,7 +189,8 @@ const BioField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const SubmitButton = (props: FormFieldProps) => {
+  const { form } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
@@ -211,7 +219,7 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
         method: 'POST',
         body: JSON.stringify({
           formData: { ...values, email: email.replace('unassigned', '') },
-          options: { revalidatePath: getUserPath(profile?.username) },
+          options: { revalidatePaths: getUserPath(profile?.username) },
         }),
       })
 

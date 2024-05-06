@@ -6,13 +6,13 @@ import { setPostViews } from '@/queries/sync'
 
 const Analytics = ({ post }: { post: Post }) => {
   React.useEffect(() => {
-    const views = async () => {
-      const result = await setPostViews(post?.id)
+    if (post) {
+      const views = async () => {
+        await setPostViews(post?.id)
+      }
+      views()
     }
-    views()
-  }, [])
-
-  return null
+  }, [post])
 }
 
 export { Analytics }

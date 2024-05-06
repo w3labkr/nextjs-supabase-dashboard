@@ -81,13 +81,17 @@ const PrimaryEmailAddress = () => {
   )
 }
 
-const EmailField = ({
-  form,
-  primaryEmail,
-}: {
+interface FormFieldProps {
   form: UseFormReturn<FormValues>
+}
+
+interface EmailFieldProps extends FormFieldProps {
   primaryEmail: Email | null
-}) => {
+}
+
+const EmailField = (props: EmailFieldProps) => {
+  const { form, primaryEmail } = props
+
   const { t } = useTranslation()
   const { user } = useAuth()
   const { emails } = useEmailsAPI(user?.id ?? null)
@@ -132,7 +136,8 @@ const EmailField = ({
   )
 }
 
-const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const SubmitButton = (props: FormFieldProps) => {
+  const { form } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()

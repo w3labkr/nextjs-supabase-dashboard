@@ -11,14 +11,16 @@ import {
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 
+import { Post } from '@/types/database'
 import { UseFormReturn } from 'react-hook-form'
 import { FormValues } from '../../post-form'
 
-interface MetaboxThumbnailProps {
+interface MetaboxProps {
   form: UseFormReturn<FormValues>
+  post: Post | null
 }
 
-const MetaboxThumbnail = (props: MetaboxThumbnailProps) => {
+const MetaboxThumbnail = (props: MetaboxProps) => {
   const { form } = props
   const { t } = useTranslation()
 
@@ -36,4 +38,4 @@ const MetaboxThumbnail = (props: MetaboxThumbnailProps) => {
   )
 }
 
-export { MetaboxThumbnail, type MetaboxThumbnailProps }
+export { MetaboxThumbnail }

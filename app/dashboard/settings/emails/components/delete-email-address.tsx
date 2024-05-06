@@ -24,7 +24,12 @@ import { useAuth } from '@/hooks/use-auth'
 import { EmailsAPI } from '@/types/api'
 import { Email } from '@/types/database'
 
-const DeleteEmailAddress = ({ item }: { item: Email }) => {
+interface DeleteEmailAddressProps {
+  item: Email
+}
+
+const DeleteEmailAddress = (props: DeleteEmailAddressProps) => {
+  const { item } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()

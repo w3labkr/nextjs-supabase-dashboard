@@ -57,11 +57,12 @@ const NotificationsForm = () => {
   )
 }
 
-const MarketingEmailsField = ({
-  form,
-}: {
+interface FormFieldProps {
   form: UseFormReturn<FormValues>
-}) => {
+}
+
+const MarketingEmailsField = (props: FormFieldProps) => {
+  const { form } = props
   const { t } = useTranslation()
 
   return (
@@ -87,7 +88,8 @@ const MarketingEmailsField = ({
   )
 }
 
-const SecurityEmailsField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const SecurityEmailsField = (props: FormFieldProps) => {
+  const { form } = props
   const { t } = useTranslation()
 
   return (
@@ -118,7 +120,8 @@ const SecurityEmailsField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const SubmitButton = (props: FormFieldProps) => {
+  const { form } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()

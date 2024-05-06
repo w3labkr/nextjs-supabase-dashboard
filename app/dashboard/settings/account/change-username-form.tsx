@@ -54,7 +54,12 @@ const ChangeUsernameForm = () => {
   )
 }
 
-const UsernameField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+interface FormFieldProps {
+  form: UseFormReturn<FormValues>
+}
+
+const UsernameField = (props: FormFieldProps) => {
+  const { form } = props
   const { t } = useTranslation()
 
   return (
@@ -79,7 +84,8 @@ const UsernameField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const SubmitButton = (props: FormFieldProps) => {
+  const { form } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
@@ -102,9 +108,7 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
         method: 'POST',
         body: JSON.stringify({
           formData: { username: formValues?.username },
-          options: {
-            revalidatePath: getUserPath(profile?.username),
-          },
+          options: { revalidatePaths: getUserPath(profile?.username) },
         }),
       })
 

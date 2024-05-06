@@ -58,7 +58,13 @@ const ChangeLanguageForm = () => {
   )
 }
 
-const LanguageField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+interface FormFieldProps {
+  form: UseFormReturn<FormValues>
+}
+
+const LanguageField = (props: FormFieldProps) => {
+  const { form } = props
+
   return (
     <FormField
       control={form.control}
@@ -88,7 +94,8 @@ const LanguageField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const SubmitButton = (props: FormFieldProps) => {
+  const { form } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t, i18n } = useTranslation()

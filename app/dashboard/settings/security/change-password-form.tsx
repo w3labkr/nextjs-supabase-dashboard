@@ -78,7 +78,12 @@ const ChangePasswordForm = (props: ChangePasswordFormProps) => {
   )
 }
 
-const OldPasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+interface FormFieldprops {
+  form: UseFormReturn<FormValues>
+}
+
+const OldPasswordField = (props: FormFieldprops) => {
+  const { form } = props
   const { t } = useTranslation()
 
   return (
@@ -105,7 +110,8 @@ const OldPasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const NewPasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const NewPasswordField = (props: FormFieldprops) => {
+  const { form } = props
   const { t } = useTranslation()
 
   return (
@@ -132,11 +138,8 @@ const NewPasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const ConfirmNewPasswordField = ({
-  form,
-}: {
-  form: UseFormReturn<FormValues>
-}) => {
+const ConfirmNewPasswordField = (props: FormFieldprops) => {
+  const { form } = props
   const { t } = useTranslation()
 
   return (
@@ -163,7 +166,8 @@ const ConfirmNewPasswordField = ({
   )
 }
 
-const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const SubmitButton = (props: FormFieldprops) => {
+  const { form } = props
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()

@@ -20,14 +20,16 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 
+import { Post } from '@/types/database'
 import { UseFormReturn } from 'react-hook-form'
 import { FormValues } from '../../post-form'
 
-interface MetaboxExcerptProps {
+interface MetaboxProps {
   form: UseFormReturn<FormValues>
+  post: Post | null
 }
 
-const MetaboxExcerpt = (props: MetaboxExcerptProps) => {
+const MetaboxExcerpt = (props: MetaboxProps) => {
   const { form } = props
   const { t } = useTranslation()
 
@@ -58,4 +60,4 @@ const MetaboxExcerpt = (props: MetaboxExcerptProps) => {
   )
 }
 
-export { MetaboxExcerpt, type MetaboxExcerptProps }
+export { MetaboxExcerpt }

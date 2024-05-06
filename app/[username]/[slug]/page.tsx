@@ -9,8 +9,6 @@ import { getUserUrl } from '@/lib/utils'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { RelatedPosts } from '@/components/related-posts'
-
-import { PreviewAlert } from './preview-alert'
 import { Analytics } from './analytics'
 
 import { Post } from '@/types/database'
@@ -20,6 +18,9 @@ import {
   getAdjacentPostAPI,
   getProfileAPI,
 } from '@/queries/async'
+
+// revalidate the data at most every hour
+// export const revalidate = process.env.NODE_ENV === 'production' ? 3600 : 0
 
 export async function generateMetadata(
   {
@@ -59,10 +60,6 @@ export default async function PostPage({
     uid: profile?.id,
     slug: decodeURIComponent(slug),
   })
-  const { previousPost, nextPost } = await getAdjacentPostAPI(
-    post?.id ?? null,
-    { uid: post?.user_id ?? null }
-  )
 
   if (!post) notFound()
 
@@ -73,6 +70,11 @@ export default async function PostPage({
   } else {
     if (post?.status !== 'publish') notFound()
   }
+
+  const { previousPost, nextPost } = await getAdjacentPostAPI(
+    post?.id ?? null,
+    { uid: post?.user_id ?? null }
+  )
 
   return (
     <>

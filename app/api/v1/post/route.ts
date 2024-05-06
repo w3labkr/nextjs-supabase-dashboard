@@ -1,7 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { ApiError } from '@/lib/utils'
+import { ApiError, revalidatePaths } from '@/lib/utils'
 import { authorize } from '@/queries/async'
 
 export async function GET(request: NextRequest) {
@@ -69,19 +68,14 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const originalPath = options?.revalidatePath
+  const revalidated = revalidatePaths(options?.revalidatePaths)
 
-  if (originalPath && typeof originalPath === 'string') {
-    revalidatePath(decodeURIComponent(originalPath))
-  } else if (originalPath && Array.isArray(originalPath)) {
-    originalPath.forEach((path: string) =>
-      revalidatePath(decodeURIComponent(path))
-    )
-  }
-
-  return originalPath
-    ? NextResponse.json({ data: result?.data, error: null, revalidated: true })
-    : NextResponse.json({ data: result?.data, error: null })
+  return NextResponse.json({
+    data: result?.data,
+    error: null,
+    revalidated,
+    now: Date.now(),
+  })
 }
 
 export async function PUT(request: NextRequest) {
@@ -133,19 +127,14 @@ export async function PUT(request: NextRequest) {
     )
   }
 
-  const originalPath = options?.revalidatePath
+  const revalidated = revalidatePaths(options?.revalidatePaths)
 
-  if (originalPath && typeof originalPath === 'string') {
-    revalidatePath(decodeURIComponent(originalPath))
-  } else if (originalPath && Array.isArray(originalPath)) {
-    originalPath.forEach((path: string) =>
-      revalidatePath(decodeURIComponent(path))
-    )
-  }
-
-  return originalPath
-    ? NextResponse.json({ data: result?.data, error: null, revalidated: true })
-    : NextResponse.json({ data: result?.data, error: null })
+  return NextResponse.json({
+    data: result?.data,
+    error: null,
+    revalidated,
+    now: Date.now(),
+  })
 }
 
 export async function DELETE(request: NextRequest) {
@@ -178,17 +167,12 @@ export async function DELETE(request: NextRequest) {
     )
   }
 
-  const originalPath = options?.revalidatePath
+  const revalidated = revalidatePaths(options?.revalidatePaths)
 
-  if (originalPath && typeof originalPath === 'string') {
-    revalidatePath(decodeURIComponent(originalPath))
-  } else if (originalPath && Array.isArray(originalPath)) {
-    originalPath.forEach((path: string) =>
-      revalidatePath(decodeURIComponent(path))
-    )
-  }
-
-  return originalPath
-    ? NextResponse.json({ data: result?.data, error: null, revalidated: true })
-    : NextResponse.json({ data: result?.data, error: null })
+  return NextResponse.json({
+    data: result?.data,
+    error: null,
+    revalidated,
+    now: Date.now(),
+  })
 }

@@ -21,16 +21,16 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
+import { Post } from '@/types/database'
 import { UseFormReturn } from 'react-hook-form'
 import { FormValues } from '../../post-form'
-import { Post } from '@/types/database'
 
-interface MetaboxSlugProps {
+interface MetaboxProps {
   form: UseFormReturn<FormValues>
   post: Post | null
 }
 
-const MetaboxSlug = (props: MetaboxSlugProps) => {
+const MetaboxSlug = (props: MetaboxProps) => {
   const { form, post } = props
   const { t } = useTranslation()
 
@@ -38,7 +38,7 @@ const MetaboxSlug = (props: MetaboxSlugProps) => {
   const slug = form.watch('slug')
 
   const debounceSetValue = React.useCallback(
-    debounce((value: string) => form.setValue('slug', value), 1000),
+    debounce((value: string) => form.setValue('slug', value.trim()), 1000),
     []
   )
 
@@ -78,4 +78,4 @@ const MetaboxSlug = (props: MetaboxSlugProps) => {
   )
 }
 
-export { MetaboxSlug, type MetaboxSlugProps }
+export { MetaboxSlug }

@@ -20,12 +20,8 @@ export interface MiniNavigationProps
   user_role?: string
 }
 
-export function MiniNavigation({
-  className,
-  nav,
-  user_role,
-  ...props
-}: MiniNavigationProps) {
+export function MiniNavigation(props: MiniNavigationProps) {
+  const { className, nav, user_role, ...rest } = props
   const { height } = useAppBar()
 
   return (
@@ -35,7 +31,7 @@ export function MiniNavigation({
         'w-14 min-w-14',
         className
       )}
-      {...props}
+      {...rest}
     >
       <div className={cn('flex items-center justify-center border-b', height)}>
         <Link href="/">
@@ -59,8 +55,11 @@ interface NavItemProps {
   user_role?: string
 }
 
-function NavItem({ item, user_role }: NavItemProps) {
-  const { separator, items } = item
+function NavItem(props: NavItemProps) {
+  const {
+    item: { separator, items },
+    user_role,
+  } = props
 
   return (
     <React.Fragment>
@@ -78,8 +77,10 @@ interface NavSubItemProps {
   item: DashboardMiniNavSubItem
 }
 
-function NavSubItem({ item }: NavSubItemProps) {
-  const { href, iconName, title, translate, disabled, badge } = item
+function NavSubItem(props: NavSubItemProps) {
+  const {
+    item: { href, iconName, title, translate, disabled, badge },
+  } = props
   const pathname = usePathname()
 
   return (

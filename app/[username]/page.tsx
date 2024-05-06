@@ -14,6 +14,9 @@ import { Aside } from './aside'
 
 import { getProfileAPI, getPostsAPI } from '@/queries/async'
 
+// revalidate the data at most every hour
+export const revalidate = process.env.NODE_ENV === 'production' ? 3600 : 0
+
 export async function generateMetadata(
   {
     params: { username },

@@ -1,7 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { ApiError } from '@/lib/utils'
+import { ApiError, revalidatePaths } from '@/lib/utils'
 import { authorize } from '@/queries/async'
 
 export async function GET(request: NextRequest) {

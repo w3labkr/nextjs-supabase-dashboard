@@ -37,9 +37,7 @@ const DeleteButton = (props: DeleteButtonProps) => {
         method: 'DELETE',
         body: JSON.stringify({
           formData: { user_id: uid },
-          options: {
-            revalidatePath: [getPostPath(post)],
-          },
+          options: { revalidatePaths: getPostPath(post) },
         }),
       })
 

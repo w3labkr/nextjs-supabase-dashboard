@@ -10,7 +10,7 @@ import {
   PaginationPrevious,
 } from '@/components/ui-custom/pagination'
 
-export interface PagingProps {
+interface PagingProps {
   page: number // Current page number
   perPage: number // Number of posts to display per page
   setPage: React.Dispatch<React.SetStateAction<number>>

@@ -39,12 +39,7 @@ const TrashButton = (props: TrashButtonProps) => {
         method: 'POST',
         body: JSON.stringify({
           formData: { user_id: uid, status: 'trash', deleted_at: now },
-          options: {
-            revalidatePath: [
-              getPostPath(post),
-              getUserPath(post?.profile?.username),
-            ],
-          },
+          options: { revalidatePaths: getPostPath(post) },
         }),
       })
 
