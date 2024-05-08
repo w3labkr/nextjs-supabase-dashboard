@@ -6,7 +6,7 @@ drop function if exists verify_user_password;
 
 create or replace function verify_user_password(uid uuid, password text)
 returns boolean
-security definer set search_path = extensions, public, auth
+security definer set search_path = public, extensions, auth
 as $$
 begin
   return exists (

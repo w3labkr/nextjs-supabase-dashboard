@@ -44,10 +44,10 @@ const PostItem = ({ post }: { post: Post }) => {
         </time>
         <span>— by</span>
         <Link
-          href={getUserUrl(post?.profile?.username) ?? '#'}
+          href={getUserUrl(post?.creator?.username) ?? '#'}
           className="hover:underline"
         >
-          {post?.profile?.full_name}
+          {post?.creator?.full_name}
         </Link>
       </div>
     </div>

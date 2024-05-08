@@ -5,11 +5,11 @@ import { createClient } from '@/lib/supabase/client'
 import { setQueryString } from '@/lib/utils'
 import { PostAPI, PostsAPI, CountPostsAPI } from '@/types/api'
 
-export async function setPostViews(id: number) {
+export async function setPostView(id: number) {
   const supabase = createClient()
-  const { data } = await supabase.rpc('set_post_views', { pid: id })
+  const result = await supabase.rpc('set_post_view', { pid: id })
 
-  return { views: data }
+  return result
 }
 
 export function usePostAPI(

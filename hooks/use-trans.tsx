@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 
 export function useTrans() {
   const { t } = useTranslation()
-  const setRefs = React.useRef(new Map()).current
 
   const trans = React.useCallback(
     <T extends Record<string, any>, U extends Record<string, any>>(

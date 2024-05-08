@@ -33,7 +33,7 @@ export function getPostPath(
 ): string | null {
   if (!post) return null
 
-  const username = post?.profile?.username
+  const username = post?.creator?.username
   const postname = slug ?? post?.slug
 
   return postname ? `/${username}/${postname}` : null

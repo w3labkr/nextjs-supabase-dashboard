@@ -210,7 +210,7 @@ const PostItem = ({ post }: { post: Post }) => {
           )}
         </div>
       </TableCell>
-      <TableCell align="center">{post?.profile?.full_name}</TableCell>
+      <TableCell align="center">{post?.creator?.full_name}</TableCell>
       <TableCell align="center">
         {post?.status === 'private' ? (
           <LucideIcon name="LockKeyhole" className="size-4 min-w-4" />
@@ -219,7 +219,7 @@ const PostItem = ({ post }: { post: Post }) => {
         )}
       </TableCell>
       <TableCell align="center">
-        {post?.views?.toLocaleString('en-US')}
+        {post?.views?.view_count?.toLocaleString('en-US')}
       </TableCell>
       <TableCell align="center">
         {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm')}

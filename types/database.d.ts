@@ -27,7 +27,8 @@ export type PostStatus =
 export type PostType = 'post' | 'page' | 'revision'
 
 export type Post = Tables<'posts'> & {
-  profile: Tables<'profiles'>
+  creator: Tables<'profiles'>
+  views: Tables<'post_views'>
 }
 
 export type CountPosts = {

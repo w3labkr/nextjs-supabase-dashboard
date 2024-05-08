@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
   const listQuery = supabase
     .from('posts')
-    .select('*, profile:profiles(*)')
+    .select('*, creator:profiles(*), views:post_views(*)')
     .match(match)
     .range((page - 1) * perPage, page * perPage - 1)
     .order('created_at', { ascending: false })

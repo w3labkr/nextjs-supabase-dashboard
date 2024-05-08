@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   const supabase = createClient()
   const result = await supabase
     .from('posts')
-    .select('*, profile:profiles(*)')
+    .select('*, creator:profiles(*), views:post_views(*)')
     .match(match)
     .single()
 
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     .from('posts')
     .update(body)
     .match({ id, user_id })
-    .select('*, profile:profiles(*)')
+    .select('*, creator:profiles(*), views:post_views(*)')
     .single()
 
   if (result?.error) {
@@ -113,23 +113,37 @@ export async function PUT(request: NextRequest) {
     )
   }
 
-  const result = await supabase
+  const inserted = await supabase
     .from('posts')
-    .insert({ ...formData, user_id: uid, profile_id: uid })
-    .select('*, profile:profiles(*)')
+    .insert({ ...formData, user_id: uid })
+    .select('*, creator:profiles(*)')
     .single()
 
-  if (result?.error) {
+  if (inserted?.error) {
     return NextResponse.json(
-      { data: null, error: result?.error },
+      { data: null, error: inserted?.error },
       { status: 400 }
     )
   }
 
+  const views = await supabase
+    .from('post_views')
+    .insert({ id: inserted?.data?.id })
+    .select('*')
+    .single()
+
+  if (views?.error) {
+    return NextResponse.json(
+      { data: null, error: views?.error },
+      { status: 400 }
+    )
+  }
+
+  const data = { ...inserted?.data, views: views?.data }
   const revalidated = revalidatePaths(options?.revalidatePaths)
 
   return NextResponse.json({
-    data: result?.data,
+    data,
     error: null,
     revalidated,
     now: Date.now(),
@@ -152,16 +166,20 @@ export async function DELETE(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const result = await supabase
-    .from('posts')
-    .delete()
-    .match({ id, user_id })
-    .select('*, profile:profiles(*)')
-    .single()
+  const deleted = await supabase.from('posts').delete().match({ id, user_id })
 
-  if (result?.error) {
+  if (deleted?.error) {
     return NextResponse.json(
-      { data: null, error: result?.error },
+      { data: null, error: deleted?.error },
+      { status: 400 }
+    )
+  }
+
+  const views = await supabase.from('post_views').delete().match({ id })
+
+  if (views?.error) {
+    return NextResponse.json(
+      { data: null, error: views?.error },
       { status: 400 }
     )
   }
@@ -169,7 +187,7 @@ export async function DELETE(request: NextRequest) {
   const revalidated = revalidatePaths(options?.revalidatePaths)
 
   return NextResponse.json({
-    data: result?.data,
+    data: null,
     error: null,
     revalidated,
     now: Date.now(),

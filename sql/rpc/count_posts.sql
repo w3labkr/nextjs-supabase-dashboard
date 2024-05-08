@@ -5,10 +5,12 @@ drop function if exists count_posts;
 
 create or replace function count_posts(uid uuid)
 returns table(status text, count bigint)
-security definer
+security definer set search_path = public
 as $$
 begin
-	return query
-	select posts.status, count(*) from posts where user_id = uid group by posts.status;
+  return query
+  select p.status, count(*)
+  from posts p where p.user_id = uid
+  group by p.status;
 end;
 $$ language plpgsql;

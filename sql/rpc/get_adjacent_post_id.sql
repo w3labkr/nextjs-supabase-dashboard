@@ -10,7 +10,7 @@ create or replace function get_adjacent_post_id(
   post_status text default 'publish'
 )
 returns table(previous_id bigint, next_id bigint)
-security definer
+security definer set search_path = public
 as $$
 begin
   return query

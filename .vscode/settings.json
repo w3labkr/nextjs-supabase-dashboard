@@ -146,5 +146,10 @@
     // Configure settings to be overridden for the xml language.
     "[xml]": {
         "editor.tabSize": 2
+    },
+
+    // Configure settings to be overridden for the sql language.
+    "[sql]": {
+        "editor.tabSize": 2
     }
 }

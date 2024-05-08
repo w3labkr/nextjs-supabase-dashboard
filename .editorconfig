@@ -82,6 +82,10 @@ indent_size = 2
 [*.sh]
 indent_size = 2
 
+# SQL
+[*.sql]
+indent_size = 2
+
 # JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write.
 # https://www.json.org/json-en.html
 [*.json]

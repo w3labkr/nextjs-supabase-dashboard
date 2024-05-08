@@ -108,10 +108,10 @@ function PostMeta({ post }: { post: Post }) {
       <time dateTime={datetime}>{dayjs(datetime).format('MMMM D, YYYY')}</time>
       <span>— by</span>
       <Link
-        href={getUserUrl(post?.profile?.username) ?? '#'}
+        href={getUserUrl(post?.creator?.username) ?? '#'}
         className="hover:underline"
       >
-        {post?.profile?.full_name}
+        {post?.creator?.full_name}
       </Link>
     </div>
   )

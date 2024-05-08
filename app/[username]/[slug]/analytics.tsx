@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { setPostViews } from '@/queries/sync'
+import { setPostView } from '@/queries/sync'
 import { usePost } from './post-provider'
 
 const Analytics = () => {
@@ -10,7 +10,7 @@ const Analytics = () => {
   React.useEffect(() => {
     if (post) {
       const views = async () => {
-        await setPostViews(post?.id)
+        await setPostView(post?.id)
       }
       views()
     }

@@ -5,8 +5,8 @@ drop table if exists profiles;
 
 create table profiles (
   id uuid not null references auth.users on delete cascade primary key,
-  created_at timestamptz default now(),
-  updated_at timestamptz default now(),
+  created_at timestamptz default now() not null,
+  updated_at timestamptz default now() not null,
   username text not null,
   email varchar(255),
   full_name text,
@@ -24,9 +24,9 @@ alter table profiles enable row level security;
 
 -- Add row-level security
 create policy "Public profiles are viewable by everyone." on profiles for select to authenticated, anon using ( true );
--- create policy "Users can insert their own profile." on profiles for insert to authenticated with check ( auth.uid() = id );
-create policy "Users can update their own profile." on profiles for update to authenticated using ( auth.uid() = id );
--- create policy "Users can delete their own profile." on profiles for delete to authenticated using ( auth.uid() = id );
+create policy "Users can insert their own profile." on profiles for insert to authenticated with check ( (select auth.uid()) = id );
+create policy "Users can update their own profile." on profiles for update to authenticated using ( (select auth.uid()) = id );
+create policy "Users can delete their own profile." on profiles for delete to authenticated using ( (select auth.uid()) = id );
 
 -- Update a column timestamp on every update.
 create extension if not exists moddatetime schema extensions;

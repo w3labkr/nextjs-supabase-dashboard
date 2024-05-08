@@ -17,7 +17,7 @@ import {
 import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getPostPath, getPostUrl, getUserPath } from '@/lib/utils'
+import { fetcher, getPostPath } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 
 import { Post } from '@/types/database'
@@ -68,9 +68,7 @@ const MetaboxPublish = (props: MetaboxProps) => {
             <li className="flex items-center">
               <LucideIcon name="BarChart" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.post_views')}: `}
-              {post?.views === null || post?.views === undefined
-                ? 0
-                : post?.views}
+              {post?.views?.view_count ?? 0}
             </li>
           </ul>
           <div className="flex justify-between">
@@ -97,8 +95,7 @@ const DraftButton = (props: MetaboxProps) => {
       if (!post) throw new Error('Require is not defined.')
 
       const slugified = kebabCase(slug)
-      const now = new Date().toISOString()
-      const values = { slug: slugified, status: 'draft', updated_at: now }
+      const values = { slug: slugified, status: 'draft' }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
@@ -190,8 +187,7 @@ const PreviewButton = (props: MetaboxProps) => {
       if (!post) throw new Error('Require is not defined.')
 
       const slugified = kebabCase(slug)
-      const now = new Date().toISOString()
-      const values = { slug: slugified, status: 'draft', updated_at: now }
+      const values = { slug: slugified, status: 'draft' }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const path = getPostPath(post)
@@ -313,7 +309,7 @@ const PublishButton = (props: MetaboxProps) => {
 
       const slugified = kebabCase(slug)
       const now = new Date().toISOString()
-      const values = { slug: slugified, status: 'publish', updated_at: now }
+      const values = { slug: slugified, status: 'publish' }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {

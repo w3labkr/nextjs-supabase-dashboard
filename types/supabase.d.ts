@@ -20,27 +20,27 @@ export type Database = {
     Tables: {
       emails: {
         Row: {
-          created_at: string | null
+          created_at: string
           email: string
           email_confirmed_at: string | null
           id: number
-          updated_at: string | null
+          updated_at: string
           user_id: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           email: string
           email_confirmed_at?: string | null
           id?: number
-          updated_at?: string | null
+          updated_at?: string
           user_id: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           email?: string
           email_confirmed_at?: string | null
           id?: number
-          updated_at?: string | null
+          updated_at?: string
           user_id?: string
         }
         Relationships: [
@@ -55,27 +55,27 @@ export type Database = {
       }
       notifications: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: number
-          marketing_emails: boolean | null
-          security_emails: boolean | null
-          updated_at: string | null
+          marketing_emails: boolean
+          security_emails: boolean
+          updated_at: string
           user_id: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           id?: number
-          marketing_emails?: boolean | null
-          security_emails?: boolean | null
-          updated_at?: string | null
+          marketing_emails?: boolean
+          security_emails?: boolean
+          updated_at?: string
           user_id: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           id?: number
-          marketing_emails?: boolean | null
-          security_emails?: boolean | null
-          updated_at?: string | null
+          marketing_emails?: boolean
+          security_emails?: boolean
+          updated_at?: string
           user_id?: string
         }
         Relationships: [
@@ -88,80 +88,144 @@ export type Database = {
           },
         ]
       }
-      posts: {
+      post_views: {
         Row: {
-          banned_until: string | null
-          content: string | null
-          created_at: string | null
-          deleted_at: string | null
-          excerpt: string | null
+          created_at: string
           id: number
-          is_ban: boolean | null
-          password: string | null
-          profile_id: string | null
-          published_at: string | null
-          slug: string | null
-          status: string | null
-          thumbnail_url: string | null
-          title: string | null
-          type: string | null
-          updated_at: string | null
-          user_id: string | null
-          views: number | null
+          updated_at: string
+          view_count: number
         }
         Insert: {
-          banned_until?: string | null
-          content?: string | null
-          created_at?: string | null
-          deleted_at?: string | null
-          excerpt?: string | null
-          id?: number
-          is_ban?: boolean | null
-          password?: string | null
-          profile_id?: string | null
-          published_at?: string | null
-          slug?: string | null
-          status?: string | null
-          thumbnail_url?: string | null
-          title?: string | null
-          type?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-          views?: number | null
+          created_at?: string
+          id: number
+          updated_at?: string
+          view_count?: number
         }
         Update: {
-          banned_until?: string | null
-          content?: string | null
-          created_at?: string | null
-          deleted_at?: string | null
-          excerpt?: string | null
+          created_at?: string
           id?: number
-          is_ban?: boolean | null
-          password?: string | null
-          profile_id?: string | null
-          published_at?: string | null
-          slug?: string | null
-          status?: string | null
-          thumbnail_url?: string | null
-          title?: string | null
-          type?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-          views?: number | null
+          updated_at?: string
+          view_count?: number
         }
         Relationships: [
           {
-            foreignKeyName: 'posts_profile_id_fkey'
-            columns: ['profile_id']
+            foreignKeyName: 'post_views_id_fkey'
+            columns: ['id']
+            isOneToOne: true
+            referencedRelation: 'posts'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      post_votes: {
+        Row: {
+          created_at: string
+          id: number
+          is_dislike: number
+          is_like: number
+          post_id: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          is_dislike?: number
+          is_like?: number
+          post_id: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          is_dislike?: number
+          is_like?: number
+          post_id?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'post_votes_post_id_fkey'
+            columns: ['post_id']
+            isOneToOne: false
+            referencedRelation: 'posts'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'post_votes_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
             referencedRelation: 'profiles'
             referencedColumns: ['id']
           },
+        ]
+      }
+      posts: {
+        Row: {
+          banned_until: string | null
+          content: string | null
+          created_at: string
+          deleted_at: string | null
+          excerpt: string | null
+          id: number
+          is_ban: boolean
+          metadata: Json | null
+          password: string | null
+          published_at: string | null
+          slug: string | null
+          status: string
+          thumbnail_url: string | null
+          title: string | null
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          banned_until?: string | null
+          content?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          excerpt?: string | null
+          id?: number
+          is_ban?: boolean
+          metadata?: Json | null
+          password?: string | null
+          published_at?: string | null
+          slug?: string | null
+          status?: string
+          thumbnail_url?: string | null
+          title?: string | null
+          type?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          banned_until?: string | null
+          content?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          excerpt?: string | null
+          id?: number
+          is_ban?: boolean
+          metadata?: Json | null
+          password?: string | null
+          published_at?: string | null
+          slug?: string | null
+          status?: string
+          thumbnail_url?: string | null
+          title?: string | null
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
           {
             foreignKeyName: 'posts_user_id_fkey'
             columns: ['user_id']
             isOneToOne: false
-            referencedRelation: 'users'
+            referencedRelation: 'profiles'
             referencedColumns: ['id']
           },
         ]
@@ -171,13 +235,13 @@ export type Database = {
           age: number | null
           avatar_url: string | null
           bio: string | null
-          created_at: string | null
+          created_at: string
           email: string | null
           first_name: string | null
           full_name: string | null
           id: string
           last_name: string | null
-          updated_at: string | null
+          updated_at: string
           username: string
           website: string | null
         }
@@ -185,13 +249,13 @@ export type Database = {
           age?: number | null
           avatar_url?: string | null
           bio?: string | null
-          created_at?: string | null
+          created_at?: string
           email?: string | null
           first_name?: string | null
           full_name?: string | null
           id: string
           last_name?: string | null
-          updated_at?: string | null
+          updated_at?: string
           username: string
           website?: string | null
         }
@@ -199,13 +263,13 @@ export type Database = {
           age?: number | null
           avatar_url?: string | null
           bio?: string | null
-          created_at?: string | null
+          created_at?: string
           email?: string | null
           first_name?: string | null
           full_name?: string | null
           id?: string
           last_name?: string | null
-          updated_at?: string | null
+          updated_at?: string
           username?: string
           website?: string | null
         }
@@ -221,48 +285,48 @@ export type Database = {
       }
       role_permissions: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: number
           permission: string
           role: string
-          updated_at: string | null
+          updated_at: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           id?: number
           permission: string
           role: string
-          updated_at?: string | null
+          updated_at?: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           id?: number
           permission?: string
           role?: string
-          updated_at?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
       user_plans: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: number
           plan: string
-          updated_at: string | null
+          updated_at: string
           user_id: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           id?: number
           plan?: string
-          updated_at?: string | null
+          updated_at?: string
           user_id: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           id?: number
           plan?: string
-          updated_at?: string | null
+          updated_at?: string
           user_id?: string
         }
         Relationships: [
@@ -277,24 +341,24 @@ export type Database = {
       }
       user_roles: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: number
           role: string
-          updated_at: string | null
+          updated_at: string
           user_id: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           id?: number
           role?: string
-          updated_at?: string | null
+          updated_at?: string
           user_id: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           id?: number
           role?: string
-          updated_at?: string | null
+          updated_at?: string
           user_id?: string
         }
         Relationships: [
@@ -310,32 +374,32 @@ export type Database = {
       users: {
         Row: {
           banned_until: string | null
-          created_at: string | null
+          created_at: string
           deleted_at: string | null
-          has_set_password: boolean | null
+          has_set_password: boolean
           id: string
-          is_ban: boolean | null
-          updated_at: string | null
+          is_ban: boolean
+          updated_at: string
           username_changed_at: string | null
         }
         Insert: {
           banned_until?: string | null
-          created_at?: string | null
+          created_at?: string
           deleted_at?: string | null
-          has_set_password?: boolean | null
+          has_set_password?: boolean
           id: string
-          is_ban?: boolean | null
-          updated_at?: string | null
+          is_ban?: boolean
+          updated_at?: string
           username_changed_at?: string | null
         }
         Update: {
           banned_until?: string | null
-          created_at?: string | null
+          created_at?: string
           deleted_at?: string | null
-          has_set_password?: boolean | null
+          has_set_password?: boolean
           id?: string
-          is_ban?: boolean | null
-          updated_at?: string | null
+          is_ban?: boolean
+          updated_at?: string
           username_changed_at?: string | null
         }
         Relationships: [
@@ -353,6 +417,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      auth_users_to_public_users: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       count_posts: {
         Args: {
           uid: string
@@ -361,6 +429,13 @@ export type Database = {
           status: string
           count: number
         }[]
+      }
+      create_new_user: {
+        Args: {
+          email: string
+          password: string
+        }
+        Returns: string
       }
       generate_username: {
         Args: {
@@ -380,6 +455,16 @@ export type Database = {
           next_id: number
         }[]
       }
+      get_post_vote: {
+        Args: {
+          pid: number
+        }
+        Returns: {
+          id: number
+          like_count: number
+          dislike_count: number
+        }[]
+      }
       get_user: {
         Args: {
           uid: string
@@ -397,11 +482,20 @@ export type Database = {
           plan: string
         }[]
       }
-      set_post_views: {
+      set_post_view: {
         Args: {
           pid: number
         }
-        Returns: number
+        Returns: undefined
+      }
+      set_post_vote: {
+        Args: {
+          uid: string
+          pid: number
+          islike?: number
+          isdislike?: number
+        }
+        Returns: undefined
       }
       verify_user_password: {
         Args: {

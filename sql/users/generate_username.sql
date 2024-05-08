@@ -5,7 +5,7 @@ drop function if exists generate_username;
 
 create or replace function generate_username(email text)
 returns text
-security definer
+security definer set search_path = public
 as $$
 declare
   new_username text;
