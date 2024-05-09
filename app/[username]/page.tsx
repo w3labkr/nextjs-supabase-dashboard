@@ -77,7 +77,7 @@ export default async function ProfilePage({
                 <div className="hidden sm:inline"></div>
                 <TabsList className="w-full sm:w-auto">
                   <TabsItem value="recent" iconName="History" />
-                  <TabsItem value="stars" iconName="Star" />
+                  <TabsItem value="favorite" iconName="Heart" />
                 </TabsList>
               </div>
               <Separator className="my-4" />
@@ -91,7 +91,7 @@ export default async function ProfilePage({
                   />
                 </PagingProvider>
               </TabsContent>
-              <TabsContent value="stars">
+              <TabsContent value="favorite">
                 In non augue ut augue elementum tristique vitae id diam.
               </TabsContent>
             </Tabs>

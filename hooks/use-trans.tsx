@@ -25,7 +25,7 @@ export function useTrans() {
           if (typeof token === 'string' && token.startsWith('{{')) {
             token =
               typeof values[k] === 'number'
-                ? values[k].toLocaleString('en-US')
+                ? values[k]?.toLocaleString()
                 : values[k]
           }
         })

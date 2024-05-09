@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { ApiError, revalidatePaths } from '@/lib/utils'
+import { ApiError, revalidatePaths, setMeta } from '@/lib/utils'
 import { authorize } from '@/queries/async'
 
 export async function GET(request: NextRequest) {
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
   const listQuery = supabase
     .from('posts')
-    .select('*, creator:profiles(*), views:post_views(*)')
+    .select('*, creator:profiles(*), meta:postmeta(*)')
     .match(match)
     .range((page - 1) * perPage, page * perPage - 1)
     .order('created_at', { ascending: false })
@@ -55,8 +55,10 @@ export async function GET(request: NextRequest) {
     )
   }
 
+  const data = list?.data?.map((d) => setMeta(d))
+
   return NextResponse.json({
-    data: list?.data,
+    data,
     count: total?.count ?? 0,
     error: null,
   })

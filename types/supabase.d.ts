@@ -18,6 +18,48 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      analyses: {
+        Row: {
+          created_at: string
+          id: number
+          ip: unknown | null
+          post_id: number
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          ip?: unknown | null
+          post_id: number
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          ip?: unknown | null
+          post_id?: number
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'analyses_post_id_fkey'
+            columns: ['post_id']
+            isOneToOne: false
+            referencedRelation: 'posts'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'analyses_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       emails: {
         Row: {
           created_at: string
@@ -49,6 +91,48 @@ export type Database = {
             columns: ['user_id']
             isOneToOne: false
             referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      favorites: {
+        Row: {
+          created_at: string
+          id: number
+          is_favorite: number
+          post_id: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          is_favorite?: number
+          post_id: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          is_favorite?: number
+          post_id?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'favorites_post_id_fkey'
+            columns: ['post_id']
+            isOneToOne: false
+            referencedRelation: 'posts'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'favorites_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
             referencedColumns: ['id']
           },
         ]
@@ -88,76 +172,31 @@ export type Database = {
           },
         ]
       }
-      post_views: {
+      postmeta: {
         Row: {
-          created_at: string
           id: number
-          updated_at: string
-          view_count: number
+          meta_key: string | null
+          meta_value: string | null
+          post_id: number
         }
         Insert: {
-          created_at?: string
-          id: number
-          updated_at?: string
-          view_count?: number
+          id?: number
+          meta_key?: string | null
+          meta_value?: string | null
+          post_id: number
         }
         Update: {
-          created_at?: string
           id?: number
-          updated_at?: string
-          view_count?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'post_views_id_fkey'
-            columns: ['id']
-            isOneToOne: true
-            referencedRelation: 'posts'
-            referencedColumns: ['id']
-          },
-        ]
-      }
-      post_votes: {
-        Row: {
-          created_at: string
-          id: number
-          is_dislike: number
-          is_like: number
-          post_id: number
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          is_dislike?: number
-          is_like?: number
-          post_id: number
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          is_dislike?: number
-          is_like?: number
+          meta_key?: string | null
+          meta_value?: string | null
           post_id?: number
-          updated_at?: string
-          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'post_votes_post_id_fkey'
+            foreignKeyName: 'postmeta_post_id_fkey'
             columns: ['post_id']
             isOneToOne: false
             referencedRelation: 'posts'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'post_votes_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'profiles'
             referencedColumns: ['id']
           },
         ]
@@ -171,7 +210,6 @@ export type Database = {
           excerpt: string | null
           id: number
           is_ban: boolean
-          metadata: Json | null
           password: string | null
           published_at: string | null
           slug: string | null
@@ -190,7 +228,6 @@ export type Database = {
           excerpt?: string | null
           id?: number
           is_ban?: boolean
-          metadata?: Json | null
           password?: string | null
           published_at?: string | null
           slug?: string | null
@@ -209,7 +246,6 @@ export type Database = {
           excerpt?: string | null
           id?: number
           is_ban?: boolean
-          metadata?: Json | null
           password?: string | null
           published_at?: string | null
           slug?: string | null
@@ -285,25 +321,19 @@ export type Database = {
       }
       role_permissions: {
         Row: {
-          created_at: string
           id: number
           permission: string
           role: string
-          updated_at: string
         }
         Insert: {
-          created_at?: string
           id?: number
           permission: string
           role: string
-          updated_at?: string
         }
         Update: {
-          created_at?: string
           id?: number
           permission?: string
           role?: string
-          updated_at?: string
         }
         Relationships: []
       }
@@ -371,6 +401,35 @@ export type Database = {
           },
         ]
       }
+      usermeta: {
+        Row: {
+          id: number
+          meta_key: string | null
+          meta_value: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: number
+          meta_key?: string | null
+          meta_value?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: number
+          meta_key?: string | null
+          meta_value?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'usermeta_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       users: {
         Row: {
           banned_until: string | null
@@ -412,6 +471,51 @@ export type Database = {
           },
         ]
       }
+      votes: {
+        Row: {
+          created_at: string
+          id: number
+          is_dislike: number
+          is_like: number
+          post_id: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          is_dislike?: number
+          is_like?: number
+          post_id: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          is_dislike?: number
+          is_like?: number
+          post_id?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'votes_post_id_fkey'
+            columns: ['post_id']
+            isOneToOne: false
+            referencedRelation: 'posts'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'votes_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -424,11 +528,18 @@ export type Database = {
       count_posts: {
         Args: {
           uid: string
+          post_type?: string
         }
         Returns: {
           status: string
           count: number
         }[]
+      }
+      create_new_posts: {
+        Args: {
+          user_email: string
+        }
+        Returns: undefined
       }
       create_new_user: {
         Args: {
@@ -455,16 +566,6 @@ export type Database = {
           next_id: number
         }[]
       }
-      get_post_vote: {
-        Args: {
-          pid: number
-        }
-        Returns: {
-          id: number
-          like_count: number
-          dislike_count: number
-        }[]
-      }
       get_user: {
         Args: {
           uid: string
@@ -482,18 +583,35 @@ export type Database = {
           plan: string
         }[]
       }
-      set_post_view: {
+      get_vote: {
         Args: {
           pid: number
         }
-        Returns: undefined
+        Returns: {
+          id: number
+          like_count: number
+          dislike_count: number
+        }[]
       }
-      set_post_vote: {
+      set_is_dislike: {
         Args: {
           uid: string
           pid: number
-          islike?: number
-          isdislike?: number
+          isdislike: number
+        }
+        Returns: undefined
+      }
+      set_is_like: {
+        Args: {
+          uid: string
+          pid: number
+          islike: number
+        }
+        Returns: undefined
+      }
+      set_view_count: {
+        Args: {
+          pid: number
         }
         Returns: undefined
       }

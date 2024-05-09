@@ -1,5 +1,5 @@
 -- SQL Editor > New query
--- select create_new_user('email', 'password');
+-- select create_new_user('username@example.com', '123456789');
 
 drop function if exists create_new_user;
 
@@ -28,4 +28,3 @@ begin
 end;
 $$ language plpgsql;
 
-select create_new_user('username@example.com', '123456789');

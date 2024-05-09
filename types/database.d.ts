@@ -6,7 +6,11 @@ export type UserRole = 'guest' | 'user' | 'admin' | 'superadmin'
 export type UserPlan = 'free' | 'basic' | 'standard' | 'premium'
 
 export type User = AuthUser & {
-  user: Tables<'users'> & { role: string; plan: string }
+  user: Tables<'users'> & {
+    role: string
+    plan: string
+    meta: Record<string, string>
+  }
   profile: Tables<'profiles'>
 }
 
@@ -28,7 +32,7 @@ export type PostType = 'post' | 'page' | 'revision'
 
 export type Post = Tables<'posts'> & {
   creator: Tables<'profiles'>
-  views: Tables<'post_views'>
+  meta: Record<string, string>
 }
 
 export type CountPosts = {

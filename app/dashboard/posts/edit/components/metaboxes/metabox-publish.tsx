@@ -68,7 +68,7 @@ const MetaboxPublish = (props: MetaboxProps) => {
             <li className="flex items-center">
               <LucideIcon name="BarChart" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.post_views')}: `}
-              {post?.views?.view_count ?? 0}
+              {post?.meta?.view_count ?? '0'}
             </li>
           </ul>
           <div className="flex justify-between">

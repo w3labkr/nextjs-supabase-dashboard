@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { ApiError, revalidatePaths } from '@/lib/utils'
+import { ApiError, revalidatePaths, setMeta } from '@/lib/utils'
 import { authorize } from '@/queries/async'
 
 export async function GET(request: NextRequest) {
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   const supabase = createClient()
   const result = await supabase
     .from('posts')
-    .select('*, creator:profiles(*), views:post_views(*)')
+    .select('*, creator:profiles(*), meta:postmeta(*)')
     .match(match)
     .single()
 
@@ -34,7 +34,9 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  return NextResponse.json({ data: result?.data, error: null })
+  const data = setMeta(result?.data)
+
+  return NextResponse.json({ data, error: null })
 }
 
 export async function POST(request: NextRequest) {
@@ -57,7 +59,7 @@ export async function POST(request: NextRequest) {
     .from('posts')
     .update(body)
     .match({ id, user_id })
-    .select('*, creator:profiles(*), views:post_views(*)')
+    .select('*, creator:profiles(*), meta:postmeta(*)')
     .single()
 
   if (result?.error) {
@@ -67,10 +69,11 @@ export async function POST(request: NextRequest) {
     )
   }
 
+  const data = setMeta(result?.data)
   const revalidated = revalidatePaths(options?.revalidatePaths)
 
   return NextResponse.json({
-    data: result?.data,
+    data,
     error: null,
     revalidated,
     now: Date.now(),
@@ -113,37 +116,23 @@ export async function PUT(request: NextRequest) {
     )
   }
 
-  const inserted = await supabase
+  const result = await supabase
     .from('posts')
     .insert({ ...formData, user_id: uid })
     .select('*, creator:profiles(*)')
     .single()
 
-  if (inserted?.error) {
+  if (result?.error) {
     return NextResponse.json(
-      { data: null, error: inserted?.error },
+      { data: null, error: result?.error },
       { status: 400 }
     )
   }
 
-  const views = await supabase
-    .from('post_views')
-    .insert({ id: inserted?.data?.id })
-    .select('*')
-    .single()
-
-  if (views?.error) {
-    return NextResponse.json(
-      { data: null, error: views?.error },
-      { status: 400 }
-    )
-  }
-
-  const data = { ...inserted?.data, views: views?.data }
   const revalidated = revalidatePaths(options?.revalidatePaths)
 
   return NextResponse.json({
-    data,
+    data: result?.data,
     error: null,
     revalidated,
     now: Date.now(),
@@ -166,20 +155,11 @@ export async function DELETE(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const deleted = await supabase.from('posts').delete().match({ id, user_id })
+  const result = await supabase.from('posts').delete().match({ id, user_id })
 
-  if (deleted?.error) {
+  if (result?.error) {
     return NextResponse.json(
-      { data: null, error: deleted?.error },
-      { status: 400 }
-    )
-  }
-
-  const views = await supabase.from('post_views').delete().match({ id })
-
-  if (views?.error) {
-    return NextResponse.json(
-      { data: null, error: views?.error },
+      { data: null, error: result?.error },
       { status: 400 }
     )
   }

@@ -1,8 +1,6 @@
 -- Custom Claims & Role-based Access Control (RBAC)
 -- https://supabase.com/docs/guides/auth/custom-claims-and-role-based-access-control-rbac
 
-drop function if exists get_user;
-
 drop table if exists user_plans;
 
 -- drop type if exists public.user_plan;

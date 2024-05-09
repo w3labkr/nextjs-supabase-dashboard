@@ -19,7 +19,13 @@ export async function getPostAPI(
 
 export async function getPostsAPI(
   uid: string | null,
-  params?: { page?: number; perPage?: number; status?: string; limit?: number }
+  params?: {
+    page?: number
+    perPage?: number
+    status?: string
+    limit?: number
+    postType?: string
+  }
 ) {
   const query = setQueryString({ uid, ...params })
   const url = query ? `/api/v1/post/list?${query}` : null
@@ -33,7 +39,7 @@ export async function getPostsAPI(
 
 export async function getAdjacentPostAPI(
   id: number | null,
-  params: { uid: string | null; type?: string; status?: string }
+  params: { uid: string | null; status?: string; postType?: string }
 ) {
   let previousPost: Post | null = null
   let nextPost: Post | null = null
@@ -46,7 +52,7 @@ export async function getAdjacentPostAPI(
     .rpc('get_adjacent_post_id', {
       pid: id,
       uid: params?.uid,
-      post_type: params?.type ?? 'post',
+      post_type: params?.postType ?? 'post',
       post_status: params?.status ?? 'publish',
     })
     .single()

@@ -5,12 +5,14 @@ import { notFound } from 'next/navigation'
 
 import dayjs from 'dayjs'
 import { getUserUrl } from '@/lib/utils'
-
+import { LucideIcon } from '@/lib/lucide-icon'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { RelatedPosts } from '@/components/related-posts'
 import { PostProvider } from './post-provider'
-import { Analytics } from './analytics'
+import { Analysis } from './analysis'
+import { ViewCount } from './view-count'
+import { FavoriteButton } from './favorite-button'
 
 import { Post } from '@/types/database'
 import {
@@ -76,7 +78,7 @@ export default async function PostPage({
 
   return (
     <PostProvider value={{ post }}>
-      <Analytics />
+      <Analysis />
       <Header />
       <main className="min-h-[80vh] pb-40 pt-16">
         <div className="container min-w-0 flex-1 overflow-auto">
@@ -104,15 +106,23 @@ function PostMeta({ post }: { post: Post }) {
   const datetime = post?.published_at ?? post?.created_at ?? undefined
 
   return (
-    <div className="mb-8 space-x-1">
-      <time dateTime={datetime}>{dayjs(datetime).format('MMMM D, YYYY')}</time>
-      <span>— by</span>
-      <Link
-        href={getUserUrl(post?.creator?.username) ?? '#'}
-        className="hover:underline"
-      >
-        {post?.creator?.full_name}
-      </Link>
+    <div className="mb-8 flex justify-between">
+      <div className="space-x-1">
+        <time dateTime={datetime}>
+          {dayjs(datetime).format('MMMM D, YYYY')}
+        </time>
+        <span>— by</span>
+        <Link
+          href={getUserUrl(post?.creator?.username) ?? '#'}
+          className="hover:underline"
+        >
+          {post?.creator?.full_name}
+        </Link>
+      </div>
+      <div className="flex space-x-4">
+        <ViewCount count={post?.meta?.view_count} />
+        <FavoriteButton />
+      </div>
     </div>
   )
 }

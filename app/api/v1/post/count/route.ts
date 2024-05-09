@@ -6,6 +6,7 @@ import { authorize } from '@/queries/async'
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const uid = searchParams.get('uid') as string
+  const postType = (searchParams.get('postType') as string) ?? 'post'
 
   const { user } = await authorize(uid)
 
@@ -17,7 +18,7 @@ export async function GET(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const result = await supabase.rpc('count_posts', { uid })
+  const result = await supabase.rpc('count_posts', { uid, post_type: postType })
 
   if (result?.error) {
     return NextResponse.json(

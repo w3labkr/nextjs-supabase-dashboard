@@ -1,6 +1,7 @@
 export { cn } from './tailwind'
 export { fetcher } from './fetcher'
 export { revalidatePaths } from './cache'
+export { setMeta } from './data'
 export {
   httpStatusCodes,
   type HttpStatusCode,

@@ -5,11 +5,10 @@ import { createClient } from '@/lib/supabase/client'
 import { setQueryString } from '@/lib/utils'
 import { PostAPI, PostsAPI, CountPostsAPI } from '@/types/api'
 
-export async function setPostView(id: number) {
+export async function setViewCount(id: number): Promise<void> {
   const supabase = createClient()
-  const result = await supabase.rpc('set_post_view', { pid: id })
 
-  return result
+  await supabase.rpc('set_view_count', { pid: id })
 }
 
 export function usePostAPI(
@@ -38,7 +37,13 @@ export function usePostAPI(
 
 export function usePostsAPI(
   uid: string | null,
-  params?: { page?: number; perPage?: number; status?: string; limit?: number }
+  params?: {
+    page?: number
+    perPage?: number
+    status?: string
+    limit?: number
+    postType?: string
+  }
 ) {
   const query = setQueryString({ uid, ...params })
   const url = query ? `/api/v1/post/list?${query}` : null
@@ -61,8 +66,12 @@ export function usePostsAPI(
   }
 }
 
-export function useCountPostsAPI(uid: string | null) {
-  const url = uid ? `/api/v1/post/count?uid=${uid}` : null
+export function useCountPostsAPI(
+  uid: string | null,
+  params?: { postType?: string }
+) {
+  const query = setQueryString({ uid, ...params })
+  const url = query ? `/api/v1/post/count?${query}` : null
 
   const {
     data: response,

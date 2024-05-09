@@ -1,9 +1,9 @@
 -- SQL Editor > New query
--- select auth_users_to_public_users();
+-- select migrate_user_data();
 
-drop function if exists auth_users_to_public_users;
+drop function if exists migrate_user_data;
 
-create or replace function auth_users_to_public_users()
+create or replace function migrate_user_data()
 returns void
 security definer set search_path = public
 as $$
