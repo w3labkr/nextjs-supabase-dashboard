@@ -32,10 +32,11 @@ import {
 import { Input } from '@/components/ui/input'
 
 import { fetcher, getUserPath } from '@/lib/utils'
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/supabase/client'
 import { User } from '@/types/database'
+import { UserAPI } from '@/types/api'
 import { useAuth } from '@/hooks/use-auth'
-import { useUserAPI } from '@/queries/sync'
+import { useUserAPI } from '@/queries/client'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
@@ -47,8 +48,6 @@ const FormSchema = z.object({
 })
 
 type FormValues = z.infer<typeof FormSchema>
-
-type FetchAPI = { data: null; error: Error } | { data: null; error: null }
 
 const defaultValues: Partial<FormValues> = {
   email: '',
@@ -217,7 +216,7 @@ const SubmitButton = (props: FormFieldProps) => {
       }
 
       const fetchUrl = `/api/v1/user?id=${user?.id}`
-      const deleted = await fetcher<FetchAPI>(fetchUrl, {
+      const deleted = await fetcher<UserAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
           formData: { deleted: new Date().toISOString() },

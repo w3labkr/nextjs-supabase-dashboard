@@ -5,8 +5,23 @@ import {
   Post,
   CountPosts,
   Profile,
+  Favorite,
+  Vote,
+  Analysis,
   User,
 } from '@/types/database'
+
+export type UserAPI =
+  | { data: User | null; error: null }
+  | { data: null; error: Error }
+
+export type UsersAPI =
+  | { data: { users: AuthUser[]; aud: string } & Pagination; error: null }
+  | { data: { users: [] }; error: AuthError }
+
+export type ProfileAPI =
+  | { data: Profile; error: null }
+  | { data: null; error: Error }
 
 export type EmailAPI =
   | { data: Email; error: null }
@@ -21,9 +36,8 @@ export type NotificationAPI =
   | { data: null; error: Error }
 
 export type PostAPI =
-  | { data: Post; error: null }
+  | { data: Post | null; error: null }
   | { data: null; error: Error }
-  | { data: null; error: null }
 
 export type PostsAPI =
   | { data: Post[]; count: number; error: null }
@@ -33,12 +47,14 @@ export type CountPostsAPI =
   | { data: CountPosts[]; count: number; error: null }
   | { data: null; count: null; error: Error }
 
-export type ProfileAPI =
-  | { data: Profile; error: null }
+export type FavoriteAPI =
+  | { data: Favorite | null; error: null }
   | { data: null; error: Error }
 
-export type UserAPI = { data: User; error: null } | { data: null; error: Error }
+export type VoteAPI =
+  | { data: Vote | null; error: null }
+  | { data: null; error: Error }
 
-export type UsersAPI =
-  | { data: { users: AuthUser[]; aud: string } & Pagination; error: null }
-  | { data: { users: [] }; error: AuthError }
+export type AnalysisAPI =
+  | { data: Analysis | null; error: null }
+  | { data: null; error: Error }

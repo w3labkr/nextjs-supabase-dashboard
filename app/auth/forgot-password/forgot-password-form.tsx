@@ -20,7 +20,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/supabase/client'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),

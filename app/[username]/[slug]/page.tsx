@@ -5,7 +5,6 @@ import { notFound } from 'next/navigation'
 
 import dayjs from 'dayjs'
 import { getUserUrl } from '@/lib/utils'
-import { LucideIcon } from '@/lib/lucide-icon'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { RelatedPosts } from '@/components/related-posts'
@@ -20,7 +19,11 @@ import {
   getPostAPI,
   getAdjacentPostAPI,
   getProfileAPI,
-} from '@/queries/async'
+} from '@/queries/server'
+
+// revalidate the data at most every month
+// 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
+export const revalidate = 2678400
 
 export async function generateMetadata(
   {
@@ -121,7 +124,7 @@ function PostMeta({ post }: { post: Post }) {
       </div>
       <div className="flex space-x-4">
         <ViewCount count={post?.meta?.view_count} />
-        <FavoriteButton />
+        <FavoriteButton post={post} />
       </div>
     </div>
   )

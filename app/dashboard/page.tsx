@@ -9,7 +9,7 @@ import { MiniNavigation } from '@/app/dashboard/components/mini-navigation'
 import { DashboardForm } from './dashboard/dashboard-form'
 
 import { dashboardConfig } from '@/config/dashboard'
-import { getUser } from '@/queries/async'
+import { getUser } from '@/queries/server'
 
 export default async function DashboardPage() {
   const { user } = await getUser()

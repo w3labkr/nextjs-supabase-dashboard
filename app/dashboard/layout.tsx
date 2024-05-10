@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
-import { getUser } from '@/queries/async'
+import { getUser } from '@/queries/server'
 
 export default async function DashboardLayout({
   children,

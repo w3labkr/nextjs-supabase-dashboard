@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { createAdminClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/supabase/server'
 import { ApiError } from '@/lib/utils'
-import { authorize } from '@/queries/async'
+import { authorize } from '@/queries/server'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams

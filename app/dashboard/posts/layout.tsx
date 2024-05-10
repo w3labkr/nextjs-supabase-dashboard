@@ -5,7 +5,7 @@ import { AppBar } from '@/components/app-bar'
 import { MiniNavigation } from '@/app/dashboard/components/mini-navigation'
 
 import { dashboardConfig } from '@/config/dashboard'
-import { getUser } from '@/queries/async'
+import { getUser } from '@/queries/server'
 
 export default async function PostListLayout({
   children,

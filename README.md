@@ -29,6 +29,7 @@ Denpendency
     - [Schema Validation](#schema-validation)
     - [Redux Toolkit](#redux-toolkit)
     - [Supabase Cloud Functions](#supabase-cloud-functions)
+    - [Supabase CLI](#supabase-cli)
     - [Supabase Auth](#supabase-auth)
     - [Firebase Auth](#firebase-auth)
     - [Text Editor](#text-editor)
@@ -243,6 +244,54 @@ npm install redux-persist
 ### Supabase Cloud Functions
 
 Run the SQL code in `SQL Editor > New Query`.
+
+Generating Types
+
+- `Api Docs` > `Introduction` > `Generating Types`
+
+### Supabase CLI
+
+Supabase CLI. Manage postgres migrations, run Supabase locally, deploy edge functions. Postgres backups. Generating types from your database schema.
+
+```shell
+npm install supabase --save-dev
+```
+
+Login with your Personal Access Token:
+
+```shell
+npx supabase login
+```
+
+Generate types without init
+
+```shell
+npx supabase gen types typescript --project-id "YOURL_PROJECT_ID" --schema public > types/supabase.ts
+```
+
+Generate types with init
+
+```shell
+npx supabase init
+npx supabase link --project-ref YOURL_PROJECT_ID
+npx supabase gen types typescript --linked > types/supabase.ts
+```
+
+`package.json`
+
+```json
+{
+  "scripts": {
+    "gen-types": "supabase gen types typescript --linked > types/supabase.ts"
+  }
+}
+```
+
+```shell
+npm run gen-types
+```
+
+[Generating types using Supabase CLI](https://supabase.com/docs/guides/api/rest/generating-types)
 
 ### Supabase Auth
 

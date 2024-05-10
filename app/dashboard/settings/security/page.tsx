@@ -5,7 +5,7 @@ import { Description } from '@/components/description'
 import { Separator } from '@/components/ui/separator'
 
 import { ChangePasswordForm } from './change-password-form'
-import { getUser } from '@/queries/async'
+import { getUser } from '@/queries/server'
 
 export default async function SecurityPage() {
   const { user } = await getUser()

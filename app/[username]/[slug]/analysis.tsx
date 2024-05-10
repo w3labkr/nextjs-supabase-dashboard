@@ -1,20 +1,24 @@
 'use client'
 
 import * as React from 'react'
-import { setViewCount } from '@/queries/sync'
 import { usePost } from './post-provider'
+import { createClient } from '@/supabase/client'
 
 const Analysis = () => {
   const { post } = usePost()
 
+  const setViewCount = async (pid: number) => {
+    const supabase = createClient()
+    const result = await supabase.rpc('set_view_count', { pid })
+  }
+
   React.useEffect(() => {
-    if (typeof window !== 'undefined' && post) {
-      const viewCount = async () => {
-        await setViewCount(post?.id)
-      }
-      viewCount()
+    if (typeof window !== 'undefined') {
+      setViewCount(post?.id)
     }
-  }, [post])
+  }, [])
+
+  return null
 }
 
 export { Analysis }

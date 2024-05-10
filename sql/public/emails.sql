@@ -1,6 +1,8 @@
 -- SQL Editor > New query
 -- https://supabase.com/docs/guides/auth/managing-user-data
 
+drop trigger if exists handle_updated_at on emails;
+
 drop table if exists emails;
 
 create table emails (
@@ -27,7 +29,5 @@ create extension if not exists moddatetime schema extensions;
 
 -- assuming the table name is "emails", and a timestamp column "updated_at"
 -- this trigger will set the "updated_at" column to the current timestamp for every update
-drop trigger if exists handle_updated_at on emails;
-
 create trigger handle_updated_at before update on emails
   for each row execute procedure moddatetime (updated_at);

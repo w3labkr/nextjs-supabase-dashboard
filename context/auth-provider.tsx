@@ -3,7 +3,7 @@
 import * as React from 'react'
 
 import { Session, User } from '@supabase/supabase-js'
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/supabase/client'
 
 /**
  * Listen to auth events

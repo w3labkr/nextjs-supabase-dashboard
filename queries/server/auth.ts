@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/supabase/server'
 import { setMeta } from '@/lib/utils'
 
 export async function authorize(id: string) {
@@ -24,7 +24,7 @@ export async function getUser() {
     .single()
 
   const { data: meta } = await supabase
-    .from('usermeta')
+    .from('user_metas')
     .select('*')
     .eq('user_id', session?.id)
 

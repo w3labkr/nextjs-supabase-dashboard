@@ -10,3 +10,12 @@ create table analyses (
   ip inet,
   user_agent text
 );
+
+-- Secure the table
+alter table analyses enable row level security;
+
+-- Add row-level security
+create policy "Public analyses are viewable by everyone." on analyses for select to authenticated, anon using ( true );
+create policy "Users can insert analysis." on analyses for insert to authenticated with check ( true );
+create policy "Users can update analysis." on analyses for update to authenticated using ( true );
+create policy "Users can delete analysis." on analyses for delete to authenticated using ( true );

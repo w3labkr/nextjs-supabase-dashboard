@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { updateSession } from '@/lib/supabase/middleware'
+import { updateSession } from '@/supabase/middleware'
 import { accessDenied } from '@/config/middleware'
 
 // Server Components only have read access to cookies.

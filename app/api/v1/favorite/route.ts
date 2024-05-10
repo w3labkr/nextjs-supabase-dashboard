@@ -1,10 +1,13 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
-import { ApiError, revalidatePaths } from '@/lib/utils'
+import { ApiError, revalidatePaths, setMeta } from '@/lib/utils'
 import { authorize } from '@/queries/server'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
+
+  const id = searchParams.get('id') as string
+  const pid = searchParams.get('pid') as string
   const uid = searchParams.get('uid') as string
 
   const { user } = await authorize(uid)
@@ -16,8 +19,18 @@ export async function GET(request: NextRequest) {
     )
   }
 
+  let match = {}
+
+  if (id) match = { ...match, id }
+  if (pid) match = { ...match, post_id: pid }
+  if (uid) match = { ...match, user_id: uid }
+
   const supabase = createClient()
-  const result = await supabase.from('emails').select('*').eq('user_id', uid)
+  const result = await supabase
+    .from('favorites')
+    .select('*')
+    .match(match)
+    .maybeSingle()
 
   if (result?.error) {
     return NextResponse.json(

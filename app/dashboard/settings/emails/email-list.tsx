@@ -7,7 +7,7 @@ import { DeleteEmailAddress } from './components/delete-email-address'
 import { ResendVerifyEmail } from './components/resend-verify-email'
 
 import { useAuth } from '@/hooks/use-auth'
-import { useEmailsAPI } from '@/queries/sync'
+import { useEmailsAPI } from '@/queries/client'
 import { Email } from '@/types/database'
 
 const EmailList = () => {

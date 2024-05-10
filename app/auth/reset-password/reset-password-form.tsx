@@ -21,7 +21,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 
 const FormSchema = z

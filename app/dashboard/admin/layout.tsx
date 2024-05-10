@@ -11,7 +11,7 @@ import { MiniNavigation } from '@/app/dashboard/components/mini-navigation'
 import { Navigation } from '@/app/dashboard/components/navigation'
 
 import { dashboardConfig, adminConfig } from '@/config/dashboard'
-import { getUser } from '@/queries/async'
+import { getUser } from '@/queries/server'
 
 export default async function AdminLayout({
   children,

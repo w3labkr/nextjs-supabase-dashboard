@@ -31,7 +31,7 @@ import { Button } from '@/components/ui/button'
 import { useSWRConfig } from 'swr'
 import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
-import { useEmailsAPI } from '@/queries/sync'
+import { useEmailsAPI } from '@/queries/client'
 import { EmailAPI } from '@/types/api'
 import { Email } from '@/types/database'
 

@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 
-import { toast } from 'sonner'
 import { LucideIcon } from '@/lib/lucide-icon'
 
 interface ViewCountProps extends React.HTMLAttributes<HTMLDivElement> {

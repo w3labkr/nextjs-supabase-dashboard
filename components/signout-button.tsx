@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { Button, ButtonProps } from '@/components/ui/button'
 
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 
 interface SignOutButtonProps

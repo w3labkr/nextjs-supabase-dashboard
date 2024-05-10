@@ -27,7 +27,7 @@ import {
 } from './components/metaboxes'
 import { Permalink } from './components/permalink'
 
-import { usePostAPI } from '@/queries/sync'
+import { usePostAPI } from '@/queries/client'
 
 const Editor = dynamic(() => import('./components/editor'), { ssr: false })
 

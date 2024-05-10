@@ -39,3 +39,9 @@ export type CountPosts = {
   status: PostStatus
   count: number
 }
+
+export type Favorite = Tables<'favorites'>
+
+export type Vote = Tables<'votes'>
+
+export type Analysis = Tables<'analyses'>

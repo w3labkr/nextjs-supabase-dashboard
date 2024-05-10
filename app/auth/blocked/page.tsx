@@ -9,7 +9,7 @@ import { Logo } from '@/components/logo'
 import { Title } from '@/components/title'
 import { LanguageToggleButton } from '@/components/language-toggle-button'
 
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 
 export default function BlockedPage() {

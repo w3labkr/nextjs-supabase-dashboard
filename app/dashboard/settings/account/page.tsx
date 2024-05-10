@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator'
 
 import { ChangeUsernameForm } from './change-username-form'
 import { DeleteUserForm } from './delete-user-form'
-import { getUser } from '@/queries/async'
+import { getUser } from '@/queries/server'
 
 export default async function AccountPage() {
   const { user } = await getUser()

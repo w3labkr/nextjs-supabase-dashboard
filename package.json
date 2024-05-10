@@ -10,7 +10,8 @@
     "clean:dir": "rm -rf ./node_modules && rm -rf ./.next",
     "clean:cache": "npm cache clean --force",
     "clean": "npm run clean:dir && npm run clean:cache",
-    "reinstall": "npm run clean && npm install"
+    "reinstall": "npm run clean && npm install",
+    "gen-types": "supabase gen types typescript --linked > types/supabase.ts"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^6.2.0",
@@ -106,6 +107,7 @@
     "postcss": "^8.4.33",
     "prettier": "^3.2.4",
     "prettier-plugin-tailwindcss": "^0.5.11",
+    "supabase": "^1.165.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

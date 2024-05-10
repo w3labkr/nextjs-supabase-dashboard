@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/supabase/server'
 import { ApiError, revalidatePaths } from '@/lib/utils'
-import { authorize } from '@/queries/async'
+import { authorize } from '@/queries/server'
 
 import { transporter, sender } from '@/lib/nodemailer'
 import { jwtSign } from '@/lib/jsonwebtoken'

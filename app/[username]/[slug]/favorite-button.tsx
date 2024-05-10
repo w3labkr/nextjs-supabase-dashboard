@@ -1,26 +1,63 @@
 'use client'
 
 import * as React from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 
 import { toast } from 'sonner'
-import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
+import { cn } from '@/lib/utils'
+
+import { useSWRConfig } from 'swr'
+import { createClient } from '@/supabase/client'
+import { Post } from '@/types/database'
+import { useAuth } from '@/hooks/use-auth'
+import { useFavoriteAPI } from '@/queries/client/favorites'
 
 interface FavoriteButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  post: Post
+}
 
 const FavoriteButton = (props: FavoriteButtonProps) => {
-  const { ...rest } = props
+  const { post, ...rest } = props
+
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const { user } = useAuth()
+  const { favorite } = useFavoriteAPI(null, { pid: post?.id, uid: user?.id })
+  const { mutate } = useSWRConfig()
+
   const [isLike, setIsLike] = React.useState<boolean>(false)
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
+  React.useEffect(() => {
+    if (favorite?.is_favorite) {
+      setIsLike(favorite?.is_favorite)
+    }
+  }, [favorite?.is_favorite])
 
   const handleClick = async () => {
     try {
       setIsSubmitting(true)
 
+      if (!user) {
+        router?.push(`/auth/signin?next=${pathname}`)
+        return false
+      }
+
+      const supabase = createClient()
+      const result = await supabase.rpc('set_favorite', {
+        pid: post?.id,
+        uid: post?.user_id,
+        isfavorite: !isLike,
+      })
+
+      if (result?.error) throw new Error(result?.error?.message)
+
       setIsLike(!isLike)
 
-      // ...
+      mutate(`/api/v1/favorite?pid=${post?.id}&uid=${user?.id}`)
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {

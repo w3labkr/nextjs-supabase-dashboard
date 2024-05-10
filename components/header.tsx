@@ -12,7 +12,7 @@ import { MobileNavigation } from '@/components/mobile-navigation'
 import { LinkButton } from '@/components/link-button'
 
 import { useAuth } from '@/hooks/use-auth'
-import { useUserAPI } from '@/queries/sync'
+import { useUserAPI } from '@/queries/client'
 
 const Header = () => {
   const { user } = useAuth()
@@ -33,7 +33,7 @@ const Header = () => {
           <Brand />
           <Navigation />
           <div className="ml-auto flex gap-2">
-            {user ? <SignedInButton /> : <SignedOutButton />}
+            {user ? <SignedInNav /> : <SignedOutNav />}
           </div>
         </div>
       </header>
@@ -41,7 +41,7 @@ const Header = () => {
   )
 }
 
-const SignedInButton = () => {
+const SignedInNav = () => {
   // const { user: session } = useAuth()
   // const { user } = useUserAPI(session?.id ?? null)
 
@@ -57,7 +57,7 @@ const SignedInButton = () => {
   )
 }
 
-const SignedOutButton = () => {
+const SignedOutNav = () => {
   return (
     <>
       <LinkButton

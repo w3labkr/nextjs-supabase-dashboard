@@ -1,6 +1,8 @@
 -- Custom Claims & Role-based Access Control (RBAC)
 -- https://supabase.com/docs/guides/auth/custom-claims-and-role-based-access-control-rbac
 
+drop trigger if exists handle_updated_at on user_plans;
+
 drop table if exists user_plans;
 
 -- drop type if exists public.user_plan;
@@ -33,7 +35,5 @@ create extension if not exists moddatetime schema extensions;
 
 -- assuming the table name is "user_plans", and a timestamp column "updated_at"
 -- this trigger will set the "updated_at" column to the current timestamp for every update
-drop trigger if exists handle_updated_at on user_plans;
-
 create trigger handle_updated_at before update on user_plans
   for each row execute procedure moddatetime (updated_at);

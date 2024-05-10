@@ -2,12 +2,13 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSearchParams } from 'next/navigation'
 
 import { toast } from 'sonner'
 import { FaGithub } from 'react-icons/fa'
 import { Button, ButtonProps } from '@/components/ui/button'
 
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/supabase/client'
 
 interface SignInWithGithubProps
   extends ButtonProps,
@@ -16,9 +17,12 @@ interface SignInWithGithubProps
 const SignInWithGithub = (props: SignInWithGithubProps) => {
   const { variant = 'outline', ...rest } = props
   const { t } = useTranslation()
+  const searchParams = useSearchParams()
 
   const handleClick = async () => {
     try {
+      const next = (searchParams.get('next') as string) ?? '/dashboard'
+
       const supabase = createClient()
       const signed = await supabase.auth.signInWithOAuth({
         provider: 'github',
@@ -27,7 +31,7 @@ const SignInWithGithub = (props: SignInWithGithubProps) => {
           // Don't forget to change the URL in supabase's email template.
           redirectTo:
             process.env.NEXT_PUBLIC_SITE_URL +
-            '/api/auth/callback?next=/dashboard',
+            `/api/auth/callback?next=${next}`,
         },
       })
 

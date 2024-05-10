@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/supabase/server'
 import { ApiError, revalidatePaths, setMeta } from '@/lib/utils'
-import { authorize } from '@/queries/async'
+import { authorize } from '@/queries/server'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
   const listQuery = supabase
     .from('posts')
-    .select('*, creator:profiles(*), meta:postmeta(*)')
+    .select('*, creator:profiles(*), meta:post_metas(*)')
     .match(match)
     .range((page - 1) * perPage, page * perPage - 1)
     .order('created_at', { ascending: false })

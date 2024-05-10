@@ -22,10 +22,10 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/supabase/client'
 import { User } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
-import { useUserAPI } from '@/queries/sync'
+import { useUserAPI } from '@/queries/client'
 
 const FormSchema = z
   .object({

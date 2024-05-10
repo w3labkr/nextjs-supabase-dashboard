@@ -12,10 +12,11 @@ import { PagingProvider } from '@/components/paging/paging-provider'
 import { LatestPosts } from '@/components/latest-posts'
 import { Aside } from './aside'
 
-import { getProfileAPI, getPostsAPI } from '@/queries/async'
+import { getProfileAPI, getPostsAPI } from '@/queries/server'
 
-// revalidate the data at most every hour
-export const revalidate = process.env.NODE_ENV === 'production' ? 3600 : 0
+// revalidate the data at most every week
+// 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
+export const revalidate = 604800
 
 export async function generateMetadata(
   {

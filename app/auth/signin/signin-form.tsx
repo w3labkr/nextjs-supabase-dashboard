@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
 import { useForm, UseFormReturn } from 'react-hook-form'
@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/form'
 import { TextLink } from '@/components/text-link'
 
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
 
 const FormSchema = z.object({
@@ -121,12 +121,15 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { t } = useTranslation()
   const { setSession, setUser } = useAuth()
 
   const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
+
+      const next = (searchParams.get('next') as string) ?? '/dashboard'
 
       const supabase = createClient()
       const signed = await supabase.auth.signInWithPassword({
@@ -141,7 +144,7 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
       toast.success(t('FormMessage.you_have_successfully_logged_in'))
 
       router.refresh()
-      router.replace('/dashboard')
+      router.replace(next)
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Invalid login credentials')) {

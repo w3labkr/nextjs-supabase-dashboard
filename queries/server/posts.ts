@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/supabase/server'
 import { fetcher, setQueryString } from '@/lib/utils'
 import { PostAPI, PostsAPI } from '@/types/api'
 import { Post } from '@/types/database'

@@ -1,15 +1,8 @@
 'use client'
 
 import useSWR from 'swr'
-import { createClient } from '@/lib/supabase/client'
 import { setQueryString } from '@/lib/utils'
 import { PostAPI, PostsAPI, CountPostsAPI } from '@/types/api'
-
-export async function setViewCount(id: number): Promise<void> {
-  const supabase = createClient()
-
-  await supabase.rpc('set_view_count', { pid: id })
-}
 
 export function usePostAPI(
   id: number | null,

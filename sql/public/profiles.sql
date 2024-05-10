@@ -1,6 +1,11 @@
 -- SQL Editor > New query
 -- https://supabase.com/docs/guides/auth/managing-user-data
 
+drop trigger if exists on_username_updated on profiles;
+drop trigger if exists handle_updated_at on profiles;
+
+drop function if exists handle_username_changed_at;
+
 drop table if exists profiles;
 
 create table profiles (
@@ -33,15 +38,10 @@ create extension if not exists moddatetime schema extensions;
 
 -- assuming the table name is "profiles", and a timestamp column "updated_at"
 -- this trigger will set the "updated_at" column to the current timestamp for every update
-drop trigger if exists handle_updated_at on profiles;
-
 create trigger handle_updated_at before update on profiles
   for each row execute procedure moddatetime (updated_at);
 
 -- Trigger the function every time a username is updated
-drop trigger if exists on_username_updated on profiles;
-drop function if exists handle_username_changed_at;
-
 create or replace function handle_username_changed_at()
 returns trigger
 security definer set search_path = public
