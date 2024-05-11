@@ -10,9 +10,9 @@ import { Brand } from '@/components/brand'
 import { Navigation } from '@/components/navigation'
 import { MobileNavigation } from '@/components/mobile-navigation'
 import { LinkButton } from '@/components/link-button'
+import { AccountMenu } from '@/components/account-menu'
 
 import { useAuth } from '@/hooks/use-auth'
-import { useUserAPI } from '@/queries/client'
 
 const Header = () => {
   const { user } = useAuth()
@@ -23,7 +23,7 @@ const Header = () => {
         <MobileNavigation />
       </SheetContent>
       <header className="flex w-full flex-col border-0 border-b border-solid border-input bg-inherit">
-        <div className="container flex h-20 items-center">
+        <div className="container flex h-[60px] items-center">
           <SheetTrigger asChild>
             <Button className="lg:hidden" size="icon" variant="outline">
               <LucideIcon name="Menu" className="size-6 min-w-6" />
@@ -42,19 +42,7 @@ const Header = () => {
 }
 
 const SignedInNav = () => {
-  // const { user: session } = useAuth()
-  // const { user } = useUserAPI(session?.id ?? null)
-
-  return (
-    <>
-      <LinkButton
-        variant="outline"
-        href="/dashboard"
-        text="LinkButton.dashboard"
-        translate="yes"
-      />
-    </>
-  )
+  return <AccountMenu />
 }
 
 const SignedOutNav = () => {

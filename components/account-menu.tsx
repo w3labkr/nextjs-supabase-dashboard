@@ -16,9 +16,9 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { SignOutButton } from '@/components/signout-button'
 
-import { getUserUrl } from '@/lib/utils'
+import { getAuthorUrl } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
-import { useProfileAPI } from '@/queries/client'
+import { useProfileAPI } from '@/queries/client/profiles'
 
 const AccountMenu = () => {
   const { t } = useTranslation()
@@ -30,11 +30,11 @@ const AccountMenu = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="h-8 w-8 rounded-full border border-gray-200 dark:border-gray-800"
+          className="size-8 rounded-full border border-gray-200 dark:border-gray-800"
           size="icon"
           variant="ghost"
         >
-          <Avatar className="h-8 w-8">
+          <Avatar className="size-8">
             <AvatarImage
               src={profile?.avatar_url ?? undefined}
               alt={`@${profile?.username}`}
@@ -54,7 +54,7 @@ const AccountMenu = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link
-            href={getUserUrl(profile?.username ?? null) ?? '#'}
+            href={getAuthorUrl(profile?.username ?? null) ?? '#'}
             className="cursor-pointer"
           >
             {t('AccountMenu.profile')}

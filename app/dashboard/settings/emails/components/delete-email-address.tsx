@@ -30,11 +30,12 @@ interface DeleteEmailAddressProps {
 
 const DeleteEmailAddress = (props: DeleteEmailAddressProps) => {
   const { item } = props
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
   const { user } = useAuth()
   const { mutate } = useSWRConfig()
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const handleClick = async () => {
     try {
@@ -43,14 +44,17 @@ const DeleteEmailAddress = (props: DeleteEmailAddressProps) => {
       if (!user) throw new Error('Require is not defined.')
       if (!item) throw new Error('Require is not defined.')
 
-      const result = await fetcher<EmailsAPI>(`/api/v1/email?uid=${user?.id}`, {
+      const formData = { email: item?.email }
+
+      const fetchUrl = `/api/v1/email?userId=${user?.id}`
+      const result = await fetcher<EmailsAPI>(fetchUrl, {
         method: 'DELETE',
-        body: JSON.stringify({ formData: { email: item?.email } }),
+        body: JSON.stringify({ formData }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      mutate(`/api/v1/email/list?uid=${user?.id}`)
+      mutate(`/api/v1/email/list?userId=${user?.id}`)
 
       toast.success(t('FormMessage.deleted_successfully'))
     } catch (e: unknown) {

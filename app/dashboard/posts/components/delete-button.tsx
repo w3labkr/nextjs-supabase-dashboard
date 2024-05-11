@@ -18,36 +18,37 @@ interface DeleteButtonProps
 
 const DeleteButton = (props: DeleteButtonProps) => {
   const { post, ...rest } = props
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
-  const { page, perPage, status } = usePaging()
+  const { page, perPage, postStatus } = usePaging()
   const { mutate } = useSWRConfig()
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const handleClick = async () => {
     try {
       setIsSubmitting(true)
 
-      const uid = post?.user_id
+      const userId = post?.user_id
 
-      if (!uid) throw new Error('Require is not defined.')
+      if (!userId) throw new Error('Require is not defined.')
+
+      const formData = { user_id: userId }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
+      const fetchOptions = { revalidatePaths: getPostPath(post) }
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'DELETE',
-        body: JSON.stringify({
-          formData: { user_id: uid },
-          options: { revalidatePaths: getPostPath(post) },
-        }),
+        body: JSON.stringify({ formData, options: fetchOptions }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      const query = setQueryString({ uid, page, perPage, status })
+      const query = setQueryString({ userId, page, perPage, postStatus })
 
       mutate(fetchUrl)
       mutate(`/api/v1/post/list?${query}`)
-      mutate(`/api/v1/post/count?uid=${uid}`)
+      mutate(`/api/v1/post/count?userId=${userId}`)
 
       toast.success(t('FormMessage.deleted_successfully'))
     } catch (e: unknown) {

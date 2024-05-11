@@ -1,13 +1,13 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
 import { ApiError, revalidatePaths } from '@/lib/utils'
-import { authorize } from '@/queries/server'
+import { authorize } from '@/queries/server/auth'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-  const uid = searchParams.get('uid') as string
+  const userId = searchParams.get('userId') as string
 
-  const { user } = await authorize(uid)
+  const { user } = await authorize(userId)
 
   if (!user) {
     return NextResponse.json(
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
   const result = await supabase
     .from('notifications')
     .select('*')
-    .eq('user_id', uid)
+    .eq('user_id', userId)
     .single()
 
   if (result?.error) {
@@ -35,10 +35,10 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-  const uid = searchParams.get('uid') as string
+  const userId = searchParams.get('userId') as string
 
   const { formData, options } = await request.json()
-  const { user } = await authorize(uid)
+  const { user } = await authorize(userId)
 
   if (!user) {
     return NextResponse.json(
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
   const result = await supabase
     .from('notifications')
     .update(formData)
-    .eq('user_id', uid)
+    .eq('user_id', userId)
     .select('*')
     .single()
 

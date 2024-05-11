@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { authorize } from '@/queries/server'
+import { authorize } from '@/queries/server/auth'
 import { createClient } from '@/supabase/server'
 import { jwtVerify } from '@/lib/jsonwebtoken'
 import { VerifyTokenPayload } from '@/types/token'
@@ -52,9 +52,9 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.redirect(redirectTo)
-
   // return the user to an error page with some instructions
   // redirectTo.pathname = '/errors/400'
   // return NextResponse.redirect(redirectTo)
+
+  return NextResponse.redirect(redirectTo)
 }

@@ -31,12 +31,12 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import { fetcher, getUserPath } from '@/lib/utils'
+import { fetcher, getAuthorPath } from '@/lib/utils'
 import { createClient } from '@/supabase/client'
 import { User } from '@/types/database'
 import { UserAPI } from '@/types/api'
 import { useAuth } from '@/hooks/use-auth'
-import { useUserAPI } from '@/queries/client'
+import { useUserAPI } from '@/queries/client/users'
 
 const FormSchema = z.object({
   email: z.string().nonempty().max(255).email(),
@@ -103,11 +103,11 @@ const DeleteUserForm = (props: DeleteUserFormProps) => {
   )
 }
 
-interface FormFieldProps {
+interface FieldProps {
   form: UseFormReturn<FormValues>
 }
 
-const EmailField = (props: FormFieldProps) => {
+const EmailField = (props: FieldProps) => {
   const { form } = props
   const { t } = useTranslation()
 
@@ -128,7 +128,7 @@ const EmailField = (props: FormFieldProps) => {
   )
 }
 
-const PasswordField = (props: FormFieldProps) => {
+const PasswordField = (props: FieldProps) => {
   const { form } = props
   const { t } = useTranslation()
 
@@ -156,7 +156,7 @@ const PasswordField = (props: FormFieldProps) => {
   )
 }
 
-const ConfirmationPhraseField = (props: FormFieldProps) => {
+const ConfirmationPhraseField = (props: FieldProps) => {
   const { form } = props
   const { trans } = useTrans()
 
@@ -181,14 +181,15 @@ const ConfirmationPhraseField = (props: FormFieldProps) => {
   )
 }
 
-const SubmitButton = (props: FormFieldProps) => {
+const SubmitButton = (props: FieldProps) => {
   const { form } = props
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
   const { t } = useTranslation()
   const { session, setSession, setUser } = useAuth()
   const { user } = useUserAPI(session?.user?.id ?? null)
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
     try {
@@ -206,7 +207,7 @@ const SubmitButton = (props: FormFieldProps) => {
       if (user?.user?.has_set_password) {
         if (!formValues?.password) throw new Error('Require is not defined.')
         const verified = await supabase.rpc('verify_user_password', {
-          uid: user?.id,
+          userid: user?.id,
           password: formValues?.password,
         })
         if (verified?.error) throw new Error(verified?.error?.message)
@@ -216,12 +217,14 @@ const SubmitButton = (props: FormFieldProps) => {
       }
 
       const fetchUrl = `/api/v1/user?id=${user?.id}`
+      const fetchOptions = {
+        revalidatePaths: getAuthorPath(user?.profile?.username),
+      }
       const deleted = await fetcher<UserAPI>(fetchUrl, {
         method: 'DELETE',
-        body: JSON.stringify({
-          options: { revalidatePaths: getUserPath(user?.profile?.username) },
-        }),
+        body: JSON.stringify({ options: fetchOptions }),
       })
+
       if (deleted?.error) throw new Error(deleted?.error?.message)
 
       setSession(null)

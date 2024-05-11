@@ -118,12 +118,12 @@ const PasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
 }
 
 const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
-
   const router = useRouter()
   const searchParams = useSearchParams()
   const { t } = useTranslation()
   const { setSession, setUser } = useAuth()
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
     try {

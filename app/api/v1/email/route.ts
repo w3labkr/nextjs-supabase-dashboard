@@ -1,14 +1,14 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient, createAdminClient } from '@/supabase/server'
 import { ApiError, revalidatePaths } from '@/lib/utils'
-import { authorize } from '@/queries/server'
+import { authorize } from '@/queries/server/auth'
 
 export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-  const uid = searchParams.get('uid') as string
+  const userId = searchParams.get('userId') as string
 
   const { formData, options } = await request.json()
-  const { user } = await authorize(uid)
+  const { user } = await authorize(userId)
 
   if (!user) {
     return NextResponse.json(
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
   }
 
   const supabaseAdmin = createAdminClient()
-  const result = await supabaseAdmin.updateUserById(uid, {
+  const result = await supabaseAdmin.updateUserById(userId, {
     email: formData?.email,
     user_metadata: { email: formData?.email },
   })
@@ -42,10 +42,10 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-  const uid = searchParams.get('uid') as string
+  const userId = searchParams.get('userId') as string
 
   const { formData, options } = await request.json()
-  const { user } = await authorize(uid)
+  const { user } = await authorize(userId)
 
   if (!user) {
     return NextResponse.json(
@@ -57,7 +57,7 @@ export async function PUT(request: NextRequest) {
   const supabase = createClient()
   const result = await supabase
     .from('emails')
-    .insert({ email: formData?.email, user_id: uid })
+    .insert({ email: formData?.email, user_id: userId })
     .select('*')
     .single()
 
@@ -80,10 +80,10 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-  const uid = searchParams.get('uid') as string
+  const userId = searchParams.get('userId') as string
 
   const { formData, options } = await request.json()
-  const { user } = await authorize(uid)
+  const { user } = await authorize(userId)
 
   if (!user) {
     return NextResponse.json(
@@ -96,7 +96,7 @@ export async function DELETE(request: NextRequest) {
   const result = await supabase
     .from('emails')
     .delete()
-    .eq('user_id', uid)
+    .eq('user_id', userId)
     .eq('email', formData?.email)
     .select('*')
     .single()

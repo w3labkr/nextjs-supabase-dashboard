@@ -23,7 +23,7 @@ import { Button } from '@/components/ui/button'
 import { useSWRConfig } from 'swr'
 import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
-import { useNotificationAPI } from '@/queries/client'
+import { useNotificationAPI } from '@/queries/client/notifications'
 import { NotificationAPI } from '@/types/api'
 
 const FormSchema = z.object({
@@ -57,11 +57,11 @@ const NotificationsForm = () => {
   )
 }
 
-interface FormFieldProps {
+interface FieldProps {
   form: UseFormReturn<FormValues>
 }
 
-const MarketingEmailsField = (props: FormFieldProps) => {
+const MarketingEmailsField = (props: FieldProps) => {
   const { form } = props
   const { t } = useTranslation()
 
@@ -88,7 +88,7 @@ const MarketingEmailsField = (props: FormFieldProps) => {
   )
 }
 
-const SecurityEmailsField = (props: FormFieldProps) => {
+const SecurityEmailsField = (props: FieldProps) => {
   const { form } = props
   const { t } = useTranslation()
 
@@ -120,14 +120,15 @@ const SecurityEmailsField = (props: FormFieldProps) => {
   )
 }
 
-const SubmitButton = (props: FormFieldProps) => {
+const SubmitButton = (props: FieldProps) => {
   const { form } = props
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
   const { user } = useAuth()
   const { notification } = useNotificationAPI(user?.id ?? null)
   const { mutate } = useSWRConfig()
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
     try {
@@ -139,10 +140,12 @@ const SubmitButton = (props: FormFieldProps) => {
         throw new Error('Nothing has changed.')
       }
 
-      const fetchUrl = `/api/v1/notification?uid=${user?.id}`
+      const formData = formValues
+
+      const fetchUrl = `/api/v1/notification?userId=${user?.id}`
       const result = await fetcher<NotificationAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ formData: formValues }),
+        body: JSON.stringify({ formData }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

@@ -5,7 +5,7 @@ import { Post } from '@/types/database'
 
 export async function getPostAPI(
   id: number | null,
-  params?: { uid?: string; slug?: string }
+  params?: { userId?: string; slug?: string }
 ) {
   const query = setQueryString({ id, ...params })
   const url = query ? `/api/v1/post?${query}` : null
@@ -18,16 +18,15 @@ export async function getPostAPI(
 }
 
 export async function getPostsAPI(
-  uid: string | null,
+  userId: string | null,
   params?: {
     page?: number
     perPage?: number
-    status?: string
-    limit?: number
     postType?: string
+    postStatus?: string
   }
 ) {
-  const query = setQueryString({ uid, ...params })
+  const query = setQueryString({ userId, ...params })
   const url = query ? `/api/v1/post/list?${query}` : null
 
   if (!url) return { posts: null, count: null }
@@ -39,21 +38,21 @@ export async function getPostsAPI(
 
 export async function getAdjacentPostAPI(
   id: number | null,
-  params: { uid: string | null; status?: string; postType?: string }
+  params: { userId: string | null; postType?: string; postStatus?: string }
 ) {
   let previousPost: Post | null = null
   let nextPost: Post | null = null
 
   if (!id) return { previousPost, nextPost }
-  if (!params?.uid) return { previousPost, nextPost }
+  if (!params?.userId) return { previousPost, nextPost }
 
   const supabase = createClient()
   const { data: adjacent } = await supabase
     .rpc('get_adjacent_post_id', {
-      pid: id,
-      uid: params?.uid,
-      post_type: params?.postType ?? 'post',
-      post_status: params?.status ?? 'publish',
+      postid: id,
+      userid: params?.userId,
+      posttype: params?.postType ?? 'post',
+      poststatus: params?.postStatus ?? 'publish',
     })
     .single()
 
@@ -72,4 +71,23 @@ export async function getAdjacentPostAPI(
   }
 
   return { previousPost, nextPost }
+}
+
+export async function getFavoritePostsAPI(
+  userId: string | null,
+  params?: {
+    page?: number
+    perPage?: number
+    postType?: string
+    postStatus?: string
+  }
+) {
+  const query = setQueryString({ userId, ...params })
+  const url = query ? `/api/v1/favorite/list?${query}` : null
+
+  if (!url) return { posts: null, count: null }
+
+  const { data, count } = await fetcher<PostsAPI>(url)
+
+  return { posts: data, count }
 }

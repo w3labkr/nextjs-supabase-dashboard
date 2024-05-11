@@ -4,6 +4,8 @@
 drop trigger if exists on_auth_user_password_updated on auth.users;
 drop function if exists handle_has_set_password;
 
+----------------------------------------------------------------
+
 create or replace function handle_has_set_password()
 returns trigger
 security definer set search_path = public

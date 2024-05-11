@@ -83,10 +83,11 @@ const MetaboxPublish = (props: MetaboxProps) => {
 
 const DraftButton = (props: MetaboxProps) => {
   const { form, post } = props
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async ({ slug, ...formValues }: FormValues) => {
     try {
@@ -94,16 +95,13 @@ const DraftButton = (props: MetaboxProps) => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const slugified = kebabCase(slug)
-      const values = { slug: slugified, status: 'draft' }
+      const formData = { ...formValues, slug: kebabCase(slug), status: 'draft' }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
+      const fetchOptions = { revalidatePaths: getPostPath(post) }
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({
-          formData: Object.assign({}, formValues, values),
-          options: { revalidatePaths: getPostPath(post) },
-        }),
+        body: JSON.stringify({ formData, options: fetchOptions }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
@@ -138,10 +136,11 @@ const DraftButton = (props: MetaboxProps) => {
 
 const ViewButton = (props: MetaboxProps) => {
   const { form, post } = props
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
   const { t } = useTranslation()
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async () => {
     try {
@@ -174,11 +173,12 @@ const ViewButton = (props: MetaboxProps) => {
 
 const PreviewButton = (props: MetaboxProps) => {
   const { form, post } = props
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async ({ slug, ...formValues }: FormValues) => {
     try {
@@ -186,17 +186,14 @@ const PreviewButton = (props: MetaboxProps) => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const slugified = kebabCase(slug)
-      const values = { slug: slugified, status: 'draft' }
+      const path = getPostPath(post)
+      const formData = { ...formValues, slug: kebabCase(slug), status: 'draft' }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const path = getPostPath(post)
+      const fetchOptions = { revalidatePaths: path }
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({
-          formData: Object.assign({}, formValues, values),
-          options: { revalidatePaths: path },
-        }),
+        body: JSON.stringify({ formData, options: fetchOptions }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
@@ -231,11 +228,12 @@ const PreviewButton = (props: MetaboxProps) => {
 
 const TrashButton = (props: MetaboxProps) => {
   const { form, post } = props
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
   const { t } = useTranslation()
   const { unregister } = form
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   React.useEffect(() => {
     unregister('slug')
@@ -248,19 +246,17 @@ const TrashButton = (props: MetaboxProps) => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const now = new Date().toISOString()
+      const formData = {
+        user_id: formValues?.user_id,
+        status: 'trash',
+        deleted_at: new Date().toISOString(),
+      }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
+      const fetchOptions = { revalidatePaths: getPostPath(post) }
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({
-          formData: {
-            user_id: formValues?.user_id,
-            status: 'trash',
-            deleted_at: now,
-          },
-          options: { revalidatePaths: getPostPath(post) },
-        }),
+        body: JSON.stringify({ formData, options: fetchOptions }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
@@ -296,10 +292,11 @@ const TrashButton = (props: MetaboxProps) => {
 
 const PublishButton = (props: MetaboxProps) => {
   const { form, post } = props
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async ({ slug, ...formValues }: FormValues) => {
     try {
@@ -307,18 +304,26 @@ const PublishButton = (props: MetaboxProps) => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const slugified = kebabCase(slug)
-      const now = new Date().toISOString()
-      const values = { slug: slugified, status: 'publish' }
+      const publishedFormData = {
+        ...formValues,
+        slug: kebabCase(slug),
+        status: 'publish',
+        published_at: new Date().toISOString(),
+      }
+
+      const updatedFormData = {
+        ...formValues,
+        slug: kebabCase(slug),
+        status: 'publish',
+      }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
+      const fetchOptions = { revalidatePaths: getPostPath(post) }
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          formData: post?.published_at
-            ? Object.assign({}, formValues, values)
-            : Object.assign({}, formValues, values, { published_at: now }),
-          options: { revalidatePaths: getPostPath(post) },
+          formData: post?.published_at ? updatedFormData : publishedFormData,
+          options: fetchOptions,
         }),
       })
 

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
-import { getUser } from '@/queries/server'
+import { getUser } from '@/queries/server/users'
 
 export default async function BlockedLayout({
   children,

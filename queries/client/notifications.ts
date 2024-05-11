@@ -3,8 +3,8 @@
 import useSWR from 'swr'
 import { NotificationAPI } from '@/types/api'
 
-export function useNotificationAPI(uid: string | null) {
-  const url = uid ? `/api/v1/notification?uid=${uid}` : null
+export function useNotificationAPI(userId: string | null) {
+  const url = userId ? `/api/v1/notification?userId=${userId}` : null
   const {
     data: response,
     error,

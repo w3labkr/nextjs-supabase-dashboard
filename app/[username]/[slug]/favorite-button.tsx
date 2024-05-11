@@ -5,13 +5,14 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { toast } from 'sonner'
 import { LucideIcon } from '@/lib/lucide-icon'
-import { cn } from '@/lib/utils'
+import { cn, fetcher, getAuthorPath } from '@/lib/utils'
 
 import { useSWRConfig } from 'swr'
-import { createClient } from '@/supabase/client'
 import { Post } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 import { useFavoriteAPI } from '@/queries/client/favorites'
+import { FavoriteAPI } from '@/types/api'
+import { useProfileAPI } from '@/queries/client/profiles'
 
 interface FavoriteButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -19,45 +20,57 @@ interface FavoriteButtonProps
 }
 
 const FavoriteButton = (props: FavoriteButtonProps) => {
+  const { user } = useAuth()
+
+  return user ? <SignedInAction {...props} /> : <SignedOutAction {...props} />
+}
+
+const SignedInAction = (props: FavoriteButtonProps) => {
   const { post, ...rest } = props
 
-  const router = useRouter()
-  const pathname = usePathname()
-
   const { user } = useAuth()
-  const { favorite } = useFavoriteAPI(null, { pid: post?.id, uid: user?.id })
+  const { profile } = useProfileAPI(user?.id ?? null)
+  const { favorite } = useFavoriteAPI(null, {
+    postId: post?.id,
+    userId: user?.id,
+  })
   const { mutate } = useSWRConfig()
 
   const [isLike, setIsLike] = React.useState<boolean>(false)
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
+  const is_favorite = favorite?.is_favorite
+
   React.useEffect(() => {
-    if (favorite?.is_favorite) {
-      setIsLike(favorite?.is_favorite)
+    if (is_favorite) {
+      setIsLike(is_favorite)
     }
-  }, [favorite?.is_favorite])
+  }, [is_favorite])
 
   const handleClick = async () => {
     try {
       setIsSubmitting(true)
 
-      if (!user) {
-        router?.push(`/auth/signin?next=${pathname}`)
-        return false
+      if (!user) throw new Error('Require is not defined.')
+      if (!profile?.username) throw new Error('Require is not defined.')
+
+      const formData = { is_favorite: !is_favorite }
+
+      const fetchUrl = `/api/v1/favorite?postId=${post?.id}&userId=${user?.id}`
+      const fetchOptions = {
+        revalidatePaths: getAuthorPath(profile?.username) + '/favorites',
       }
 
-      const supabase = createClient()
-      const result = await supabase.rpc('set_favorite', {
-        pid: post?.id,
-        uid: post?.user_id,
-        isfavorite: !isLike,
+      const result = await fetcher<FavoriteAPI>(fetchUrl, {
+        method: 'POST',
+        body: JSON.stringify({ formData, options: fetchOptions }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      setIsLike(!isLike)
+      setIsLike(!is_favorite)
 
-      mutate(`/api/v1/favorite?pid=${post?.id}&uid=${user?.id}`)
+      mutate(fetchUrl)
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -66,10 +79,35 @@ const FavoriteButton = (props: FavoriteButtonProps) => {
   }
 
   return (
-    <button onClick={handleClick} disabled={isSubmitting} {...rest}>
+    <button
+      type="button"
+      onClick={handleClick}
+      disabled={isSubmitting}
+      {...rest}
+    >
       <LucideIcon
         name="Heart"
         fill={cn(isLike ? '#ef4444' : 'transparent')}
+        className={cn('size-5 min-w-5 text-red-500')}
+      />
+    </button>
+  )
+}
+
+const SignedOutAction = (props: FavoriteButtonProps) => {
+  const { post, ...rest } = props
+  const router = useRouter()
+  const pathname = usePathname()
+
+  return (
+    <button
+      type="button"
+      onClick={() => router?.push(`/auth/signin?next=${pathname}`)}
+      {...rest}
+    >
+      <LucideIcon
+        name="Heart"
+        fill="transparent"
         className={cn('size-5 min-w-5 text-red-500')}
       />
     </button>

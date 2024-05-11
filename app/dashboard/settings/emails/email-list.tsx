@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next'
 import { DeleteEmailAddress } from './components/delete-email-address'
 import { ResendVerifyEmail } from './components/resend-verify-email'
 
-import { useAuth } from '@/hooks/use-auth'
-import { useEmailsAPI } from '@/queries/client'
 import { Email } from '@/types/database'
+import { useAuth } from '@/hooks/use-auth'
+import { useEmailsAPI } from '@/queries/client/emails'
 
 const EmailList = () => {
   const { user } = useAuth()

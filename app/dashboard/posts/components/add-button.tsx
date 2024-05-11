@@ -22,11 +22,12 @@ interface AddButtonProps
 const AddButton = (props: AddButtonProps) => {
   const { children, text, translate, startIconName, endIconName, ...rest } =
     props
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const router = useRouter()
-  const { t } = useTranslation()
   const { user } = useAuth()
+  const { t } = useTranslation()
+  const router = useRouter()
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const handleClick = async () => {
     try {
@@ -34,10 +35,12 @@ const AddButton = (props: AddButtonProps) => {
 
       if (!user) throw new Error('Require is not defined.')
 
-      const fetchUrl = `/api/v1/post?uid=${user?.id}`
+      const formData = { title: 'Untitled Post' }
+
+      const fetchUrl = `/api/v1/post?userId=${user?.id}`
       const result = await fetcher(fetchUrl, {
         method: 'PUT',
-        body: JSON.stringify({ formData: { title: 'Untitled Post' } }),
+        body: JSON.stringify({ formData }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

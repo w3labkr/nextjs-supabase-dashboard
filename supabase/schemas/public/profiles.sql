@@ -1,4 +1,9 @@
--- SQL Editor > New query
+----------------------------------------------------------------
+--                                                            --
+--                      public.profiles                       --
+--                                                            --
+----------------------------------------------------------------
+
 -- https://supabase.com/docs/guides/auth/managing-user-data
 
 drop trigger if exists on_username_updated on profiles;
@@ -7,6 +12,8 @@ drop trigger if exists handle_updated_at on profiles;
 drop function if exists handle_username_changed_at;
 
 drop table if exists profiles;
+
+----------------------------------------------------------------
 
 create table profiles (
   id uuid not null references auth.users on delete cascade primary key,

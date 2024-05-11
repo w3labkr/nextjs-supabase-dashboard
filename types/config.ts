@@ -55,5 +55,5 @@ export interface DashboardPageConfig {
 export interface MiddlewareAccessDenied {
   from: string
   to: string
-  isAuthenticated: boolean
+  authenticated: boolean
 }

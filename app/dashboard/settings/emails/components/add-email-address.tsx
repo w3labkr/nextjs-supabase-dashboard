@@ -23,7 +23,7 @@ import {
 import { useSWRConfig } from 'swr'
 import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
-import { useEmailsAPI } from '@/queries/client'
+import { useEmailsAPI } from '@/queries/client/emails'
 import { EmailsAPI } from '@/types/api'
 
 const FormSchema = z.object({
@@ -66,11 +66,11 @@ const AddEmailAddress = () => {
   )
 }
 
-interface FormFieldProps {
+interface FieldProps {
   form: UseFormReturn<FormValues>
 }
 
-const EmailField = (props: FormFieldProps) => {
+const EmailField = (props: FieldProps) => {
   const { form } = props
 
   return (
@@ -96,39 +96,42 @@ const EmailField = (props: FormFieldProps) => {
   )
 }
 
-const SubmitButton = (props: FormFieldProps) => {
+const SubmitButton = (props: FieldProps) => {
   const { form } = props
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
   const { user } = useAuth()
   const { emails } = useEmailsAPI(user?.id ?? null)
   const { mutate } = useSWRConfig()
 
-  const onSubmit = async (formValues: FormValues) => {
-    if (emails?.find((value) => value?.email === formValues?.email)) {
-      toast(t('FormMessage.email_has_already_been_added'))
-      return false
-    }
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
+  const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
 
+      if (emails?.find((value) => value?.email === formValues?.email)) {
+        throw new Error('This email has already been added.')
+      }
+
       if (!user) throw new Error('Require is not defined.')
 
-      const result = await fetcher<EmailsAPI>(`/api/v1/email?uid=${user?.id}`, {
+      const formData = { email: formValues?.email }
+
+      const fetchUrl = `/api/v1/email?userId=${user?.id}`
+      const result = await fetcher<EmailsAPI>(fetchUrl, {
         method: 'PUT',
-        body: JSON.stringify({ formData: { email: formValues?.email } }),
+        body: JSON.stringify({ formData }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      mutate(`/api/v1/email/list?uid=${user?.id}`)
+      mutate(`/api/v1/email/list?userId=${user?.id}`)
 
-      const sentUrl = `/api/v1/email/verify?uid=${user?.id}`
+      const sentUrl = `/api/v1/email/verify?userId=${user?.id}`
       const sent = await fetcher(sentUrl, {
         method: 'POST',
-        body: JSON.stringify({ formData: { email: formValues?.email } }),
+        body: JSON.stringify({ formData }),
       })
 
       if (sent?.error) throw new Error(sent?.error?.message)
@@ -139,7 +142,12 @@ const SubmitButton = (props: FormFieldProps) => {
 
       toast.success(t('FormMessage.added_successfully'))
     } catch (e: unknown) {
-      toast.error((e as Error)?.message)
+      const err = (e as Error)?.message
+      if (err.startsWith('This email has already been added')) {
+        toast(t('FormMessage.email_has_already_been_added'))
+      } else {
+        toast.error(err)
+      }
     } finally {
       setIsSubmitting(false)
     }

@@ -2,7 +2,7 @@ import * as React from 'react'
 import Link from 'next/link'
 import dayjs from 'dayjs'
 
-import { cn, getPostUrl, getUserUrl } from '@/lib/utils'
+import { cn, getPostUrl, getAuthorUrl } from '@/lib/utils'
 import { Paging } from '@/components/paging'
 
 import { Post } from '@/types/database'
@@ -19,7 +19,7 @@ const LatestPosts = (props: LatestPostsProps) => {
     <div className="space-y-16">
       <div className={cn('columns-1 gap-8 space-y-8', className)}>
         {posts && posts?.length > 0 ? (
-          posts?.map((post: Post) => <PostItem key={post?.id} post={post} />)
+          posts?.map((post: Post) => <LatestItem key={post?.id} post={post} />)
         ) : (
           <EmptyItem />
         )}
@@ -29,7 +29,12 @@ const LatestPosts = (props: LatestPostsProps) => {
   )
 }
 
-const PostItem = ({ post }: { post: Post }) => {
+interface LatestItemProps {
+  post: Post
+}
+
+const LatestItem = (props: LatestItemProps) => {
+  const { post } = props
   const datetime = post?.published_at ?? post?.created_at ?? undefined
 
   return (
@@ -44,10 +49,10 @@ const PostItem = ({ post }: { post: Post }) => {
         </time>
         <span>— by</span>
         <Link
-          href={getUserUrl(post?.creator?.username) ?? '#'}
+          href={getAuthorUrl(post?.author?.username) ?? '#'}
           className="hover:underline"
         >
-          {post?.creator?.full_name}
+          {post?.author?.full_name}
         </Link>
       </div>
     </div>

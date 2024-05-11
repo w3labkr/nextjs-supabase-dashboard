@@ -3,6 +3,8 @@
 
 drop function if exists create_new_user;
 
+----------------------------------------------------------------
+
 create or replace function create_new_user(email text, password text)
 returns uuid
 security definer set search_path = public

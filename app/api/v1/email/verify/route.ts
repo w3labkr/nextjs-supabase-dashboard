@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
 import { ApiError, revalidatePaths } from '@/lib/utils'
-import { authorize } from '@/queries/server'
+import { authorize } from '@/queries/server/auth'
 
 import { transporter, sender } from '@/lib/nodemailer'
 import { jwtSign } from '@/lib/jsonwebtoken'
@@ -9,10 +9,10 @@ import { VerifyTokenPayload } from '@/types/token'
 
 export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-  const uid = searchParams.get('uid') as string
+  const userId = searchParams.get('userId') as string
 
   const { formData, options } = await request.json()
-  const { user } = await authorize(uid)
+  const { user } = await authorize(userId)
 
   if (!user) {
     return NextResponse.json(
@@ -21,7 +21,10 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const payload: VerifyTokenPayload = { email: formData?.email, user_id: uid }
+  const payload: VerifyTokenPayload = {
+    email: formData?.email,
+    user_id: userId,
+  }
   const mailOptions = mailTemplate(payload)
 
   try {

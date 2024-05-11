@@ -3,8 +3,8 @@
 import useSWR from 'swr'
 import { EmailsAPI } from '@/types/api'
 
-export function useEmailsAPI(uid: string | null) {
-  const url = uid ? `/api/v1/email/list?uid=${uid}` : null
+export function useEmailsAPI(userId: string | null) {
+  const url = userId ? `/api/v1/email/list?userId=${userId}` : null
   const {
     data: response,
     error,

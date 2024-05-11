@@ -3,6 +3,8 @@
 
 drop function if exists generate_username;
 
+----------------------------------------------------------------
+
 create or replace function generate_username(email text)
 returns text
 security definer set search_path = public

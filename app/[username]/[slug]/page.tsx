@@ -4,22 +4,19 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import dayjs from 'dayjs'
-import { getUserUrl } from '@/lib/utils'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { RelatedPosts } from '@/components/related-posts'
+import { getAuthorUrl } from '@/lib/utils'
 import { PostProvider } from './post-provider'
 import { Analysis } from './analysis'
 import { ViewCount } from './view-count'
 import { FavoriteButton } from './favorite-button'
 
 import { Post } from '@/types/database'
-import {
-  getUser,
-  getPostAPI,
-  getAdjacentPostAPI,
-  getProfileAPI,
-} from '@/queries/server'
+import { getUser } from '@/queries/server/users'
+import { getProfileAPI } from '@/queries/server/profiles'
+import { getPostAPI, getAdjacentPostAPI } from '@/queries/server/posts'
 
 // revalidate the data at most every month
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
@@ -35,7 +32,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { profile } = await getProfileAPI(null, { username })
   const { post } = await getPostAPI(null, {
-    uid: profile?.id,
+    userId: profile?.id,
     slug: decodeURIComponent(slug),
   })
 
@@ -60,23 +57,24 @@ export default async function PostPage({
 }) {
   const { profile } = await getProfileAPI(null, { username })
   const { post } = await getPostAPI(null, {
-    uid: profile?.id,
+    userId: profile?.id,
     slug: decodeURIComponent(slug),
   })
 
   if (!post) notFound()
 
   const { user } = await getUser()
+  const authorId = post?.user_id
 
   if (searchParams?.preview === 'true') {
-    if (user && post?.user_id !== user?.id) notFound()
+    if (user && authorId !== user?.id) notFound()
   } else {
     if (post?.status !== 'publish') notFound()
   }
 
   const { previousPost, nextPost } = await getAdjacentPostAPI(
     post?.id ?? null,
-    { uid: post?.user_id ?? null }
+    { userId: authorId ?? null }
   )
 
   return (
@@ -97,7 +95,13 @@ export default async function PostPage({
   )
 }
 
-function PostTitle({ post }: { post: Post }) {
+interface FieldProps {
+  post: Post
+}
+
+const PostTitle = (props: FieldProps) => {
+  const { post } = props
+
   return (
     <h1 className="mb-16 text-center font-serif text-6xl font-bold leading-tight tracking-tighter md:text-7xl md:leading-none lg:text-8xl">
       {post?.title}
@@ -105,7 +109,8 @@ function PostTitle({ post }: { post: Post }) {
   )
 }
 
-function PostMeta({ post }: { post: Post }) {
+const PostMeta = (props: FieldProps) => {
+  const { post } = props
   const datetime = post?.published_at ?? post?.created_at ?? undefined
 
   return (
@@ -116,10 +121,10 @@ function PostMeta({ post }: { post: Post }) {
         </time>
         <span>— by</span>
         <Link
-          href={getUserUrl(post?.creator?.username) ?? '#'}
+          href={getAuthorUrl(post?.author?.username) ?? '#'}
           className="hover:underline"
         >
-          {post?.creator?.full_name}
+          {post?.author?.full_name}
         </Link>
       </div>
       <div className="flex space-x-4">
@@ -130,7 +135,9 @@ function PostMeta({ post }: { post: Post }) {
   )
 }
 
-function PostThumbnail({ post }: { post: Post }) {
+const PostThumbnail = (props: FieldProps) => {
+  const { post } = props
+
   if (!post?.thumbnail_url) return null
 
   return (
@@ -142,7 +149,9 @@ function PostThumbnail({ post }: { post: Post }) {
   )
 }
 
-function PostContent({ post }: { post: Post }) {
+const PostContent = (props: FieldProps) => {
+  const { post } = props
+
   if (!post?.content) return null
 
   return (

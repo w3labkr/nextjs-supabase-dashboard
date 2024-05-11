@@ -27,7 +27,7 @@ import {
 } from './components/metaboxes'
 import { Permalink } from './components/permalink'
 
-import { usePostAPI } from '@/queries/client'
+import { usePostAPI } from '@/queries/client/posts'
 
 const Editor = dynamic(() => import('./components/editor'), { ssr: false })
 
@@ -43,6 +43,7 @@ type FormValues = z.infer<typeof FormSchema>
 
 const PostForm = ({ id }: { id: number }) => {
   const { post } = usePostAPI(id)
+
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',

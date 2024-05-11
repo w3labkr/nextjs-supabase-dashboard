@@ -31,7 +31,7 @@ export type PostStatus =
 export type PostType = 'post' | 'page' | 'revision'
 
 export type Post = Tables<'posts'> & {
-  creator: Tables<'profiles'>
+  author: Tables<'profiles'>
   meta: Record<string, string>
 }
 

@@ -4,16 +4,16 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
 import { cn, getAuthorUrl } from '@/lib/utils'
-import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
+import { LucideIcon } from '@/lib/lucide-icon'
 import { Separator } from '@/components/ui/separator'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { PagingProvider } from '@/components/paging/paging-provider'
 import { LatestPosts } from '@/components/latest-posts'
-import { Aside } from './aside'
+import { Aside } from '../aside'
 
 import { getProfileAPI } from '@/queries/server/profiles'
-import { getPostsAPI } from '@/queries/server/posts'
+import { getFavoritePostsAPI } from '@/queries/server/posts'
 
 // revalidate the data at most every week
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
@@ -41,7 +41,7 @@ export async function generateMetadata(
   }
 }
 
-export default async function ProfilePage({
+export default async function FavoritesPage({
   params: { username },
   searchParams,
 }: {
@@ -57,7 +57,7 @@ export default async function ProfilePage({
   const pageSize = +(searchParams?.pageSize ?? '10')
   const postStatus = 'publish'
 
-  const { posts, count } = await getPostsAPI(profile?.id ?? null, {
+  const { posts, count } = await getFavoritePostsAPI(profile?.id ?? null, {
     page,
     perPage,
     postStatus,
@@ -76,11 +76,14 @@ export default async function ProfilePage({
             </div>
             <div className="flex flex-col md:col-span-2 lg:col-span-3">
               <div className="flex w-full flex-col-reverse justify-between sm:flex-row sm:items-end">
-                <div className="hidden sm:inline">Recent generations</div>
+                <div className="hidden sm:inline">Favorited generations</div>
                 <div className="flex w-full gap-2 sm:w-auto">
                   <Link
-                    href="#"
-                    className={cn('flex w-full items-center sm:w-auto')}
+                    href={getAuthorUrl(username) ?? '#'}
+                    className={cn(
+                      'flex w-full items-center sm:w-auto',
+                      'text-muted-foreground'
+                    )}
                   >
                     <LucideIcon
                       name="History"
@@ -89,11 +92,8 @@ export default async function ProfilePage({
                     Recent
                   </Link>
                   <Link
-                    href={getAuthorUrl(username) + '/favorites'}
-                    className={cn(
-                      'flex w-full items-center sm:w-auto',
-                      'text-muted-foreground'
-                    )}
+                    href="#"
+                    className={cn('flex w-full items-center sm:w-auto')}
                   >
                     <LucideIcon name="Heart" className="mr-1 size-4 min-w-4" />
                     Favorites

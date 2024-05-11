@@ -31,7 +31,7 @@ import { Button } from '@/components/ui/button'
 import { useSWRConfig } from 'swr'
 import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
-import { useEmailsAPI } from '@/queries/client'
+import { useEmailsAPI } from '@/queries/client/emails'
 import { EmailAPI } from '@/types/api'
 import { Email } from '@/types/database'
 
@@ -81,11 +81,11 @@ const PrimaryEmailAddress = () => {
   )
 }
 
-interface FormFieldProps {
+interface FieldProps {
   form: UseFormReturn<FormValues>
 }
 
-interface EmailFieldProps extends FormFieldProps {
+interface EmailFieldProps extends FieldProps {
   primaryEmail: Email | null
 }
 
@@ -136,28 +136,34 @@ const EmailField = (props: EmailFieldProps) => {
   )
 }
 
-const SubmitButton = (props: FormFieldProps) => {
+const SubmitButton = (props: FieldProps) => {
   const { form } = props
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const router = useRouter()
   const { t } = useTranslation()
   const { user } = useAuth()
   const { mutate } = useSWRConfig()
 
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
+
   const onSubmit = async (formValues: FormValues) => {
     try {
       setIsSubmitting(true)
 
       if (!user) throw new Error('Require is not defined.')
-      if (formValues?.email === user?.email) {
+      if (
+        formValues?.email === user?.email ||
+        formValues?.email === 'unassigned'
+      ) {
         throw new Error('Nothing has changed.')
       }
 
-      const fetchUrl = `/api/v1/email?uid=${user?.id}`
+      const formData = { email: formValues?.email }
+
+      const fetchUrl = `/api/v1/email?userId=${user?.id}`
       const result = await fetcher<EmailAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ formData: { email: formValues?.email } }),
+        body: JSON.stringify({ formData }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

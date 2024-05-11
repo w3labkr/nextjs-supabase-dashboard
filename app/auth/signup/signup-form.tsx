@@ -149,11 +149,11 @@ const ConfirmNewPasswordField = ({
 }
 
 const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
-
   const router = useRouter()
   const { t } = useTranslation()
   const { setSession, setUser } = useAuth()
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
     try {

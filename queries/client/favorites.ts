@@ -6,7 +6,7 @@ import { FavoriteAPI } from '@/types/api'
 
 export function useFavoriteAPI(
   id: number | null,
-  params?: { pid?: number; uid?: string }
+  params?: { postId?: number; userId?: string }
 ) {
   const query = setQueryString({ id, ...params })
   const url = query ? `/api/v1/favorite?${query}` : null

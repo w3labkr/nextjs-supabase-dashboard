@@ -1,29 +1,29 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
 import { ApiError, revalidatePaths, setMeta } from '@/lib/utils'
-import { authorize } from '@/queries/server'
+import { authorize } from '@/queries/server/auth'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
 
   const id = searchParams.get('id') as string
-  const uid = searchParams.get('uid') as string
+  const userId = searchParams.get('userId') as string
   const slug = searchParams.get('slug') as string
-  const status = searchParams.get('status') as string
   const postType = (searchParams.get('postType') as string) ?? 'post'
+  const postStatus = searchParams.get('postStatus') as string
 
   let match = {}
 
   if (id) match = { ...match, id }
-  if (uid) match = { ...match, user_id: uid }
+  if (userId) match = { ...match, user_id: userId }
   if (postType) match = { ...match, type: postType }
-  if (status) match = { ...match, status }
+  if (postStatus) match = { ...match, status: postStatus }
   if (slug) match = { ...match, slug }
 
   const supabase = createClient()
   const result = await supabase
     .from('posts')
-    .select('*, creator:profiles(*), meta:post_metas(*)')
+    .select('*, author:profiles(*), meta:post_metas(*)')
     .match(match)
     .single()
 
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
     .from('posts')
     .update(body)
     .match({ id, user_id })
-    .select('*, creator:profiles(*), meta:post_metas(*)')
+    .select('*, author:profiles(*), meta:post_metas(*)')
     .single()
 
   if (result?.error) {
@@ -82,10 +82,10 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-  const uid = searchParams.get('uid') as string
+  const userId = searchParams.get('userId') as string
 
   const { formData, options } = await request.json()
-  const { user, plan } = await authorize(uid)
+  const { user, plan } = await authorize(userId)
 
   if (!user) {
     return NextResponse.json(
@@ -98,7 +98,7 @@ export async function PUT(request: NextRequest) {
   const total = await supabase
     .from('posts')
     .select('*', { count: 'exact', head: true })
-    .eq('user_id', uid)
+    .eq('user_id', userId)
 
   if (total?.error) {
     return NextResponse.json(
@@ -118,8 +118,8 @@ export async function PUT(request: NextRequest) {
 
   const result = await supabase
     .from('posts')
-    .insert({ ...formData, user_id: uid })
-    .select('*, creator:profiles(*)')
+    .insert({ ...formData, user_id: userId })
+    .select('*, author:profiles(*)')
     .single()
 
   if (result?.error) {

@@ -539,8 +539,8 @@ export type Database = {
     Functions: {
       count_posts: {
         Args: {
-          uid: string
-          post_type?: string
+          userid: string
+          posttype?: string
         }
         Returns: {
           status: string
@@ -559,10 +559,10 @@ export type Database = {
       }
       get_adjacent_post_id: {
         Args: {
-          pid: number
-          uid: string
-          post_type?: string
-          post_status?: string
+          postid: number
+          userid: string
+          posttype?: string
+          poststatus?: string
         }
         Returns: {
           previous_id: number
@@ -571,7 +571,7 @@ export type Database = {
       }
       get_user: {
         Args: {
-          uid: string
+          userid: string
         }
         Returns: {
           id: string
@@ -588,7 +588,7 @@ export type Database = {
       }
       get_vote: {
         Args: {
-          pid: number
+          postid: number
         }
         Returns: {
           id: number
@@ -602,15 +602,15 @@ export type Database = {
       }
       set_favorite: {
         Args: {
-          pid: number
-          uid: string
+          postid: number
+          userid: string
           isfavorite: boolean
         }
         Returns: undefined
       }
       set_post_meta: {
         Args: {
-          pid: number
+          postid: number
           metakey: string
           metavalue: string
         }
@@ -618,7 +618,7 @@ export type Database = {
       }
       set_user_meta: {
         Args: {
-          uid: number
+          userid: number
           metakey: string
           metavalue: string
         }
@@ -626,13 +626,13 @@ export type Database = {
       }
       set_view_count: {
         Args: {
-          pid: number
+          postid: number
         }
         Returns: undefined
       }
       verify_user_password: {
         Args: {
-          uid: string
+          userid: string
           password: string
         }
         Returns: boolean

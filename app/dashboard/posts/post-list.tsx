@@ -29,10 +29,10 @@ import { TrashButton } from './components/trash-button'
 import { RestoreButton } from './components/restore-button'
 import { DeleteButton } from './components/delete-button'
 
-import { Post, CountPosts, PostStatus } from '@/types/database'
+import { Post, PostStatus } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 import { useQueryString } from '@/hooks/use-query-string'
-import { usePostsAPI, useCountPostsAPI } from '@/queries/client'
+import { usePostsAPI, useCountPostsAPI } from '@/queries/client/posts'
 
 const PostList = () => {
   const searchParams = useSearchParams()
@@ -40,18 +40,18 @@ const PostList = () => {
   const page = +(searchParams.get('page') ?? '1')
   const perPage = +(searchParams.get('perPage') ?? '50')
   const pageSize = +(searchParams.get('pageSize') ?? '10')
-  const status = searchParams.get('status') ?? undefined
+  const postStatus = searchParams.get('postStatus') ?? undefined
 
   const { user } = useAuth()
   const { count } = usePostsAPI(user?.id ?? null, {
     page,
     perPage,
-    status,
+    postStatus,
   })
 
   return (
     <PagingProvider
-      value={{ total: count ?? 0, page, perPage, pageSize, status }}
+      value={{ total: count ?? 0, page, perPage, pageSize, postStatus }}
     >
       <Header />
       <Body />
@@ -62,19 +62,30 @@ const PostList = () => {
 
 const Header = () => {
   const { user } = useAuth()
-  const { data, count: total } = useCountPostsAPI(user?.id ?? null)
+  const { data, count } = useCountPostsAPI(user?.id ?? null)
+
+  const status: { [key: string]: number } | undefined = React.useMemo(() => {
+    return data?.reduce((acc: { [key: string]: number }, curr) => {
+      acc[curr.status] = curr.count
+      return acc
+    }, {})
+  }, [data])
 
   return (
     <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-      <HeadLink value={undefined} label="all" count={total ?? 0} />
-      {data?.map(({ status, count }: CountPosts) => {
-        return (
-          <React.Fragment key={status}>
-            <span>|</span>
-            <HeadLink value={status} label={status} count={count} />
-          </React.Fragment>
-        )
-      })}
+      <HeadLink value={undefined} label="all" count={count ?? 0} />
+      <span>|</span>
+      <HeadLink value="publish" label="publish" count={status?.publish ?? 0} />
+      {/* <span>|</span> */}
+      {/* <HeadLink value="future" label="future" count={status?.future ?? 0} /> */}
+      <span>|</span>
+      <HeadLink value="draft" label="draft" count={status?.draft ?? 0} />
+      {/* <span>|</span> */}
+      {/* <HeadLink value="pending" label="pending" count={status?.pending ?? 0} /> */}
+      {/* <span>|</span> */}
+      {/* <HeadLink value="private" label="private" count={status?.private ?? 0} /> */}
+      <span>|</span>
+      <HeadLink value="trash" label="trash" count={status?.trash ?? 0} />
     </div>
   )
 }
@@ -89,16 +100,16 @@ const HeadLink = ({
   count: number
 }) => {
   const { t } = useTranslation()
-  const { status } = usePaging()
+  const { postStatus } = usePaging()
   const { qs } = useQueryString()
   const pathname = usePathname()
 
   return (
     <Link
-      href={pathname + '?' + qs({ status: value, page: 1 })}
+      href={pathname + '?' + qs({ postStatus: value, page: 1 })}
       className={cn(
         'h-auto p-0',
-        value === status ? 'text-foreground' : 'text-muted-foreground'
+        value === postStatus ? 'text-foreground' : 'text-muted-foreground'
       )}
     >
       {t(`PostStatus.${label}`)}({count})
@@ -108,11 +119,11 @@ const HeadLink = ({
 
 const Footer = () => {
   const { user } = useAuth()
-  const { page, perPage, status } = usePaging()
+  const { page, perPage, postStatus } = usePaging()
   const { posts } = usePostsAPI(user?.id ?? null, {
     page,
     perPage,
-    status,
+    postStatus,
   })
 
   if (!posts) return null
@@ -124,11 +135,11 @@ const Body = () => {
   const { t } = useTranslation()
 
   const { user } = useAuth()
-  const { page, perPage, status } = usePaging()
+  const { page, perPage, postStatus } = usePaging()
   const { posts } = usePostsAPI(user?.id ?? null, {
     page,
     perPage,
-    status,
+    postStatus,
   })
 
   return (
@@ -210,7 +221,7 @@ const PostItem = ({ post }: { post: Post }) => {
           )}
         </div>
       </TableCell>
-      <TableCell align="center">{post?.creator?.full_name}</TableCell>
+      <TableCell align="center">{post?.author?.full_name}</TableCell>
       <TableCell align="center">
         {post?.status === 'private' ? (
           <LucideIcon name="LockKeyhole" className="size-4 min-w-4" />

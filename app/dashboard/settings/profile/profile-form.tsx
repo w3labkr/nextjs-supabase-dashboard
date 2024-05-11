@@ -32,9 +32,10 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getUserPath } from '@/lib/utils'
+import { fetcher, getAuthorPath } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
-import { useProfileAPI, useEmailsAPI } from '@/queries/client'
+import { useProfileAPI } from '@/queries/client/profiles'
+import { useEmailsAPI } from '@/queries/client/emails'
 import { ProfileAPI } from '@/types/api'
 
 const FormSchema = z.object({
@@ -71,11 +72,11 @@ const ProfileForm = () => {
   )
 }
 
-interface FormFieldProps {
+interface FieldProps {
   form: UseFormReturn<FormValues>
 }
 
-const FullNameField = (props: FormFieldProps) => {
+const FullNameField = (props: FieldProps) => {
   const { form } = props
   const { t } = useTranslation()
 
@@ -101,7 +102,7 @@ const FullNameField = (props: FormFieldProps) => {
   )
 }
 
-const EmailField = (props: FormFieldProps) => {
+const EmailField = (props: FieldProps) => {
   const { form } = props
   const { t } = useTranslation()
   const { user } = useAuth()
@@ -163,7 +164,7 @@ const EmailField = (props: FormFieldProps) => {
   )
 }
 
-const BioField = (props: FormFieldProps) => {
+const BioField = (props: FieldProps) => {
   const { form } = props
   const { t } = useTranslation()
 
@@ -189,14 +190,15 @@ const BioField = (props: FormFieldProps) => {
   )
 }
 
-const SubmitButton = (props: FormFieldProps) => {
+const SubmitButton = (props: FieldProps) => {
   const { form } = props
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t } = useTranslation()
   const { user } = useAuth()
   const { profile } = useProfileAPI(user?.id ?? null)
   const { mutate } = useSWRConfig()
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
     try {
@@ -213,14 +215,18 @@ const SubmitButton = (props: FormFieldProps) => {
       }
 
       const { email, ...values } = formValues
+      const formData = {
+        ...values,
+        email: email.replace('unassigned', ''),
+      }
 
       const fetchUrl = `/api/v1/profile?id=${user?.id}`
+      const fetchOptions = {
+        revalidatePaths: getAuthorPath(profile?.username),
+      }
       const result = await fetcher<ProfileAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({
-          formData: { ...values, email: email.replace('unassigned', '') },
-          options: { revalidatePaths: getUserPath(profile?.username) },
-        }),
+        body: JSON.stringify({ formData, options: fetchOptions }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

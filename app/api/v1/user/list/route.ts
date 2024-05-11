@@ -1,15 +1,16 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createAdminClient } from '@/supabase/server'
 import { ApiError } from '@/lib/utils'
-import { authorize } from '@/queries/server'
+import { authorize } from '@/queries/server/auth'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-  const uid = searchParams.get('uid') as string
+
+  const id = searchParams.get('id') as string
   const page = +((searchParams.get('page') as string) ?? '1')
   const perPage = +((searchParams.get('perPage') as string) ?? '50')
 
-  const { user, role } = await authorize(uid)
+  const { user, role } = await authorize(id)
 
   if (!user) {
     return NextResponse.json(

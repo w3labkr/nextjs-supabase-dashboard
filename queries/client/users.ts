@@ -24,10 +24,10 @@ export function useUserAPI(id: string | null) {
 }
 
 export function useUsersAPI(
-  uid: string | null,
+  id: string | null,
   params?: { page?: number; perPage?: number }
 ) {
-  const query = setQueryString({ uid, ...params })
+  const query = setQueryString({ id, ...params })
   const url = query ? `/api/v1/user/list?${query}` : null
 
   const {

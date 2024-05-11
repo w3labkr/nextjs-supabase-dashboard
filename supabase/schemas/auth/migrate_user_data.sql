@@ -3,6 +3,8 @@
 
 drop function if exists migrate_user_data;
 
+----------------------------------------------------------------
+
 create or replace function migrate_user_data()
 returns void
 security definer set search_path = public

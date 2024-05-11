@@ -77,9 +77,9 @@ const EmailField = ({ form }: { form: UseFormReturn<FormValues> }) => {
 }
 
 const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
-
   const { t } = useTranslation()
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
     try {

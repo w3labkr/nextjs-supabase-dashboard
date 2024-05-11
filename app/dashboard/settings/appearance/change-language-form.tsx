@@ -58,11 +58,11 @@ const ChangeLanguageForm = () => {
   )
 }
 
-interface FormFieldProps {
+interface FieldProps {
   form: UseFormReturn<FormValues>
 }
 
-const LanguageField = (props: FormFieldProps) => {
+const LanguageField = (props: FieldProps) => {
   const { form } = props
 
   return (
@@ -94,15 +94,16 @@ const LanguageField = (props: FormFieldProps) => {
   )
 }
 
-const SubmitButton = (props: FormFieldProps) => {
+const SubmitButton = (props: FieldProps) => {
   const { form } = props
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const { t, i18n } = useTranslation()
   const dispatch = useAppDispatch()
   const resolvedLanguage = useAppSelector(
     (state) => state?.i18n?.resolvedLanguage
   )
+
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async (formValues: FormValues) => {
     try {

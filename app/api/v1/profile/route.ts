@@ -1,7 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
 import { ApiError, revalidatePaths } from '@/lib/utils'
-import { authorize } from '@/queries/server'
+import { authorize } from '@/queries/server/auth'
+
 import dayjs from 'dayjs'
 
 export async function GET(request: NextRequest) {
