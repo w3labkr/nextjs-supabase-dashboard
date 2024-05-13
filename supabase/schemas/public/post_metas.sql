@@ -44,7 +44,7 @@ begin
 end;
 $$ language plpgsql;
 
--- const { data, error } = await supabase.rpc('set_view_count', { postid: 0 });
+-- const { data, error } = await supabase.rpc('set_view_count', { postid: '' });
 -- select * from set_view_count('postid');
 
 create or replace function set_view_count(postid bigint)

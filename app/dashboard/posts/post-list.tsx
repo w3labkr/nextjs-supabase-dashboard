@@ -82,8 +82,8 @@ const Header = () => {
       <HeadLink value="draft" label="draft" count={status?.draft ?? 0} />
       {/* <span>|</span> */}
       {/* <HeadLink value="pending" label="pending" count={status?.pending ?? 0} /> */}
-      {/* <span>|</span> */}
-      {/* <HeadLink value="private" label="private" count={status?.private ?? 0} /> */}
+      <span>|</span>
+      <HeadLink value="private" label="private" count={status?.private ?? 0} />
       <span>|</span>
       <HeadLink value="trash" label="trash" count={status?.trash ?? 0} />
     </div>

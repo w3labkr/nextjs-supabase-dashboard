@@ -32,4 +32,12 @@ const Error = (props: ErrorProps) => {
   )
 }
 
-export { Error, type ErrorProps }
+const Forbidden = (props: Omit<ErrorProps, 'status'>) => {
+  return <Error status="403" {...props} />
+}
+
+const NotFound = (props: Omit<ErrorProps, 'status'>) => {
+  return <Error status="404" {...props} />
+}
+
+export { Forbidden, NotFound, Error, type ErrorProps }

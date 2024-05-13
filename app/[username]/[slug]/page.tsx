@@ -1,18 +1,19 @@
 import * as React from 'react'
 import type { Metadata, ResolvingMetadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 
 import dayjs from 'dayjs'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { RelatedPosts } from '@/components/related-posts'
-import { getAuthorUrl } from '@/lib/utils'
+import { Forbidden } from '@/components/error'
 import { PostProvider } from './post-provider'
 import { Analysis } from './analysis'
 import { ViewCount } from './view-count'
 import { FavoriteButton } from './favorite-button'
 
+import { getAuthorUrl } from '@/lib/utils'
 import { Post } from '@/types/database'
 import { getUser } from '@/queries/server/users'
 import { getProfileAPI } from '@/queries/server/profiles'
@@ -64,18 +65,18 @@ export default async function PostPage({
   if (!post) notFound()
 
   const { user } = await getUser()
-  const authorId = post?.user_id
 
   if (searchParams?.preview === 'true') {
-    if (user && authorId !== user?.id) notFound()
+    if (post?.user_id !== user?.id) return <Forbidden />
+  } else if (post?.status === 'private') {
+    if (post?.user_id !== user?.id) return <Forbidden />
   } else {
     if (post?.status !== 'publish') notFound()
   }
 
-  const { previousPost, nextPost } = await getAdjacentPostAPI(
-    post?.id ?? null,
-    { userId: authorId ?? null }
-  )
+  const { previousPost, nextPost } = await getAdjacentPostAPI(post?.id, {
+    userId: post?.user_id,
+  })
 
   return (
     <PostProvider value={{ post }}>

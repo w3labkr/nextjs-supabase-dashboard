@@ -24,6 +24,7 @@ import {
   MetaboxRevisions,
   MetaboxThumbnail,
   MetaboxPublish,
+  MetaboxRectriction,
 } from './components/metaboxes'
 import { Permalink } from './components/permalink'
 
@@ -33,6 +34,7 @@ const Editor = dynamic(() => import('./components/editor'), { ssr: false })
 
 const FormSchema = z.object({
   user_id: z.string().uuid(),
+  status: z.string().nonempty(),
   title: z.string().nonempty(),
   slug: z.string().nonempty(),
   content: z.string().optional(),
@@ -49,6 +51,7 @@ const PostForm = ({ id }: { id: number }) => {
     mode: 'onSubmit',
     values: {
       user_id: post?.user_id ?? '',
+      status: post?.status ?? '',
       slug: post?.slug ?? '',
       title: post?.title ?? '',
       content: post?.content ?? '',
@@ -60,6 +63,7 @@ const PostForm = ({ id }: { id: number }) => {
   return (
     <Form {...form}>
       <UserIdField form={form} />
+      <StatusField form={form} />
       <form method="POST" noValidate>
         <div className="relative grid gap-10 md:grid-cols-[1fr_280px]">
           <div className="mx-auto w-full min-w-0 space-y-6">
@@ -74,6 +78,7 @@ const PostForm = ({ id }: { id: number }) => {
           </div>
           <div className="space-y-0">
             <MetaboxPublish form={form} post={post} />
+            <MetaboxRectriction form={form} post={post} />
             <MetaboxThumbnail form={form} post={post} />
           </div>
         </div>
@@ -87,6 +92,22 @@ const UserIdField = ({ form }: { form: UseFormReturn<FormValues> }) => {
     <FormField
       control={form.control}
       name="user_id"
+      render={({ field }) => (
+        <FormItem>
+          <FormControl>
+            <Input type="hidden" {...field} />
+          </FormControl>
+        </FormItem>
+      )}
+    />
+  )
+}
+
+const StatusField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+  return (
+    <FormField
+      control={form.control}
+      name="status"
       render={({ field }) => (
         <FormItem>
           <FormControl>

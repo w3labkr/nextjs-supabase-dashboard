@@ -23,9 +23,9 @@ alter table user_metas enable row level security;
 
 -- Add row-level security
 create policy "Public user_metas are viewable by everyone." on user_metas for select to authenticated, anon using ( true );
-create policy "Users can insert user_meta." on user_metas for insert to authenticated with check ( true );
-create policy "Users can update user_meta." on user_metas for update to authenticated using ( true );
-create policy "Users can delete user_meta." on user_metas for delete to authenticated using ( true );
+create policy "Users can insert their own user_meta." on user_metas for insert to authenticated with check ( (select auth.uid()) = user_id );
+create policy "Users can update their own user_meta." on user_metas for update to authenticated using ( (select auth.uid()) = user_id );
+create policy "Users can delete their own user_meta." on user_metas for delete to authenticated using ( (select auth.uid()) = user_id );
 
 -- const { data, error } = await supabase.rpc('set_user_meta', { userid: '', metakey: '', metavalue: '' });
 -- select * from set_user_meta('userid', 'metakey', 'metavalue');

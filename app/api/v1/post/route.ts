@@ -9,15 +9,11 @@ export async function GET(request: NextRequest) {
   const id = searchParams.get('id') as string
   const userId = searchParams.get('userId') as string
   const slug = searchParams.get('slug') as string
-  const postType = (searchParams.get('postType') as string) ?? 'post'
-  const postStatus = searchParams.get('postStatus') as string
 
   let match = {}
 
   if (id) match = { ...match, id }
   if (userId) match = { ...match, user_id: userId }
-  if (postType) match = { ...match, type: postType }
-  if (postStatus) match = { ...match, status: postStatus }
   if (slug) match = { ...match, slug }
 
   const supabase = createClient()
@@ -85,7 +81,7 @@ export async function PUT(request: NextRequest) {
   const userId = searchParams.get('userId') as string
 
   const { formData, options } = await request.json()
-  const { user, plan } = await authorize(userId)
+  const { user, role, plan } = await authorize(userId)
 
   if (!user) {
     return NextResponse.json(
@@ -107,9 +103,10 @@ export async function PUT(request: NextRequest) {
     )
   }
 
-  const count = total?.count ?? 0
+  const isAdmin = role === 'admin' || role === 'superadmin'
+  const totalCount = total?.count ?? 0
 
-  if (plan === 'free' && count > 2) {
+  if (!isAdmin && plan === 'free' && totalCount > 2) {
     return NextResponse.json(
       { data: null, error: new ApiError(402) },
       { status: 402 }

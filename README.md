@@ -103,6 +103,12 @@ Set the current Node.js version.
 node -v > .nvmrc
 ```
 
+(Optional) Generating Types if supabase cli is installed
+
+```shell
+npm run gen-types
+```
+
 Start the development server.
 
 ```shell

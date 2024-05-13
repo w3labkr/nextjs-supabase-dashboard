@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
   }
 
   // return the user to an error page with some instructions
-  // redirectTo.pathname = '/errors/400'
+  // redirectTo.pathname = '/auth/auth-code-error'
   // return NextResponse.redirect(redirectTo)
 
   return NextResponse.redirect(redirectTo)

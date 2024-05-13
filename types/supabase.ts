@@ -548,7 +548,9 @@ export type Database = {
         }[]
       }
       create_new_posts: {
-        Args: Record<PropertyKey, never>
+        Args: {
+          useremail: string
+        }
         Returns: undefined
       }
       generate_username: {

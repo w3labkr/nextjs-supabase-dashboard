@@ -36,7 +36,9 @@ const MetaboxPublish = (props: MetaboxProps) => {
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
       <AccordionItem value="item-1">
-        <AccordionTrigger>{t('PostMetabox.publish')}</AccordionTrigger>
+        <AccordionTrigger className="pt-0">
+          {t('PostMetabox.publish')}
+        </AccordionTrigger>
         <AccordionContent className="space-y-4">
           <div className="flex justify-between">
             <DraftButton form={form} post={post} />
@@ -50,7 +52,9 @@ const MetaboxPublish = (props: MetaboxProps) => {
             <li className="flex items-center">
               <LucideIcon name="Signpost" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.status')}: `}
-              {post?.status && t(`PostStatus.${post?.status}`)}
+              {post?.status === 'private'
+                ? t('PostMetabox.publish')
+                : t(`PostStatus.${post?.status}`)}
             </li>
             <li className="flex items-center">
               <LucideIcon name="Eye" className="mr-2 size-4 min-w-4" />
@@ -298,7 +302,7 @@ const PublishButton = (props: MetaboxProps) => {
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async ({ slug, ...formValues }: FormValues) => {
+  const onSubmit = async ({ slug, status, ...formValues }: FormValues) => {
     try {
       setIsSubmitting(true)
 
@@ -307,14 +311,14 @@ const PublishButton = (props: MetaboxProps) => {
       const publishedFormData = {
         ...formValues,
         slug: kebabCase(slug),
-        status: 'publish',
+        status: status === 'private' ? 'private' : 'publish',
         published_at: new Date().toISOString(),
       }
 
       const updatedFormData = {
         ...formValues,
         slug: kebabCase(slug),
-        status: 'publish',
+        status: status === 'private' ? 'private' : 'publish',
       }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`

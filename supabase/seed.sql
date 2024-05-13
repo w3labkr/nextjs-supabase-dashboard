@@ -227,9 +227,9 @@ create table user_metas (
 alter table user_metas enable row level security;
 
 create policy "Public user_metas are viewable by everyone." on user_metas for select to authenticated, anon using ( true );
-create policy "Users can insert user_meta." on user_metas for insert to authenticated with check ( true );
-create policy "Users can update user_meta." on user_metas for update to authenticated using ( true );
-create policy "Users can delete user_meta." on user_metas for delete to authenticated using ( true );
+create policy "Users can insert their own user_meta." on user_metas for insert to authenticated with check ( (select auth.uid()) = user_id );
+create policy "Users can update their own user_meta." on user_metas for update to authenticated using ( (select auth.uid()) = user_id );
+create policy "Users can delete their own user_meta." on user_metas for delete to authenticated using ( (select auth.uid()) = user_id );
 
 ----------------------------------------------------------------
 
@@ -678,7 +678,7 @@ select migrate_user_data();
 
 ----------------------------------------------------------------
 
-create or replace function create_new_posts()
+create or replace function create_new_posts(useremail text)
 returns void
 security definer set search_path = public
 as $$
@@ -686,7 +686,7 @@ declare
   r record;
   userid uuid;
 begin
-  select id into userid from auth.users limit 1;
+  select id into userid from auth.users where email = useremail;
 
   insert into posts
     (published_at, user_id, status, title, slug, content)
@@ -702,4 +702,4 @@ begin
 end;
 $$ language plpgsql;
 
-select create_new_posts()
+-- select create_new_posts('username@example.com')

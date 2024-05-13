@@ -7,9 +7,9 @@ import { createClient } from '@/supabase/client'
 const Analysis = () => {
   const { post } = usePost()
 
-  const setViewCount = async (id: number) => {
+  const setViewCount = async (postid: number) => {
     const supabase = createClient()
-    const result = await supabase.rpc('set_view_count', { postid: id })
+    const result = await supabase.rpc('set_view_count', { postid })
   }
 
   React.useEffect(() => {
