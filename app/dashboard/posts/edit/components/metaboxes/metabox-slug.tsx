@@ -20,18 +20,10 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { usePostForm } from '../../post-form-provider'
 
-import { Post } from '@/types/database'
-import { UseFormReturn } from 'react-hook-form'
-import { FormValues } from '../../post-form'
-
-interface MetaboxProps {
-  form: UseFormReturn<FormValues>
-  post: Post | null
-}
-
-const MetaboxSlug = (props: MetaboxProps) => {
-  const { form, post } = props
+const MetaboxSlug = () => {
+  const { form, post } = usePostForm()
   const { t } = useTranslation()
 
   const title = form.watch('title')

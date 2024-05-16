@@ -25,7 +25,12 @@ const Header = () => {
       <header className="flex w-full flex-col border-0 border-b border-solid border-input bg-inherit">
         <div className="container flex h-[60px] items-center">
           <SheetTrigger asChild>
-            <Button className="lg:hidden" size="icon" variant="outline">
+            <Button
+              type="button"
+              className="lg:hidden"
+              size="icon"
+              variant="outline"
+            >
               <LucideIcon name="Menu" className="size-6 min-w-6" />
               <span className="sr-only">Toggle navigation menu</span>
             </Button>

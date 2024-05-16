@@ -29,16 +29,18 @@ import {
 import { Permalink } from './components/permalink'
 
 import { usePostAPI } from '@/queries/client/posts'
+import { PostFormProvider, usePostForm } from './post-form-provider'
 
 const Editor = dynamic(() => import('./components/editor'), { ssr: false })
 
 const FormSchema = z.object({
-  user_id: z.string().uuid(),
+  user_id: z.string().nonempty().uuid(),
   status: z.string().nonempty(),
   title: z.string().nonempty(),
   slug: z.string().nonempty(),
   content: z.string().optional(),
   excerpt: z.string().optional(),
+  thumbnail_url: z.string().optional(),
 })
 
 type FormValues = z.infer<typeof FormSchema>
@@ -56,38 +58,43 @@ const PostForm = ({ id }: { id: number }) => {
       title: post?.title ?? '',
       content: post?.content ?? '',
       excerpt: post?.excerpt ?? '',
+      thumbnail_url: post?.thumbnail_url ?? '',
     },
     shouldUnregister: true,
   })
 
   return (
-    <Form {...form}>
-      <UserIdField form={form} />
-      <StatusField form={form} />
-      <form method="POST" noValidate>
-        <div className="relative grid gap-10 md:grid-cols-[1fr_280px]">
-          <div className="mx-auto w-full min-w-0 space-y-6">
-            <div className="space-y-2">
-              <TitleField form={form} />
-              <Permalink form={form} post={post} />
+    <PostFormProvider value={{ form, post }}>
+      <Form {...form}>
+        <UserIdField />
+        <StatusField />
+        <form method="POST" noValidate>
+          <div className="relative grid gap-10 md:grid-cols-[1fr_280px]">
+            <div className="mx-auto w-full min-w-0 space-y-6">
+              <div className="space-y-2">
+                <TitleField />
+                <Permalink />
+              </div>
+              <Editor />
+              <MetaboxSlug />
+              <MetaboxExcerpt />
+              {/* <MetaboxRevisions /> */}
             </div>
-            <Editor form={form} post={post} />
-            <MetaboxSlug form={form} post={post} />
-            <MetaboxExcerpt form={form} post={post} />
-            {/* <MetaboxRevisions form={form} post={post} /> */}
+            <div className="space-y-0">
+              <MetaboxPublish />
+              <MetaboxRectriction />
+              <MetaboxThumbnail />
+            </div>
           </div>
-          <div className="space-y-0">
-            <MetaboxPublish form={form} post={post} />
-            <MetaboxRectriction form={form} post={post} />
-            <MetaboxThumbnail form={form} post={post} />
-          </div>
-        </div>
-      </form>
-    </Form>
+        </form>
+      </Form>
+    </PostFormProvider>
   )
 }
 
-const UserIdField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const UserIdField = () => {
+  const { form } = usePostForm()
+
   return (
     <FormField
       control={form.control}
@@ -103,7 +110,9 @@ const UserIdField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const StatusField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const StatusField = () => {
+  const { form } = usePostForm()
+
   return (
     <FormField
       control={form.control}
@@ -119,8 +128,9 @@ const StatusField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const TitleField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const TitleField = () => {
   const { t } = useTranslation()
+  const { form } = usePostForm()
 
   return (
     <FormField

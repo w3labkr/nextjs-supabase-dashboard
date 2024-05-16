@@ -31,7 +31,7 @@ const Notify = () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button className="h-8 w-8" size="icon" variant="ghost">
+        <Button type="button" variant="ghost" className="h-8 w-8" size="icon">
           <LucideIcon name="Bell" />
         </Button>
       </PopoverTrigger>
@@ -48,7 +48,7 @@ const Notify = () => {
             {data?.data && <NotifyItems items={data?.data} />}
           </CardContent>
           <CardFooter>
-            <Button className="w-full">
+            <Button type="button" className="w-full">
               <LucideIcon name="Check" className="mr-2 size-4 min-w-4" />
               {t('Notify.submit')}
             </Button>

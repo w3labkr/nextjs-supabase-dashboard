@@ -20,7 +20,7 @@ const DeleteButton = (props: DeleteButtonProps) => {
   const { post, ...rest } = props
 
   const { t } = useTranslation()
-  const { page, perPage, postStatus } = usePaging()
+  const { page, perPage, status } = usePaging()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -44,7 +44,7 @@ const DeleteButton = (props: DeleteButtonProps) => {
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      const query = setQueryString({ userId, page, perPage, postStatus })
+      const query = setQueryString({ userId, page, perPage, status })
 
       mutate(fetchUrl)
       mutate(`/api/v1/post/list?${query}`)
@@ -60,7 +60,7 @@ const DeleteButton = (props: DeleteButtonProps) => {
 
   return (
     <button
-      className="text-xs text-red-700 hover:underline"
+      className="text-xs text-red-500 hover:underline"
       onClick={handleClick}
       disabled={isSubmitting}
       {...rest}

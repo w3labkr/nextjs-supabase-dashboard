@@ -10,13 +10,13 @@ export async function GET(request: NextRequest) {
   const page = +((searchParams.get('page') as string) ?? '1')
   const perPage = +((searchParams.get('perPage') as string) ?? '50')
   const postType = (searchParams.get('postType') as string) ?? 'post'
-  const postStatus = searchParams.get('postStatus') as string
+  const status = searchParams.get('status') as string
 
   let match = {}
 
   if (userId) match = { ...match, user_id: userId }
   if (postType) match = { ...match, 'posts.type': postType }
-  if (postStatus) match = { ...match, 'posts.status': postStatus }
+  if (status) match = { ...match, 'posts.status': status }
 
   match = { ...match, is_favorite: true }
 

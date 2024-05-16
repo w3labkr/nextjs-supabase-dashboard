@@ -41,7 +41,7 @@ const EmailItem = (props: EmailItemProps) => {
             {item?.email === user?.email ? (
               <>
                 <span>{' - '}</span>
-                <span className="text-green-700">{t('EmailItem.title')}</span>
+                <span className="text-green-500">{t('EmailItem.title')}</span>
               </>
             ) : null}
           </div>
@@ -104,7 +104,7 @@ const UnverifiedEmails = (props: EmailItemProps) => {
   return (
     <li className="text-xs text-muted-foreground">
       <div>
-        <span className="font-semibold text-amber-700">
+        <span className="font-semibold text-amber-500">
           {t('UnverifiedEmails.title')}
         </span>
         &nbsp;&nbsp;

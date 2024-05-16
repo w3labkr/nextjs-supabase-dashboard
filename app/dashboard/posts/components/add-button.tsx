@@ -59,7 +59,12 @@ const AddButton = (props: AddButtonProps) => {
   }
 
   return (
-    <Button onClick={handleClick} disabled={isSubmitting} {...rest}>
+    <Button
+      type="button"
+      onClick={handleClick}
+      disabled={isSubmitting}
+      {...rest}
+    >
       {startIconName && (
         <LucideIcon name={startIconName} className="mr-2 size-4" />
       )}

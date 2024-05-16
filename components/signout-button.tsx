@@ -38,7 +38,7 @@ const SignOutButton = (props: SignOutButtonProps) => {
   }
 
   return (
-    <Button onClick={handleClick} {...props}>
+    <Button type="button" onClick={handleClick} {...props}>
       {t('SignOutButton.label')}
     </Button>
   )

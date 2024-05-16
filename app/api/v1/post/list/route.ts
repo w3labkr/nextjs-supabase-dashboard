@@ -10,13 +10,13 @@ export async function GET(request: NextRequest) {
   const page = +((searchParams.get('page') as string) ?? '1')
   const perPage = +((searchParams.get('perPage') as string) ?? '50')
   const postType = (searchParams.get('postType') as string) ?? 'post'
-  const postStatus = searchParams.get('postStatus') as string
+  const status = searchParams.get('status') as string
 
   let match = {}
 
   if (userId) match = { ...match, user_id: userId }
   if (postType) match = { ...match, type: postType }
-  if (postStatus) match = { ...match, status: postStatus }
+  if (status) match = { ...match, status }
 
   const supabase = createClient()
   const totalQuery = supabase
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     .select('*', { count: 'exact', head: true })
     .match(match)
 
-  if (!postStatus) totalQuery.neq('status', 'trash')
+  if (!status) totalQuery.neq('status', 'trash')
 
   const total = await totalQuery
 
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
     .range((page - 1) * perPage, page * perPage - 1)
     .order('created_at', { ascending: false })
 
-  if (!postStatus) listQuery.neq('status', 'trash')
+  if (!status) listQuery.neq('status', 'trash')
 
   const list = await listQuery
 

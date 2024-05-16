@@ -23,7 +23,7 @@ export async function getPostsAPI(
     page?: number
     perPage?: number
     postType?: string
-    postStatus?: string
+    status?: string
   }
 ) {
   const query = setQueryString({ userId, ...params })
@@ -38,7 +38,7 @@ export async function getPostsAPI(
 
 export async function getAdjacentPostAPI(
   id: number | null,
-  params: { userId: string | null; postType?: string; postStatus?: string }
+  params: { userId: string | null; postType?: string; status?: string }
 ) {
   let previousPost: Post | null = null
   let nextPost: Post | null = null
@@ -52,7 +52,7 @@ export async function getAdjacentPostAPI(
       postid: id,
       userid: params?.userId,
       posttype: params?.postType ?? 'post',
-      poststatus: params?.postStatus ?? 'publish',
+      poststatus: params?.status ?? 'publish',
     })
     .single()
 
@@ -79,7 +79,7 @@ export async function getFavoritePostsAPI(
     page?: number
     perPage?: number
     postType?: string
-    postStatus?: string
+    status?: string
   }
 ) {
   const query = setQueryString({ userId, ...params })

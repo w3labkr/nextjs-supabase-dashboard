@@ -48,7 +48,7 @@ const SignInWithGoogle = (props: SignInWithGoogleProps) => {
   }
 
   return (
-    <Button variant={variant} onClick={handleClick} {...rest}>
+    <Button type="button" variant={variant} onClick={handleClick} {...rest}>
       <FcGoogle className="mr-2 size-4 min-w-4" />
       {t('SignInWithGoogle.label')}
     </Button>

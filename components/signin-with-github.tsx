@@ -42,7 +42,7 @@ const SignInWithGithub = (props: SignInWithGithubProps) => {
   }
 
   return (
-    <Button variant={variant} onClick={handleClick} {...rest}>
+    <Button type="button" variant={variant} onClick={handleClick} {...rest}>
       <FaGithub className="mr-2 h-4 w-4" />
       {t('SignInWithGithub.label')}
     </Button>

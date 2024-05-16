@@ -19,18 +19,10 @@ import { Button } from '@/components/ui/button'
 import { useSWRConfig } from 'swr'
 import { fetcher, getPostPath } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
+import { usePostForm } from '../../post-form-provider'
 
-import { Post } from '@/types/database'
-import { UseFormReturn } from 'react-hook-form'
-import { FormValues } from '../../post-form'
-
-interface MetaboxProps {
-  form: UseFormReturn<FormValues>
-  post: Post | null
-}
-
-const MetaboxPublish = (props: MetaboxProps) => {
-  const { form, post } = props
+const MetaboxPublish = () => {
+  const { form, post } = usePostForm()
   const { t } = useTranslation()
 
   return (
@@ -85,21 +77,22 @@ const MetaboxPublish = (props: MetaboxProps) => {
   )
 }
 
-const DraftButton = (props: MetaboxProps) => {
-  const { form, post } = props
+const DraftButton = () => {
+  const { form, post } = usePostForm()
 
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async ({ slug, ...formValues }: FormValues) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
       if (!post) throw new Error('Require is not defined.')
 
-      const formData = { ...formValues, slug: kebabCase(slug), status: 'draft' }
+      const { slug, ...values } = form.getValues()
+      const formData = { ...values, slug: kebabCase(slug), status: 'draft' }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const fetchOptions = { revalidatePaths: getPostPath(post) }
@@ -138,8 +131,8 @@ const DraftButton = (props: MetaboxProps) => {
   )
 }
 
-const ViewButton = (props: MetaboxProps) => {
-  const { form, post } = props
+const ViewButton = () => {
+  const { form, post } = usePostForm()
 
   const router = useRouter()
   const { t } = useTranslation()
@@ -175,8 +168,8 @@ const ViewButton = (props: MetaboxProps) => {
   )
 }
 
-const PreviewButton = (props: MetaboxProps) => {
-  const { form, post } = props
+const PreviewButton = () => {
+  const { form, post } = usePostForm()
 
   const router = useRouter()
   const { t } = useTranslation()
@@ -184,14 +177,15 @@ const PreviewButton = (props: MetaboxProps) => {
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async ({ slug, ...formValues }: FormValues) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
       if (!post) throw new Error('Require is not defined.')
 
       const path = getPostPath(post)
-      const formData = { ...formValues, slug: kebabCase(slug), status: 'draft' }
+      const { slug, ...values } = form.getValues()
+      const formData = { ...values, slug: kebabCase(slug), status: 'draft' }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const fetchOptions = { revalidatePaths: path }
@@ -230,8 +224,8 @@ const PreviewButton = (props: MetaboxProps) => {
   )
 }
 
-const TrashButton = (props: MetaboxProps) => {
-  const { form, post } = props
+const TrashButton = () => {
+  const { form, post } = usePostForm()
 
   const router = useRouter()
   const { t } = useTranslation()
@@ -244,12 +238,13 @@ const TrashButton = (props: MetaboxProps) => {
     router.refresh()
   }, [unregister, router])
 
-  const onSubmit = async (formValues: FormValues) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
       if (!post) throw new Error('Require is not defined.')
 
+      const formValues = form.getValues()
       const formData = {
         user_id: formValues?.user_id,
         status: 'trash',
@@ -294,29 +289,37 @@ const TrashButton = (props: MetaboxProps) => {
   )
 }
 
-const PublishButton = (props: MetaboxProps) => {
-  const { form, post } = props
+const PublishButton = () => {
+  const { form, post } = usePostForm()
 
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async ({ slug, status, ...formValues }: FormValues) => {
+  // const onSubmit = async ({ slug, status, ...formValues }) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
+      const formValues = form.getValues()
+
+      console.log(formValues)
+
+      return
+
       if (!post) throw new Error('Require is not defined.')
 
+      const { slug, status, ...values } = form.getValues()
       const publishedFormData = {
-        ...formValues,
+        ...values,
         slug: kebabCase(slug),
         status: status === 'private' ? 'private' : 'publish',
         published_at: new Date().toISOString(),
       }
 
       const updatedFormData = {
-        ...formValues,
+        ...values,
         slug: kebabCase(slug),
         status: status === 'private' ? 'private' : 'publish',
       }

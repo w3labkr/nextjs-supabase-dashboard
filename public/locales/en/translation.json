@@ -377,6 +377,8 @@
     "thumbnail": "Thumbnail",
     "featured_image": "Featured image",
     "set_featured_image": "Set featured image",
+    "edit_featured_image": "Click the image to edit or update",
+    "remove_featured_image": "Remove featured image",
     "rectriction": "Post Rectriction",
     "save_draft": "Save Draft",
     "view": "View",

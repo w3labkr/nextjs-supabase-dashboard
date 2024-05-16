@@ -377,6 +377,8 @@
     "thumbnail": "썸네일",
     "featured_image": "추천 이미지",
     "set_featured_image": "추천 이미지 설정",
+    "edit_featured_image": "이미지를 클릭하여 편집하거나 업데이트하세요",
+    "remove_featured_image": "추천 이미지 삭제",
     "rectriction": "제한",
     "save_draft": "임시 저장",
     "view": "보기",

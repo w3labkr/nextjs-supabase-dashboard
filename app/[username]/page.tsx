@@ -55,12 +55,12 @@ export default async function ProfilePage({
   const page = +(searchParams?.page ?? '1')
   const perPage = +(searchParams?.perPage ?? '50')
   const pageSize = +(searchParams?.pageSize ?? '10')
-  const postStatus = 'publish'
 
   const { posts, count } = await getPostsAPI(profile?.id ?? null, {
     page,
     perPage,
-    postStatus,
+    postType: 'post',
+    status: 'publish',
   })
 
   const total = count ?? 0

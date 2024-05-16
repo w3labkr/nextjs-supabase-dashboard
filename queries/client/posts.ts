@@ -34,7 +34,7 @@ export function usePostsAPI(
     page?: number
     perPage?: number
     postType?: string
-    postStatus?: string
+    status?: string
   }
 ) {
   const query = setQueryString({ userId, ...params })
@@ -89,7 +89,7 @@ export function useFavoritePostsAPI(
     page?: number
     perPage?: number
     postType?: string
-    postStatus?: string
+    status?: string
   }
 ) {
   const query = setQueryString({ userId, ...params })

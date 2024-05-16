@@ -33,7 +33,13 @@ const LanguageToggleButton = (props: LanguageToggleButtonProps) => {
   }
 
   return (
-    <Button variant={variant} size={size} onClick={handleClick} {...rest}>
+    <Button
+      type="button"
+      variant={variant}
+      size={size}
+      onClick={handleClick}
+      {...rest}
+    >
       {currentLanguage?.toUpperCase()}
     </Button>
   )

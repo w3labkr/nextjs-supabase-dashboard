@@ -78,7 +78,7 @@ const DeactivateUserForm = (props: DeactivateUserFormProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="text-destructive">
+        <Button type="button" variant="outline" className="text-destructive">
           {t('DeleteUserDialog.trigger')}
         </Button>
       </DialogTrigger>

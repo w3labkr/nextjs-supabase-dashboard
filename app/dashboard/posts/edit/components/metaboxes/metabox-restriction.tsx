@@ -10,18 +10,10 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Switch } from '@/components/ui/switch'
+import { usePostForm } from '../../post-form-provider'
 
-import { Post } from '@/types/database'
-import { UseFormReturn } from 'react-hook-form'
-import { FormValues } from '../../post-form'
-
-interface MetaboxProps {
-  form: UseFormReturn<FormValues>
-  post: Post | null
-}
-
-const MetaboxRectriction = (props: MetaboxProps) => {
-  const { form } = props
+const MetaboxRectriction = () => {
+  const { form, post } = usePostForm()
   const { t } = useTranslation()
 
   const status = form.watch('status')

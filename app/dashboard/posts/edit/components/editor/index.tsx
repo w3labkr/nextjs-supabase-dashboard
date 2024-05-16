@@ -5,13 +5,14 @@ import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from 'ckeditor5-custom-build'
 import type { EditorConfig } from '@ckeditor/ckeditor5-core'
 import EventInfo from '@ckeditor/ckeditor5-utils/src/eventinfo'
+import { MyUploadAdapterPlugin } from './upload-adapter'
 
 import { defaultLng } from '@/i18next.config'
 import { useAppSelector } from '@/lib/redux/hooks'
 
 import { Post } from '@/types/database'
 import { UseFormReturn } from 'react-hook-form'
-import { FormValues } from '../../post-form'
+import { usePostForm } from '../../post-form-provider'
 
 import '@/ckeditor5/build/translations/ko.js'
 import './style.css'
@@ -149,16 +150,13 @@ const editorConfiguration: EditorConfig = {
     'MediaEmbedToolbar', // Warning: widget-toolbar-no-items { toolbarId: 'mediaEmbed' }
   ],
 
-  // extraPlugins: [],
+  extraPlugins: [
+    MyUploadAdapterPlugin
+  ],
 }
 
-interface MetaboxProps {
-  form: UseFormReturn<FormValues>
-  post: Post | null
-}
-
-const Editor = (props: MetaboxProps) => {
-  const { form, post } = props
+const Editor = () => {
+  const { form, post } = usePostForm()
   const resolvedLanguage = useAppSelector(
     (state) => state?.i18n?.resolvedLanguage
   )

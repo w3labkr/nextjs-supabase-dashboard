@@ -70,12 +70,14 @@ export default async function PostPage({
     if (post?.user_id !== user?.id) return <Forbidden />
   } else if (post?.status === 'private') {
     if (post?.user_id !== user?.id) return <Forbidden />
-  } else {
-    if (post?.status !== 'publish') notFound()
+  } else if (post?.status !== 'publish') {
+    notFound()
   }
 
   const { previousPost, nextPost } = await getAdjacentPostAPI(post?.id, {
     userId: post?.user_id,
+    postType: 'post',
+    status: 'publish',
   })
 
   return (

@@ -12,7 +12,11 @@ import {
 const UpgradeProBanner = () => {
   return (
     <div className="mt-auto p-4">
-      <Button variant="outline" className="inline-flex w-full lg:hidden">
+      <Button
+        type="button"
+        variant="outline"
+        className="inline-flex w-full lg:hidden"
+      >
         Pro
       </Button>
       <Card className="hidden max-w-60 lg:block">
@@ -23,7 +27,7 @@ const UpgradeProBanner = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button className="w-full" size="sm">
+          <Button type="button" className="w-full" size="sm">
             Upgrade
           </Button>
         </CardContent>

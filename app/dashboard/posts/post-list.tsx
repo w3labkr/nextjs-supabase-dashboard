@@ -40,19 +40,19 @@ const PostList = () => {
   const page = +(searchParams.get('page') ?? '1')
   const perPage = +(searchParams.get('perPage') ?? '50')
   const pageSize = +(searchParams.get('pageSize') ?? '10')
-  const postStatus = searchParams.get('postStatus') ?? undefined
+  const status = searchParams.get('status') ?? undefined
 
   const { user } = useAuth()
   const { count } = usePostsAPI(user?.id ?? null, {
     page,
     perPage,
-    postStatus,
+    status,
   })
 
+  const total = count ?? 0
+
   return (
-    <PagingProvider
-      value={{ total: count ?? 0, page, perPage, pageSize, postStatus }}
-    >
+    <PagingProvider value={{ total, page, perPage, pageSize, status }}>
       <Header />
       <Body />
       <Footer />
@@ -62,7 +62,9 @@ const PostList = () => {
 
 const Header = () => {
   const { user } = useAuth()
-  const { data, count } = useCountPostsAPI(user?.id ?? null)
+  const { data, count } = useCountPostsAPI(user?.id ?? null, {
+    postType: 'post',
+  })
 
   const status: { [key: string]: number } | undefined = React.useMemo(() => {
     return data?.reduce((acc: { [key: string]: number }, curr) => {
@@ -76,8 +78,8 @@ const Header = () => {
       <HeadLink value={undefined} label="all" count={count ?? 0} />
       <span>|</span>
       <HeadLink value="publish" label="publish" count={status?.publish ?? 0} />
-      {/* <span>|</span> */}
-      {/* <HeadLink value="future" label="future" count={status?.future ?? 0} /> */}
+      <span>|</span>
+      <HeadLink value="future" label="future" count={status?.future ?? 0} />
       <span>|</span>
       <HeadLink value="draft" label="draft" count={status?.draft ?? 0} />
       {/* <span>|</span> */}
@@ -100,16 +102,16 @@ const HeadLink = ({
   count: number
 }) => {
   const { t } = useTranslation()
-  const { postStatus } = usePaging()
+  const { status } = usePaging()
   const { qs } = useQueryString()
   const pathname = usePathname()
 
   return (
     <Link
-      href={pathname + '?' + qs({ postStatus: value, page: 1 })}
+      href={pathname + '?' + qs({ status: value, page: 1 })}
       className={cn(
         'h-auto p-0',
-        value === postStatus ? 'text-foreground' : 'text-muted-foreground'
+        value === status ? 'text-foreground' : 'text-muted-foreground'
       )}
     >
       {t(`PostStatus.${label}`)}({count})
@@ -119,11 +121,11 @@ const HeadLink = ({
 
 const Footer = () => {
   const { user } = useAuth()
-  const { page, perPage, postStatus } = usePaging()
+  const { page, perPage, status } = usePaging()
   const { posts } = usePostsAPI(user?.id ?? null, {
     page,
     perPage,
-    postStatus,
+    status,
   })
 
   if (!posts) return null
@@ -135,11 +137,11 @@ const Body = () => {
   const { t } = useTranslation()
 
   const { user } = useAuth()
-  const { page, perPage, postStatus } = usePaging()
+  const { page, perPage, status } = usePaging()
   const { posts } = usePostsAPI(user?.id ?? null, {
     page,
     perPage,
-    postStatus,
+    status,
   })
 
   return (

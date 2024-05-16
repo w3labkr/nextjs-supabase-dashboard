@@ -20,7 +20,7 @@ const RestoreButton = (props: RestoreButtonProps) => {
   const { post, ...rest } = props
 
   const { t } = useTranslation()
-  const { page, perPage, postStatus } = usePaging()
+  const { page, perPage, status } = usePaging()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -44,7 +44,7 @@ const RestoreButton = (props: RestoreButtonProps) => {
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      const query = setQueryString({ userId, page, perPage, postStatus })
+      const query = setQueryString({ userId, page, perPage, status })
 
       mutate(fetchUrl)
       mutate(`/api/v1/post/list?${query}`)
@@ -60,7 +60,7 @@ const RestoreButton = (props: RestoreButtonProps) => {
 
   return (
     <button
-      className="text-xs text-blue-700 hover:underline"
+      className="text-xs text-blue-500 hover:underline"
       onClick={handleClick}
       disabled={isSubmitting}
       {...rest}

@@ -9,18 +9,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { usePostForm } from '../../post-form-provider'
 
-import { Post } from '@/types/database'
-import { UseFormReturn } from 'react-hook-form'
-import { FormValues } from '../../post-form'
-
-interface MetaboxProps {
-  form: UseFormReturn<FormValues>
-  post: Post | null
-}
-
-const MetaboxRevisions = (props: MetaboxProps) => {
-  const { form } = props
+const MetaboxRevisions = () => {
+  const { form, post } = usePostForm()
   const { t } = useTranslation()
 
   return (
