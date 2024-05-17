@@ -93,11 +93,13 @@ const PostForm = ({ id }: { id: number }) => {
 }
 
 const UserIdField = () => {
-  const { form } = usePostForm()
+  const {
+    form: { control },
+  } = usePostForm()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="user_id"
       render={({ field }) => (
         <FormItem>
@@ -111,11 +113,13 @@ const UserIdField = () => {
 }
 
 const StatusField = () => {
-  const { form } = usePostForm()
+  const {
+    form: { control },
+  } = usePostForm()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="status"
       render={({ field }) => (
         <FormItem>
@@ -130,11 +134,13 @@ const StatusField = () => {
 
 const TitleField = () => {
   const { t } = useTranslation()
-  const { form } = usePostForm()
+  const {
+    form: { control },
+  } = usePostForm()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="title"
       render={({ field }) => (
         <FormItem>

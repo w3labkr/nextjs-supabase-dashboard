@@ -13,18 +13,19 @@ import { Switch } from '@/components/ui/switch'
 import { usePostForm } from '../../post-form-provider'
 
 const MetaboxRectriction = () => {
-  const { form, post } = usePostForm()
   const { t } = useTranslation()
+  const {
+    form: { setValue },
+    post,
+  } = usePostForm()
 
-  const status = form.watch('status')
+  const [watchValue, setWatchValue] = React.useState<boolean>(false)
 
-  const handleCheckedChange = (checked: boolean) => {
-    if (checked) {
-      form.setValue('status', 'private')
-    } else {
-      form.setValue('status', 'publish')
-    }
-  }
+  React.useEffect(() => {
+    const value = post?.status ?? ''
+    setValue('status', value)
+    setWatchValue(value)
+  }, [setValue, post?.status])
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
@@ -32,8 +33,12 @@ const MetaboxRectriction = () => {
         <AccordionTrigger>{t('PostMetabox.private')}</AccordionTrigger>
         <AccordionContent className="flex items-center gap-2">
           <Switch
-            checked={status === 'private'}
-            onCheckedChange={handleCheckedChange}
+            checked={watchValue === 'private'}
+            onCheckedChange={(checked: boolean) => {
+              const value = checked ? 'private' : 'public'
+              setValue('status', value)
+              setWatchValue(value)
+            }}
           />
         </AccordionContent>
       </AccordionItem>

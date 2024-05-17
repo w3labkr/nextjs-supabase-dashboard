@@ -10,60 +10,57 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { usePostForm } from '../../post-form-provider'
 
 const MetaboxSlug = () => {
-  const { form, post } = usePostForm()
   const { t } = useTranslation()
+  const {
+    form: { setValue, watch, getFieldState },
+    post,
+  } = usePostForm()
 
-  const title = form.watch('title')
-  const slug = form.watch('slug')
+  const title = watch('title')
+  const field = getFieldState('slug')
+  const [watchValue, setWatchValue] = React.useState<string>('')
 
   const debounceSetValue = React.useCallback(
-    debounce((value: string) => form.setValue('slug', value.trim()), 1000),
+    debounce((value: string) => {
+      const slugified = kebabCase(value.trim())
+      setValue('slug', slugified)
+      setWatchValue(slugified)
+    }, 300),
     []
   )
 
   React.useEffect(() => {
-    if (!post?.slug) {
-      debounceSetValue(kebabCase(title))
+    if (post?.slug) {
+      debounceSetValue(post?.slug)
+    } else {
+      debounceSetValue(title)
     }
-  }, [debounceSetValue, post?.slug, slug, title])
+  }, [debounceSetValue, post?.slug, title])
 
   React.useEffect(() => {
-    if (slug) debounceSetValue(kebabCase(slug))
-  }, [debounceSetValue, slug])
+    debounceSetValue(watchValue)
+  }, [debounceSetValue, watchValue])
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
       <AccordionItem value="item-1">
         <AccordionTrigger>{t('PostMetabox.slug')}</AccordionTrigger>
         <AccordionContent className="px-1 py-1 pb-4">
-          <FormField
-            control={form.control}
+          <Input
+            type="text"
             name="slug"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    placeholder={t('Input.please_enter_your_text')}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            placeholder={t('Input.please_enter_your_text')}
+            value={watchValue}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setWatchValue(e.target.value)
+            }
           />
+          <FormMessage>{field?.error?.message}</FormMessage>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

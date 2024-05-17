@@ -22,8 +22,8 @@ import { PostAPI } from '@/types/api'
 import { usePostForm } from '../../post-form-provider'
 
 const MetaboxPublish = () => {
-  const { form, post } = usePostForm()
   const { t } = useTranslation()
+  const { post } = usePostForm()
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
@@ -33,12 +33,8 @@ const MetaboxPublish = () => {
         </AccordionTrigger>
         <AccordionContent className="space-y-4">
           <div className="flex justify-between">
-            <DraftButton form={form} post={post} />
-            {post?.status === 'draft' ? (
-              <PreviewButton form={form} post={post} />
-            ) : (
-              <ViewButton form={form} post={post} />
-            )}
+            <DraftButton />
+            {post?.status === 'draft' ? <PreviewButton /> : <ViewButton />}
           </div>
           <ul className="space-y-1">
             <li className="flex items-center">
@@ -68,8 +64,8 @@ const MetaboxPublish = () => {
             </li>
           </ul>
           <div className="flex justify-between">
-            <TrashButton form={form} post={post} />
-            <PublishButton form={form} post={post} />
+            <TrashButton />
+            <PublishButton />
           </div>
         </AccordionContent>
       </AccordionItem>
@@ -78,10 +74,12 @@ const MetaboxPublish = () => {
 }
 
 const DraftButton = () => {
-  const { form, post } = usePostForm()
-
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
+  const {
+    form: { getValues, setError, handleSubmit },
+    post,
+  } = usePostForm()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -91,7 +89,7 @@ const DraftButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const { slug, ...values } = form.getValues()
+      const { slug, ...values } = getValues()
       const formData = { ...values, slug: kebabCase(slug), status: 'draft' }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
@@ -109,7 +107,7 @@ const DraftButton = () => {
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
-        form.setError('slug', { message: t('FormMessage.duplicate_slug') })
+        setError('slug', { message: t('FormMessage.duplicate_slug') })
       } else {
         toast.error(err)
       }
@@ -123,7 +121,7 @@ const DraftButton = () => {
       type="button"
       variant="secondary"
       size="sm"
-      onClick={form.handleSubmit(onSubmit)}
+      onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
       {t('PostMetabox.save_draft')}
@@ -132,10 +130,12 @@ const DraftButton = () => {
 }
 
 const ViewButton = () => {
-  const { form, post } = usePostForm()
-
   const router = useRouter()
   const { t } = useTranslation()
+  const {
+    form: { handleSubmit },
+    post,
+  } = usePostForm()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -160,7 +160,7 @@ const ViewButton = () => {
       type="button"
       variant="secondary"
       size="sm"
-      onClick={form.handleSubmit(onSubmit)}
+      onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
       {t('PostMetabox.view')}
@@ -169,11 +169,13 @@ const ViewButton = () => {
 }
 
 const PreviewButton = () => {
-  const { form, post } = usePostForm()
-
   const router = useRouter()
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
+  const {
+    form: { getValues, setError, handleSubmit },
+    post,
+  } = usePostForm()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -184,7 +186,7 @@ const PreviewButton = () => {
       if (!post) throw new Error('Require is not defined.')
 
       const path = getPostPath(post)
-      const { slug, ...values } = form.getValues()
+      const { slug, ...values } = getValues()
       const formData = { ...values, slug: kebabCase(slug), status: 'draft' }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
@@ -202,7 +204,7 @@ const PreviewButton = () => {
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
-        form.setError('slug', { message: t('FormMessage.duplicate_slug') })
+        setError('slug', { message: t('FormMessage.duplicate_slug') })
       } else {
         toast.error(err)
       }
@@ -216,7 +218,7 @@ const PreviewButton = () => {
       type="button"
       variant="secondary"
       size="sm"
-      onClick={form.handleSubmit(onSubmit)}
+      onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
       {t('PostMetabox.preview')}
@@ -225,11 +227,12 @@ const PreviewButton = () => {
 }
 
 const TrashButton = () => {
-  const { form, post } = usePostForm()
-
   const router = useRouter()
   const { t } = useTranslation()
-  const { unregister } = form
+  const {
+    form: { getValues, setError, handleSubmit, unregister },
+    post,
+  } = usePostForm()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -244,7 +247,7 @@ const TrashButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const formValues = form.getValues()
+      const formValues = getValues()
       const formData = {
         user_id: formValues?.user_id,
         status: 'trash',
@@ -266,7 +269,7 @@ const TrashButton = () => {
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
-        form.setError('slug', { message: t('FormMessage.duplicate_slug') })
+        setError('slug', { message: t('FormMessage.duplicate_slug') })
       } else {
         toast.error(err)
       }
@@ -281,7 +284,7 @@ const TrashButton = () => {
       variant="link"
       className="h-auto p-0 text-destructive underline"
       size="sm"
-      onClick={form.handleSubmit(onSubmit)}
+      onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
       {t('PostMetabox.move_to_trash')}
@@ -290,27 +293,22 @@ const TrashButton = () => {
 }
 
 const PublishButton = () => {
-  const { form, post } = usePostForm()
-
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
+  const {
+    form: { getValues, setError, handleSubmit },
+    post,
+  } = usePostForm()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  // const onSubmit = async ({ slug, status, ...formValues }) => {
   const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
-      const formValues = form.getValues()
-
-      console.log(formValues)
-
-      return
-
       if (!post) throw new Error('Require is not defined.')
 
-      const { slug, status, ...values } = form.getValues()
+      const { slug, status, ...values } = getValues()
       const publishedFormData = {
         ...values,
         slug: kebabCase(slug),
@@ -342,7 +340,7 @@ const PublishButton = () => {
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
-        form.setError('slug', { message: t('FormMessage.duplicate_slug') })
+        setError('slug', { message: t('FormMessage.duplicate_slug') })
       } else {
         toast.error(err)
       }
@@ -356,7 +354,7 @@ const PublishButton = () => {
       type="submit"
       variant="default"
       size="sm"
-      onClick={form.handleSubmit(onSubmit)}
+      onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
       {post?.status === 'draft'

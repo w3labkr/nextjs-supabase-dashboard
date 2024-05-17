@@ -8,15 +8,17 @@ import { getPostUrl } from '@/lib/utils'
 import { usePostForm } from '../post-form-provider'
 
 const Permalink = () => {
-  const { form, post } = usePostForm()
   const { t } = useTranslation()
+  const {
+    form: { watch },
+    post,
+  } = usePostForm()
+
+  const slug = watch('slug')
   const [permalink, setPermalink] = React.useState<string>('')
 
-  const slug = form.watch('slug')
-
   React.useEffect(() => {
-    let url: string | null = null
-    if (post) url = getPostUrl(post, slug)
+    const url = getPostUrl(post, slug)
     if (url) setPermalink(url)
   }, [post, slug])
 

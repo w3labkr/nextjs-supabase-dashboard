@@ -18,8 +18,10 @@ import { useAuth } from '@/hooks/use-auth'
 const MetaboxThumbnail = () => {
   const { t } = useTranslation()
   const { user } = useAuth()
-  const { form, post } = usePostForm()
-  const { setValue } = form
+  const {
+    form: { setValue },
+    post,
+  } = usePostForm()
 
   const fileInputRef = React.useRef(null)
   const [watchValue, setWatchValue] = React.useState<string>('')
@@ -47,16 +49,16 @@ const MetaboxThumbnail = () => {
       const filePath = `${user?.id}/${file.name}`
 
       const supabase = createClient()
-      const result = await supabase.storage
+      const uploaded = await supabase.storage
         .from(bucketId)
         .upload(filePath, file, { upsert: true })
 
-      if (result?.data?.path) {
+      if (uploaded?.data?.path) {
         const {
           data: { publicUrl },
         } = await supabase.storage
           .from(bucketId)
-          .getPublicUrl(result?.data?.path)
+          .getPublicUrl(uploaded?.data?.path)
 
         setValue('thumbnail_url', publicUrl)
         setWatchValue(publicUrl)
