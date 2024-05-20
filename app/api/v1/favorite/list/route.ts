@@ -14,15 +14,15 @@ export async function GET(request: NextRequest) {
   let match = {}
 
   if (userId) match = { ...match, user_id: userId }
-  if (postType) match = { ...match, 'posts.type': postType }
-  if (status) match = { ...match, 'posts.status': status }
+  if (postType) match = { ...match, type: postType }
+  if (status) match = { ...match, status: status }
 
-  match = { ...match, is_favorite: true }
+  match = { ...match, 'favorites.is_favorite': true }
 
   const supabase = createClient()
   const total = await supabase
-    .from('favorites')
-    .select('posts(*)', { count: 'exact', head: true })
+    .from('posts')
+    .select('*, favorite:favorites!inner(*)', { count: 'exact', head: true })
     .match(match)
 
   if (total?.error) {
@@ -33,8 +33,10 @@ export async function GET(request: NextRequest) {
   }
 
   const list = await supabase
-    .from('favorites')
-    .select('posts(*, author:profiles(*), meta:post_metas(*))')
+    .from('posts')
+    .select(
+      '*, author:profiles!inner(*), meta:post_metas!inner(*), favorite:favorites!inner(*)'
+    )
     .match(match)
     .range((page - 1) * perPage, page * perPage - 1)
     .order('created_at', { ascending: false })
@@ -46,12 +48,8 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const data = list?.data
-    ?.map((row) => ({ ...row?.posts }))
-    ?.map((d) => setMeta(d))
-
   return NextResponse.json({
-    data,
+    data: list?.data?.map((r) => setMeta(r)),
     count: total?.count ?? 0,
     error: null,
   })

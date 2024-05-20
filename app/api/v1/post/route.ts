@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
   const supabase = createClient()
   const result = await supabase
     .from('posts')
-    .select('*, author:profiles(*), meta:post_metas(*)')
+    .select('*, author:profiles!inner(*), meta:post_metas!inner(*)')
     .match(match)
     .single()
 
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     .from('posts')
     .update(values)
     .match({ id, user_id })
-    .select('*, author:profiles(*), meta:post_metas(*)')
+    .select('*, author:profiles!inner(*), meta:post_metas!inner(*)')
     .single()
 
   if (result?.error) {

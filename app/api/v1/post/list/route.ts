@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
 
   const listQuery = supabase
     .from('posts')
-    .select('*, author:profiles(*), meta:post_metas(*)')
+    .select('*, author:profiles!inner(*), meta:post_metas!inner(*)')
     .match(match)
     .range((page - 1) * perPage, page * perPage - 1)
     .order('created_at', { ascending: false })
