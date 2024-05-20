@@ -33,13 +33,13 @@ const DeleteButton = (props: DeleteButtonProps) => {
 
       if (!userId) throw new Error('Require is not defined.')
 
-      const formData = { user_id: userId }
+      const fetchData = { user_id: userId }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const fetchOptions = { revalidatePaths: getPostPath(post) }
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'DELETE',
-        body: JSON.stringify({ formData, options: fetchOptions }),
+        body: JSON.stringify({ data: fetchData, options: fetchOptions }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useFormContext } from 'react-hook-form'
 
 import {
   Accordion,
@@ -9,11 +10,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+
 import { usePostForm } from '../../post-form-provider'
 
 const MetaboxRevisions = () => {
   const { t } = useTranslation()
-  const { form, post } = usePostForm()
+  const { register, setValue, watch } = useFormContext()
+  const { post } = usePostForm()
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">

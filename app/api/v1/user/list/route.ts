@@ -5,7 +5,6 @@ import { authorize } from '@/queries/server/auth'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-
   const id = searchParams.get('id') as string
   const page = +((searchParams.get('page') as string) ?? '1')
   const perPage = +((searchParams.get('perPage') as string) ?? '50')

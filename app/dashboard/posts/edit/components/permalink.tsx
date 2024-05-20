@@ -3,24 +3,23 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import { getPostUrl } from '@/lib/utils'
 import { usePostForm } from '../post-form-provider'
 
 const Permalink = () => {
   const { t } = useTranslation()
-  const {
-    form: { watch },
-    post,
-  } = usePostForm()
+  const { control } = useFormContext()
+  const { post } = usePostForm()
 
-  const slug = watch('slug')
+  const watchSlug = useWatch({ control, name: 'slug' })
   const [permalink, setPermalink] = React.useState<string>('')
 
   React.useEffect(() => {
-    const url = getPostUrl(post, slug)
+    const url = getPostUrl(post, watchSlug)
     if (url) setPermalink(url)
-  }, [post, slug])
+  }, [post, watchSlug])
 
   return (
     <div className="text-sm">

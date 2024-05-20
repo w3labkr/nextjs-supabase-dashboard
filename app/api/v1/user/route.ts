@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const id = searchParams.get('id') as string
 
-  const { formData, options } = await request.json()
+  const { data, options } = await request.json()
   const { user } = await authorize(id)
 
   if (!user) {
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
   const supabase = createClient()
   const result = await supabase
     .from('users')
-    .update(formData)
+    .update(data)
     .eq('id', id)
     .select('*')
     .single()

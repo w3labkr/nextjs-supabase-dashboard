@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
-import { useForm, UseFormReturn } from 'react-hook-form'
+import { useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -46,7 +46,7 @@ const PrimaryEmailAddress = () => {
   const { user } = useAuth()
   const { emails } = useEmailsAPI(user?.id ?? null)
 
-  const primaryEmail = React.useMemo(() => {
+  const primary = React.useMemo(() => {
     return (
       emails?.find((x) => x.email === user?.email && x.email_confirmed_at) ??
       null
@@ -56,7 +56,7 @@ const PrimaryEmailAddress = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
-    values: { email: primaryEmail?.email ?? 'unassigned' },
+    values: { email: primary?.email ?? 'unassigned' },
   })
 
   return (
@@ -73,32 +73,23 @@ const PrimaryEmailAddress = () => {
           noValidate
           className="flex w-full max-w-sm space-x-2"
         >
-          <EmailField form={form} primaryEmail={primaryEmail} />
-          <SubmitButton form={form} />
+          <EmailField hasPrimary={!!primary} />
+          <SubmitButton />
         </form>
       </Form>
     </div>
   )
 }
 
-interface FieldProps {
-  form: UseFormReturn<FormValues>
-}
-
-interface EmailFieldProps extends FieldProps {
-  primaryEmail: Email | null
-}
-
-const EmailField = (props: EmailFieldProps) => {
-  const { form, primaryEmail } = props
-
+const EmailField = ({ hasPrimary }: { hasPrimary: boolean }) => {
   const { t } = useTranslation()
+  const { control } = useFormContext()
   const { user } = useAuth()
   const { emails } = useEmailsAPI(user?.id ?? null)
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="email"
       render={({ field }) => (
         <FormItem>
@@ -114,7 +105,7 @@ const EmailField = (props: EmailFieldProps) => {
             </FormControl>
             <SelectContent>
               <SelectGroup>
-                {!primaryEmail ? (
+                {!hasPrimary ? (
                   <SelectItem value="unassigned">
                     {t('SelectValue.select_a_verified_email_to_display')}
                   </SelectItem>
@@ -136,19 +127,20 @@ const EmailField = (props: EmailFieldProps) => {
   )
 }
 
-const SubmitButton = (props: FieldProps) => {
-  const { form } = props
-
+const SubmitButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
+  const { handleSubmit, getValues } = useFormContext()
   const { user } = useAuth()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async (formValues: FormValues) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true)
+
+      const formValues = getValues()
 
       if (!user) throw new Error('Require is not defined.')
       if (
@@ -158,12 +150,12 @@ const SubmitButton = (props: FieldProps) => {
         throw new Error('Nothing has changed.')
       }
 
-      const formData = { email: formValues?.email }
+      const fetchData = { email: formValues?.email }
 
       const fetchUrl = `/api/v1/email?userId=${user?.id}`
       const result = await fetcher<EmailAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ formData }),
+        body: JSON.stringify({ data: fetchData }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
@@ -188,7 +180,7 @@ const SubmitButton = (props: FieldProps) => {
   return (
     <Button
       type="submit"
-      onClick={form.handleSubmit(onSubmit)}
+      onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
       {t('FormSubmit.save')}

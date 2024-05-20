@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { kebabCase, debounce } from 'lodash'
 
 import {
@@ -12,35 +13,35 @@ import {
 } from '@/components/ui/accordion'
 import { FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+
 import { usePostForm } from '../../post-form-provider'
 
 const MetaboxSlug = () => {
   const { t } = useTranslation()
-  const {
-    form: { setValue, watch, getFieldState },
-    post,
-  } = usePostForm()
+  const { control, register, setValue, getFieldState } = useFormContext()
+  const { post } = usePostForm()
 
-  const title = watch('title')
   const field = getFieldState('slug')
+  const title: string = useWatch({ control, name: 'title' })
+  const slug: string = post?.slug ?? ''
   const [watchValue, setWatchValue] = React.useState<string>('')
 
   const debounceSetValue = React.useCallback(
     debounce((value: string) => {
       const slugified = kebabCase(value.trim())
-      setValue('slug', slugified)
+      setValue('slug', slugified, { shouldDirty: true, shouldValidate: true })
       setWatchValue(slugified)
     }, 300),
     []
   )
 
   React.useEffect(() => {
-    if (post?.slug) {
-      debounceSetValue(post?.slug)
+    if (slug) {
+      debounceSetValue(slug)
     } else {
       debounceSetValue(title)
     }
-  }, [debounceSetValue, post?.slug, title])
+  }, [debounceSetValue, slug, title])
 
   React.useEffect(() => {
     debounceSetValue(watchValue)
@@ -52,15 +53,15 @@ const MetaboxSlug = () => {
         <AccordionTrigger>{t('PostMetabox.slug')}</AccordionTrigger>
         <AccordionContent className="px-1 py-1 pb-4">
           <Input
+            {...register('slug')}
             type="text"
-            name="slug"
             placeholder={t('Input.please_enter_your_text')}
             value={watchValue}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setWatchValue(e.target.value)
-            }
+            }}
           />
-          <FormMessage>{field?.error?.message}</FormMessage>
+          <FormMessage className="mt-2">{field?.error?.message}</FormMessage>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

@@ -54,7 +54,7 @@ const SignedInAction = (props: FavoriteButtonProps) => {
       if (!user) throw new Error('Require is not defined.')
       if (!profile?.username) throw new Error('Require is not defined.')
 
-      const formData = { is_favorite: !is_favorite }
+      const fetchData = { is_favorite: !is_favorite }
 
       const fetchUrl = `/api/v1/favorite?postId=${post?.id}&userId=${user?.id}`
       const fetchOptions = {
@@ -63,7 +63,7 @@ const SignedInAction = (props: FavoriteButtonProps) => {
 
       const result = await fetcher<FavoriteAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ formData, options: fetchOptions }),
+        body: JSON.stringify({ data: fetchData, options: fetchOptions }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

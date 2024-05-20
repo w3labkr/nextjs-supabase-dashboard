@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useForm, UseFormReturn } from 'react-hook-form'
+import { useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -49,25 +49,21 @@ const NotificationsForm = () => {
   return (
     <Form {...form}>
       <form method="POST" noValidate className="space-y-4">
-        <MarketingEmailsField form={form} />
-        <SecurityEmailsField form={form} />
-        <SubmitButton form={form} />
+        <MarketingEmailsField />
+        <SecurityEmailsField />
+        <SubmitButton />
       </form>
     </Form>
   )
 }
 
-interface FieldProps {
-  form: UseFormReturn<FormValues>
-}
-
-const MarketingEmailsField = (props: FieldProps) => {
-  const { form } = props
+const MarketingEmailsField = () => {
   const { t } = useTranslation()
+  const { control } = useFormContext()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="marketing_emails"
       render={({ field }) => (
         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
@@ -88,13 +84,13 @@ const MarketingEmailsField = (props: FieldProps) => {
   )
 }
 
-const SecurityEmailsField = (props: FieldProps) => {
-  const { form } = props
+const SecurityEmailsField = () => {
   const { t } = useTranslation()
+  const { control } = useFormContext()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="security_emails"
       render={({ field }) => (
         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
@@ -120,19 +116,20 @@ const SecurityEmailsField = (props: FieldProps) => {
   )
 }
 
-const SubmitButton = (props: FieldProps) => {
-  const { form } = props
-
+const SubmitButton = () => {
   const { t } = useTranslation()
+  const { handleSubmit, getValues } = useFormContext()
   const { user } = useAuth()
   const { notification } = useNotificationAPI(user?.id ?? null)
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async (formValues: FormValues) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true)
+
+      const formValues = getValues()
 
       if (!user) throw new Error('Require is not defined.')
       if (!notification) throw new Error('Require is not defined.')
@@ -140,12 +137,12 @@ const SubmitButton = (props: FieldProps) => {
         throw new Error('Nothing has changed.')
       }
 
-      const formData = formValues
+      const fetchData = formValues
 
       const fetchUrl = `/api/v1/notification?userId=${user?.id}`
       const result = await fetcher<NotificationAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ formData }),
+        body: JSON.stringify({ data: fetchData }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
@@ -168,7 +165,7 @@ const SubmitButton = (props: FieldProps) => {
   return (
     <Button
       type="submit"
-      onClick={form.handleSubmit(onSubmit)}
+      onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
       {t('FormSubmit.update_notifications')}

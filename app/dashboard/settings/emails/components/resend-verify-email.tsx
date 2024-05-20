@@ -29,12 +29,12 @@ const ResendVerifyEmail = (props: ResendVerifyEmailProps) => {
       if (!user) throw new Error('Require is not defined.')
       if (!item) throw new Error('Require is not defined.')
 
-      const formData = { email: item?.email }
+      const fetchData = { email: item?.email }
 
       const fetchUrl = `/api/v1/email/verify?userId=${user?.id}`
       const result = await fetcher(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ formData }),
+        body: JSON.stringify({ data: fetchData }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

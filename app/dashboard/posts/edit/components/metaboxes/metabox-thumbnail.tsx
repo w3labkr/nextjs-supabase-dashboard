@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useFormContext } from 'react-hook-form'
 
 import { toast } from 'sonner'
 import {
@@ -10,28 +11,29 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { usePostForm } from '../../post-form-provider'
 
 import { createClient } from '@/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
+import { usePostForm } from '../../post-form-provider'
 
 const MetaboxThumbnail = () => {
   const { t } = useTranslation()
   const { user } = useAuth()
-  const {
-    form: { setValue },
-    post,
-  } = usePostForm()
+  const { register, setValue } = useFormContext()
+  const { post } = usePostForm()
 
-  const fileInputRef = React.useRef(null)
+  const thumbnail_url: string = post?.thumbnail_url ?? ''
+  const fileInputRef = React.useRef<HTMLInputElement>(null)
   const [watchValue, setWatchValue] = React.useState<string>('')
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   React.useEffect(() => {
-    const value = post?.thumbnail_url ?? ''
-    setValue('thumbnail_url', value)
-    setWatchValue(value)
-  }, [setValue, post?.thumbnail_url])
+    setValue('thumbnail_url', thumbnail_url, {
+      shouldDirty: true,
+      shouldValidate: true,
+    })
+    setWatchValue(thumbnail_url)
+  }, [setValue, thumbnail_url])
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -40,13 +42,13 @@ const MetaboxThumbnail = () => {
       e.preventDefault()
 
       const target = e.currentTarget as HTMLInputElement
-      const file = target.files[0]
+      const file = target?.files ? target?.files[0] : null
 
       if (!file) throw new Error('Require is not defined.')
       if (!user) throw new Error('Require is not defined.')
 
       const bucketId = process.env.NEXT_PUBLIC_SUPABASE_ID!
-      const filePath = `${user?.id}/${file.name}`
+      const filePath = `${user?.id}/${file?.name}`
 
       const supabase = createClient()
       const uploaded = await supabase.storage
@@ -76,8 +78,8 @@ const MetaboxThumbnail = () => {
         <AccordionTrigger>{t('PostMetabox.featured_image')}</AccordionTrigger>
         <AccordionContent>
           <input
+            {...register('thumbnail_url')}
             type="hidden"
-            name="thumbnail_url"
             value={watchValue}
             readOnly
           />
@@ -92,7 +94,11 @@ const MetaboxThumbnail = () => {
             <button
               type="button"
               className="text-blue-500 underline"
-              onClick={() => fileInputRef.current.click()}
+              onClick={() => {
+                if (fileInputRef.current !== null) {
+                  fileInputRef.current.click()
+                }
+              }}
             >
               {t('PostMetabox.set_featured_image')}
             </button>
@@ -102,7 +108,11 @@ const MetaboxThumbnail = () => {
               <button
                 type="button"
                 className="w-full"
-                onClick={() => fileInputRef.current.click()}
+                onClick={() => {
+                  if (fileInputRef.current !== null) {
+                    fileInputRef.current.click()
+                  }
+                }}
                 disabled={isSubmitting}
               >
                 <img

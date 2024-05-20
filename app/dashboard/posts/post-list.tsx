@@ -36,7 +36,6 @@ import { usePostsAPI, useCountPostsAPI } from '@/queries/client/posts'
 
 const PostList = () => {
   const searchParams = useSearchParams()
-
   const page = +(searchParams.get('page') ?? '1')
   const perPage = +(searchParams.get('perPage') ?? '50')
   const pageSize = +(searchParams.get('pageSize') ?? '10')
@@ -62,9 +61,7 @@ const PostList = () => {
 
 const Header = () => {
   const { user } = useAuth()
-  const { data, count } = useCountPostsAPI(user?.id ?? null, {
-    postType: 'post',
-  })
+  const { data, count } = useCountPostsAPI(user?.id ?? null)
 
   const status: { [key: string]: number } | undefined = React.useMemo(() => {
     return data?.reduce((acc: { [key: string]: number }, curr) => {
@@ -135,7 +132,6 @@ const Footer = () => {
 
 const Body = () => {
   const { t } = useTranslation()
-
   const { user } = useAuth()
   const { page, perPage, status } = usePaging()
   const { posts } = usePostsAPI(user?.id ?? null, {

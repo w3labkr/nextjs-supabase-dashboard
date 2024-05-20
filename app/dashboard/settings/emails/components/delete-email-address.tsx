@@ -44,12 +44,12 @@ const DeleteEmailAddress = (props: DeleteEmailAddressProps) => {
       if (!user) throw new Error('Require is not defined.')
       if (!item) throw new Error('Require is not defined.')
 
-      const formData = { email: item?.email }
+      const fetchData = { email: item?.email }
 
       const fetchUrl = `/api/v1/email?userId=${user?.id}`
       const result = await fetcher<EmailsAPI>(fetchUrl, {
         method: 'DELETE',
-        body: JSON.stringify({ formData }),
+        body: JSON.stringify({ data: fetchData }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

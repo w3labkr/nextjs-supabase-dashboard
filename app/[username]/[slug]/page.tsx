@@ -13,7 +13,7 @@ import { Analysis } from './analysis'
 import { ViewCount } from './view-count'
 import { FavoriteButton } from './favorite-button'
 
-import { getAuthorUrl } from '@/lib/utils'
+import { cn, getAuthorUrl } from '@/lib/utils'
 import { Post } from '@/types/database'
 import { getUser } from '@/queries/server/users'
 import { getProfileAPI } from '@/queries/server/profiles'
@@ -145,9 +145,10 @@ const PostThumbnail = (props: FieldProps) => {
 
   return (
     <div className="mb-8 sm:mx-0 md:mb-16">
-      <div className="sm:mx-0">
-        <img src={post?.thumbnail_url} alt="thumbnail" />
-      </div>
+      <div
+        className="min-h-96 bg-cover bg-center bg-no-repeat sm:mx-0"
+        style={{ backgroundImage: `url(${post?.thumbnail_url})` }}
+      ></div>
     </div>
   )
 }

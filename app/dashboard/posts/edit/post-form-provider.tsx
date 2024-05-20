@@ -1,13 +1,9 @@
 'use client'
 
+import { Post } from '@/types/database'
 import * as React from 'react'
 
-import { UseFormReturn } from 'react-hook-form'
-import { FormValues } from './post-form'
-import { Post } from '@/types/database'
-
 interface PostFormContextProps {
-  form: UseFormReturn<FormValues>
   post: Post | null
 }
 

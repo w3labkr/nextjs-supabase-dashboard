@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useFormContext } from 'react-hook-form'
 
 import {
   Accordion,
@@ -10,22 +11,21 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Switch } from '@/components/ui/switch'
+
 import { usePostForm } from '../../post-form-provider'
 
 const MetaboxRectriction = () => {
   const { t } = useTranslation()
-  const {
-    form: { setValue },
-    post,
-  } = usePostForm()
+  const { register, setValue } = useFormContext()
+  const { post } = usePostForm()
 
-  const [watchValue, setWatchValue] = React.useState<boolean>(false)
+  const status: string = post?.status ?? ''
+  const [watchValue, setWatchValue] = React.useState<string>('')
 
   React.useEffect(() => {
-    const value = post?.status ?? ''
-    setValue('status', value)
-    setWatchValue(value)
-  }, [setValue, post?.status])
+    setValue('status', status, { shouldDirty: true, shouldValidate: true })
+    setWatchValue(status)
+  }, [setValue, status])
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
@@ -33,6 +33,7 @@ const MetaboxRectriction = () => {
         <AccordionTrigger>{t('PostMetabox.private')}</AccordionTrigger>
         <AccordionContent className="flex items-center gap-2">
           <Switch
+            {...register('status')}
             checked={watchValue === 'private'}
             onCheckedChange={(checked: boolean) => {
               const value = checked ? 'private' : 'public'

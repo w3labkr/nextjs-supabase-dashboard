@@ -5,7 +5,6 @@ import { authorize } from '@/queries/server/auth'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-
   const userId = searchParams.get('userId') as string
   const postType = (searchParams.get('postType') as string) ?? 'post'
 

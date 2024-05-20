@@ -33,13 +33,13 @@ const RestoreButton = (props: RestoreButtonProps) => {
 
       if (!userId) throw new Error('Require is not defined.')
 
-      const formData = { user_id: userId, status: 'draft', deleted_at: null }
+      const fetchData = { user_id: userId, status: 'draft', deleted_at: null }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const fetchOptions = { revalidatePaths: getPostPath(post) }
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ formData, options: fetchOptions }),
+        body: JSON.stringify({ data: fetchData, options: fetchOptions }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

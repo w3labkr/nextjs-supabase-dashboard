@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useForm, UseFormReturn } from 'react-hook-form'
+import { useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -47,24 +47,20 @@ const ChangeUsernameForm = () => {
   return (
     <Form {...form}>
       <form method="POST" noValidate className="space-y-4">
-        <UsernameField form={form} />
-        <SubmitButton form={form} />
+        <UsernameField />
+        <SubmitButton />
       </form>
     </Form>
   )
 }
 
-interface FieldProps {
-  form: UseFormReturn<FormValues>
-}
-
-const UsernameField = (props: FieldProps) => {
-  const { form } = props
+const UsernameField = () => {
   const { t } = useTranslation()
+  const { control } = useFormContext()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="username"
       render={({ field }) => (
         <FormItem>
@@ -84,19 +80,20 @@ const UsernameField = (props: FieldProps) => {
   )
 }
 
-const SubmitButton = (props: FieldProps) => {
-  const { form } = props
-
+const SubmitButton = () => {
   const { t } = useTranslation()
+  const { handleSubmit, setError, getValues } = useFormContext()
   const { user } = useAuth()
   const { profile } = useProfileAPI(user?.id ?? null)
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async (formValues: FormValues) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true)
+
+      const formValues = getValues()
 
       if (!user) throw new Error('Require is not defined.')
       if (!profile) throw new Error('Require is not defined.')
@@ -104,7 +101,7 @@ const SubmitButton = (props: FieldProps) => {
         throw new Error('Nothing has changed.')
       }
 
-      const formData = {
+      const fetchData = {
         username: formValues?.username,
       }
 
@@ -112,7 +109,7 @@ const SubmitButton = (props: FieldProps) => {
       const fetchOptions = { revalidatePaths: getAuthorPath(profile?.username) }
       const result = await fetcher<ProfileAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ formData, options: fetchOptions }),
+        body: JSON.stringify({ data: fetchData, options: fetchOptions }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
@@ -123,7 +120,7 @@ const SubmitButton = (props: FieldProps) => {
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
-        form.setError('username', {
+        setError('username', {
           message: t('FormMessage.duplicate_username'),
         })
       } else if (err.startsWith('You can change it after')) {
@@ -144,7 +141,7 @@ const SubmitButton = (props: FieldProps) => {
   return (
     <Button
       type="submit"
-      onClick={form.handleSubmit(onSubmit)}
+      onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
       {t('FormSubmit.change_username')}

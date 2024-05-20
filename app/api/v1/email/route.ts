@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const userId = searchParams.get('userId') as string
 
-  const { formData, options } = await request.json()
+  const { data, options } = await request.json()
   const { user } = await authorize(userId)
 
   if (!user) {
@@ -19,8 +19,8 @@ export async function POST(request: NextRequest) {
 
   const supabaseAdmin = createAdminClient()
   const result = await supabaseAdmin.updateUserById(userId, {
-    email: formData?.email,
-    user_metadata: { email: formData?.email },
+    email: data?.email,
+    user_metadata: { email: data?.email },
   })
 
   if (result?.error) {
@@ -44,7 +44,7 @@ export async function PUT(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const userId = searchParams.get('userId') as string
 
-  const { formData, options } = await request.json()
+  const { data, options } = await request.json()
   const { user } = await authorize(userId)
 
   if (!user) {
@@ -57,7 +57,7 @@ export async function PUT(request: NextRequest) {
   const supabase = createClient()
   const result = await supabase
     .from('emails')
-    .insert({ email: formData?.email, user_id: userId })
+    .insert({ email: data?.email, user_id: userId })
     .select('*')
     .single()
 
@@ -82,7 +82,7 @@ export async function DELETE(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const userId = searchParams.get('userId') as string
 
-  const { formData, options } = await request.json()
+  const { data, options } = await request.json()
   const { user } = await authorize(userId)
 
   if (!user) {
@@ -97,7 +97,7 @@ export async function DELETE(request: NextRequest) {
     .from('emails')
     .delete()
     .eq('user_id', userId)
-    .eq('email', formData?.email)
+    .eq('email', data?.email)
     .select('*')
     .single()
 

@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
 
-import { useForm, UseFormReturn } from 'react-hook-form'
+import { useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -39,22 +39,19 @@ const ChangeThemeForm = () => {
   return (
     <Form {...form}>
       <form method="POST" noValidate className="space-y-4">
-        <ThemeField form={form} />
-        <SubmitButton form={form} />
+        <ThemeField />
+        <SubmitButton />
       </form>
     </Form>
   )
 }
 
-interface FieldProps {
-  form: UseFormReturn<FormValues>
-}
+const ThemeField = () => {
+  const { control } = useFormContext()
 
-const ThemeField = (props: FieldProps) => {
-  const { form } = props
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="theme"
       render={({ field }) => (
         <FormItem className="space-y-1">
@@ -125,17 +122,17 @@ const ThemeField = (props: FieldProps) => {
   )
 }
 
-const SubmitButton = (props: FieldProps) => {
-  const { form } = props
-
+const SubmitButton = () => {
   const { t } = useTranslation()
   const { theme, setTheme } = useTheme()
-
+  const { handleSubmit, getValues } = useFormContext()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async (formValues: FormValues) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true)
+
+      const formValues = getValues()
 
       if (!theme) throw new Error('Require is not defined.')
       if (formValues?.theme === theme) {
@@ -160,7 +157,7 @@ const SubmitButton = (props: FieldProps) => {
   return (
     <Button
       type="submit"
-      onClick={form.handleSubmit(onSubmit)}
+      onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
       {t('FormSubmit.update_theme')}

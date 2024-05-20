@@ -5,7 +5,6 @@ import { authorize } from '@/queries/server/auth'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-
   const id = searchParams.get('id') as string
   const postId = +(searchParams.get('postId') as string)
   const userId = searchParams.get('userId') as string
@@ -35,7 +34,6 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-
   const postId = +(searchParams.get('postId') as string)
   const userId = searchParams.get('userId') as string
 
@@ -48,13 +46,13 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const { formData, options } = await request.json()
+  const { data, options } = await request.json()
 
   const supabase = createClient()
   const result = await supabase.rpc('set_favorite', {
     postid: postId,
     userid: userId,
-    isfavorite: formData?.is_favorite,
+    isfavorite: data?.is_favorite,
   })
 
   if (result?.error) {

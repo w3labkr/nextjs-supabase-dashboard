@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const userId = searchParams.get('userId') as string
 
-  const { formData, options } = await request.json()
+  const { data, options } = await request.json()
   const { user } = await authorize(userId)
 
   if (!user) {
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
   }
 
   const payload: VerifyTokenPayload = {
-    email: formData?.email,
+    email: data?.email,
     user_id: userId,
   }
   const mailOptions = mailTemplate(payload)

@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
-import { useForm, UseFormReturn } from 'react-hook-form'
+import { useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -51,20 +51,21 @@ const ResetPasswordForm = () => {
   return (
     <Form {...form}>
       <form method="POST" noValidate className="space-y-4">
-        <NewPasswordField form={form} />
-        <ConfirmNewPasswordField form={form} />
-        <SubmitButton form={form} />
+        <NewPasswordField />
+        <ConfirmNewPasswordField />
+        <SubmitButton />
       </form>
     </Form>
   )
 }
 
-const NewPasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const NewPasswordField = () => {
   const { t } = useTranslation()
+  const { control } = useFormContext()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="newPassword"
       render={({ field }) => (
         <FormItem>
@@ -86,16 +87,13 @@ const NewPasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const ConfirmNewPasswordField = ({
-  form,
-}: {
-  form: UseFormReturn<FormValues>
-}) => {
+const ConfirmNewPasswordField = () => {
   const { t } = useTranslation()
+  const { control } = useFormContext()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="confirmNewPassword"
       render={({ field }) => (
         <FormItem>
@@ -117,17 +115,19 @@ const ConfirmNewPasswordField = ({
   )
 }
 
-const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const SubmitButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
+  const { handleSubmit, setError, getValues } = useFormContext()
   const { setSession, setUser } = useAuth()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async (formValues: FormValues) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
+      const formValues = getValues()
       const supabase = createClient()
       const updated = await supabase.auth.updateUser({
         password: formValues?.newPassword,
@@ -149,7 +149,7 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
       if (
         err.startsWith('New password should be different from the old password')
       ) {
-        form.setError('newPassword', {
+        setError('newPassword', {
           message: t(
             'FormMessage.new_password_should_be_different_from_the_old_password'
           ),
@@ -165,7 +165,7 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   return (
     <Button
       type="submit"
-      onClick={form.handleSubmit(onSubmit)}
+      onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
       className="w-full"
     >

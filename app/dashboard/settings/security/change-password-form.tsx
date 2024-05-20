@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
-import { useForm, UseFormReturn } from 'react-hook-form'
+import { useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -69,26 +69,22 @@ const ChangePasswordForm = (props: ChangePasswordFormProps) => {
   return (
     <Form {...form}>
       <form method="POST" noValidate className="space-y-4">
-        {has_set_password ? <OldPasswordField form={form} /> : null}
-        <NewPasswordField form={form} />
-        <ConfirmNewPasswordField form={form} />
-        <SubmitButton form={form} />
+        {has_set_password ? <OldPasswordField /> : null}
+        <NewPasswordField />
+        <ConfirmNewPasswordField />
+        <SubmitButton />
       </form>
     </Form>
   )
 }
 
-interface FormFieldprops {
-  form: UseFormReturn<FormValues>
-}
-
-const OldPasswordField = (props: FormFieldprops) => {
-  const { form } = props
+const OldPasswordField = () => {
   const { t } = useTranslation()
+  const { control } = useFormContext()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="oldPassword"
       render={({ field }) => (
         <FormItem className="max-w-80">
@@ -110,13 +106,13 @@ const OldPasswordField = (props: FormFieldprops) => {
   )
 }
 
-const NewPasswordField = (props: FormFieldprops) => {
-  const { form } = props
+const NewPasswordField = () => {
   const { t } = useTranslation()
+  const { control } = useFormContext()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="newPassword"
       render={({ field }) => (
         <FormItem className="max-w-80">
@@ -138,13 +134,13 @@ const NewPasswordField = (props: FormFieldprops) => {
   )
 }
 
-const ConfirmNewPasswordField = (props: FormFieldprops) => {
-  const { form } = props
+const ConfirmNewPasswordField = () => {
   const { t } = useTranslation()
+  const { control } = useFormContext()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="confirmNewPassword"
       render={({ field }) => (
         <FormItem className="max-w-80">
@@ -166,23 +162,23 @@ const ConfirmNewPasswordField = (props: FormFieldprops) => {
   )
 }
 
-const SubmitButton = (props: FormFieldprops) => {
-  const { form } = props
-
+const SubmitButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
+  const { handleSubmit, reset, setError, getValues } = useFormContext()
   const { session } = useAuth()
   const { user } = useUserAPI(session?.user?.id ?? null)
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async (formValues: FormValues) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
       if (!user) throw new Error('Require is not defined.')
 
+      const formValues = getValues()
       const supabase = createClient()
 
       if (user?.user?.has_set_password) {
@@ -204,20 +200,20 @@ const SubmitButton = (props: FormFieldprops) => {
 
       mutate(`/api/v1/user?id=${user?.id}`)
 
-      form.reset()
+      reset()
       router.refresh()
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Old password does not match')) {
-        form.setError('oldPassword', {
+        setError('oldPassword', {
           message: t('FormMessage.old_password_does_not_match'),
         })
       } else if (
         err.startsWith('New password should be different from the old password')
       ) {
-        form.setError('newPassword', {
+        setError('newPassword', {
           message: t(
             'FormMessage.new_password_should_be_different_from_the_old_password'
           ),
@@ -233,7 +229,7 @@ const SubmitButton = (props: FormFieldprops) => {
   return (
     <Button
       type="submit"
-      onClick={form.handleSubmit(onSubmit)}
+      onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
       {t('FormSubmit.change_password')}

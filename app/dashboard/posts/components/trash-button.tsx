@@ -33,7 +33,7 @@ const TrashButton = (props: TrashButtonProps) => {
 
       if (!userId) throw new Error('Require is not defined.')
 
-      const formData = {
+      const fetchData = {
         user_id: userId,
         status: 'trash',
         deleted_at: new Date().toISOString(),
@@ -43,7 +43,7 @@ const TrashButton = (props: TrashButtonProps) => {
       const fetchOptions = { revalidatePaths: getPostPath(post) }
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ formData, options: fetchOptions }),
+        body: JSON.stringify({ data: fetchData, options: fetchOptions }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

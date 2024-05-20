@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useForm, UseFormReturn } from 'react-hook-form'
+import { useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -58,24 +58,20 @@ const AddEmailAddress = () => {
           noValidate
           className="flex w-full max-w-sm space-x-2"
         >
-          <EmailField form={form} />
-          <SubmitButton form={form} />
+          <EmailField />
+          <SubmitButton />
         </form>
       </Form>
     </div>
   )
 }
 
-interface FieldProps {
-  form: UseFormReturn<FormValues>
-}
-
-const EmailField = (props: FieldProps) => {
-  const { form } = props
+const EmailField = () => {
+  const { control } = useFormContext()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="email"
       render={({ field }) => (
         <FormItem>
@@ -96,19 +92,20 @@ const EmailField = (props: FieldProps) => {
   )
 }
 
-const SubmitButton = (props: FieldProps) => {
-  const { form } = props
-
+const SubmitButton = () => {
   const { t } = useTranslation()
+  const { handleSubmit, reset, getValues } = useFormContext()
   const { user } = useAuth()
   const { emails } = useEmailsAPI(user?.id ?? null)
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async (formValues: FormValues) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true)
+
+      const formValues = getValues()
 
       if (emails?.find((value) => value?.email === formValues?.email)) {
         throw new Error('This email has already been added.')
@@ -116,12 +113,12 @@ const SubmitButton = (props: FieldProps) => {
 
       if (!user) throw new Error('Require is not defined.')
 
-      const formData = { email: formValues?.email }
+      const fetchData = { email: formValues?.email }
 
       const fetchUrl = `/api/v1/email?userId=${user?.id}`
       const result = await fetcher<EmailsAPI>(fetchUrl, {
         method: 'PUT',
-        body: JSON.stringify({ formData }),
+        body: JSON.stringify({ data: fetchData }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
@@ -131,14 +128,14 @@ const SubmitButton = (props: FieldProps) => {
       const sentUrl = `/api/v1/email/verify?userId=${user?.id}`
       const sent = await fetcher(sentUrl, {
         method: 'POST',
-        body: JSON.stringify({ formData }),
+        body: JSON.stringify({ data: fetchData }),
       })
 
       if (sent?.error) throw new Error(sent?.error?.message)
 
       mutate(sentUrl)
 
-      form.reset()
+      reset()
 
       toast.success(t('FormMessage.added_successfully'))
     } catch (e: unknown) {
@@ -156,7 +153,7 @@ const SubmitButton = (props: FieldProps) => {
   return (
     <Button
       type="submit"
-      onClick={form.handleSubmit(onSubmit)}
+      onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
       {t('FormSubmit.add')}

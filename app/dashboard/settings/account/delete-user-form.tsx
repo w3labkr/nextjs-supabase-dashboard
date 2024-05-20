@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { useTrans } from '@/hooks/use-trans'
 
-import { useForm, UseFormReturn } from 'react-hook-form'
+import { useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -91,10 +91,10 @@ const DeleteUserForm = (props: DeleteUserFormProps) => {
         </DialogHeader>
         <Form {...form}>
           <form method="POST" noValidate className="space-y-4">
-            <EmailField form={form} />
-            {has_set_password ? <PasswordField form={form} /> : null}
-            <ConfirmationPhraseField form={form} />
-            <SubmitButton form={form} />
+            <EmailField />
+            {has_set_password ? <PasswordField /> : null}
+            <ConfirmationPhraseField />
+            <SubmitButton />
           </form>
         </Form>
         {/* <DialogFooter></DialogFooter> */}
@@ -103,17 +103,13 @@ const DeleteUserForm = (props: DeleteUserFormProps) => {
   )
 }
 
-interface FieldProps {
-  form: UseFormReturn<FormValues>
-}
-
-const EmailField = (props: FieldProps) => {
-  const { form } = props
+const EmailField = () => {
   const { t } = useTranslation()
+  const { control } = useFormContext()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="email"
       render={({ field }) => (
         <FormItem>
@@ -128,13 +124,13 @@ const EmailField = (props: FieldProps) => {
   )
 }
 
-const PasswordField = (props: FieldProps) => {
-  const { form } = props
+const PasswordField = () => {
   const { t } = useTranslation()
+  const { control } = useFormContext()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="password"
       render={({ field }) => (
         <FormItem>
@@ -156,13 +152,13 @@ const PasswordField = (props: FieldProps) => {
   )
 }
 
-const ConfirmationPhraseField = (props: FieldProps) => {
-  const { form } = props
+const ConfirmationPhraseField = () => {
   const { trans } = useTrans()
+  const { control } = useFormContext()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="confirmationPhrase"
       render={({ field }) => (
         <FormItem>
@@ -181,19 +177,20 @@ const ConfirmationPhraseField = (props: FieldProps) => {
   )
 }
 
-const SubmitButton = (props: FieldProps) => {
-  const { form } = props
-
+const SubmitButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
+  const { handleSubmit, setError, getValues, formState } = useFormContext()
   const { session, setSession, setUser } = useAuth()
   const { user } = useUserAPI(session?.user?.id ?? null)
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async (formValues: FormValues) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true)
+
+      const formValues = getValues()
 
       if (!user) throw new Error('Require is not defined.')
       if (!user?.profile) throw new Error('Require is not defined.')
@@ -237,9 +234,9 @@ const SubmitButton = (props: FieldProps) => {
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Your email address is invalid')) {
-        form.setError('email', { message: t('FormMessage.email_is_invalid') })
+        setError('email', { message: t('FormMessage.email_is_invalid') })
       } else if (err.startsWith('Your password is invalid')) {
-        form.setError('password', {
+        setError('password', {
           message: t('FormMessage.password_is_invalid'),
         })
       } else {
@@ -254,8 +251,8 @@ const SubmitButton = (props: FieldProps) => {
     <Button
       variant="destructive"
       type="submit"
-      onClick={form.handleSubmit(onSubmit)}
-      disabled={!form?.formState?.isValid || isSubmitting}
+      onClick={handleSubmit(onSubmit)}
+      disabled={!formState?.isValid || isSubmitting}
     >
       {t('FormSubmit.delete_your_account')}
     </Button>

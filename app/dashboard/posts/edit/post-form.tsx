@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import dynamic from 'next/dynamic'
 
-import { useForm, UseFormReturn } from 'react-hook-form'
+import { useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -27,9 +27,9 @@ import {
   MetaboxRectriction,
 } from './components/metaboxes'
 import { Permalink } from './components/permalink'
+import { PostFormProvider } from './post-form-provider'
 
 import { usePostAPI } from '@/queries/client/posts'
-import { PostFormProvider, usePostForm } from './post-form-provider'
 
 const Editor = dynamic(() => import('./components/editor'), { ssr: false })
 
@@ -64,7 +64,7 @@ const PostForm = ({ id }: { id: number }) => {
   })
 
   return (
-    <PostFormProvider value={{ form, post }}>
+    <PostFormProvider value={{ post }}>
       <Form {...form}>
         <UserIdField />
         <StatusField />
@@ -93,9 +93,7 @@ const PostForm = ({ id }: { id: number }) => {
 }
 
 const UserIdField = () => {
-  const {
-    form: { control },
-  } = usePostForm()
+  const { control } = useFormContext()
 
   return (
     <FormField
@@ -113,9 +111,7 @@ const UserIdField = () => {
 }
 
 const StatusField = () => {
-  const {
-    form: { control },
-  } = usePostForm()
+  const { control } = useFormContext()
 
   return (
     <FormField
@@ -134,9 +130,7 @@ const StatusField = () => {
 
 const TitleField = () => {
   const { t } = useTranslation()
-  const {
-    form: { control },
-  } = usePostForm()
+  const { control } = useFormContext()
 
   return (
     <FormField
@@ -154,4 +148,4 @@ const TitleField = () => {
   )
 }
 
-export { PostForm, type FormValues }
+export { PostForm }

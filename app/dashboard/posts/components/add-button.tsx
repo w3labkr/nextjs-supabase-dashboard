@@ -35,12 +35,12 @@ const AddButton = (props: AddButtonProps) => {
 
       if (!user) throw new Error('Require is not defined.')
 
-      const formData = { title: 'Untitled Post' }
+      const fetchData = { title: 'Untitled Post' }
 
       const fetchUrl = `/api/v1/post?userId=${user?.id}`
       const result = await fetcher(fetchUrl, {
         method: 'PUT',
-        body: JSON.stringify({ formData }),
+        body: JSON.stringify({ data: fetchData }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

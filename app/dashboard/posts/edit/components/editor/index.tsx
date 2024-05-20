@@ -9,9 +9,8 @@ import { MyUploadAdapterPlugin } from './upload-adapter'
 
 import { defaultLng } from '@/i18next.config'
 import { useAppSelector } from '@/lib/redux/hooks'
-
-import { Post } from '@/types/database'
-import { UseFormReturn } from 'react-hook-form'
+import { useAuth } from '@/hooks/use-auth'
+import { useFormContext } from 'react-hook-form'
 import { usePostForm } from '../../post-form-provider'
 
 import '@/ckeditor5/build/translations/ko.js'
@@ -156,18 +155,34 @@ const editorConfiguration: EditorConfig = {
 }
 
 const Editor = () => {
-  const { form, post } = usePostForm()
+  const { user } = useAuth()
+  const { setValue } = useFormContext()
+  const { post } = usePostForm()
+
   const resolvedLanguage = useAppSelector(
     (state) => state?.i18n?.resolvedLanguage
   )
+
+  const content: string = post?.content ?? ''
+  const [watchValue, setWatchValue] = React.useState<string>('')
+
+  React.useEffect(() => {
+    setValue('content', content)
+    setWatchValue(content)
+  }, [setValue, content])
 
   React.useEffect(() => {
     editorConfiguration.language = resolvedLanguage
   }, [resolvedLanguage])
 
+  React.useEffect(() => {
+    localStorage.setItem('ckeditor5', JSON.stringify({ userId: user?.id }))
+  }, [user?.id])
+
   const handleChange = (event: EventInfo, editor: ClassicEditor) => {
     const data = editor.getData()
-    form.setValue('content', data)
+    setValue('content', data)
+    setWatchValue(data)
   }
 
   // This for Revisions
@@ -181,7 +196,7 @@ const Editor = () => {
     <CKEditor
       editor={ClassicEditor}
       config={editorConfiguration}
-      data={post?.content ?? ''}
+      data={watchValue}
       onChange={handleChange}
       // onBlur={handleBlur}
     />

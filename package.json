@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "clean:dir": "rm -rf ./node_modules && rm -rf ./.next",
-    "clean:cache": "npm cache clean --force",
+    "clean:dir": "rm -rf node_modules && rm -rf .next",
+    "clean:cache": "rm -rf .next && npm cache clean --force && npm cache verify",
     "clean": "npm run clean:dir && npm run clean:cache",
     "reinstall": "npm run clean && npm install",
     "gen-types": "supabase gen types typescript --linked > types/supabase.ts"

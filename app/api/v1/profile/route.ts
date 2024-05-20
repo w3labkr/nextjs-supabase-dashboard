@@ -45,10 +45,10 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const { formData, options } = await request.json()
+  const { data, options } = await request.json()
   const username_changed_at = user?.user?.username_changed_at
 
-  if (formData?.username && username_changed_at) {
+  if (data?.username && username_changed_at) {
     const now = dayjs()
     const startDate = dayjs(username_changed_at)
     const endDate = startDate.add(1, 'month')
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
   const supabase = createClient()
   const result = await supabase
     .from('profiles')
-    .update(formData)
+    .update(data)
     .eq('id', id)
     .select('*')
     .single()

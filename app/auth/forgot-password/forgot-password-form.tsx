@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useForm, UseFormReturn } from 'react-hook-form'
+import { useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -42,19 +42,20 @@ const ForgotPasswordForm = () => {
   return (
     <Form {...form}>
       <form method="POST" noValidate className="space-y-4">
-        <EmailField form={form} />
-        <SubmitButton form={form} />
+        <EmailField />
+        <SubmitButton />
       </form>
     </Form>
   )
 }
 
-const EmailField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const EmailField = () => {
   const { t } = useTranslation()
+  const { control } = useFormContext()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="email"
       render={({ field }) => (
         <FormItem>
@@ -76,17 +77,18 @@ const EmailField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const SubmitButton = () => {
   const { t } = useTranslation()
-
+  const { handleSubmit, reset, getValues } = useFormContext()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async (formValues: FormValues) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
+      const formValues = getValues()
       const supabase = createClient()
-      const { error } = await supabase.auth.resetPasswordForEmail(
+      const result = await supabase.auth.resetPasswordForEmail(
         formValues?.email,
         {
           // A URL to send the user to after they are confirmed.
@@ -96,11 +98,11 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
             '/api/auth/confirm?next=/auth/reset-password',
         }
       )
-      if (error) throw new Error(error?.message)
+      if (result?.error) throw new Error(result?.error?.message)
 
       toast.success(t('FormMessage.email_has_been_successfully_sent'))
 
-      form.reset()
+      reset()
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -111,7 +113,7 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   return (
     <Button
       type="submit"
-      onClick={form.handleSubmit(onSubmit)}
+      onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
       className="w-full"
     >

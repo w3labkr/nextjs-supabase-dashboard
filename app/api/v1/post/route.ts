@@ -5,7 +5,6 @@ import { authorize } from '@/queries/server/auth'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-
   const id = searchParams.get('id') as string
   const userId = searchParams.get('userId') as string
   const slug = searchParams.get('slug') as string
@@ -39,8 +38,8 @@ export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const id = searchParams.get('id') as string
 
-  const { formData, options } = await request.json()
-  const { user_id, ...body } = formData
+  const { data, options } = await request.json()
+  const { user_id, ...values } = data
   const { user } = await authorize(user_id)
 
   if (!user) {
@@ -53,7 +52,7 @@ export async function POST(request: NextRequest) {
   const supabase = createClient()
   const result = await supabase
     .from('posts')
-    .update(body)
+    .update(values)
     .match({ id, user_id })
     .select('*, author:profiles(*), meta:post_metas(*)')
     .single()
@@ -65,11 +64,10 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const data = setMeta(result?.data)
   const revalidated = revalidatePaths(options?.revalidatePaths)
 
   return NextResponse.json({
-    data,
+    data: setMeta(result?.data),
     error: null,
     revalidated,
     now: Date.now(),
@@ -80,7 +78,7 @@ export async function PUT(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const userId = searchParams.get('userId') as string
 
-  const { formData, options } = await request.json()
+  const { data, options } = await request.json()
   const { user, role, plan } = await authorize(userId)
 
   if (!user) {
@@ -115,7 +113,7 @@ export async function PUT(request: NextRequest) {
 
   const result = await supabase
     .from('posts')
-    .insert({ ...formData, user_id: userId })
+    .insert({ ...data, user_id: userId })
     .select('*, author:profiles(*)')
     .single()
 
@@ -140,8 +138,8 @@ export async function DELETE(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const id = searchParams.get('id') as string
 
-  const { formData, options } = await request.json()
-  const { user_id } = formData
+  const { data, options } = await request.json()
+  const { user_id } = data
   const { user } = await authorize(user_id)
 
   if (!user) {

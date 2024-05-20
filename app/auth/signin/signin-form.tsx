@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
-import { useForm, UseFormReturn } from 'react-hook-form'
+import { useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -47,20 +47,21 @@ const SignInForm = () => {
   return (
     <Form {...form}>
       <form method="POST" noValidate className="space-y-4">
-        <EmailField form={form} />
-        <PasswordField form={form} />
-        <SubmitButton form={form} />
+        <EmailField />
+        <PasswordField />
+        <SubmitButton />
       </form>
     </Form>
   )
 }
 
-const EmailField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const EmailField = () => {
   const { t } = useTranslation()
+  const { control } = useFormContext()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="email"
       render={({ field }) => (
         <FormItem>
@@ -82,12 +83,13 @@ const EmailField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const PasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
+const PasswordField = () => {
   const { t } = useTranslation()
+  const { control } = useFormContext()
 
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="password"
       render={({ field }) => (
         <FormItem>
@@ -117,20 +119,22 @@ const PasswordField = ({ form }: { form: UseFormReturn<FormValues> }) => {
   )
 }
 
-const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
-  const router = useRouter()
+const SubmitButton = () => {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const { t } = useTranslation()
+  const { handleSubmit, setError, getValues } = useFormContext()
   const { setSession, setUser } = useAuth()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async (formValues: FormValues) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true)
 
       const next = (searchParams.get('next') as string) ?? '/dashboard'
 
+      const formValues = getValues()
       const supabase = createClient()
       const signed = await supabase.auth.signInWithPassword({
         email: formValues?.email,
@@ -148,10 +152,10 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Invalid login credentials')) {
-        form.setError('email', {
+        setError('email', {
           message: t('FormMessage.invalid_login_credentials'),
         })
-        form.setError('password', {
+        setError('password', {
           message: t('FormMessage.invalid_login_credentials'),
         })
       } else {
@@ -165,7 +169,7 @@ const SubmitButton = ({ form }: { form: UseFormReturn<FormValues> }) => {
   return (
     <Button
       type="submit"
-      onClick={form.handleSubmit(onSubmit)}
+      onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
       className="w-full"
     >
