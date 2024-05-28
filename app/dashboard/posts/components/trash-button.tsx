@@ -29,30 +29,33 @@ const TrashButton = (props: TrashButtonProps) => {
     try {
       setIsSubmitting(true)
 
-      const userId = post?.user_id
-
-      if (!userId) throw new Error('Require is not defined.')
-
       const fetchData = {
-        user_id: userId,
+        user_id: post?.user_id,
         status: 'trash',
         deleted_at: new Date().toISOString(),
       }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const fetchOptions = { revalidatePaths: getPostPath(post) }
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ data: fetchData, options: fetchOptions }),
+        body: JSON.stringify({
+          data: fetchData,
+          options: { revalidatePaths: getPostPath(post) },
+        }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      const query = setQueryString({ userId, page, perPage, status })
+      const query = setQueryString({
+        userId: post?.user_id,
+        page,
+        perPage,
+        status,
+      })
 
       mutate(fetchUrl)
       mutate(`/api/v1/post/list?${query}`)
-      mutate(`/api/v1/post/count?userId=${userId}`)
+      mutate(`/api/v1/post/count?userId=${post?.user_id}`)
 
       toast.success(t('FormMessage.deleted_successfully'))
     } catch (e: unknown) {

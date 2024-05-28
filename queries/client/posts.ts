@@ -11,17 +11,14 @@ export function usePostAPI(
   const query = setQueryString({ id, ...params })
   const url = query ? `/api/v1/post?${query}` : null
 
-  const {
-    data: response,
-    error,
-    isLoading,
-    isValidating,
-    mutate,
-  } = useSWR<PostAPI, Error>(url)
+  const { data, error, isLoading, isValidating, mutate } = useSWR<
+    PostAPI,
+    Error
+  >(url)
 
   return {
-    post: response?.data ?? null,
-    error: error ?? response?.error ?? null,
+    post: data?.data ?? null,
+    error: error ?? data?.error ?? null,
     isLoading,
     isValidating,
     mutate,
@@ -40,18 +37,15 @@ export function usePostsAPI(
   const query = setQueryString({ userId, ...params })
   const url = query ? `/api/v1/post/list?${query}` : null
 
-  const {
-    data: response,
-    error,
-    isLoading,
-    isValidating,
-    mutate,
-  } = useSWR<PostsAPI, Error>(url)
+  const { data, error, isLoading, isValidating, mutate } = useSWR<
+    PostsAPI,
+    Error
+  >(url)
 
   return {
-    posts: response?.data ?? null,
-    count: response?.count ?? null,
-    error: error ?? response?.error ?? null,
+    posts: data?.data ?? null,
+    count: data?.count ?? null,
+    error: error ?? data?.error ?? null,
     isLoading,
     isValidating,
     mutate,
@@ -65,18 +59,15 @@ export function useCountPostsAPI(
   const query = setQueryString({ userId, ...params })
   const url = query ? `/api/v1/post/count?${query}` : null
 
-  const {
-    data: response,
-    error,
-    isLoading,
-    isValidating,
-    mutate,
-  } = useSWR<CountPostsAPI, Error>(url)
+  const { data, error, isLoading, isValidating, mutate } = useSWR<
+    CountPostsAPI,
+    Error
+  >(url)
 
   return {
-    data: response?.data ?? null,
-    count: response?.count ?? null,
-    error: error ?? response?.error ?? null,
+    data: data?.data ?? null,
+    count: data?.count ?? null,
+    error: error ?? data?.error ?? null,
     isLoading,
     isValidating,
     mutate,
@@ -95,18 +86,15 @@ export function useFavoritePostsAPI(
   const query = setQueryString({ userId, ...params })
   const url = query ? `/api/v1/favorite/list?${query}` : null
 
-  const {
-    data: response,
-    error,
-    isLoading,
-    isValidating,
-    mutate,
-  } = useSWR<PostsAPI, Error>(url)
+  const { data, error, isLoading, isValidating, mutate } = useSWR<
+    PostsAPI,
+    Error
+  >(url)
 
   return {
-    posts: response?.data ?? null,
-    count: response?.count ?? null,
-    error: error ?? response?.error ?? null,
+    posts: data?.data ?? null,
+    count: data?.count ?? null,
+    error: error ?? data?.error ?? null,
     isLoading,
     isValidating,
     mutate,

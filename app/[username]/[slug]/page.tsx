@@ -13,10 +13,10 @@ import { Analysis } from './analysis'
 import { ViewCount } from './view-count'
 import { FavoriteButton } from './favorite-button'
 
-import { cn, getAuthorUrl } from '@/lib/utils'
+import { getUserUrl } from '@/lib/utils'
 import { Post } from '@/types/database'
-import { getUser } from '@/queries/server/users'
-import { getProfileAPI } from '@/queries/server/profiles'
+import { getAuth } from '@/queries/server/auth'
+import { getUserAPI } from '@/queries/server/users'
 import { getPostAPI, getAdjacentPostAPI } from '@/queries/server/posts'
 
 // revalidate the data at most every month
@@ -31,11 +31,16 @@ export async function generateMetadata(
   },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const { profile } = await getProfileAPI(null, { username })
+  const { user } = await getUserAPI(null, { username })
+
+  if (!user) return {}
+
   const { post } = await getPostAPI(null, {
-    userId: profile?.id,
+    userId: user?.id,
     slug: decodeURIComponent(slug),
   })
+
+  if (!post) return {}
 
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL!),
@@ -56,20 +61,22 @@ export default async function PostPage({
   params: { username: string; slug: string }
   searchParams?: { preview?: string }
 }) {
-  const { profile } = await getProfileAPI(null, { username })
+  const { session } = await getAuth()
+  const { user } = await getUserAPI(null, { username })
+
+  if (!user) notFound()
+
   const { post } = await getPostAPI(null, {
-    userId: profile?.id,
+    userId: user?.id,
     slug: decodeURIComponent(slug),
   })
 
   if (!post) notFound()
 
-  const { user } = await getUser()
-
   if (searchParams?.preview === 'true') {
-    if (post?.user_id !== user?.id) return <Forbidden />
+    if (post?.user_id !== session?.user?.id) return <Forbidden />
   } else if (post?.status === 'private') {
-    if (post?.user_id !== user?.id) return <Forbidden />
+    if (post?.user_id !== session?.user?.id) return <Forbidden />
   } else if (post?.status !== 'publish') {
     notFound()
   }
@@ -124,10 +131,10 @@ const PostMeta = (props: FieldProps) => {
         </time>
         <span>— by</span>
         <Link
-          href={getAuthorUrl(post?.author?.username) ?? '#'}
+          href={getUserUrl(post?.user?.username) ?? '#'}
           className="hover:underline"
         >
-          {post?.author?.full_name}
+          {post?.user?.full_name}
         </Link>
       </div>
       <div className="flex space-x-4">

@@ -17,6 +17,6 @@ export {
   setQueryString,
   getPostPath,
   getPostUrl,
-  getAuthorPath,
-  getAuthorUrl,
+  getUserPath,
+  getUserUrl,
 } from './url'

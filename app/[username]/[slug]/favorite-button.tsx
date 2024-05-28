@@ -5,14 +5,14 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { toast } from 'sonner'
 import { LucideIcon } from '@/lib/lucide-icon'
-import { cn, fetcher, getAuthorPath } from '@/lib/utils'
+import { cn, fetcher, getUserPath } from '@/lib/utils'
 
 import { useSWRConfig } from 'swr'
 import { Post } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 import { useFavoriteAPI } from '@/queries/client/favorites'
 import { FavoriteAPI } from '@/types/api'
-import { useProfileAPI } from '@/queries/client/profiles'
+import { useUserAPI } from '@/queries/client/users'
 
 interface FavoriteButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -28,47 +28,43 @@ const FavoriteButton = (props: FavoriteButtonProps) => {
 const SignedInAction = (props: FavoriteButtonProps) => {
   const { post, ...rest } = props
 
-  const { user } = useAuth()
-  const { profile } = useProfileAPI(user?.id ?? null)
+  const { user } = useUserAPI()
   const { favorite } = useFavoriteAPI(null, {
     postId: post?.id,
-    userId: user?.id,
+    userId: user?.id ?? undefined,
   })
   const { mutate } = useSWRConfig()
 
   const [isLike, setIsLike] = React.useState<boolean>(false)
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const is_favorite = favorite?.is_favorite
-
   React.useEffect(() => {
-    if (is_favorite) {
-      setIsLike(is_favorite)
+    if (favorite?.is_favorite !== undefined) {
+      setIsLike(favorite?.is_favorite)
     }
-  }, [is_favorite])
+  }, [favorite?.is_favorite])
 
   const handleClick = async () => {
     try {
       setIsSubmitting(true)
 
-      if (!user) throw new Error('Require is not defined.')
-      if (!profile?.username) throw new Error('Require is not defined.')
+      const username = user?.username
 
-      const fetchData = { is_favorite: !is_favorite }
+      if (!user) throw new Error('Require is not defined.')
+      if (!username) throw new Error('Require is not defined.')
 
       const fetchUrl = `/api/v1/favorite?postId=${post?.id}&userId=${user?.id}`
-      const fetchOptions = {
-        revalidatePaths: getAuthorPath(profile?.username) + '/favorites',
-      }
-
       const result = await fetcher<FavoriteAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ data: fetchData, options: fetchOptions }),
+        body: JSON.stringify({
+          data: { is_favorite: !isLike },
+          options: { revalidatePaths: getUserPath(username) + '/favorites' },
+        }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      setIsLike(!is_favorite)
+      setIsLike(!isLike)
 
       mutate(fetchUrl)
     } catch (e: unknown) {

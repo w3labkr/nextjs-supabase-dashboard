@@ -11,17 +11,14 @@ export function useFavoriteAPI(
   const query = setQueryString({ id, ...params })
   const url = query ? `/api/v1/favorite?${query}` : null
 
-  const {
-    data: response,
-    error,
-    isLoading,
-    isValidating,
-    mutate,
-  } = useSWR<FavoriteAPI, Error>(url)
+  const { data, error, isLoading, isValidating, mutate } = useSWR<
+    FavoriteAPI,
+    Error
+  >(url)
 
   return {
-    favorite: response?.data ?? null,
-    error: error ?? response?.error ?? null,
+    favorite: data?.data ?? null,
+    error: error ?? data?.error ?? null,
     isLoading,
     isValidating,
     mutate,

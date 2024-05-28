@@ -20,7 +20,7 @@ create table role_permissions (
 
 alter table role_permissions enable row level security;
 
-create policy "Public role_permissions are viewable by everyone." on role_permissions for select to authenticated, anon using ( true );
-create policy "Users can insert role_permission." on role_permissions for insert to authenticated with check ( true );
-create policy "Users can update role_permission." on role_permissions for update to authenticated using ( true );
-create policy "Users can delete role_permission." on role_permissions for delete to authenticated using ( true );
+create policy "Public access for all users" on role_permissions for select to authenticated, anon using ( true );
+create policy "User can insert role_permissions" on role_permissions for insert to authenticated with check ( true );
+create policy "User can update role_permissions" on role_permissions for update to authenticated using ( true );
+create policy "User can delete role_permissions" on role_permissions for delete to authenticated using ( true );

@@ -88,18 +88,18 @@ const DraftButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const { slug, ...formValues } = getValues()
-      const fetchData = {
-        ...formValues,
-        slug: kebabCase(slug),
-        status: 'draft',
-      }
-
+      const formValues = getValues()
       const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const fetchOptions = { revalidatePaths: getPostPath(post) }
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ data: fetchData, options: fetchOptions }),
+        body: JSON.stringify({
+          data: {
+            ...formValues,
+            slug: kebabCase(formValues?.slug),
+            status: 'draft',
+          },
+          options: { revalidatePaths: getPostPath(post) },
+        }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
@@ -146,9 +146,9 @@ const ViewButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const path = getPostPath(post)
+      const postPath = getPostPath(post)
 
-      if (path) router.push(path)
+      if (postPath) router.push(postPath)
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -184,26 +184,26 @@ const PreviewButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const path = getPostPath(post)
-      const { slug, ...formValues } = getValues()
-      const fetchData = {
-        ...formValues,
-        slug: kebabCase(slug),
-        status: 'draft',
-      }
-
+      const postPath = getPostPath(post)
+      const formValues = getValues()
       const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const fetchOptions = { revalidatePaths: path }
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ data: fetchData, options: fetchOptions }),
+        body: JSON.stringify({
+          data: {
+            ...formValues,
+            slug: kebabCase(formValues?.slug),
+            status: 'draft',
+          },
+          options: { revalidatePaths: postPath },
+        }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
       mutate(fetchUrl)
 
-      if (path) router.push(path + '?preview=true')
+      if (postPath) router.push(postPath + '?preview=true')
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
@@ -248,18 +248,18 @@ const TrashButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const { user_id } = getValues()
-      const fetchData = {
-        user_id,
-        status: 'trash',
-        deleted_at: new Date().toISOString(),
-      }
-
+      const formValues = getValues()
       const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const fetchOptions = { revalidatePaths: getPostPath(post) }
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ data: fetchData, options: fetchOptions }),
+        body: JSON.stringify({
+          data: {
+            user_id: formValues?.user_id,
+            status: 'trash',
+            deleted_at: new Date().toISOString(),
+          },
+          options: { revalidatePaths: getPostPath(post) },
+        }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
@@ -322,13 +322,13 @@ const PublishButton = () => {
         status: status === 'private' ? 'private' : 'publish',
       }
 
-      const fetchData = post?.published_at ? updated : published
-
       const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const fetchOptions = { revalidatePaths: getPostPath(post) }
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ data: fetchData, options: fetchOptions }),
+        body: JSON.stringify({
+          data: post?.published_at ? updated : published,
+          options: { revalidatePaths: getPostPath(post) },
+        }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

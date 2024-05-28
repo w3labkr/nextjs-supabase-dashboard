@@ -24,7 +24,7 @@ class MyUploadAdapter {
         const storage: Record<string, any> = JSON.parse(raw)
 
         const supabase = createClient()
-        const bucketId = process.env.NEXT_PUBLIC_SUPABASE_ID!
+        const bucketId = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET!
         const filePath = `${storage?.userId}/${file?.name}`
 
         if (file) {

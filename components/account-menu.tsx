@@ -16,15 +16,12 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { SignOutButton } from '@/components/signout-button'
 
-import { getAuthorUrl } from '@/lib/utils'
-import { useAuth } from '@/hooks/use-auth'
-import { useProfileAPI } from '@/queries/client/profiles'
+import { getUserUrl } from '@/lib/utils'
+import { useUserAPI } from '@/queries/client/users'
 
 const AccountMenu = () => {
   const { t } = useTranslation()
-
-  const { user } = useAuth()
-  const { profile } = useProfileAPI(user?.id ?? null)
+  const { user } = useUserAPI()
 
   return (
     <DropdownMenu>
@@ -36,25 +33,23 @@ const AccountMenu = () => {
         >
           <Avatar className="size-8">
             <AvatarImage
-              src={profile?.avatar_url ?? undefined}
-              alt={`@${profile?.username}`}
+              src={user?.avatar_url ?? undefined}
+              alt={`@${user?.username}`}
             />
-            <AvatarFallback>{profile?.username?.charAt(0)}</AvatarFallback>
+            <AvatarFallback>{user?.username?.charAt(0)}</AvatarFallback>
           </Avatar>
           <span className="sr-only">Toggle account menu</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel className="grid font-normal">
-          <span>{profile?.full_name}</span>
-          <span className="text-xs text-muted-foreground">
-            {profile?.email}
-          </span>
+          <span>{user?.full_name}</span>
+          <span className="text-xs text-muted-foreground">{user?.email}</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link
-            href={getAuthorUrl(profile?.username ?? null) ?? '#'}
+            href={getUserUrl(user?.username ?? null) ?? '#'}
             className="cursor-pointer"
           >
             {t('AccountMenu.profile')}

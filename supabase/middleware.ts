@@ -47,6 +47,6 @@ export async function updateSession(request: NextRequest) {
   return {
     response,
     user,
-    authenticated: !(error || !user),
+    authenticated: error || !user ? false : true,
   }
 }

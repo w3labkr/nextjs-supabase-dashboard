@@ -4,7 +4,7 @@
 --                                                            --
 ----------------------------------------------------------------
 
-drop trigger if exists handle_updated_at on emails;
+drop trigger if exists on_updated_at on emails;
 
 drop table if exists emails;
 
@@ -24,15 +24,12 @@ create table emails (
 alter table emails enable row level security;
 
 -- Add row-level security
-create policy "Users can view their emails." on emails for select to authenticated using ( (select auth.uid()) = user_id );
-create policy "Users can insert their own email." on emails for insert to authenticated with check ( (select auth.uid()) = user_id );
-create policy "Users can update their own email." on emails for update to authenticated using ( (select auth.uid()) = user_id );
-create policy "Users can delete their own email." on emails for delete to authenticated using ( (select auth.uid()) = user_id );
+create policy "User can select their own emails" on emails for select to authenticated using ( (select auth.uid()) = user_id );
+create policy "User can insert their own emails" on emails for insert to authenticated with check ( (select auth.uid()) = user_id );
+create policy "User can update their own emails" on emails for update to authenticated using ( (select auth.uid()) = user_id );
+create policy "User can delete their own emails" on emails for delete to authenticated using ( (select auth.uid()) = user_id );
 
--- Update a column timestamp on every update.
+-- Functions for tracking last modification time
 create extension if not exists moddatetime schema extensions;
-
--- assuming the table name is "emails", and a timestamp column "updated_at"
--- this trigger will set the "updated_at" column to the current timestamp for every update
-create trigger handle_updated_at before update on emails
+create trigger on_updated_at before update on emails
   for each row execute procedure moddatetime (updated_at);

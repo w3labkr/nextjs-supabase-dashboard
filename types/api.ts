@@ -1,10 +1,14 @@
-import { User as AuthUser, AuthError, Pagination } from '@supabase/supabase-js'
+import {
+  Session,
+  User as AuthUser,
+  AuthError,
+  Pagination,
+} from '@supabase/supabase-js'
 import {
   Email,
   Notification,
   Post,
   CountPosts,
-  Profile,
   Favorite,
   Vote,
   Analysis,
@@ -18,10 +22,6 @@ export type UserAPI =
 export type UsersAPI =
   | { data: { users: AuthUser[]; aud: string } & Pagination; error: null }
   | { data: { users: [] }; error: AuthError }
-
-export type ProfileAPI =
-  | { data: Profile; error: null }
-  | { data: null; error: Error }
 
 export type EmailAPI =
   | { data: Email; error: null }

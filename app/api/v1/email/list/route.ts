@@ -7,9 +7,9 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const userId = searchParams.get('userId') as string
 
-  const { user } = await authorize(userId)
+  const { authorized } = await authorize(userId)
 
-  if (!user) {
+  if (!authorized) {
     return NextResponse.json(
       { data: null, error: new ApiError(401) },
       { status: 401 }
@@ -17,14 +17,14 @@ export async function GET(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const result = await supabase.from('emails').select('*').eq('user_id', userId)
+  const { data: emails, error } = await supabase
+    .from('emails')
+    .select('*')
+    .eq('user_id', userId)
 
-  if (result?.error) {
-    return NextResponse.json(
-      { data: null, error: result?.error },
-      { status: 400 }
-    )
+  if (error) {
+    return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
-  return NextResponse.json({ data: result?.data, error: null })
+  return NextResponse.json({ data: emails, error: null })
 }

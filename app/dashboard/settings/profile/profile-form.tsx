@@ -32,11 +32,11 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getAuthorPath } from '@/lib/utils'
+import { fetcher, getUserPath } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
-import { useProfileAPI } from '@/queries/client/profiles'
+import { useUserAPI } from '@/queries/client/users'
 import { useEmailsAPI } from '@/queries/client/emails'
-import { ProfileAPI } from '@/types/api'
+import { UserAPI } from '@/types/api'
 
 const FormSchema = z.object({
   full_name: z.string().nonempty(),
@@ -47,16 +47,15 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>
 
 const ProfileForm = () => {
-  const { user } = useAuth()
-  const { profile } = useProfileAPI(user?.id ?? null)
+  const { user } = useUserAPI()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     values: {
-      full_name: profile?.full_name ?? '',
-      email: profile?.email ?? 'unassigned',
-      bio: profile?.bio ?? '',
+      full_name: user?.full_name ?? '',
+      email: user?.email ?? 'unassigned',
+      bio: user?.bio ?? '',
     },
   })
 
@@ -189,8 +188,7 @@ const BioField = () => {
 const SubmitButton = () => {
   const { t } = useTranslation()
   const { handleSubmit, getValues } = useFormContext()
-  const { user } = useAuth()
-  const { profile } = useProfileAPI(user?.id ?? null)
+  const { user } = useUserAPI()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -202,28 +200,26 @@ const SubmitButton = () => {
       const formValues = getValues()
 
       if (!user) throw new Error('Require is not defined.')
-      if (!profile) throw new Error('Require is not defined.')
       if (
-        formValues?.full_name === profile?.full_name &&
-        formValues?.email === profile?.email &&
-        formValues?.bio === profile?.bio
+        formValues?.full_name === user?.full_name &&
+        formValues?.email === user?.email &&
+        formValues?.bio === user?.bio
       ) {
         throw new Error('Nothing has changed.')
       }
 
-      const { email, ...values } = formValues
       const fetchData = {
-        ...values,
-        email: email.replace('unassigned', ''),
+        ...formValues,
+        email: formValues?.email?.replace('unassigned', ''),
       }
 
-      const fetchUrl = `/api/v1/profile?id=${user?.id}`
-      const fetchOptions = {
-        revalidatePaths: getAuthorPath(profile?.username),
-      }
-      const result = await fetcher<ProfileAPI>(fetchUrl, {
+      const fetchUrl = `/api/v1/user?id=${user?.id}`
+      const result = await fetcher<UserAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ data: fetchData, options: fetchOptions }),
+        body: JSON.stringify({
+          data: fetchData,
+          options: { revalidatePaths: getUserPath(user?.username) },
+        }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

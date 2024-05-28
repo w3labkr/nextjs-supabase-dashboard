@@ -12,9 +12,9 @@ export async function POST(request: NextRequest) {
   const userId = searchParams.get('userId') as string
 
   const { data, options } = await request.json()
-  const { user } = await authorize(userId)
+  const { authorized } = await authorize(userId)
 
-  if (!user) {
+  if (!authorized) {
     return NextResponse.json(
       { data: null, error: new ApiError(401) },
       { status: 401 }

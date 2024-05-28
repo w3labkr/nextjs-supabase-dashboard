@@ -1,22 +1,34 @@
 'use client'
 
 import useSWR from 'swr'
+import { useAuth } from '@/hooks/use-auth'
 import { setQueryString } from '@/lib/utils'
 import { UserAPI, UsersAPI } from '@/types/api'
 
-export function useUserAPI(id: string | null) {
-  const url = id ? `/api/v1/user?id=${id}` : null
-  const {
-    data: response,
-    error,
-    isLoading,
-    isValidating,
-    mutate,
-  } = useSWR<UserAPI, Error>(url)
+export function useUserAPI(
+  id: string | null = null,
+  params?: { username?: string }
+) {
+  const { session } = useAuth()
+
+  let url: string | null = null
+
+  if (params?.username) {
+    url = `/api/v1/user?username=${params?.username}`
+  } else if (id) {
+    url = `/api/v1/user?id=${id}`
+  } else if (session?.user) {
+    url = `/api/v1/user?id=${session?.user?.id}`
+  }
+
+  const { data, error, isLoading, isValidating, mutate } = useSWR<
+    UserAPI,
+    Error
+  >(url)
 
   return {
-    user: response?.data ?? null,
-    error: error ?? response?.error ?? null,
+    user: data?.data ?? null,
+    error: error ?? data?.error ?? null,
     isLoading,
     isValidating,
     mutate,
@@ -30,17 +42,14 @@ export function useUsersAPI(
   const query = setQueryString({ id, ...params })
   const url = query ? `/api/v1/user/list?${query}` : null
 
-  const {
-    data: response,
-    error,
-    isLoading,
-    isValidating,
-    mutate,
-  } = useSWR<UsersAPI, Error>(url)
+  const { data, error, isLoading, isValidating, mutate } = useSWR<
+    UsersAPI,
+    Error
+  >(url)
 
   return {
-    users: response?.data?.users ?? [],
-    error: error ?? response?.error ?? null,
+    users: data?.data?.users ?? [],
+    error: error ?? data?.error ?? null,
     isLoading,
     isValidating,
     mutate,

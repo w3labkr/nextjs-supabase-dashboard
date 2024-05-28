@@ -41,7 +41,7 @@ export type Database = {
           ip: unknown | null
           post_id: number
           user_agent: string | null
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -49,7 +49,7 @@ export type Database = {
           ip?: unknown | null
           post_id: number
           user_agent?: string | null
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           created_at?: string
@@ -57,7 +57,7 @@ export type Database = {
           ip?: unknown | null
           post_id?: number
           user_agent?: string | null
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -148,7 +148,7 @@ export type Database = {
             foreignKeyName: "favorites_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -191,19 +191,19 @@ export type Database = {
       post_metas: {
         Row: {
           id: number
-          meta_key: string | null
+          meta_key: string
           meta_value: string | null
           post_id: number
         }
         Insert: {
           id?: number
-          meta_key?: string | null
+          meta_key: string
           meta_value?: string | null
           post_id: number
         }
         Update: {
           id?: number
-          meta_key?: string | null
+          meta_key?: string
           meta_value?: string | null
           post_id?: number
         }
@@ -228,7 +228,7 @@ export type Database = {
           is_ban: boolean
           password: string | null
           published_at: string | null
-          slug: string | null
+          slug: string
           status: string
           thumbnail_url: string | null
           title: string | null
@@ -246,7 +246,7 @@ export type Database = {
           is_ban?: boolean
           password?: string | null
           published_at?: string | null
-          slug?: string | null
+          slug: string
           status?: string
           thumbnail_url?: string | null
           title?: string | null
@@ -264,7 +264,7 @@ export type Database = {
           is_ban?: boolean
           password?: string | null
           published_at?: string | null
-          slug?: string | null
+          slug?: string
           status?: string
           thumbnail_url?: string | null
           title?: string | null
@@ -277,59 +277,6 @@ export type Database = {
             foreignKeyName: "posts_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      profiles: {
-        Row: {
-          age: number | null
-          avatar_url: string | null
-          bio: string | null
-          created_at: string
-          email: string | null
-          first_name: string | null
-          full_name: string | null
-          id: string
-          last_name: string | null
-          updated_at: string
-          username: string
-          website: string | null
-        }
-        Insert: {
-          age?: number | null
-          avatar_url?: string | null
-          bio?: string | null
-          created_at?: string
-          email?: string | null
-          first_name?: string | null
-          full_name?: string | null
-          id: string
-          last_name?: string | null
-          updated_at?: string
-          username: string
-          website?: string | null
-        }
-        Update: {
-          age?: number | null
-          avatar_url?: string | null
-          bio?: string | null
-          created_at?: string
-          email?: string | null
-          first_name?: string | null
-          full_name?: string | null
-          id?: string
-          last_name?: string | null
-          updated_at?: string
-          username?: string
-          website?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -356,19 +303,19 @@ export type Database = {
       user_metas: {
         Row: {
           id: number
-          meta_key: string | null
+          meta_key: string
           meta_value: string | null
           user_id: string
         }
         Insert: {
           id?: number
-          meta_key?: string | null
+          meta_key: string
           meta_value?: string | null
           user_id: string
         }
         Update: {
           id?: number
-          meta_key?: string | null
+          meta_key?: string
           meta_value?: string | null
           user_id?: string
         }
@@ -448,34 +395,61 @@ export type Database = {
       }
       users: {
         Row: {
+          age: number | null
+          avatar_url: string | null
           banned_until: string | null
+          bio: string | null
           created_at: string
           deleted_at: string | null
+          email: string | null
+          first_name: string | null
+          full_name: string | null
           has_set_password: boolean
           id: string
           is_ban: boolean
+          last_name: string | null
           updated_at: string
+          username: string
           username_changed_at: string | null
+          website: string | null
         }
         Insert: {
+          age?: number | null
+          avatar_url?: string | null
           banned_until?: string | null
+          bio?: string | null
           created_at?: string
           deleted_at?: string | null
+          email?: string | null
+          first_name?: string | null
+          full_name?: string | null
           has_set_password?: boolean
           id: string
           is_ban?: boolean
+          last_name?: string | null
           updated_at?: string
+          username: string
           username_changed_at?: string | null
+          website?: string | null
         }
         Update: {
+          age?: number | null
+          avatar_url?: string | null
           banned_until?: string | null
+          bio?: string | null
           created_at?: string
           deleted_at?: string | null
+          email?: string | null
+          first_name?: string | null
+          full_name?: string | null
           has_set_password?: boolean
           id?: string
           is_ban?: boolean
+          last_name?: string | null
           updated_at?: string
+          username?: string
           username_changed_at?: string | null
+          website?: string | null
         }
         Relationships: [
           {
@@ -527,7 +501,7 @@ export type Database = {
             foreignKeyName: "votes_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -537,6 +511,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      assign_user_data: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       count_posts: {
         Args: {
           userid: string
@@ -552,6 +530,18 @@ export type Database = {
           useremail: string
         }
         Returns: undefined
+      }
+      create_new_user: {
+        Args: {
+          useremail: string
+          password?: string
+          metadata?: Json
+        }
+        Returns: string
+      }
+      generate_password: {
+        Args: Record<PropertyKey, never>
+        Returns: string
       }
       generate_username: {
         Args: {
@@ -571,23 +561,6 @@ export type Database = {
           next_id: number
         }[]
       }
-      get_user: {
-        Args: {
-          userid: string
-        }
-        Returns: {
-          id: string
-          created_at: string
-          updated_at: string
-          deleted_at: string
-          username_changed_at: string
-          has_set_password: boolean
-          is_ban: boolean
-          banned_until: string
-          role: string
-          plan: string
-        }[]
-      }
       get_vote: {
         Args: {
           postid: number
@@ -597,10 +570,6 @@ export type Database = {
           like_count: number
           dislike_count: number
         }[]
-      }
-      migrate_user_data: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
       }
       set_favorite: {
         Args: {

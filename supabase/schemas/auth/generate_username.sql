@@ -1,4 +1,3 @@
--- SQL Editor > New query
 -- select generate_username('username@example.com');
 
 drop function if exists generate_username;
@@ -17,14 +16,16 @@ begin
   new_username := lower(split_part(email, '@', 1));
 
   -- check if username already exists in users table
-  select exists(select 1 from profiles where username = new_username) into username_exists;
+  select exists(select 1 from users where username = new_username) into username_exists;
 
   -- increase username length gradually if needed
   while username_exists loop
     new_username := new_username || '_' || to_char(trunc(random()*1000000), 'fm000000');
-    select exists(select 1 from profiles where username = new_username) into username_exists;
+    select exists(select 1 from users where username = new_username) into username_exists;
   end loop;
 
   return new_username;
 end;
 $$ language plpgsql;
+
+

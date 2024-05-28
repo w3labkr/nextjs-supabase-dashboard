@@ -13,21 +13,10 @@ import {
 import { FormMessage } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 
-import { usePostForm } from '../../post-form-provider'
-
 const MetaboxExcerpt = () => {
   const { t } = useTranslation()
-  const { register, setValue, getFieldState } = useFormContext()
-  const { post } = usePostForm()
-
+  const { register, getFieldState } = useFormContext()
   const field = getFieldState('excerpt')
-  const excerpt: string = post?.excerpt ?? ''
-  const [watchValue, setWatchValue] = React.useState<string>('')
-
-  React.useEffect(() => {
-    setValue('excerpt', excerpt, { shouldDirty: true, shouldValidate: true })
-    setWatchValue(excerpt)
-  }, [setValue, excerpt])
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
@@ -37,11 +26,6 @@ const MetaboxExcerpt = () => {
           <Textarea
             {...register('excerpt')}
             placeholder={t('Textarea.please_enter_your_message')}
-            value={watchValue}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-              setValue('excerpt', e.target.value)
-              setWatchValue(e.target.value)
-            }}
             rows={5}
           />
           <FormMessage className="mt-2">{field?.error?.message}</FormMessage>

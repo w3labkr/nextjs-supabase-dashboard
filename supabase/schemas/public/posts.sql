@@ -4,7 +4,7 @@
 --                                                            --
 ----------------------------------------------------------------
 
-drop trigger if exists handle_updated_at on posts;
+drop trigger if exists on_updated_at on posts;
 
 drop function if exists count_posts;
 drop function if exists get_adjacent_post_id;
@@ -19,18 +19,17 @@ create table posts (
   updated_at timestamptz default now() not null,
   deleted_at timestamptz,
   published_at timestamptz,
-  user_id uuid references profiles(id) on delete cascade not null,
+  user_id uuid references users(id) on delete cascade not null,
   type text default 'post'::text not null,
   status text default 'draft'::text not null,
   password varchar(255),
-  slug text,
+  slug text not null,
   title text,
   content text,
   excerpt text,
   thumbnail_url text,
   is_ban boolean default false not null,
-  banned_until timestamptz,
-  unique(user_id, slug)
+  banned_until timestamptz
 );
 comment on column posts.type is 'post, page, revision';
 comment on column posts.status is 'publish, future, draft, pending, private, trash';
@@ -39,17 +38,14 @@ comment on column posts.status is 'publish, future, draft, pending, private, tra
 alter table posts enable row level security;
 
 -- Add row-level security
-create policy "Public posts are viewable by everyone." on posts for select to authenticated, anon using ( true );
-create policy "Users can insert their own post." on posts for insert to authenticated with check ( (select auth.uid()) = user_id );
-create policy "Users can update their own post." on posts for update to authenticated using ( (select auth.uid()) = user_id );
-create policy "Users can delete their own post." on posts for delete to authenticated using ( (select auth.uid()) = user_id );
+create policy "Public access for all users" on posts for select to authenticated, anon using ( true );
+create policy "User can insert their own posts" on posts for insert to authenticated with check ( (select auth.uid()) = user_id );
+create policy "User can update their own posts" on posts for update to authenticated using ( (select auth.uid()) = user_id );
+create policy "User can delete their own posts" on posts for delete to authenticated using ( (select auth.uid()) = user_id );
 
--- Update a column timestamp on every update.
+-- Functions for tracking last modification time
 create extension if not exists moddatetime schema extensions;
-
--- assuming the table name is "posts", and a timestamp column "updated_at"
--- this trigger will set the "updated_at" column to the current timestamp for every update
-create trigger handle_updated_at before update on posts
+create trigger on_updated_at before update on posts
   for each row execute procedure moddatetime (updated_at);
 
 -- const { data, error } = await supabase.rpc('count_posts', { userid: '', posttype: '' });

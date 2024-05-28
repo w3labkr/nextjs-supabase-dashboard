@@ -29,26 +29,27 @@ const RestoreButton = (props: RestoreButtonProps) => {
     try {
       setIsSubmitting(true)
 
-      const userId = post?.user_id
-
-      if (!userId) throw new Error('Require is not defined.')
-
-      const fetchData = { user_id: userId, status: 'draft', deleted_at: null }
-
       const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const fetchOptions = { revalidatePaths: getPostPath(post) }
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ data: fetchData, options: fetchOptions }),
+        body: JSON.stringify({
+          data: { user_id: post?.user_id, status: 'draft', deleted_at: null },
+          options: { revalidatePaths: getPostPath(post) },
+        }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      const query = setQueryString({ userId, page, perPage, status })
+      const query = setQueryString({
+        userId: post?.user_id,
+        page,
+        perPage,
+        status,
+      })
 
       mutate(fetchUrl)
       mutate(`/api/v1/post/list?${query}`)
-      mutate(`/api/v1/post/count?userId=${userId}`)
+      mutate(`/api/v1/post/count?userId=${post?.user_id}`)
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {

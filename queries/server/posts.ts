@@ -12,9 +12,9 @@ export async function getPostAPI(
 
   if (!url) return { post: null }
 
-  const { data } = await fetcher<PostAPI>(url)
+  const { data: post, error } = await fetcher<PostAPI>(url)
 
-  return { post: data }
+  return error ? { post: null } : { post }
 }
 
 export async function getPostsAPI(
@@ -31,9 +31,9 @@ export async function getPostsAPI(
 
   if (!url) return { posts: null, count: null }
 
-  const { data, count } = await fetcher<PostsAPI>(url)
+  const { data: posts, count, error } = await fetcher<PostsAPI>(url)
 
-  return { posts: data, count }
+  return error ? { posts: null, count: null } : { posts, count }
 }
 
 export async function getAdjacentPostAPI(
@@ -87,7 +87,7 @@ export async function getFavoritePostsAPI(
 
   if (!url) return { posts: null, count: null }
 
-  const { data, count } = await fetcher<PostsAPI>(url)
+  const { data: posts, count, error } = await fetcher<PostsAPI>(url)
 
-  return { posts: data, count }
+  return error ? { posts: null, count: null } : { posts, count }
 }

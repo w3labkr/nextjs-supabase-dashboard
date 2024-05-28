@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import {
   Accordion,
@@ -12,33 +12,21 @@ import {
 } from '@/components/ui/accordion'
 import { Switch } from '@/components/ui/switch'
 
-import { usePostForm } from '../../post-form-provider'
-
 const MetaboxRectriction = () => {
   const { t } = useTranslation()
-  const { register, setValue } = useFormContext()
-  const { post } = usePostForm()
-
-  const status: string = post?.status ?? ''
-  const [watchValue, setWatchValue] = React.useState<string>('')
-
-  React.useEffect(() => {
-    setValue('status', status, { shouldDirty: true, shouldValidate: true })
-    setWatchValue(status)
-  }, [setValue, status])
+  const { control, register, setValue } = useFormContext()
+  const watchStatus: string = useWatch({ control, name: 'status' })
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
       <AccordionItem value="item-1">
         <AccordionTrigger>{t('PostMetabox.private')}</AccordionTrigger>
         <AccordionContent className="flex items-center gap-2">
+          <input {...register('status')} type="hidden" />
           <Switch
-            {...register('status')}
-            checked={watchValue === 'private'}
+            checked={watchStatus === 'private'}
             onCheckedChange={(checked: boolean) => {
-              const value = checked ? 'private' : 'public'
-              setValue('status', value)
-              setWatchValue(value)
+              setValue('status', checked ? 'private' : 'public')
             }}
           />
         </AccordionContent>

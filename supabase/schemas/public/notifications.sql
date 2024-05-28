@@ -4,7 +4,7 @@
 --                                                            --
 ----------------------------------------------------------------
 
-drop trigger if exists handle_updated_at on notifications;
+drop trigger if exists on_updated_at on notifications;
 
 drop table if exists notifications;
 
@@ -23,15 +23,12 @@ create table notifications (
 alter table notifications enable row level security;
 
 -- Add row-level security
-create policy "Users can view their notification." on notifications for select to authenticated using ( (select auth.uid()) = user_id );
-create policy "Users can insert their own notification." on notifications for insert to authenticated with check ( (select auth.uid()) = user_id );
-create policy "Users can update their own notification." on notifications for update to authenticated using ( (select auth.uid()) = user_id );
-create policy "Users can delete their own notification." on notifications for delete to authenticated using ( (select auth.uid()) = user_id );
+create policy "User can select their own notifications" on notifications for select to authenticated using ( (select auth.uid()) = user_id );
+create policy "User can insert their own notifications" on notifications for insert to authenticated with check ( (select auth.uid()) = user_id );
+create policy "User can update their own notifications" on notifications for update to authenticated using ( (select auth.uid()) = user_id );
+create policy "User can delete their own notifications" on notifications for delete to authenticated using ( (select auth.uid()) = user_id );
 
--- Update a column timestamp on every update.
+-- Functions for tracking last modification time
 create extension if not exists moddatetime schema extensions;
-
--- assuming the table name is "notifications", and a timestamp column "updated_at"
--- this trigger will set the "updated_at" column to the current timestamp for every update
-create trigger handle_updated_at before update on notifications
+create trigger on_updated_at before update on notifications
   for each row execute procedure moddatetime (updated_at);

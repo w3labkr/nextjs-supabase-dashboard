@@ -18,25 +18,23 @@ export async function GET(request: NextRequest) {
   }
 
   const payload = token?.payload as VerifyTokenPayload
-  const { user } = await authorize(payload?.user_id)
+  const { authorized, user } = await authorize(payload?.user_id)
 
-  if (!user) {
+  if (!authorized) {
     return new Response('Unauthorized', { status: 401 })
   }
 
-  const now = new Date().toISOString()
-
   const supabase = createClient()
-  const result = await supabase
+  const updated = await supabase
     .from('emails')
-    .update({ email_confirmed_at: now })
+    .update({ email_confirmed_at: new Date().toISOString() })
     .eq('user_id', payload?.user_id)
     .eq('email', payload?.email)
     .select('*')
     .single()
 
-  if (result?.error) {
-    return new Response(result?.error?.message, { status: 400 })
+  if (updated?.error) {
+    return new Response(updated?.error?.message, { status: 400 })
   }
 
   // If your verification email is your primary email, update it.
@@ -44,11 +42,11 @@ export async function GET(request: NextRequest) {
     user?.app_metadata?.provider === 'email' &&
     payload?.email === user?.email
   ) {
-    const updated = await supabase.auth.updateUser({
+    const verified = await supabase.auth.updateUser({
       data: { email_verified: true },
     })
-    if (updated?.error) {
-      return new Response(updated?.error?.message, { status: 400 })
+    if (verified?.error) {
+      return new Response(verified?.error?.message, { status: 400 })
     }
   }
 

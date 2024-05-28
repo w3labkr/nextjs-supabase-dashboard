@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { redirect } from 'next/navigation'
 
 import { AppBarProvider } from '@/components/app-bar/app-bar-provider'
 import { AppBar } from '@/components/app-bar'
@@ -7,33 +8,34 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
-
 import { MiniNavigation } from '@/app/dashboard/components/mini-navigation'
 import { Navigation } from '@/app/dashboard/components/navigation'
 import { dashboardConfig, settingsConfig } from '@/config/dashboard'
 
-import { getUser } from '@/queries/server/users'
+import { getAuth } from '@/queries/server/auth'
+import { getUserAPI } from '@/queries/server/users'
 
 export default async function SettingsLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const { user } = await getUser()
+  const { session } = await getAuth()
+  const { user } = await getUserAPI(session?.user?.id ?? null)
+
+  if (!session) redirect('/auth/signin')
+  if (!user) redirect('/auth/signin')
 
   return (
     <div className="body-overflow-hidden flex h-screen w-screen">
       <AppBarProvider>
-        <MiniNavigation
-          nav={dashboardConfig?.nav}
-          user_role={user?.user?.role}
-        />
+        <MiniNavigation nav={dashboardConfig?.nav} user_role={user?.role} />
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
             <Navigation
               className="w-full border-none lg:max-w-full"
               nav={settingsConfig?.nav}
-              user_role={user?.user?.role}
+              user_role={user?.role}
               title="settings"
               translate="yes"
             />

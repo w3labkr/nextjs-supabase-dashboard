@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import { toast } from 'sonner'
 import {
@@ -14,26 +14,19 @@ import {
 
 import { createClient } from '@/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
-import { usePostForm } from '../../post-form-provider'
 
 const MetaboxThumbnail = () => {
   const { t } = useTranslation()
   const { user } = useAuth()
-  const { register, setValue } = useFormContext()
-  const { post } = usePostForm()
+  const { control, register, setValue } = useFormContext()
 
-  const thumbnail_url: string = post?.thumbnail_url ?? ''
+  const watchThumbnailUrl: string = useWatch({ control, name: 'thumbnail_url' })
   const fileInputRef = React.useRef<HTMLInputElement>(null)
-  const [watchValue, setWatchValue] = React.useState<string>('')
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  React.useEffect(() => {
-    setValue('thumbnail_url', thumbnail_url, {
-      shouldDirty: true,
-      shouldValidate: true,
-    })
-    setWatchValue(thumbnail_url)
-  }, [setValue, thumbnail_url])
+  const handleFileInputRef = (ref: React.RefObject<HTMLInputElement>) => {
+    if (ref.current !== null) ref.current.click()
+  }
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -47,7 +40,7 @@ const MetaboxThumbnail = () => {
       if (!file) throw new Error('Require is not defined.')
       if (!user) throw new Error('Require is not defined.')
 
-      const bucketId = process.env.NEXT_PUBLIC_SUPABASE_ID!
+      const bucketId = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET!
       const filePath = `${user?.id}/${file?.name}`
 
       const supabase = createClient()
@@ -63,7 +56,6 @@ const MetaboxThumbnail = () => {
           .getPublicUrl(uploaded?.data?.path)
 
         setValue('thumbnail_url', publicUrl)
-        setWatchValue(publicUrl)
       }
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
@@ -77,12 +69,7 @@ const MetaboxThumbnail = () => {
       <AccordionItem value="item-1">
         <AccordionTrigger>{t('PostMetabox.featured_image')}</AccordionTrigger>
         <AccordionContent>
-          <input
-            {...register('thumbnail_url')}
-            type="hidden"
-            value={watchValue}
-            readOnly
-          />
+          <input {...register('thumbnail_url')} type="hidden" />
           <input
             ref={fileInputRef}
             type="file"
@@ -90,33 +77,25 @@ const MetaboxThumbnail = () => {
             onChange={handleFileChange}
             className="hidden"
           />
-          {watchValue ? null : (
+          {watchThumbnailUrl ? null : (
             <button
               type="button"
               className="text-blue-500 underline"
-              onClick={() => {
-                if (fileInputRef.current !== null) {
-                  fileInputRef.current.click()
-                }
-              }}
+              onClick={() => handleFileInputRef(fileInputRef)}
             >
               {t('PostMetabox.set_featured_image')}
             </button>
           )}
-          {watchValue ? (
+          {watchThumbnailUrl ? (
             <>
               <button
                 type="button"
                 className="w-full"
-                onClick={() => {
-                  if (fileInputRef.current !== null) {
-                    fileInputRef.current.click()
-                  }
-                }}
+                onClick={() => handleFileInputRef(fileInputRef)}
                 disabled={isSubmitting}
               >
                 <img
-                  src={watchValue}
+                  src={watchThumbnailUrl}
                   alt=""
                   className="h-auto w-full rounded"
                 />
@@ -126,14 +105,11 @@ const MetaboxThumbnail = () => {
               </div>
             </>
           ) : null}
-          {watchValue ? (
+          {watchThumbnailUrl ? (
             <button
               type="button"
               className="mt-2 text-destructive"
-              onClick={() => {
-                setValue('thumbnail_url', '')
-                setWatchValue('')
-              }}
+              onClick={() => setValue('thumbnail_url', '')}
             >
               {t('PostMetabox.remove_featured_image')}
             </button>

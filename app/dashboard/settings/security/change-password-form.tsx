@@ -24,7 +24,6 @@ import { Button } from '@/components/ui/button'
 import { useSWRConfig } from 'swr'
 import { createClient } from '@/supabase/client'
 import { User } from '@/types/database'
-import { useAuth } from '@/hooks/use-auth'
 import { useUserAPI } from '@/queries/client/users'
 
 const FormSchema = z
@@ -48,7 +47,7 @@ const defaultValues: Partial<FormValues> = {
 }
 
 interface ChangePasswordFormProps {
-  user: User | null
+  user: User
 }
 
 const ChangePasswordForm = (props: ChangePasswordFormProps) => {
@@ -60,7 +59,7 @@ const ChangePasswordForm = (props: ChangePasswordFormProps) => {
     shouldUnregister: true,
   })
   const { register, unregister } = form
-  const has_set_password = user?.user?.has_set_password
+  const has_set_password = user?.has_set_password
 
   React.useEffect(() => {
     has_set_password ? register('oldPassword') : unregister('oldPassword')
@@ -166,8 +165,7 @@ const SubmitButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { handleSubmit, reset, setError, getValues } = useFormContext()
-  const { session } = useAuth()
-  const { user } = useUserAPI(session?.user?.id ?? null)
+  const { user } = useUserAPI()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -181,7 +179,7 @@ const SubmitButton = () => {
       const formValues = getValues()
       const supabase = createClient()
 
-      if (user?.user?.has_set_password) {
+      if (user?.has_set_password) {
         if (!formValues?.oldPassword) throw new Error('Require is not defined.')
         const verified = await supabase.rpc('verify_user_password', {
           userid: user?.id,

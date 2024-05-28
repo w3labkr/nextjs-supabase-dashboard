@@ -1,7 +1,7 @@
--- SQL Editor > New query
 -- Trigger the function every time a user password is updated
 
 drop trigger if exists on_auth_user_password_updated on auth.users;
+
 drop function if exists handle_has_set_password;
 
 ----------------------------------------------------------------

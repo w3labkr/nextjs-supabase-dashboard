@@ -150,12 +150,12 @@ const SubmitButton = () => {
         throw new Error('Nothing has changed.')
       }
 
-      const fetchData = { email: formValues?.email }
-
       const fetchUrl = `/api/v1/email?userId=${user?.id}`
       const result = await fetcher<EmailAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ data: fetchData }),
+        body: JSON.stringify({
+          data: { email: formValues?.email },
+        }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

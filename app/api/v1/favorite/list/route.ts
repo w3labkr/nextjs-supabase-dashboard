@@ -19,37 +19,33 @@ export async function GET(request: NextRequest) {
 
   match = { ...match, 'favorites.is_favorite': true }
 
+  const columns =
+    '*, user:users(*), meta:post_metas(*), favorite:favorites!inner(*)'
+
   const supabase = createClient()
   const total = await supabase
     .from('posts')
-    .select('*, favorite:favorites!inner(*)', { count: 'exact', head: true })
+    .select(columns, { count: 'exact', head: true })
     .match(match)
 
-  if (total?.error) {
-    return NextResponse.json(
-      { data: null, count: null, error: total?.error },
-      { status: 400 }
-    )
-  }
-
-  const list = await supabase
+  const { data: list, error } = await supabase
     .from('posts')
-    .select(
-      '*, author:profiles!inner(*), meta:post_metas!inner(*), favorite:favorites!inner(*)'
-    )
+    .select(columns)
     .match(match)
     .range((page - 1) * perPage, page * perPage - 1)
     .order('created_at', { ascending: false })
 
-  if (list?.error) {
+  if (error) {
     return NextResponse.json(
-      { data: null, count: null, error: list?.error },
+      { data: null, count: null, error },
       { status: 400 }
     )
   }
 
+  const output = list ? list?.map((r) => setMeta(r)) : list
+
   return NextResponse.json({
-    data: list?.data?.map((r) => setMeta(r)),
+    data: output,
     count: total?.count ?? 0,
     error: null,
   })

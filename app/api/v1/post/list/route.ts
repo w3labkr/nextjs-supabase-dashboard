@@ -17,45 +17,36 @@ export async function GET(request: NextRequest) {
   if (postType) match = { ...match, type: postType }
   if (status) match = { ...match, status }
 
+  const columns = '*, user:users(*), meta:post_metas(*)'
+
   const supabase = createClient()
   const totalQuery = supabase
     .from('posts')
-    .select('*', { count: 'exact', head: true })
+    .select(columns, { count: 'exact', head: true })
     .match(match)
 
   if (!status) totalQuery.neq('status', 'trash')
 
   const total = await totalQuery
-
-  if (total?.error) {
-    return NextResponse.json(
-      { data: null, count: null, error: total?.error },
-      { status: 400 }
-    )
-  }
-
-  const listQuery = supabase
-    .from('posts')
-    .select('*, author:profiles!inner(*), meta:post_metas!inner(*)')
-    .match(match)
-    .range((page - 1) * perPage, page * perPage - 1)
-    .order('created_at', { ascending: false })
+  const listQuery = supabase.from('posts').select(columns).match(match)
 
   if (!status) listQuery.neq('status', 'trash')
 
-  const list = await listQuery
+  const { data: list, error } = await listQuery
+    .range((page - 1) * perPage, page * perPage - 1)
+    .order('created_at', { ascending: false })
 
-  if (list?.error) {
+  if (error) {
     return NextResponse.json(
-      { data: null, count: null, error: list?.error },
+      { data: null, count: null, error },
       { status: 400 }
     )
   }
 
-  const data = list?.data?.map((d) => setMeta(d))
+  const output = list ? list?.map((r) => setMeta(r)) : list
 
   return NextResponse.json({
-    data,
+    data: output,
     count: total?.count ?? 0,
     error: null,
   })

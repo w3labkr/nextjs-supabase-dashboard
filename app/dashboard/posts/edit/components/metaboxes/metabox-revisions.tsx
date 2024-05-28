@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import {
   Accordion,
@@ -15,7 +15,7 @@ import { usePostForm } from '../../post-form-provider'
 
 const MetaboxRevisions = () => {
   const { t } = useTranslation()
-  const { register, setValue, watch } = useFormContext()
+  const { control, register, setValue } = useFormContext()
   const { post } = usePostForm()
 
   return (

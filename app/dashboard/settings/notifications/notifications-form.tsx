@@ -137,12 +137,12 @@ const SubmitButton = () => {
         throw new Error('Nothing has changed.')
       }
 
-      const fetchData = formValues
-
       const fetchUrl = `/api/v1/notification?userId=${user?.id}`
       const result = await fetcher<NotificationAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ data: fetchData }),
+        body: JSON.stringify({
+          data: formValues,
+        }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

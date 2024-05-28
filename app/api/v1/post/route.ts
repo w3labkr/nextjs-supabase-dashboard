@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
 import { ApiError, revalidatePaths, setMeta } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
+import { getUserAPI } from '@/queries/server/users'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -16,22 +17,19 @@ export async function GET(request: NextRequest) {
   if (slug) match = { ...match, slug }
 
   const supabase = createClient()
-  const result = await supabase
+  const { data: post, error } = await supabase
     .from('posts')
-    .select('*, author:profiles!inner(*), meta:post_metas!inner(*)')
+    .select('*, user:users!inner(*), meta:post_metas(*)')
     .match(match)
-    .single()
+    .maybeSingle()
 
-  if (result?.error) {
-    return NextResponse.json(
-      { data: null, error: result?.error },
-      { status: 400 }
-    )
+  if (error) {
+    return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
-  const data = setMeta(result?.data)
+  const output = post ? setMeta(post) : post
 
-  return NextResponse.json({ data, error: null })
+  return NextResponse.json({ data: output, error: null })
 }
 
 export async function POST(request: NextRequest) {
@@ -39,10 +37,10 @@ export async function POST(request: NextRequest) {
   const id = searchParams.get('id') as string
 
   const { data, options } = await request.json()
-  const { user_id, ...values } = data
-  const { user } = await authorize(user_id)
+  const { user_id, ...formData } = data
+  const { authorized } = await authorize(user_id)
 
-  if (!user) {
+  if (!authorized) {
     return NextResponse.json(
       { data: null, error: new ApiError(401) },
       { status: 401 }
@@ -50,24 +48,22 @@ export async function POST(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const result = await supabase
+  const { data: post, error } = await supabase
     .from('posts')
-    .update(values)
+    .update(formData)
     .match({ id, user_id })
-    .select('*, author:profiles!inner(*), meta:post_metas!inner(*)')
+    .select('*, user:users(*), meta:post_metas(*)')
     .single()
 
-  if (result?.error) {
-    return NextResponse.json(
-      { data: null, error: result?.error },
-      { status: 400 }
-    )
+  if (error) {
+    return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
+  const output = post ? setMeta(post) : post
   const revalidated = revalidatePaths(options?.revalidatePaths)
 
   return NextResponse.json({
-    data: setMeta(result?.data),
+    data: output,
     error: null,
     revalidated,
     now: Date.now(),
@@ -79,9 +75,10 @@ export async function PUT(request: NextRequest) {
   const userId = searchParams.get('userId') as string
 
   const { data, options } = await request.json()
-  const { user, role, plan } = await authorize(userId)
+  const { authorized } = await authorize(userId)
+  const { user } = await getUserAPI(userId)
 
-  if (!user) {
+  if (!authorized || !user) {
     return NextResponse.json(
       { data: null, error: new ApiError(401) },
       { status: 401 }
@@ -101,33 +98,30 @@ export async function PUT(request: NextRequest) {
     )
   }
 
-  const isAdmin = role === 'admin' || role === 'superadmin'
   const totalCount = total?.count ?? 0
 
-  if (!isAdmin && plan === 'free' && totalCount > 2) {
+  if (user?.plan === 'free' && totalCount > 2) {
     return NextResponse.json(
       { data: null, error: new ApiError(402) },
       { status: 402 }
     )
   }
 
-  const result = await supabase
+  const { data: post, error } = await supabase
     .from('posts')
     .insert({ ...data, user_id: userId })
-    .select('*, author:profiles(*)')
+    .select('*, user:users(*), meta:post_metas(*)')
     .single()
 
-  if (result?.error) {
-    return NextResponse.json(
-      { data: null, error: result?.error },
-      { status: 400 }
-    )
+  if (error) {
+    return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
+  const output = post ? setMeta(post) : post
   const revalidated = revalidatePaths(options?.revalidatePaths)
 
   return NextResponse.json({
-    data: result?.data,
+    data: output,
     error: null,
     revalidated,
     now: Date.now(),
@@ -140,9 +134,9 @@ export async function DELETE(request: NextRequest) {
 
   const { data, options } = await request.json()
   const { user_id } = data
-  const { user } = await authorize(user_id)
+  const { authorized } = await authorize(user_id)
 
-  if (!user) {
+  if (!authorized) {
     return NextResponse.json(
       { data: null, error: new ApiError(401) },
       { status: 401 }
@@ -150,13 +144,10 @@ export async function DELETE(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const result = await supabase.from('posts').delete().match({ id, user_id })
+  const { error } = await supabase.from('posts').delete().match({ id, user_id })
 
-  if (result?.error) {
-    return NextResponse.json(
-      { data: null, error: result?.error },
-      { status: 400 }
-    )
+  if (error) {
+    return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
   const revalidated = revalidatePaths(options?.revalidatePaths)

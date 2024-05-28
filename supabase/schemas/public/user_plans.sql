@@ -7,7 +7,7 @@
 -- Custom Claims & Role-based Access Control (RBAC)
 -- https://supabase.com/docs/guides/auth/custom-claims-and-role-based-access-control-rbac
 
-drop trigger if exists handle_updated_at on user_plans;
+drop trigger if exists on_updated_at on user_plans;
 
 drop table if exists user_plans;
 
@@ -35,15 +35,12 @@ comment on column user_plans.plan is 'free, basic, standard, premium';
 alter table user_plans enable row level security;
 
 -- Add row-level security
-create policy "Users can view their plans." on user_plans for select to authenticated using ( (select auth.uid()) = user_id );
-create policy "Users can insert their own plan." on user_plans for insert to authenticated with check ( (select auth.uid()) = user_id );
-create policy "Users can update their own plan." on user_plans for update to authenticated using ( (select auth.uid()) = user_id );
-create policy "Users can delete their own plan." on user_plans for delete to authenticated using ( (select auth.uid()) = user_id );
+create policy "Public access for all users" on user_plans for select to authenticated, anon using ( true );
+create policy "User can insert their own user_plans" on user_plans for insert to authenticated with check ( (select auth.uid()) = user_id );
+create policy "User can update their own user_plans" on user_plans for update to authenticated using ( (select auth.uid()) = user_id );
+create policy "User can delete their own user_plans" on user_plans for delete to authenticated using ( (select auth.uid()) = user_id );
 
--- Update a column timestamp on every update.
+-- Functions for tracking last modification time
 create extension if not exists moddatetime schema extensions;
-
--- assuming the table name is "user_plans", and a timestamp column "updated_at"
--- this trigger will set the "updated_at" column to the current timestamp for every update
-create trigger handle_updated_at before update on user_plans
+create trigger on_updated_at before update on user_plans
   for each row execute procedure moddatetime (updated_at);

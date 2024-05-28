@@ -21,10 +21,9 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getAuthorPath } from '@/lib/utils'
-import { useAuth } from '@/hooks/use-auth'
-import { useProfileAPI } from '@/queries/client/profiles'
-import { ProfileAPI } from '@/types/api'
+import { fetcher, getUserPath } from '@/lib/utils'
+import { useUserAPI } from '@/queries/client/users'
+import { UserAPI } from '@/types/api'
 
 const FormSchema = z.object({
   username: z.string().nonempty().min(2).max(30),
@@ -33,14 +32,13 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>
 
 const ChangeUsernameForm = () => {
-  const { user } = useAuth()
-  const { profile } = useProfileAPI(user?.id ?? null)
+  const { user } = useUserAPI()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     values: {
-      username: profile?.username ?? '',
+      username: user?.username ?? '',
     },
   })
 
@@ -83,8 +81,7 @@ const UsernameField = () => {
 const SubmitButton = () => {
   const { t } = useTranslation()
   const { handleSubmit, setError, getValues } = useFormContext()
-  const { user } = useAuth()
-  const { profile } = useProfileAPI(user?.id ?? null)
+  const { user } = useUserAPI()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -94,22 +91,21 @@ const SubmitButton = () => {
       setIsSubmitting(true)
 
       const formValues = getValues()
+      const username = user?.username
 
       if (!user) throw new Error('Require is not defined.')
-      if (!profile) throw new Error('Require is not defined.')
-      if (formValues?.username === profile?.username) {
+      if (!username) throw new Error('Require is not defined.')
+      if (formValues?.username === username) {
         throw new Error('Nothing has changed.')
       }
 
-      const fetchData = {
-        username: formValues?.username,
-      }
-
-      const fetchUrl = `/api/v1/profile?id=${user?.id}`
-      const fetchOptions = { revalidatePaths: getAuthorPath(profile?.username) }
-      const result = await fetcher<ProfileAPI>(fetchUrl, {
+      const fetchUrl = `/api/v1/user?id=${user?.id}`
+      const result = await fetcher<UserAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ data: fetchData, options: fetchOptions }),
+        body: JSON.stringify({
+          data: { username: formValues?.username },
+          options: { revalidatePaths: getUserPath(username) },
+        }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)

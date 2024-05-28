@@ -1,24 +1,18 @@
 import { Tables } from '@/types/supabase'
-import { User as AuthUser } from '@supabase/supabase-js'
 
 export type UserRole = 'guest' | 'user' | 'admin' | 'superadmin'
 
 export type UserPlan = 'free' | 'basic' | 'standard' | 'premium'
 
-export type User = AuthUser & {
-  user: Tables<'users'> & {
-    role: string
-    plan: string
-    meta: Record<string, string>
-  }
-  profile: Tables<'profiles'>
+export type User = Tables<'users'> & {
+  role: string
+  plan: string
+  meta: Record<string, string>
 }
 
 export type Email = Tables<'emails'>
 
 export type Notification = Tables<'notifications'>
-
-export type Profile = Tables<'profiles'>
 
 export type PostStatus =
   | 'publish'
@@ -31,7 +25,7 @@ export type PostStatus =
 export type PostType = 'post' | 'page' | 'revision'
 
 export type Post = Tables<'posts'> & {
-  author: Tables<'profiles'>
+  user: Tables<'users'>
   meta: Record<string, string>
 }
 

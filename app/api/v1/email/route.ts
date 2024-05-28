@@ -8,9 +8,9 @@ export async function POST(request: NextRequest) {
   const userId = searchParams.get('userId') as string
 
   const { data, options } = await request.json()
-  const { user } = await authorize(userId)
+  const { authorized } = await authorize(userId)
 
-  if (!user) {
+  if (!authorized) {
     return NextResponse.json(
       { data: null, error: new ApiError(401) },
       { status: 401 }
@@ -18,16 +18,13 @@ export async function POST(request: NextRequest) {
   }
 
   const supabaseAdmin = createAdminClient()
-  const result = await supabaseAdmin.updateUserById(userId, {
+  const { error } = await supabaseAdmin.updateUserById(userId, {
     email: data?.email,
     user_metadata: { email: data?.email },
   })
 
-  if (result?.error) {
-    return NextResponse.json(
-      { data: null, error: result?.error },
-      { status: 400 }
-    )
+  if (error) {
+    return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
   const revalidated = revalidatePaths(options?.revalidatePaths)
@@ -45,9 +42,9 @@ export async function PUT(request: NextRequest) {
   const userId = searchParams.get('userId') as string
 
   const { data, options } = await request.json()
-  const { user } = await authorize(userId)
+  const { authorized } = await authorize(userId)
 
-  if (!user) {
+  if (!authorized) {
     return NextResponse.json(
       { data: null, error: new ApiError(401) },
       { status: 401 }
@@ -55,23 +52,20 @@ export async function PUT(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const result = await supabase
+  const { data: email, error } = await supabase
     .from('emails')
     .insert({ email: data?.email, user_id: userId })
     .select('*')
     .single()
 
-  if (result?.error) {
-    return NextResponse.json(
-      { data: null, error: result?.error },
-      { status: 400 }
-    )
+  if (error) {
+    return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
   const revalidated = revalidatePaths(options?.revalidatePaths)
 
   return NextResponse.json({
-    data: result?.data,
+    data: email,
     error: null,
     revalidated,
     now: Date.now(),
@@ -83,9 +77,9 @@ export async function DELETE(request: NextRequest) {
   const userId = searchParams.get('userId') as string
 
   const { data, options } = await request.json()
-  const { user } = await authorize(userId)
+  const { authorized } = await authorize(userId)
 
-  if (!user) {
+  if (!authorized) {
     return NextResponse.json(
       { data: null, error: new ApiError(401) },
       { status: 401 }
@@ -93,7 +87,7 @@ export async function DELETE(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const result = await supabase
+  const { data: email, error } = await supabase
     .from('emails')
     .delete()
     .eq('user_id', userId)
@@ -101,17 +95,14 @@ export async function DELETE(request: NextRequest) {
     .select('*')
     .single()
 
-  if (result?.error) {
-    return NextResponse.json(
-      { data: null, error: result?.error },
-      { status: 400 }
-    )
+  if (error) {
+    return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
   const revalidated = revalidatePaths(options?.revalidatePaths)
 
   return NextResponse.json({
-    data: result?.data,
+    data: email,
     error: null,
     revalidated,
     now: Date.now(),

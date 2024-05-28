@@ -7,9 +7,9 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const userId = searchParams.get('userId') as string
 
-  const { user } = await authorize(userId)
+  const { authorized } = await authorize(userId)
 
-  if (!user) {
+  if (!authorized) {
     return NextResponse.json(
       { data: null, error: new ApiError(401) },
       { status: 401 }
@@ -17,20 +17,17 @@ export async function GET(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const result = await supabase
+  const { data: notification, error } = await supabase
     .from('notifications')
     .select('*')
     .eq('user_id', userId)
-    .single()
+    .maybeSingle()
 
-  if (result?.error) {
-    return NextResponse.json(
-      { data: null, error: result?.error },
-      { status: 400 }
-    )
+  if (error) {
+    return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
-  return NextResponse.json({ data: result?.data, error: null })
+  return NextResponse.json({ data: notification, error: null })
 }
 
 export async function POST(request: NextRequest) {
@@ -38,9 +35,9 @@ export async function POST(request: NextRequest) {
   const userId = searchParams.get('userId') as string
 
   const { data, options } = await request.json()
-  const { user } = await authorize(userId)
+  const { authorized } = await authorize(userId)
 
-  if (!user) {
+  if (!authorized) {
     return NextResponse.json(
       { data: null, error: new ApiError(401) },
       { status: 401 }
@@ -48,24 +45,21 @@ export async function POST(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const result = await supabase
+  const { data: notification, error } = await supabase
     .from('notifications')
     .update(data)
     .eq('user_id', userId)
     .select('*')
     .single()
 
-  if (result?.error) {
-    return NextResponse.json(
-      { data: null, error: result?.error },
-      { status: 400 }
-    )
+  if (error) {
+    return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
   const revalidated = revalidatePaths(options?.revalidatePaths)
 
   return NextResponse.json({
-    data: result?.data,
+    data: notification,
     error: null,
     revalidated,
     now: Date.now(),

@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import { fetcher, getAuthorPath } from '@/lib/utils'
+import { fetcher, getUserPath } from '@/lib/utils'
 import { createClient } from '@/supabase/client'
 import { User } from '@/types/database'
 import { UserAPI } from '@/types/api'
@@ -69,7 +69,7 @@ const DeactivateUserForm = (props: DeactivateUserFormProps) => {
     shouldUnregister: true,
   })
   const { register, unregister } = form
-  const has_set_password = user?.user?.has_set_password
+  const has_set_password = user?.has_set_password
 
   React.useEffect(() => {
     has_set_password ? register('password') : unregister('password')
@@ -181,8 +181,8 @@ const SubmitButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { handleSubmit, setError, getValues, formState } = useFormContext()
-  const { session, setSession, setUser } = useAuth()
-  const { user } = useUserAPI(session?.user?.id ?? null)
+  const { setSession, setUser } = useAuth()
+  const { user } = useUserAPI()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -193,7 +193,6 @@ const SubmitButton = () => {
       const formValues = getValues()
 
       if (!user) throw new Error('Require is not defined.')
-      if (!user?.profile) throw new Error('Require is not defined.')
       if (!user?.email) throw new Error('Require is not defined.')
       if (formValues?.email !== user?.email) {
         throw new Error('Your email address is invalid.')
@@ -201,7 +200,7 @@ const SubmitButton = () => {
 
       const supabase = createClient()
 
-      if (user?.user?.has_set_password) {
+      if (user?.has_set_password) {
         if (!formValues?.password) throw new Error('Require is not defined.')
         const verified = await supabase.rpc('verify_user_password', {
           userid: user?.id,
@@ -213,17 +212,13 @@ const SubmitButton = () => {
         }
       }
 
-      const fetchData = {
-        deleted: new Date().toISOString(),
-      }
-
       const fetchUrl = `/api/v1/user?id=${user?.id}`
-      const fetchOptions = {
-        revalidatePaths: getAuthorPath(user?.profile?.username),
-      }
       const deleted = await fetcher<UserAPI>(fetchUrl, {
         method: 'POST',
-        body: JSON.stringify({ data: fetchData, options: fetchOptions }),
+        body: JSON.stringify({
+          data: { deleted: new Date().toISOString() },
+          options: { revalidatePaths: getUserPath(user?.username) },
+        }),
       })
 
       if (deleted?.error) throw new Error(deleted?.error?.message)
