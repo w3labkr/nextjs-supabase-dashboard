@@ -15,13 +15,13 @@ import { FavoriteButton } from './favorite-button'
 
 import { getUserUrl } from '@/lib/utils'
 import { Post } from '@/types/database'
-import { getAuth } from '@/queries/server/auth'
+import { getAuth, authenticate } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { getPostAPI, getAdjacentPostAPI } from '@/queries/server/posts'
 
 // revalidate the data at most every month
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
-export const revalidate = 2678400
+// export const revalidate = 2678400
 
 export async function generateMetadata(
   {
@@ -61,7 +61,6 @@ export default async function PostPage({
   params: { username: string; slug: string }
   searchParams?: { preview?: string }
 }) {
-  const { session } = await getAuth()
   const { user } = await getUserAPI(null, { username })
 
   if (!user) notFound()
@@ -73,14 +72,14 @@ export default async function PostPage({
 
   if (!post) notFound()
 
-  if (searchParams?.preview === 'true') {
-    if (post?.user_id !== session?.user?.id) return <Forbidden />
-  } else if (post?.status === 'private') {
+  if (post?.status === 'private' || searchParams?.preview === 'true') {
+    const { authenticated } = await authenticate()
+    const { session } = await getAuth()
+    if (!authenticated) return <Forbidden />
     if (post?.user_id !== session?.user?.id) return <Forbidden />
   } else if (post?.status !== 'publish') {
     notFound()
   }
-
   const { previousPost, nextPost } = await getAdjacentPostAPI(post?.id, {
     userId: post?.user_id,
     postType: 'post',

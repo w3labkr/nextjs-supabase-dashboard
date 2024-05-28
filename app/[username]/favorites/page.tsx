@@ -17,7 +17,7 @@ import { getFavoritePostsAPI } from '@/queries/server/posts'
 
 // revalidate the data at most every week
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
-export const revalidate = 604800
+// export const revalidate = 604800
 
 export async function generateMetadata(
   {

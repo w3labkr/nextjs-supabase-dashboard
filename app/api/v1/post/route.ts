@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
   const supabase = createClient()
   const { data: post, error } = await supabase
     .from('posts')
-    .select('*, user:users!inner(*), meta:post_metas(*)')
+    .select('*, user:users(*), meta:post_metas(*)')
     .match(match)
     .maybeSingle()
 
