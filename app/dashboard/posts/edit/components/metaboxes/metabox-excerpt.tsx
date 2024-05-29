@@ -15,8 +15,8 @@ import { Textarea } from '@/components/ui/textarea'
 
 const MetaboxExcerpt = () => {
   const { t } = useTranslation()
-  const { register, getFieldState } = useFormContext()
-  const field = getFieldState('excerpt')
+  const { register, getFieldState, formState } = useFormContext()
+  const fieldState = getFieldState('excerpt', formState)
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
@@ -28,7 +28,9 @@ const MetaboxExcerpt = () => {
             placeholder={t('Textarea.please_enter_your_message')}
             rows={5}
           />
-          <FormMessage className="mt-2">{field?.error?.message}</FormMessage>
+          <FormMessage className="mt-2">
+            {fieldState?.error?.message}
+          </FormMessage>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

@@ -228,7 +228,7 @@ export type Database = {
           is_ban: boolean
           password: string | null
           published_at: string | null
-          slug: string
+          slug: string | null
           status: string
           thumbnail_url: string | null
           title: string | null
@@ -246,7 +246,7 @@ export type Database = {
           is_ban?: boolean
           password?: string | null
           published_at?: string | null
-          slug: string
+          slug?: string | null
           status?: string
           thumbnail_url?: string | null
           title?: string | null
@@ -264,7 +264,7 @@ export type Database = {
           is_ban?: boolean
           password?: string | null
           published_at?: string | null
-          slug?: string
+          slug?: string | null
           status?: string
           thumbnail_url?: string | null
           title?: string | null

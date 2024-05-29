@@ -156,20 +156,18 @@ const editorConfiguration: EditorConfig = {
 
 const Editor = () => {
   const { user } = useAuth()
-  const { setValue } = useFormContext()
   const { post } = usePostForm()
+  const { setValue } = useFormContext()
+  const [watchValue, setWatchValue] = React.useState<string>('')
 
   const resolvedLanguage = useAppSelector(
     (state) => state?.i18n?.resolvedLanguage
   )
 
-  const content: string = post?.content ?? ''
-  const [watchValue, setWatchValue] = React.useState<string>('')
-
   React.useEffect(() => {
-    setValue('content', content)
-    setWatchValue(content)
-  }, [setValue, content])
+    setValue('content', post?.content ?? '')
+    setWatchValue(post?.content ?? '')
+  }, [setValue, post?.content])
 
   React.useEffect(() => {
     editorConfiguration.language = resolvedLanguage
@@ -181,7 +179,7 @@ const Editor = () => {
 
   const handleChange = (event: EventInfo, editor: ClassicEditor) => {
     const data = editor.getData()
-    setValue('content', data)
+    setValue('content', data, { shouldDirty: true, shouldValidate: true })
     setWatchValue(data)
   }
 

@@ -4,6 +4,11 @@
 --                                                            --
 ----------------------------------------------------------------
 
+-- Functions for tracking last modification time
+create extension if not exists moddatetime schema extensions;
+
+----------------------------------------------------------------
+
 drop trigger if exists on_updated_at on favorites;
 
 drop function if exists set_favorite;
@@ -31,8 +36,7 @@ create policy "User can insert their own favorites" on favorites for insert to a
 create policy "User can update their own favorites" on favorites for update to authenticated using ( (select auth.uid()) = user_id );
 create policy "User can delete their own favorites" on favorites for delete to authenticated using ( (select auth.uid()) = user_id );
 
--- Functions for tracking last modification time
-create extension if not exists moddatetime schema extensions;
+-- Trigger for tracking last modification time
 create trigger on_updated_at before update on favorites
   for each row execute procedure moddatetime (updated_at);
 

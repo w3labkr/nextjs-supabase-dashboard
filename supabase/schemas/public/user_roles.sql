@@ -7,6 +7,13 @@
 -- Custom Claims & Role-based Access Control (RBAC)
 -- https://supabase.com/docs/guides/auth/custom-claims-and-role-based-access-control-rbac
 
+----------------------------------------------------------------
+
+-- Functions for tracking last modification time
+create extension if not exists moddatetime schema extensions;
+
+----------------------------------------------------------------
+
 drop trigger if exists on_updated_at on user_roles;
 
 drop table if exists user_roles;
@@ -42,7 +49,6 @@ create policy "User can insert their own user_roles" on user_roles for insert to
 create policy "User can update their own user_roles" on user_roles for update to authenticated using ( (select auth.uid()) = user_id );
 create policy "User can delete their own user_roles" on user_roles for delete to authenticated using ( (select auth.uid()) = user_id );
 
--- Functions for tracking last modification time
-create extension if not exists moddatetime schema extensions;
+-- Trigger for tracking last modification time
 create trigger on_updated_at before update on user_roles
   for each row execute procedure moddatetime (updated_at);

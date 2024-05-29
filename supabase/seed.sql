@@ -51,6 +51,9 @@ create extension if not exists pgcrypto schema extensions;
 -- Functions for tracking last modification time
 create extension if not exists moddatetime schema extensions;
 
+-- Text search dictionary that removes accents
+create extension if not exists unaccent schema extensions;
+
 ----------------------------------------------------------------
 --                                                            --
 --                           reset                            --
@@ -435,7 +438,7 @@ create table posts (
   type text default 'post'::text not null,
   status text default 'draft'::text not null,
   password varchar(255),
-  slug text not null,
+  slug text,
   title text,
   content text,
   excerpt text,

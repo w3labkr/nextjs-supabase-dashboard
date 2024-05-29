@@ -133,8 +133,8 @@ const SubmitButton = () => {
       setIsSubmitting(true)
 
       const next = (searchParams.get('next') as string) ?? '/dashboard'
-
       const formValues = getValues()
+
       const supabase = createClient()
       const signed = await supabase.auth.signInWithPassword({
         email: formValues?.email,

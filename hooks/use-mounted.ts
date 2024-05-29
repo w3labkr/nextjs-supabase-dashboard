@@ -13,7 +13,7 @@ export function useMounted() {
   return mounted
 }
 
-export function useDebounceMounted(wait: number = 0) {
+export function useDebounceMounted(wait?: number = 0) {
   const [mounted, setMounted] = React.useState<boolean>(false)
   const debounceCallback = React.useCallback(
     debounce((value: boolean) => setMounted(value), wait),

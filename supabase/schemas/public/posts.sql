@@ -4,6 +4,14 @@
 --                                                            --
 ----------------------------------------------------------------
 
+-- Functions for tracking last modification time
+create extension if not exists moddatetime schema extensions;
+
+-- Text search dictionary that removes accents
+create extension if not exists unaccent schema extensions;
+
+----------------------------------------------------------------
+
 drop trigger if exists on_updated_at on posts;
 
 drop function if exists count_posts;
@@ -23,7 +31,7 @@ create table posts (
   type text default 'post'::text not null,
   status text default 'draft'::text not null,
   password varchar(255),
-  slug text not null,
+  slug text,
   title text,
   content text,
   excerpt text,
@@ -43,8 +51,7 @@ create policy "User can insert their own posts" on posts for insert to authentic
 create policy "User can update their own posts" on posts for update to authenticated using ( (select auth.uid()) = user_id );
 create policy "User can delete their own posts" on posts for delete to authenticated using ( (select auth.uid()) = user_id );
 
--- Functions for tracking last modification time
-create extension if not exists moddatetime schema extensions;
+-- Trigger for tracking last modification time
 create trigger on_updated_at before update on posts
   for each row execute procedure moddatetime (updated_at);
 
@@ -83,3 +90,35 @@ begin
   where user_id = userid and type = posttype and status = poststatus;
 end;
 $$ language plpgsql;
+
+-- Trigger the function every time a slug is updated
+
+create or replace function set_post_slug()
+returns trigger
+security definer set search_path = public
+as $$
+declare
+    slugified text;
+    new_slug text;
+    counter integer := 1;
+begin
+  -- slugified := slugify(new.slug);
+  slugified := new.slug;
+  new_slug := slugified;
+
+  loop
+    if exists (select 1 from posts where user_id = new.user_id and slug = new_slug and id != coalesce(new.id, 0)) then
+      new_slug := slugified || '-' || counter;
+      counter := counter + 1;
+    else
+      exit;
+    end if;
+  end loop;
+
+  new.slug := new_slug;
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger on_slug_upsert before insert or update of slug on posts
+  for each row when (new.slug is not null) execute function set_post_slug();

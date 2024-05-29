@@ -34,8 +34,7 @@ const MetaboxThumbnail = () => {
 
       e.preventDefault()
 
-      const target = e.currentTarget as HTMLInputElement
-      const file = target?.files ? target?.files[0] : null
+      const file = e.target?.files ? e.target?.files[0] : null
 
       if (!file) throw new Error('Require is not defined.')
       if (!user) throw new Error('Require is not defined.')
@@ -55,7 +54,10 @@ const MetaboxThumbnail = () => {
           .from(bucketId)
           .getPublicUrl(uploaded?.data?.path)
 
-        setValue('thumbnail_url', publicUrl)
+        setValue('thumbnail_url', publicUrl, {
+          shouldDirty: true,
+          shouldValidate: true,
+        })
       }
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
@@ -109,7 +111,12 @@ const MetaboxThumbnail = () => {
             <button
               type="button"
               className="mt-2 text-destructive"
-              onClick={() => setValue('thumbnail_url', '')}
+              onClick={() =>
+                setValue('thumbnail_url', '', {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }
             >
               {t('PostMetabox.remove_featured_image')}
             </button>

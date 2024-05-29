@@ -4,7 +4,15 @@
 --                                                            --
 ----------------------------------------------------------------
 
+-- User Management
 -- https://supabase.com/docs/guides/auth/managing-user-data
+
+----------------------------------------------------------------
+
+-- Functions for tracking last modification time
+create extension if not exists moddatetime schema extensions;
+
+----------------------------------------------------------------
 
 drop trigger if exists on_updated_at on users;
 drop trigger if exists on_username_updated on users;
@@ -48,8 +56,7 @@ create policy "User can insert their own users" on users for insert to authentic
 create policy "User can update their own users" on users for update to authenticated using ( (select auth.uid()) = id );
 create policy "User can delete their own users" on users for delete to authenticated using ( (select auth.uid()) = id );
 
--- Functions for tracking last modification time
-create extension if not exists moddatetime schema extensions;
+-- Trigger for tracking last modification time
 create trigger on_updated_at before update on users
   for each row execute procedure moddatetime (updated_at);
 

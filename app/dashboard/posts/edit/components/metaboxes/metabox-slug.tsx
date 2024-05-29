@@ -18,32 +18,24 @@ import { usePostForm } from '../../post-form-provider'
 
 const MetaboxSlug = () => {
   const { t } = useTranslation()
-  const { control, register, setValue, getFieldState } = useFormContext()
   const { post } = usePostForm()
+  const { control, register, setValue, getFieldState, formState } =
+    useFormContext()
 
-  const field = getFieldState('slug')
+  const fieldState = getFieldState('slug', formState)
   const watchTitle: string = useWatch({ control, name: 'title' })
-  const watchSlug: string = useWatch({ control, name: 'slug' })
-
-  const debounceSetValue = React.useCallback(
-    debounce((value: string) => {
-      const slugified = kebabCase(value)
-      setValue('slug', slugified, { shouldDirty: true, shouldValidate: true })
-    }, 300),
-    []
-  )
 
   React.useEffect(() => {
-    if (post?.slug) {
-      debounceSetValue(post?.slug)
-    } else {
-      debounceSetValue(watchTitle)
-    }
-  }, [debounceSetValue, post?.slug, watchTitle])
-
-  React.useEffect(() => {
-    debounceSetValue(watchSlug)
-  }, [debounceSetValue, watchSlug])
+    const timer = setTimeout(() => {
+      if (!post?.slug) {
+        setValue('slug', kebabCase(watchTitle), {
+          shouldDirty: true,
+          shouldValidate: true,
+        })
+      }
+    }, 0)
+    return () => clearTimeout(timer)
+  }, [post?.slug, setValue, watchTitle])
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
@@ -54,8 +46,22 @@ const MetaboxSlug = () => {
             {...register('slug')}
             type="text"
             placeholder={t('Input.please_enter_your_text')}
+            onChange={debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+              setValue('slug', kebabCase(e.target.value), {
+                shouldDirty: true,
+                shouldValidate: true,
+              })
+            }, 1000)}
+            onBlur={(e: React.FocusEvent<HTMLInputElement, Element>) => {
+              setValue('slug', kebabCase(e.target.value), {
+                shouldDirty: true,
+                shouldValidate: true,
+              })
+            }}
           />
-          <FormMessage className="mt-2">{field?.error?.message}</FormMessage>
+          <FormMessage className="mt-2">
+            {fieldState?.error?.message}
+          </FormMessage>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

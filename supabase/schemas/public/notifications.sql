@@ -4,6 +4,11 @@
 --                                                            --
 ----------------------------------------------------------------
 
+-- Functions for tracking last modification time
+create extension if not exists moddatetime schema extensions;
+
+----------------------------------------------------------------
+
 drop trigger if exists on_updated_at on notifications;
 
 drop table if exists notifications;
@@ -28,7 +33,6 @@ create policy "User can insert their own notifications" on notifications for ins
 create policy "User can update their own notifications" on notifications for update to authenticated using ( (select auth.uid()) = user_id );
 create policy "User can delete their own notifications" on notifications for delete to authenticated using ( (select auth.uid()) = user_id );
 
--- Functions for tracking last modification time
-create extension if not exists moddatetime schema extensions;
+-- Trigger for tracking last modification time
 create trigger on_updated_at before update on notifications
   for each row execute procedure moddatetime (updated_at);

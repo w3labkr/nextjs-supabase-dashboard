@@ -160,6 +160,7 @@ const SubmitButton = () => {
       setIsSubmitting(true)
 
       const formValues = getValues()
+
       const supabase = createClient()
       const signed = await supabase.auth.signUp({
         email: formValues?.email,

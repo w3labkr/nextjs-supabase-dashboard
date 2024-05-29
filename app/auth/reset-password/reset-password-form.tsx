@@ -128,6 +128,7 @@ const SubmitButton = () => {
       setIsSubmitting(true)
 
       const formValues = getValues()
+
       const supabase = createClient()
       const updated = await supabase.auth.updateUser({
         password: formValues?.newPassword,

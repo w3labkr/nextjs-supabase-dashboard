@@ -4,6 +4,11 @@
 --                                                            --
 ----------------------------------------------------------------
 
+-- Functions for tracking last modification time
+create extension if not exists moddatetime schema extensions;
+
+----------------------------------------------------------------
+
 drop trigger if exists on_updated_at on emails;
 
 drop table if exists emails;
@@ -29,7 +34,6 @@ create policy "User can insert their own emails" on emails for insert to authent
 create policy "User can update their own emails" on emails for update to authenticated using ( (select auth.uid()) = user_id );
 create policy "User can delete their own emails" on emails for delete to authenticated using ( (select auth.uid()) = user_id );
 
--- Functions for tracking last modification time
-create extension if not exists moddatetime schema extensions;
+-- Trigger for tracking last modification time
 create trigger on_updated_at before update on emails
   for each row execute procedure moddatetime (updated_at);

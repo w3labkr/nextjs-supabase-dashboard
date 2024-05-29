@@ -87,6 +87,7 @@ const SubmitButton = () => {
       setIsSubmitting(true)
 
       const formValues = getValues()
+
       const supabase = createClient()
       const result = await supabase.auth.resetPasswordForEmail(
         formValues?.email,

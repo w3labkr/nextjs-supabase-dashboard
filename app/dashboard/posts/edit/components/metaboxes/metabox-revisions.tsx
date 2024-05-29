@@ -15,8 +15,8 @@ import { usePostForm } from '../../post-form-provider'
 
 const MetaboxRevisions = () => {
   const { t } = useTranslation()
-  const { control, register, setValue } = useFormContext()
   const { post } = usePostForm()
+  const { control, register, setValue } = useFormContext()
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">

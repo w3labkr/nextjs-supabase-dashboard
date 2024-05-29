@@ -4,6 +4,11 @@
 --                                                            --
 ----------------------------------------------------------------
 
+-- Functions for tracking last modification time
+create extension if not exists moddatetime schema extensions;
+
+----------------------------------------------------------------
+
 drop trigger if exists on_updated_at on votes;
 
 drop function if exists get_vote;
@@ -32,8 +37,7 @@ create policy "User can insert their own votes" on votes for insert to authentic
 create policy "User can update their own votes" on votes for update to authenticated using ( (select auth.uid()) = user_id );
 create policy "User can delete their own votes" on votes for delete to authenticated using ( (select auth.uid()) = user_id );
 
--- Functions for tracking last modification time
-create extension if not exists moddatetime schema extensions;
+-- Trigger for tracking last modification time
 create trigger on_updated_at before update on votes
   for each row execute procedure moddatetime (updated_at);
 

@@ -4,7 +4,6 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { useFormContext } from 'react-hook-form'
-import { kebabCase } from 'lodash'
 import dayjs from 'dayjs'
 
 import { toast } from 'sonner'
@@ -76,9 +75,9 @@ const MetaboxPublish = () => {
 
 const DraftButton = () => {
   const { t } = useTranslation()
-  const { mutate } = useSWRConfig()
-  const { getValues, setError, handleSubmit } = useFormContext()
   const { post } = usePostForm()
+  const { getValues, setError, handleSubmit } = useFormContext()
+  const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -89,15 +88,12 @@ const DraftButton = () => {
       if (!post) throw new Error('Require is not defined.')
 
       const formValues = getValues()
+
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          data: {
-            ...formValues,
-            slug: kebabCase(formValues?.slug),
-            status: 'draft',
-          },
+          data: { ...formValues, status: 'draft' },
           options: { revalidatePaths: getPostPath(post) },
         }),
       })
@@ -135,8 +131,8 @@ const DraftButton = () => {
 const ViewButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
-  const { handleSubmit } = useFormContext()
   const { post } = usePostForm()
+  const { handleSubmit } = useFormContext()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -172,9 +168,9 @@ const ViewButton = () => {
 const PreviewButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
-  const { mutate } = useSWRConfig()
-  const { getValues, setError, handleSubmit } = useFormContext()
   const { post } = usePostForm()
+  const { getValues, setError, handleSubmit } = useFormContext()
+  const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -186,15 +182,12 @@ const PreviewButton = () => {
 
       const postPath = getPostPath(post)
       const formValues = getValues()
+
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          data: {
-            ...formValues,
-            slug: kebabCase(formValues?.slug),
-            status: 'draft',
-          },
+          data: { ...formValues, status: 'draft' },
           options: { revalidatePaths: postPath },
         }),
       })
@@ -232,8 +225,8 @@ const PreviewButton = () => {
 const TrashButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
-  const { getValues, setError, handleSubmit, unregister } = useFormContext()
   const { post } = usePostForm()
+  const { getValues, setError, handleSubmit, unregister } = useFormContext()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -249,12 +242,13 @@ const TrashButton = () => {
       if (!post) throw new Error('Require is not defined.')
 
       const formValues = getValues()
+
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
           data: {
-            user_id: formValues?.user_id,
+            ...formValues,
             status: 'trash',
             deleted_at: new Date().toISOString(),
           },
@@ -295,9 +289,10 @@ const TrashButton = () => {
 
 const PublishButton = () => {
   const { t } = useTranslation()
-  const { mutate } = useSWRConfig()
-  const { getValues, setError, handleSubmit } = useFormContext()
   const { post } = usePostForm()
+  const { getValues, setValue, reset, setError, handleSubmit } =
+    useFormContext()
+  const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -307,32 +302,27 @@ const PublishButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const { slug, status, ...formValues } = getValues()
-
-      const published = {
-        ...formValues,
-        slug: kebabCase(slug),
-        status: status === 'private' ? 'private' : 'publish',
-        published_at: new Date().toISOString(),
-      }
-
-      const updated = {
-        ...formValues,
-        slug: kebabCase(slug),
-        status: status === 'private' ? 'private' : 'publish',
-      }
+      const { status, ...formValues } = getValues()
+      const setStatus = (s: string) => (s === 'private' ? 'private' : 'publish')
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          data: post?.published_at ? updated : published,
+          data: post?.published_at
+            ? { ...formValues, status: setStatus(status) }
+            : {
+                ...formValues,
+                status: setStatus(status),
+                published_at: new Date().toISOString(),
+              },
           options: { revalidatePaths: getPostPath(post) },
         }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
+      // reset()
       mutate(fetchUrl)
 
       toast.success(t('FormMessage.changed_successfully'))

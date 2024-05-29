@@ -10,10 +10,10 @@ import { usePostForm } from '../post-form-provider'
 
 const Permalink = () => {
   const { t } = useTranslation()
-  const { control } = useFormContext()
   const { post } = usePostForm()
+  const { control } = useFormContext()
 
-  const watchSlug = useWatch({ control, name: 'slug' })
+  const watchSlug: string = useWatch({ control, name: 'slug' })
   const [permalink, setPermalink] = React.useState<string>('')
 
   React.useEffect(() => {
