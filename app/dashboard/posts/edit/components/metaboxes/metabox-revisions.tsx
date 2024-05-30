@@ -11,7 +11,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 
-import { usePostForm } from '../../post-form-provider'
+import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 const MetaboxRevisions = () => {
   const { t } = useTranslation()

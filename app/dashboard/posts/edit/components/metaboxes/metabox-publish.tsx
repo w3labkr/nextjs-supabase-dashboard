@@ -15,11 +15,11 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
+import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 import { useSWRConfig } from 'swr'
 import { fetcher, getPostPath } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
-import { usePostForm } from '../../post-form-provider'
 
 const MetaboxPublish = () => {
   const { t } = useTranslation()

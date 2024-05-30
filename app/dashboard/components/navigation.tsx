@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
 import { LinkButton } from '@/components/link-button'
-import { useAppBar } from '@/app/dashboard/components/app-bar'
+import { useAppBar } from './app-bar'
 
 import { DashboardNavItem, DashboardNavSubItem } from '@/types/config'
 

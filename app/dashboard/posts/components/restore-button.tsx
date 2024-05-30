@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { toast } from 'sonner'
-import { usePaging } from '@/components/paging/paging-provider'
+import { usePaging } from '@/components/paging'
 
 import { useSWRConfig } from 'swr'
 import { fetcher, setQueryString, getPostPath } from '@/lib/utils'

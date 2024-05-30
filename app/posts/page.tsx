@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { PagingProvider } from '@/components/paging/paging-provider'
+import { PagingProvider } from '@/components/paging'
 import { LatestPosts } from '@/components/latest-posts'
 
 import { getPostsAPI } from '@/queries/server/posts'

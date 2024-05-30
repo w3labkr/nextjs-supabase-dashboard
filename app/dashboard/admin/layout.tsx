@@ -6,9 +6,9 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
-import { AppBar, AppBarProvider } from '@/app/dashboard/components/app-bar'
-import { MiniNavigation } from '@/app/dashboard/components/mini-navigation'
-import { Navigation } from '@/app/dashboard/components/navigation'
+import { AppBar, AppBarProvider } from '../components/app-bar'
+import { MiniNavigation } from '../components/mini-navigation'
+import { Navigation } from '../components/navigation'
 
 import { dashboardConfig, adminConfig } from '@/config/dashboard'
 import { getAuth } from '@/queries/server/auth'

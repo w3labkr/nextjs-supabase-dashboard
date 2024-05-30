@@ -8,7 +8,7 @@ import { LucideIcon } from '@/lib/lucide-icon'
 import { Separator } from '@/components/ui/separator'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { PagingProvider } from '@/components/paging/paging-provider'
+import { PagingProvider } from '@/components/paging'
 import { LatestPosts } from '@/components/latest-posts'
 import { Aside } from './aside'
 

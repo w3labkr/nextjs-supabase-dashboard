@@ -21,12 +21,12 @@ import {
 } from '@/components/ui/card'
 
 import useSWR from 'swr'
-import { NotifyItems } from './notify-items'
 
 const Notify = () => {
   const { t } = useTranslation()
-  const fetchUrl = process.env.NEXT_PUBLIC_SITE_URL + '/api/v1/notify'
-  const { data } = useSWR<{ data: any[]; count: number }>(fetchUrl)
+  const { data } = useSWR<{ data: any[]; count: number }>(
+    process.env.NEXT_PUBLIC_SITE_URL + '/api/v1/notify'
+  )
 
   return (
     <Popover>
@@ -45,7 +45,9 @@ const Notify = () => {
           </CardHeader>
           <CardContent className="grid gap-4">
             <Separator className="mb-2" />
-            {data?.data && <NotifyItems items={data?.data} />}
+            {data?.data?.map((item) => (
+              <NotifyItem key={item.id} item={item} />
+            ))}
           </CardContent>
           <CardFooter>
             <Button type="button" className="w-full">
@@ -56,6 +58,24 @@ const Notify = () => {
         </Card>
       </PopoverContent>
     </Popover>
+  )
+}
+
+interface NotifyItemProps {
+  id: number
+  title: string
+  description: string
+}
+
+const NotifyItem = ({ item }: { item: NotifyItemProps }) => {
+  return (
+    <div className="grid grid-cols-[25px_1fr] items-start">
+      <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500"></span>
+      <div className="space-y-1">
+        <p className="text-sm font-medium leading-none">{item.title}</p>
+        <p className="text-sm text-muted-foreground">{item.description}</p>
+      </div>
+    </div>
   )
 }
 

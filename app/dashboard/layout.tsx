@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
 
-import { DemoSiteWarningNotification } from './components/demo-site-warning-notification'
-
 import { authenticate } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
+
+import { DemoSiteWarningNotification } from './components/demo-site-warning-notification'
 
 export default async function DashboardLayout({
   children,

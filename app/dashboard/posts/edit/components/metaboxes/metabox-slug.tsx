@@ -16,7 +16,7 @@ import {
 import { FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import { usePostForm } from '../../post-form-provider'
+import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 const MetaboxSlug = () => {
   const { t } = useTranslation()

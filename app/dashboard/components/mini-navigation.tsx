@@ -9,7 +9,7 @@ import { LucideIcon } from '@/lib/lucide-icon'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 import { TooltipLinkButton } from '@/components/tooltip-link-button'
-import { useAppBar } from '@/app/dashboard/components/app-bar'
+import { useAppBar } from './app-bar'
 
 import { siteConfig } from '@/config/site'
 import { DashboardMiniNavItem, DashboardMiniNavSubItem } from '@/types/config'

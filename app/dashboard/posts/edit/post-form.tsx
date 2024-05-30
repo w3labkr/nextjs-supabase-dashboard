@@ -27,7 +27,7 @@ import {
   MetaboxRectriction,
 } from './components/metaboxes'
 import { Permalink } from './components/permalink'
-import { PostFormProvider } from './post-form-provider'
+import { PostFormProvider } from './context/post-form-provider'
 
 import { usePostAPI } from '@/queries/client/posts'
 

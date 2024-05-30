@@ -11,7 +11,7 @@ import { defaultLng } from '@/i18next.config'
 import { useAppSelector } from '@/lib/redux/hooks'
 import { useAuth } from '@/hooks/use-auth'
 import { useFormContext } from 'react-hook-form'
-import { usePostForm } from '../../post-form-provider'
+import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 import '@/ckeditor5/build/translations/ko.js'
 import './style.css'

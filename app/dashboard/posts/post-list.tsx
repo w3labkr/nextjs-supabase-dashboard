@@ -19,9 +19,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Checkbox } from '@/components/ui/checkbox'
-
-import { PagingProvider, usePaging } from '@/components/paging/paging-provider'
-import { Paging } from '@/components/paging'
+import { PagingProvider, usePaging, Paging } from '@/components/paging'
 
 import { EditLink } from './components/edit-link'
 import { ViewLink } from './components/view-link'

@@ -1,16 +1,16 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
 
-import { AppBar, AppBarProvider } from '@/app/dashboard/components/app-bar'
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
-import { MiniNavigation } from '@/app/dashboard/components/mini-navigation'
-import { Navigation } from '@/app/dashboard/components/navigation'
-import { dashboardConfig, settingsConfig } from '@/config/dashboard'
+import { AppBar, AppBarProvider } from '../components/app-bar'
+import { MiniNavigation } from '../components/mini-navigation'
+import { Navigation } from '../components/navigation'
 
+import { dashboardConfig, settingsConfig } from '@/config/dashboard'
 import { getAuth } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 
