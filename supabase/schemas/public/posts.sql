@@ -7,13 +7,12 @@
 -- Functions for tracking last modification time
 create extension if not exists moddatetime schema extensions;
 
--- Text search dictionary that removes accents
-create extension if not exists unaccent schema extensions;
-
 ----------------------------------------------------------------
 
 drop trigger if exists on_updated_at on posts;
+drop trigger if exists on_slug_upsert on posts;
 
+drop function if exists generate_slug;
 drop function if exists count_posts;
 drop function if exists get_adjacent_post_id;
 
@@ -39,6 +38,8 @@ create table posts (
   is_ban boolean default false not null,
   banned_until timestamptz
 );
+comment on column posts.updated_at is 'on_updated_at';
+comment on column posts.slug is 'on_slug_upsert';
 comment on column posts.type is 'post, page, revision';
 comment on column posts.status is 'publish, future, draft, pending, private, trash';
 
@@ -55,8 +56,38 @@ create policy "User can delete their own posts" on posts for delete to authentic
 create trigger on_updated_at before update on posts
   for each row execute procedure moddatetime (updated_at);
 
--- const { data, error } = await supabase.rpc('count_posts', { userid: '', posttype: '' });
--- select * from count_posts('userid', 'posttype');
+----------------------------------------------------------------
+
+create or replace function generate_slug()
+returns trigger
+security definer set search_path = public
+as $$
+declare
+  old_slug text;
+  new_slug text;
+  counter integer := 1;
+begin
+  old_slug := new.slug;
+  new_slug := old_slug;
+
+  loop
+    if exists (select 1 from posts where user_id = new.user_id and slug = new_slug and id != coalesce(new.id, 0)) then
+      new_slug := old_slug || '-' || counter;
+      counter := counter + 1;
+    else
+      exit;
+    end if;
+  end loop;
+
+  new.slug := new_slug;
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger on_slug_upsert before insert or update of slug on posts
+  for each row execute function generate_slug();
+
+----------------------------------------------------------------
 
 create or replace function count_posts(userid uuid, posttype text default 'post')
 returns table(status text, count bigint)
@@ -70,8 +101,7 @@ begin
 end;
 $$ language plpgsql;
 
--- const { data, error } = await supabase.rpc('get_adjacent_post_id', { postid: '', userid: '', posttype: '', poststatus: '' });
--- select * from get_adjacent_post_id('postid', 'userid', 'posttype', 'poststatus');
+----------------------------------------------------------------
 
 create or replace function get_adjacent_post_id(
   postid bigint,
@@ -90,35 +120,3 @@ begin
   where user_id = userid and type = posttype and status = poststatus;
 end;
 $$ language plpgsql;
-
--- Trigger the function every time a slug is updated
-
-create or replace function set_post_slug()
-returns trigger
-security definer set search_path = public
-as $$
-declare
-    slugified text;
-    new_slug text;
-    counter integer := 1;
-begin
-  -- slugified := slugify(new.slug);
-  slugified := new.slug;
-  new_slug := slugified;
-
-  loop
-    if exists (select 1 from posts where user_id = new.user_id and slug = new_slug and id != coalesce(new.id, 0)) then
-      new_slug := slugified || '-' || counter;
-      counter := counter + 1;
-    else
-      exit;
-    end if;
-  end loop;
-
-  new.slug := new_slug;
-  return new;
-end;
-$$ language plpgsql;
-
-create trigger on_slug_upsert before insert or update of slug on posts
-  for each row when (new.slug is not null) execute function set_post_slug();

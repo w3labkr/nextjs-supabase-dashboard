@@ -8,7 +8,7 @@ import {
 
 // It is recommended to read up on IETF Language Codes.
 // If you're using a language detector, do not define the lng option
-// https://en.wikipedia.org/wiki/IETF_language_tag
+// https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
 export const defaultLng: DefaultLng = 'en'
 export const fallbackLng: FallbackLng = 'ko'
 

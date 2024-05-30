@@ -3,7 +3,9 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFormContext, useWatch } from 'react-hook-form'
-import { kebabCase, debounce } from 'lodash'
+import { debounce } from 'lodash'
+import slugify from 'slugify'
+import XRegExp from 'xregexp'
 
 import {
   Accordion,
@@ -24,18 +26,26 @@ const MetaboxSlug = () => {
 
   const fieldState = getFieldState('slug', formState)
   const watchTitle: string = useWatch({ control, name: 'title' })
+  const setSlug = React.useCallback(
+    (value: string) => {
+      const slugified = slugify(value, {
+        replacement: '-', // replace spaces with replacement character, defaults to `-`
+        remove: XRegExp(`[^\\p{L}\\d\\s]+`, 'g'), // remove characters that match regex, defaults to `undefined`
+        lower: true, // convert to lower case, defaults to `false`
+        strict: false, // strip special characters except replacement, defaults to `false`
+        trim: true, // trim leading and trailing replacement chars, defaults to `true`
+      })
+      setValue('slug', slugified, { shouldDirty: true, shouldValidate: true })
+    },
+    [setValue]
+  )
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      if (!post?.slug) {
-        setValue('slug', kebabCase(watchTitle), {
-          shouldDirty: true,
-          shouldValidate: true,
-        })
-      }
+      if (!post?.slug) setSlug(watchTitle)
     }, 0)
     return () => clearTimeout(timer)
-  }, [post?.slug, setValue, watchTitle])
+  }, [post?.slug, setSlug, watchTitle])
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
@@ -47,16 +57,13 @@ const MetaboxSlug = () => {
             type="text"
             placeholder={t('Input.please_enter_your_text')}
             onChange={debounce((e: React.ChangeEvent<HTMLInputElement>) => {
-              setValue('slug', kebabCase(e.target.value), {
-                shouldDirty: true,
-                shouldValidate: true,
-              })
+              setSlug(e.currentTarget.value)
             }, 1000)}
             onBlur={(e: React.FocusEvent<HTMLInputElement, Element>) => {
-              setValue('slug', kebabCase(e.target.value), {
-                shouldDirty: true,
-                shouldValidate: true,
-              })
+              setSlug(e.currentTarget.value)
+            }}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === 'Enter') setSlug(e.currentTarget.value)
             }}
           />
           <FormMessage className="mt-2">

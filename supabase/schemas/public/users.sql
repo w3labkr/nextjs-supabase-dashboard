@@ -44,8 +44,9 @@ create table users (
   banned_until timestamptz,
   unique (username)
 );
-comment on column users.has_set_password is 'handle_has_set_password';
-comment on column users.username_changed_at is 'handle_username_changed_at';
+comment on column users.updated_at is 'on_updated_at';
+comment on column users.username_changed_at is 'on_username_updated';
+comment on column users.has_set_password is 'on_auth_user_password_updated';
 
 -- Secure the table
 alter table users enable row level security;
@@ -60,8 +61,22 @@ create policy "User can delete their own users" on users for delete to authentic
 create trigger on_updated_at before update on users
   for each row execute procedure moddatetime (updated_at);
 
--- const { data, error } = await supabase.rpc('verify_user_password', { userid: '', password: '' });
--- select * from verify_user_password('userid', 'password');
+----------------------------------------------------------------
+
+create or replace function handle_username_changed_at()
+returns trigger
+security definer set search_path = public
+as $$
+begin
+  update users set username_changed_at = now() where id = new.id;
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger on_username_updated after update of username on users
+  for each row execute function handle_username_changed_at();
+
+----------------------------------------------------------------
 
 create or replace function verify_user_password(userid uuid, password text)
 returns boolean
@@ -76,18 +91,3 @@ begin
   );
 end;
 $$ language plpgsql;
-
--- Trigger the function every time a username is updated
-
-create or replace function handle_username_changed_at()
-returns trigger
-security definer set search_path = public
-as $$
-begin
-  update users set username_changed_at = now() where id = new.id;
-  return new;
-end;
-$$ language plpgsql;
-
-create trigger on_username_updated after update of username on users
-  for each row execute function handle_username_changed_at();

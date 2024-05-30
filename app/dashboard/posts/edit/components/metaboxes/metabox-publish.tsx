@@ -290,8 +290,7 @@ const TrashButton = () => {
 const PublishButton = () => {
   const { t } = useTranslation()
   const { post } = usePostForm()
-  const { getValues, setValue, reset, setError, handleSubmit } =
-    useFormContext()
+  const { getValues, setError, handleSubmit } = useFormContext()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -322,7 +321,6 @@ const PublishButton = () => {
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      // reset()
       mutate(fetchUrl)
 
       toast.success(t('FormMessage.changed_successfully'))

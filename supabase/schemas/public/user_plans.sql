@@ -36,6 +36,7 @@ create table user_plans (
   plan text default 'free'::text not null,
   unique (user_id, plan)
 );
+comment on column user_plans.updated_at is 'on_updated_at';
 comment on column user_plans.plan is 'free, basic, standard, premium';
 
 -- Secure the table

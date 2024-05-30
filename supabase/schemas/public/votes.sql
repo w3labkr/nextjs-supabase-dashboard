@@ -27,6 +27,7 @@ create table votes (
   is_dislike smallint default 0 not null,
   unique (user_id, post_id)
 );
+comment on column votes.updated_at is 'on_updated_at';
 
 -- Secure the table
 alter table votes enable row level security;
@@ -41,8 +42,7 @@ create policy "User can delete their own votes" on votes for delete to authentic
 create trigger on_updated_at before update on votes
   for each row execute procedure moddatetime (updated_at);
 
--- const { data, error } = await supabase.rpc('get_vote', { postid: '' });
--- select * from get_vote('postid');
+----------------------------------------------------------------
 
 create or replace function get_vote(postid bigint)
 returns table(

@@ -24,6 +24,7 @@ create table emails (
   email_confirmed_at timestamptz,
   unique (user_id, email)
 );
+comment on column emails.updated_at is 'on_updated_at';
 
 -- Secure the table
 alter table emails enable row level security;

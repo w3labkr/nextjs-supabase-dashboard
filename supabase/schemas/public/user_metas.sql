@@ -27,8 +27,7 @@ create policy "User can insert their own user_metas" on user_metas for insert to
 create policy "User can update their own user_metas" on user_metas for update to authenticated using ( (select auth.uid()) = user_id );
 create policy "User can delete their own user_metas" on user_metas for delete to authenticated using ( (select auth.uid()) = user_id );
 
--- const { data, error } = await supabase.rpc('set_user_meta', { userid: '', metakey: '', metavalue: '' });
--- select * from set_user_meta('userid', 'metakey', 'metavalue');
+----------------------------------------------------------------
 
 create or replace function set_user_meta(userid bigint, metakey text, metavalue text)
 returns void

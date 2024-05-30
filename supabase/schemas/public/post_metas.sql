@@ -28,8 +28,7 @@ create policy "User can insert post_metas" on post_metas for insert to authentic
 create policy "User can update post_metas" on post_metas for update to authenticated using ( true );
 create policy "User can delete post_metas" on post_metas for delete to authenticated using ( true );
 
--- const { data, error } = await supabase.rpc('set_post_meta', { postid: '', metakey: '', metavalue: '' });
--- select * from set_post_meta('postid', 'metakey', 'metavalue');
+----------------------------------------------------------------
 
 create or replace function set_post_meta(postid bigint, metakey text, metavalue text)
 returns void
@@ -44,8 +43,7 @@ begin
 end;
 $$ language plpgsql;
 
--- const { data, error } = await supabase.rpc('set_view_count', { postid: '' });
--- select * from set_view_count('postid');
+----------------------------------------------------------------
 
 create or replace function set_view_count(postid bigint)
 returns void

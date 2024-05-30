@@ -38,6 +38,7 @@ create table user_roles (
   role text default 'guest'::text not null,
   unique (user_id, role)
 );
+comment on column user_roles.updated_at is 'on_updated_at';
 comment on column user_roles.role is 'guest, user, admin, superadmin';
 
 -- Secure the table

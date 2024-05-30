@@ -26,6 +26,7 @@ create table favorites (
   is_favorite boolean default false not null,
   unique (user_id, post_id)
 );
+comment on column favorites.updated_at is 'on_updated_at';
 
 -- Secure the table
 alter table favorites enable row level security;
@@ -40,8 +41,7 @@ create policy "User can delete their own favorites" on favorites for delete to a
 create trigger on_updated_at before update on favorites
   for each row execute procedure moddatetime (updated_at);
 
--- const { data, error } = await supabase.rpc('set_favorite', { postid: '', userid: '', isfavorite: '' });
--- select * from set_favorite('postid', 'userid', 'isfavorite');
+----------------------------------------------------------------
 
 create or replace function set_favorite(postid bigint, userid uuid, isfavorite boolean)
 returns void

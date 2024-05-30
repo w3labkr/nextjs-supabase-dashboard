@@ -40,6 +40,7 @@ Denpendency
     - [Data Fetching With JSON](#data-fetching-with-json)
     - [Data Fetching With FormData](#data-fetching-with-formdata)
     - [Error Handling](#error-handling)
+  - [Regular Expression](#regular-expression)
   - [Deploying](#deploying)
   - [Troubleshooting](#troubleshooting)
   - [Reference](#reference)
@@ -452,6 +453,18 @@ JsonWebToken implementation for node.js
 npm install jsonwebtoken @types/jsonwebtoken
 ```
 
+Slugifies a string
+
+```shell
+npm install slugify
+```
+
+Extended JavaScript regular expressions
+
+```shell
+npm install xregexp
+```
+
 ### ESLint
 
 ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
@@ -635,6 +648,32 @@ export function Component() {
   
   return <Button disabled={isSubmitting}>Submit</Button>
 }
+```
+
+## Regular Expression
+
+CJK (Chinese - Japanese - Korean)
+
+```javascript
+/[一-龥ぁ-ゔァ-ヴー々〆〤ㄱ-ㅎㅏ-ㅣ가-힇]+/g
+```
+
+cn (Chinese)
+
+```javascript
+/[一-龥]+/g
+```
+
+jp (Japanese)
+
+```javascript
+/[ぁ-ゔァ-ヴー々〆〤]+/g
+```
+
+ko (Korean)
+
+```javascript
+/[ㄱ-ㅎㅏ-ㅣ가-힇]+/g
 ```
 
 ## Deploying

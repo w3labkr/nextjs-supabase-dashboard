@@ -23,6 +23,7 @@ create table notifications (
   marketing_emails boolean default false not null,
   security_emails boolean default true not null
 );
+comment on column notifications.updated_at is 'on_updated_at';
 
 -- Secure the table
 alter table notifications enable row level security;

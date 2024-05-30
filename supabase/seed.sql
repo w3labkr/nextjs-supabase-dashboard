@@ -51,9 +51,6 @@ create extension if not exists pgcrypto schema extensions;
 -- Functions for tracking last modification time
 create extension if not exists moddatetime schema extensions;
 
--- Text search dictionary that removes accents
-create extension if not exists unaccent schema extensions;
-
 ----------------------------------------------------------------
 --                                                            --
 --                           reset                            --
@@ -73,6 +70,7 @@ drop trigger if exists on_updated_at on notifications;
 drop trigger if exists on_updated_at on votes;
 drop trigger if exists on_updated_at on favorites;
 drop trigger if exists on_updated_at on posts;
+drop trigger if exists on_slug_upsert on posts;
 
 ----------------------------------------------------------------
 
@@ -87,6 +85,7 @@ drop function if exists get_vote;
 drop function if exists set_favorite;
 drop function if exists set_post_meta;
 drop function if exists set_view_count;
+drop function if exists generate_slug;
 drop function if exists count_posts;
 drop function if exists get_adjacent_post_id;
 drop function if exists create_new_user;
@@ -219,8 +218,9 @@ create table users (
   banned_until timestamptz,
   unique (username)
 );
-comment on column users.has_set_password is 'handle_has_set_password';
-comment on column users.username_changed_at is 'handle_username_changed_at';
+comment on column users.updated_at is 'on_updated_at';
+comment on column users.username_changed_at is 'on_username_updated';
+comment on column users.has_set_password is 'on_auth_user_password_updated';
 
 alter table users enable row level security;
 
@@ -231,6 +231,21 @@ create policy "User can delete their own users" on users for delete to authentic
 
 create trigger on_updated_at before update on users
   for each row execute procedure moddatetime (updated_at);
+
+----------------------------------------------------------------
+
+create or replace function handle_username_changed_at()
+returns trigger
+security definer set search_path = public
+as $$
+begin
+  update users set username_changed_at = now() where id = new.id;
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger on_username_updated after update of username on users
+  for each row execute function handle_username_changed_at();
 
 ----------------------------------------------------------------
 
@@ -247,21 +262,6 @@ begin
   );
 end;
 $$ language plpgsql;
-
-----------------------------------------------------------------
-
-create or replace function handle_username_changed_at()
-returns trigger
-security definer set search_path = public
-as $$
-begin
-  update users set username_changed_at = now() where id = new.id;
-  return new;
-end;
-$$ language plpgsql;
-
-create trigger on_username_updated after update of username on users
-  for each row execute function handle_username_changed_at();
 
 ----------------------------------------------------------------
 --                                                            --
@@ -313,6 +313,7 @@ create table user_roles (
   role text default 'guest'::text not null,
   unique (user_id, role)
 );
+comment on column user_roles.updated_at is 'on_updated_at';
 comment on column user_roles.role is 'guest, user, admin, superadmin';
 
 alter table user_roles enable row level security;
@@ -359,6 +360,7 @@ create table user_plans (
   plan text default 'free'::text not null,
   unique (user_id, plan)
 );
+comment on column user_plans.updated_at is 'on_updated_at';
 comment on column user_plans.plan is 'free, basic, standard, premium';
 
 alter table user_plans enable row level security;
@@ -386,6 +388,7 @@ create table emails (
   email_confirmed_at timestamptz,
   unique (user_id, email)
 );
+comment on column emails.updated_at is 'on_updated_at';
 
 alter table emails enable row level security;
 
@@ -411,6 +414,7 @@ create table notifications (
   marketing_emails boolean default false not null,
   security_emails boolean default true not null
 );
+comment on column notifications.updated_at is 'on_updated_at';
 
 alter table notifications enable row level security;
 
@@ -446,6 +450,8 @@ create table posts (
   is_ban boolean default false not null,
   banned_until timestamptz
 );
+comment on column posts.updated_at is 'on_updated_at';
+comment on column posts.slug is 'on_slug_upsert';
 comment on column posts.type is 'post, page, revision';
 comment on column posts.status is 'publish, future, draft, pending, private, trash';
 
@@ -458,6 +464,37 @@ create policy "User can delete their own posts" on posts for delete to authentic
 
 create trigger on_updated_at before update on posts
   for each row execute procedure moddatetime (updated_at);
+
+----------------------------------------------------------------
+
+create or replace function generate_slug()
+returns trigger
+security definer set search_path = public
+as $$
+declare
+  old_slug text;
+  new_slug text;
+  counter integer := 1;
+begin
+  old_slug := new.slug;
+  new_slug := old_slug;
+
+  loop
+    if exists (select 1 from posts where user_id = new.user_id and slug = new_slug and id != coalesce(new.id, 0)) then
+      new_slug := old_slug || '-' || counter;
+      counter := counter + 1;
+    else
+      exit;
+    end if;
+  end loop;
+
+  new.slug := new_slug;
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger on_slug_upsert before insert or update of slug on posts
+  for each row execute function generate_slug();
 
 ----------------------------------------------------------------
 
@@ -559,6 +596,7 @@ create table favorites (
   is_favorite boolean default false not null,
   unique (user_id, post_id)
 );
+comment on column favorites.updated_at is 'on_updated_at';
 
 alter table favorites enable row level security;
 
@@ -601,6 +639,7 @@ create table votes (
   is_dislike smallint default 0 not null,
   unique (user_id, post_id)
 );
+comment on column votes.updated_at is 'on_updated_at';
 
 alter table votes enable row level security;
 
@@ -742,7 +781,7 @@ begin
     (now(), userid, 'publish', 'Integer in dui vel nibh hendrerit ultrices', 'integer-in-dui-vel-nibh-hendrerit-ultrices', 'Vestibulum porta eros ornare nisi lacinia accumsan.'),
     (now(), userid, 'publish', 'Proin volutpat nisl dictum risus molestie porttitor', 'proin-volutpat-nisl-dictum-risus-molestie-porttitor', 'Vivamus commodo turpis volutpat neque varius commodo.');
 
-    for r in (select * from posts) loop
+    for r in (select * from posts where user_id = userid) loop
       insert into post_metas(post_id, meta_key, meta_value) values(r.id, 'view_count', '1');
     end loop;
   end if;
