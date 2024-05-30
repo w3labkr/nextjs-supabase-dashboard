@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
 
+import { DemoSiteWarningNotification } from './components/demo-site-warning-notification'
+
 import { authenticate } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 
@@ -17,5 +19,10 @@ export default async function DashboardLayout({
   if (user?.is_ban) redirect('/auth/blocked')
   // if (user?.deleted_at) redirect('/auth/deactivated')
 
-  return <>{children}</>
+  return (
+    <>
+      <DemoSiteWarningNotification />
+      {children}
+    </>
+  )
 }

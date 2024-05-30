@@ -24,7 +24,7 @@ const AppBar = (props: AppBarProps) => {
       {...rest}
     >
       {children}
-      <div className="flex-1"></div>
+      <div className="flex-1 text-destructive"></div>
       <Notify />
       <AccountMenu />
     </header>

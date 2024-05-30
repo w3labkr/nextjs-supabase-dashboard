@@ -2,10 +2,9 @@ import * as React from 'react'
 import { redirect } from 'next/navigation'
 
 import { Separator } from '@/components/ui/separator'
-import { AppBarProvider } from '@/components/app-bar/app-bar-provider'
-import { AppBar } from '@/components/app-bar'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
+import { AppBar, AppBarProvider } from '@/app/dashboard/components/app-bar'
 import { MiniNavigation } from '@/app/dashboard/components/mini-navigation'
 import { DashboardForm } from './dashboard/dashboard-form'
 

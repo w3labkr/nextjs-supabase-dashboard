@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
 
-import { AppBarProvider } from '@/components/app-bar/app-bar-provider'
-import { AppBar } from '@/components/app-bar'
+import { AppBar, AppBarProvider } from '@/app/dashboard/components/app-bar'
 import {
   ResizableHandle,
   ResizablePanel,

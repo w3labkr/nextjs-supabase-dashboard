@@ -6,8 +6,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
-import { AppBarProvider } from '@/components/app-bar/app-bar-provider'
-import { AppBar } from '@/components/app-bar'
+import { AppBar, AppBarProvider } from '@/app/dashboard/components/app-bar'
 import { MiniNavigation } from '@/app/dashboard/components/mini-navigation'
 import { Navigation } from '@/app/dashboard/components/navigation'
 
