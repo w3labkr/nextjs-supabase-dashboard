@@ -56,13 +56,15 @@ const MetaboxSlug = () => {
             type="text"
             placeholder={t('Input.please_enter_your_text')}
             onChange={debounce((e: React.ChangeEvent<HTMLInputElement>) => {
-              setSlug(e.currentTarget.value)
+              setSlug((e.target as HTMLInputElement).value)
             }, 1000)}
             onBlur={(e: React.FocusEvent<HTMLInputElement, Element>) => {
-              setSlug(e.currentTarget.value)
+              setSlug((e.target as HTMLInputElement).value)
             }}
             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === 'Enter') setSlug(e.currentTarget.value)
+              if (e.key === 'Enter') {
+                setSlug((e.target as HTMLInputElement).value)
+              }
             }}
           />
           <FormMessage className="mt-2">

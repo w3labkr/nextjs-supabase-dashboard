@@ -34,7 +34,8 @@ const MetaboxThumbnail = () => {
 
       e.preventDefault()
 
-      const file = e.currentTarget?.files ? e.currentTarget?.files[0] : null
+      const target = e.target as HTMLInputElement
+      const file = target?.files ? target?.files[0] : null
 
       if (!file) throw new Error('Require is not defined.')
       if (!user) throw new Error('Require is not defined.')
