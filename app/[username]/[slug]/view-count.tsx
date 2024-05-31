@@ -14,7 +14,7 @@ const ViewCount = (props: ViewCountProps) => {
   return (
     <div className="flex items-center" {...rest}>
       <LucideIcon name="Eye" className="mr-2 size-5 min-w-5" />
-      {count ?? '0'}
+      {count}
     </div>
   )
 }

@@ -137,7 +137,7 @@ const PostMeta = (props: FieldProps) => {
         </Link>
       </div>
       <div className="flex space-x-4">
-        <ViewCount count={post?.meta?.view_count} />
+        <ViewCount count={post?.meta?.view_count ?? '0'} />
         <FavoriteButton post={post} />
       </div>
     </div>
