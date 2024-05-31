@@ -120,13 +120,12 @@ const PostTitle = (props: FieldProps) => {
 
 const PostMeta = (props: FieldProps) => {
   const { post } = props
-  const datetime = post?.published_at ?? post?.created_at ?? undefined
 
   return (
     <div className="mb-8 flex justify-between">
       <div className="space-x-1">
-        <time dateTime={datetime}>
-          {dayjs(datetime).format('MMMM D, YYYY')}
+        <time dateTime={post?.date ?? undefined}>
+          {dayjs(post?.date).format('MMMM D, YYYY')}
         </time>
         <span>— by</span>
         <Link

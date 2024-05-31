@@ -226,7 +226,7 @@ const PostItem = ({ post }: { post: Post }) => {
         )}
       </TableCell>
       <TableCell align="center">
-        {post?.meta?.view_count?.toLocaleString()}
+        {post?.meta?.view_count?.toLocaleString() ?? '0'}
       </TableCell>
       <TableCell align="center">
         {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm')}

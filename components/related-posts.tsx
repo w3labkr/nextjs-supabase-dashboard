@@ -29,8 +29,6 @@ const RelatedPosts = (props: RelatedPostsProps) => {
 }
 
 const PreviousPost = ({ post }: { post: Post | null }) => {
-  const datetime = post?.published_at ?? post?.created_at ?? undefined
-
   if (!post) {
     return <div className="text-center">The previous post does not exist.</div>
   }
@@ -40,15 +38,15 @@ const PreviousPost = ({ post }: { post: Post | null }) => {
       <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
         <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
       </h3>
-      <time dateTime={datetime}>{dayjs(datetime).format('MMMM D, YYYY')}</time>
+      <time dateTime={post?.date ?? undefined}>
+        {dayjs(post?.date).format('MMMM D, YYYY')}
+      </time>
       <p className="line-clamp-3">{post?.excerpt}</p>
     </div>
   )
 }
 
 const NextPost = ({ post }: { post: Post | null }) => {
-  const datetime = post?.published_at ?? post?.created_at ?? undefined
-
   if (!post) {
     return <div className="text-center">The next post does not exist.</div>
   }
@@ -58,7 +56,9 @@ const NextPost = ({ post }: { post: Post | null }) => {
       <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
         <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
       </h3>
-      <time dateTime={datetime}>{dayjs(datetime).format('MMMM D, YYYY')}</time>
+      <time dateTime={post?.date ?? undefined}>
+        {dayjs(post?.date).format('MMMM D, YYYY')}
+      </time>
       <p className="line-clamp-3">{post?.excerpt}</p>
     </div>
   )

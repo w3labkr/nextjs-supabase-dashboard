@@ -1,9 +1,4 @@
-import {
-  Session,
-  User as AuthUser,
-  AuthError,
-  Pagination,
-} from '@supabase/supabase-js'
+import { User as AuthUser, AuthError, Pagination } from '@supabase/supabase-js'
 import {
   Email,
   Notification,
@@ -58,3 +53,5 @@ export type VoteAPI =
 export type AnalysisAPI =
   | { data: Analysis | null; error: null }
   | { data: null; error: Error }
+
+export type CronAPI = { data: null; error: null } | { data: null; error: Error }

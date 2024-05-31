@@ -25,7 +25,7 @@ create table posts (
   created_at timestamptz default now() not null,
   updated_at timestamptz default now() not null,
   deleted_at timestamptz,
-  published_at timestamptz,
+  date timestamptz,
   user_id uuid references users(id) on delete cascade not null,
   type text default 'post'::text not null,
   status text default 'draft'::text not null,

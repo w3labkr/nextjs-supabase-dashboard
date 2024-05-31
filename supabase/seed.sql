@@ -1,33 +1,5 @@
 ----------------------------------------------------------------
 --                                                            --
---                          Storage                           --
---                                                            --
-----------------------------------------------------------------
-
--- Use Supabase to store and serve files.
--- https://supabase.com/docs/guides/storage
-
-delete from storage.objects where bucket_id = 'my_bucket_id';
-delete from storage.buckets where id = 'my_bucket_id';
-
-drop policy if exists "Public access for all users" on storage.objects;
-drop policy if exists "User can upload in their own folders" on storage.objects;
-drop policy if exists "User can update their own objects" on storage.objects;
-drop policy if exists "User can delete their own objects" on storage.objects;
-
-insert into storage.buckets (id, name, public) values ('my_bucket_id', 'my_bucket_id', true);
-
-create policy "Public access for all users" on storage.objects
-  for select to authenticated, anon using (bucket_id = 'my_bucket_id');
-create policy "User can upload in their own folders" on storage.objects
-  for insert to authenticated with check (bucket_id = 'my_bucket_id' and (storage.foldername(name))[1] = (select auth.uid()::text));
-create policy "User can update their own objects" on storage.objects
-  for update to authenticated using (owner_id = (select auth.uid()::text));
-create policy "User can delete their own objects" on storage.objects
-  for delete to authenticated using (owner_id = (select auth.uid()::text));
-
-----------------------------------------------------------------
---                                                            --
 --                           Config                           --
 --                                                            --
 ----------------------------------------------------------------
@@ -50,6 +22,47 @@ create extension if not exists pgcrypto schema extensions;
 
 -- Functions for tracking last modification time
 create extension if not exists moddatetime schema extensions;
+
+-- Job scheduler for PostgreSQL
+create extension if not exists pg_cron with schema extensions;
+
+grant usage on schema cron to postgres;
+grant all privileges on all tables in schema cron to postgres;
+
+----------------------------------------------------------------
+--                                                            --
+--                       Job Scheduling                       --
+--                                                            --
+----------------------------------------------------------------
+
+select cron.schedule('hourly-publish-future-posts', '0 * * * *', 'SELECT hourly_publish_future_posts()');
+
+drop function if exists hourly_publish_future_posts;
+
+----------------------------------------------------------------
+--                                                            --
+--                          Storage                           --
+--                                                            --
+----------------------------------------------------------------
+
+delete from storage.objects where bucket_id = 'my_bucket_id';
+delete from storage.buckets where id = 'my_bucket_id';
+
+drop policy if exists "Public access for all users" on storage.objects;
+drop policy if exists "User can upload in their own folders" on storage.objects;
+drop policy if exists "User can update their own objects" on storage.objects;
+drop policy if exists "User can delete their own objects" on storage.objects;
+
+insert into storage.buckets (id, name, public) values ('my_bucket_id', 'my_bucket_id', true);
+
+create policy "Public access for all users" on storage.objects
+  for select to authenticated, anon using (bucket_id = 'my_bucket_id');
+create policy "User can upload in their own folders" on storage.objects
+  for insert to authenticated with check (bucket_id = 'my_bucket_id' and (storage.foldername(name))[1] = (select auth.uid()::text));
+create policy "User can update their own objects" on storage.objects
+  for update to authenticated using (owner_id = (select auth.uid()::text));
+create policy "User can delete their own objects" on storage.objects
+  for delete to authenticated using (owner_id = (select auth.uid()::text));
 
 ----------------------------------------------------------------
 --                                                            --
@@ -437,7 +450,7 @@ create table posts (
   created_at timestamptz default now() not null,
   updated_at timestamptz default now() not null,
   deleted_at timestamptz,
-  published_at timestamptz,
+  date timestamptz,
   user_id uuid references users(id) on delete cascade not null,
   type text default 'post'::text not null,
   status text default 'draft'::text not null,
@@ -693,6 +706,25 @@ create policy "User can delete analyses" on analyses for delete to authenticated
 
 ----------------------------------------------------------------
 --                                                            --
+--                       Job Scheduling                       --
+--                                                            --
+----------------------------------------------------------------
+
+create or replace function hourly_publish_future_posts()
+returns void
+security definer set search_path = public
+as $$
+declare
+  r record;
+begin
+  for r in (select * from posts where status = 'future' and date < now()) loop
+    update posts set status = 'publish' where id = r.id;
+  end loop;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+--                                                            --
 --                           seed                             --
 --                                                            --
 ----------------------------------------------------------------
@@ -768,22 +800,17 @@ returns void
 security definer set search_path = public
 as $$
 declare
-  r record;
   userid uuid;
 begin
   select id into userid from auth.users where email = useremail;
 
   if userid is not null then
     insert into posts
-    (published_at, user_id, status, title, slug, content)
+    (date, user_id, status, title, slug, content)
     values
     (now(), userid, 'publish', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit', 'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit', 'Aenean pellentesque tortor non velit posuere, ut fringilla libero egestas.'),
     (now(), userid, 'publish', 'Integer in dui vel nibh hendrerit ultrices', 'integer-in-dui-vel-nibh-hendrerit-ultrices', 'Vestibulum porta eros ornare nisi lacinia accumsan.'),
-    (now(), userid, 'publish', 'Proin volutpat nisl dictum risus molestie porttitor', 'proin-volutpat-nisl-dictum-risus-molestie-porttitor', 'Vivamus commodo turpis volutpat neque varius commodo.');
-
-    for r in (select * from posts where user_id = userid) loop
-      insert into post_metas(post_id, meta_key, meta_value) values(r.id, 'view_count', '1');
-    end loop;
+    (now() + interval '10 minutes', userid, 'future', 'Posted 1 hour later', 'posted-1-hour-later', 'Vivamus commodo turpis volutpat neque varius commodo.');
   end if;
 
 end;

@@ -222,12 +222,12 @@ export type Database = {
           banned_until: string | null
           content: string | null
           created_at: string
+          date: string | null
           deleted_at: string | null
           excerpt: string | null
           id: number
           is_ban: boolean
           password: string | null
-          published_at: string | null
           slug: string | null
           status: string
           thumbnail_url: string | null
@@ -240,12 +240,12 @@ export type Database = {
           banned_until?: string | null
           content?: string | null
           created_at?: string
+          date?: string | null
           deleted_at?: string | null
           excerpt?: string | null
           id?: number
           is_ban?: boolean
           password?: string | null
-          published_at?: string | null
           slug?: string | null
           status?: string
           thumbnail_url?: string | null
@@ -258,12 +258,12 @@ export type Database = {
           banned_until?: string | null
           content?: string | null
           created_at?: string
+          date?: string | null
           deleted_at?: string | null
           excerpt?: string | null
           id?: number
           is_ban?: boolean
           password?: string | null
-          published_at?: string | null
           slug?: string | null
           status?: string
           thumbnail_url?: string | null

@@ -53,8 +53,8 @@ const MetaboxPublish = () => {
             </li>
             <li className="flex items-center">
               <LucideIcon name="CalendarDays" className="mr-2 size-4 min-w-4" />
-              {post?.published_at
-                ? `${t('PostMetabox.publish_on')}: ${dayjs(post?.published_at).format('YYYY-MM-DD HH:mm')}`
+              {post?.date
+                ? `${t('PostMetabox.publish_on')}: ${dayjs(post?.date).format('YYYY-MM-DD HH:mm')}`
                 : `${t('PostMetabox.publish')}: ${t('PostMetabox.immediately')}`}
             </li>
             <li className="flex items-center">
@@ -308,12 +308,12 @@ const PublishButton = () => {
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          data: post?.published_at
+          data: post?.date
             ? { ...formValues, status: setStatus(status) }
             : {
                 ...formValues,
                 status: setStatus(status),
-                published_at: new Date().toISOString(),
+                date: new Date().toISOString(),
               },
           options: { revalidatePaths: getPostPath(post) },
         }),

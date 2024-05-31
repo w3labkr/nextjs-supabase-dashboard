@@ -1,3 +1,8 @@
+----------------------------------------------------------------
+--                                                            --
+--                          Storage                           --
+--                                                            --
+----------------------------------------------------------------
 
 -- Use Supabase to store and serve files.
 -- https://supabase.com/docs/guides/storage
@@ -10,8 +15,7 @@ drop policy if exists "User can upload in their own folders" on storage.objects;
 drop policy if exists "User can update their own objects" on storage.objects;
 drop policy if exists "User can delete their own objects" on storage.objects;
 
-----------------------------------------------------------------
-
+-- Create a new bucket
 insert into storage.buckets (id, name, public) values ('my_bucket_id', 'my_bucket_id', true);
 
 -- Add row-level security

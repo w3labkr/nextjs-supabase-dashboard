@@ -35,7 +35,6 @@ interface LatestItemProps {
 
 const LatestItem = (props: LatestItemProps) => {
   const { post } = props
-  const datetime = post?.published_at ?? post?.created_at ?? undefined
 
   return (
     <div className="grid gap-2">
@@ -44,8 +43,8 @@ const LatestItem = (props: LatestItemProps) => {
       </h3>
       {post?.excerpt ? <p className="line-clamp-3">{post?.excerpt}</p> : null}
       <div className="space-x-1 text-sm">
-        <time dateTime={datetime}>
-          {dayjs(datetime).format('MMMM D, YYYY')}
+        <time dateTime={post?.date ?? undefined}>
+          {dayjs(post?.date).format('MMMM D, YYYY')}
         </time>
         <span>— by</span>
         <Link
