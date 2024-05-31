@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { debounce } from 'lodash'
 import slugify from 'slugify'
-import XRegExp from 'xregexp'
 
 import {
   Accordion,
@@ -30,7 +29,7 @@ const MetaboxSlug = () => {
     (value: string) => {
       const slugified = slugify(value, {
         replacement: '-', // replace spaces with replacement character, defaults to `-`
-        remove: XRegExp(`[^\\p{L}\\d\\s]+`, 'g'), // remove characters that match regex, defaults to `undefined`
+        remove: /[^\p{L}\d\s]+/gu, // remove characters that match regex, defaults to `undefined`
         lower: true, // convert to lower case, defaults to `false`
         strict: false, // strip special characters except replacement, defaults to `false`
         trim: true, // trim leading and trailing replacement chars, defaults to `true`
