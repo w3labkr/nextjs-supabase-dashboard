@@ -25,6 +25,18 @@ const MetaboxPublish = () => {
   const { t } = useTranslation()
   const { post } = usePostForm()
 
+  const statusText = React.useMemo(() => {
+    if (post?.status === 'future') return 'PostMetabox.draft'
+    if (post?.date) return 'PostMetabox.publish'
+    if (post?.status) return `PostStatus.${post?.status}`
+
+    return null
+  }, [post?.status, post?.date])
+
+  const posted_on = React.useMemo(() => {
+    return dayjs(post?.date).format('YYYY-MM-DD HH:mm:ss')
+  }, [post?.date])
+
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
       <AccordionItem value="item-1">
@@ -40,9 +52,7 @@ const MetaboxPublish = () => {
             <li className="flex items-center">
               <LucideIcon name="Signpost" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.status')}: `}
-              {post?.status === 'private'
-                ? t('PostMetabox.publish')
-                : t(`PostStatus.${post?.status}`)}
+              {statusText ? t(statusText) : null}
             </li>
             <li className="flex items-center">
               <LucideIcon name="Eye" className="mr-2 size-4 min-w-4" />
@@ -53,9 +63,11 @@ const MetaboxPublish = () => {
             </li>
             <li className="flex items-center">
               <LucideIcon name="CalendarDays" className="mr-2 size-4 min-w-4" />
-              {post?.date
-                ? `${t('PostMetabox.publish_on')}: ${dayjs(post?.date).format('YYYY-MM-DD HH:mm')}`
-                : `${t('PostMetabox.publish')}: ${t('PostMetabox.immediately')}`}
+              {post?.status === 'future'
+                ? `${t('PostMetabox.future_date')}: ${posted_on}`
+                : post?.date
+                  ? `${t('PostMetabox.posted_on')}: ${posted_on}`
+                  : `${t('PostMetabox.publish')}: ${t('PostMetabox.immediately')}`}
             </li>
             <li className="flex items-center">
               <LucideIcon name="BarChart" className="mr-2 size-4 min-w-4" />
@@ -302,7 +314,9 @@ const PublishButton = () => {
       if (!post) throw new Error('Require is not defined.')
 
       const { status, ...formValues } = getValues()
-      const setStatus = (s: string) => (s === 'private' ? 'private' : 'publish')
+      const setStatus = (s: string) => {
+        return s === 'future' || s === 'private' ? s : 'publish'
+      }
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {

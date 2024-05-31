@@ -26,7 +26,7 @@ const MetaboxRectriction = () => {
           <Switch
             checked={watchStatus === 'private'}
             onCheckedChange={(checked: boolean) => {
-              setValue('status', checked ? 'private' : 'public', {
+              setValue('status', checked ? 'private' : 'draft', {
                 shouldDirty: true,
                 shouldValidate: true,
               })

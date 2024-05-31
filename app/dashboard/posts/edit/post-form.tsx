@@ -25,6 +25,7 @@ import {
   MetaboxThumbnail,
   MetaboxPublish,
   MetaboxRectriction,
+  MetaboxFutureDate,
 } from './components/metaboxes'
 import { Permalink } from './components/permalink'
 import { PostFormProvider } from './context/post-form-provider'
@@ -38,6 +39,7 @@ const FormSchema = z.object({
   status: z.string().nonempty(),
   title: z.string().nonempty(),
   slug: z.string().nonempty(),
+  date: z.string().datetime({ offset: true }).optional(),
   content: z.string().optional(),
   excerpt: z.string().optional(),
   thumbnail_url: z.string().optional(),
@@ -54,8 +56,9 @@ const PostForm = ({ id }: { id: number }) => {
     values: {
       user_id: post?.user_id ?? '',
       status: post?.status ?? '',
-      slug: post?.slug ?? '',
       title: post?.title ?? '',
+      slug: post?.slug ?? '',
+      date: post?.date ?? '',
       content: post?.content ?? '',
       excerpt: post?.excerpt ?? '',
       thumbnail_url: post?.thumbnail_url ?? '',
@@ -67,7 +70,6 @@ const PostForm = ({ id }: { id: number }) => {
     <PostFormProvider value={{ post }}>
       <Form {...form}>
         <UserIdField />
-        <StatusField />
         <form method="POST" noValidate>
           <div className="relative grid gap-10 md:grid-cols-[1fr_280px]">
             <div className="mx-auto w-full min-w-0 space-y-6">
@@ -82,6 +84,7 @@ const PostForm = ({ id }: { id: number }) => {
             </div>
             <div className="space-y-0">
               <MetaboxPublish />
+              <MetaboxFutureDate />
               <MetaboxRectriction />
               <MetaboxThumbnail />
             </div>
@@ -99,24 +102,6 @@ const UserIdField = () => {
     <FormField
       control={control}
       name="user_id"
-      render={({ field }) => (
-        <FormItem>
-          <FormControl>
-            <Input type="hidden" {...field} />
-          </FormControl>
-        </FormItem>
-      )}
-    />
-  )
-}
-
-const StatusField = () => {
-  const { control } = useFormContext()
-
-  return (
-    <FormField
-      control={control}
-      name="status"
       render={({ field }) => (
         <FormItem>
           <FormControl>
