@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient, createAdminClient } from '@/supabase/server'
-import { ApiError, revalidatePaths, setMeta } from '@/lib/utils'
+import { ApiError, revalidatePaths } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 
@@ -27,15 +27,17 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
-  const output = user
-    ? setMeta({
-        ...user,
-        role: user?.role[0]?.role,
-        plan: user?.plan[0]?.plan,
-      })
-    : user
+  if (!user) {
+    return NextResponse.json({ data: null, error: null })
+  }
 
-  return NextResponse.json({ data: output, error: null })
+  const data = {
+    ...user,
+    role: user?.role[0]?.role,
+    plan: user?.plan[0]?.plan,
+  }
+
+  return NextResponse.json({ data, error: null })
 }
 
 export async function POST(request: NextRequest) {

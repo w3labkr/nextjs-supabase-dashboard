@@ -14,10 +14,10 @@ import { ViewCount } from './view-count'
 import { FavoriteButton } from './favorite-button'
 
 import { getUserUrl } from '@/lib/utils'
-import { Post } from '@/types/database'
 import { getAuth, authenticate } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { getPostAPI, getAdjacentPostAPI } from '@/queries/server/posts'
+import { Post } from '@/types/database'
 
 // revalidate the data at most every month
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
@@ -32,15 +32,10 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { user } = await getUserAPI(null, { username })
-
-  if (!user) return {}
-
   const { post } = await getPostAPI(null, {
     userId: user?.id,
     slug: decodeURIComponent(slug),
   })
-
-  if (!post) return {}
 
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL!),
@@ -136,7 +131,7 @@ const PostMeta = (props: FieldProps) => {
         </Link>
       </div>
       <div className="flex space-x-4">
-        <ViewCount count={post?.meta?.view_count ?? '0'} />
+        <ViewCount post={post} />
         <FavoriteButton post={post} />
       </div>
     </div>

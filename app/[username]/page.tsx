@@ -29,8 +29,6 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { user } = await getUserAPI(null, { username })
 
-  if (!user) return {}
-
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL!),
     title: user?.full_name,

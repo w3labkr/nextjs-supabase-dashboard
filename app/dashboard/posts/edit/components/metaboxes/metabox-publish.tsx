@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/button'
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getPostPath } from '@/lib/utils'
+import { fetcher, getPostPath, getMeta } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 
 const MetaboxPublish = () => {
@@ -26,16 +26,26 @@ const MetaboxPublish = () => {
   const { post } = usePostForm()
 
   const statusText = React.useMemo(() => {
-    if (post?.status === 'future') return 'PostMetabox.draft'
-    if (post?.date) return 'PostMetabox.publish'
-    if (post?.status) return `PostStatus.${post?.status}`
+    if (post?.status === 'future') return t('PostMetabox.draft')
+    if (post?.date) return t('PostMetabox.publish')
+    if (post?.status) return t(`PostStatus.${post?.status}`)
 
     return null
-  }, [post?.status, post?.date])
+  }, [t, post?.status, post?.date])
 
-  const posted_on = React.useMemo(() => {
-    return dayjs(post?.date).format('YYYY-MM-DD HH:mm:ss')
-  }, [post?.date])
+  const dateText = React.useMemo(() => {
+    const date = dayjs(post?.date).format('YYYY-MM-DD HH:mm:ss')
+
+    if (post?.status === 'future') {
+      return `${t('PostMetabox.future_date')}: ${date}`
+    }
+
+    if (post?.date) {
+      return `${t('PostMetabox.posted_on')}: ${date}`
+    }
+
+    return `${t('PostMetabox.publish')}: ${t('PostMetabox.immediately')}`
+  }, [t, post?.status, post?.date])
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
@@ -52,7 +62,7 @@ const MetaboxPublish = () => {
             <li className="flex items-center">
               <LucideIcon name="Signpost" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.status')}: `}
-              {statusText ? t(statusText) : null}
+              {statusText}
             </li>
             <li className="flex items-center">
               <LucideIcon name="Eye" className="mr-2 size-4 min-w-4" />
@@ -63,16 +73,12 @@ const MetaboxPublish = () => {
             </li>
             <li className="flex items-center">
               <LucideIcon name="CalendarDays" className="mr-2 size-4 min-w-4" />
-              {post?.status === 'future'
-                ? `${t('PostMetabox.future_date')}: ${posted_on}`
-                : post?.date
-                  ? `${t('PostMetabox.posted_on')}: ${posted_on}`
-                  : `${t('PostMetabox.publish')}: ${t('PostMetabox.immediately')}`}
+              {dateText}
             </li>
             <li className="flex items-center">
               <LucideIcon name="BarChart" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.post_views')}: `}
-              {post?.meta?.view_count ?? '0'}
+              {getMeta(post?.meta, 'view_count', '0')?.toLocaleString()}
             </li>
           </ul>
           <div className="flex justify-between">

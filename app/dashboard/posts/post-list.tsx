@@ -6,7 +6,7 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 
-import { cn } from '@/lib/utils'
+import { cn, getMeta } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import {
   Table,
@@ -61,8 +61,8 @@ const Header = () => {
   const { user } = useAuth()
   const { data, count } = useCountPostsAPI(user?.id ?? null)
 
-  const status: { [key: string]: number } | undefined = React.useMemo(() => {
-    return data?.reduce((acc: { [key: string]: number }, curr) => {
+  const status: Record<string, number> | undefined = React.useMemo(() => {
+    return data?.reduce((acc: Record<string, number>, curr) => {
       acc[curr.status] = curr.count
       return acc
     }, {})
@@ -226,7 +226,7 @@ const PostItem = ({ post }: { post: Post }) => {
         )}
       </TableCell>
       <TableCell align="center">
-        {post?.meta?.view_count?.toLocaleString() ?? '0'}
+        {getMeta(post?.meta, 'view_count', '0')?.toLocaleString()}
       </TableCell>
       <TableCell align="center">
         {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm')}

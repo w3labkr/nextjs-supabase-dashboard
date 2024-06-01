@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
-import { ApiError, revalidatePaths, setMeta } from '@/lib/utils'
+import { ApiError, revalidatePaths } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 
 export async function GET(request: NextRequest) {
@@ -42,10 +42,8 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const output = list ? list?.map((r) => setMeta(r)) : list
-
   return NextResponse.json({
-    data: output,
+    data: list,
     count: total?.count ?? 0,
     error: null,
   })

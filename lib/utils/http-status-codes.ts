@@ -83,20 +83,21 @@ export const httpUnknownStatusCode: HttpStatusCode = {
 
 export function httpStatusCode(status: number): HttpStatusCode {
   return (
-    httpStatusCodes.find((v) => v.status === status) ?? httpUnknownStatusCode
+    httpStatusCodes.find((v: HttpStatusCode) => v.status === status) ??
+    httpUnknownStatusCode
   )
 }
 
 export function httpStatusText(status: number): string {
   return (
-    httpStatusCodes.find((v) => v.status === status)?.statusText ??
-    httpUnknownStatusCode?.statusText
+    httpStatusCodes.find((v: HttpStatusCode) => v.status === status)
+      ?.statusText ?? httpUnknownStatusCode?.statusText
   )
 }
 
 export function httpStatusMessage(status: number): string {
   return (
-    httpStatusCodes.find((v) => v.status === status)?.message ??
+    httpStatusCodes.find((v: HttpStatusCode) => v.status === status)?.message ??
     httpUnknownStatusCode?.message
   )
 }
