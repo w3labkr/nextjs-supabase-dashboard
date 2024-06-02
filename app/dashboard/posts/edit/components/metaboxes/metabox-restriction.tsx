@@ -22,14 +22,14 @@ const MetaboxRectriction = () => {
   const { control, setValue } = useFormContext()
   const watchMeta: Meta | undefined = useWatch({ control, name: 'meta' })
 
-  const setVisibility = React.useCallback(
-    (value: string | null) => {
-      const metaValue = setMeta(watchMeta, 'visibility', value, {
+  const setMetaValue = React.useCallback(
+    (meta: Meta | undefined, key: string, value: string | null) => {
+      const metaValue = setMeta(meta, key, value, {
         post_id: post?.id,
       })
       setValue('meta', metaValue, { shouldDirty: true, shouldValidate: true })
     },
-    [post?.id, setValue, watchMeta]
+    [post?.id, setValue]
   )
 
   const checked: boolean = React.useMemo(() => {
@@ -44,7 +44,8 @@ const MetaboxRectriction = () => {
           <Switch
             checked={checked}
             onCheckedChange={(value: boolean) => {
-              setVisibility(value ? 'private' : 'public')
+              const metaValue = value ? 'private' : 'public'
+              setMetaValue(watchMeta, 'visibility', metaValue)
             }}
           />
         </AccordionContent>

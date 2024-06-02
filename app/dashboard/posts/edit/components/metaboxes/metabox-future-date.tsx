@@ -26,14 +26,14 @@ const MetaboxFutureDate = () => {
   const watchMeta: Meta | undefined = useWatch({ control, name: 'meta' })
   const [date, setDate] = React.useState<Date | undefined>(new Date())
 
-  const setFutureDate = React.useCallback(
-    (value: string | null) => {
-      const metaValue = setMeta(watchMeta, 'future_date', value, {
+  const setMetaValue = React.useCallback(
+    (meta: Meta | undefined, key: string, value: string | null) => {
+      const metaValue = setMeta(meta, key, value, {
         post_id: post?.id,
       })
       setValue('meta', metaValue, { shouldDirty: true, shouldValidate: true })
     },
-    [post?.id, setValue, watchMeta]
+    [post?.id, setValue]
   )
 
   const checked: boolean = React.useMemo(() => {
@@ -48,8 +48,8 @@ const MetaboxFutureDate = () => {
           <Switch
             checked={checked}
             onCheckedChange={(value: boolean) => {
-              if (value) setFutureDate(date?.toISOString() ?? null)
-              else setFutureDate(null)
+              const metaValue = value ? date?.toISOString() ?? null : null
+              setMetaValue(watchMeta, 'future_date', metaValue)
             }}
           />
           {checked ? (
