@@ -1,23 +1,23 @@
 'use client'
 
-import { Post } from '@/types/database'
 import * as React from 'react'
+import { Post } from '@/types/database'
 
 interface PostFormContextProps {
   post: Post | null
 }
 
-const PostFormContext = React.createContext<PostFormContextProps | undefined>(
-  undefined
-)
+const PostFormContext = React.createContext<PostFormContextProps | undefined>({
+  post: null,
+})
 
-function PostFormProvider({
+const PostFormProvider = ({
   children,
   value,
 }: {
   children: React.ReactNode
   value: PostFormContextProps
-}) {
+}) => {
   const memoValue = React.useMemo(() => value, [value])
 
   return (
@@ -27,7 +27,7 @@ function PostFormProvider({
   )
 }
 
-function usePostForm() {
+const usePostForm = () => {
   const context = React.useContext<PostFormContextProps | undefined>(
     PostFormContext
   )

@@ -31,7 +31,7 @@ export function getPostPath(
   post: Post | null,
   slug?: string | null
 ): string | null {
-  const username = post?.user?.username
+  const username = post?.author?.username
   const postname = slug ?? post?.slug
 
   return username && postname ? `/${username}/${postname}` : null
@@ -41,16 +41,16 @@ export function getPostUrl(
   post: Post | null,
   slug?: string | null
 ): string | null {
-  const username = post?.user?.username
+  const username = post?.author?.username
   const postname = slug ?? post?.slug
 
   return username && postname ? absoluteUrl(`/${username}/${postname}`) : null
 }
 
-export function getUserPath(username: string | null): string | null {
+export function getAuthorPath(username?: string | null): string | null {
   return username ? `/${username}` : null
 }
 
-export function getUserUrl(username: string | null): string | null {
+export function getAuthorUrl(username?: string | null): string | null {
   return username ? absoluteUrl(`/${username}`) : null
 }

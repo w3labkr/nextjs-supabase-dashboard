@@ -3,7 +3,7 @@ import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
-import { cn, getUserUrl } from '@/lib/utils'
+import { cn, getAuthorUrl } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { Separator } from '@/components/ui/separator'
 import { Header } from '@/components/header'
@@ -89,7 +89,7 @@ export default async function UserPage({
                     Recent
                   </Link>
                   <Link
-                    href={getUserUrl(username) + '/favorites'}
+                    href={getAuthorUrl(username) + '/favorites'}
                     className={cn(
                       'flex w-full items-center sm:w-auto',
                       'text-muted-foreground'

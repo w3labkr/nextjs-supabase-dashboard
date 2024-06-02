@@ -17,7 +17,7 @@ interface AuthContextProps {
   setUser: React.Dispatch<React.SetStateAction<User | null>>
 }
 
-const AuthContext = React.createContext<AuthContextProps>({
+const AuthContext = React.createContext<AuthContextProps | undefined>({
   session: null,
   user: null,
   setSession: () => void 0,
@@ -39,11 +39,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => subscription?.unsubscribe()
   }, [])
 
-  const value = React.useMemo(() => {
+  const memoValue = React.useMemo(() => {
     return { session, user, setSession, setUser }
-  }, [session, user, setSession, setUser])
+  }, [session, user])
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={memoValue}>{children}</AuthContext.Provider>
+  )
 }
 
 export { AuthContext, type AuthContextProps, AuthProvider }

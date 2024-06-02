@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
   const supabase = createClient()
   const { data: post, error } = await supabase
     .from('posts')
-    .select('*, user:users(*), meta:post_metas(*)')
+    .select('*, author:users(*), meta:post_metas(*)')
     .match(match)
     .maybeSingle()
 
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
   const id = searchParams.get('id') as string
 
   const { data, options } = await request.json()
-  const { user_id, ...formData } = data
+  const { user_id, meta, ...formData } = data
   const { authorized } = await authorize(user_id)
 
   if (!authorized) {
@@ -46,11 +46,43 @@ export async function POST(request: NextRequest) {
   }
 
   const supabase = createClient()
+
+  if (meta) {
+    const denyMetaList = ['view_count']
+    const addMetaData = meta
+      ?.filter((r: Record<string, any>) => !denyMetaList.includes(r.meta_key))
+      ?.filter((r: Record<string, any>) => !r.id)
+
+    if (addMetaData) {
+      const { error } = await supabase
+        .from('post_metas')
+        .insert(addMetaData)
+        .select()
+      if (error) {
+        return NextResponse.json({ data: null, error }, { status: 400 })
+      }
+    }
+
+    const editMetaData = meta
+      ?.filter((r: Record<string, any>) => !denyMetaList.includes(r.meta_key))
+      ?.filter((r: Record<string, any>) => r.id)
+
+    if (editMetaData) {
+      const { error } = await supabase
+        .from('post_metas')
+        .upsert(editMetaData)
+        .select()
+      if (error) {
+        return NextResponse.json({ data: null, error }, { status: 400 })
+      }
+    }
+  }
+
   const { data: post, error } = await supabase
     .from('posts')
     .update(formData)
     .match({ id, user_id })
-    .select('*, user:users(*), meta:post_metas(*)')
+    .select('*, author:users(*), meta:post_metas(*)')
     .single()
 
   if (error) {
@@ -107,7 +139,7 @@ export async function PUT(request: NextRequest) {
   const { data: post, error } = await supabase
     .from('posts')
     .insert({ ...data, user_id: userId })
-    .select('*, user:users(*), meta:post_metas(*)')
+    .select('*, author:users(*), meta:post_metas(*)')
     .single()
 
   if (error) {

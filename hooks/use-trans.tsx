@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-export function useTrans() {
+const useTrans = () => {
   const { t } = useTranslation()
 
   const trans = React.useCallback(
@@ -102,3 +102,5 @@ export function useTrans() {
 
   return { trans }
 }
+
+export { useTrans }

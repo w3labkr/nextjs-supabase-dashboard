@@ -2,7 +2,7 @@ import * as React from 'react'
 import Link from 'next/link'
 import dayjs from 'dayjs'
 
-import { cn, getPostUrl, getUserUrl } from '@/lib/utils'
+import { cn, getPostUrl, getAuthorUrl } from '@/lib/utils'
 import { Paging } from '@/components/paging'
 
 import { Post } from '@/types/database'
@@ -48,10 +48,10 @@ const LatestItem = (props: LatestItemProps) => {
         </time>
         <span>— by</span>
         <Link
-          href={getUserUrl(post?.user?.username) ?? '#'}
+          href={getAuthorUrl(post?.author?.username) ?? '#'}
           className="hover:underline"
         >
-          {post?.user?.full_name}
+          {post?.author?.full_name}
         </Link>
       </div>
     </div>

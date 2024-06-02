@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useSearchParams } from 'next/navigation'
 
-export function useQueryString() {
+const useQueryString = () => {
   const searchParams = useSearchParams()
 
   const qs = React.useCallback(
@@ -27,3 +27,5 @@ export function useQueryString() {
 
   return { qs }
 }
+
+export { useQueryString }

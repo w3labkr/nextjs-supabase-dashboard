@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
   if (postType) match = { ...match, type: postType }
   if (status) match = { ...match, status }
 
-  const columns = '*, user:users(*), meta:post_metas(*)'
+  const columns = '*, author:users(*), meta:post_metas(*)'
 
   const supabase = createClient()
   const totalQuery = supabase

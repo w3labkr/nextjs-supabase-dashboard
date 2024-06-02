@@ -217,7 +217,7 @@ const PostItem = ({ post }: { post: Post }) => {
           )}
         </div>
       </TableCell>
-      <TableCell align="center">{post?.user?.full_name}</TableCell>
+      <TableCell align="center">{post?.author?.full_name}</TableCell>
       <TableCell align="center">
         {post?.status === 'private' ? (
           <LucideIcon name="LockKeyhole" className="size-4 min-w-4" />

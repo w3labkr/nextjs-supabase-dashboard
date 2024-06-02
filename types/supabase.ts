@@ -571,6 +571,10 @@ export type Database = {
           dislike_count: number
         }[]
       }
+      hourly_publish_future_posts: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       set_favorite: {
         Args: {
           postid: number

@@ -21,7 +21,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getUserPath } from '@/lib/utils'
+import { fetcher, getAuthorPath } from '@/lib/utils'
 import { useUserAPI } from '@/queries/client/users'
 import { UserAPI } from '@/types/api'
 
@@ -104,7 +104,7 @@ const SubmitButton = () => {
         method: 'POST',
         body: JSON.stringify({
           data: { username: formValues?.username },
-          options: { revalidatePaths: getUserPath(username) },
+          options: { revalidatePaths: getAuthorPath(username) },
         }),
       })
 

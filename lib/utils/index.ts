@@ -16,7 +16,7 @@ export {
   setQueryString,
   getPostPath,
   getPostUrl,
-  getUserPath,
-  getUserUrl,
+  getAuthorPath,
+  getAuthorUrl,
 } from './url'
-export { getMeta } from './functions'
+export { getMeta, setMeta } from './functions'

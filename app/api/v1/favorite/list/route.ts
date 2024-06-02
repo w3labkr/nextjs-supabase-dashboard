@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
   match = { ...match, 'favorites.is_favorite': true }
 
   const columns =
-    '*, user:users(*), meta:post_metas(*), favorite:favorites!inner(*)'
+    '*, author:users(*), meta:post_metas(*), favorite:favorites!inner(*)'
 
   const supabase = createClient()
   const total = await supabase

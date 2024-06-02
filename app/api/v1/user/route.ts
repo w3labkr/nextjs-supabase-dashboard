@@ -4,6 +4,8 @@ import { ApiError, revalidatePaths } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 
+import { User } from '@/types/database'
+
 import dayjs from 'dayjs'
 
 export async function GET(request: NextRequest) {
@@ -31,7 +33,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ data: null, error: null })
   }
 
-  const data = {
+  const data: User = {
     ...user,
     role: user?.role[0]?.role,
     plan: user?.plan[0]?.plan,

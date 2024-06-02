@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { toast } from 'sonner'
 import { LucideIcon } from '@/lib/lucide-icon'
-import { cn, fetcher, getUserPath } from '@/lib/utils'
+import { cn, fetcher, getAuthorPath } from '@/lib/utils'
 
 import { useSWRConfig } from 'swr'
 import { useAuth } from '@/hooks/use-auth'
@@ -58,7 +58,7 @@ const SignedInAction = (props: FavoriteButtonProps) => {
         method: 'POST',
         body: JSON.stringify({
           data: { is_favorite: !isLike },
-          options: { revalidatePaths: getUserPath(username) + '/favorites' },
+          options: { revalidatePaths: getAuthorPath(username) + '/favorites' },
         }),
       })
 

@@ -3,7 +3,7 @@ import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
-import { cn, getUserUrl } from '@/lib/utils'
+import { cn, getAuthorUrl } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { Separator } from '@/components/ui/separator'
 import { Header } from '@/components/header'
@@ -78,7 +78,7 @@ export default async function FavoritesPage({
                 <div className="hidden sm:inline">Favorited generations</div>
                 <div className="flex w-full gap-2 sm:w-auto">
                   <Link
-                    href={getUserUrl(username) ?? '#'}
+                    href={getAuthorUrl(username) ?? '#'}
                     className={cn(
                       'flex w-full items-center sm:w-auto',
                       'text-muted-foreground'

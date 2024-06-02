@@ -43,6 +43,7 @@ const FormSchema = z.object({
   content: z.string().optional(),
   excerpt: z.string().optional(),
   thumbnail_url: z.string().optional(),
+  meta: z.array(z.record(z.string(), z.any())).optional(),
 })
 
 type FormValues = z.infer<typeof FormSchema>
@@ -62,6 +63,7 @@ const PostForm = ({ id }: { id: number }) => {
       content: post?.content ?? '',
       excerpt: post?.excerpt ?? '',
       thumbnail_url: post?.thumbnail_url ?? '',
+      meta: post?.meta ?? [],
     },
     shouldUnregister: true,
   })
@@ -70,6 +72,7 @@ const PostForm = ({ id }: { id: number }) => {
     <PostFormProvider value={{ post }}>
       <Form {...form}>
         <UserIdField />
+        <MetaField />
         <form method="POST" noValidate>
           <div className="relative grid gap-10 md:grid-cols-[1fr_280px]">
             <div className="mx-auto w-full min-w-0 space-y-6">
@@ -102,6 +105,24 @@ const UserIdField = () => {
     <FormField
       control={control}
       name="user_id"
+      render={({ field }) => (
+        <FormItem>
+          <FormControl>
+            <Input type="hidden" {...field} />
+          </FormControl>
+        </FormItem>
+      )}
+    />
+  )
+}
+
+const MetaField = () => {
+  const { control } = useFormContext()
+
+  return (
+    <FormField
+      control={control}
+      name="meta"
       render={({ field }) => (
         <FormItem>
           <FormControl>

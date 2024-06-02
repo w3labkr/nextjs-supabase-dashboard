@@ -1,15 +1,21 @@
 import { Tables } from '@/types/supabase'
 
-export type UserRole = 'guest' | 'user' | 'admin' | 'superadmin'
+export type Meta = Array<Record<string, any>>
 
-export type UserPlan = 'free' | 'basic' | 'standard' | 'premium'
+export type Role = 'guest' | 'user' | 'admin' | 'superadmin'
+
+export type Plan = 'free' | 'basic' | 'standard' | 'premium'
+
+export type UserRole = Tables<'user_roles'>
+
+export type UserPlan = Tables<'user_plans'>
 
 export type UserMeta = Tables<'user_metas'>
 
 export type User = Tables<'users'> & {
-  role: string
-  plan: string
-  meta: Tables<'user_metas'>[]
+  role?: string
+  plan?: string
+  meta?: UserMeta[]
 }
 
 export type Email = Tables<'emails'>
@@ -28,9 +34,11 @@ export type PostType = 'post' | 'page' | 'revision'
 
 export type PostMeta = Tables<'post_metas'>
 
+export type Author = Tables<'users'>
+
 export type Post = Tables<'posts'> & {
-  user: Tables<'users'>
-  meta: Tables<'post_metas'>[]
+  author?: Author | null
+  meta?: PostMeta[]
 }
 
 export type CountPosts = {

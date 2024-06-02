@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-export function useMounted() {
+const useMounted = () => {
   const [mounted, setMounted] = React.useState<boolean>(false)
 
   React.useEffect(() => {
@@ -12,7 +12,7 @@ export function useMounted() {
   return mounted
 }
 
-export function useDebounceMounted(wait: number = 0) {
+const useDebounceMounted = (wait: number = 0) => {
   const [mounted, setMounted] = React.useState<boolean>(false)
 
   React.useEffect(() => {
@@ -24,3 +24,5 @@ export function useDebounceMounted(wait: number = 0) {
 
   return mounted
 }
+
+export { useMounted, useDebounceMounted }

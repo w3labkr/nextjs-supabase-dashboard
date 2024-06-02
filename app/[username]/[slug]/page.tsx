@@ -13,7 +13,7 @@ import { Analysis } from './analysis'
 import { ViewCount } from './view-count'
 import { FavoriteButton } from './favorite-button'
 
-import { getUserUrl } from '@/lib/utils'
+import { getAuthorUrl } from '@/lib/utils'
 import { getAuth, authenticate } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { getPostAPI, getAdjacentPostAPI } from '@/queries/server/posts'
@@ -124,10 +124,10 @@ const PostMeta = (props: FieldProps) => {
         </time>
         <span>— by</span>
         <Link
-          href={getUserUrl(post?.user?.username) ?? '#'}
+          href={getAuthorUrl(post?.author?.username) ?? '#'}
           className="hover:underline"
         >
-          {post?.user?.full_name}
+          {post?.author?.full_name}
         </Link>
       </div>
       <div className="flex space-x-4">
