@@ -24,7 +24,7 @@ create extension if not exists pgcrypto schema extensions;
 create extension if not exists moddatetime schema extensions;
 
 -- Job scheduler for PostgreSQL
-create extension if not exists pg_cron with schema extensions;
+create extension if not exists pg_cron schema extensions;
 
 grant usage on schema cron to postgres;
 grant all privileges on all tables in schema cron to postgres;
@@ -716,9 +716,18 @@ security definer set search_path = public
 as $$
 declare
   r record;
+  visibility text;
 begin
   for r in (select * from posts where status = 'future' and date < now()) loop
-    update posts set status = 'publish' where id = r.id;
+    select meta_value into visibility from post_metas where post_id = r.id and meta_key = 'visibility';
+
+    if visibility = 'private' then
+      update posts set status = 'private' where id = r.id;
+    else
+      update posts set status = 'publish' where id = r.id;
+    end if;
+
+    update post_metas set meta_value = null where post_id = r.id and meta_key = 'future_date';
   end loop;
 end;
 $$ language plpgsql;

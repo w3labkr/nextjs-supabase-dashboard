@@ -20,7 +20,6 @@ import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provid
 import { useSWRConfig } from 'swr'
 import { fetcher, getPostPath, getMeta } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
-import { Meta } from '@/types/database'
 
 const MetaboxPublish = () => {
   const { t } = useTranslation()
@@ -321,9 +320,13 @@ const PublishButton = () => {
       if (!post) throw new Error('Require is not defined.')
 
       const formValues = getValues()
-      const future_date = getMeta(formValues?.meta, 'future_date', null)
-      const status = future_date ? 'future' : 'publish'
+
       const now = new Date().toISOString()
+      const visibility = getMeta(formValues?.meta, 'visibility', null)
+      const future_date = getMeta(formValues?.meta, 'future_date', null)
+
+      let status: string = visibility === 'private' ? 'private' : 'publish'
+      if (future_date) status = 'future'
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {

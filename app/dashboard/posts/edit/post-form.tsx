@@ -36,7 +36,6 @@ const Editor = dynamic(() => import('./components/editor'), { ssr: false })
 
 const FormSchema = z.object({
   user_id: z.string().nonempty().uuid(),
-  status: z.string().nonempty(),
   title: z.string().nonempty(),
   slug: z.string().nonempty(),
   date: z.string().datetime({ offset: true }).optional(),
@@ -56,7 +55,6 @@ const PostForm = ({ id }: { id: number }) => {
     mode: 'onSubmit',
     values: {
       user_id: post?.user_id ?? '',
-      status: post?.status ?? '',
       title: post?.title ?? '',
       slug: post?.slug ?? '',
       date: post?.date ?? '',

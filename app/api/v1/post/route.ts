@@ -48,29 +48,29 @@ export async function POST(request: NextRequest) {
   const supabase = createClient()
 
   if (meta) {
-    const denyMetaList = ['view_count']
-    const addMetaData = meta
-      ?.filter((r: Record<string, any>) => !denyMetaList.includes(r.meta_key))
+    const denyMetaKeys = ['view_count']
+    const addMeta = meta
+      ?.filter((r: Record<string, any>) => !denyMetaKeys.includes(r.meta_key))
       ?.filter((r: Record<string, any>) => !r.id)
 
-    if (addMetaData) {
+    if (addMeta) {
       const { error } = await supabase
         .from('post_metas')
-        .insert(addMetaData)
+        .insert(addMeta)
         .select()
       if (error) {
         return NextResponse.json({ data: null, error }, { status: 400 })
       }
     }
 
-    const editMetaData = meta
-      ?.filter((r: Record<string, any>) => !denyMetaList.includes(r.meta_key))
+    const editMeta = meta
+      ?.filter((r: Record<string, any>) => !denyMetaKeys.includes(r.meta_key))
       ?.filter((r: Record<string, any>) => r.id)
 
-    if (editMetaData) {
+    if (editMeta) {
       const { error } = await supabase
         .from('post_metas')
-        .upsert(editMetaData)
+        .upsert(editMeta)
         .select()
       if (error) {
         return NextResponse.json({ data: null, error }, { status: 400 })
