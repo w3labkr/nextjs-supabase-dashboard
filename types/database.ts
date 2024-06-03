@@ -37,6 +37,7 @@ export type PostMeta = Tables<'post_metas'>
 export type Author = Tables<'users'>
 
 export type Post = Tables<'posts'> & {
+  num?: number
   author?: Author | null
   meta?: PostMeta[]
 }

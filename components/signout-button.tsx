@@ -17,7 +17,6 @@ interface SignOutButtonProps
 const SignOutButton = (props: SignOutButtonProps) => {
   const router = useRouter()
   const { t } = useTranslation()
-
   const { setSession, setUser } = useAuth()
 
   const handleClick = async () => {

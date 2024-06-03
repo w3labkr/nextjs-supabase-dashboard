@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
 import { ApiError, revalidatePaths } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
+import { Post } from '@/types/database'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -23,16 +24,21 @@ export async function GET(request: NextRequest) {
     '*, author:users(*), meta:post_metas(*), favorite:favorites!inner(*)'
 
   const supabase = createClient()
-  const total = await supabase
+  const totalQuery = supabase
     .from('posts')
     .select(columns, { count: 'exact', head: true })
     .match(match)
+
+  const total = await totalQuery
+  const totalPost = total?.count ?? 0
+  const startPost = (page - 1) * perPage
+  const endPost = page * perPage - 1
 
   const { data: list, error } = await supabase
     .from('posts')
     .select(columns)
     .match(match)
-    .range((page - 1) * perPage, page * perPage - 1)
+    .range(startPost, endPost)
     .order('created_at', { ascending: false })
 
   if (error) {
@@ -42,9 +48,10 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  return NextResponse.json({
-    data: list,
-    count: total?.count ?? 0,
-    error: null,
+  const data = list?.map((item: Post, index: number) => {
+    item['num'] = totalPost - startPost - index
+    return item
   })
+
+  return NextResponse.json({ data, count: totalPost, error: null })
 }

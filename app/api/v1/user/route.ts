@@ -111,7 +111,7 @@ export async function DELETE(request: NextRequest) {
   const bucketId = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET!
   const { data: list } = await supabase.storage.from(bucketId).list(id)
 
-  if (list) {
+  if (list && list?.length > 0) {
     const files = list.map((file) => `${id}/${file?.name}`)
     const removed = await supabase.storage.from(bucketId).remove(files)
     if (removed?.error) {

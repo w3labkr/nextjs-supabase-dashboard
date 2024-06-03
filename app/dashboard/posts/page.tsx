@@ -7,7 +7,7 @@ import { PostList } from './post-list'
 
 export default function PostListPage() {
   return (
-    <main className="flex flex-col gap-4 overflow-auto p-10 pb-16">
+    <main className="flex-1 space-y-4 overflow-auto p-10 pb-16">
       <div className="flex justify-between">
         <Title text="PostListPage.title" translate="yes" />
         <AddButton

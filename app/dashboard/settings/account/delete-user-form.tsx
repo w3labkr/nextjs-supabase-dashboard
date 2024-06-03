@@ -227,7 +227,7 @@ const SubmitButton = () => {
 
       toast.success(t('FormMessage.deleted_successfully'))
 
-      router.replace('/')
+      router.replace('/auth/signin')
       router.refresh()
     } catch (e: unknown) {
       const err = (e as Error)?.message

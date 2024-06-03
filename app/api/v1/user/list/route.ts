@@ -29,14 +29,11 @@ export async function GET(request: NextRequest) {
   }
 
   const supabaseAdmin = createAdminClient()
-  const result = await supabaseAdmin.listUsers({ page, perPage })
+  const { data: list, error } = await supabaseAdmin.listUsers({ page, perPage })
 
-  if (result?.error) {
-    return NextResponse.json(
-      { data: null, error: result?.error },
-      { status: 400 }
-    )
+  if (error) {
+    return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
-  return NextResponse.json({ data: result?.data, error: null })
+  return NextResponse.json({ data: list, error: null })
 }

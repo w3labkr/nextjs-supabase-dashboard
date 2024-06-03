@@ -35,7 +35,7 @@ import { usePostsAPI, useCountPostsAPI } from '@/queries/client/posts'
 const PostList = () => {
   const searchParams = useSearchParams()
   const page = +(searchParams.get('page') ?? '1')
-  const perPage = +(searchParams.get('perPage') ?? '50')
+  const perPage = +(searchParams.get('perPage') ?? '10')
   const pageSize = +(searchParams.get('pageSize') ?? '10')
   const status = searchParams.get('status') ?? undefined
 
@@ -70,43 +70,43 @@ const Header = () => {
 
   return (
     <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-      <HeadLink value={undefined} label="all" count={count ?? 0} />
+      <HeadLink status={undefined} label="all" count={count ?? 0} />
       <span>|</span>
-      <HeadLink value="publish" label="publish" count={status?.publish ?? 0} />
+      <HeadLink status="publish" label="publish" count={status?.publish ?? 0} />
       <span>|</span>
-      <HeadLink value="future" label="future" count={status?.future ?? 0} />
+      <HeadLink status="future" label="future" count={status?.future ?? 0} />
       <span>|</span>
-      <HeadLink value="draft" label="draft" count={status?.draft ?? 0} />
+      <HeadLink status="draft" label="draft" count={status?.draft ?? 0} />
       {/* <span>|</span> */}
-      {/* <HeadLink value="pending" label="pending" count={status?.pending ?? 0} /> */}
+      {/* <HeadLink status="pending" label="pending" count={status?.pending ?? 0} /> */}
       <span>|</span>
-      <HeadLink value="private" label="private" count={status?.private ?? 0} />
+      <HeadLink status="private" label="private" count={status?.private ?? 0} />
       <span>|</span>
-      <HeadLink value="trash" label="trash" count={status?.trash ?? 0} />
+      <HeadLink status="trash" label="trash" count={status?.trash ?? 0} />
     </div>
   )
 }
 
-const HeadLink = ({
-  value,
-  label,
-  count,
-}: {
-  value?: PostStatus
+interface HeadLinkProps {
+  status?: PostStatus
   label: PostStatus | 'all'
   count: number
-}) => {
+}
+
+const HeadLink = (props: HeadLinkProps) => {
+  const { status, label, count } = props
+
   const { t } = useTranslation()
-  const { status } = usePaging()
+  const { status: current } = usePaging()
   const { qs } = useQueryString()
   const pathname = usePathname()
 
   return (
     <Link
-      href={pathname + '?' + qs({ status: value, page: 1 })}
+      href={pathname + '?' + qs({ status, page: 1 })}
       className={cn(
         'h-auto p-0',
-        value === status ? 'text-foreground' : 'text-muted-foreground'
+        current === status ? 'text-foreground' : 'text-muted-foreground'
       )}
     >
       {t(`PostStatus.${label}`)}({count})
@@ -125,7 +125,7 @@ const Footer = () => {
 
   if (!posts) return null
 
-  return <Paging className="mt-16" />
+  return <Paging />
 }
 
 const Body = () => {
@@ -159,7 +159,7 @@ const Body = () => {
           <TableHead className="w-[100px] text-center">
             {t('Table.views')}
           </TableHead>
-          <TableHead className="w-[170px] text-center">
+          <TableHead className="w-[200px] text-center">
             {t('Table.created_at')}
           </TableHead>
         </TableRow>
@@ -177,7 +177,12 @@ const Body = () => {
   )
 }
 
-const PostItem = ({ post }: { post: Post }) => {
+interface PostItemProps {
+  post: Post
+}
+
+const PostItem = (props: PostItemProps) => {
+  const { post } = props
   const { t } = useTranslation()
 
   return (
@@ -185,7 +190,7 @@ const PostItem = ({ post }: { post: Post }) => {
       <TableCell>
         <Checkbox />
       </TableCell>
-      <TableCell align="center">{post?.id}</TableCell>
+      <TableCell align="center">{post?.num}</TableCell>
       <TableCell>
         <div className="line-clamp-1">
           {post?.title}
@@ -229,7 +234,7 @@ const PostItem = ({ post }: { post: Post }) => {
         {getMeta(post?.meta, 'view_count', '0')?.toLocaleString()}
       </TableCell>
       <TableCell align="center">
-        {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm')}
+        {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm:ss')}
       </TableCell>
     </TableRow>
   )

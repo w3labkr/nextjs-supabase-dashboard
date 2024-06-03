@@ -53,7 +53,7 @@ export default async function FavoritesPage({
   if (!user) notFound()
 
   const page = +(searchParams?.page ?? '1')
-  const perPage = +(searchParams?.perPage ?? '50')
+  const perPage = +(searchParams?.perPage ?? '10')
   const pageSize = +(searchParams?.pageSize ?? '10')
 
   const { posts, count } = await getFavoritePostsAPI(user?.id ?? null, {

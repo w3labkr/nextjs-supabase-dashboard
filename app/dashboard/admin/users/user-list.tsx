@@ -30,7 +30,7 @@ const UserList = () => {
     <>
       <Table>
         <TableCaption></TableCaption>
-        <TableHeader>
+        <TableHeader className="sticky top-0 bg-white">
           <TableRow>
             <TableHead>created_at</TableHead>
             <TableHead>updated_at</TableHead>
