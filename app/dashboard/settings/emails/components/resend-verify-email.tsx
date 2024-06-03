@@ -29,8 +29,8 @@ const ResendVerifyEmail = (props: ResendVerifyEmailProps) => {
       if (!user) throw new Error('Require is not defined.')
       if (!item) throw new Error('Require is not defined.')
 
-      const fetchUrl = `/api/v1/email/verify?userId=${user?.id}`
-      const result = await fetcher(fetchUrl, {
+      const sendUrl = `/api/v1/email/verify?userId=${user?.id}`
+      const result = await fetcher(sendUrl, {
         method: 'POST',
         body: JSON.stringify({
           data: { email: item?.email },
@@ -39,7 +39,7 @@ const ResendVerifyEmail = (props: ResendVerifyEmailProps) => {
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      mutate(fetchUrl)
+      mutate(sendUrl)
 
       toast.success(t('FormMessage.email_has_been_successfully_sent'))
     } catch (e: unknown) {
@@ -54,7 +54,7 @@ const ResendVerifyEmail = (props: ResendVerifyEmailProps) => {
   return (
     <button
       type="button"
-      className="text-xs font-semibold text-blue-500 hover:underline"
+      className="text-xs font-semibold text-blue-700 hover:underline"
       onClick={handleClick}
       disabled={isSubmitting}
     >

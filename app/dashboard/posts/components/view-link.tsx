@@ -18,7 +18,7 @@ const ViewLink = (props: ViewLinkProps) => {
   return (
     <Link
       href={getPostPath(post) ?? '#'}
-      className="text-xs text-blue-500 hover:underline"
+      className="text-xs text-blue-700 hover:underline"
       target="_blank"
       rel="noopener noreferrer"
     >

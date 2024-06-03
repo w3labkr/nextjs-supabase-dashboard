@@ -393,6 +393,7 @@
     "num": "Num",
     "id": "ID",
     "status": "Status",
+    "visibility": "Visibility",
     "title": "Title",
     "excerpt": "Excerpt",
     "description": "Description",

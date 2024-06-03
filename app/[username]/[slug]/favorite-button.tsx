@@ -84,7 +84,7 @@ const SignedInAction = (props: FavoriteButtonProps) => {
       <LucideIcon
         name="Heart"
         fill={cn(isLike ? '#ef4444' : 'transparent')}
-        className={cn('size-5 min-w-5 text-red-500')}
+        className={cn('size-5 min-w-5 text-destructive')}
       />
     </button>
   )
@@ -104,7 +104,7 @@ const SignedOutAction = (props: FavoriteButtonProps) => {
       <LucideIcon
         name="Heart"
         fill="transparent"
-        className={cn('size-5 min-w-5 text-red-500')}
+        className={cn('size-5 min-w-5 text-destructive')}
       />
     </button>
   )

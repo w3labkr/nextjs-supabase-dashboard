@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
   const supabase = createClient()
 
   if (meta && meta?.length > 0) {
-    const denyMetaKeys = ['view_count']
+    const denyMetaKeys: string[] = ['view_count']
     const addMeta = meta
       ?.filter((r: Record<string, any>) => !denyMetaKeys.includes(r.meta_key))
       ?.filter((r: Record<string, any>) => !r.id)

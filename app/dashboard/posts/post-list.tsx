@@ -6,7 +6,6 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 
-import { cn, getMeta } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import {
   Table,
@@ -18,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { PagingProvider, usePaging, Paging } from '@/components/paging'
 
@@ -27,6 +27,7 @@ import { TrashButton } from './components/trash-button'
 import { RestoreButton } from './components/restore-button'
 import { DeleteButton } from './components/delete-button'
 
+import { cn, getMeta } from '@/lib/utils'
 import { Post, PostStatus } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 import { useQueryString } from '@/hooks/use-query-string'
@@ -154,7 +155,7 @@ const Body = () => {
             {t('Table.author')}
           </TableHead>
           <TableHead className="w-[70px] text-center">
-            {t('Table.status')}
+            {t('Table.visibility')}
           </TableHead>
           <TableHead className="w-[100px] text-center">
             {t('Table.views')}
@@ -184,6 +185,7 @@ interface PostItemProps {
 const PostItem = (props: PostItemProps) => {
   const { post } = props
   const { t } = useTranslation()
+  const { status } = usePaging()
 
   return (
     <TableRow>
@@ -192,11 +194,20 @@ const PostItem = (props: PostItemProps) => {
       </TableCell>
       <TableCell align="center">{post?.num}</TableCell>
       <TableCell>
-        <div className="line-clamp-1">
-          {post?.title}
-          {post?.status !== 'publish'
-            ? ` - ${t(`PostStatus.${post?.status}`)}`
-            : null}
+        <div className="flex items-center space-x-2">
+          <div className="line-clamp-1">
+            <span>
+              {!status && post?.status !== 'publish'
+                ? `[${t(`PostStatus.${post?.status}`)}] `
+                : null}
+            </span>
+            <span className="break-all">{post?.title}</span>
+          </div>
+          {dayjs().isBefore(dayjs(post?.created_at).add(1, 'day')) ? (
+            <Badge variant="destructive" className="text-2xs rounded-none px-1">
+              N
+            </Badge>
+          ) : null}
         </div>
         <div className="flex items-center space-x-1">
           {post?.status === 'publish' || post?.status === 'private' ? (
@@ -224,7 +235,7 @@ const PostItem = (props: PostItemProps) => {
       </TableCell>
       <TableCell align="center">{post?.author?.full_name}</TableCell>
       <TableCell align="center">
-        {post?.status === 'private' ? (
+        {getMeta(post?.meta, 'visibility', null) === 'private' ? (
           <LucideIcon name="LockKeyhole" className="size-4 min-w-4" />
         ) : (
           <LucideIcon name="LockKeyholeOpen" className="size-4 min-w-4" />

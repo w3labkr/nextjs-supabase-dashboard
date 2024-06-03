@@ -46,7 +46,7 @@ export default function BlockedPage() {
           <p>{t('BlockedPage.message')}</p>
           <button
             onClick={handleClick}
-            className="text-left text-blue-500 hover:underline"
+            className="text-left text-blue-700 hover:underline"
           >
             {t('BlockedPage.button')}
           </button>

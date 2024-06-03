@@ -69,8 +69,8 @@ interface NotifyItemProps {
 
 const NotifyItem = ({ item }: { item: NotifyItemProps }) => {
   return (
-    <div className="grid grid-cols-[25px_1fr] items-start">
-      <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500"></span>
+    <div className="grid grid-cols-[16px_1fr] items-start">
+      <span className="flex h-2 w-2 translate-y-1 rounded-full bg-black"></span>
       <div className="space-y-1">
         <p className="text-sm font-medium leading-none">{item.title}</p>
         <p className="text-sm text-muted-foreground">{item.description}</p>

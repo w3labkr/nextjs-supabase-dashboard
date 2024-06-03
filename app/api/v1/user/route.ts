@@ -3,10 +3,9 @@ import { createClient, createAdminClient } from '@/supabase/server'
 import { ApiError, revalidatePaths } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
+import dayjs from 'dayjs'
 
 import { User } from '@/types/database'
-
-import dayjs from 'dayjs'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -47,6 +46,7 @@ export async function POST(request: NextRequest) {
   const id = searchParams.get('id') as string
 
   const { data, options } = await request.json()
+  const { meta, ...formData } = data
   const { authorized } = await authorize(id)
   const { user } = await getUserAPI(id)
 
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  if (data?.username && user?.username_changed_at) {
+  if (formData?.username && user?.username_changed_at) {
     const now = dayjs()
     const startDate = dayjs(user?.username_changed_at)
     const endDate = startDate.add(1, 'month')
@@ -72,9 +72,41 @@ export async function POST(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const { data: updated, error } = await supabase
+
+  if (meta && meta?.length > 0) {
+    const denyMetaKeys: string[] = []
+    const addMeta = meta
+      ?.filter((r: Record<string, any>) => !denyMetaKeys.includes(r.meta_key))
+      ?.filter((r: Record<string, any>) => !r.id)
+
+    if (addMeta) {
+      const { error } = await supabase
+        .from('user_metas')
+        .insert(addMeta)
+        .select()
+      if (error) {
+        return NextResponse.json({ data: null, error }, { status: 400 })
+      }
+    }
+
+    const editMeta = meta
+      ?.filter((r: Record<string, any>) => !denyMetaKeys.includes(r.meta_key))
+      ?.filter((r: Record<string, any>) => r.id)
+
+    if (editMeta) {
+      const { error } = await supabase
+        .from('user_metas')
+        .upsert(editMeta)
+        .select()
+      if (error) {
+        return NextResponse.json({ data: null, error }, { status: 400 })
+      }
+    }
+  }
+
+  const { data: newUser, error } = await supabase
     .from('users')
-    .update(data)
+    .update(formData)
     .eq('id', id)
     .select('*')
     .single()
@@ -86,7 +118,7 @@ export async function POST(request: NextRequest) {
   const revalidated = revalidatePaths(options?.revalidatePaths)
 
   return NextResponse.json({
-    data: updated,
+    data: newUser,
     error: null,
     revalidated,
     now: Date.now(),

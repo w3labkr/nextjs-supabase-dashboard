@@ -61,7 +61,7 @@ const DeleteButton = (props: DeleteButtonProps) => {
 
   return (
     <button
-      className="text-xs text-red-500 hover:underline"
+      className="text-xs text-destructive hover:underline"
       onClick={handleClick}
       disabled={isSubmitting}
       {...rest}

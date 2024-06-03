@@ -26,7 +26,7 @@ const Permalink = () => {
       {`${t('PostMetabox.permalink')}: `}
       <Link
         href={permalink ?? '#'}
-        className="text-blue-500 hover:underline"
+        className="text-blue-700 hover:underline"
         target="_blank"
         rel="noopener noreferrer"
       >

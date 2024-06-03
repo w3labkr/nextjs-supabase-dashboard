@@ -72,7 +72,15 @@ const tailwindConfig = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate'), require('tailwind-scrollbar-hide')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('tailwind-scrollbar-hide'),
+    ({ addUtilities }) => {
+      addUtilities({
+        '.text-2xs': { fontSize: '10px', lineHeight: 1 },
+      })
+    },
+  ],
 }
 
 module.exports = tailwindConfig

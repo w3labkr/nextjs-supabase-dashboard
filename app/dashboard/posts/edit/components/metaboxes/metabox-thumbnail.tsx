@@ -83,7 +83,7 @@ const MetaboxThumbnail = () => {
           {watchThumbnailUrl ? null : (
             <button
               type="button"
-              className="text-blue-500 underline"
+              className="text-blue-700 underline"
               onClick={() => handleFileInputRef(fileInputRef)}
             >
               {t('PostMetabox.set_featured_image')}

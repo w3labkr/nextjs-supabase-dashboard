@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
     .select(columns)
     .match(match)
     .range(startPost, endPost)
-    .order('created_at', { ascending: false })
+    .order('id', { ascending: false })
 
   if (error) {
     return NextResponse.json(

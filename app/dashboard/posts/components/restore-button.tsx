@@ -61,7 +61,7 @@ const RestoreButton = (props: RestoreButtonProps) => {
 
   return (
     <button
-      className="text-xs text-blue-500 hover:underline"
+      className="text-xs text-blue-700 hover:underline"
       onClick={handleClick}
       disabled={isSubmitting}
       {...rest}

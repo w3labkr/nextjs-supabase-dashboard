@@ -125,8 +125,8 @@ const SubmitButton = () => {
 
       mutate(`/api/v1/email/list?userId=${user?.id}`)
 
-      const sentUrl = `/api/v1/email/verify?userId=${user?.id}`
-      const sent = await fetcher(sentUrl, {
+      const sendUrl = `/api/v1/email/verify?userId=${user?.id}`
+      const sent = await fetcher(sendUrl, {
         method: 'POST',
         body: JSON.stringify({
           data: { email: formValues?.email },
@@ -135,7 +135,7 @@ const SubmitButton = () => {
 
       if (sent?.error) throw new Error(sent?.error?.message)
 
-      mutate(sentUrl)
+      mutate(sendUrl)
 
       reset()
 

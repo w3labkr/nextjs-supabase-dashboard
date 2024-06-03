@@ -71,7 +71,7 @@ const DeleteEmailAddress = (props: DeleteEmailAddressProps) => {
       <AlertDialogTrigger asChild>
         <Button
           variant="outline"
-          className="h-auto p-1.5 text-red-500 hover:bg-red-500 hover:text-white"
+          className="h-auto p-1.5 text-destructive hover:bg-destructive hover:text-white"
           disabled={isSubmitting}
         >
           <LucideIcon name="Trash" className="size-4 min-w-4" />

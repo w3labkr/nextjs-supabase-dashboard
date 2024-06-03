@@ -16,7 +16,7 @@ const EditLink = (props: EditLinkProps) => {
   return (
     <Link
       href={`/dashboard/posts/edit?id=${post?.id}`}
-      className="text-xs text-blue-500 hover:underline"
+      className="text-xs text-blue-700 hover:underline"
     >
       {t('PostList.EditLink')}
     </Link>

@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
 
   const { data: list, error } = await listQuery
     .range(startPost, endPost)
-    .order('created_at', { ascending: false })
+    .order('id', { ascending: false })
 
   if (error) {
     return NextResponse.json(
