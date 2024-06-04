@@ -24,11 +24,11 @@ import { useAuth } from '@/hooks/use-auth'
 import { EmailsAPI } from '@/types/api'
 import { Email } from '@/types/database'
 
-interface DeleteEmailAddressProps {
+interface DeleteEmailProps {
   item: Email
 }
 
-const DeleteEmailAddress = (props: DeleteEmailAddressProps) => {
+const DeleteEmail = (props: DeleteEmailProps) => {
   const { item } = props
 
   const { t } = useTranslation()
@@ -80,18 +80,18 @@ const DeleteEmailAddress = (props: DeleteEmailAddressProps) => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {t('DeleteEmailAddress.AlertDialogTitle')}
+            {t('DeleteEmail.AlertDialogTitle')}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {t('DeleteEmailAddress.AlertDialogDescription')}
+            {t('DeleteEmail.AlertDialogDescription')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>
-            {t('DeleteEmailAddress.AlertDialogCancel')}
+            {t('DeleteEmail.AlertDialogCancel')}
           </AlertDialogCancel>
           <AlertDialogAction onClick={handleClick}>
-            {t('DeleteEmailAddress.AlertDialogAction')}
+            {t('DeleteEmail.AlertDialogAction')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -99,4 +99,4 @@ const DeleteEmailAddress = (props: DeleteEmailAddressProps) => {
   )
 }
 
-export { DeleteEmailAddress }
+export { DeleteEmail }

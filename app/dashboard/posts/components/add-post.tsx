@@ -10,8 +10,9 @@ import { Button, ButtonProps } from '@/components/ui/button'
 
 import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
+import { PostAPI } from '@/types/api'
 
-interface AddButtonProps
+interface AddPostProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
   text?: string
@@ -19,13 +20,13 @@ interface AddButtonProps
   endIconName?: LucideIconName
 }
 
-const AddButton = (props: AddButtonProps) => {
+const AddPost = (props: AddPostProps) => {
   const { children, text, translate, startIconName, endIconName, ...rest } =
     props
 
-  const { user } = useAuth()
-  const { t } = useTranslation()
   const router = useRouter()
+  const { t } = useTranslation()
+  const { user } = useAuth()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -35,17 +36,19 @@ const AddButton = (props: AddButtonProps) => {
 
       if (!user) throw new Error('Require is not defined.')
 
-      const fetchUrl = `/api/v1/post?userId=${user?.id}`
-      const result = await fetcher(fetchUrl, {
+      const userId = user?.id
+
+      const fetchUrl = `/api/v1/post?userId=${userId}`
+      const { data: post, error } = await fetcher<PostAPI>(fetchUrl, {
         method: 'PUT',
         body: JSON.stringify({
-          data: { title: 'Untitled Post' },
+          data: { title: 'Untitled Post', user_id: userId },
         }),
       })
 
-      if (result?.error) throw new Error(result?.error?.message)
+      if (error) throw new Error(error?.message)
 
-      router.push(`/dashboard/posts/edit?id=${result?.data?.id}`)
+      router.push(`/dashboard/posts/edit?id=${post?.id}`)
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Payment Required')) {
@@ -75,4 +78,4 @@ const AddButton = (props: AddButtonProps) => {
   )
 }
 
-export { AddButton, type AddButtonProps }
+export { AddPost, type AddPostProps }

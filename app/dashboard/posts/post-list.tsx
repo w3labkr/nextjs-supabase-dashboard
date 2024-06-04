@@ -21,11 +21,11 @@ import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { PagingProvider, usePaging, Paging } from '@/components/paging'
 
-import { EditLink } from './components/edit-link'
-import { ViewLink } from './components/view-link'
-import { TrashButton } from './components/trash-button'
-import { RestoreButton } from './components/restore-button'
-import { DeleteButton } from './components/delete-button'
+import { EditPost } from './components/edit-post'
+import { ViewPost } from './components/view-post'
+import { TrashPost } from './components/trash-post'
+import { RestorePost } from './components/restore-post'
+import { DeletePost } from './components/delete-post'
 
 import { cn, getMeta } from '@/lib/utils'
 import { Post, PostStatus } from '@/types/database'
@@ -35,22 +35,26 @@ import { usePostsAPI, useCountPostsAPI } from '@/queries/client/posts'
 
 const PostList = () => {
   const searchParams = useSearchParams()
-  const page = +(searchParams.get('page') ?? '1')
-  const perPage = +(searchParams.get('perPage') ?? '10')
-  const pageSize = +(searchParams.get('pageSize') ?? '10')
-  const status = searchParams.get('status') ?? undefined
+  const page = +((searchParams.get('page') as string) ?? '1')
+  const perPage = +((searchParams.get('perPage') as string) ?? '10')
+  const pageSize = +((searchParams.get('pageSize') as string) ?? '10')
+  const postType = (searchParams.get('postType') as string) ?? 'post'
+  const status = searchParams.get('status') as string
 
   const { user } = useAuth()
   const { count } = usePostsAPI(user?.id ?? null, {
     page,
     perPage,
+    postType,
     status,
   })
 
   const total = count ?? 0
 
   return (
-    <PagingProvider value={{ total, page, perPage, pageSize, status }}>
+    <PagingProvider
+      value={{ total, page, perPage, pageSize, postType, status }}
+    >
       <Header />
       <Body />
       <Footer />
@@ -71,7 +75,7 @@ const Header = () => {
 
   return (
     <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-      <HeadLink status={undefined} label="all" count={count ?? 0} />
+      <HeadLink status={null} label="all" count={count ?? 0} />
       <span>|</span>
       <HeadLink status="publish" label="publish" count={status?.publish ?? 0} />
       <span>|</span>
@@ -89,7 +93,7 @@ const Header = () => {
 }
 
 interface HeadLinkProps {
-  status?: PostStatus
+  status: PostStatus | null
   label: PostStatus | 'all'
   count: number
 }
@@ -98,16 +102,16 @@ const HeadLink = (props: HeadLinkProps) => {
   const { status, label, count } = props
 
   const { t } = useTranslation()
-  const { status: current } = usePaging()
   const { qs } = useQueryString()
   const pathname = usePathname()
+  const paging = usePaging()
 
   return (
     <Link
       href={pathname + '?' + qs({ status, page: 1 })}
       className={cn(
         'h-auto p-0',
-        current === status ? 'text-foreground' : 'text-muted-foreground'
+        paging?.status === status ? 'text-foreground' : 'text-muted-foreground'
       )}
     >
       {t(`PostStatus.${label}`)}({count})
@@ -116,12 +120,14 @@ const HeadLink = (props: HeadLinkProps) => {
 }
 
 const Footer = () => {
+  const paging = usePaging()
+
   const { user } = useAuth()
-  const { page, perPage, status } = usePaging()
   const { posts } = usePostsAPI(user?.id ?? null, {
-    page,
-    perPage,
-    status,
+    page: paging?.page,
+    perPage: paging?.perPage,
+    postType: paging?.postType,
+    status: paging?.status,
   })
 
   if (!posts) return null
@@ -131,12 +137,14 @@ const Footer = () => {
 
 const Body = () => {
   const { t } = useTranslation()
+
+  const paging = usePaging()
   const { user } = useAuth()
-  const { page, perPage, status } = usePaging()
   const { posts } = usePostsAPI(user?.id ?? null, {
-    page,
-    perPage,
-    status,
+    page: paging?.page,
+    perPage: paging?.perPage,
+    postType: paging?.postType,
+    status: paging?.status,
   })
 
   return (
@@ -168,7 +176,7 @@ const Body = () => {
       <TableBody>
         {posts === null ? (
           <LoadingItem />
-        ) : posts?.length > 0 ? (
+        ) : Array.isArray(posts) && posts?.length > 0 ? (
           posts?.map((post: Post) => <PostItem key={post?.id} post={post} />)
         ) : (
           <EmptyItem />
@@ -185,7 +193,7 @@ interface PostItemProps {
 const PostItem = (props: PostItemProps) => {
   const { post } = props
   const { t } = useTranslation()
-  const { status } = usePaging()
+  const paging = usePaging()
 
   return (
     <TableRow>
@@ -197,38 +205,38 @@ const PostItem = (props: PostItemProps) => {
         <div className="flex items-center space-x-2">
           <div className="line-clamp-1">
             <span>
-              {!status && post?.status !== 'publish'
+              {!paging?.status && post?.status !== 'publish'
                 ? `[${t(`PostStatus.${post?.status}`)}] `
                 : null}
             </span>
             <span className="break-all">{post?.title}</span>
           </div>
           {dayjs().isBefore(dayjs(post?.created_at).add(1, 'day')) ? (
-            <Badge variant="destructive" className="text-2xs rounded-none px-1">
-              N
+            <Badge variant="destructive" className="text-2xs px-1.5">
+              New
             </Badge>
           ) : null}
         </div>
         <div className="flex items-center space-x-1">
           {post?.status === 'publish' || post?.status === 'private' ? (
             <>
-              <EditLink post={post} />
+              <EditPost post={post} />
               <span>|</span>
-              <TrashButton post={post} />
+              <TrashPost post={post} />
               <span>|</span>
-              <ViewLink post={post} />
+              <ViewPost post={post} />
             </>
           ) : post?.status === 'trash' ? (
             <>
-              <RestoreButton post={post} />
+              <RestorePost post={post} />
               <span>|</span>
-              <DeleteButton post={post} />
+              <DeletePost post={post} />
             </>
           ) : (
             <>
-              <EditLink post={post} />
+              <EditPost post={post} />
               <span>|</span>
-              <TrashButton post={post} />
+              <TrashPost post={post} />
             </>
           )}
         </div>

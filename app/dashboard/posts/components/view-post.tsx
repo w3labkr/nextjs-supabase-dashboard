@@ -7,11 +7,11 @@ import { useTranslation } from 'react-i18next'
 import { getPostPath } from '@/lib/utils'
 import { Post } from '@/types/database'
 
-interface ViewLinkProps {
+interface ViewPostProps {
   post: Post
 }
 
-const ViewLink = (props: ViewLinkProps) => {
+const ViewPost = (props: ViewPostProps) => {
   const { post } = props
   const { t } = useTranslation()
 
@@ -22,9 +22,9 @@ const ViewLink = (props: ViewLinkProps) => {
       target="_blank"
       rel="noopener noreferrer"
     >
-      {t('PostList.ViewLink')}
+      {t('PostList.ViewPost')}
     </Link>
   )
 }
 
-export { ViewLink, type ViewLinkProps }
+export { ViewPost, type ViewPostProps }

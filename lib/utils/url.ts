@@ -17,7 +17,7 @@ export function setQueryString<T extends Record<string, any>>(
   object: T
 ): string {
   const params = Object.keys(object).reduce((acc: T, k: string) => {
-    if (object[k] === null || object[k] === undefined || object[k] === '') {
+    if (object[k] === undefined || object[k] === null || object[k] === '') {
       return acc
     }
     acc[k as keyof T] = object[k]

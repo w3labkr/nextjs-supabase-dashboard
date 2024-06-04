@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
-import { ApiError, revalidatePaths } from '@/lib/utils'
+import { ApiError, revalidates } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 
 import { transporter, sender } from '@/lib/nodemailer'
@@ -29,12 +29,11 @@ export async function POST(request: NextRequest) {
 
   try {
     const info = await transporter.sendMail(mailOptions)
-    const revalidated = revalidatePaths(options?.revalidatePaths)
 
     return NextResponse.json({
       data: info,
       error: null,
-      revalidated,
+      revalidated: revalidates(options),
       now: Date.now(),
     })
   } catch (e: unknown) {

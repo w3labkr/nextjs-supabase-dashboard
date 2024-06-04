@@ -459,6 +459,12 @@ Slugifies a string
 npm install slugify
 ```
 
+Generate massive amounts of fake data in the browser and node.js
+
+```shell
+npm install @faker-js/faker
+```
+
 ### ESLint
 
 ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.

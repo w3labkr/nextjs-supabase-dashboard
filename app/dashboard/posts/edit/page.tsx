@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { Title } from '@/components/title'
-import { AddButton } from '../components/add-button'
+import { AddPost } from '../components/add-post'
 
 import { BackLink } from './components/back-link'
 import { PostForm } from './post-form'
@@ -16,10 +16,10 @@ export default function PostEditPage({
       <div className="flex items-center space-x-2">
         <BackLink />
         <Title text="PostEditPage.title" translate="yes" />
-        <AddButton
+        <AddPost
           variant="secondary"
           size="sm"
-          text="PostEditPage.AddButton"
+          text="PostEditPage.AddPost"
           translate="yes"
         />
       </div>

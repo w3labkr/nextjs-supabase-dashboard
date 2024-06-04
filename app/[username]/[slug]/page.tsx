@@ -67,7 +67,11 @@ export default async function PostPage({
 
   if (!post) notFound()
 
-  if (post?.status === 'private' || searchParams?.preview === 'true') {
+  if (
+    post?.status === 'future' ||
+    post?.status === 'private' ||
+    searchParams?.preview === 'true'
+  ) {
     const { authenticated } = await authenticate()
     const { session } = await getAuth()
     if (!authenticated) return <Forbidden />

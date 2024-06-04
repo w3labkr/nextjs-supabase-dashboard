@@ -36,7 +36,7 @@ const defaultValues: Partial<FormValues> = {
   email: '',
 }
 
-const AddEmailAddress = () => {
+const AddEmail = () => {
   const { t } = useTranslation()
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -47,10 +47,8 @@ const AddEmailAddress = () => {
   return (
     <div className="space-y-2">
       <div>
-        <span className="text-sm font-semibold">
-          {t('AddEmailAddress.title')}
-        </span>
-        {/* <p className="text-xs">{t('AddEmailAddress.description')}</p> */}
+        <span className="text-sm font-semibold">{t('AddEmail.title')}</span>
+        {/* <p className="text-xs">{t('AddEmail.description')}</p> */}
       </div>
       <Form {...form}>
         <form
@@ -163,4 +161,4 @@ const SubmitButton = () => {
   )
 }
 
-export { AddEmailAddress }
+export { AddEmail }

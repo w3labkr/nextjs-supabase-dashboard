@@ -11,17 +11,16 @@ import { fetcher, setQueryString, getPostPath } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
-interface DeleteButtonProps
+interface DeletePostProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   post: Post
 }
 
-const DeleteButton = (props: DeleteButtonProps) => {
+const DeletePost = (props: DeletePostProps) => {
   const { post, ...rest } = props
-
   const { t } = useTranslation()
-  const { page, perPage, status } = usePaging()
   const { mutate } = useSWRConfig()
+  const paging = usePaging()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -29,27 +28,30 @@ const DeleteButton = (props: DeleteButtonProps) => {
     try {
       setIsSubmitting(true)
 
+      const userId = post?.user_id
+
       const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const result = await fetcher<PostAPI>(fetchUrl, {
+      const { error } = await fetcher<PostAPI>(fetchUrl, {
         method: 'DELETE',
         body: JSON.stringify({
-          data: { user_id: post?.user_id },
+          data: { user_id: userId },
           options: { revalidatePaths: getPostPath(post) },
         }),
       })
 
-      if (result?.error) throw new Error(result?.error?.message)
+      if (error) throw new Error(error?.message)
 
       const query = setQueryString({
-        userId: post?.user_id,
-        page,
-        perPage,
-        status,
+        userId,
+        page: paging?.page,
+        perPage: paging?.perPage,
+        postType: paging?.postType,
+        status: paging?.status,
       })
 
       mutate(fetchUrl)
       mutate(`/api/v1/post/list?${query}`)
-      mutate(`/api/v1/post/count?userId=${post?.user_id}`)
+      mutate(`/api/v1/post/count?userId=${userId}`)
 
       toast.success(t('FormMessage.deleted_successfully'))
     } catch (e: unknown) {
@@ -66,9 +68,9 @@ const DeleteButton = (props: DeleteButtonProps) => {
       disabled={isSubmitting}
       {...rest}
     >
-      {t('PostList.DeleteButton')}
+      {t('PostList.DeletePost')}
     </button>
   )
 }
 
-export { DeleteButton, type DeleteButtonProps }
+export { DeletePost, type DeletePostProps }

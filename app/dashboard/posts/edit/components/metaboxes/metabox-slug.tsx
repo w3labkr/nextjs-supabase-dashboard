@@ -4,7 +4,6 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { debounce } from 'lodash'
-import slugify from 'slugify'
 
 import {
   Accordion,
@@ -16,6 +15,7 @@ import { FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
+import { slugify } from '@/lib/slugify'
 
 const MetaboxSlug = () => {
   const { t } = useTranslation()
@@ -27,14 +27,10 @@ const MetaboxSlug = () => {
   const watchTitle: string = useWatch({ control, name: 'title' })
   const setSlug = React.useCallback(
     (value: string) => {
-      const slugified = slugify(value, {
-        replacement: '-', // replace spaces with replacement character, defaults to `-`
-        remove: /[^\p{L}\d\s]+/gu, // remove characters that match regex, defaults to `undefined`
-        lower: true, // convert to lower case, defaults to `false`
-        strict: false, // strip special characters except replacement, defaults to `false`
-        trim: true, // trim leading and trailing replacement chars, defaults to `true`
+      setValue('slug', slugify(value), {
+        shouldDirty: true,
+        shouldValidate: true,
       })
-      setValue('slug', slugified, { shouldDirty: true, shouldValidate: true })
     },
     [setValue]
   )

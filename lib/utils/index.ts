@@ -1,6 +1,6 @@
 export { cn } from './tailwind'
 export { fetcher } from './fetcher'
-export { revalidatePaths } from './cache'
+export { revalidates, revalidatePaths, revalidateTags } from './cache'
 export {
   httpStatusCodes,
   type HttpStatusCode,
@@ -20,3 +20,4 @@ export {
   getAuthorUrl,
 } from './url'
 export { getMeta, setMeta } from './functions'
+export { generateRecentPosts } from './dummy-text'

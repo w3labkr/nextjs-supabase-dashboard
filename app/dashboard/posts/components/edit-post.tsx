@@ -5,11 +5,11 @@ import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { Post } from '@/types/database'
 
-interface EditLinkProps {
+interface EditPostProps {
   post: Post
 }
 
-const EditLink = (props: EditLinkProps) => {
+const EditPost = (props: EditPostProps) => {
   const { post } = props
   const { t } = useTranslation()
 
@@ -18,9 +18,9 @@ const EditLink = (props: EditLinkProps) => {
       href={`/dashboard/posts/edit?id=${post?.id}`}
       className="text-xs text-blue-700 hover:underline"
     >
-      {t('PostList.EditLink')}
+      {t('PostList.EditPost')}
     </Link>
   )
 }
 
-export { EditLink, type EditLinkProps }
+export { EditPost, type EditPostProps }

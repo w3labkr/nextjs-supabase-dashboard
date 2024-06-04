@@ -5,8 +5,8 @@ import { Description } from '@/components/description'
 import { Separator } from '@/components/ui/separator'
 
 import { EmailList } from './email-list'
-import { AddEmailAddress } from './components/add-email-address'
-import { PrimaryEmailAddress } from './components/primary-email-address'
+import { AddEmail } from './components/add-email'
+import { EditPrimaryEmail } from './components/edit-primary-email'
 
 export default function EmailsPage() {
   return (
@@ -16,9 +16,9 @@ export default function EmailsPage() {
         <Separator />
         <Description text="EmailsSection.description" translate="yes" />
         <EmailList />
-        <AddEmailAddress />
+        <AddEmail />
         <Separator />
-        <PrimaryEmailAddress />
+        <EditPrimaryEmail />
       </div>
     </main>
   )

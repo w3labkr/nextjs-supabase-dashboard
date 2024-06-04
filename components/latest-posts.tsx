@@ -18,13 +18,13 @@ const LatestPosts = (props: LatestPostsProps) => {
   return (
     <div className="space-y-16">
       <div className={cn('columns-1 gap-8 space-y-8', className)}>
-        {posts && posts?.length > 0 ? (
+        {Array.isArray(posts) && posts?.length > 0 ? (
           posts?.map((post: Post) => <LatestItem key={post?.id} post={post} />)
         ) : (
           <EmptyItem />
         )}
       </div>
-      {posts && posts?.length > 0 ? <Paging /> : null}
+      {Array.isArray(posts) && posts?.length > 0 ? <Paging /> : null}
     </div>
   )
 }

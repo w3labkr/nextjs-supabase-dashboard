@@ -33,7 +33,6 @@ import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useEmailsAPI } from '@/queries/client/emails'
 import { EmailAPI } from '@/types/api'
-import { Email } from '@/types/database'
 
 const FormSchema = z.object({
   email: z.string().max(255),
@@ -41,7 +40,7 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-const PrimaryEmailAddress = () => {
+const EditPrimaryEmail = () => {
   const { t } = useTranslation()
   const { user } = useAuth()
   const { emails } = useEmailsAPI(user?.id ?? null)
@@ -63,9 +62,9 @@ const PrimaryEmailAddress = () => {
     <div className="space-y-2">
       <div>
         <span className="text-sm font-semibold">
-          {t('PrimaryEmailAddress.title')}
+          {t('EditPrimaryEmail.title')}
         </span>
-        <p className="text-xs">{t('PrimaryEmailAddress.description')}</p>
+        <p className="text-xs">{t('EditPrimaryEmail.description')}</p>
       </div>
       <Form {...form}>
         <form
@@ -188,4 +187,4 @@ const SubmitButton = () => {
   )
 }
 
-export { PrimaryEmailAddress }
+export { EditPrimaryEmail }

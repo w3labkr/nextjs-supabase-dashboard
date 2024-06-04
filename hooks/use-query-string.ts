@@ -12,7 +12,11 @@ const useQueryString = () => {
 
       if (object) {
         Object.keys(object).forEach((k: string) => {
-          if (object[k] === null || object[k] === undefined) {
+          if (
+            object[k] === undefined ||
+            object[k] === null ||
+            object[k] === ''
+          ) {
             params.delete(k)
             return
           }

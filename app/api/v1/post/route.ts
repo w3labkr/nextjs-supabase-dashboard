@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
-import { ApiError, revalidatePaths } from '@/lib/utils'
+import { ApiError, revalidates } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
 
   const supabase = createClient()
 
-  if (meta && meta?.length > 0) {
+  if (Array.isArray(meta) && meta?.length > 0) {
     const denyMetaKeys: string[] = ['view_count']
     const addMeta = meta
       ?.filter((r: Record<string, any>) => !denyMetaKeys.includes(r.meta_key))
@@ -89,12 +89,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
-  const revalidated = revalidatePaths(options?.revalidatePaths)
-
   return NextResponse.json({
     data: post,
     error: null,
-    revalidated,
+    revalidated: revalidates(options),
     now: Date.now(),
   })
 }
@@ -114,31 +112,73 @@ export async function PUT(request: NextRequest) {
     )
   }
 
-  const supabase = createClient()
-  const total = await supabase
-    .from('posts')
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', userId)
+  const pricingPlan = [
+    { name: 'free', post: 3 },
+    { name: 'basic', post: -1 },
+    { name: 'standard', post: -1 },
+    { name: 'premium', post: -1 },
+  ]
+  const plan = pricingPlan.find((r) => r.name === user?.plan)
 
-  if (total?.error) {
+  if (!plan) {
     return NextResponse.json(
-      { data: null, error: total?.error },
+      { data: null, error: new ApiError(401) },
       { status: 400 }
     )
   }
 
-  const totalCount = total?.count ?? 0
+  const supabase = createClient()
+  const counter = await supabase
+    .from('posts')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', userId)
 
-  if (user?.plan === 'free' && totalCount > 2) {
+  if (counter?.error) {
+    return NextResponse.json(
+      { data: null, error: counter?.error },
+      { status: 400 }
+    )
+  }
+
+  const total = counter?.count ?? 0
+  const overflows = data?.length - total
+
+  if (plan?.post > 0 && total >= plan?.post) {
     return NextResponse.json(
       { data: null, error: new ApiError(402) },
       { status: 402 }
     )
   }
 
+  if (Array.isArray(data) && data?.length > 0 && overflows > 0) {
+    const {
+      data: list,
+      count: listCount,
+      error,
+    } = await supabase
+      .from('posts')
+      .insert(data.slice(0, overflows))
+      .select('*, author:users(*), meta:post_metas(*)')
+
+    if (error) {
+      return NextResponse.json(
+        { data: null, count: null, error },
+        { status: 400 }
+      )
+    }
+
+    return NextResponse.json({
+      data: list,
+      count: listCount ?? 0,
+      error: null,
+      revalidated: revalidates(options),
+      now: Date.now(),
+    })
+  }
+
   const { data: post, error } = await supabase
     .from('posts')
-    .insert({ ...data, user_id: userId })
+    .insert(data)
     .select('*, author:users(*), meta:post_metas(*)')
     .single()
 
@@ -146,12 +186,10 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
-  const revalidated = revalidatePaths(options?.revalidatePaths)
-
   return NextResponse.json({
     data: post,
     error: null,
-    revalidated,
+    revalidated: revalidates(options),
     now: Date.now(),
   })
 }
@@ -178,12 +216,10 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
-  const revalidated = revalidatePaths(options?.revalidatePaths)
-
   return NextResponse.json({
     data: null,
     error: null,
-    revalidated,
+    revalidated: revalidates(options),
     now: Date.now(),
   })
 }

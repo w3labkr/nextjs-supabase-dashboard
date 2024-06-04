@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient, createAdminClient } from '@/supabase/server'
-import { ApiError, revalidatePaths } from '@/lib/utils'
+import { ApiError, revalidates } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import dayjs from 'dayjs'
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
 
   const supabase = createClient()
 
-  if (meta && meta?.length > 0) {
+  if (Array.isArray(meta) && meta?.length > 0) {
     const denyMetaKeys: string[] = []
     const addMeta = meta
       ?.filter((r: Record<string, any>) => !denyMetaKeys.includes(r.meta_key))
@@ -115,12 +115,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
-  const revalidated = revalidatePaths(options?.revalidatePaths)
-
   return NextResponse.json({
     data: newUser,
     error: null,
-    revalidated,
+    revalidated: revalidates(options),
     now: Date.now(),
   })
 }
@@ -143,7 +141,7 @@ export async function DELETE(request: NextRequest) {
   const bucketId = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET!
   const { data: list } = await supabase.storage.from(bucketId).list(id)
 
-  if (list && list?.length > 0) {
+  if (Array.isArray(list) && list?.length > 0) {
     const files = list.map((file) => `${id}/${file?.name}`)
     const removed = await supabase.storage.from(bucketId).remove(files)
     if (removed?.error) {
@@ -164,12 +162,10 @@ export async function DELETE(request: NextRequest) {
     )
   }
 
-  const revalidated = revalidatePaths(options?.revalidatePaths)
-
   return NextResponse.json({
     data: null,
     error: null,
-    revalidated,
+    revalidated: revalidates(options),
     now: Date.now(),
   })
 }

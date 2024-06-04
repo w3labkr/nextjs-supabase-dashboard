@@ -59,6 +59,7 @@ export default async function FavoritesPage({
   const { posts, count } = await getFavoritePostsAPI(user?.id ?? null, {
     page,
     perPage,
+    postType: 'post',
     status: 'publish',
   })
 

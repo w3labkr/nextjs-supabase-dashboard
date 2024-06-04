@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
-import { ApiError, revalidatePaths } from '@/lib/utils'
+import { ApiError, revalidates } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 
 export async function GET(request: NextRequest) {
@@ -56,12 +56,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
-  const revalidated = revalidatePaths(options?.revalidatePaths)
-
   return NextResponse.json({
     data: null,
     error: null,
-    revalidated,
+    revalidated: revalidates(options),
     now: Date.now(),
   })
 }

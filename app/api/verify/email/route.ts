@@ -6,11 +6,11 @@ import { VerifyTokenPayload } from '@/types/token'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
-  const next = searchParams.get('next') ?? '/'
+  const next = (searchParams.get('next') as string) ?? '/'
   const redirectTo = request.nextUrl.clone()
   redirectTo.pathname = next
 
-  const token_hash = searchParams.get('token_hash') ?? ''
+  const token_hash = (searchParams.get('token_hash') as string) ?? ''
   const token = jwtVerify(token_hash)
 
   if (token?.error) {

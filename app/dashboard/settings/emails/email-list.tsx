@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { DeleteEmailAddress } from './components/delete-email-address'
+import { DeleteEmail } from './components/delete-email'
 import { ResendVerifyEmail } from './components/resend-verify-email'
 
 import { Email } from '@/types/database'
@@ -46,9 +46,7 @@ const EmailItem = (props: EmailItemProps) => {
             ) : null}
           </div>
           <div className="ml-auto">
-            {item?.email !== user?.email ? (
-              <DeleteEmailAddress item={item} />
-            ) : null}
+            {item?.email !== user?.email ? <DeleteEmail item={item} /> : null}
           </div>
         </div>
         {item?.email === user?.email ? (

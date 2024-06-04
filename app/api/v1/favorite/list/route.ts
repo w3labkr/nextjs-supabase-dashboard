@@ -24,21 +24,21 @@ export async function GET(request: NextRequest) {
     '*, author:users(*), meta:post_metas(*), favorite:favorites!inner(*)'
 
   const supabase = createClient()
-  const totalQuery = supabase
+  const counterQuery = supabase
     .from('posts')
     .select(columns, { count: 'exact', head: true })
     .match(match)
 
-  const total = await totalQuery
-  const totalPost = total?.count ?? 0
-  const startPost = (page - 1) * perPage
-  const endPost = page * perPage - 1
+  const counter = await counterQuery
+  const total = counter?.count ?? 0
+  const startingIndex = (page - 1) * perPage
+  const lastIndex = page * perPage - 1
 
   const { data: list, error } = await supabase
     .from('posts')
     .select(columns)
     .match(match)
-    .range(startPost, endPost)
+    .range(startingIndex, lastIndex)
     .order('id', { ascending: false })
 
   if (error) {
@@ -49,9 +49,9 @@ export async function GET(request: NextRequest) {
   }
 
   const data = list?.map((item: Post, index: number) => {
-    item['num'] = totalPost - startPost - index
+    item['num'] = total - startingIndex - index
     return item
   })
 
-  return NextResponse.json({ data, count: totalPost, error: null })
+  return NextResponse.json({ data, count: total, error: null })
 }

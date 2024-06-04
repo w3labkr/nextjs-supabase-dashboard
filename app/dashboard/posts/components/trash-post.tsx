@@ -11,17 +11,15 @@ import { fetcher, setQueryString, getPostPath } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
-interface RestoreButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface TrashPostProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   post: Post
 }
 
-const RestoreButton = (props: RestoreButtonProps) => {
+const TrashPost = (props: TrashPostProps) => {
   const { post, ...rest } = props
-
   const { t } = useTranslation()
-  const { page, perPage, status } = usePaging()
   const { mutate } = useSWRConfig()
+  const paging = usePaging()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -29,29 +27,33 @@ const RestoreButton = (props: RestoreButtonProps) => {
     try {
       setIsSubmitting(true)
 
+      const userId = post?.user_id
+      const now = new Date().toISOString()
+
       const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const result = await fetcher<PostAPI>(fetchUrl, {
+      const { error } = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          data: { user_id: post?.user_id, status: 'draft', deleted_at: null },
+          data: { status: 'trash', user_id: userId, deleted_at: now },
           options: { revalidatePaths: getPostPath(post) },
         }),
       })
 
-      if (result?.error) throw new Error(result?.error?.message)
+      if (error) throw new Error(error?.message)
 
       const query = setQueryString({
-        userId: post?.user_id,
-        page,
-        perPage,
-        status,
+        userId,
+        page: paging?.page,
+        perPage: paging?.perPage,
+        postType: paging?.postType,
+        status: paging?.status,
       })
 
       mutate(fetchUrl)
       mutate(`/api/v1/post/list?${query}`)
-      mutate(`/api/v1/post/count?userId=${post?.user_id}`)
+      mutate(`/api/v1/post/count?userId=${userId}`)
 
-      toast.success(t('FormMessage.changed_successfully'))
+      toast.success(t('FormMessage.deleted_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -61,14 +63,14 @@ const RestoreButton = (props: RestoreButtonProps) => {
 
   return (
     <button
-      className="text-xs text-blue-700 hover:underline"
+      className="text-xs text-destructive hover:underline"
       onClick={handleClick}
       disabled={isSubmitting}
       {...rest}
     >
-      {t('PostList.RestoreButton')}
+      {t('PostList.TrashPost')}
     </button>
   )
 }
 
-export { RestoreButton, type RestoreButtonProps }
+export { TrashPost, type TrashPostProps }

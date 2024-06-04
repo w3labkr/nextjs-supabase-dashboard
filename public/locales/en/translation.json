@@ -46,13 +46,14 @@
   "PostListPage": {
     "title": "Posts",
     "description": "Create and manage posts.",
-    "AddButton": "New post"
+    "AddPost": "New post",
+    "AddDummyPost": "Dummy post"
   },
 
   "PostEditPage": {
     "title": "Edit Post",
     "description": "",
-    "AddButton": "Add New"
+    "AddPost": "Add New"
   },
 
   "ProfileSection": {
@@ -323,17 +324,17 @@
     "description": "This email cannot be used as your profile or author address."
   },
 
-  "AddEmailAddress": {
+  "AddEmail": {
     "title": "Add email address",
     "description": ""
   },
 
-  "PrimaryEmailAddress": {
+  "EditPrimaryEmail": {
     "title": "Primary email address",
     "description": "Your primary email address may be used to receive account-related notifications and reset your password."
   },
 
-  "DeleteEmailAddress": {
+  "DeleteEmail": {
     "AlertDialogTitle": "Are you sure you want to remove this email from your account?",
     "AlertDialogDescription": "Once deleted, this email address will no longer be associated with your account.",
     "AlertDialogCancel": "Cancel",
@@ -341,12 +342,12 @@
   },
 
   "PostList": {
-    "EditLink": "Edit",
-    "ViewLink": "View",
-    "TrashButton": "Trash",
-    "ClonePostButton": "Clone",
-    "RestoreButton": "Restore",
-    "DeleteButton": "Delete"
+    "EditPost": "Edit",
+    "ViewPost": "View",
+    "TrashPost": "Trash",
+    "RestorePost": "Restore",
+    "DeletePost": "Delete",
+    "ClonePost": "Clone"
   },
 
   "PostStatus": {
