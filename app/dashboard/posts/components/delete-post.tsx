@@ -31,7 +31,7 @@ const DeletePost = (props: DeletePostProps) => {
       const userId = post?.user_id
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const { error } = await fetcher<PostAPI>(fetchUrl, {
+      const deleted = await fetcher<PostAPI>(fetchUrl, {
         method: 'DELETE',
         body: JSON.stringify({
           data: { user_id: userId },
@@ -39,7 +39,7 @@ const DeletePost = (props: DeletePostProps) => {
         }),
       })
 
-      if (error) throw new Error(error?.message)
+      if (deleted?.error) throw new Error(deleted?.error?.message)
 
       const query = setQueryString({
         userId,

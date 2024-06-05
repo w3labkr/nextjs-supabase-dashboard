@@ -80,12 +80,15 @@ export async function POST(request: NextRequest) {
       ?.filter((r: Record<string, any>) => !r.id)
 
     if (addMeta) {
-      const { error } = await supabase
+      const inserted = await supabase
         .from('user_metas')
         .insert(addMeta)
         .select()
-      if (error) {
-        return NextResponse.json({ data: null, error }, { status: 400 })
+      if (inserted?.error) {
+        return NextResponse.json(
+          { data: null, error: inserted?.error },
+          { status: 400 }
+        )
       }
     }
 
@@ -94,12 +97,15 @@ export async function POST(request: NextRequest) {
       ?.filter((r: Record<string, any>) => r.id)
 
     if (editMeta) {
-      const { error } = await supabase
+      const upserted = await supabase
         .from('user_metas')
         .upsert(editMeta)
         .select()
-      if (error) {
-        return NextResponse.json({ data: null, error }, { status: 400 })
+      if (upserted?.error) {
+        return NextResponse.json(
+          { data: null, error: upserted?.error },
+          { status: 400 }
+        )
       }
     }
   }

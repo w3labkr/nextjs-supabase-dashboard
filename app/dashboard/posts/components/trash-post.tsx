@@ -31,7 +31,7 @@ const TrashPost = (props: TrashPostProps) => {
       const now = new Date().toISOString()
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const { error } = await fetcher<PostAPI>(fetchUrl, {
+      const updated = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
           data: { status: 'trash', user_id: userId, deleted_at: now },
@@ -39,7 +39,7 @@ const TrashPost = (props: TrashPostProps) => {
         }),
       })
 
-      if (error) throw new Error(error?.message)
+      if (updated?.error) throw new Error(updated?.error?.message)
 
       const query = setQueryString({
         userId,

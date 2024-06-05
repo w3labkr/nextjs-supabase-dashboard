@@ -10,6 +10,7 @@ type SlugifyOptions =
       locale?: string
       trim?: boolean
     }
+  | undefined
 
 const slugify = (string: string, options?: SlugifyOptions): string => {
   const defaults = {
@@ -22,7 +23,11 @@ const slugify = (string: string, options?: SlugifyOptions): string => {
 
   let settings: SlugifyOptions = defaults
 
-  if (typeof options === 'object') {
+  if (
+    typeof options === 'object' &&
+    !Array.isArray(options) &&
+    Object.keys(options).length > 0
+  ) {
     settings = Object.assign({}, defaults, options)
   } else if (typeof options === 'string') {
     settings = options

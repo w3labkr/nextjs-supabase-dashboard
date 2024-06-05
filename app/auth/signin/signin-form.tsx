@@ -132,6 +132,7 @@ const SubmitButton = () => {
     try {
       setIsSubmitting(true)
 
+      // if "next" is in param, use it as the redirect URL
       const next = (searchParams.get('next') as string) ?? '/dashboard'
       const formValues = getValues()
 

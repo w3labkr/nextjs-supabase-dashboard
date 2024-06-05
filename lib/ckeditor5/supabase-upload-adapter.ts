@@ -7,7 +7,7 @@ import { createClient } from '@/supabase/client'
 
 // https://ckeditor.com/docs/ckeditor5/latest/framework/deep-dive/upload-adapter.html
 // https://ckeditor.com/docs/ckeditor5/latest/api/module_upload_filerepository-FileLoader.html
-class MyUploadAdapter {
+class SupabaseUploadAdapter {
   loader: FileLoader
 
   constructor(loader: FileLoader) {
@@ -50,10 +50,10 @@ class MyUploadAdapter {
   }
 }
 
-export function MyUploadAdapterPlugin(editor: any) {
+export function SupabaseUploadAdapterPlugin(editor: any) {
   editor.plugins.get('FileRepository').createUploadAdapter = (
     loader: FileLoader
   ) => {
-    return new MyUploadAdapter(loader)
+    return new SupabaseUploadAdapter(loader)
   }
 }

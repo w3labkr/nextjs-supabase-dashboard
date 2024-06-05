@@ -41,14 +41,14 @@ const AddDummyPost = (props: AddDummyPostProps) => {
       const userId = user?.id
 
       const fetchUrl = `/api/v1/post?userId=${userId}`
-      const { error } = await fetcher<PostAPI>(fetchUrl, {
+      const inserted = await fetcher<PostAPI>(fetchUrl, {
         method: 'PUT',
         body: JSON.stringify({
           data: generateRecentPosts(userId, 1),
         }),
       })
 
-      if (error) throw new Error(error?.message)
+      if (inserted?.error) throw new Error(inserted?.error?.message)
 
       const query = setQueryString({
         userId,

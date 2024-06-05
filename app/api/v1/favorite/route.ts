@@ -46,14 +46,17 @@ export async function POST(request: NextRequest) {
   const { data, options } = await request.json()
 
   const supabase = createClient()
-  const { error } = await supabase.rpc('set_favorite', {
+  const updated = await supabase.rpc('set_favorite', {
     postid: postId,
     userid: userId,
     isfavorite: data?.is_favorite,
   })
 
-  if (error) {
-    return NextResponse.json({ data: null, error }, { status: 400 })
+  if (updated?.error) {
+    return NextResponse.json(
+      { data: null, error: updated?.error },
+      { status: 400 }
+    )
   }
 
   return NextResponse.json({

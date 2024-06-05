@@ -5,16 +5,15 @@ import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from 'ckeditor5-custom-build'
 import type { EditorConfig } from '@ckeditor/ckeditor5-core'
 import EventInfo from '@ckeditor/ckeditor5-utils/src/eventinfo'
-import { MyUploadAdapterPlugin } from './upload-adapter'
+import { SupabaseUploadAdapterPlugin } from '@/lib/ckeditor5/supabase-upload-adapter'
+import '@/lib/ckeditor5/style.css'
+import '@/ckeditor5/build/translations/ko.js'
 
 import { defaultLng } from '@/i18next.config'
 import { useAppSelector } from '@/lib/redux/hooks'
 import { useAuth } from '@/hooks/use-auth'
 import { useFormContext } from 'react-hook-form'
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
-
-import '@/ckeditor5/build/translations/ko.js'
-import './style.css'
 
 // prettier-ignore
 const editorConfiguration: EditorConfig = {
@@ -150,7 +149,7 @@ const editorConfiguration: EditorConfig = {
   ],
 
   extraPlugins: [
-    MyUploadAdapterPlugin
+    SupabaseUploadAdapterPlugin
   ],
 }
 

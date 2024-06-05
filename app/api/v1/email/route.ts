@@ -18,13 +18,16 @@ export async function POST(request: NextRequest) {
   }
 
   const supabaseAdmin = createAdminClient()
-  const { error } = await supabaseAdmin.updateUserById(userId, {
+  const updated = await supabaseAdmin.updateUserById(userId, {
     email: data?.email,
     user_metadata: { email: data?.email },
   })
 
-  if (error) {
-    return NextResponse.json({ data: null, error }, { status: 400 })
+  if (updated?.error) {
+    return NextResponse.json(
+      { data: null, error: updated?.error },
+      { status: 400 }
+    )
   }
 
   return NextResponse.json({

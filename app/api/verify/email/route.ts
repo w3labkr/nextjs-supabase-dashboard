@@ -6,6 +6,7 @@ import { VerifyTokenPayload } from '@/types/token'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
+  // if "next" is in param, use it as the redirect URL
   const next = (searchParams.get('next') as string) ?? '/'
   const redirectTo = request.nextUrl.clone()
   redirectTo.pathname = next

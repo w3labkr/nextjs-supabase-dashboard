@@ -12,6 +12,7 @@ Denpendency
 - Supabase OAuth with PKCE flow (@supabase/ssr)
 - Supabase Email Auth with PKCE flow (@supabase/ssr)
 - Supabase Role-based Access Control (RBAC)
+- CKEditor 5 + Supabase Upload Adapter
 
 > The administrator page cannot be viewed on the demo page.  
 > Check the files in the `app/dashboard/admin` directory.

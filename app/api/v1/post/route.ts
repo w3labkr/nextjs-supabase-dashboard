@@ -54,12 +54,15 @@ export async function POST(request: NextRequest) {
       ?.filter((r: Record<string, any>) => !r.id)
 
     if (addMeta) {
-      const { error } = await supabase
+      const insersted = await supabase
         .from('post_metas')
         .insert(addMeta)
         .select()
-      if (error) {
-        return NextResponse.json({ data: null, error }, { status: 400 })
+      if (insersted?.error) {
+        return NextResponse.json(
+          { data: null, error: insersted?.error },
+          { status: 400 }
+        )
       }
     }
 
@@ -68,12 +71,15 @@ export async function POST(request: NextRequest) {
       ?.filter((r: Record<string, any>) => r.id)
 
     if (editMeta) {
-      const { error } = await supabase
+      const upserted = await supabase
         .from('post_metas')
         .upsert(editMeta)
         .select()
-      if (error) {
-        return NextResponse.json({ data: null, error }, { status: 400 })
+      if (upserted?.error) {
+        return NextResponse.json(
+          { data: null, error: upserted?.error },
+          { status: 400 }
+        )
       }
     }
   }
@@ -210,10 +216,13 @@ export async function DELETE(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const { error } = await supabase.from('posts').delete().match({ id, user_id })
+  const deleted = await supabase.from('posts').delete().match({ id, user_id })
 
-  if (error) {
-    return NextResponse.json({ data: null, error }, { status: 400 })
+  if (deleted?.error) {
+    return NextResponse.json(
+      { data: null, error: deleted?.error },
+      { status: 400 }
+    )
   }
 
   return NextResponse.json({

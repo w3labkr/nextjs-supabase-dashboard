@@ -31,7 +31,7 @@ const RestorePost = (props: RestorePostProps) => {
       const userId = post?.user_id
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const { error } = await fetcher<PostAPI>(fetchUrl, {
+      const updated = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
           data: { user_id: userId, status: 'draft', deleted_at: null },
@@ -39,7 +39,7 @@ const RestorePost = (props: RestorePostProps) => {
         }),
       })
 
-      if (error) throw new Error(error?.message)
+      if (updated?.error) throw new Error(updated?.error?.message)
 
       const query = setQueryString({
         userId,

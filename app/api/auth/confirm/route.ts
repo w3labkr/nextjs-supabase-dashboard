@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const token_hash = searchParams.get('token_hash') as string
   const type = searchParams.get('type') as EmailOtpType | null
+  // if "next" is in param, use it as the redirect URL
   const next = (searchParams.get('next') as string) ?? '/'
   const redirectTo = request.nextUrl.clone()
   redirectTo.pathname = next
@@ -36,10 +37,8 @@ export async function GET(request: NextRequest) {
       }
     )
 
-    const { error } = await supabase.auth.verifyOtp({
-      type,
-      token_hash,
-    })
+    const { error } = await supabase.auth.verifyOtp({ type, token_hash })
+
     if (!error) {
       return NextResponse.redirect(redirectTo)
     }
