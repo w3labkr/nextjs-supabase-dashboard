@@ -35,9 +35,13 @@ grant all privileges on all tables in schema cron to postgres;
 --                                                            --
 ----------------------------------------------------------------
 
-select cron.schedule('hourly-publish-future-posts', '0 * * * *', 'SELECT hourly_publish_future_posts()');
+truncate table cron.job_run_details restart identity;
+
+select cron.unschedule('hourly-publish-future-posts');
 
 drop function if exists hourly_publish_future_posts;
+
+select cron.schedule('hourly-publish-future-posts', '0 * * * *', 'SELECT hourly_publish_future_posts()');
 
 ----------------------------------------------------------------
 --                                                            --

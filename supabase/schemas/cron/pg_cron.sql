@@ -51,3 +51,6 @@ grant all privileges on all tables in schema cron to postgres;
 
 -- Viewing previously ran jobs
 -- select * from cron.job_run_details order by start_time desc;
+
+-- Clearing previously ran jobs
+truncate table cron.job_run_details restart identity;
