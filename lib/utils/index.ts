@@ -18,8 +18,14 @@ export {
   getPostUrl,
   getAuthorPath,
   getAuthorUrl,
+  getAuthorFavoritesPath,
+  getAuthorFavoritesUrl,
+  getArchivePath,
+  getArchiveUrl,
   getProfilePath,
   getProfileUrl,
+  getFavoritesPath,
+  getFavoritesUrl,
 } from './url'
 export { getMeta, setMeta } from './functions'
 export { generateRecentPosts } from './dummy-text'

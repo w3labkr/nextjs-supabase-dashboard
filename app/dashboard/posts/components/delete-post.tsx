@@ -12,6 +12,7 @@ import {
   setQueryString,
   getPostPath,
   getAuthorPath,
+  getAuthorFavoritesPath,
 } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
@@ -33,14 +34,18 @@ const DeletePost = (props: DeletePostProps) => {
     try {
       setIsSubmitting(true)
 
+      const revalidatePaths = [
+        getPostPath(post),
+        getAuthorPath(post),
+        getAuthorFavoritesPath(post),
+      ]
+
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const deleted = await fetcher<PostAPI>(fetchUrl, {
         method: 'DELETE',
         body: JSON.stringify({
           data: { user_id: post?.user_id },
-          options: {
-            revalidatePaths: [getPostPath(post), getAuthorPath(post)],
-          },
+          options: { revalidatePaths },
         }),
       })
 

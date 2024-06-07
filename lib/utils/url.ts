@@ -1,4 +1,4 @@
-import { Post } from '@/types/database'
+import { Post, User } from '@/types/database'
 
 export function absoluteUrl(pathname?: string): string {
   const origin = process.env.NEXT_PUBLIC_SITE_URL!
@@ -64,6 +64,24 @@ export function getAuthorUrl(
   return pathname ? absoluteUrl(pathname) : null
 }
 
+export function getAuthorFavoritesPath(
+  post: Partial<Post> | null,
+  params?: { username?: string | null }
+): string | null {
+  const pathname = getAuthorPath(post, params)
+
+  return pathname ? pathname + '/favorites' : null
+}
+
+export function getAuthorFavoritesUrl(
+  post: Partial<Post> | null,
+  params?: { username?: string | null }
+): string | null {
+  const pathname = getAuthorFavoritesPath(post, params)
+
+  return pathname ? absoluteUrl(pathname) : null
+}
+
 export function getArchivePath(): string {
   return `/posts`
 }
@@ -72,12 +90,38 @@ export function getArchiveUrl(): string {
   return absoluteUrl(getArchivePath())
 }
 
-export function getProfilePath(username?: string | null): string | null {
-  return username ? `/${username}` : null
+export function getProfilePath(
+  user: User | null,
+  params?: { username?: string | null }
+): string | null {
+  const pathname = params?.username ?? user?.username
+
+  return pathname ? `/${pathname}` : null
 }
 
-export function getProfileUrl(username?: string | null): string | null {
-  const pathname = getProfilePath(username)
+export function getProfileUrl(
+  user: User | null,
+  params?: { username?: string | null }
+): string | null {
+  const pathname = getProfilePath(user, params)
+
+  return pathname ? absoluteUrl(pathname) : null
+}
+
+export function getFavoritesPath(
+  user: User | null,
+  params?: { username?: string | null }
+): string | null {
+  const pathname = getProfilePath(user, params)
+
+  return pathname ? pathname + '/favorites' : null
+}
+
+export function getFavoritesUrl(
+  user: User | null,
+  params?: { username?: string | null }
+): string | null {
+  const pathname = getFavoritesPath(user, params)
 
   return pathname ? absoluteUrl(pathname) : null
 }

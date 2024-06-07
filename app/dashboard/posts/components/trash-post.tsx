@@ -12,6 +12,7 @@ import {
   setQueryString,
   getPostPath,
   getAuthorPath,
+  getAuthorFavoritesPath,
 } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
@@ -33,15 +34,18 @@ const TrashPost = (props: TrashPostProps) => {
       setIsSubmitting(true)
 
       const now = new Date().toISOString()
+      const revalidatePaths = [
+        getPostPath(post),
+        getAuthorPath(post),
+        getAuthorFavoritesPath(post),
+      ]
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const updated = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
           data: { status: 'trash', user_id: post?.user_id, deleted_at: now },
-          options: {
-            revalidatePaths: [getPostPath(post), getAuthorPath(post)],
-          },
+          options: { revalidatePaths },
         }),
       })
 

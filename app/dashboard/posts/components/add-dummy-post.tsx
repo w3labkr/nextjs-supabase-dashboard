@@ -13,7 +13,8 @@ import {
   setQueryString,
   generateRecentPosts,
   getPostPath,
-  getAuthorPath,
+  getProfilePath,
+  getFavoritesPath,
 } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { PostAPI } from '@/types/api'
@@ -48,21 +49,21 @@ const AddDummyPost = (props: AddDummyPostProps) => {
       if (!user) throw new Error('Require is not defined.')
 
       const posts = generateRecentPosts(user?.id, 1)
-      const postPaths = posts.map((post: Partial<Post>) =>
+      const postPaths = posts?.map((post: Partial<Post>) =>
         getPostPath(post, { username: user?.username })
       )
+      const revalidatePaths = [
+        ...postPaths,
+        getProfilePath(user),
+        getFavoritesPath(user),
+      ]
 
       const fetchUrl = `/api/v1/post?userId=${user?.id}`
       const inserted = await fetcher<PostAPI>(fetchUrl, {
         method: 'PUT',
         body: JSON.stringify({
           data: posts,
-          options: {
-            revalidatePaths: [
-              ...postPaths,
-              getAuthorPath(null, { username: user?.username }),
-            ],
-          },
+          options: { revalidatePaths },
         }),
       })
 

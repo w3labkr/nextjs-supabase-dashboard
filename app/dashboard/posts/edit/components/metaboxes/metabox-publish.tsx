@@ -18,7 +18,13 @@ import { Button } from '@/components/ui/button'
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getMeta, getPostPath, getAuthorPath } from '@/lib/utils'
+import {
+  fetcher,
+  getMeta,
+  getPostPath,
+  getAuthorPath,
+  getAuthorFavoritesPath,
+} from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 
 const MetaboxPublish = () => {
@@ -105,16 +111,18 @@ const DraftButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const formValues = getValues()
+      const revalidatePaths = [
+        getPostPath(post),
+        getAuthorPath(post),
+        getAuthorFavoritesPath(post),
+      ]
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          data: { ...formValues, status: 'draft' },
-          options: {
-            revalidatePaths: [getPostPath(post), getAuthorPath(post)],
-          },
+          data: { ...getValues(), status: 'draft' },
+          options: { revalidatePaths },
         }),
       })
 
@@ -200,17 +208,19 @@ const PreviewButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const formValues = getValues()
       const postPath = getPostPath(post)
+      const revalidatePaths = [
+        postPath,
+        getAuthorPath(post),
+        getAuthorFavoritesPath(post),
+      ]
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          data: { ...formValues, status: 'draft' },
-          options: {
-            revalidatePaths: [postPath, getAuthorPath(post)],
-          },
+          data: { ...getValues(), status: 'draft' },
+          options: { revalidatePaths },
         }),
       })
 
@@ -263,20 +273,24 @@ const TrashButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const formValues = getValues()
+      const fetchData = {
+        ...getValues(),
+        status: 'trash',
+        deleted_at: new Date().toISOString(),
+      }
+
+      const revalidatePaths = [
+        getPostPath(post),
+        getAuthorPath(post),
+        getAuthorFavoritesPath(post),
+      ]
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          data: {
-            ...formValues,
-            status: 'trash',
-            deleted_at: new Date().toISOString(),
-          },
-          options: {
-            revalidatePaths: [getPostPath(post), getAuthorPath(post)],
-          },
+          data: fetchData,
+          options: { revalidatePaths },
         }),
       })
 
@@ -334,6 +348,12 @@ const PublishButton = () => {
       let status: string = visibility === 'private' ? 'private' : 'publish'
       if (future_date) status = 'future'
 
+      const revalidatePaths = [
+        getPostPath(post),
+        getAuthorPath(post),
+        getAuthorFavoritesPath(post),
+      ]
+
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
@@ -341,9 +361,7 @@ const PublishButton = () => {
           data: post?.date
             ? { ...formValues, status }
             : { ...formValues, status, date: now },
-          options: {
-            revalidatePaths: [getPostPath(post), getAuthorPath(post)],
-          },
+          options: { revalidatePaths },
         }),
       })
 

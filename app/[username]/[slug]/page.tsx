@@ -79,6 +79,7 @@ export default async function PostPage({
   } else if (post?.status !== 'publish') {
     notFound()
   }
+
   const { previousPost, nextPost } = await getAdjacentPostAPI(post?.id, {
     userId: post?.user_id,
     postType: 'post',

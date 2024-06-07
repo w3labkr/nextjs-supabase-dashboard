@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { toast } from 'sonner'
 import { LucideIcon } from '@/lib/lucide-icon'
-import { cn, fetcher, getProfilePath } from '@/lib/utils'
+import { cn, fetcher, getFavoritesPath } from '@/lib/utils'
 
 import { useSWRConfig } from 'swr'
 import { useAuth } from '@/hooks/use-auth'
@@ -48,17 +48,16 @@ const SignedInAction = (props: FavoriteButtonProps) => {
     try {
       setIsSubmitting(true)
 
-      const username = user?.username
-
       if (!user) throw new Error('Require is not defined.')
-      if (!username) throw new Error('Require is not defined.')
+
+      const revalidatePaths = [getFavoritesPath(user)]
 
       const fetchUrl = `/api/v1/favorite?postId=${post?.id}&userId=${user?.id}`
       const result = await fetcher<FavoriteAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
           data: { is_favorite: !isLike },
-          options: { revalidatePaths: getProfilePath(username) + '/favorites' },
+          options: { revalidatePaths },
         }),
       })
 

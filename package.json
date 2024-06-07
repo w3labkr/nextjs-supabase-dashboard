@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
-    "build": "npm run gen-types && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "clean:dir": "rm -rf node_modules && rm -rf .next",
