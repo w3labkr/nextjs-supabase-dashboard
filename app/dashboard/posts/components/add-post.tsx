@@ -36,13 +36,11 @@ const AddPost = (props: AddPostProps) => {
 
       if (!user) throw new Error('Require is not defined.')
 
-      const userId = user?.id
-
-      const fetchUrl = `/api/v1/post?userId=${userId}`
+      const fetchUrl = `/api/v1/post?userId=${user?.id}`
       const { data: post, error } = await fetcher<PostAPI>(fetchUrl, {
         method: 'PUT',
         body: JSON.stringify({
-          data: { title: 'Untitled Post', user_id: userId },
+          data: { title: 'Untitled Post', user_id: user?.id },
         }),
       })
 

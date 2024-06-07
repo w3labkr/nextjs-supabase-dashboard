@@ -3,7 +3,7 @@ import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
-import { cn, getAuthorUrl } from '@/lib/utils'
+import { cn, getProfilePath } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { Separator } from '@/components/ui/separator'
 import { Header } from '@/components/header'
@@ -64,6 +64,7 @@ export default async function UserPage({
   })
 
   const total = count ?? 0
+  const profilePath = getProfilePath(username)
 
   return (
     <>
@@ -89,7 +90,7 @@ export default async function UserPage({
                     Recent
                   </Link>
                   <Link
-                    href={getAuthorUrl(username) + '/favorites'}
+                    href={profilePath ? profilePath + '/favorites' : '#'}
                     className={cn(
                       'flex w-full items-center sm:w-auto',
                       'text-muted-foreground'

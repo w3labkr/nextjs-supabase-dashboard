@@ -32,7 +32,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getAuthorPath } from '@/lib/utils'
+import { fetcher, getProfilePath } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useUserAPI } from '@/queries/client/users'
 import { useEmailsAPI } from '@/queries/client/emails'
@@ -218,7 +218,7 @@ const SubmitButton = () => {
         method: 'POST',
         body: JSON.stringify({
           data: fetchData,
-          options: { revalidatePaths: getAuthorPath(user?.username) },
+          options: { revalidatePaths: getProfilePath(user?.username) },
         }),
       })
 

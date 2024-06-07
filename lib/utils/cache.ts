@@ -21,14 +21,14 @@ export function revalidates(options: {
 export function revalidatePaths(paths?: string | string[] | null): boolean {
   let revalidated: boolean = false
 
-  if (typeof paths === 'string') {
-    revalidatePath(encodeURI(paths))
-    revalidated = true
-  } else if (Array.isArray(paths) && paths?.length > 0) {
+  if (Array.isArray(paths) && paths?.length > 0) {
     paths.forEach((path: string) => {
       revalidatePath(encodeURI(path))
       revalidated = true
     })
+  } else if (typeof paths === 'string') {
+    revalidatePath(encodeURI(paths))
+    revalidated = true
   }
 
   return revalidated
@@ -37,14 +37,14 @@ export function revalidatePaths(paths?: string | string[] | null): boolean {
 export function revalidateTags(tags?: string | string[] | null): boolean {
   let revalidated: boolean = false
 
-  if (typeof tags === 'string') {
-    revalidateTag(tags)
-    revalidated = true
-  } else if (Array.isArray(tags) && tags?.length > 0) {
+  if (Array.isArray(tags) && tags?.length > 0) {
     tags.forEach((path: string) => {
       revalidateTag(path)
       revalidated = true
     })
+  } else if (typeof tags === 'string') {
+    revalidateTag(tags)
+    revalidated = true
   }
 
   return revalidated

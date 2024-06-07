@@ -17,7 +17,7 @@ const Permalink = () => {
   const [permalink, setPermalink] = React.useState<string>('')
 
   React.useEffect(() => {
-    const url = getPostUrl(post, watchSlug)
+    const url = getPostUrl(post, { slug: watchSlug })
     if (url) setPermalink(url)
   }, [post, watchSlug])
 

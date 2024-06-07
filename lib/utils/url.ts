@@ -28,29 +28,56 @@ export function setQueryString<T extends Record<string, any>>(
 }
 
 export function getPostPath(
-  post: Post | null,
-  slug?: string | null
+  post: Partial<Post> | null,
+  params?: { username?: string | null; slug?: string | null }
 ): string | null {
-  const username = post?.author?.username
-  const postname = slug ?? post?.slug
+  const username = params?.username ?? post?.author?.username
+  const slug = params?.slug ?? post?.slug
 
-  return username && postname ? `/${username}/${postname}` : null
+  return username && slug ? `/${username}/${slug}` : null
 }
 
 export function getPostUrl(
-  post: Post | null,
-  slug?: string | null
+  post: Partial<Post> | null,
+  params?: { username?: string | null; slug?: string | null }
 ): string | null {
-  const username = post?.author?.username
-  const postname = slug ?? post?.slug
+  const pathname = getPostPath(post, params)
 
-  return username && postname ? absoluteUrl(`/${username}/${postname}`) : null
+  return pathname ? absoluteUrl(pathname) : null
 }
 
-export function getAuthorPath(username?: string | null): string | null {
+export function getAuthorPath(
+  post: Partial<Post> | null,
+  params?: { username?: string | null }
+): string | null {
+  const username = params?.username ?? post?.author?.username
+
   return username ? `/${username}` : null
 }
 
-export function getAuthorUrl(username?: string | null): string | null {
-  return username ? absoluteUrl(`/${username}`) : null
+export function getAuthorUrl(
+  post: Partial<Post> | null,
+  params?: { username?: string | null }
+): string | null {
+  const pathname = getAuthorPath(post, params)
+
+  return pathname ? absoluteUrl(pathname) : null
+}
+
+export function getArchivePath(): string {
+  return `/posts`
+}
+
+export function getArchiveUrl(): string {
+  return absoluteUrl(getArchivePath())
+}
+
+export function getProfilePath(username?: string | null): string | null {
+  return username ? `/${username}` : null
+}
+
+export function getProfileUrl(username?: string | null): string | null {
+  const pathname = getProfilePath(username)
+
+  return pathname ? absoluteUrl(pathname) : null
 }

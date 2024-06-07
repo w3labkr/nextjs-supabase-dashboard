@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import { fetcher, getAuthorPath } from '@/lib/utils'
+import { fetcher, getProfilePath } from '@/lib/utils'
 import { createClient } from '@/supabase/client'
 import { User } from '@/types/database'
 import { UserAPI } from '@/types/api'
@@ -216,7 +216,7 @@ const SubmitButton = () => {
       const deleted = await fetcher<UserAPI>(fetchUrl, {
         method: 'DELETE',
         body: JSON.stringify({
-          options: { revalidatePaths: getAuthorPath(user?.username) },
+          options: { revalidatePaths: getProfilePath(user?.username) },
         }),
       })
 

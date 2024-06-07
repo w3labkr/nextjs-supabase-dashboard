@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { SignOutButton } from '@/components/signout-button'
 
-import { getAuthorUrl } from '@/lib/utils'
+import { getProfilePath } from '@/lib/utils'
 import { useUserAPI } from '@/queries/client/users'
 
 const AccountMenu = () => {
@@ -49,7 +49,7 @@ const AccountMenu = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link
-            href={getAuthorUrl(user?.username ?? null) ?? '#'}
+            href={getProfilePath(user?.username) ?? '#'}
             className="cursor-pointer"
           >
             {t('AccountMenu.profile')}

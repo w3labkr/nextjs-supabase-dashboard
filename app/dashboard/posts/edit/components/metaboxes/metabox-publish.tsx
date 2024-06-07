@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/button'
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getPostPath, getMeta } from '@/lib/utils'
+import { fetcher, getMeta, getPostPath, getAuthorPath } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 
 const MetaboxPublish = () => {
@@ -112,7 +112,9 @@ const DraftButton = () => {
         method: 'POST',
         body: JSON.stringify({
           data: { ...formValues, status: 'draft' },
-          options: { revalidatePaths: getPostPath(post) },
+          options: {
+            revalidatePaths: [getPostPath(post), getAuthorPath(post)],
+          },
         }),
       })
 
@@ -198,15 +200,17 @@ const PreviewButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const postPath = getPostPath(post)
       const formValues = getValues()
+      const postPath = getPostPath(post)
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const result = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
           data: { ...formValues, status: 'draft' },
-          options: { revalidatePaths: postPath },
+          options: {
+            revalidatePaths: [postPath, getAuthorPath(post)],
+          },
         }),
       })
 
@@ -270,7 +274,9 @@ const TrashButton = () => {
             status: 'trash',
             deleted_at: new Date().toISOString(),
           },
-          options: { revalidatePaths: getPostPath(post) },
+          options: {
+            revalidatePaths: [getPostPath(post), getAuthorPath(post)],
+          },
         }),
       })
 
@@ -335,7 +341,9 @@ const PublishButton = () => {
           data: post?.date
             ? { ...formValues, status }
             : { ...formValues, status, date: now },
-          options: { revalidatePaths: getPostPath(post) },
+          options: {
+            revalidatePaths: [getPostPath(post), getAuthorPath(post)],
+          },
         }),
       })
 

@@ -7,7 +7,12 @@ import { toast } from 'sonner'
 import { usePaging } from '@/components/paging'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, setQueryString, getPostPath } from '@/lib/utils'
+import {
+  fetcher,
+  setQueryString,
+  getPostPath,
+  getAuthorPath,
+} from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
@@ -28,21 +33,21 @@ const DeletePost = (props: DeletePostProps) => {
     try {
       setIsSubmitting(true)
 
-      const userId = post?.user_id
-
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const deleted = await fetcher<PostAPI>(fetchUrl, {
         method: 'DELETE',
         body: JSON.stringify({
-          data: { user_id: userId },
-          options: { revalidatePaths: getPostPath(post) },
+          data: { user_id: post?.user_id },
+          options: {
+            revalidatePaths: [getPostPath(post), getAuthorPath(post)],
+          },
         }),
       })
 
       if (deleted?.error) throw new Error(deleted?.error?.message)
 
       const query = setQueryString({
-        userId,
+        userId: post?.user_id,
         page: paging?.page,
         perPage: paging?.perPage,
         postType: paging?.postType,
@@ -51,7 +56,7 @@ const DeletePost = (props: DeletePostProps) => {
 
       mutate(fetchUrl)
       mutate(`/api/v1/post/list?${query}`)
-      mutate(`/api/v1/post/count?userId=${userId}`)
+      mutate(`/api/v1/post/count?userId=${post?.user_id}`)
 
       toast.success(t('FormMessage.deleted_successfully'))
     } catch (e: unknown) {

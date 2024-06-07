@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 import { usePaging } from '@/components/paging'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, setQueryString, getPostPath } from '@/lib/utils'
+import { fetcher, setQueryString } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
@@ -28,21 +28,18 @@ const RestorePost = (props: RestorePostProps) => {
     try {
       setIsSubmitting(true)
 
-      const userId = post?.user_id
-
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const updated = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          data: { user_id: userId, status: 'draft', deleted_at: null },
-          options: { revalidatePaths: getPostPath(post) },
+          data: { user_id: post?.user_id, status: 'draft', deleted_at: null },
         }),
       })
 
       if (updated?.error) throw new Error(updated?.error?.message)
 
       const query = setQueryString({
-        userId,
+        userId: post?.user_id,
         page: paging?.page,
         perPage: paging?.perPage,
         postType: paging?.postType,
@@ -51,7 +48,7 @@ const RestorePost = (props: RestorePostProps) => {
 
       mutate(fetchUrl)
       mutate(`/api/v1/post/list?${query}`)
-      mutate(`/api/v1/post/count?userId=${userId}`)
+      mutate(`/api/v1/post/count?userId=${post?.user_id}`)
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {

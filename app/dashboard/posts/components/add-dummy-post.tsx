@@ -8,10 +8,18 @@ import { toast } from 'sonner'
 import { Button, ButtonProps } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, generateRecentPosts, setQueryString } from '@/lib/utils'
+import {
+  fetcher,
+  setQueryString,
+  generateRecentPosts,
+  getPostPath,
+  getAuthorPath,
+} from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { PostAPI } from '@/types/api'
 import { useSearchParams } from 'next/navigation'
+import { useUserAPI } from '@/queries/client/users'
+import { Post } from '@/types/database'
 
 interface AddDummyPostProps
   extends ButtonProps,
@@ -27,7 +35,8 @@ const AddDummyPost = (props: AddDummyPostProps) => {
 
   const searchParams = useSearchParams()
   const { t } = useTranslation()
-  const { user } = useAuth()
+  const { session } = useAuth()
+  const { user } = useUserAPI(session?.user?.id ?? null)
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -38,20 +47,29 @@ const AddDummyPost = (props: AddDummyPostProps) => {
 
       if (!user) throw new Error('Require is not defined.')
 
-      const userId = user?.id
+      const posts = generateRecentPosts(user?.id, 1)
+      const postPaths = posts.map((post: Partial<Post>) =>
+        getPostPath(post, { username: user?.username })
+      )
 
-      const fetchUrl = `/api/v1/post?userId=${userId}`
+      const fetchUrl = `/api/v1/post?userId=${user?.id}`
       const inserted = await fetcher<PostAPI>(fetchUrl, {
         method: 'PUT',
         body: JSON.stringify({
-          data: generateRecentPosts(userId, 1),
+          data: posts,
+          options: {
+            revalidatePaths: [
+              ...postPaths,
+              getAuthorPath(null, { username: user?.username }),
+            ],
+          },
         }),
       })
 
       if (inserted?.error) throw new Error(inserted?.error?.message)
 
       const query = setQueryString({
-        userId,
+        userId: user?.id,
         page: +((searchParams.get('page') as string) ?? '1'),
         perPage: +((searchParams.get('perPage') as string) ?? '10'),
         postType: (searchParams.get('postType') as string) ?? 'post',
@@ -60,7 +78,7 @@ const AddDummyPost = (props: AddDummyPostProps) => {
 
       mutate(fetchUrl)
       mutate(`/api/v1/post/list?${query}`)
-      mutate(`/api/v1/post/count?userId=${userId}`)
+      mutate(`/api/v1/post/count?userId=${user?.id}`)
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Payment Required')) {

@@ -21,7 +21,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getAuthorPath } from '@/lib/utils'
+import { fetcher, getProfilePath } from '@/lib/utils'
 import { useUserAPI } from '@/queries/client/users'
 import { UserAPI } from '@/types/api'
 
@@ -91,11 +91,9 @@ const SubmitButton = () => {
       setIsSubmitting(true)
 
       const formValues = getValues()
-      const username = user?.username
 
       if (!user) throw new Error('Require is not defined.')
-      if (!username) throw new Error('Require is not defined.')
-      if (formValues?.username === username) {
+      if (formValues?.username === user?.username) {
         throw new Error('Nothing has changed.')
       }
 
@@ -104,7 +102,7 @@ const SubmitButton = () => {
         method: 'POST',
         body: JSON.stringify({
           data: { username: formValues?.username },
-          options: { revalidatePaths: getAuthorPath(username) },
+          options: { revalidatePaths: getProfilePath(user?.username) },
         }),
       })
 

@@ -47,10 +47,7 @@ const LatestItem = (props: LatestItemProps) => {
           {dayjs(post?.date).format('MMMM D, YYYY')}
         </time>
         <span>— by</span>
-        <Link
-          href={getAuthorUrl(post?.author?.username) ?? '#'}
-          className="hover:underline"
-        >
+        <Link href={getAuthorUrl(post) ?? '#'} className="hover:underline">
           {post?.author?.full_name}
         </Link>
       </div>

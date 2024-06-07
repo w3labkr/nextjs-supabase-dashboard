@@ -7,7 +7,12 @@ import { toast } from 'sonner'
 import { usePaging } from '@/components/paging'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, setQueryString, getPostPath } from '@/lib/utils'
+import {
+  fetcher,
+  setQueryString,
+  getPostPath,
+  getAuthorPath,
+} from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
@@ -27,22 +32,23 @@ const TrashPost = (props: TrashPostProps) => {
     try {
       setIsSubmitting(true)
 
-      const userId = post?.user_id
       const now = new Date().toISOString()
 
       const fetchUrl = `/api/v1/post?id=${post?.id}`
       const updated = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          data: { status: 'trash', user_id: userId, deleted_at: now },
-          options: { revalidatePaths: getPostPath(post) },
+          data: { status: 'trash', user_id: post?.user_id, deleted_at: now },
+          options: {
+            revalidatePaths: [getPostPath(post), getAuthorPath(post)],
+          },
         }),
       })
 
       if (updated?.error) throw new Error(updated?.error?.message)
 
       const query = setQueryString({
-        userId,
+        userId: post?.user_id,
         page: paging?.page,
         perPage: paging?.perPage,
         postType: paging?.postType,
@@ -51,7 +57,7 @@ const TrashPost = (props: TrashPostProps) => {
 
       mutate(fetchUrl)
       mutate(`/api/v1/post/list?${query}`)
-      mutate(`/api/v1/post/count?userId=${userId}`)
+      mutate(`/api/v1/post/count?userId=${post?.user_id}`)
 
       toast.success(t('FormMessage.deleted_successfully'))
     } catch (e: unknown) {
