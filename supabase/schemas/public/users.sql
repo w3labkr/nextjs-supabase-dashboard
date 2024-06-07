@@ -19,6 +19,7 @@ drop trigger if exists on_username_updated on users;
 
 drop function if exists verify_user_password;
 drop function if exists handle_username_changed_at;
+drop function if exists get_users;
 
 drop table if exists users;
 
@@ -89,5 +90,33 @@ begin
     where id = userid
       and encrypted_password = crypt(password::text, auth.users.encrypted_password)
   );
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
+create or replace function get_users(userrole text = null, userplan text = null)
+returns setof users
+security definer set search_path = public
+as $$
+begin
+	if userrole is not null and userplan is not null then
+		return query
+      select u.*
+      from users u
+        join user_roles ur on u.id = ur.user_id
+        join user_plans up on u.id = up.user_id
+      where ur.role = userrole and up.plan = userplan;
+	elsif userrole is not null then
+		return query
+      select u.*
+      from users u join user_roles ur on u.id = ur.user_id
+      where ur.role = userrole;
+	elsif userplan is not null then
+    return query
+      select u.*
+      from users u join user_plans up on u.id = up.user_id
+      where up.plan = userplan;
+	end if;
 end;
 $$ language plpgsql;

@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/daily-reset-posts",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}

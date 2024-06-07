@@ -24,7 +24,7 @@ create extension if not exists pgcrypto schema extensions;
 create extension if not exists moddatetime schema extensions;
 
 -- Job scheduler for PostgreSQL
-create extension if not exists pg_cron schema extensions;
+create extension if not exists pg_cron;
 
 grant usage on schema cron to postgres;
 grant all privileges on all tables in schema cron to postgres;
@@ -93,6 +93,7 @@ drop function if exists handle_new_user;
 drop function if exists handle_username_changed_at;
 drop function if exists handle_has_set_password;
 drop function if exists verify_user_password;
+drop function if exists get_users;
 drop function if exists set_user_meta;
 drop function if exists get_vote;
 drop function if exists set_favorite;
@@ -101,6 +102,8 @@ drop function if exists set_view_count;
 drop function if exists generate_slug;
 drop function if exists count_posts;
 drop function if exists get_adjacent_post_id;
+drop function if exists create_new_posts;
+drop function if exists truncate_posts;
 drop function if exists create_new_user;
 drop function if exists assign_user_data;
 
@@ -272,6 +275,34 @@ begin
     where id = userid
       and encrypted_password = crypt(password::text, auth.users.encrypted_password)
   );
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
+create or replace function get_users(userrole text = null, userplan text = null)
+returns setof users
+security definer set search_path = public
+as $$
+begin
+	if userrole is not null and userplan is not null then
+		return query
+      select u.*
+      from users u
+        join user_roles ur on u.id = ur.user_id
+        join user_plans up on u.id = up.user_id
+      where ur.role = userrole and up.plan = userplan;
+	elsif userrole is not null then
+		return query
+      select u.*
+      from users u join user_roles ur on u.id = ur.user_id
+      where ur.role = userrole;
+	elsif userplan is not null then
+    return query
+      select u.*
+      from users u join user_plans up on u.id = up.user_id
+      where up.plan = userplan;
+	end if;
 end;
 $$ language plpgsql;
 
@@ -539,6 +570,52 @@ begin
          min(case when id > postid then id end)
   from posts
   where user_id = userid and type = posttype and status = poststatus;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
+create or replace function create_new_posts(data json[])
+returns void
+security definer set search_path = public
+as $$
+declare
+  r json;
+begin
+  foreach r in array data
+  loop
+    insert into posts
+    (created_at, updated_at, deleted_at, date, user_id, type, status, password, title, slug, content, excerpt, thumbnail_url, is_ban, banned_until)
+    values
+    (
+      coalesce((r ->> 'created_at')::timestamptz, now()),
+      coalesce((r ->> 'updated_at')::timestamptz, now()),
+      (r ->> 'deleted_at')::timestamptz,
+      (r ->> 'date')::timestamptz,
+      (r ->> 'user_id')::uuid,
+      coalesce((r ->> 'type')::text, 'post'),
+      coalesce((r ->> 'status')::text, 'draft'),
+      (r ->> 'password')::varchar(255),
+      (r ->> 'title')::text,
+      (r ->> 'slug')::text,
+      (r ->> 'content')::text,
+      (r ->> 'excerpt')::text,
+      (r ->> 'thumbnail_url')::text,
+      coalesce((r ->> 'is_ban')::boolean, false),
+      (r ->> 'banned_until')::timestamptz
+    );
+  end loop;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
+create or replace function truncate_posts()
+returns void
+security definer set search_path = public
+as $$
+begin
+  truncate table posts restart identity cascade;
 end;
 $$ language plpgsql;
 

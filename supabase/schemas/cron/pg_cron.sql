@@ -30,37 +30,24 @@
 ----------------------------------------------------------------
 
 -- Job scheduler for PostgreSQL
-create extension if not exists pg_cron with schema extensions;
+create extension if not exists pg_cron;
+
+-- Dependent privileges exist. Use CASCADE to revoke them too.
+-- create extension if not exists pg_cron with schema extensions;
 
 grant usage on schema cron to postgres;
 grant all privileges on all tables in schema cron to postgres;
 
 ----------------------------------------------------------------
 
-select cron.schedule('hourly-publish-future-posts', '0 * * * *', 'SELECT hourly_publish_future_posts()');
+-- List all the jobs
+-- select * from cron.job;
 
-drop function if exists hourly_publish_future_posts;
+-- Edit a job
+-- select cron.alter_job(
+--   job_id := (select jobid from cron.job where jobname = 'vacuum'),
+--   schedule := '*/5 * * * *'
+-- );
 
-----------------------------------------------------------------
-
-create or replace function hourly_publish_future_posts()
-returns void
-security definer set search_path = public
-as $$
-declare
-  r record;
-  visibility text;
-begin
-  for r in (select * from posts where status = 'future' and date < now()) loop
-    select meta_value into visibility from post_metas where post_id = r.id and meta_key = 'visibility';
-
-    if visibility = 'private' then
-      update posts set status = 'private' where id = r.id;
-    else
-      update posts set status = 'publish' where id = r.id;
-    end if;
-
-    update post_metas set meta_value = null where post_id = r.id and meta_key = 'future_date';
-  end loop;
-end;
-$$ language plpgsql;
+-- Viewing previously ran jobs
+-- select * from cron.job_run_details order by start_time desc;

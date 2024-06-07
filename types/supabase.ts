@@ -527,7 +527,7 @@ export type Database = {
       }
       create_new_posts: {
         Args: {
-          useremail: string
+          data: Json[]
         }
         Returns: undefined
       }
@@ -559,6 +559,31 @@ export type Database = {
         Returns: {
           previous_id: number
           next_id: number
+        }[]
+      }
+      get_users: {
+        Args: {
+          userrole?: string
+          userplan?: string
+        }
+        Returns: {
+          age: number | null
+          avatar_url: string | null
+          banned_until: string | null
+          bio: string | null
+          created_at: string
+          deleted_at: string | null
+          email: string | null
+          first_name: string | null
+          full_name: string | null
+          has_set_password: boolean
+          id: string
+          is_ban: boolean
+          last_name: string | null
+          updated_at: string
+          username: string
+          username_changed_at: string | null
+          website: string | null
         }[]
       }
       get_vote: {
@@ -603,6 +628,10 @@ export type Database = {
         Args: {
           postid: number
         }
+        Returns: undefined
+      }
+      truncate_posts: {
+        Args: Record<PropertyKey, never>
         Returns: undefined
       }
       verify_user_password: {

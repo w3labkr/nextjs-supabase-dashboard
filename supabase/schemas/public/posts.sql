@@ -15,6 +15,8 @@ drop trigger if exists on_slug_upsert on posts;
 drop function if exists generate_slug;
 drop function if exists count_posts;
 drop function if exists get_adjacent_post_id;
+drop function if exists create_new_posts;
+drop function if exists truncate_posts;
 
 drop table if exists posts;
 
@@ -30,8 +32,8 @@ create table posts (
   type text default 'post'::text not null,
   status text default 'draft'::text not null,
   password varchar(255),
-  slug text,
   title text,
+  slug text,
   content text,
   excerpt text,
   thumbnail_url text,
@@ -118,5 +120,51 @@ begin
          min(case when id > postid then id end)
   from posts
   where user_id = userid and type = posttype and status = poststatus;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
+create or replace function create_new_posts(data json[])
+returns void
+security definer set search_path = public
+as $$
+declare
+  r json;
+begin
+  foreach r in array data
+  loop
+    insert into posts
+    (created_at, updated_at, deleted_at, date, user_id, type, status, password, title, slug, content, excerpt, thumbnail_url, is_ban, banned_until)
+    values
+    (
+      coalesce((r ->> 'created_at')::timestamptz, now()),
+      coalesce((r ->> 'updated_at')::timestamptz, now()),
+      (r ->> 'deleted_at')::timestamptz,
+      (r ->> 'date')::timestamptz,
+      (r ->> 'user_id')::uuid,
+      coalesce((r ->> 'type')::text, 'post'),
+      coalesce((r ->> 'status')::text, 'draft'),
+      (r ->> 'password')::varchar(255),
+      (r ->> 'title')::text,
+      (r ->> 'slug')::text,
+      (r ->> 'content')::text,
+      (r ->> 'excerpt')::text,
+      (r ->> 'thumbnail_url')::text,
+      coalesce((r ->> 'is_ban')::boolean, false),
+      (r ->> 'banned_until')::timestamptz
+    );
+  end loop;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
+create or replace function truncate_posts()
+returns void
+security definer set search_path = public
+as $$
+begin
+  truncate table posts restart identity cascade;
 end;
 $$ language plpgsql;

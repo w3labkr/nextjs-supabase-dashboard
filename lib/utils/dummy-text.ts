@@ -12,13 +12,21 @@ export function generateRecentPosts(
     const title = faker.lorem.sentence()
 
     const post: Partial<Post> = {
-      user_id,
-      status: 'publish',
+      // created_at: new Date().toISOString(),
+      // updated_at: new Date().toISOString(),
+      deleted_at: null,
       date: faker.date.recent().toISOString(),
+      user_id,
+      type: 'post',
+      status: 'publish',
+      password: null,
       title,
       slug: slugify(title),
-      excerpt: faker.lorem.sentence(),
       content: faker.lorem.paragraphs(),
+      excerpt: faker.lorem.sentence(),
+      thumbnail_url: null,
+      is_ban: false,
+      banned_until: null,
     }
     posts = [...posts, post]
   }
