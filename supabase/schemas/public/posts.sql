@@ -116,8 +116,7 @@ security definer set search_path = public
 as $$
 begin
   return query
-  select max(case when id < postid then id end),
-         min(case when id > postid then id end)
+  select max(case when id < postid then id end), min(case when id > postid then id end)
   from posts
   where user_id = userid and type = posttype and status = poststatus;
 end;

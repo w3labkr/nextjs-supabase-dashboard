@@ -17,7 +17,6 @@ create extension if not exists moddatetime schema extensions;
 drop trigger if exists on_updated_at on users;
 drop trigger if exists on_username_updated on users;
 
-drop function if exists verify_user_password;
 drop function if exists handle_username_changed_at;
 drop function if exists get_users;
 
@@ -76,22 +75,6 @@ $$ language plpgsql;
 
 create trigger on_username_updated after update of username on users
   for each row execute function handle_username_changed_at();
-
-----------------------------------------------------------------
-
-create or replace function verify_user_password(userid uuid, password text)
-returns boolean
-security definer set search_path = public, extensions, auth
-as $$
-begin
-  return exists (
-    select id
-    from auth.users
-    where id = userid
-      and encrypted_password = crypt(password::text, auth.users.encrypted_password)
-  );
-end;
-$$ language plpgsql;
 
 ----------------------------------------------------------------
 

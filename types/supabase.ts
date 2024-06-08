@@ -624,6 +624,22 @@ export type Database = {
         }
         Returns: undefined
       }
+      set_user_plan: {
+        Args: {
+          userplan: string
+          userid?: string
+          useremail?: string
+        }
+        Returns: undefined
+      }
+      set_user_role: {
+        Args: {
+          userrole: string
+          userid?: string
+          useremail?: string
+        }
+        Returns: undefined
+      }
       set_view_count: {
         Args: {
           postid: number

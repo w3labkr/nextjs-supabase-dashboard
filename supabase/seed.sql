@@ -91,14 +91,20 @@ drop trigger if exists on_slug_upsert on posts;
 
 ----------------------------------------------------------------
 
-drop function if exists generate_username;
 drop function if exists generate_password;
-drop function if exists handle_new_user;
-drop function if exists handle_username_changed_at;
+drop function if exists generate_username;
 drop function if exists handle_has_set_password;
 drop function if exists verify_user_password;
+drop function if exists handle_new_user;
+drop function if exists create_new_user;
+drop function if exists assign_user_data;
+
+drop function if exists handle_username_changed_at;
 drop function if exists get_users;
 drop function if exists set_user_meta;
+drop function if exists set_user_role;
+drop function if exists set_user_plan;
+
 drop function if exists get_vote;
 drop function if exists set_favorite;
 drop function if exists set_post_meta;
@@ -108,8 +114,6 @@ drop function if exists count_posts;
 drop function if exists get_adjacent_post_id;
 drop function if exists create_new_posts;
 drop function if exists truncate_posts;
-drop function if exists create_new_user;
-drop function if exists assign_user_data;
 
 ----------------------------------------------------------------
 
@@ -130,6 +134,17 @@ drop table if exists users;
 --                                                            --
 --                         auth.users                         --
 --                                                            --
+----------------------------------------------------------------
+
+create or replace function generate_password()
+returns text
+security definer set search_path = public
+as $$
+begin
+  return trim(both from (encode(decode(md5(random()::text || current_timestamp || random()),'hex'),'base64')), '=');
+end;
+$$ language plpgsql;
+
 ----------------------------------------------------------------
 
 create or replace function generate_username(email text)
@@ -154,12 +169,35 @@ $$ language plpgsql;
 
 ----------------------------------------------------------------
 
-create or replace function generate_password()
-returns text
+create or replace function handle_has_set_password()
+returns trigger
 security definer set search_path = public
 as $$
+declare
+  new_has_set_password boolean;
 begin
-  return trim(both from (encode(decode(md5(random()::text || current_timestamp || random()),'hex'),'base64')), '=');
+  new_has_set_password := case when (new.encrypted_password is null or new.encrypted_password = '') then false else true end;
+  update users set has_set_password = new_has_set_password where id = new.id;
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger on_auth_user_password_updated after update of encrypted_password on auth.users
+  for each row execute function handle_has_set_password();
+
+----------------------------------------------------------------
+
+create or replace function verify_user_password(userid uuid, password text)
+returns boolean
+security definer set search_path = public, extensions, auth
+as $$
+begin
+  return exists (
+    select id
+    from auth.users
+    where id = userid
+      and encrypted_password = crypt(password::text, auth.users.encrypted_password)
+  );
 end;
 $$ language plpgsql;
 
@@ -195,21 +233,65 @@ create trigger on_auth_user_created after insert on auth.users
 
 ----------------------------------------------------------------
 
-create or replace function handle_has_set_password()
-returns trigger
-security definer set search_path = public
+create or replace function create_new_user(useremail text, password text = null, metadata JSONB = '{}'::JSONB)
+returns uuid
 as $$
 declare
-  new_has_set_password boolean;
+  user_id uuid;
+  encrypted_pw text;
+  app_metadata jsonb;
 begin
-  new_has_set_password := case when (new.encrypted_password is null or new.encrypted_password = '') then false else true end;
-  update users set has_set_password = new_has_set_password where id = new.id;
-  return new;
+  select id into user_id from auth.users where email = useremail;
+
+  if user_id is null then
+    user_id := gen_random_uuid();
+    encrypted_pw := crypt(password, gen_salt('bf'));
+    app_metadata := '{"provider":"email","providers":["email"]}'::jsonb || metadata::jsonb;
+
+    insert into auth.users
+    (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, recovery_sent_at, last_sign_in_at, confirmation_sent_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, confirmation_token, email_change, email_change_token_new, recovery_token)
+    values
+    ('00000000-0000-0000-0000-000000000000', user_id, 'authenticated', 'authenticated', useremail, encrypted_pw, now(), now(), now(), now(), app_metadata, '{}', now(), now(), '', '', '', '');
+
+    insert into auth.identities
+    (provider_id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
+    values
+    (gen_random_uuid(), user_id, format('{"sub":"%s","email":"%s"}', user_id::text, useremail)::jsonb, 'email', now(), now(), now());
+  end if;
+
+  return user_id;
 end;
 $$ language plpgsql;
 
-create trigger on_auth_user_password_updated after update of encrypted_password on auth.users
-  for each row execute function handle_has_set_password();
+----------------------------------------------------------------
+
+create or replace function assign_user_data()
+returns void
+security definer set search_path = public
+as $$
+declare
+  r record;
+  new_username text;
+  new_has_set_password boolean;
+begin
+  for r in (select * from auth.users) loop
+
+    new_username := generate_username(r.email);
+    new_username := substr(new_username, 1, 255);
+    new_has_set_password := case when r.encrypted_password is null or r.encrypted_password = '' then false else true end;
+
+    insert into users
+    (id, has_set_password, username, full_name, avatar_url)
+    values
+    (r.id, new_has_set_password, new_username, new_username, r.raw_user_meta_data ->> 'avatar_url');
+    insert into emails (user_id, email) values (r.id, r.email);
+    insert into user_roles (user_id) values (r.id);
+    insert into user_plans (user_id) values (r.id);
+    insert into notifications (user_id) values (r.id);
+
+  end loop;
+end;
+$$ language plpgsql;
 
 ----------------------------------------------------------------
 --                                                            --
@@ -265,22 +347,6 @@ $$ language plpgsql;
 
 create trigger on_username_updated after update of username on users
   for each row execute function handle_username_changed_at();
-
-----------------------------------------------------------------
-
-create or replace function verify_user_password(userid uuid, password text)
-returns boolean
-security definer set search_path = public, extensions, auth
-as $$
-begin
-  return exists (
-    select id
-    from auth.users
-    where id = userid
-      and encrypted_password = crypt(password::text, auth.users.encrypted_password)
-  );
-end;
-$$ language plpgsql;
 
 ----------------------------------------------------------------
 
@@ -374,6 +440,29 @@ create trigger on_updated_at before update on user_roles
   for each row execute procedure moddatetime (updated_at);
 
 ----------------------------------------------------------------
+
+create or replace function set_user_role(userrole text, userid uuid = null, useremail text = null)
+returns void
+security definer set search_path = public
+as $$
+begin
+  if userid is not null and useremail is not null then
+    update user_roles set role = userrole
+    from auth.users u
+    where user_id = u.id and u.id = userid and u.email = useremail;
+  elsif userid is not null then
+    update user_roles set role = userrole
+    from auth.users u
+    where user_id = u.id and u.id = userid;
+  elsif useremail is not null then
+    update user_roles set role = userrole
+    from auth.users u
+    where user_id = u.id and u.email = useremail;
+  end if;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
 --                                                            --
 --                  public.role_permissions                   --
 --                                                            --
@@ -419,6 +508,29 @@ create policy "User can delete their own user_plans" on user_plans for delete to
 
 create trigger on_updated_at before update on user_plans
   for each row execute procedure moddatetime (updated_at);
+
+----------------------------------------------------------------
+
+create or replace function set_user_plan(userplan text, userid uuid = null, useremail text = null)
+returns void
+security definer set search_path = public
+as $$
+begin
+  if userid is not null and useremail is not null then
+    update user_plans set plan = userplan
+    from auth.users u
+    where user_id = u.id and u.id = userid and u.email = useremail;
+  elsif userid is not null then
+    update user_plans set plan = userplan
+    from auth.users u
+    where user_id = u.id and u.id = userid;
+  elsif useremail is not null then
+    update user_plans set plan = userplan
+    from auth.users u
+    where user_id = u.id and u.email = useremail;
+  end if;
+end;
+$$ language plpgsql;
 
 ----------------------------------------------------------------
 --                                                            --
@@ -570,8 +682,7 @@ security definer set search_path = public
 as $$
 begin
   return query
-  select max(case when id < postid then id end),
-         min(case when id > postid then id end)
+  select max(case when id < postid then id end), min(case when id > postid then id end)
   from posts
   where user_id = userid and type = posttype and status = poststatus;
 end;
@@ -818,66 +929,7 @@ $$ language plpgsql;
 --                                                            --
 ----------------------------------------------------------------
 
-create or replace function create_new_user(useremail text, password text = null, metadata JSONB = '{}'::JSONB)
-returns uuid
-as $$
-declare
-  user_id uuid;
-  encrypted_pw text;
-  app_metadata jsonb;
-begin
-  select id into user_id from auth.users where email = useremail;
-
-  if user_id is null then
-    user_id := gen_random_uuid();
-    encrypted_pw := crypt(password, gen_salt('bf'));
-    app_metadata := '{"provider":"email","providers":["email"]}'::jsonb || metadata::jsonb;
-
-    insert into auth.users
-    (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, recovery_sent_at, last_sign_in_at, confirmation_sent_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, confirmation_token, email_change, email_change_token_new, recovery_token)
-    values
-    ('00000000-0000-0000-0000-000000000000', user_id, 'authenticated', 'authenticated', useremail, encrypted_pw, now(), now(), now(), now(), app_metadata, '{}', now(), now(), '', '', '', '');
-
-    insert into auth.identities
-    (provider_id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
-    values
-    (gen_random_uuid(), user_id, format('{"sub":"%s","email":"%s"}', user_id::text, useremail)::jsonb, 'email', now(), now(), now());
-  end if;
-
-  return user_id;
-end;
-$$ language plpgsql;
-
 -- select create_new_user('username@example.com', '123456789');
-
-----------------------------------------------------------------
-
-create or replace function assign_user_data()
-returns void
-security definer set search_path = public
-as $$
-declare
-  r record;
-  new_username text;
-  new_has_set_password boolean;
-begin
-  for r in (select * from auth.users) loop
-
-    new_username := generate_username(r.email);
-    new_username := substr(new_username, 1, 255);
-    new_has_set_password := case when r.encrypted_password is null or r.encrypted_password = '' then false else true end;
-
-    insert into users
-    (id, has_set_password, username, full_name, avatar_url)
-    values
-    (r.id, new_has_set_password, new_username, new_username, r.raw_user_meta_data ->> 'avatar_url');
-    insert into emails (user_id, email) values (r.id, r.email);
-    insert into user_roles (user_id) values (r.id);
-    insert into user_plans (user_id) values (r.id);
-    insert into notifications (user_id) values (r.id);
-
-  end loop;
-end;
-$$ language plpgsql;
-
 select assign_user_data();
+select set_user_role('superadmin', null, 'username@example.com')
+select set_user_plan('premium', null, 'username@example.com')

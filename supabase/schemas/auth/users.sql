@@ -13,6 +13,7 @@ drop trigger if exists on_auth_user_created on auth.users;
 drop function if exists generate_password;
 drop function if exists generate_username;
 drop function if exists handle_has_set_password;
+drop function if exists verify_user_password;
 drop function if exists handle_new_user;
 drop function if exists create_new_user;
 drop function if exists assign_user_data;
@@ -71,6 +72,22 @@ $$ language plpgsql;
 
 create trigger on_auth_user_password_updated after update of encrypted_password on auth.users
   for each row execute function handle_has_set_password();
+
+----------------------------------------------------------------
+
+create or replace function verify_user_password(userid uuid, password text)
+returns boolean
+security definer set search_path = public, extensions, auth
+as $$
+begin
+  return exists (
+    select id
+    from auth.users
+    where id = userid
+      and encrypted_password = crypt(password::text, auth.users.encrypted_password)
+  );
+end;
+$$ language plpgsql;
 
 ----------------------------------------------------------------
 

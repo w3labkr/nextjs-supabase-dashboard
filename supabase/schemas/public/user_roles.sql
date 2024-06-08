@@ -16,6 +16,8 @@ create extension if not exists moddatetime schema extensions;
 
 drop trigger if exists on_updated_at on user_roles;
 
+drop function if exists set_user_role;
+
 drop table if exists user_roles;
 
 ----------------------------------------------------------------
@@ -53,3 +55,26 @@ create policy "User can delete their own user_roles" on user_roles for delete to
 -- Trigger for tracking last modification time
 create trigger on_updated_at before update on user_roles
   for each row execute procedure moddatetime (updated_at);
+
+----------------------------------------------------------------
+
+create or replace function set_user_role(userrole text, userid uuid = null, useremail text = null)
+returns void
+security definer set search_path = public
+as $$
+begin
+  if userid is not null and useremail is not null then
+    update user_roles set role = userrole
+    from auth.users u
+    where user_id = u.id and u.id = userid and u.email = useremail;
+  elsif userid is not null then
+    update user_roles set role = userrole
+    from auth.users u
+    where user_id = u.id and u.id = userid;
+  elsif useremail is not null then
+    update user_roles set role = userrole
+    from auth.users u
+    where user_id = u.id and u.email = useremail;
+  end if;
+end;
+$$ language plpgsql;
