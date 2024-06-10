@@ -6,7 +6,7 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 import { AppBar, AppBarProvider } from './components/app-bar'
 import { MiniNavigation } from './components/mini-navigation'
-import { DashboardForm } from './dashboard/dashboard-form'
+import { WidgetLatestPosts } from './dashboard/components/widgets'
 
 import { dashboardConfig } from '@/config/dashboard'
 import { getAuth } from '@/queries/server/auth'
@@ -30,7 +30,9 @@ export default async function DashboardPage() {
               <Title text="DashboardPage.title" translate="yes" />
               <Separator />
               <Description text="DashboardPage.description" translate="yes" />
-              <DashboardForm />
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <WidgetLatestPosts className="columns-1 gap-2 space-y-2" />
+              </div>
             </div>
           </main>
         </div>

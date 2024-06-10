@@ -410,5 +410,9 @@
   "Alert": {
     "heads_up": "주의하세요!",
     "data_stored_on_the_demo_site_is_reset_periodically": "데모 사이트에 저장된 데이터는 주기적으로 재설정됩니다."
+  },
+
+  "CardTitle": {
+    "latest_posts": "최근 게시물"
   }
 }

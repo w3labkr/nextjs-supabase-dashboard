@@ -12,7 +12,7 @@ export const dashboardConfig: DashboardConfig = {
           href: '/dashboard',
           iconName: 'LayoutDashboard',
           title: 'dashboard',
-          badge: 1,
+          badge: 0,
           translate: 'yes',
           disabled: false,
           // roles: ['user'],

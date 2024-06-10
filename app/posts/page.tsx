@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { PagingProvider } from '@/components/paging'
+import { Paging, PagingProvider } from '@/components/paging'
 import { LatestPosts } from '@/components/latest-posts'
 
 import { getPostsAPI } from '@/queries/server/posts'
@@ -36,7 +36,13 @@ export default async function PostsPage({
         <div className="container flex-1 overflow-auto">
           <h2 className="mb-12 text-center font-serif text-4xl">Posts</h2>
           <PagingProvider value={{ total, page, perPage, pageSize }}>
-            <LatestPosts posts={posts} className="columns-1 gap-8 space-y-8" />
+            <div className="space-y-16">
+              <LatestPosts
+                className="columns-1 gap-8 space-y-8"
+                posts={posts}
+              />
+              {Array.isArray(posts) && posts?.length > 0 ? <Paging /> : null}
+            </div>
           </PagingProvider>
         </div>
       </main>

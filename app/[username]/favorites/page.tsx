@@ -8,7 +8,7 @@ import { LucideIcon } from '@/lib/lucide-icon'
 import { Separator } from '@/components/ui/separator'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { PagingProvider } from '@/components/paging'
+import { Paging, PagingProvider } from '@/components/paging'
 import { LatestPosts } from '@/components/latest-posts'
 import { Aside } from '../aside'
 
@@ -102,10 +102,15 @@ export default async function FavoritesPage({
               </div>
               <Separator className="my-4" />
               <PagingProvider value={{ total, page, perPage, pageSize }}>
-                <LatestPosts
-                  posts={posts}
-                  className="columns-1 gap-8 space-y-8"
-                />
+                <div className="space-y-16">
+                  <LatestPosts
+                    className="columns-1 gap-8 space-y-8"
+                    posts={posts}
+                  />
+                  {Array.isArray(posts) && posts?.length > 0 ? (
+                    <Paging />
+                  ) : null}
+                </div>
               </PagingProvider>
             </div>
           </div>

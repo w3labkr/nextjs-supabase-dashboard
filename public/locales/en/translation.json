@@ -410,5 +410,9 @@
   "Alert": {
     "heads_up": "Heads up!",
     "data_stored_on_the_demo_site_is_reset_periodically": "Data stored on the demo site is reset periodically."
+  },
+
+  "CardTitle": {
+    "latest_posts": "Latest Posts"
   }
 }
