@@ -45,7 +45,7 @@ const TrashPost = (props: TrashPostProps) => {
       const updated = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          data: { status: 'trash', user_id: post?.user_id, deleted_at: now },
+          data: { status: 'trash', deleted_at: now, user_id: post?.user_id },
           options: { revalidatePaths },
         }),
       })

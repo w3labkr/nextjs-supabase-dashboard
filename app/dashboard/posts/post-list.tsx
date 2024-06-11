@@ -1,8 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import Link from 'next/link'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 
@@ -21,18 +20,14 @@ import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { PagingProvider, usePaging, Paging } from '@/components/paging'
 
-import { EditPost } from './components/edit-post'
-import { ViewPost } from './components/view-post'
-import { TrashPost } from './components/trash-post'
-import { RestorePost } from './components/restore-post'
-import { DeletePost } from './components/delete-post'
 import { SearchForm } from './components/search-form'
+import { HeadLink } from './components/head-link'
+import { QuickLinks } from './components/quick-links'
 import { BulkActions } from './components/bulk-actions'
 
-import { cn, getMeta } from '@/lib/utils'
-import { Post, PostStatus } from '@/types/database'
+import { getMeta } from '@/lib/utils'
+import { Post } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
-import { useQueryString } from '@/hooks/use-query-string'
 import { usePostsAPI, useCountPostsAPI } from '@/queries/client/posts'
 
 const PostList = () => {
@@ -112,32 +107,6 @@ const HeadLinks = () => {
   )
 }
 
-interface HeadLinkProps {
-  status: PostStatus | null
-  label: PostStatus | 'all'
-  count: number
-}
-
-const HeadLink = (props: HeadLinkProps) => {
-  const { status, label, count } = props
-  const { t } = useTranslation()
-  const { qs } = useQueryString()
-  const pathname = usePathname()
-  const paging = usePaging()
-
-  return (
-    <Link
-      href={pathname + '?' + qs({ status, page: 1 })}
-      className={cn(
-        'h-auto p-0',
-        paging?.status === status ? 'text-foreground' : 'text-muted-foreground'
-      )}
-    >
-      {t(`PostStatus.${label}`)}({count})
-    </Link>
-  )
-}
-
 const Footer = () => {
   const paging = usePaging()
   const { user } = useAuth()
@@ -206,12 +175,7 @@ const Body = () => {
   )
 }
 
-interface PostItemProps {
-  post: Post
-}
-
-const PostItem = (props: PostItemProps) => {
-  const { post } = props
+const PostItem = ({ post }: { post: Post }) => {
   const { t } = useTranslation()
   const paging = usePaging()
 
@@ -237,36 +201,17 @@ const PostItem = (props: PostItemProps) => {
             </Badge>
           ) : null}
         </div>
-        <div className="flex items-center space-x-1">
-          {post?.status === 'publish' || post?.status === 'private' ? (
-            <>
-              <EditPost post={post} />
-              <span>|</span>
-              <TrashPost post={post} />
-              <span>|</span>
-              <ViewPost post={post} />
-            </>
-          ) : post?.status === 'trash' ? (
-            <>
-              <RestorePost post={post} />
-              <span>|</span>
-              <DeletePost post={post} />
-            </>
-          ) : (
-            <>
-              <EditPost post={post} />
-              <span>|</span>
-              <TrashPost post={post} />
-            </>
-          )}
-        </div>
+        <QuickLinks post={post} />
       </TableCell>
       <TableCell align="center">{post?.author?.full_name}</TableCell>
       <TableCell align="center">
         {getMeta(post?.meta, 'visibility', null) === 'private' ? (
           <LucideIcon name="LockKeyhole" className="size-4 min-w-4" />
         ) : (
-          <LucideIcon name="LockKeyholeOpen" className="size-4 min-w-4" />
+          <LucideIcon
+            name="LockKeyholeOpen"
+            className="size-4 min-w-4 text-muted-foreground"
+          />
         )}
       </TableCell>
       <TableCell align="center">

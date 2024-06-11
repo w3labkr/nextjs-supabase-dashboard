@@ -343,6 +343,7 @@
 
   "PostList": {
     "EditPost": "Edit",
+    "PublishPost": "Publish",
     "ViewPost": "View",
     "TrashPost": "Trash",
     "RestorePost": "Restore",
@@ -419,8 +420,10 @@
   "BulkActions": {
     "placeholder": "Bulk Actions",
     "submit": "Apply",
-    "delete": "Delete",
-    "publish": "Publish"
+    "delete": "Bulk Delete",
+    "publish": "Bulk Publish",
+    "public": "Bulk Public",
+    "private": "Bulk Private"
   },
 
   "SearchForm": {

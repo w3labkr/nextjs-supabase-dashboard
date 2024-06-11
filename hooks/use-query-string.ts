@@ -7,7 +7,7 @@ const useQueryString = () => {
   const searchParams = useSearchParams()
 
   const qs = React.useCallback(
-    <T extends Record<string, any>>(object?: T): string | undefined => {
+    <T extends Record<string, any>>(object?: T): string => {
       const params = new URLSearchParams(searchParams.toString())
 
       if (object) {

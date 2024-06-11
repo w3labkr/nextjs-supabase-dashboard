@@ -519,6 +519,7 @@ export type Database = {
         Args: {
           userid: string
           posttype?: string
+          q?: string
         }
         Returns: {
           status: string

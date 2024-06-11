@@ -18,16 +18,20 @@ const BulkActions = () => {
   const { t } = useTranslation()
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-start space-x-2">
       <Select>
         <SelectTrigger className="w-[180px]">
-          <SelectValue />
+          <SelectValue placeholder={t('BulkActions.placeholder')} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem>{t('BulkActions.placeholder')}</SelectItem>
-            <SelectItem value="delete">{t('BulkActions.delete')}</SelectItem>
+            <SelectItem value="unassigned">
+              {t('BulkActions.placeholder')}
+            </SelectItem>
+            {/* <SelectItem value="delete">{t('BulkActions.delete')}</SelectItem> */}
             {/* <SelectItem value="publish">{t('BulkActions.publish')}</SelectItem> */}
+            {/* <SelectItem value="public">{t('BulkActions.public')}</SelectItem> */}
+            {/* <SelectItem value="private">{t('BulkActions.private')}</SelectItem> */}
           </SelectGroup>
         </SelectContent>
       </Select>

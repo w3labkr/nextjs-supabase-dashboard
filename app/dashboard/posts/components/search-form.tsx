@@ -59,9 +59,13 @@ const SearchForm = () => {
           control={form.control}
           name="q"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="w-full sm:w-auto">
               <FormControl>
-                <Input placeholder={t('SearchForm.placeholder')} {...field} />
+                <Input
+                  className="sm:w-60"
+                  placeholder={t('SearchForm.placeholder')}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

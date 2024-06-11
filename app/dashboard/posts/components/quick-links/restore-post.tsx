@@ -32,7 +32,7 @@ const RestorePost = (props: RestorePostProps) => {
       const updated = await fetcher<PostAPI>(fetchUrl, {
         method: 'POST',
         body: JSON.stringify({
-          data: { user_id: post?.user_id, status: 'draft', deleted_at: null },
+          data: { status: 'draft', deleted_at: null, user_id: post?.user_id },
         }),
       })
 
