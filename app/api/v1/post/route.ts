@@ -147,9 +147,8 @@ export async function PUT(request: NextRequest) {
   }
 
   const total = counter?.count ?? 0
-  const overflows = total + data?.length - plan?.post
 
-  if (plan?.post > 0 && total >= plan?.post) {
+  if (plan?.post > -1 && total >= plan?.post) {
     return NextResponse.json(
       { data: null, error: new ApiError(402) },
       { status: 402 }
@@ -157,13 +156,16 @@ export async function PUT(request: NextRequest) {
   }
 
   if (Array.isArray(data) && data?.length > 0) {
+    let endIndex = data?.length - (total + data?.length - plan?.post)
+    if (endIndex < 0) endIndex = 0
+
     const {
       data: list,
       count: listCount,
       error,
     } = await supabase
       .from('posts')
-      .insert(data.slice(0, data?.length - overflows))
+      .insert(plan?.post > -1 ? data.slice(0, endIndex) : data)
       .select('*, author:users(*), meta:post_metas(*)')
 
     if (error) {
