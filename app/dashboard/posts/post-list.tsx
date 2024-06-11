@@ -26,6 +26,8 @@ import { ViewPost } from './components/view-post'
 import { TrashPost } from './components/trash-post'
 import { RestorePost } from './components/restore-post'
 import { DeletePost } from './components/delete-post'
+import { SearchForm } from './components/search-form'
+import { BulkActions } from './components/bulk-actions'
 
 import { cn, getMeta } from '@/lib/utils'
 import { Post, PostStatus } from '@/types/database'
@@ -40,6 +42,7 @@ const PostList = () => {
   const pageSize = +((searchParams.get('pageSize') as string) ?? '10')
   const postType = (searchParams.get('postType') as string) ?? 'post'
   const status = searchParams.get('status') as string
+  const q = searchParams.get('q') as string
 
   const { user } = useAuth()
   const { count } = usePostsAPI(user?.id ?? null, {
@@ -47,13 +50,14 @@ const PostList = () => {
     perPage,
     postType,
     status,
+    q,
   })
 
   const total = count ?? 0
 
   return (
     <PagingProvider
-      value={{ total, page, perPage, pageSize, postType, status }}
+      value={{ total, page, perPage, pageSize, postType, status, q }}
     >
       <Header />
       <Body />
@@ -63,8 +67,25 @@ const PostList = () => {
 }
 
 const Header = () => {
+  return (
+    <div className="space-y-6">
+      <HeadLinks />
+      <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:space-y-0">
+        <BulkActions />
+        <SearchForm />
+      </div>
+    </div>
+  )
+}
+
+const HeadLinks = () => {
+  const paging = usePaging()
+
   const { user } = useAuth()
-  const { data, count } = useCountPostsAPI(user?.id ?? null)
+  const { data, count } = useCountPostsAPI(user?.id ?? null, {
+    postType: 'post',
+    q: paging?.q,
+  })
 
   const status: Record<string, number> | undefined = React.useMemo(() => {
     return data?.reduce((acc: Record<string, number>, curr) => {
@@ -100,7 +121,6 @@ interface HeadLinkProps {
 
 const HeadLink = (props: HeadLinkProps) => {
   const { status, label, count } = props
-
   const { t } = useTranslation()
   const { qs } = useQueryString()
   const pathname = usePathname()
@@ -121,13 +141,13 @@ const HeadLink = (props: HeadLinkProps) => {
 
 const Footer = () => {
   const paging = usePaging()
-
   const { user } = useAuth()
   const { posts } = usePostsAPI(user?.id ?? null, {
     page: paging?.page,
     perPage: paging?.perPage,
     postType: paging?.postType,
     status: paging?.status,
+    q: paging?.q,
   })
 
   if (!posts) return null
@@ -145,11 +165,12 @@ const Body = () => {
     perPage: paging?.perPage,
     postType: paging?.postType,
     status: paging?.status,
+    q: paging?.q,
   })
 
   return (
-    <Table>
-      <TableCaption></TableCaption>
+    <Table className="border-t">
+      {/* <TableCaption></TableCaption> */}
       <TableHeader>
         <TableRow>
           <TableHead className="w-[50px]">
@@ -212,7 +233,7 @@ const PostItem = (props: PostItemProps) => {
             <span className="break-all">{post?.title}</span>
           </div>
           {dayjs().isBefore(dayjs(post?.created_at).add(1, 'day')) ? (
-            <Badge variant="destructive" className="text-2xs px-1.5">
+            <Badge variant="destructive" className="px-1.5 text-2xs">
               New
             </Badge>
           ) : null}

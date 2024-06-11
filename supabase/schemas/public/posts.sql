@@ -91,15 +91,26 @@ create trigger on_slug_upsert before insert or update of slug on posts
 
 ----------------------------------------------------------------
 
-create or replace function count_posts(userid uuid, posttype text default 'post')
+create or replace function count_posts(
+  userid uuid,
+  posttype text = 'post',
+  q text = null
+)
 returns table(status text, count bigint)
 security definer set search_path = public
 as $$
 begin
-  return query
-  select p.status, count(*)
-  from posts p where p.user_id = userid and p.type = posttype
-  group by p.status;
+  if q is not null then
+    return query
+    select p.status, count(*)
+    from posts p where p.user_id = userid and p.type = posttype and to_tsvector(title) @@ to_tsquery(q)
+    group by p.status;
+  else
+    return query
+    select p.status, count(*)
+    from posts p where p.user_id = userid and p.type = posttype
+    group by p.status;
+  end if;
 end;
 $$ language plpgsql;
 
@@ -108,8 +119,8 @@ $$ language plpgsql;
 create or replace function get_adjacent_post_id(
   postid bigint,
   userid uuid,
-  posttype text default 'post',
-  poststatus text default 'publish'
+  posttype text = 'post',
+  poststatus text = 'publish'
 )
 returns table(previous_id bigint, next_id bigint)
 security definer set search_path = public

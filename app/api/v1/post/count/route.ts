@@ -1,12 +1,13 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
-import { ApiError, revalidatePaths } from '@/lib/utils'
+import { ApiError, revalidates } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const userId = searchParams.get('userId') as string
   const postType = (searchParams.get('postType') as string) ?? 'post'
+  const q = (searchParams.get('q') as string) ?? null
 
   const { authorized } = await authorize(userId)
 
@@ -21,6 +22,7 @@ export async function GET(request: NextRequest) {
   const result = await supabase.rpc('count_posts', {
     userid: userId,
     posttype: postType,
+    q,
   })
 
   if (result?.error) {

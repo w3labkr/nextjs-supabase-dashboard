@@ -28,6 +28,7 @@ const WidgetLatestPosts = (props: WidgetLatestPostsProps) => {
     perPage: 5,
     postType: 'post',
     status: 'publish',
+    q: '',
   })
 
   const options = React.useMemo(() => {

@@ -4,7 +4,7 @@ const withPWA = require('next-pwa')({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: process.env.NODE_ENV === 'production',
   swcMinify: true,
   eslint: {
     // Warning: This allows production builds to successfully complete even if

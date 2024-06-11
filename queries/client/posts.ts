@@ -32,6 +32,7 @@ export function usePostsAPI(
     perPage?: number
     postType?: string
     status?: string
+    q?: string
   }
 ) {
   const query = setQueryString({ userId, ...params })
@@ -54,7 +55,7 @@ export function usePostsAPI(
 
 export function useCountPostsAPI(
   userId: string | null,
-  params?: { postType?: string }
+  params?: { postType?: string; q?: string }
 ) {
   const query = setQueryString({ userId, ...params })
   const url = query ? `/api/v1/post/count?${query}` : null

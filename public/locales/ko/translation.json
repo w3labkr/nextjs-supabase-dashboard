@@ -414,5 +414,17 @@
 
   "CardTitle": {
     "latest_posts": "최근 게시물"
+  },
+
+  "BulkActions": {
+    "placeholder": "일괄 작업",
+    "submit": "적용",
+    "delete": "삭제",
+    "publish": "발행"
+  },
+
+  "SearchForm": {
+    "placeholder": "텍스트 검색",
+    "submit": "검색"
   }
 }

@@ -414,5 +414,17 @@
 
   "CardTitle": {
     "latest_posts": "Latest Posts"
+  },
+
+  "BulkActions": {
+    "placeholder": "Bulk Actions",
+    "submit": "Apply",
+    "delete": "Delete",
+    "publish": "Publish"
+  },
+
+  "SearchForm": {
+    "placeholder": "Search Text",
+    "submit": "Search"
   }
 }

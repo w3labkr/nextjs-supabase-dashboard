@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
-import { ApiError, revalidatePaths } from '@/lib/utils'
+import { ApiError, revalidates } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 import { Post } from '@/types/database'
 
@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
   const perPage = +((searchParams.get('perPage') as string) ?? '50')
   const postType = (searchParams.get('postType') as string) ?? 'post'
   const status = searchParams.get('status') as string
+  const q = searchParams.get('q') as string
 
   let match = {}
 
@@ -24,20 +25,22 @@ export async function GET(request: NextRequest) {
   const counterQuery = supabase
     .from('posts')
     .select(columns, { count: 'exact', head: true })
-    .match(match)
 
+  if (q) counterQuery.textSearch('title', q)
   if (!status) counterQuery.neq('status', 'trash')
 
-  const counter = await counterQuery
+  const counter = await counterQuery.match(match)
   const total = counter?.count ?? 0
   const startingIndex = (page - 1) * perPage
   const lastIndex = page * perPage - 1
 
-  const listQuery = supabase.from('posts').select(columns).match(match)
+  const listQuery = supabase.from('posts').select(columns)
 
+  if (q) listQuery.textSearch('title', q)
   if (!status) listQuery.neq('status', 'trash')
 
   const { data: list, error } = await listQuery
+    .match(match)
     .range(startingIndex, lastIndex)
     .order('id', { ascending: false })
 
