@@ -27,7 +27,7 @@ const MetaboxSlug = () => {
   const watchTitle: string = useWatch({ control, name: 'title' })
   const setSlug = React.useCallback(
     (value: string) => {
-      setValue('slug', slugify(value), {
+      setValue('slug', slugify(value ?? ''), {
         shouldDirty: true,
         shouldValidate: true,
       })

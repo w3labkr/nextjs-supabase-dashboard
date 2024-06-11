@@ -10,7 +10,6 @@ type SlugifyOptions =
       locale?: string
       trim?: boolean
     }
-  | undefined
 
 const slugify = (string: string, options?: SlugifyOptions): string => {
   const defaults = {
@@ -18,6 +17,7 @@ const slugify = (string: string, options?: SlugifyOptions): string => {
     remove: /[^\p{L}\d\s]+/gu, // remove characters that match regex, defaults to `undefined`
     lower: true, // convert to lower case, defaults to `false`
     strict: false, // strip special characters except replacement, defaults to `false`
+    // locale: 'vi', // language code of the locale to use
     trim: true, // trim leading and trailing replacement chars, defaults to `true`
   }
 

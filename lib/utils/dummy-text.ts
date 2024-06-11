@@ -21,7 +21,7 @@ export function generateRecentPosts(
       status: 'publish',
       password: null,
       title,
-      slug: slugify(title),
+      slug: slugify(title ?? ''),
       content: faker.lorem.paragraphs(),
       excerpt: faker.lorem.sentence(),
       thumbnail_url: null,
