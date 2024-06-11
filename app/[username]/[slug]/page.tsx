@@ -38,10 +38,12 @@ export async function generateMetadata(
   })
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL!),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL!),
     title: post?.title,
     description: post?.excerpt,
     openGraph: {
+      type: 'website',
+      siteName: process.env.NEXT_PUBLIC_APP_NAME!,
       title: post?.title ?? undefined,
       description: post?.excerpt ?? undefined,
       images: post?.thumbnail_url ?? undefined,

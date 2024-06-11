@@ -52,7 +52,7 @@ module.exports = {
   },
   ignorePatterns: [
     '.eslintrc.js',
-    'next.config.mjs',
+    'next.config.js',
     'postcss.config.js',
     'tailwind.config.ts',
     'components/ui',

@@ -44,7 +44,7 @@ i18n
 
     backend: {
       loadPath:
-        process.env.NEXT_PUBLIC_SITE_URL + '/locales/{{lng}}/{{ns}}.json',
+        process.env.NEXT_PUBLIC_APP_URL + '/locales/{{lng}}/{{ns}}.json',
     },
   })
 

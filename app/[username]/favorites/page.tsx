@@ -17,7 +17,7 @@ import { getFavoritePostsAPI } from '@/queries/server/posts'
 
 // revalidate the data at most every week
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
-// export const revalidate = 604800
+export const revalidate = 0
 
 export async function generateMetadata(
   {
@@ -30,7 +30,7 @@ export async function generateMetadata(
   const { user } = await getUserAPI(null, { username })
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL!),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL!),
     title: user?.full_name,
     description: user?.bio,
     openGraph: {

@@ -25,7 +25,7 @@ import useSWR from 'swr'
 const Notify = () => {
   const { t } = useTranslation()
   const { data } = useSWR<{ data: any[]; count: number }>(
-    process.env.NEXT_PUBLIC_SITE_URL + '/api/v1/notify'
+    process.env.NEXT_PUBLIC_APP_URL + '/api/v1/notify'
   )
 
   return (

@@ -31,8 +31,7 @@ const SignInWithGoogle = (props: SignInWithGoogleProps) => {
           // A URL to send the user to after they are confirmed.
           // Don't forget to change the URL in supabase's email template.
           redirectTo:
-            process.env.NEXT_PUBLIC_SITE_URL +
-            `/api/auth/callback?next=${next}`,
+            process.env.NEXT_PUBLIC_APP_URL + `/api/auth/callback?next=${next}`,
           // Google does not send out a refresh token by default,
           // so you will need to pass parameters like these to signInWithOAuth() in order to extract the provider_refresh_token:
           queryParams: {

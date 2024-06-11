@@ -13,6 +13,7 @@ Denpendency
 - Supabase Email Auth with PKCE flow (@supabase/ssr)
 - Supabase Role-based Access Control (RBAC)
 - CKEditor 5 + Supabase Upload Adapter
+- PWA (Progressive Web Apps)
 
 > The administrator page cannot be viewed on the demo page.  
 > Check the files in the `app/dashboard/admin` directory.
@@ -34,6 +35,7 @@ Denpendency
     - [Supabase Auth](#supabase-auth)
     - [Firebase Auth](#firebase-auth)
     - [Text Editor](#text-editor)
+    - [PWA (Progressive Web Apps)](#pwa-progressive-web-apps)
     - [Utils](#utils)
     - [ESLint](#eslint)
   - [Configuration](#configuration)
@@ -402,6 +404,21 @@ npm install @ckeditor/ckeditor5-react
 ```
 
 - [Integrate CKEditor 5 with Next.js](https://ckeditor.com/docs/ckeditor5/latest/installation/integrations/next-js.html)
+
+### PWA (Progressive Web Apps)
+
+Zero config PWA plugin for Next.js, with workbox
+
+```shell
+npm install next-pwa
+```
+
+- [next-pwa](https://github.com/shadowwalker/next-pwa)
+
+Generate manifest and splash screen
+
+- [PWA Manifest Generator](https://www.simicart.com/manifest-generator.html)
+- [Custom Splash Screen on iOS](https://appsco.pe/developer/splash-screens)
 
 ### Utils
 

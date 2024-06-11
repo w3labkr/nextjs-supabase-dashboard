@@ -1,6 +1,12 @@
+const withPWA = require('next-pwa')({
+  dest: 'public',
+})
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: process.env.NODE_ENV === 'production',
+  // reactStrictMode: process.env.NODE_ENV === 'production',
+  reactStrictMode: true,
+  swcMinify: true,
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
@@ -53,4 +59,4 @@ const nextConfig = {
   },
 }
 
-export default nextConfig
+module.exports = withPWA(nextConfig)

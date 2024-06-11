@@ -1,7 +1,7 @@
 import { Post, User } from '@/types/database'
 
 export function absoluteUrl(pathname?: string): string {
-  const origin = process.env.NEXT_PUBLIC_SITE_URL!
+  const origin = process.env.NEXT_PUBLIC_APP_URL!
   const uri = `${origin}/${pathname}`
   const sanitized = uri.replace(/\/+/g, '/').replace(/\/+$/, '')
   const url = new URL(sanitized)

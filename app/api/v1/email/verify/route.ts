@@ -63,7 +63,7 @@ function mailTemplate(payload: VerifyTokenPayload) {
 
 function generate_url(payload: string | object | Buffer) {
   const token_hash = jwtSign(payload, { expiresIn: '10m' })
-  const url = new URL(process.env.NEXT_PUBLIC_SITE_URL!)
+  const url = new URL(process.env.NEXT_PUBLIC_APP_URL!)
   url.pathname = '/api/verify/email'
   url.searchParams.set('token_hash', token_hash)
   url.searchParams.set('next', '/dashboard/settings/emails')

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter as FontSans } from 'next/font/google'
 import { Analytics } from '@/components/analytics'
 
@@ -19,8 +19,19 @@ const fontSans = FontSans({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL!),
   title: siteConfig.title,
   description: siteConfig.description,
+  manifest: '/manifest.json',
+}
+
+export const viewport: Viewport = {
+  themeColor: '#ffffff',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({
