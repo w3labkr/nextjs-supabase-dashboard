@@ -10,6 +10,7 @@ import { Button, ButtonProps } from '@/components/ui/button'
 import { useSWRConfig } from 'swr'
 import {
   fetcher,
+  setUrn,
   setQueryString,
   generateRecentPosts,
   getPostPath,
@@ -69,17 +70,24 @@ const AddDummyPost = (props: AddDummyPostProps) => {
 
       if (inserted?.error) throw new Error(inserted?.error?.message)
 
-      const query = setQueryString({
+      const qsCounter = setQueryString({
+        userId: user?.id,
+        postType: (searchParams.get('postType') as string) ?? 'post',
+        q: searchParams.get('q') as string,
+      })
+
+      const qsList = setQueryString({
         userId: user?.id,
         page: +((searchParams.get('page') as string) ?? '1'),
         perPage: +((searchParams.get('perPage') as string) ?? '10'),
         postType: (searchParams.get('postType') as string) ?? 'post',
         status: searchParams.get('status') as string,
+        q: searchParams.get('q') as string,
       })
 
       mutate(fetchUrl)
-      mutate(`/api/v1/post/list?${query}`)
-      mutate(`/api/v1/post/count?userId=${user?.id}`)
+      mutate(setUrn('/api/v1/post/count', qsCounter))
+      mutate(setUrn('/api/v1/post/list', qsList))
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Payment Required')) {

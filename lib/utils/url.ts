@@ -9,6 +9,12 @@ export function absoluteUrl(pathname?: string): string {
   return url.toString()
 }
 
+export function setUrn(pathname: string, queryString: string): string {
+  const sanitized = pathname.replace(/\/+/g, '/').replace(/\/+$/, '')
+
+  return [sanitized, queryString].filter(Boolean).join('?')
+}
+
 export function getQueryString(searchParams: URLSearchParams) {
   return Object.fromEntries(searchParams?.entries())
 }

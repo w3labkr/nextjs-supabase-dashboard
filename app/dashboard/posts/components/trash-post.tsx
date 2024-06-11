@@ -9,6 +9,7 @@ import { usePaging } from '@/components/paging'
 import { useSWRConfig } from 'swr'
 import {
   fetcher,
+  setUrn,
   setQueryString,
   getPostPath,
   getAuthorPath,
@@ -51,17 +52,24 @@ const TrashPost = (props: TrashPostProps) => {
 
       if (updated?.error) throw new Error(updated?.error?.message)
 
-      const query = setQueryString({
+      const qsCounter = setQueryString({
+        userId: post?.user_id,
+        postType: paging?.postType,
+        q: paging?.q,
+      })
+
+      const qsList = setQueryString({
         userId: post?.user_id,
         page: paging?.page,
         perPage: paging?.perPage,
         postType: paging?.postType,
         status: paging?.status,
+        q: paging?.q,
       })
 
       mutate(fetchUrl)
-      mutate(`/api/v1/post/list?${query}`)
-      mutate(`/api/v1/post/count?userId=${post?.user_id}`)
+      mutate(setUrn('/api/v1/post/count', qsCounter))
+      mutate(setUrn('/api/v1/post/list', qsList))
 
       toast.success(t('FormMessage.deleted_successfully'))
     } catch (e: unknown) {

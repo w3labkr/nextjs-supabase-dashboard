@@ -12,6 +12,7 @@ export {
 export { ApiError } from './error'
 export {
   absoluteUrl,
+  setUrn,
   getQueryString,
   setQueryString,
   getPostPath,

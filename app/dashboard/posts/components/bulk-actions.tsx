@@ -26,7 +26,7 @@ const BulkActions = () => {
         <SelectContent>
           <SelectGroup>
             <SelectItem>{t('BulkActions.placeholder')}</SelectItem>
-            {/* <SelectItem value="delete">{t('BulkActions.delete')}</SelectItem> */}
+            <SelectItem value="delete">{t('BulkActions.delete')}</SelectItem>
             {/* <SelectItem value="publish">{t('BulkActions.publish')}</SelectItem> */}
           </SelectGroup>
         </SelectContent>

@@ -80,10 +80,9 @@ const Header = () => {
 
 const HeadLinks = () => {
   const paging = usePaging()
-
   const { user } = useAuth()
   const { data, count } = useCountPostsAPI(user?.id ?? null, {
-    postType: 'post',
+    postType: paging.postType,
     q: paging?.q,
   })
 
