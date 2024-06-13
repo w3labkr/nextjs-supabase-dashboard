@@ -24,6 +24,7 @@ const MetaboxFutureDate = () => {
   const { control, setValue } = useFormContext()
 
   const watchMeta: Meta | undefined = useWatch({ control, name: 'meta' })
+  const [checked, setChecked] = React.useState<boolean>(false)
   const [date, setDate] = React.useState<Date | undefined>(new Date())
 
   const setMetaValue = React.useCallback(
@@ -36,9 +37,18 @@ const MetaboxFutureDate = () => {
     [post?.id, setValue]
   )
 
-  const checked: boolean = React.useMemo(() => {
-    return !!getMeta(watchMeta, 'future_date', null)
+  React.useEffect(() => {
+    const future_date = getMeta(watchMeta, 'future_date')
+    setChecked(!!future_date)
   }, [watchMeta])
+
+  React.useEffect(() => {
+    if (date) {
+      setMetaValue(watchMeta, 'future_date', date?.toISOString())
+    } else {
+      setMetaValue(watchMeta, 'future_date', null)
+    }
+  }, [date])
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
@@ -48,8 +58,7 @@ const MetaboxFutureDate = () => {
           <Switch
             checked={checked}
             onCheckedChange={(value: boolean) => {
-              const metaValue = value ? date?.toISOString() ?? null : null
-              setMetaValue(watchMeta, 'future_date', metaValue)
+              value ? setDate(new Date()) : setDate(undefined)
             }}
           />
           {checked ? (
