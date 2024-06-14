@@ -31,7 +31,7 @@ export default async function DashboardPage() {
               <Separator />
               <Description text="DashboardPage.description" translate="yes" />
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <WidgetLatestPosts className="columns-1 gap-2 space-y-2" />
+                <WidgetLatestPosts className="columns-1 gap-2 space-y-1" />
               </div>
             </div>
           </main>

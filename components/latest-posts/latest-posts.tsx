@@ -15,6 +15,7 @@ interface LatestPostsOptions {
   classNameExcerpt?: string
   classNameDate?: string
   classNameAuthor?: string
+  prefixTitle?: React.JSX.Element
 }
 
 interface LatestPostsProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -55,6 +56,7 @@ const LatestItem = (props: LatestItemProps) => {
             options?.classNameTitle
           )}
         >
+          {options?.prefixTitle}
           <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
         </h3>
       ) : null}
