@@ -27,7 +27,7 @@ const LatestPosts = (props: LatestPostsProps) => {
   const { className, posts, options, ...rest } = props
 
   return (
-    <div className={cn('gap-8 space-y-8', className)} {...rest}>
+    <div className={cn(className)} {...rest}>
       {Array.isArray(posts) && posts?.length > 0 ? (
         posts?.map((post: Post) => (
           <LatestItem key={post?.id} post={post} options={options} />
@@ -52,7 +52,7 @@ const LatestItem = (props: LatestItemProps) => {
       {!options?.hideTitle ? (
         <h3
           className={cn(
-            'font-serif text-3xl hover:underline',
+            'line-clamp-2 font-serif text-3xl hover:underline',
             options?.classNameTitle
           )}
         >

@@ -109,7 +109,7 @@ export default async function FavoritesPage({
               <PagingProvider value={{ total, page, perPage, pageSize }}>
                 <div className="space-y-16">
                   <LatestPosts
-                    className="columns-1 gap-8 space-y-8"
+                    className="grid grid-cols-1 gap-8"
                     posts={posts}
                   />
                   {Array.isArray(posts) && posts?.length > 0 ? (

@@ -38,8 +38,8 @@ export default async function PostsPage({
           <PagingProvider value={{ total, page, perPage, pageSize }}>
             <div className="space-y-16">
               <LatestPosts
-                className="columns-1 gap-8 space-y-8"
                 posts={posts}
+                className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4"
               />
               {Array.isArray(posts) && posts?.length > 0 ? <Paging /> : null}
             </div>
