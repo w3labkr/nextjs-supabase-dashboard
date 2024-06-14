@@ -17,7 +17,7 @@ export default function BlockedPage() {
   const { t } = useTranslation()
   const { setSession, setUser } = useAuth()
 
-  const handleClick = async () => {
+  const onClick = async () => {
     try {
       const supabase = createClient()
       const unsigned = await supabase.auth.signOut()
@@ -45,7 +45,7 @@ export default function BlockedPage() {
           <p>{t('BlockedPage.description')}</p>
           <p>{t('BlockedPage.message')}</p>
           <button
-            onClick={handleClick}
+            onClick={onClick}
             className="text-left text-blue-700 hover:underline"
           >
             {t('BlockedPage.button')}

@@ -37,20 +37,22 @@ const DeleteEmail = (props: DeleteEmailProps) => {
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const handleClick = async () => {
+  const onClick = async () => {
     try {
       setIsSubmitting(true)
 
       if (!user) throw new Error('Require is not defined.')
       if (!item) throw new Error('Require is not defined.')
 
-      const fetchUrl = `/api/v1/email?userId=${user?.id}`
-      const result = await fetcher<EmailsAPI>(fetchUrl, {
-        method: 'DELETE',
-        body: JSON.stringify({
-          data: { email: item?.email },
-        }),
-      })
+      const result = await fetcher<EmailsAPI>(
+        `/api/v1/email?userId=${user?.id}`,
+        {
+          method: 'DELETE',
+          body: JSON.stringify({
+            data: { email: item?.email },
+          }),
+        }
+      )
 
       if (result?.error) throw new Error(result?.error?.message)
 
@@ -90,7 +92,7 @@ const DeleteEmail = (props: DeleteEmailProps) => {
           <AlertDialogCancel>
             {t('DeleteEmail.AlertDialogCancel')}
           </AlertDialogCancel>
-          <AlertDialogAction onClick={handleClick}>
+          <AlertDialogAction onClick={onClick}>
             {t('DeleteEmail.AlertDialogAction')}
           </AlertDialogAction>
         </AlertDialogFooter>

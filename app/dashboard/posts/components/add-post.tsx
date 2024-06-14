@@ -30,19 +30,21 @@ const AddPost = (props: AddPostProps) => {
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const handleClick = async () => {
+  const onClick = async () => {
     try {
       setIsSubmitting(true)
 
       if (!user) throw new Error('Require is not defined.')
 
-      const fetchUrl = `/api/v1/post?userId=${user?.id}`
-      const { data: post, error } = await fetcher<PostAPI>(fetchUrl, {
-        method: 'PUT',
-        body: JSON.stringify({
-          data: { title: 'Untitled Post', user_id: user?.id },
-        }),
-      })
+      const { data: post, error } = await fetcher<PostAPI>(
+        `/api/v1/post?userId=${user?.id}`,
+        {
+          method: 'PUT',
+          body: JSON.stringify({
+            data: { title: 'Untitled Post', user_id: user?.id },
+          }),
+        }
+      )
 
       if (error) throw new Error(error?.message)
 
@@ -60,12 +62,7 @@ const AddPost = (props: AddPostProps) => {
   }
 
   return (
-    <Button
-      type="button"
-      onClick={handleClick}
-      disabled={isSubmitting}
-      {...rest}
-    >
+    <Button type="button" onClick={onClick} disabled={isSubmitting} {...rest}>
       {startIconName && (
         <LucideIcon name={startIconName} className="mr-2 size-4" />
       )}

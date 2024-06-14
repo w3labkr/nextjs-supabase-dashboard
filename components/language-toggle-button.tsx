@@ -23,9 +23,10 @@ const LanguageToggleButton = (props: LanguageToggleButtonProps) => {
     React.useState<string>(resolvedLanguage)
   const { i18n } = useTranslation()
 
-  const handleClick = () => {
+  const onClick = () => {
     const currentValue =
       currentLanguage === defaultLng ? fallbackLng : defaultLng
+
     i18n.changeLanguage(currentValue)
     document.documentElement.lang = currentValue
     setCurrentLanguage(currentValue)
@@ -37,7 +38,7 @@ const LanguageToggleButton = (props: LanguageToggleButtonProps) => {
       type="button"
       variant={variant}
       size={size}
-      onClick={handleClick}
+      onClick={onClick}
       {...rest}
     >
       {currentLanguage?.toUpperCase()}

@@ -103,4 +103,4 @@ const usePaging = () => {
   return context
 }
 
-export { PagingProvider, usePaging }
+export { PagingProvider, usePaging, type PagingContextProps }

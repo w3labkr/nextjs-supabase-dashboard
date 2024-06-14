@@ -8,8 +8,8 @@
 -- https://supabase.com/blog/postgrest-aggregate-functions
 
 -- Staying Safe with Aggregate Functions
--- ALTER ROLE authenticator SET pgrst.db_aggregates_enabled = 'true';
--- NOTIFY pgrst, 'reload config';
+ALTER ROLE authenticator SET pgrst.db_aggregates_enabled = 'true';
+NOTIFY pgrst, 'reload config';
 
 ----------------------------------------------------------------
 --                                                            --
@@ -18,16 +18,16 @@
 ----------------------------------------------------------------
 
 -- Cryptographic functions
--- create extension if not exists pgcrypto schema extensions;
+create extension if not exists pgcrypto schema extensions;
 
 -- Functions for tracking last modification time
--- create extension if not exists moddatetime schema extensions;
+create extension if not exists moddatetime schema extensions;
 
 -- Job scheduler for PostgreSQL
--- create extension if not exists pg_cron;
+create extension if not exists pg_cron;
 
--- grant usage on schema cron to postgres;
--- grant all privileges on all tables in schema cron to postgres;
+grant usage on schema cron to postgres;
+grant all privileges on all tables in schema cron to postgres;
 
 ----------------------------------------------------------------
 --                                                            --
@@ -940,8 +940,9 @@ $$ language plpgsql;
 --                                                            --
 ----------------------------------------------------------------
 
+-- select create_new_user('username@example.com', '123456789');
+
 select assign_user_data();
 
--- select create_new_user('username@example.com', '123456789');
--- select set_user_role('superadmin', null, 'username@example.com')
--- select set_user_plan('premium', null, 'username@example.com')
+select set_user_role('superadmin', null, 'username@example.com');
+select set_user_plan('premium', null, 'username@example.com');

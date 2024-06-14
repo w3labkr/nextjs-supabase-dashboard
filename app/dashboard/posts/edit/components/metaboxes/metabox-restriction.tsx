@@ -33,7 +33,7 @@ const MetaboxRectriction = () => {
   )
 
   const checked: boolean = React.useMemo(() => {
-    return getMeta(watchMeta, 'visibility', null) === 'private'
+    return getMeta(watchMeta, 'visibility') === 'private'
   }, [watchMeta])
 
   return (

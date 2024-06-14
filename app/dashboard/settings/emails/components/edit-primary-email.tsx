@@ -149,17 +149,19 @@ const SubmitButton = () => {
         throw new Error('Nothing has changed.')
       }
 
-      const fetchUrl = `/api/v1/email?userId=${user?.id}`
-      const result = await fetcher<EmailAPI>(fetchUrl, {
-        method: 'POST',
-        body: JSON.stringify({
-          data: { email: formValues?.email },
-        }),
-      })
+      const result = await fetcher<EmailAPI>(
+        `/api/v1/email?userId=${user?.id}`,
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            data: { email: formValues?.email },
+          }),
+        }
+      )
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      mutate(fetchUrl)
+      mutate(`/api/v1/email?userId=${user?.id}`)
 
       toast.success(t('FormMessage.changed_successfully'))
 

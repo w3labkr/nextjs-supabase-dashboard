@@ -208,25 +208,21 @@ const SubmitButton = () => {
         throw new Error('Nothing has changed.')
       }
 
-      const fetchData = {
+      const data = {
         ...formValues,
         email: formValues?.email?.replace('unassigned', ''),
       }
 
       const revalidatePaths = [getProfilePath(user), getFavoritesPath(user)]
 
-      const fetchUrl = `/api/v1/user?id=${user?.id}`
-      const result = await fetcher<UserAPI>(fetchUrl, {
+      const result = await fetcher<UserAPI>(`/api/v1/user?id=${user?.id}`, {
         method: 'POST',
-        body: JSON.stringify({
-          data: fetchData,
-          options: { revalidatePaths },
-        }),
+        body: JSON.stringify({ data, options: { revalidatePaths } }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      mutate(fetchUrl)
+      mutate(`/api/v1/user?id=${user?.id}`)
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {

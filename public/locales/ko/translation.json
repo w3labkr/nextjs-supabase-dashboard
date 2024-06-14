@@ -341,16 +341,6 @@
     "AlertDialogAction": "계속"
   },
 
-  "PostList": {
-    "EditPost": "수정",
-    "PublishPost": "발행",
-    "ViewPost": "보기",
-    "TrashPost": "휴지통",
-    "RestorePost": "복구",
-    "DeletePost": "삭제",
-    "ClonePost": "복사"
-  },
-
   "PostStatus": {
     "all": "모두",
     "publish": "발행",
@@ -359,6 +349,31 @@
     "pending": "대기",
     "private": "비공개",
     "trash": "휴지통"
+  },
+
+  "QuickLinks": {
+    "edit": "수정",
+    "draft": "임시",
+    "publish": "발행",
+    "public": "공개",
+    "private": "비공개",
+    "view": "보기",
+    "trash": "휴지통",
+    "restore": "복구",
+    "delete": "삭제",
+    "clone": "복사"
+  },
+
+  "BulkActions": {
+    "trash": "휴지통",
+    "delete": "삭제",
+    "draft": "임시",
+    "publish": "발행",
+    "restore": "복구",
+    "public": "공개",
+    "private": "비공개",
+    "placeholder": "일괄 작업",
+    "submit": "적용"
   },
 
   "PostMetabox": {
@@ -415,15 +430,6 @@
 
   "CardTitle": {
     "latest_posts": "최근 게시물"
-  },
-
-  "BulkActions": {
-    "placeholder": "일괄 작업",
-    "submit": "적용",
-    "delete": "일괄 삭제",
-    "publish": "일괄 발행",
-    "public": "일괄 공개",
-    "private": "일괄 비공개"
   },
 
   "SearchForm": {

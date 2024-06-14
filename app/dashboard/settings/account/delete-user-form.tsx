@@ -214,8 +214,7 @@ const SubmitButton = () => {
 
       const revalidatePaths = [getProfilePath(user), getFavoritesPath(user)]
 
-      const fetchUrl = `/api/v1/user?id=${user?.id}`
-      const deleted = await fetcher<UserAPI>(fetchUrl, {
+      const deleted = await fetcher<UserAPI>(`/api/v1/user?id=${user?.id}`, {
         method: 'DELETE',
         body: JSON.stringify({
           options: { revalidatePaths },

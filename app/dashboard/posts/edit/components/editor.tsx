@@ -176,15 +176,15 @@ const Editor = () => {
     localStorage.setItem('ckeditor5', JSON.stringify({ userId: user?.id }))
   }, [user?.id])
 
-  const handleChange = (event: EventInfo, editor: ClassicEditor) => {
+  const onChange = (event: EventInfo, editor: ClassicEditor) => {
     const data = editor.getData()
     setValue('content', data, { shouldDirty: true, shouldValidate: true })
     setWatchValue(data)
   }
 
   // This for Revisions
-  // const handleBlur = (event: EventInfo, editor: ClassicEditor) => {
-  //   console.log('handleBlur')
+  // const onBlur = (event: EventInfo, editor: ClassicEditor) => {
+  //   console.log('onBlur')
   //   const data = editor.getData()
   //   console.log(data)
   // }
@@ -194,8 +194,8 @@ const Editor = () => {
       editor={ClassicEditor}
       config={editorConfiguration}
       data={watchValue}
-      onChange={handleChange}
-      // onBlur={handleBlur}
+      onChange={onChange}
+      // onBlur={onBlur}
     />
   )
 }

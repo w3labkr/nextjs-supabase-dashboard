@@ -94,4 +94,4 @@ const EmptyItem = () => {
   return <div>No posts yet.</div>
 }
 
-export { LatestPosts, type LatestPostsProps }
+export { LatestPosts, type LatestPostsProps, type LatestPostsOptions }

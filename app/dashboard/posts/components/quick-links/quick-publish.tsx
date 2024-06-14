@@ -9,21 +9,22 @@ import { usePaging } from '@/components/paging'
 import { useSWRConfig } from 'swr'
 import {
   fetcher,
-  setUrn,
   setQueryString,
   getPostPath,
   getAuthorPath,
   getAuthorFavoritesPath,
+  setMeta,
+  getMeta,
 } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
-interface DeletePostProps
+interface QuickPublishProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   post: Post
 }
 
-const DeletePost = (props: DeletePostProps) => {
+const QuickPublish = (props: QuickPublishProps) => {
   const { post, ...rest } = props
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
@@ -31,9 +32,19 @@ const DeletePost = (props: DeletePostProps) => {
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const handleClick = async () => {
+  const onClick = async () => {
     try {
       setIsSubmitting(true)
+
+      const visibility = getMeta(post?.meta, 'visibility')
+      const now = new Date().toISOString()
+      const data = {
+        status: visibility === 'private' ? 'private' : 'publish',
+        meta: setMeta(post?.meta, 'future_date', null, {
+          post_id: post?.id,
+        }),
+        user_id: post?.user_id,
+      }
 
       const revalidatePaths = [
         getPostPath(post),
@@ -41,24 +52,23 @@ const DeletePost = (props: DeletePostProps) => {
         getAuthorFavoritesPath(post),
       ]
 
-      const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const deleted = await fetcher<PostAPI>(fetchUrl, {
-        method: 'DELETE',
+      const updated = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
+        method: 'POST',
         body: JSON.stringify({
-          data: { user_id: post?.user_id },
+          data: post?.date ? data : { ...data, date: now },
           options: { revalidatePaths },
         }),
       })
 
-      if (deleted?.error) throw new Error(deleted?.error?.message)
+      if (updated?.error) throw new Error(updated?.error?.message)
 
-      const qsCounter = setQueryString({
+      const countSearchParams = setQueryString({
         userId: post?.user_id,
         postType: paging?.postType,
         q: paging?.q,
       })
 
-      const qsList = setQueryString({
+      const listSearchParams = setQueryString({
         userId: post?.user_id,
         page: paging?.page,
         perPage: paging?.perPage,
@@ -67,11 +77,11 @@ const DeletePost = (props: DeletePostProps) => {
         q: paging?.q,
       })
 
-      mutate(fetchUrl)
-      mutate(setUrn('/api/v1/post/count', qsCounter))
-      mutate(setUrn('/api/v1/post/list', qsList))
+      mutate(`/api/v1/post?id=${post?.id}`)
+      mutate(`/api/v1/post/count?${countSearchParams}`)
+      mutate(`/api/v1/post/list?${listSearchParams}`)
 
-      toast.success(t('FormMessage.deleted_successfully'))
+      toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -81,14 +91,14 @@ const DeletePost = (props: DeletePostProps) => {
 
   return (
     <button
-      className="text-xs text-destructive hover:underline"
-      onClick={handleClick}
+      className="text-xs text-blue-700 hover:underline"
+      onClick={onClick}
       disabled={isSubmitting}
       {...rest}
     >
-      {t('PostList.DeletePost')}
+      {t('QuickLinks.publish')}
     </button>
   )
 }
 
-export { DeletePost, type DeletePostProps }
+export { QuickPublish, type QuickPublishProps }

@@ -22,13 +22,29 @@ import { PagingProvider, usePaging, Paging } from '@/components/paging'
 
 import { SearchForm } from './components/search-form'
 import { HeadLink } from './components/head-link'
-import { QuickLinks } from './components/quick-links'
-import { BulkActions } from './components/bulk-actions'
+import {
+  QuickEdit,
+  QuickView,
+  QuickTrash,
+  QuickRestore,
+  QuickDelete,
+  QuickPublish,
+  QuickPublic,
+  QuickPrivate,
+  QuickDraft,
+} from './components/quick-links'
 
-import { getMeta } from '@/lib/utils'
+import {
+  BulkActions,
+  BulkActionsProvider,
+  useBulkActions,
+} from './components/bulk-actions'
+
+import { cn, getMeta } from '@/lib/utils'
 import { Post } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 import { usePostsAPI, useCountPostsAPI } from '@/queries/client/posts'
+import { CheckedState } from '@radix-ui/react-checkbox'
 
 const PostList = () => {
   const searchParams = useSearchParams()
@@ -54,9 +70,11 @@ const PostList = () => {
     <PagingProvider
       value={{ total, page, perPage, pageSize, postType, status, q }}
     >
-      <Header />
-      <Body />
-      <Footer />
+      <BulkActionsProvider>
+        <Header />
+        <Body />
+        <Footer />
+      </BulkActionsProvider>
     </PagingProvider>
   )
 }
@@ -73,7 +91,11 @@ const Header = () => {
   )
 }
 
-const HeadLinks = () => {
+interface HeadLinksProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const HeadLinks = (props: HeadLinksProps) => {
+  const { className, ...rest } = props
+
   const paging = usePaging()
   const { user } = useAuth()
   const { data, count } = useCountPostsAPI(user?.id ?? null, {
@@ -89,7 +111,13 @@ const HeadLinks = () => {
   }, [data])
 
   return (
-    <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+    <div
+      className={cn(
+        'flex items-center space-x-1 text-sm text-muted-foreground',
+        className
+      )}
+      {...rest}
+    >
       <HeadLink status={null} label="all" count={count ?? 0} />
       <span>|</span>
       <HeadLink status="publish" label="publish" count={status?.publish ?? 0} />
@@ -107,22 +135,6 @@ const HeadLinks = () => {
   )
 }
 
-const Footer = () => {
-  const paging = usePaging()
-  const { user } = useAuth()
-  const { posts } = usePostsAPI(user?.id ?? null, {
-    page: paging?.page,
-    perPage: paging?.perPage,
-    postType: paging?.postType,
-    status: paging?.status,
-    q: paging?.q,
-  })
-
-  if (!posts) return null
-
-  return <Paging />
-}
-
 const Body = () => {
   const { t } = useTranslation()
 
@@ -136,13 +148,29 @@ const Body = () => {
     q: paging?.q,
   })
 
+  const { checks, setChecks } = useBulkActions()
+  const onCheckedChange = (checked: CheckedState) => {
+    if (checked && posts) {
+      setChecks(posts)
+    } else {
+      setChecks([])
+    }
+  }
+
+  React.useEffect(() => {
+    setChecks([])
+  }, [paging, setChecks])
+
   return (
     <Table className="border-t">
       {/* <TableCaption></TableCaption> */}
       <TableHeader>
         <TableRow>
           <TableHead className="w-[50px]">
-            <Checkbox />
+            <Checkbox
+              checked={checks?.length === posts?.length}
+              onCheckedChange={onCheckedChange}
+            />
           </TableHead>
           <TableHead className="w-[70px] text-center">
             {t('Table.num')}
@@ -179,17 +207,29 @@ const PostItem = ({ post }: { post: Post }) => {
   const { t } = useTranslation()
   const paging = usePaging()
 
+  const { checks, setChecks } = useBulkActions()
+  const onCheckedChange = (checked: CheckedState) => {
+    if (checked) {
+      setChecks([...checks, post])
+    } else {
+      setChecks(checks?.filter((r) => r.id !== post?.id))
+    }
+  }
+
   return (
     <TableRow>
       <TableCell>
-        <Checkbox />
+        <Checkbox
+          checked={checks?.some((r) => r.id === post?.id)}
+          onCheckedChange={onCheckedChange}
+        />
       </TableCell>
       <TableCell align="center">{post?.num}</TableCell>
       <TableCell>
         <div className="flex items-center space-x-2">
           <div className="line-clamp-1">
             <span>
-              {!paging?.status && post?.status !== 'publish'
+              {!['publish'].includes(post?.status)
                 ? `[${t(`PostStatus.${post?.status}`)}] `
                 : null}
             </span>
@@ -205,7 +245,7 @@ const PostItem = ({ post }: { post: Post }) => {
       </TableCell>
       <TableCell align="center">{post?.author?.full_name}</TableCell>
       <TableCell align="center">
-        {getMeta(post?.meta, 'visibility', null) === 'private' ? (
+        {getMeta(post?.meta, 'visibility') === 'private' ? (
           <LucideIcon name="LockKeyhole" className="size-4 min-w-4" />
         ) : (
           <LucideIcon
@@ -222,6 +262,81 @@ const PostItem = ({ post }: { post: Post }) => {
       </TableCell>
     </TableRow>
   )
+}
+
+interface QuickLinksProps extends React.HTMLAttributes<HTMLDivElement> {
+  post: Post
+}
+
+const QuickLinks = (props: QuickLinksProps) => {
+  const { post, ...rest } = props
+
+  switch (post?.status) {
+    case 'publish':
+      return (
+        <div className="space-x-1" {...rest}>
+          <QuickEdit post={post} />
+          <span>|</span>
+          <QuickDraft post={post} />
+          <span>|</span>
+          <QuickPrivate post={post} />
+          <span>|</span>
+          <QuickTrash post={post} />
+          <span>|</span>
+          <QuickView post={post} />
+        </div>
+      )
+    case 'private':
+      return (
+        <div className="space-x-1" {...rest}>
+          <QuickEdit post={post} />
+          <span>|</span>
+          <QuickDraft post={post} />
+          <span>|</span>
+          <QuickPublic post={post} />
+          <span>|</span>
+          <QuickTrash post={post} />
+          <span>|</span>
+          <QuickView post={post} />
+        </div>
+      )
+    case 'future':
+      return (
+        <div className="space-x-1" {...rest}>
+          <QuickEdit post={post} />
+          <span>|</span>
+          <QuickDraft post={post} />
+          <span>|</span>
+          <QuickPublish post={post} />
+          <span>|</span>
+          <QuickTrash post={post} />
+        </div>
+      )
+    case 'draft':
+      return (
+        <div className="space-x-1" {...rest}>
+          <QuickEdit post={post} />
+          <span>|</span>
+          <QuickPublish post={post} />
+          <span>|</span>
+          <QuickTrash post={post} />
+        </div>
+      )
+    case 'trash':
+      return (
+        <div className="space-x-1" {...rest}>
+          <QuickRestore post={post} />
+          <span>|</span>
+          <QuickDelete post={post} />
+        </div>
+      )
+    case 'pending':
+      return (
+        <div className="space-x-1" {...rest}>
+          <QuickTrash post={post} />
+        </div>
+      )
+  }
 }
 
 const EmptyItem = () => {
@@ -246,6 +361,22 @@ const LoadingItem = () => {
       </TableCell>
     </TableRow>
   )
+}
+
+const Footer = () => {
+  const paging = usePaging()
+  const { user } = useAuth()
+  const { posts } = usePostsAPI(user?.id ?? null, {
+    page: paging?.page,
+    perPage: paging?.perPage,
+    postType: paging?.postType,
+    status: paging?.status,
+    q: paging?.q,
+  })
+
+  if (!posts) return null
+
+  return <Paging />
 }
 
 export { PostList }

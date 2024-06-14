@@ -7,22 +7,16 @@ import { toast } from 'sonner'
 import { usePaging } from '@/components/paging'
 
 import { useSWRConfig } from 'swr'
-import {
-  fetcher,
-  setUrn,
-  setQueryString,
-  getPostPath,
-  getAuthorPath,
-  getAuthorFavoritesPath,
-} from '@/lib/utils'
+import { fetcher, setQueryString } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
-interface TrashPostProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface QuickRestoreProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   post: Post
 }
 
-const PublishPost = (props: TrashPostProps) => {
+const QuickRestore = (props: QuickRestoreProps) => {
   const { post, ...rest } = props
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
@@ -30,37 +24,26 @@ const PublishPost = (props: TrashPostProps) => {
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const handleClick = async () => {
+  const onClick = async () => {
     try {
       setIsSubmitting(true)
 
-      const now = new Date().toISOString()
-      const revalidatePaths = [
-        getPostPath(post),
-        getAuthorPath(post),
-        getAuthorFavoritesPath(post),
-      ]
-
-      const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const updated = await fetcher<PostAPI>(fetchUrl, {
+      const updated = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
-          data: post?.date
-            ? { status: 'publish', user_id: post?.user_id }
-            : { status: 'publish', user_id: post?.user_id, date: now },
-          options: { revalidatePaths },
+          data: { status: 'draft', deleted_at: null, user_id: post?.user_id },
         }),
       })
 
       if (updated?.error) throw new Error(updated?.error?.message)
 
-      const qsCounter = setQueryString({
+      const countSearchParams = setQueryString({
         userId: post?.user_id,
         postType: paging?.postType,
         q: paging?.q,
       })
 
-      const qsList = setQueryString({
+      const listSearchParams = setQueryString({
         userId: post?.user_id,
         page: paging?.page,
         perPage: paging?.perPage,
@@ -69,9 +52,9 @@ const PublishPost = (props: TrashPostProps) => {
         q: paging?.q,
       })
 
-      mutate(fetchUrl)
-      mutate(setUrn('/api/v1/post/count', qsCounter))
-      mutate(setUrn('/api/v1/post/list', qsList))
+      mutate(`/api/v1/post?id=${post?.id}`)
+      mutate(`/api/v1/post/count?${countSearchParams}`)
+      mutate(`/api/v1/post/list?${listSearchParams}`)
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
@@ -84,13 +67,13 @@ const PublishPost = (props: TrashPostProps) => {
   return (
     <button
       className="text-xs text-blue-700 hover:underline"
-      onClick={handleClick}
+      onClick={onClick}
       disabled={isSubmitting}
       {...rest}
     >
-      {t('PostList.PublishPost')}
+      {t('QuickLinks.restore')}
     </button>
   )
 }
 
-export { PublishPost, type TrashPostProps }
+export { QuickRestore, type QuickRestoreProps }

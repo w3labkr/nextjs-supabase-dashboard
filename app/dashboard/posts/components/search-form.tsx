@@ -42,7 +42,7 @@ const SearchForm = () => {
     },
   })
 
-  const onSubmit = (formValues: FormValues) => {
+  const onSubmit = async (formValues: FormValues) => {
     const queryString = qs({ q: formValues?.q, page: 1 })
     const href = [pathname, queryString].filter(Boolean).join('?')
 
@@ -52,6 +52,8 @@ const SearchForm = () => {
   return (
     <Form {...form}>
       <form
+        method="POST"
+        noValidate
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex items-start space-x-2"
       >

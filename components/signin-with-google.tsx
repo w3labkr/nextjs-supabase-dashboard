@@ -19,7 +19,7 @@ const SignInWithGoogle = (props: SignInWithGoogleProps) => {
   const { t } = useTranslation()
   const searchParams = useSearchParams()
 
-  const handleClick = async () => {
+  const onClick = async () => {
     try {
       // if "next" is in param, use it as the redirect URL
       const next = (searchParams.get('next') as string) ?? '/dashboard'
@@ -48,7 +48,7 @@ const SignInWithGoogle = (props: SignInWithGoogleProps) => {
   }
 
   return (
-    <Button type="button" variant={variant} onClick={handleClick} {...rest}>
+    <Button type="button" variant={variant} onClick={onClick} {...rest}>
       <FcGoogle className="mr-2 size-4 min-w-4" />
       {t('SignInWithGoogle.label')}
     </Button>

@@ -31,27 +31,23 @@ const MetaboxPublish = () => {
   const { t } = useTranslation()
   const { post } = usePostForm()
 
-  const statusText = React.useMemo(() => {
-    if (post?.status === 'future') return t('PostMetabox.draft')
-    if (post?.date) return t('PostMetabox.publish')
-    if (post?.status) return t(`PostStatus.${post?.status}`)
-
-    return null
-  }, [t, post?.status, post?.date])
+  const visibility = getMeta(post?.meta, 'visibility')
+  const view_count = getMeta(post?.meta, 'view_count', '0')
+  const future_date = getMeta(post?.meta, 'future_date')
 
   const dateText = React.useMemo(() => {
-    const date = dayjs(post?.date).format('YYYY-MM-DD HH:mm:ss')
-
-    if (post?.status === 'future') {
+    if (future_date) {
+      const date = dayjs(future_date).format('YYYY-MM-DD HH:mm:ss')
       return `${t('PostMetabox.future_date')}: ${date}`
     }
 
     if (post?.date) {
+      const date = dayjs(post?.date).format('YYYY-MM-DD HH:mm:ss')
       return `${t('PostMetabox.posted_on')}: ${date}`
     }
 
     return `${t('PostMetabox.publish')}: ${t('PostMetabox.immediately')}`
-  }, [t, post?.status, post?.date])
+  }, [t, future_date, post?.date])
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
@@ -68,14 +64,14 @@ const MetaboxPublish = () => {
             <li className="flex items-center">
               <LucideIcon name="Signpost" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.status')}: `}
-              {statusText}
+              {post?.status ? t(`PostStatus.${post?.status}`) : null}
             </li>
             <li className="flex items-center">
               <LucideIcon name="Eye" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.visibility')}: `}
-              {post?.status === 'publish'
-                ? t('PostMetabox.public')
-                : t('PostMetabox.private')}
+              {visibility === 'private'
+                ? t('PostMetabox.private')
+                : t('PostMetabox.public')}
             </li>
             <li className="flex items-center">
               <LucideIcon name="CalendarDays" className="mr-2 size-4 min-w-4" />
@@ -84,7 +80,7 @@ const MetaboxPublish = () => {
             <li className="flex items-center">
               <LucideIcon name="BarChart" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.post_views')}: `}
-              {getMeta(post?.meta, 'view_count', '0')?.toLocaleString()}
+              {view_count?.toLocaleString()}
             </li>
           </ul>
           <div className="flex justify-between">
@@ -117,8 +113,7 @@ const DraftButton = () => {
         getAuthorFavoritesPath(post),
       ]
 
-      const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const result = await fetcher<PostAPI>(fetchUrl, {
+      const result = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: { ...getValues(), status: 'draft' },
@@ -128,7 +123,7 @@ const DraftButton = () => {
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      mutate(fetchUrl)
+      mutate(`/api/v1/post?id=${post?.id}`)
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {
@@ -215,8 +210,7 @@ const PreviewButton = () => {
         getAuthorFavoritesPath(post),
       ]
 
-      const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const result = await fetcher<PostAPI>(fetchUrl, {
+      const result = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: { ...getValues(), status: 'draft' },
@@ -226,7 +220,7 @@ const PreviewButton = () => {
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      mutate(fetchUrl)
+      mutate(`/api/v1/post?id=${post?.id}`)
 
       if (postPath) router.push(postPath + '?preview=true')
     } catch (e: unknown) {
@@ -273,23 +267,17 @@ const TrashButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const fetchData = {
-        ...getValues(),
-        status: 'trash',
-        deleted_at: new Date().toISOString(),
-      }
-
+      const now = new Date().toISOString()
       const revalidatePaths = [
         getPostPath(post),
         getAuthorPath(post),
         getAuthorFavoritesPath(post),
       ]
 
-      const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const result = await fetcher<PostAPI>(fetchUrl, {
+      const result = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
-          data: fetchData,
+          data: { ...getValues(), status: 'trash', deleted_at: now },
           options: { revalidatePaths },
         }),
       })
@@ -340,13 +328,14 @@ const PublishButton = () => {
       if (!post) throw new Error('Require is not defined.')
 
       const formValues = getValues()
-
-      const now = new Date().toISOString()
-      const visibility = getMeta(formValues?.meta, 'visibility', null)
-      const future_date = getMeta(formValues?.meta, 'future_date', null)
+      const visibility = getMeta(formValues?.meta, 'visibility')
+      const future_date = getMeta(formValues?.meta, 'future_date')
 
       let status: string = visibility === 'private' ? 'private' : 'publish'
       if (future_date) status = 'future'
+
+      const now = new Date().toISOString()
+      const data = { ...formValues, status }
 
       const revalidatePaths = [
         getPostPath(post),
@@ -354,20 +343,17 @@ const PublishButton = () => {
         getAuthorFavoritesPath(post),
       ]
 
-      const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const result = await fetcher<PostAPI>(fetchUrl, {
+      const result = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
-          data: post?.date
-            ? { ...formValues, status }
-            : { ...formValues, status, date: now },
+          data: post?.date ? data : { ...data, date: now },
           options: { revalidatePaths },
         }),
       })
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      mutate(fetchUrl)
+      mutate(`/api/v1/post?id=${post?.id}`)
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {

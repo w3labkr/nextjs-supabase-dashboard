@@ -19,7 +19,7 @@ const SignInWithGithub = (props: SignInWithGithubProps) => {
   const { t } = useTranslation()
   const searchParams = useSearchParams()
 
-  const handleClick = async () => {
+  const onClick = async () => {
     try {
       // if "next" is in param, use it as the redirect URL
       const next = (searchParams.get('next') as string) ?? '/dashboard'
@@ -42,7 +42,7 @@ const SignInWithGithub = (props: SignInWithGithubProps) => {
   }
 
   return (
-    <Button type="button" variant={variant} onClick={handleClick} {...rest}>
+    <Button type="button" variant={variant} onClick={onClick} {...rest}>
       <FaGithub className="mr-2 h-4 w-4" />
       {t('SignInWithGithub.label')}
     </Button>

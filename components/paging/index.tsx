@@ -1,2 +1,6 @@
 export { Paging, type PagingProps } from './paging'
-export { PagingProvider, usePaging } from './paging-provider'
+export {
+  PagingProvider,
+  usePaging,
+  type PagingContextProps,
+} from './paging-provider'

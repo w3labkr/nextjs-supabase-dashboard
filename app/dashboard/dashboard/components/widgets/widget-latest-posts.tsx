@@ -15,6 +15,7 @@ import { LatestPosts } from '@/components/latest-posts'
 
 import { useAuth } from '@/hooks/use-auth'
 import { usePostsAPI } from '@/queries/client/posts'
+import { LatestPostsOptions } from '@/components/latest-posts/latest-posts'
 
 interface WidgetLatestPostsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -31,17 +32,15 @@ const WidgetLatestPosts = (props: WidgetLatestPostsProps) => {
     q: '',
   })
 
-  const options = React.useMemo(() => {
-    return {
-      hideAuthor: true,
-      hideDate: true,
-      hideExcerpt: true,
-      classNameTitle: 'text-sm',
-      // classNameExcerpt: 'text-sm',
-      // classNameAuthor: 'text-xs',
-      // classNameDate: 'text-xs',
-    }
-  }, [])
+  const options: LatestPostsOptions = {
+    hideAuthor: true,
+    hideDate: true,
+    hideExcerpt: true,
+    classNameTitle: 'text-sm',
+    // classNameExcerpt: 'text-sm',
+    // classNameAuthor: 'text-xs',
+    // classNameDate: 'text-xs',
+  }
 
   return (
     <Card>

@@ -10,7 +10,6 @@ import { Button, ButtonProps } from '@/components/ui/button'
 import { useSWRConfig } from 'swr'
 import {
   fetcher,
-  setUrn,
   setQueryString,
   generateRecentPosts,
   getPostPath,
@@ -43,7 +42,7 @@ const AddDummyPost = (props: AddDummyPostProps) => {
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const handleClick = async () => {
+  const onClick = async () => {
     try {
       setIsSubmitting(true)
 
@@ -59,24 +58,23 @@ const AddDummyPost = (props: AddDummyPostProps) => {
         getFavoritesPath(user),
       ]
 
-      const fetchUrl = `/api/v1/post?userId=${user?.id}`
-      const inserted = await fetcher<PostAPI>(fetchUrl, {
-        method: 'PUT',
-        body: JSON.stringify({
-          data: posts,
-          options: { revalidatePaths },
-        }),
-      })
+      const inserted = await fetcher<PostAPI>(
+        `/api/v1/post?userId=${user?.id}`,
+        {
+          method: 'PUT',
+          body: JSON.stringify({ data: posts, options: { revalidatePaths } }),
+        }
+      )
 
       if (inserted?.error) throw new Error(inserted?.error?.message)
 
-      const qsCounter = setQueryString({
+      const countSearchParams = setQueryString({
         userId: user?.id,
         postType: (searchParams.get('postType') as string) ?? 'post',
         q: searchParams.get('q') as string,
       })
 
-      const qsList = setQueryString({
+      const listSearchParams = setQueryString({
         userId: user?.id,
         page: +((searchParams.get('page') as string) ?? '1'),
         perPage: +((searchParams.get('perPage') as string) ?? '10'),
@@ -85,9 +83,9 @@ const AddDummyPost = (props: AddDummyPostProps) => {
         q: searchParams.get('q') as string,
       })
 
-      mutate(fetchUrl)
-      mutate(setUrn('/api/v1/post/count', qsCounter))
-      mutate(setUrn('/api/v1/post/list', qsList))
+      mutate(`/api/v1/post?userId=${user?.id}`)
+      mutate(`/api/v1/post/count?${countSearchParams}`)
+      mutate(`/api/v1/post/list?${listSearchParams}`)
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Payment Required')) {
@@ -101,12 +99,7 @@ const AddDummyPost = (props: AddDummyPostProps) => {
   }
 
   return (
-    <Button
-      type="button"
-      onClick={handleClick}
-      disabled={isSubmitting}
-      {...rest}
-    >
+    <Button type="button" onClick={onClick} disabled={isSubmitting} {...rest}>
       {startIconName && (
         <LucideIcon name={startIconName} className="mr-2 size-4" />
       )}

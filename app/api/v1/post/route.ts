@@ -3,6 +3,8 @@ import { createClient } from '@/supabase/server'
 import { ApiError, revalidates } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
+import { pricingPlans } from '@/config/site'
+import { PricingPlan } from '@/types/config'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -118,13 +120,7 @@ export async function PUT(request: NextRequest) {
     )
   }
 
-  const pricingPlan = [
-    { name: 'free', post: 3 },
-    { name: 'basic', post: -1 },
-    { name: 'standard', post: -1 },
-    { name: 'premium', post: -1 },
-  ]
-  const plan = pricingPlan.find((r) => r.name === user?.plan)
+  const plan = pricingPlans.find((r: PricingPlan) => r.name === user?.plan)
 
   if (!plan) {
     return NextResponse.json(

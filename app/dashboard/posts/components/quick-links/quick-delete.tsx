@@ -7,16 +7,22 @@ import { toast } from 'sonner'
 import { usePaging } from '@/components/paging'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, setUrn, setQueryString } from '@/lib/utils'
+import {
+  fetcher,
+  setQueryString,
+  getPostPath,
+  getAuthorPath,
+  getAuthorFavoritesPath,
+} from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
-interface RestorePostProps
+interface QuickDeleteProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   post: Post
 }
 
-const RestorePost = (props: RestorePostProps) => {
+const QuickDelete = (props: QuickDeleteProps) => {
   const { post, ...rest } = props
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
@@ -24,27 +30,33 @@ const RestorePost = (props: RestorePostProps) => {
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const handleClick = async () => {
+  const onClick = async () => {
     try {
       setIsSubmitting(true)
 
-      const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const updated = await fetcher<PostAPI>(fetchUrl, {
-        method: 'POST',
+      const revalidatePaths = [
+        getPostPath(post),
+        getAuthorPath(post),
+        getAuthorFavoritesPath(post),
+      ]
+
+      const deleted = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
+        method: 'DELETE',
         body: JSON.stringify({
-          data: { status: 'draft', deleted_at: null, user_id: post?.user_id },
+          data: { user_id: post?.user_id },
+          options: { revalidatePaths },
         }),
       })
 
-      if (updated?.error) throw new Error(updated?.error?.message)
+      if (deleted?.error) throw new Error(deleted?.error?.message)
 
-      const qsCounter = setQueryString({
+      const countSearchParams = setQueryString({
         userId: post?.user_id,
         postType: paging?.postType,
         q: paging?.q,
       })
 
-      const qsList = setQueryString({
+      const listSearchParams = setQueryString({
         userId: post?.user_id,
         page: paging?.page,
         perPage: paging?.perPage,
@@ -53,11 +65,11 @@ const RestorePost = (props: RestorePostProps) => {
         q: paging?.q,
       })
 
-      mutate(fetchUrl)
-      mutate(setUrn('/api/v1/post/count', qsCounter))
-      mutate(setUrn('/api/v1/post/list', qsList))
+      mutate(`/api/v1/post?id=${post?.id}`)
+      mutate(`/api/v1/post/count?${countSearchParams}`)
+      mutate(`/api/v1/post/list?${listSearchParams}`)
 
-      toast.success(t('FormMessage.changed_successfully'))
+      toast.success(t('FormMessage.deleted_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -67,14 +79,14 @@ const RestorePost = (props: RestorePostProps) => {
 
   return (
     <button
-      className="text-xs text-blue-700 hover:underline"
-      onClick={handleClick}
+      className="text-xs text-destructive hover:underline"
+      onClick={onClick}
       disabled={isSubmitting}
       {...rest}
     >
-      {t('PostList.RestorePost')}
+      {t('QuickLinks.delete')}
     </button>
   )
 }
 
-export { RestorePost, type RestorePostProps }
+export { QuickDelete, type QuickDeleteProps }

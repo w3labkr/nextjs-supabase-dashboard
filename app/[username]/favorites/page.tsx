@@ -61,6 +61,7 @@ export default async function FavoritesPage({
     perPage,
     postType: 'post',
     status: 'publish',
+    q: '',
   })
 
   const total = count ?? 0
@@ -95,7 +96,11 @@ export default async function FavoritesPage({
                     href="#"
                     className={cn('flex w-full items-center sm:w-auto')}
                   >
-                    <LucideIcon name="Heart" className="mr-1 size-4 min-w-4" />
+                    <LucideIcon
+                      name="Heart"
+                      fill="#ef4444"
+                      className="mr-1 size-4 min-w-4 text-destructive"
+                    />
                     Favorites
                   </Link>
                 </div>

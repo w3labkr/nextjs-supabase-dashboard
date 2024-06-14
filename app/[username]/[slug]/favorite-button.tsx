@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { toast } from 'sonner'
 import { LucideIcon } from '@/lib/lucide-icon'
-import { cn, fetcher, getFavoritesPath } from '@/lib/utils'
+import { cn, fetcher, getFavoritesPath, getProfilePath } from '@/lib/utils'
 
 import { useSWRConfig } from 'swr'
 import { useAuth } from '@/hooks/use-auth'
@@ -44,28 +44,30 @@ const SignedInAction = (props: FavoriteButtonProps) => {
     }
   }, [favorite?.is_favorite])
 
-  const handleClick = async () => {
+  const onClick = async () => {
     try {
       setIsSubmitting(true)
 
       if (!user) throw new Error('Require is not defined.')
 
-      const revalidatePaths = [getFavoritesPath(user)]
+      const revalidatePaths = [getProfilePath(user), getFavoritesPath(user)]
 
-      const fetchUrl = `/api/v1/favorite?postId=${post?.id}&userId=${user?.id}`
-      const result = await fetcher<FavoriteAPI>(fetchUrl, {
-        method: 'POST',
-        body: JSON.stringify({
-          data: { is_favorite: !isLike },
-          options: { revalidatePaths },
-        }),
-      })
+      const result = await fetcher<FavoriteAPI>(
+        `/api/v1/favorite?postId=${post?.id}&userId=${user?.id}`,
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            data: { is_favorite: !isLike },
+            options: { revalidatePaths },
+          }),
+        }
+      )
 
       if (result?.error) throw new Error(result?.error?.message)
 
       setIsLike(!isLike)
 
-      mutate(fetchUrl)
+      mutate(`/api/v1/favorite?postId=${post?.id}&userId=${user?.id}`)
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -74,12 +76,7 @@ const SignedInAction = (props: FavoriteButtonProps) => {
   }
 
   return (
-    <button
-      type="button"
-      onClick={handleClick}
-      disabled={isSubmitting}
-      {...rest}
-    >
+    <button type="button" onClick={onClick} disabled={isSubmitting} {...rest}>
       <LucideIcon
         name="Heart"
         fill={cn(isLike ? '#ef4444' : 'transparent')}
@@ -90,7 +87,6 @@ const SignedInAction = (props: FavoriteButtonProps) => {
 }
 
 const SignedOutAction = (props: FavoriteButtonProps) => {
-  const { post, ...rest } = props
   const router = useRouter()
   const pathname = usePathname()
 
@@ -98,7 +94,7 @@ const SignedOutAction = (props: FavoriteButtonProps) => {
     <button
       type="button"
       onClick={() => router?.push(`/auth/signin?next=${pathname}`)}
-      {...rest}
+      {...props}
     >
       <LucideIcon
         name="Heart"

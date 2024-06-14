@@ -22,15 +22,14 @@ const ResendVerifyEmail = (props: ResendVerifyEmailProps) => {
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const handleClick = async () => {
+  const onClick = async () => {
     try {
       setIsSubmitting(true)
 
       if (!user) throw new Error('Require is not defined.')
       if (!item) throw new Error('Require is not defined.')
 
-      const sendUrl = `/api/v1/email/verify?userId=${user?.id}`
-      const result = await fetcher(sendUrl, {
+      const result = await fetcher(`/api/v1/email/verify?userId=${user?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: { email: item?.email },
@@ -39,7 +38,7 @@ const ResendVerifyEmail = (props: ResendVerifyEmailProps) => {
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      mutate(sendUrl)
+      mutate(`/api/v1/email/verify?userId=${user?.id}`)
 
       toast.success(t('FormMessage.email_has_been_successfully_sent'))
     } catch (e: unknown) {
@@ -55,7 +54,7 @@ const ResendVerifyEmail = (props: ResendVerifyEmailProps) => {
     <button
       type="button"
       className="text-xs font-semibold text-blue-700 hover:underline"
-      onClick={handleClick}
+      onClick={onClick}
       disabled={isSubmitting}
     >
       {t('ResendVerificationButton.label')}

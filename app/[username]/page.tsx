@@ -95,7 +95,11 @@ export default async function UserPage({
                       'text-muted-foreground'
                     )}
                   >
-                    <LucideIcon name="Heart" className="mr-1 size-4 min-w-4" />
+                    <LucideIcon
+                      name="Heart"
+                      fill="transparent"
+                      className="mr-1 size-4 min-w-4 text-destructive"
+                    />
                     Favorites
                   </Link>
                 </div>

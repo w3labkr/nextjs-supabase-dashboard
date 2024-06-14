@@ -82,6 +82,7 @@ export function useFavoritePostsAPI(
     perPage?: number
     postType?: string
     status?: string
+    q?: string
   }
 ) {
   const query = setQueryString({ userId, ...params })

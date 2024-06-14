@@ -341,24 +341,40 @@
     "AlertDialogAction": "Continue"
   },
 
-  "PostList": {
-    "EditPost": "Edit",
-    "PublishPost": "Publish",
-    "ViewPost": "View",
-    "TrashPost": "Trash",
-    "RestorePost": "Restore",
-    "DeletePost": "Delete",
-    "ClonePost": "Clone"
-  },
-
   "PostStatus": {
     "all": "All",
     "publish": "Publish",
     "future": "Future",
     "draft": "Draft",
     "pending": "Pending",
+    "public": "Public",
     "private": "Private",
     "trash": "Trash"
+  },
+
+  "QuickLinks": {
+    "edit": "Edit",
+    "draft": "Draft",
+    "publish": "Publish",
+    "public": "Public",
+    "private": "Private",
+    "view": "View",
+    "trash": "Trash",
+    "restore": "Restore",
+    "delete": "Delete",
+    "clone": "Clone"
+  },
+
+  "BulkActions": {
+    "trash": "Trash",
+    "delete": "Delete",
+    "draft": "Draft",
+    "publish": "Publish",
+    "restore": "Restore",
+    "public": "Public",
+    "private": "Private",
+    "placeholder": "Bulk Actions",
+    "submit": "Apply"
   },
 
   "PostMetabox": {
@@ -415,15 +431,6 @@
 
   "CardTitle": {
     "latest_posts": "Latest Posts"
-  },
-
-  "BulkActions": {
-    "placeholder": "Bulk Actions",
-    "submit": "Apply",
-    "delete": "Bulk Delete",
-    "publish": "Bulk Publish",
-    "public": "Bulk Public",
-    "private": "Bulk Private"
   },
 
   "SearchForm": {

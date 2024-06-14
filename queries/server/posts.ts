@@ -81,6 +81,7 @@ export async function getFavoritePostsAPI(
     perPage?: number
     postType?: string
     status?: string
+    q?: string
   }
 ) {
   const query = setQueryString({ userId, ...params })

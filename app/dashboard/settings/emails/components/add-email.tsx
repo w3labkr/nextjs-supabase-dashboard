@@ -111,20 +111,21 @@ const SubmitButton = () => {
 
       if (!user) throw new Error('Require is not defined.')
 
-      const fetchUrl = `/api/v1/email?userId=${user?.id}`
-      const result = await fetcher<EmailsAPI>(fetchUrl, {
-        method: 'PUT',
-        body: JSON.stringify({
-          data: { email: formValues?.email },
-        }),
-      })
+      const result = await fetcher<EmailsAPI>(
+        `/api/v1/email?userId=${user?.id}`,
+        {
+          method: 'PUT',
+          body: JSON.stringify({
+            data: { email: formValues?.email },
+          }),
+        }
+      )
 
       if (result?.error) throw new Error(result?.error?.message)
 
       mutate(`/api/v1/email/list?userId=${user?.id}`)
 
-      const sendUrl = `/api/v1/email/verify?userId=${user?.id}`
-      const sent = await fetcher(sendUrl, {
+      const sent = await fetcher(`/api/v1/email/verify?userId=${user?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: { email: formValues?.email },
@@ -133,7 +134,7 @@ const SubmitButton = () => {
 
       if (sent?.error) throw new Error(sent?.error?.message)
 
-      mutate(sendUrl)
+      mutate(`/api/v1/email/verify?userId=${user?.id}`)
 
       reset()
 

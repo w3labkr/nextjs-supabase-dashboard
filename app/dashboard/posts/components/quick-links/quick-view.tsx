@@ -3,24 +3,28 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
+
+import { getPostPath } from '@/lib/utils'
 import { Post } from '@/types/database'
 
-interface EditPostProps {
+interface QuickViewProps {
   post: Post
 }
 
-const EditPost = (props: EditPostProps) => {
+const QuickView = (props: QuickViewProps) => {
   const { post } = props
   const { t } = useTranslation()
 
   return (
     <Link
-      href={`/dashboard/posts/edit?id=${post?.id}`}
+      href={getPostPath(post) ?? '#'}
       className="text-xs text-blue-700 hover:underline"
+      target="_blank"
+      rel="noopener noreferrer"
     >
-      {t('PostList.EditPost')}
+      {t('QuickLinks.view')}
     </Link>
   )
 }
 
-export { EditPost, type EditPostProps }
+export { QuickView, type QuickViewProps }

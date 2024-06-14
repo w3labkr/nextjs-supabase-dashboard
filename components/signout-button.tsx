@@ -19,7 +19,7 @@ const SignOutButton = (props: SignOutButtonProps) => {
   const { t } = useTranslation()
   const { setSession, setUser } = useAuth()
 
-  const handleClick = async () => {
+  const onClick = async () => {
     try {
       const supabase = createClient()
       const unsigned = await supabase.auth.signOut()
@@ -37,7 +37,7 @@ const SignOutButton = (props: SignOutButtonProps) => {
   }
 
   return (
-    <Button type="button" onClick={handleClick} {...props}>
+    <Button type="button" onClick={onClick} {...props}>
       {t('SignOutButton.label')}
     </Button>
   )

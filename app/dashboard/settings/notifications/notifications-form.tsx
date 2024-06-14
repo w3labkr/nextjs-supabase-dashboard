@@ -137,17 +137,17 @@ const SubmitButton = () => {
         throw new Error('Nothing has changed.')
       }
 
-      const fetchUrl = `/api/v1/notification?userId=${user?.id}`
-      const result = await fetcher<NotificationAPI>(fetchUrl, {
-        method: 'POST',
-        body: JSON.stringify({
-          data: formValues,
-        }),
-      })
+      const result = await fetcher<NotificationAPI>(
+        `/api/v1/notification?userId=${user?.id}`,
+        {
+          method: 'POST',
+          body: JSON.stringify({ data: formValues }),
+        }
+      )
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      mutate(fetchUrl)
+      mutate(`/api/v1/notification?userId=${user?.id}`)
 
       toast.success(t('FormMessage.changed_successfully'))
     } catch (e: unknown) {

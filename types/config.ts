@@ -57,3 +57,8 @@ export interface MiddlewareAccessDenied {
   to: string
   authenticated: boolean
 }
+
+export interface PricingPlan {
+  name: string
+  post: number
+}

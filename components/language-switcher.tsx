@@ -41,7 +41,7 @@ const LanguageSwitcher = (props: LanguageSwitcherProps) => {
   const [open, setOpen] = React.useState<boolean>(false)
   const { t, i18n } = useTranslation()
 
-  const handleSelect = (currentValue: string) => {
+  const onSelect = (currentValue: string) => {
     if (currentValue === resolvedLanguage) return false
     i18n.changeLanguage(currentValue)
     document.documentElement.lang = currentValue
@@ -77,7 +77,7 @@ const LanguageSwitcher = (props: LanguageSwitcherProps) => {
                 key={item?.value}
                 item={item}
                 resolvedLanguage={resolvedLanguage}
-                onSelect={handleSelect}
+                onSelect={onSelect}
               />
             ))}
           </CommandGroup>

@@ -212,13 +212,13 @@ const SubmitButton = () => {
         }
       }
 
+      const now = new Date().toISOString()
       const revalidatePaths = [getProfilePath(user), getFavoritesPath(user)]
 
-      const fetchUrl = `/api/v1/user?id=${user?.id}`
-      const deleted = await fetcher<UserAPI>(fetchUrl, {
+      const deleted = await fetcher<UserAPI>(`/api/v1/user?id=${user?.id}`, {
         method: 'POST',
         body: JSON.stringify({
-          data: { deleted: new Date().toISOString() },
+          data: { deleted: now },
           options: { revalidatePaths },
         }),
       })

@@ -9,7 +9,6 @@ import { usePaging } from '@/components/paging'
 import { useSWRConfig } from 'swr'
 import {
   fetcher,
-  setUrn,
   setQueryString,
   getPostPath,
   getAuthorPath,
@@ -18,11 +17,12 @@ import {
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
-interface TrashPostProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface QuickTrashProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   post: Post
 }
 
-const TrashPost = (props: TrashPostProps) => {
+const QuickTrash = (props: QuickTrashProps) => {
   const { post, ...rest } = props
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
@@ -30,7 +30,7 @@ const TrashPost = (props: TrashPostProps) => {
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const handleClick = async () => {
+  const onClick = async () => {
     try {
       setIsSubmitting(true)
 
@@ -41,8 +41,7 @@ const TrashPost = (props: TrashPostProps) => {
         getAuthorFavoritesPath(post),
       ]
 
-      const fetchUrl = `/api/v1/post?id=${post?.id}`
-      const updated = await fetcher<PostAPI>(fetchUrl, {
+      const updated = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: { status: 'trash', deleted_at: now, user_id: post?.user_id },
@@ -52,13 +51,13 @@ const TrashPost = (props: TrashPostProps) => {
 
       if (updated?.error) throw new Error(updated?.error?.message)
 
-      const qsCounter = setQueryString({
+      const countSearchParams = setQueryString({
         userId: post?.user_id,
         postType: paging?.postType,
         q: paging?.q,
       })
 
-      const qsList = setQueryString({
+      const listSearchParams = setQueryString({
         userId: post?.user_id,
         page: paging?.page,
         perPage: paging?.perPage,
@@ -67,9 +66,9 @@ const TrashPost = (props: TrashPostProps) => {
         q: paging?.q,
       })
 
-      mutate(fetchUrl)
-      mutate(setUrn('/api/v1/post/count', qsCounter))
-      mutate(setUrn('/api/v1/post/list', qsList))
+      mutate(`/api/v1/post?id=${post?.id}`)
+      mutate(`/api/v1/post/count?${countSearchParams}`)
+      mutate(`/api/v1/post/list?${listSearchParams}`)
 
       toast.success(t('FormMessage.deleted_successfully'))
     } catch (e: unknown) {
@@ -82,13 +81,13 @@ const TrashPost = (props: TrashPostProps) => {
   return (
     <button
       className="text-xs text-destructive hover:underline"
-      onClick={handleClick}
+      onClick={onClick}
       disabled={isSubmitting}
       {...rest}
     >
-      {t('PostList.TrashPost')}
+      {t('QuickLinks.trash')}
     </button>
   )
 }
 
-export { TrashPost, type TrashPostProps }
+export { QuickTrash, type QuickTrashProps }
