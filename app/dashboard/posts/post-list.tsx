@@ -168,7 +168,7 @@ const Body = () => {
         <TableRow>
           <TableHead className="w-[50px]">
             <Checkbox
-              checked={checks?.length === posts?.length}
+              checked={checks?.length > 0 && checks?.length === posts?.length}
               onCheckedChange={onCheckedChange}
             />
           </TableHead>
@@ -205,7 +205,6 @@ const Body = () => {
 
 const PostItem = ({ post }: { post: Post }) => {
   const { t } = useTranslation()
-  const paging = usePaging()
 
   const { checks, setChecks } = useBulkActions()
   const onCheckedChange = (checked: CheckedState) => {
