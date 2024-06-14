@@ -13,6 +13,8 @@ import { LinkButton } from '@/components/link-button'
 import { AccountMenu } from '@/components/account-menu'
 
 import { useAuth } from '@/hooks/use-auth'
+import { cn } from '@/lib/utils'
+import { siteConfig } from '@/config/site'
 
 const Header = () => {
   const { user } = useAuth()
@@ -22,7 +24,12 @@ const Header = () => {
       <SheetContent className="bg-white dark:bg-gray-900" side="left">
         <MobileNavigation />
       </SheetContent>
-      <header className="flex w-full flex-col border-0 border-b border-solid border-input bg-inherit">
+      <header
+        className={cn(
+          'flex w-full flex-col border-0 border-b border-solid border-input bg-white',
+          siteConfig?.stickyHeader ? 'fixed z-10' : ''
+        )}
+      >
         <div className="container flex h-[60px] items-center">
           <SheetTrigger asChild>
             <Button

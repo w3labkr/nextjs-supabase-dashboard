@@ -13,11 +13,12 @@ import { Analysis } from './analysis'
 import { ViewCount } from './view-count'
 import { FavoriteButton } from './favorite-button'
 
-import { getAuthorUrl } from '@/lib/utils'
+import { cn, getAuthorUrl } from '@/lib/utils'
 import { getAuth, authenticate } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { getPostAPI, getAdjacentPostAPI } from '@/queries/server/posts'
 import { Post } from '@/types/database'
+import { siteConfig } from '@/config/site'
 
 // revalidate the data at most every month
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
@@ -92,8 +93,13 @@ export default async function PostPage({
     <PostProvider value={{ post }}>
       <Analysis />
       <Header />
-      <main className="min-h-[80vh] pb-40 pt-16">
-        <div className="container min-w-0 flex-1 overflow-auto">
+      <main
+        className={cn(
+          'min-h-[80vh] pb-40',
+          siteConfig?.stickyHeader ? 'pt-[61px]' : ''
+        )}
+      >
+        <div className="container min-w-0 flex-1 overflow-auto pt-16">
           <PostTitle post={post} />
           <PostMeta post={post} />
           <PostThumbnail post={post} />

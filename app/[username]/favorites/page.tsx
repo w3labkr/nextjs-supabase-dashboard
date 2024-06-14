@@ -14,6 +14,7 @@ import { Aside } from '../aside'
 
 import { getUserAPI } from '@/queries/server/users'
 import { getFavoritePostsAPI } from '@/queries/server/posts'
+import { siteConfig } from '@/config/site'
 
 // revalidate the data at most every week
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
@@ -69,9 +70,14 @@ export default async function FavoritesPage({
   return (
     <>
       <Header />
-      <main className="min-h-[80vh] pb-40">
-        <div className="container flex-1 overflow-auto">
-          <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-4 pb-14 pt-11 md:grid-cols-3 md:gap-8 lg:grid-cols-4 lg:gap-[60px]">
+      <main
+        className={cn(
+          'min-h-[80vh] pb-40',
+          siteConfig?.stickyHeader ? 'pt-[61px]' : ''
+        )}
+      >
+        <div className="container flex-1 overflow-auto pt-12">
+          <div className="mx-auto grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 lg:grid-cols-4 lg:gap-[60px]">
             <div className="relative flex flex-col gap-4">
               <Aside user={user} />
             </div>

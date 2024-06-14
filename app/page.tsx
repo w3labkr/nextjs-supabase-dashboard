@@ -3,12 +3,19 @@ import * as React from 'react'
 import { Header } from '@/components/header'
 import { Hero } from '@/components/hero'
 import { Footer } from '@/components/footer'
+import { cn } from '@/lib/utils'
+import { siteConfig } from '@/config/site'
 
 export default function RootPage() {
   return (
     <div>
       <Header />
-      <main className="min-h-[80vh] pb-40">
+      <main
+        className={cn(
+          'min-h-[80vh] pb-40',
+          siteConfig?.stickyHeader ? 'pt-[61px]' : ''
+        )}
+      >
         <Hero />
         <div className="container">
           <div className="columns-2 gap-4 space-y-4 md:columns-3 lg:columns-4">

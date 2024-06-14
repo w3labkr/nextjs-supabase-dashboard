@@ -6,6 +6,8 @@ import { Paging, PagingProvider } from '@/components/paging'
 import { LatestPosts } from '@/components/latest-posts'
 
 import { getPostsAPI } from '@/queries/server/posts'
+import { cn } from '@/lib/utils'
+import { siteConfig } from '@/config/site'
 
 // revalidate the data at most every week
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
@@ -32,11 +34,16 @@ export default async function PostsPage({
   return (
     <>
       <Header />
-      <main className="min-h-[80vh] pb-40 pt-16">
+      <main
+        className={cn(
+          'min-h-[80vh] pb-40',
+          siteConfig?.stickyHeader ? 'pt-[61px]' : ''
+        )}
+      >
         <div className="container flex-1 overflow-auto">
-          <h2 className="mb-12 text-center font-serif text-4xl">Posts</h2>
+          <h2 className="mt-16 text-center font-serif text-4xl">Posts</h2>
           <PagingProvider value={{ total, page, perPage, pageSize }}>
-            <div className="space-y-16">
+            <div className="mt-12 space-y-16">
               <LatestPosts
                 posts={posts}
                 className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4"
