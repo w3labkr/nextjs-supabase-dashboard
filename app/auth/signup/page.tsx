@@ -16,9 +16,10 @@ export default function SignUpPage() {
       <ButtonLink
         href="/auth/signin"
         className="absolute right-4 top-4 md:right-8 md:top-8"
-        text="ButtonLink.signin"
         translate="yes"
-      />
+      >
+        ButtonLink.signin
+      </ButtonLink>
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
@@ -33,9 +34,10 @@ export default function SignUpPage() {
           <TextLink
             href="/auth/signin"
             className="hover:underline"
-            text="AuthLink.signin"
             translate="yes"
-          />
+          >
+            AuthLink.signin
+          </TextLink>
           <LanguageToggleButton />
         </div>
       </div>

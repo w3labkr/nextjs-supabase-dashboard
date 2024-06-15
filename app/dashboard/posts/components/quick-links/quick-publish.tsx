@@ -24,8 +24,7 @@ interface QuickPublishProps
   post: Post
 }
 
-const QuickPublish = (props: QuickPublishProps) => {
-  const { post, ...rest } = props
+const QuickPublish = ({ post, ...props }: QuickPublishProps) => {
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
   const paging = usePaging()
@@ -94,7 +93,7 @@ const QuickPublish = (props: QuickPublishProps) => {
       className="text-xs text-blue-700 hover:underline"
       onClick={onClick}
       disabled={isSubmitting}
-      {...rest}
+      {...props}
     >
       {t('QuickLinks.publish')}
     </button>

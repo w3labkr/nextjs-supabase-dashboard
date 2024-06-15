@@ -31,9 +31,11 @@ interface LanguageSwitcherProps {
   contentClassName?: string
 }
 
-const LanguageSwitcher = (props: LanguageSwitcherProps) => {
-  const { className, triggerClassName, contentClassName } = props
-
+const LanguageSwitcher = ({
+  className,
+  triggerClassName,
+  contentClassName,
+}: LanguageSwitcherProps) => {
   const dispatch = useAppDispatch()
   const resolvedLanguage = useAppSelector(
     (state) => state?.i18n?.resolvedLanguage

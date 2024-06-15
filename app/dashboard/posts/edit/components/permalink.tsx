@@ -7,6 +7,7 @@ import { useFormContext, useWatch } from 'react-hook-form'
 
 import { getPostUrl } from '@/lib/utils'
 import { usePostForm } from '../context/post-form-provider'
+import { siteConfig } from '@/config/site'
 
 const Permalink = () => {
   const { t } = useTranslation()
@@ -26,6 +27,7 @@ const Permalink = () => {
       {`${t('PostMetabox.permalink')}: `}
       <Link
         href={permalink ?? '#'}
+        scroll={!siteConfig?.fixedHeader}
         className="text-blue-700 hover:underline"
         target="_blank"
         rel="noopener noreferrer"

@@ -59,8 +59,7 @@ interface DeactivateUserFormProps {
   user: User | null
 }
 
-const DeactivateUserForm = (props: DeactivateUserFormProps) => {
-  const { user } = props
+const DeactivateUserForm = ({ user }: DeactivateUserFormProps) => {
   const { t } = useTranslation()
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),

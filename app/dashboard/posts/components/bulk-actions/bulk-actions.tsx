@@ -52,9 +52,7 @@ type FormValues = z.infer<typeof FormSchema>
 
 interface BulkActionsProps extends React.FormHTMLAttributes<HTMLFormElement> {}
 
-const BulkActions = (props: BulkActionsProps) => {
-  const { className, ...rest } = props
-
+const BulkActions = ({ className, ...props }: BulkActionsProps) => {
   const { t } = useTranslation()
   const { checks } = useBulkActions()
 
@@ -183,7 +181,7 @@ const BulkActions = (props: BulkActionsProps) => {
         noValidate
         onSubmit={handleSubmit(onSubmit)}
         className={cn('flex items-start space-x-2', className)}
-        {...rest}
+        {...props}
       >
         <FormField
           control={control}

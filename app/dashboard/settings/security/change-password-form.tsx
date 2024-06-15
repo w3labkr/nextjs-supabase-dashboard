@@ -50,8 +50,7 @@ interface ChangePasswordFormProps {
   user: User
 }
 
-const ChangePasswordForm = (props: ChangePasswordFormProps) => {
-  const { user } = props
+const ChangePasswordForm = ({ user }: ChangePasswordFormProps) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',

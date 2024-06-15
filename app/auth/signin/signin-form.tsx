@@ -98,9 +98,10 @@ const PasswordField = () => {
             <TextLink
               href="/auth/forgot-password"
               className="text-sm underline hover:decoration-muted"
-              text="AuthLink.forgot_password"
               translate="yes"
-            />
+            >
+              AuthLink.forgot_password
+            </TextLink>
           </div>
           <FormControl>
             <Input

@@ -24,8 +24,7 @@ interface QuickPrivateProps
   post: Post
 }
 
-const QuickPrivate = (props: QuickPrivateProps) => {
-  const { post, ...rest } = props
+const QuickPrivate = ({ post, ...props }: QuickPrivateProps) => {
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
   const paging = usePaging()
@@ -94,7 +93,7 @@ const QuickPrivate = (props: QuickPrivateProps) => {
       className="text-xs text-blue-700 hover:underline"
       onClick={onClick}
       disabled={isSubmitting}
-      {...rest}
+      {...props}
     >
       {t('QuickLinks.private')}
     </button>

@@ -15,14 +15,13 @@ import {
 
 import { usePaging } from './paging-provider'
 import { useQueryString } from '@/hooks/use-query-string'
+import { siteConfig } from '@/config/site'
 
 interface PagingProps extends React.ComponentProps<'nav'> {}
 
-const Paging = (props: PagingProps) => {
-  const { className, ...rest } = props
-
+const Paging = ({ className, ...props }: PagingProps) => {
   return (
-    <Pagination className={className} {...rest}>
+    <Pagination className={className} {...props}>
       <PaginationContent>
         <FirstItem />
         <PreviousItem />
@@ -46,6 +45,7 @@ const PagingItem = () => {
         <PaginationLink
           href={pathname + '?' + qs({ page: startPage + i })}
           isActive={page === startPage + i}
+          scroll={!siteConfig?.fixedHeader}
         >
           {startPage + i}
         </PaginationLink>
@@ -64,6 +64,7 @@ const FirstItem = () => {
     <PaginationItem>
       <PaginationPrevious
         href={pathname + '?' + qs({ page: firstPage })}
+        scroll={!siteConfig?.fixedHeader}
         text=""
         className="p-0"
         iconName="ChevronsLeft"
@@ -85,6 +86,7 @@ const PreviousItem = () => {
     <PaginationItem>
       <PaginationPrevious
         href={pathname + '?' + qs({ page: previousPage })}
+        scroll={!siteConfig?.fixedHeader}
         text=""
         className="p-0"
         iconName="ChevronLeft"
@@ -106,6 +108,7 @@ const NextItem = () => {
     <PaginationItem>
       <PaginationNext
         href={pathname + '?' + qs({ page: nextPage })}
+        scroll={!siteConfig?.fixedHeader}
         text=""
         iconName="ChevronRight"
         className="p-0"
@@ -127,6 +130,7 @@ const LastItem = () => {
     <PaginationItem>
       <PaginationNext
         href={pathname + '?' + qs({ page: lastPage })}
+        scroll={!siteConfig?.fixedHeader}
         text=""
         className="p-0"
         iconName="ChevronsRight"

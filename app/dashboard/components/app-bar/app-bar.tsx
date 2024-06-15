@@ -10,8 +10,7 @@ import { useAppBar } from './app-bar-provider'
 
 interface AppBarProps extends React.HTMLAttributes<HTMLElement> {}
 
-const AppBar = (props: AppBarProps) => {
-  const { children, className, ...rest } = props
+const AppBar = ({ children, className, ...props }: AppBarProps) => {
   const { height } = useAppBar()
 
   return (
@@ -21,7 +20,7 @@ const AppBar = (props: AppBarProps) => {
         height,
         className
       )}
-      {...rest}
+      {...props}
     >
       {children}
       <div className="flex-1 text-destructive"></div>

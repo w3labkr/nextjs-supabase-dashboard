@@ -1,22 +1,25 @@
 import * as React from 'react'
 import Link from 'next/link'
-
 import dayjs from 'dayjs'
-import { getPostUrl } from '@/lib/utils'
 
+import { getPostUrl } from '@/lib/utils'
+import { siteConfig } from '@/config/site'
 import { Post } from '@/types/database'
 
-interface RelatedPostsProps {
+interface RelatedPostsProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string
   previousPost: Post | null
   nextPost: Post | null
 }
 
-const RelatedPosts = (props: RelatedPostsProps) => {
-  const { className, previousPost, nextPost } = props
-
+const RelatedPosts = ({
+  className,
+  previousPost,
+  nextPost,
+  ...props
+}: RelatedPostsProps) => {
   return (
-    <div className={className}>
+    <div className={className} {...props}>
       <h2 className="mb-8 font-serif text-6xl font-bold leading-tight tracking-tighter md:text-7xl">
         Related Posts
       </h2>
@@ -36,7 +39,9 @@ const PreviousPost = ({ post }: { post: Post | null }) => {
   return (
     <div className="grid gap-2">
       <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
-        <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
+        <Link href={getPostUrl(post) ?? '#'} scroll={!siteConfig?.fixedHeader}>
+          {post?.title}
+        </Link>
       </h3>
       <time dateTime={post?.date ?? undefined}>
         {dayjs(post?.date).format('MMMM D, YYYY')}
@@ -54,7 +59,9 @@ const NextPost = ({ post }: { post: Post | null }) => {
   return (
     <div className="grid gap-2">
       <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
-        <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
+        <Link href={getPostUrl(post) ?? '#'} scroll={!siteConfig?.fixedHeader}>
+          {post?.title}
+        </Link>
       </h3>
       <time dateTime={post?.date ?? undefined}>
         {dayjs(post?.date).format('MMMM D, YYYY')}

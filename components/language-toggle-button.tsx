@@ -13,8 +13,11 @@ interface LanguageToggleButtonProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
-const LanguageToggleButton = (props: LanguageToggleButtonProps) => {
-  const { variant = 'ghost', size = 'sm', ...rest } = props
+const LanguageToggleButton = ({
+  variant = 'ghost',
+  size = 'sm',
+  ...props
+}: LanguageToggleButtonProps) => {
   const dispatch = useAppDispatch()
   const resolvedLanguage = useAppSelector(
     (state) => state.i18n.resolvedLanguage
@@ -39,7 +42,7 @@ const LanguageToggleButton = (props: LanguageToggleButtonProps) => {
       variant={variant}
       size={size}
       onClick={onClick}
-      {...rest}
+      {...props}
     >
       {currentLanguage?.toUpperCase()}
     </Button>

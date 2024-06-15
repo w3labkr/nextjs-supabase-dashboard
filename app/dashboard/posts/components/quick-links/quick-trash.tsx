@@ -22,8 +22,7 @@ interface QuickTrashProps
   post: Post
 }
 
-const QuickTrash = (props: QuickTrashProps) => {
-  const { post, ...rest } = props
+const QuickTrash = ({ post, ...props }: QuickTrashProps) => {
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
   const paging = usePaging()
@@ -83,7 +82,7 @@ const QuickTrash = (props: QuickTrashProps) => {
       className="text-xs text-destructive hover:underline"
       onClick={onClick}
       disabled={isSubmitting}
-      {...rest}
+      {...props}
     >
       {t('QuickLinks.trash')}
     </button>

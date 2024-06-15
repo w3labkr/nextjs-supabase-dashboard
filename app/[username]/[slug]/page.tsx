@@ -71,8 +71,7 @@ export default async function PostPage({
   if (!post) notFound()
 
   if (
-    post?.status === 'future' ||
-    post?.status === 'private' ||
+    ['future', 'private'].includes(post?.status) ||
     searchParams?.preview === 'true'
   ) {
     const { authenticated } = await authenticate()
@@ -96,14 +95,16 @@ export default async function PostPage({
       <main
         className={cn(
           'min-h-[80vh] pb-40',
-          siteConfig?.stickyHeader ? 'pt-[61px]' : ''
+          siteConfig?.fixedHeader ? 'pt-[61px]' : ''
         )}
       >
         <div className="container min-w-0 flex-1 overflow-auto pt-16">
-          <PostTitle post={post} />
+          {post?.title ? <PostTitle title={post?.title} /> : null}
           <PostMeta post={post} />
-          <PostThumbnail post={post} />
-          <PostContent post={post} />
+          {post?.thumbnail_url ? (
+            <PostThumbnail thumbnailUrl={post?.thumbnail_url} />
+          ) : null}
+          {post?.content ? <PostContent content={post?.content} /> : null}
           <RelatedPosts previousPost={previousPost} nextPost={nextPost} />
         </div>
       </main>
@@ -112,31 +113,38 @@ export default async function PostPage({
   )
 }
 
-interface FieldProps {
-  post: Post
+interface PostTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  title: string
 }
 
-const PostTitle = (props: FieldProps) => {
-  const { post } = props
-
+const PostTitle = ({ title, ...props }: PostTitleProps) => {
   return (
-    <h1 className="mb-16 text-center font-serif text-6xl font-bold leading-tight tracking-tighter md:text-7xl md:leading-none lg:text-8xl">
-      {post?.title}
+    <h1
+      className="mb-16 text-center font-serif text-6xl font-bold leading-tight tracking-tighter md:text-7xl md:leading-none lg:text-8xl"
+      {...props}
+    >
+      {title}
     </h1>
   )
 }
 
-const PostMeta = (props: FieldProps) => {
-  const { post } = props
+interface PostMetaProps extends React.HTMLAttributes<HTMLDivElement> {
+  post: Post
+}
 
+const PostMeta = ({ post, ...props }: PostMetaProps) => {
   return (
-    <div className="mb-8 flex justify-between">
+    <div className="mb-8 flex justify-between" {...props}>
       <div className="space-x-1">
         <time dateTime={post?.date ?? undefined}>
           {dayjs(post?.date).format('MMMM D, YYYY')}
         </time>
         <span>— by</span>
-        <Link href={getAuthorUrl(post) ?? '#'} className="hover:underline">
+        <Link
+          href={getAuthorUrl(post) ?? '#'}
+          scroll={!siteConfig?.fixedHeader}
+          className="hover:underline"
+        >
           {post?.author?.full_name}
         </Link>
       </div>
@@ -148,30 +156,31 @@ const PostMeta = (props: FieldProps) => {
   )
 }
 
-const PostThumbnail = (props: FieldProps) => {
-  const { post } = props
+interface PostThumbnailProps extends React.HTMLAttributes<HTMLDivElement> {
+  thumbnailUrl: string
+}
 
-  if (!post?.thumbnail_url) return null
-
+const PostThumbnail = ({ thumbnailUrl, ...props }: PostThumbnailProps) => {
   return (
-    <div className="mb-8 sm:mx-0 md:mb-16">
+    <div className="mb-8 sm:mx-0 md:mb-16" {...props}>
       <div
         className="min-h-96 bg-cover bg-center bg-no-repeat sm:mx-0"
-        style={{ backgroundImage: `url(${post?.thumbnail_url})` }}
+        style={{ backgroundImage: `url(${thumbnailUrl})` }}
       ></div>
     </div>
   )
 }
 
-const PostContent = (props: FieldProps) => {
-  const { post } = props
+interface PostContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  content: string
+}
 
-  if (!post?.content) return null
-
+const PostContent = ({ content, ...props }: PostContentProps) => {
   return (
     <div
       className="mb-16"
-      dangerouslySetInnerHTML={{ __html: post?.content }}
+      dangerouslySetInnerHTML={{ __html: content }}
+      {...props}
     ></div>
   )
 }

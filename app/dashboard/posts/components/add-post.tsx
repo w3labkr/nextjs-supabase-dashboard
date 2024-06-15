@@ -11,6 +11,7 @@ import { Button, ButtonProps } from '@/components/ui/button'
 import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { PostAPI } from '@/types/api'
+import { siteConfig } from '@/config/site'
 
 interface AddPostProps
   extends ButtonProps,
@@ -20,10 +21,14 @@ interface AddPostProps
   endIconName?: LucideIconName
 }
 
-const AddPost = (props: AddPostProps) => {
-  const { children, text, translate, startIconName, endIconName, ...rest } =
-    props
-
+const AddPost = ({
+  children,
+  text,
+  translate,
+  startIconName,
+  endIconName,
+  ...props
+}: AddPostProps) => {
   const router = useRouter()
   const { t } = useTranslation()
   const { user } = useAuth()
@@ -48,7 +53,9 @@ const AddPost = (props: AddPostProps) => {
 
       if (error) throw new Error(error?.message)
 
-      router.push(`/dashboard/posts/edit?id=${post?.id}`)
+      router.push(`/dashboard/posts/edit?id=${post?.id}`, {
+        scroll: !siteConfig?.fixedHeader,
+      })
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Payment Required')) {
@@ -62,7 +69,7 @@ const AddPost = (props: AddPostProps) => {
   }
 
   return (
-    <Button type="button" onClick={onClick} disabled={isSubmitting} {...rest}>
+    <Button type="button" onClick={onClick} disabled={isSubmitting} {...props}>
       {startIconName && (
         <LucideIcon name={startIconName} className="mr-2 size-4" />
       )}

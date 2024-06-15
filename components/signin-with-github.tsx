@@ -14,8 +14,10 @@ interface SignInWithGithubProps
   extends ButtonProps,
     Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {}
 
-const SignInWithGithub = (props: SignInWithGithubProps) => {
-  const { variant = 'outline', ...rest } = props
+const SignInWithGithub = ({
+  variant = 'outline',
+  ...props
+}: SignInWithGithubProps) => {
   const { t } = useTranslation()
   const searchParams = useSearchParams()
 
@@ -42,7 +44,7 @@ const SignInWithGithub = (props: SignInWithGithubProps) => {
   }
 
   return (
-    <Button type="button" variant={variant} onClick={onClick} {...rest}>
+    <Button type="button" variant={variant} onClick={onClick} {...props}>
       <FaGithub className="mr-2 h-4 w-4" />
       {t('SignInWithGithub.label')}
     </Button>

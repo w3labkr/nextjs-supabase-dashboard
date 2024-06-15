@@ -2,11 +2,15 @@ import * as React from 'react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { User } from '@/types/database'
-import { LucideIcon } from '@/lib/lucide-icon'
+import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
 
-const Aside = ({ user }: { user: User }) => {
+interface AsideProps extends React.HTMLAttributes<HTMLDivElement> {
+  user: User
+}
+
+const Aside = ({ user, ...props }: AsideProps) => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2" {...props}>
       <Avatar className="size-12 min-w-12">
         <AvatarImage
           src={user?.avatar_url ?? undefined}
@@ -22,19 +26,38 @@ const Aside = ({ user }: { user: User }) => {
       </div>
       <div className="mt-4">
         <ul>
-          {user?.email ? (
-            <li className="flex items-center text-sm text-gray-600">
-              <LucideIcon name="Mail" className="mr-1 size-4 min-w-4" />
-              {user?.email}
-            </li>
-          ) : null}
+          {user?.email ? <ListItem iconName="Mail" text={user?.email} /> : null}
         </ul>
-        {user?.bio ? (
-          <p className="text-sm text-gray-600">{user?.bio}</p>
-        ) : null}
+        {user?.bio ? <Bio user={user} /> : null}
       </div>
     </div>
   )
 }
 
-export { Aside }
+interface ListItemProps extends React.LiHTMLAttributes<HTMLLIElement> {
+  iconName: LucideIconName
+  text: string
+}
+
+const ListItem = ({ iconName, text, ...props }: ListItemProps) => {
+  return (
+    <li className="flex items-center text-sm text-gray-600" {...props}>
+      <LucideIcon name={iconName} className="mr-1 size-4 min-w-4" />
+      {text}
+    </li>
+  )
+}
+
+interface BioProps extends React.HTMLAttributes<HTMLParagraphElement> {
+  user: User
+}
+
+const Bio = ({ user, ...props }: BioProps) => {
+  return (
+    <p className="text-sm text-gray-600" {...props}>
+      {user?.bio}
+    </p>
+  )
+}
+
+export { Aside, type AsideProps }

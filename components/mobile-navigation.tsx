@@ -19,6 +19,7 @@ const MobileNavigation = () => {
             'dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50'
           )}
           href={absoluteUrl('/')}
+          scroll={!siteConfig?.fixedHeader}
         >
           Home
         </Link>
@@ -28,7 +29,7 @@ const MobileNavigation = () => {
             'dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50'
           )}
           href={absoluteUrl('/posts')}
-          scroll={false}
+          scroll={!siteConfig?.fixedHeader}
         >
           Posts
         </Link>

@@ -13,9 +13,7 @@ interface ResendVerifyEmailProps {
   item: Email
 }
 
-const ResendVerifyEmail = (props: ResendVerifyEmailProps) => {
-  const { item } = props
-
+const ResendVerifyEmail = ({ item }: ResendVerifyEmailProps) => {
   const { t } = useTranslation()
   const { user } = useAuth()
   const { mutate } = useSWRConfig()

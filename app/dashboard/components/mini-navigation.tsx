@@ -1,27 +1,37 @@
 'use client'
 
 import * as React from 'react'
+import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import { cn } from '@/lib/utils'
-import { LucideIcon } from '@/lib/lucide-icon'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
-import { TooltipLinkButton } from '@/components/tooltip-link-button'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import { Button } from '@/components/ui/button'
 import { useAppBar } from './app-bar'
 
+import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
 import { siteConfig } from '@/config/site'
 import { DashboardMiniNavItem, DashboardMiniNavSubItem } from '@/types/config'
 
-export interface MiniNavigationProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+interface MiniNavigationProps extends React.HTMLAttributes<HTMLDivElement> {
   nav: DashboardMiniNavItem[]
   user_role?: string
 }
 
-export function MiniNavigation(props: MiniNavigationProps) {
-  const { className, nav, user_role, ...rest } = props
+const MiniNavigation = ({
+  className,
+  nav,
+  user_role,
+  ...props
+}: MiniNavigationProps) => {
   const { height } = useAppBar()
 
   return (
@@ -31,10 +41,10 @@ export function MiniNavigation(props: MiniNavigationProps) {
         'w-14 min-w-14',
         className
       )}
-      {...rest}
+      {...props}
     >
       <div className={cn('flex items-center justify-center border-b', height)}>
-        <Link href="/">
+        <Link href="/" scroll={!siteConfig?.fixedHeader}>
           <LucideIcon name={siteConfig.symbol} className="size-5 min-w-5" />
           <span className="sr-only">{siteConfig.name}</span>
         </Link>
@@ -55,11 +65,8 @@ interface NavItemProps {
   user_role?: string
 }
 
-function NavItem(props: NavItemProps) {
-  const {
-    item: { separator, items },
-    user_role,
-  } = props
+const NavItem = ({ item, user_role }: NavItemProps) => {
+  const { separator, items } = item
 
   return (
     <React.Fragment>
@@ -77,37 +84,76 @@ interface NavSubItemProps {
   item: DashboardMiniNavSubItem
 }
 
-function NavSubItem(props: NavSubItemProps) {
-  const {
-    item: { href, iconName, title, translate, disabled, badge },
-  } = props
+const NavSubItem = ({ item }: NavSubItemProps) => {
+  const { href, iconName, title, translate, disabled, badge } = item
+  const router = useRouter()
   const pathname = usePathname()
 
   return (
-    <TooltipLinkButton
-      variant="ghost"
-      href={href}
-      className={cn(
-        'relative flex h-auto justify-center rounded-lg px-2 py-0.5 transition-all',
-        'text-gray-500 hover:bg-transparent hover:text-gray-900',
-        'dark:text-gray-400 dark:hover:text-gray-50',
-        pathname?.startsWith(href) ? 'text-gray-900 dark:text-gray-50' : ''
-      )}
-      startIconName={iconName}
-      startIconClassName="size-5 min-w-5 mr-0"
-      text={`DashboardNavigation.${title}`}
-      translate={translate}
-      tooltipContent={{ side: 'right', align: 'end', alignOffset: 6 }}
-      disabled={disabled}
-    >
-      {!!badge && (
-        <Badge
-          className="absolute bottom-0 right-0 justify-center px-1 py-0.5"
-          style={{ fontSize: 10, lineHeight: 1 }}
-        >
-          {badge}
-        </Badge>
-      )}
-    </TooltipLinkButton>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div>
+            <Button
+              variant="ghost"
+              className={cn(
+                'relative flex h-auto justify-center rounded-lg px-2 py-0.5 transition-all',
+                'text-gray-500 hover:bg-transparent hover:text-gray-900',
+                'dark:text-gray-400 dark:hover:text-gray-50',
+                pathname?.startsWith(href)
+                  ? 'text-gray-900 dark:text-gray-50'
+                  : ''
+              )}
+              onClick={() =>
+                router.push(href, { scroll: !siteConfig?.fixedHeader })
+              }
+              disabled={disabled}
+            >
+              {iconName ? <TooltipIcon name={iconName} /> : null}
+              {badge && badge > 0 ? <TooltipBadge badge={badge} /> : null}
+            </Button>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent side="right" align="end" alignOffset={6}>
+          {title ? <TooltipTitle title={title} translate={translate} /> : null}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   )
 }
+
+interface TooltipTitleProps {
+  title: string
+  translate?: 'yes' | 'no'
+}
+
+const TooltipTitle = ({ title, translate }: TooltipTitleProps) => {
+  const { t } = useTranslation()
+
+  return translate === 'yes' ? t(`DashboardNavigation.${title}`) : title
+}
+
+interface TooltipIconProps {
+  name: LucideIconName
+}
+
+const TooltipIcon = ({ name }: TooltipIconProps) => {
+  return <LucideIcon name={name} className="mr-0 size-5 min-w-5" />
+}
+
+interface TooltipBadgeProps {
+  badge: number
+}
+
+const TooltipBadge = ({ badge }: TooltipBadgeProps) => {
+  return (
+    <Badge
+      className="absolute bottom-0 right-0 justify-center px-1 py-0.5"
+      style={{ fontSize: 10, lineHeight: 1 }}
+    >
+      {badge}
+    </Badge>
+  )
+}
+
+export { MiniNavigation, type MiniNavigationProps }

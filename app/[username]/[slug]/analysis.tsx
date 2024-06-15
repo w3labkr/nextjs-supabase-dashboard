@@ -6,7 +6,6 @@ import { createClient } from '@/supabase/client'
 
 const Analysis = () => {
   const { post } = usePost()
-
   const setViewCount = async (postid: number) => {
     const supabase = createClient()
     const result = await supabase.rpc('set_view_count', { postid })

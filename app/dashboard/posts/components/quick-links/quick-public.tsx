@@ -24,8 +24,7 @@ interface QuickPublicProps
   post: Post
 }
 
-const QuickPublic = (props: QuickPublicProps) => {
-  const { post, ...rest } = props
+const QuickPublic = ({ post, ...props }: QuickPublicProps) => {
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
   const paging = usePaging()
@@ -94,7 +93,7 @@ const QuickPublic = (props: QuickPublicProps) => {
       className="text-xs text-blue-700 hover:underline"
       onClick={onClick}
       disabled={isSubmitting}
-      {...rest}
+      {...props}
     >
       {t('QuickLinks.public')}
     </button>

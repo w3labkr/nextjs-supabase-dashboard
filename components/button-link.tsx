@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
 import { ButtonProps, buttonVariants } from '@/components/ui/button'
+import { siteConfig } from '@/config/site'
 
 interface ButtonLinkProps
   extends LinkProps,
@@ -31,6 +32,7 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
       text,
       translate,
       variant = 'ghost',
+      scroll,
       ...rest
     } = props
     const { t } = useTranslation()
@@ -38,23 +40,26 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
     return (
       <Link
         ref={ref}
+        scroll={scroll ?? !siteConfig?.fixedHeader}
         className={cn(buttonVariants({ variant }), className)}
         {...rest}
       >
-        {startIconName && (
+        {startIconName ? (
           <LucideIcon
             name={startIconName}
             className={cn('mr-2 size-4 min-w-4', startIconClassName)}
           />
-        )}
-        {text && translate === 'yes' ? t(text) : text}
-        {children}
-        {endIconName && (
+        ) : null}
+        {translate === 'yes' && text ? t(text) : text}
+        {translate === 'yes' && children && typeof children === 'string'
+          ? t(children)
+          : children}
+        {endIconName ? (
           <LucideIcon
             name={endIconName}
             className={cn('ml-2 size-4 min-w-4', endIconClassName)}
           />
-        )}
+        ) : null}
       </Link>
     )
   }

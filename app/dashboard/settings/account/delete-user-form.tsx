@@ -59,8 +59,7 @@ interface DeleteUserFormProps {
   user: User
 }
 
-const DeleteUserForm = (props: DeleteUserFormProps) => {
-  const { user } = props
+const DeleteUserForm = ({ user }: DeleteUserFormProps) => {
   const { t } = useTranslation()
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),

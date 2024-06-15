@@ -93,9 +93,7 @@ const Header = () => {
 
 interface HeadLinksProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const HeadLinks = (props: HeadLinksProps) => {
-  const { className, ...rest } = props
-
+const HeadLinks = ({ className, ...props }: HeadLinksProps) => {
   const paging = usePaging()
   const { user } = useAuth()
   const { data, count } = useCountPostsAPI(user?.id ?? null, {
@@ -116,7 +114,7 @@ const HeadLinks = (props: HeadLinksProps) => {
         'flex items-center space-x-1 text-sm text-muted-foreground',
         className
       )}
-      {...rest}
+      {...props}
     >
       <HeadLink status={null} label="all" count={count ?? 0} />
       <span>|</span>
@@ -267,13 +265,11 @@ interface QuickLinksProps extends React.HTMLAttributes<HTMLDivElement> {
   post: Post
 }
 
-const QuickLinks = (props: QuickLinksProps) => {
-  const { post, ...rest } = props
-
+const QuickLinks = ({ post, ...props }: QuickLinksProps) => {
   switch (post?.status) {
     case 'publish':
       return (
-        <div className="space-x-1" {...rest}>
+        <div className="space-x-1" {...props}>
           <QuickEdit post={post} />
           <span>|</span>
           <QuickDraft post={post} />
@@ -287,7 +283,7 @@ const QuickLinks = (props: QuickLinksProps) => {
       )
     case 'private':
       return (
-        <div className="space-x-1" {...rest}>
+        <div className="space-x-1" {...props}>
           <QuickEdit post={post} />
           <span>|</span>
           <QuickDraft post={post} />
@@ -301,7 +297,7 @@ const QuickLinks = (props: QuickLinksProps) => {
       )
     case 'future':
       return (
-        <div className="space-x-1" {...rest}>
+        <div className="space-x-1" {...props}>
           <QuickEdit post={post} />
           <span>|</span>
           <QuickDraft post={post} />
@@ -313,7 +309,7 @@ const QuickLinks = (props: QuickLinksProps) => {
       )
     case 'draft':
       return (
-        <div className="space-x-1" {...rest}>
+        <div className="space-x-1" {...props}>
           <QuickEdit post={post} />
           <span>|</span>
           <QuickPublish post={post} />
@@ -323,7 +319,7 @@ const QuickLinks = (props: QuickLinksProps) => {
       )
     case 'trash':
       return (
-        <div className="space-x-1" {...rest}>
+        <div className="space-x-1" {...props}>
           <QuickRestore post={post} />
           <span>|</span>
           <QuickDelete post={post} />
@@ -331,7 +327,7 @@ const QuickLinks = (props: QuickLinksProps) => {
       )
     case 'pending':
       return (
-        <div className="space-x-1" {...rest}>
+        <div className="space-x-1" {...props}>
           <QuickTrash post={post} />
         </div>
       )

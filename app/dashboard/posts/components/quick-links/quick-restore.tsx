@@ -16,8 +16,7 @@ interface QuickRestoreProps
   post: Post
 }
 
-const QuickRestore = (props: QuickRestoreProps) => {
-  const { post, ...rest } = props
+const QuickRestore = ({ post, ...props }: QuickRestoreProps) => {
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
   const paging = usePaging()
@@ -69,7 +68,7 @@ const QuickRestore = (props: QuickRestoreProps) => {
       className="text-xs text-blue-700 hover:underline"
       onClick={onClick}
       disabled={isSubmitting}
-      {...rest}
+      {...props}
     >
       {t('QuickLinks.restore')}
     </button>

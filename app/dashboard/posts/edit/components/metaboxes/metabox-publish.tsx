@@ -26,6 +26,7 @@ import {
   getAuthorFavoritesPath,
 } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
+import { siteConfig } from '@/config/site'
 
 const MetaboxPublish = () => {
   const { t } = useTranslation()
@@ -167,7 +168,10 @@ const ViewButton = () => {
 
       const postPath = getPostPath(post)
 
-      if (postPath) router.push(postPath)
+      if (postPath)
+        router.push(postPath, {
+          scroll: !siteConfig?.fixedHeader,
+        })
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -222,7 +226,10 @@ const PreviewButton = () => {
 
       mutate(`/api/v1/post?id=${post?.id}`)
 
-      if (postPath) router.push(postPath + '?preview=true')
+      if (postPath)
+        router.push(postPath + '?preview=true', {
+          scroll: !siteConfig?.fixedHeader,
+        })
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
@@ -286,7 +293,9 @@ const TrashButton = () => {
 
       toast.success(t('FormMessage.changed_successfully'))
 
-      router.push('/dashboard/posts')
+      router.push('/dashboard/posts', {
+        scroll: !siteConfig?.fixedHeader,
+      })
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {

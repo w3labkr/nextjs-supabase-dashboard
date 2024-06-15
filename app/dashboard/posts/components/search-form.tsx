@@ -20,6 +20,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useQueryString } from '@/hooks/use-query-string'
+import { siteConfig } from '@/config/site'
 
 const FormSchema = z.object({
   q: z.string(),
@@ -46,7 +47,9 @@ const SearchForm = () => {
     const queryString = qs({ q: formValues?.q, page: 1 })
     const href = [pathname, queryString].filter(Boolean).join('?')
 
-    router.push(href)
+    router.push(href, {
+      scroll: !siteConfig?.fixedHeader,
+    })
   }
 
   return (

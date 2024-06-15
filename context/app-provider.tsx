@@ -22,9 +22,7 @@ interface AppContextProps {
   providers: Array<React.JSXElementConstructor<React.PropsWithChildren<any>>>
 }
 
-const AppContext = (props: AppContextProps) => {
-  const { children, providers = [] } = props
-
+const AppContext = ({ children, providers = [] }: AppContextProps) => {
   return (
     <React.Fragment>
       {providers.reduceRight(
@@ -41,9 +39,7 @@ interface AppProviderProps {
   children: React.ReactNode
 }
 
-const AppProvider = (props: AppProviderProps) => {
-  const { children } = props
-
+const AppProvider = ({ children }: AppProviderProps) => {
   return <AppContext providers={providers}>{children}</AppContext>
 }
 

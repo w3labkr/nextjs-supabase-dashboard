@@ -1,15 +1,17 @@
 'use client'
 
 import * as React from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
-import { LinkButton } from '@/components/link-button'
+import { Button } from '@/components/ui/button'
 import { useAppBar } from './app-bar'
 
+import { LucideIcon } from '@/lib/lucide-icon'
 import { DashboardNavItem, DashboardNavSubItem } from '@/types/config'
+import { siteConfig } from '@/config/site'
 
 interface NavigationProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string
@@ -17,8 +19,14 @@ interface NavigationProps extends React.HTMLAttributes<HTMLDivElement> {
   user_role?: string
 }
 
-const Navigation = (props: NavigationProps) => {
-  const { className, nav, user_role, title, translate, ...rest } = props
+const Navigation = ({
+  className,
+  nav,
+  user_role,
+  title,
+  translate,
+  ...props
+}: NavigationProps) => {
   const { height } = useAppBar()
   const { t } = useTranslation()
 
@@ -29,7 +37,7 @@ const Navigation = (props: NavigationProps) => {
         'w-48 min-w-48 lg:w-64',
         className
       )}
-      {...rest}
+      {...props}
     >
       <div
         className={cn('flex flex-row items-center gap-2 border-b px-4', height)}
@@ -56,11 +64,8 @@ interface NavItemProps {
   user_role?: string
 }
 
-const NavItem = (props: NavItemProps) => {
-  const {
-    item: { separator, label, translate, items },
-    user_role,
-  } = props
+const NavItem = ({ item, user_role }: NavItemProps) => {
+  const { separator, label, translate, items } = item
   const { t } = useTranslation()
 
   return (
@@ -86,27 +91,30 @@ interface NavSubItemProps {
   item: DashboardNavSubItem
 }
 
-const NavSubItem = (props: NavSubItemProps) => {
-  const {
-    item: { href, iconName, title, translate, disabled },
-  } = props
+const NavSubItem = ({ item }: NavSubItemProps) => {
+  const { href, iconName, title, translate, disabled } = item
+  const { t } = useTranslation()
   const pathname = usePathname()
+  const router = useRouter()
 
   return (
-    <LinkButton
+    <Button
       variant="ghost"
-      href={href}
       className={cn(
         'relative flex h-auto rounded px-1 py-0.5 text-sm transition-all',
         'text-gray-500 hover:bg-transparent hover:text-gray-900',
         'dark:text-gray-400 dark:hover:text-gray-50',
         pathname?.startsWith(href) ? 'text-gray-900 dark:text-gray-50' : ''
       )}
-      startIconName={iconName}
-      text={`DashboardNavigation.${title}`}
       translate={translate}
       disabled={disabled}
-    />
+      onClick={() => router.push(href, { scroll: !siteConfig?.fixedHeader })}
+    >
+      {iconName ? (
+        <LucideIcon name={iconName} className="mr-2 size-4 min-w-4" />
+      ) : null}
+      {title && translate === 'yes' ? t(`DashboardNavigation.${title}`) : title}
+    </Button>
   )
 }
 

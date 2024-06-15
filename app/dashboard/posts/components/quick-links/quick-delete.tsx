@@ -22,8 +22,7 @@ interface QuickDeleteProps
   post: Post
 }
 
-const QuickDelete = (props: QuickDeleteProps) => {
-  const { post, ...rest } = props
+const QuickDelete = ({ post, ...props }: QuickDeleteProps) => {
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
   const paging = usePaging()
@@ -82,7 +81,7 @@ const QuickDelete = (props: QuickDeleteProps) => {
       className="text-xs text-destructive hover:underline"
       onClick={onClick}
       disabled={isSubmitting}
-      {...rest}
+      {...props}
     >
       {t('QuickLinks.delete')}
     </button>

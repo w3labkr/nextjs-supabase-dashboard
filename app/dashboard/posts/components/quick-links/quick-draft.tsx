@@ -22,8 +22,7 @@ interface QuickDraftProps
   post: Post
 }
 
-const QuickDraft = (props: QuickDraftProps) => {
-  const { post, ...rest } = props
+const QuickDraft = ({ post, ...props }: QuickDraftProps) => {
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
   const paging = usePaging()
@@ -82,7 +81,7 @@ const QuickDraft = (props: QuickDraftProps) => {
       className="text-xs text-blue-700 hover:underline"
       onClick={onClick}
       disabled={isSubmitting}
-      {...rest}
+      {...props}
     >
       {t('QuickLinks.draft')}
     </button>

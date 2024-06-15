@@ -5,7 +5,7 @@ export interface SiteConfig {
   title: string
   symbol: LucideIconName
   description: string
-  stickyHeader: boolean
+  fixedHeader: boolean
 }
 
 export interface DashboardMiniNavSubItem {

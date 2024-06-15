@@ -18,6 +18,7 @@ import { SignOutButton } from '@/components/signout-button'
 
 import { getProfileUrl } from '@/lib/utils'
 import { useUserAPI } from '@/queries/client/users'
+import { siteConfig } from '@/config/site'
 
 const AccountMenu = () => {
   const { t } = useTranslation()
@@ -48,12 +49,20 @@ const AccountMenu = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href={getProfileUrl(user) ?? '#'} className="cursor-pointer">
+          <Link
+            href={getProfileUrl(user) ?? '#'}
+            scroll={!siteConfig?.fixedHeader}
+            className="cursor-pointer"
+          >
             {t('AccountMenu.profile')}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/dashboard/settings/profile" className="cursor-pointer">
+          <Link
+            href="/dashboard/settings/profile"
+            scroll={!siteConfig?.fixedHeader}
+            className="cursor-pointer"
+          >
             {t('AccountMenu.settings')}
           </Link>
         </DropdownMenuItem>

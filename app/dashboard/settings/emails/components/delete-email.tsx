@@ -28,9 +28,7 @@ interface DeleteEmailProps {
   item: Email
 }
 
-const DeleteEmail = (props: DeleteEmailProps) => {
-  const { item } = props
-
+const DeleteEmail = ({ item }: DeleteEmailProps) => {
   const { t } = useTranslation()
   const { user } = useAuth()
   const { mutate } = useSWRConfig()

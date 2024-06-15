@@ -30,10 +30,14 @@ interface AddDummyPostProps
   endIconName?: LucideIconName
 }
 
-const AddDummyPost = (props: AddDummyPostProps) => {
-  const { children, text, translate, startIconName, endIconName, ...rest } =
-    props
-
+const AddDummyPost = ({
+  children,
+  text,
+  translate,
+  startIconName,
+  endIconName,
+  ...props
+}: AddDummyPostProps) => {
   const searchParams = useSearchParams()
   const { t } = useTranslation()
   const { session } = useAuth()
@@ -99,7 +103,7 @@ const AddDummyPost = (props: AddDummyPostProps) => {
   }
 
   return (
-    <Button type="button" onClick={onClick} disabled={isSubmitting} {...rest}>
+    <Button type="button" onClick={onClick} disabled={isSubmitting} {...props}>
       {startIconName && (
         <LucideIcon name={startIconName} className="mr-2 size-4" />
       )}

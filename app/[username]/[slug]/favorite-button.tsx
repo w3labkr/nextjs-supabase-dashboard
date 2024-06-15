@@ -13,21 +13,24 @@ import { useFavoriteAPI } from '@/queries/client/favorites'
 import { useUserAPI } from '@/queries/client/users'
 import { FavoriteAPI } from '@/types/api'
 import { Post } from '@/types/database'
+import { siteConfig } from '@/config/site'
 
 interface FavoriteButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   post: Post
 }
 
-const FavoriteButton = (props: FavoriteButtonProps) => {
+const FavoriteButton = ({ post, ...props }: FavoriteButtonProps) => {
   const { user } = useAuth()
 
-  return user ? <SignedInAction {...props} /> : <SignedOutAction {...props} />
+  return user ? (
+    <SignedInAction post={post} {...props} />
+  ) : (
+    <SignedOutAction post={post} {...props} />
+  )
 }
 
-const SignedInAction = (props: FavoriteButtonProps) => {
-  const { post, ...rest } = props
-
+const SignedInAction = ({ post, ...props }: FavoriteButtonProps) => {
   const { user } = useUserAPI()
   const { favorite } = useFavoriteAPI(null, {
     postId: post?.id,
@@ -76,7 +79,7 @@ const SignedInAction = (props: FavoriteButtonProps) => {
   }
 
   return (
-    <button type="button" onClick={onClick} disabled={isSubmitting} {...rest}>
+    <button type="button" onClick={onClick} disabled={isSubmitting} {...props}>
       <LucideIcon
         name="Heart"
         fill={cn(isLike ? '#ef4444' : 'transparent')}
@@ -86,14 +89,18 @@ const SignedInAction = (props: FavoriteButtonProps) => {
   )
 }
 
-const SignedOutAction = (props: FavoriteButtonProps) => {
+const SignedOutAction = ({ post, ...props }: FavoriteButtonProps) => {
   const router = useRouter()
   const pathname = usePathname()
 
   return (
     <button
       type="button"
-      onClick={() => router?.push(`/auth/signin?next=${pathname}`)}
+      onClick={() =>
+        router.push(`/auth/signin?next=${pathname}`, {
+          scroll: !siteConfig?.fixedHeader,
+        })
+      }
       {...props}
     >
       <LucideIcon

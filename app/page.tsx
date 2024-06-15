@@ -13,7 +13,7 @@ export default function RootPage() {
       <main
         className={cn(
           'min-h-[80vh] pb-40',
-          siteConfig?.stickyHeader ? 'pt-[61px]' : ''
+          siteConfig?.fixedHeader ? 'pt-[61px]' : ''
         )}
       >
         <Hero />
