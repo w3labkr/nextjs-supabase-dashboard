@@ -4,13 +4,14 @@ import * as React from 'react'
 
 import { LucideIcon } from '@/lib/lucide-icon'
 import { getMeta } from '@/lib/utils'
-import { Post } from '@/types/database'
+import { usePostAPI } from '@/queries/client/posts'
 
 interface PostViewsProps extends React.HTMLAttributes<HTMLDivElement> {
-  post: Post
+  id: number
 }
 
-const PostViews = ({ post, ...props }: PostViewsProps) => {
+const PostViews = ({ id, ...props }: PostViewsProps) => {
+  const { post } = usePostAPI(id ?? null)
   const views = getMeta(post?.meta, 'views', '0')
 
   return (

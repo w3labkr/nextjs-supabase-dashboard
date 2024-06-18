@@ -12,28 +12,27 @@ import { useAuth } from '@/hooks/use-auth'
 import { useFavoriteAPI } from '@/queries/client/favorites'
 import { useUserAPI } from '@/queries/client/users'
 import { FavoriteAPI } from '@/types/api'
-import { Post } from '@/types/database'
 import { siteConfig } from '@/config/site'
 
 interface FavoriteButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  post: Post
+  id: number
 }
 
-const FavoriteButton = ({ post, ...props }: FavoriteButtonProps) => {
+const FavoriteButton = ({ id, ...props }: FavoriteButtonProps) => {
   const { user } = useAuth()
 
   return user ? (
-    <SignedInAction post={post} {...props} />
+    <SignedInAction id={id} {...props} />
   ) : (
-    <SignedOutAction post={post} {...props} />
+    <SignedOutAction id={id} {...props} />
   )
 }
 
-const SignedInAction = ({ post, ...props }: FavoriteButtonProps) => {
+const SignedInAction = ({ id, ...props }: FavoriteButtonProps) => {
   const { user } = useUserAPI()
   const { favorite } = useFavoriteAPI(null, {
-    postId: post?.id,
+    postId: id,
     userId: user?.id ?? undefined,
   })
   const { mutate } = useSWRConfig()
@@ -56,7 +55,7 @@ const SignedInAction = ({ post, ...props }: FavoriteButtonProps) => {
       const revalidatePaths = [getProfilePath(user), getFavoritesPath(user)]
 
       const result = await fetcher<FavoriteAPI>(
-        `/api/v1/favorite?postId=${post?.id}&userId=${user?.id}`,
+        `/api/v1/favorite?postId=${id}&userId=${user?.id}`,
         {
           method: 'POST',
           body: JSON.stringify({
@@ -70,7 +69,7 @@ const SignedInAction = ({ post, ...props }: FavoriteButtonProps) => {
 
       setIsLike(!isLike)
 
-      mutate(`/api/v1/favorite?postId=${post?.id}&userId=${user?.id}`)
+      mutate(`/api/v1/favorite?postId=${id}&userId=${user?.id}`)
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -89,7 +88,7 @@ const SignedInAction = ({ post, ...props }: FavoriteButtonProps) => {
   )
 }
 
-const SignedOutAction = ({ post, ...props }: FavoriteButtonProps) => {
+const SignedOutAction = ({ id, ...props }: FavoriteButtonProps) => {
   const router = useRouter()
   const pathname = usePathname()
 
