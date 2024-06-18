@@ -24,6 +24,7 @@ Denpendency
   - [Table of Contents](#table-of-contents)
   - [Screenshots](#screenshots)
   - [Folder and file Structure](#folder-and-file-structure)
+  - [Seed](#seed)
   - [Installation](#installation)
     - [Tailwind CSS](#tailwind-css)
     - [Shadcn UI](#shadcn-ui)
@@ -70,14 +71,24 @@ The folder and file structure is based on nextjs app router [next.js project str
 ├── lib/                        # Utility functions
 ├── public/                     # Static assets to be served
 │   └── [locales]/              # Internationalization
+├── queries/                    # SWR for API
 ├── screenshots/                # Screenshots
-├── sql/                        # Cloud functions
 ├── store/                      # Redux reducers
+├── supabase/                   # Supabase CLI
 ├── types/
 ├── components.json             # Shadcn UI
 ├── i18next.config.ts           # Internationalization
 └── package.json                # Project dependencies and scripts
 ```
+
+## Seed
+
+Search and replace the following text in `/supabase/seed.sql`:
+
+- `my_bucket_id`
+- `username@example.com`
+
+Then run the sql.
 
 ## Installation
 
@@ -276,14 +287,14 @@ npx supabase login
 Generate types without init
 
 ```shell
-npx supabase gen types typescript --project-id "YOURL_PROJECT_ID" --schema public > types/supabase.ts
+npx supabase gen types typescript --project-id "YOUR_PROJECT_ID" --schema public > types/supabase.ts
 ```
 
 Generate types with init
 
 ```shell
 npx supabase init
-npx supabase link --project-ref YOURL_PROJECT_ID
+npx supabase link --project-ref YOUR_PROJECT_ID
 npx supabase gen types typescript --linked > types/supabase.ts
 ```
 
