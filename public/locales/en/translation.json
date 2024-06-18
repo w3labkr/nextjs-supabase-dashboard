@@ -438,5 +438,22 @@
   "SearchForm": {
     "placeholder": "Search Text",
     "submit": "Search"
+  },
+
+  "SearchResults": {
+    "title": "Search Results for: ",
+    "empty": "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+  },
+
+  "words": {
+    "posts": "Posts"
+  },
+
+  "sentences": {
+    "no_posts_yet": "No posts yet"
+  },
+
+  "paragraphs": {
+
   }
 }

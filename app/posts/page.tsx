@@ -5,6 +5,8 @@ import dayjs from 'dayjs'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Paging, PagingProvider } from '@/components/paging'
+import { ArchiveTitle } from './archive-title'
+import { EmptyPosts } from './empty-posts'
 
 import { getPostsAPI } from '@/queries/server/posts'
 import { cn, getAuthorUrl, getPostUrl } from '@/lib/utils'
@@ -30,7 +32,7 @@ export default async function PostsPage({
   const page = +(searchParams?.page ?? '1')
   const perPage = +(searchParams?.perPage ?? '10')
   const pageSize = +(searchParams?.pageSize ?? '10')
-  const q = searchParams?.orderBy
+  const q = searchParams?.q
   const orderBy = searchParams?.orderBy ?? 'id'
   const order = searchParams?.order ?? 'desc'
 
@@ -56,7 +58,10 @@ export default async function PostsPage({
         )}
       >
         <div className="container flex-1 overflow-auto">
-          <h2 className="mt-16 text-center font-serif text-4xl">Posts</h2>
+          <ArchiveTitle
+            q={q}
+            className="mt-16 text-center font-serif text-4xl"
+          />
           <PagingProvider value={{ total, page, perPage, pageSize }}>
             <div className="mt-12 space-y-16">
               {Array.isArray(posts) && posts?.length > 0 ? (
@@ -65,7 +70,7 @@ export default async function PostsPage({
                   <Paging />
                 </>
               ) : (
-                <EmptyList />
+                <EmptyPosts q={q} className="text-center" />
               )}
             </div>
           </PagingProvider>
@@ -89,10 +94,6 @@ const PostList = ({ posts, ...props }: PostListProps) => {
       {posts?.map((post: Post) => <PostItem key={post?.id} post={post} />)}
     </div>
   )
-}
-
-const EmptyList = () => {
-  return <div>No posts yet</div>
 }
 
 interface PostItemProps extends React.HTMLAttributes<HTMLDivElement> {

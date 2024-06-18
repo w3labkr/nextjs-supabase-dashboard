@@ -12,6 +12,7 @@ import { Brand } from '@/components/brand'
 import { Navigation } from '@/components/navigation'
 import { MobileNavigation } from '@/components/mobile-navigation'
 import { AccountMenu } from '@/components/account-menu'
+import { SearchForm } from '@/components/search-form'
 
 import { useAuth } from '@/hooks/use-auth'
 import { cn } from '@/lib/utils'
@@ -45,6 +46,7 @@ const Header = () => {
           </SheetTrigger>
           <Brand />
           <Navigation />
+          <SearchForm />
           <div className="ml-auto flex gap-2">
             {user ? <SignedInNav /> : <SignedOutNav />}
           </div>

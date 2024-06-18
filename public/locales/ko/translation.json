@@ -417,7 +417,7 @@
     "created_at": "생성일",
     "updated_at": "수정일",
     "deleted_at": "삭제일",
-    "empty_post": "아직 게시물이 없습니다",
+    "empty_post": "등록된 게시물이 없습니다",
     "is_loading": "로드 중..."
   },
 
@@ -431,11 +431,28 @@
     "post_views": "게시물 조회수",
     "post": "게시물",
     "views": "조회수",
-    "empty_post": "아직 게시물이 없습니다"
+    "empty_post": "등록된 게시물이 없습니다"
   },
 
   "SearchForm": {
     "placeholder": "텍스트 검색",
     "submit": "검색"
+  },
+
+  "SearchResults": {
+    "title": "검색 결과: ",
+    "empty": "죄송합니다. 검색어와 일치하는 내용이 없습니다. 다른 키워드를 사용하여 다시 시도해 보세요."
+  },
+
+  "words": {
+    "posts": "게시물"
+  },
+
+  "sentences": {
+    "no_posts_yet": "등록된 게시물이 없습니다"
+  },
+
+  "paragraphs": {
+
   }
 }
