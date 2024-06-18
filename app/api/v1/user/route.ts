@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   const id = searchParams.get('id') as string
   const username = searchParams.get('username') as string
 
-  let match = {}
+  let match: Record<string, any> = {}
 
   if (id) match = { ...match, id }
   if (username) match = { ...match, username }

@@ -7,39 +7,68 @@ import { Post } from '@/types/database'
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const userId = searchParams.get('userId') as string
-  const page = +((searchParams.get('page') as string) ?? '1')
-  const perPage = +((searchParams.get('perPage') as string) ?? '50')
   const postType = (searchParams.get('postType') as string) ?? 'post'
   const status = searchParams.get('status') as string
+  const q = searchParams.get('q') as string
+  const orderBy = (searchParams.get('orderBy') as string) ?? 'id'
+  const order = (searchParams.get('order') as string) ?? 'asc'
+  const limit = +((searchParams.get('limit') as string) ?? '0')
 
-  let match = {}
+  let page = +((searchParams.get('page') as string) ?? '1')
+  let perPage = +((searchParams.get('perPage') as string) ?? '50')
+  let offset = (page - 1) * perPage
+
+  if (page < 1) page = 1
+  if (perPage < 1) perPage = 1
+  if (offset < 0) offset = 0
+
+  let match: Record<string, any> = { 'favorites.is_favorite': true }
 
   if (userId) match = { ...match, user_id: userId }
   if (postType) match = { ...match, type: postType }
   if (status) match = { ...match, status: status }
 
-  match = { ...match, 'favorites.is_favorite': true }
-
-  const columns =
-    '*, author:users(*), meta:post_metas(*), favorite:favorites!inner(*)'
-
   const supabase = createClient()
   const counterQuery = supabase
     .from('posts')
-    .select(columns, { count: 'exact', head: true })
-    .match(match)
+    .select(
+      '*, author:users(*), meta:post_metas(*), favorite:favorites!inner(*)',
+      { count: 'exact', head: true }
+    )
+
+  if (match.constructor === Object && Object.keys(match).length > 0) {
+    counterQuery.match(match)
+  }
+  if (q) counterQuery.textSearch('title', q)
 
   const counter = await counterQuery
-  const total = counter?.count ?? 0
-  const startingIndex = (page - 1) * perPage
-  const lastIndex = page * perPage - 1
 
-  const { data: list, error } = await supabase
+  if (counter?.error) {
+    return NextResponse.json(
+      { data: null, count: null, error: counter?.error },
+      { status: 400 }
+    )
+  }
+
+  const query = supabase
     .from('posts')
-    .select(columns)
-    .match(match)
-    .range(startingIndex, lastIndex)
-    .order('id', { ascending: false })
+    .select(
+      '*, author:users(*), meta:post_metas(*), favorite:favorites!inner(*)'
+    )
+
+  if (match.constructor === Object && Object.keys(match).length > 0) {
+    query.match(match)
+  }
+  if (q) query.textSearch('title', q)
+  if (orderBy) query.order(orderBy, { ascending: order === 'asc' })
+
+  if (limit) {
+    query.limit(limit)
+  } else {
+    query.range(offset, page * perPage - 1)
+  }
+
+  const { data: list, error } = await query
 
   if (error) {
     return NextResponse.json(
@@ -48,10 +77,12 @@ export async function GET(request: NextRequest) {
     )
   }
 
+  const count = limit ? list?.length : counter?.count ?? 0
+
   const data = list?.map((item: Post, index: number) => {
-    item['num'] = total - startingIndex - index
+    item['num'] = limit ? index + 1 : count - index - offset
     return item
   })
 
-  return NextResponse.json({ data, count: total, error: null })
+  return NextResponse.json({ data, count, error: null })
 }

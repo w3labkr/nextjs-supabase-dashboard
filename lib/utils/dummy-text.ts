@@ -28,6 +28,7 @@ export function generateRecentPosts(
       is_ban: false,
       banned_until: null,
     }
+
     posts = [...posts, post]
   }
 

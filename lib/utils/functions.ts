@@ -1,7 +1,7 @@
 import { Meta } from '@/types/database'
 
-export function getMeta<T extends Meta | undefined>(
-  meta: T,
+export function getMeta(
+  meta: Meta | undefined,
   key: string,
   defaultValue?: string | null
 ): any {
@@ -11,19 +11,17 @@ export function getMeta<T extends Meta | undefined>(
   )
 }
 
-export function setMeta<T extends Meta | undefined>(
-  meta: T,
+export function setMeta(
+  meta: Meta | null | undefined,
   key: string,
   value: string | null,
   options?: Record<string, any>
-): Meta | undefined {
-  if (!meta) return undefined
-
+): Meta {
   const found: boolean = !!meta?.find(
     (r: Record<string, any>) => r.meta_key === key
   )
 
-  if (found) {
+  if (meta && found) {
     const newMeta: Meta = meta?.map((r: Record<string, any>) => {
       if (r.meta_key === key) r.meta_value = value
       return r
@@ -35,7 +33,8 @@ export function setMeta<T extends Meta | undefined>(
     ? Object.assign({}, { meta_key: key, meta_value: value }, options)
     : { meta_key: key, meta_value: value }
 
-  const newMeta: Meta = [...meta, data]
+  const newMeta: Meta =
+    Array.isArray(meta) && meta?.length > 0 ? [...meta, data] : [data]
 
   return newMeta
 }

@@ -10,7 +10,7 @@ import { RelatedPosts } from '@/components/related-posts'
 import { Forbidden } from '@/components/error'
 import { PostProvider } from './post-provider'
 import { Analysis } from './analysis'
-import { ViewCount } from './view-count'
+import { PostViews } from './post-views'
 import { FavoriteButton } from './favorite-button'
 
 import { cn, getAuthorUrl } from '@/lib/utils'
@@ -149,7 +149,7 @@ const PostMeta = ({ post, ...props }: PostMetaProps) => {
         </Link>
       </div>
       <div className="flex space-x-4">
-        <ViewCount post={post} />
+        <PostViews post={post} />
         <FavoriteButton post={post} />
       </div>
     </div>

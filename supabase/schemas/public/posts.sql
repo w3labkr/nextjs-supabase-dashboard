@@ -9,6 +9,7 @@ create extension if not exists moddatetime schema extensions;
 
 ----------------------------------------------------------------
 
+drop trigger if exists on_created on posts;
 drop trigger if exists on_updated_at on posts;
 drop trigger if exists on_slug_upsert on posts;
 
@@ -16,7 +17,9 @@ drop function if exists generate_slug;
 drop function if exists count_posts;
 drop function if exists get_adjacent_post_id;
 drop function if exists create_new_posts;
+drop function if exists handle_new_post;
 drop function if exists truncate_posts;
+drop function if exists get_posts_by_meta;
 
 drop table if exists posts;
 
@@ -170,11 +173,107 @@ $$ language plpgsql;
 
 ----------------------------------------------------------------
 
+create or replace function handle_new_post()
+returns trigger
+security definer set search_path = public
+as $$
+begin
+  insert into post_metas (post_id, meta_key, meta_value) values (new.id, 'views', '0');
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger on_created after insert on posts
+  for each row execute procedure handle_new_post();
+
+----------------------------------------------------------------
+
 create or replace function truncate_posts()
 returns void
 security definer set search_path = public
 as $$
 begin
   truncate table posts restart identity cascade;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
+create or replace function get_posts_by_meta(
+  userid uuid,
+  posttype text = 'post',
+  poststatus text = 'publish',
+  metakey text = 'views',
+  ascending boolean = true,
+  textsearch text = null,
+  count integer = null,
+  range integer[] = null
+)
+returns setof posts
+security definer set search_path = public
+as $$
+begin
+  if count is not null and textsearch is not null then
+    return query
+    select p.*
+    from posts p join post_metas m on p.id = m.post_id
+    where p.user_id = userid
+      and p.type = posttype
+      and p.status = poststatus
+      and m.meta_key = metakey
+      and to_tsvector(p.title) @@ to_tsquery(textsearch)
+    order by
+    	case ascending when true then m.meta_value::integer else 0 end asc,
+    	case ascending when false then m.meta_value::integer else 0 end desc
+    limit count;
+  elsif count is not null then
+    return query
+    select p.*
+    from posts p join post_metas m on p.id = m.post_id
+    where p.user_id = userid
+      and p.type = posttype
+      and p.status = poststatus
+      and m.meta_key = metakey
+    order by
+    	case ascending when true then m.meta_value::integer else 0 end asc,
+    	case ascending when false then m.meta_value::integer else 0 end desc
+    limit count;
+  elsif range is not null and textsearch is not null then
+    return query
+    select p.*
+    from posts p join post_metas m on p.id = m.post_id
+    where p.user_id = userid
+      and p.type = posttype
+      and p.status = poststatus
+      and m.meta_key = metakey
+      and to_tsvector(p.title) @@ to_tsquery(textsearch)
+    order by
+    	case ascending when true then m.meta_value::integer else 0 end asc,
+    	case ascending when false then m.meta_value::integer else 0 end desc
+    limit range[2] - range[1] + 1 offset range[1];
+  elsif range is not null then
+    return query
+    select p.*
+    from posts p join post_metas m on p.id = m.post_id
+    where p.user_id = userid
+      and p.type = posttype
+      and p.status = poststatus
+      and m.meta_key = metakey
+    order by
+    	case ascending when true then m.meta_value::integer else 0 end asc,
+    	case ascending when false then m.meta_value::integer else 0 end desc
+    limit range[2] - range[1] + 1 offset range[1];
+  else
+    return query
+    select p.*
+    from posts p join post_metas m on p.id = m.post_id
+    where p.user_id = userid
+      and p.type = posttype
+      and p.status = poststatus
+      and m.meta_key = metakey
+    order by
+    	case ascending when true then m.meta_value::integer else 0 end asc,
+    	case ascending when false then m.meta_value::integer else 0 end desc;
+  end if;
 end;
 $$ language plpgsql;

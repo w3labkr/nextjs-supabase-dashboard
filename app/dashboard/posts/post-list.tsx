@@ -54,6 +54,8 @@ const PostList = () => {
   const postType = (searchParams.get('postType') as string) ?? 'post'
   const status = searchParams.get('status') as string
   const q = searchParams.get('q') as string
+  const orderBy = (searchParams.get('orderBy') as string) ?? 'id'
+  const order = (searchParams.get('order') as string) ?? 'desc'
 
   const { user } = useAuth()
   const { count } = usePostsAPI(user?.id ?? null, {
@@ -62,13 +64,25 @@ const PostList = () => {
     postType,
     status,
     q,
+    orderBy,
+    order,
   })
 
   const total = count ?? 0
 
   return (
     <PagingProvider
-      value={{ total, page, perPage, pageSize, postType, status, q }}
+      value={{
+        total,
+        page,
+        perPage,
+        pageSize,
+        postType,
+        status,
+        q,
+        orderBy,
+        order,
+      }}
     >
       <BulkActionsProvider>
         <Header />
@@ -144,6 +158,8 @@ const Body = () => {
     postType: paging?.postType,
     status: paging?.status,
     q: paging?.q,
+    orderBy: paging?.orderBy,
+    order: paging?.order,
   })
 
   const { checks, setChecks } = useBulkActions()
@@ -252,7 +268,7 @@ const PostItem = ({ post }: { post: Post }) => {
         )}
       </TableCell>
       <TableCell align="center">
-        {getMeta(post?.meta, 'view_count', '0')?.toLocaleString()}
+        {getMeta(post?.meta, 'views', '0')?.toLocaleString()}
       </TableCell>
       <TableCell align="center">
         {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm:ss')}
@@ -367,6 +383,8 @@ const Footer = () => {
     postType: paging?.postType,
     status: paging?.status,
     q: paging?.q,
+    orderBy: paging?.orderBy,
+    order: paging?.order,
   })
 
   if (!posts) return null

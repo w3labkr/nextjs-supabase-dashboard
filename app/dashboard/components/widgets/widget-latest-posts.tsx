@@ -13,7 +13,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-import { getPostUrl } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { usePostsAPI } from '@/queries/client/posts'
 import { Post } from '@/types/database'
@@ -23,24 +22,26 @@ interface WidgetLatestPostsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const WidgetLatestPosts = (props: WidgetLatestPostsProps) => {
   const { t } = useTranslation()
-
   const { user } = useAuth()
   const { posts } = usePostsAPI(user?.id ?? null, {
-    page: 1,
-    perPage: 5,
+    // page: 1,
+    // perPage: 5,
     postType: 'post',
     status: 'publish',
-    q: '',
+    q: undefined,
+    orderBy: 'id',
+    order: 'desc',
+    limit: 5,
   })
 
   return (
     <Card {...props}>
       <CardHeader>
-        <CardTitle>{t('CardTitle.latest_posts')}</CardTitle>
+        <CardTitle>{t('Widget.latest_posts')}</CardTitle>
         {/* <CardDescription></CardDescription> */}
       </CardHeader>
       <CardContent>
-        <div className="space-y-2">
+        <div className="space-y-2 text-sm">
           {Array.isArray(posts) && posts?.length > 0 ? (
             posts?.map((post: Post) => <ListItem key={post?.id} post={post} />)
           ) : (
@@ -57,14 +58,16 @@ interface ListItemProps extends React.HTMLAttributes<HTMLDivElement> {
   post: Post
 }
 
-const ListItem = (props: ListItemProps) => {
-  const { post, ...rest } = props
-
+const ListItem = ({ post, ...props }: ListItemProps) => {
   return (
-    <div className="text-sm leading-4" {...rest}>
+    <div className="leading-4" {...props}>
       <span>&bull;&nbsp;</span>
-      <span className="font-serif hover:underline">
-        <Link href={getPostUrl(post) ?? '#'} scroll={!siteConfig?.fixedHeader}>
+      <span>
+        <Link
+          href={`/dashboard/posts/edit?id=${post?.id}`}
+          scroll={!siteConfig?.fixedHeader}
+          className="font-serif hover:underline"
+        >
           {post?.title}
         </Link>
       </span>
@@ -73,7 +76,9 @@ const ListItem = (props: ListItemProps) => {
 }
 
 const EmptyItem = () => {
-  return <div>No posts yet</div>
+  const { t } = useTranslation()
+
+  return <div>{t('Widget.empty_post')}</div>
 }
 
 export { WidgetLatestPosts }

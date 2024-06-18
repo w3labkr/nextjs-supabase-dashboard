@@ -48,7 +48,14 @@ export default async function UserPage({
   searchParams,
 }: {
   params: { username: string }
-  searchParams?: { page?: string; perPage?: string; pageSize?: string }
+  searchParams?: {
+    page?: string
+    perPage?: string
+    pageSize?: string
+    q?: string
+    orderBy?: string
+    order?: string
+  }
 }) {
   const { user } = await getUserAPI(null, { username })
 
@@ -57,12 +64,18 @@ export default async function UserPage({
   const page = +(searchParams?.page ?? '1')
   const perPage = +(searchParams?.perPage ?? '10')
   const pageSize = +(searchParams?.pageSize ?? '10')
+  const q = searchParams?.q
+  const orderBy = searchParams?.orderBy ?? 'id'
+  const order = searchParams?.order ?? 'desc'
 
   const { posts, count } = await getPostsAPI(user?.id ?? null, {
     page,
     perPage,
     postType: 'post',
     status: 'publish',
+    q,
+    orderBy,
+    order,
   })
 
   const total = count ?? 0

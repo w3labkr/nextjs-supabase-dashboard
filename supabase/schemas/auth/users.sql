@@ -7,8 +7,8 @@
 -- Call a Postgres function
 -- https://supabase.com/docs/reference/javascript/rpc
 
-drop trigger if exists on_auth_user_password_updated on auth.users;
-drop trigger if exists on_auth_user_created on auth.users;
+drop trigger if exists on_created on auth.users;
+drop trigger if exists on_encrypted_password_updated on auth.users;
 
 drop function if exists generate_password;
 drop function if exists generate_username;
@@ -70,7 +70,7 @@ begin
 end;
 $$ language plpgsql;
 
-create trigger on_auth_user_password_updated after update of encrypted_password on auth.users
+create trigger on_encrypted_password_updated after update of encrypted_password on auth.users
   for each row execute function handle_has_set_password();
 
 ----------------------------------------------------------------
@@ -116,7 +116,7 @@ begin
 end;
 $$ language plpgsql;
 
-create trigger on_auth_user_created after insert on auth.users
+create trigger on_created after insert on auth.users
   for each row execute procedure handle_new_user();
 
 ----------------------------------------------------------------

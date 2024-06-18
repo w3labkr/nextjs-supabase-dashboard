@@ -562,6 +562,36 @@ export type Database = {
           next_id: number
         }[]
       }
+      get_posts_by_meta: {
+        Args: {
+          userid: string
+          posttype?: string
+          poststatus?: string
+          metakey?: string
+          ascending?: boolean
+          textsearch?: string
+          count?: number
+          range?: number[]
+        }
+        Returns: {
+          banned_until: string | null
+          content: string | null
+          created_at: string
+          date: string | null
+          deleted_at: string | null
+          excerpt: string | null
+          id: number
+          is_ban: boolean
+          password: string | null
+          slug: string | null
+          status: string
+          thumbnail_url: string | null
+          title: string | null
+          type: string
+          updated_at: string
+          user_id: string
+        }[]
+      }
       get_users: {
         Args: {
           userrole?: string
@@ -617,6 +647,12 @@ export type Database = {
         }
         Returns: undefined
       }
+      set_post_views: {
+        Args: {
+          postid: number
+        }
+        Returns: undefined
+      }
       set_user_meta: {
         Args: {
           userid: number
@@ -638,12 +674,6 @@ export type Database = {
           userrole: string
           userid?: string
           useremail?: string
-        }
-        Returns: undefined
-      }
-      set_view_count: {
-        Args: {
-          postid: number
         }
         Returns: undefined
       }

@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   const postId = +(searchParams.get('postId') as string)
   const userId = searchParams.get('userId') as string
 
-  let match = {}
+  let match: Record<string, any> = {}
 
   if (id) match = { ...match, id }
   if (postId) match = { ...match, post_id: postId }

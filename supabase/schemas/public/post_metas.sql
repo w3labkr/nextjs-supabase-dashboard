@@ -4,7 +4,7 @@
 --                                                            --
 ----------------------------------------------------------------
 
-drop function if exists set_view_count;
+drop function if exists set_post_views;
 drop function if exists set_post_meta;
 
 drop table if exists post_metas;
@@ -45,15 +45,15 @@ $$ language plpgsql;
 
 ----------------------------------------------------------------
 
-create or replace function set_view_count(postid bigint)
+create or replace function set_post_views(postid bigint)
 returns void
 security definer set search_path = public
 as $$
 begin
-  if exists (select 1 from post_metas where post_id = postid and meta_key = 'view_count') then
-    update post_metas set meta_value = meta_value::integer + 1 where post_id = postid and meta_key = 'view_count';
+  if exists (select 1 from post_metas where post_id = postid and meta_key = 'views') then
+    update post_metas set meta_value = meta_value::integer + 1 where post_id = postid and meta_key = 'views';
   else
-    insert into post_metas(post_id, meta_key, meta_value) values(postid, 'view_count', '1');
+    insert into post_metas(post_id, meta_key, meta_value) values(postid, 'views', '1');
   end if;
 end;
 $$ language plpgsql;

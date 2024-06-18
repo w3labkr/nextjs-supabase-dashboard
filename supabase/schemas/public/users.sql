@@ -46,7 +46,7 @@ create table users (
 );
 comment on column users.updated_at is 'on_updated_at';
 comment on column users.username_changed_at is 'on_username_updated';
-comment on column users.has_set_password is 'on_auth_user_password_updated';
+comment on column users.has_set_password is 'on_encrypted_password_updated';
 
 -- Secure the table
 alter table users enable row level security;

@@ -25,34 +25,6 @@ export function usePostAPI(
   }
 }
 
-export function usePostsAPI(
-  userId: string | null,
-  params?: {
-    page?: number
-    perPage?: number
-    postType?: string
-    status?: string
-    q?: string
-  }
-) {
-  const query = setQueryString({ userId, ...params })
-  const url = query ? `/api/v1/post/list?${query}` : null
-
-  const { data, error, isLoading, isValidating, mutate } = useSWR<
-    PostsAPI,
-    Error
-  >(url)
-
-  return {
-    posts: data?.data ?? null,
-    count: data?.count ?? null,
-    error: error ?? data?.error ?? null,
-    isLoading,
-    isValidating,
-    mutate,
-  }
-}
-
 export function useCountPostsAPI(
   userId: string | null,
   params?: { postType?: string; q?: string }
@@ -75,7 +47,7 @@ export function useCountPostsAPI(
   }
 }
 
-export function useFavoritePostsAPI(
+export function usePostsAPI(
   userId: string | null,
   params?: {
     page?: number
@@ -83,10 +55,43 @@ export function useFavoritePostsAPI(
     postType?: string
     status?: string
     q?: string
+    orderBy?: string
+    order?: string
+    limit?: number
   }
 ) {
   const query = setQueryString({ userId, ...params })
-  const url = query ? `/api/v1/favorite/list?${query}` : null
+  const url = query ? `/api/v1/post/list?${query}` : null
+
+  const { data, error, isLoading, isValidating, mutate } = useSWR<
+    PostsAPI,
+    Error
+  >(url)
+
+  return {
+    posts: data?.data ?? null,
+    count: data?.count ?? null,
+    error: error ?? data?.error ?? null,
+    isLoading,
+    isValidating,
+    mutate,
+  }
+}
+
+export function usePostViewsAPI(
+  userId: string | null,
+  params?: {
+    page?: number
+    perPage?: number
+    postType?: string
+    status?: string
+    q?: string
+    order?: string
+    limit?: number
+  }
+) {
+  const query = setQueryString({ userId, ...params })
+  const url = query ? `/api/v1/post/views?${query}` : null
 
   const { data, error, isLoading, isValidating, mutate } = useSWR<
     PostsAPI,

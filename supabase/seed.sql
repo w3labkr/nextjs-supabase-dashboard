@@ -31,20 +31,6 @@ grant all privileges on all tables in schema cron to postgres;
 
 ----------------------------------------------------------------
 --                                                            --
---                       Job Scheduling                       --
---                                                            --
-----------------------------------------------------------------
-
-truncate table cron.job_run_details restart identity;
-
-select cron.unschedule('hourly-publish-future-posts');
-
-drop function if exists hourly_publish_future_posts;
-
-select cron.schedule('hourly-publish-future-posts', '0 * * * *', 'SELECT hourly_publish_future_posts()');
-
-----------------------------------------------------------------
---                                                            --
 --                          Storage                           --
 --                                                            --
 ----------------------------------------------------------------
@@ -70,12 +56,26 @@ create policy "User can delete their own objects" on storage.objects
 
 ----------------------------------------------------------------
 --                                                            --
+--                       Job Scheduling                       --
+--                                                            --
+----------------------------------------------------------------
+
+truncate table cron.job_run_details restart identity;
+
+select cron.unschedule('hourly-publish-future-posts');
+
+drop function if exists hourly_publish_future_posts;
+
+select cron.schedule('hourly-publish-future-posts', '0 * * * *', 'SELECT hourly_publish_future_posts()');
+
+----------------------------------------------------------------
+--                                                            --
 --                           reset                            --
 --                                                            --
 ----------------------------------------------------------------
 
-drop trigger if exists on_auth_user_created on auth.users;
-drop trigger if exists on_auth_user_password_updated on auth.users;
+drop trigger if exists on_created on auth.users;
+drop trigger if exists on_encrypted_password_updated on auth.users;
 drop trigger if exists on_updated_at on users;
 drop trigger if exists on_username_updated on users;
 drop trigger if exists on_updated_at on role_permissions;
@@ -86,6 +86,7 @@ drop trigger if exists on_updated_at on emails;
 drop trigger if exists on_updated_at on notifications;
 drop trigger if exists on_updated_at on votes;
 drop trigger if exists on_updated_at on favorites;
+drop trigger if exists on_created on posts;
 drop trigger if exists on_updated_at on posts;
 drop trigger if exists on_slug_upsert on posts;
 
@@ -108,12 +109,14 @@ drop function if exists set_user_plan;
 drop function if exists get_vote;
 drop function if exists set_favorite;
 drop function if exists set_post_meta;
-drop function if exists set_view_count;
+drop function if exists set_post_views;
 drop function if exists generate_slug;
 drop function if exists count_posts;
 drop function if exists get_adjacent_post_id;
 drop function if exists create_new_posts;
+drop function if exists handle_new_post;
 drop function if exists truncate_posts;
+drop function if exists get_posts_by_meta;
 
 ----------------------------------------------------------------
 
@@ -182,7 +185,7 @@ begin
 end;
 $$ language plpgsql;
 
-create trigger on_auth_user_password_updated after update of encrypted_password on auth.users
+create trigger on_encrypted_password_updated after update of encrypted_password on auth.users
   for each row execute function handle_has_set_password();
 
 ----------------------------------------------------------------
@@ -228,7 +231,7 @@ begin
 end;
 $$ language plpgsql;
 
-create trigger on_auth_user_created after insert on auth.users
+create trigger on_created after insert on auth.users
   for each row execute procedure handle_new_user();
 
 ----------------------------------------------------------------
@@ -321,7 +324,7 @@ create table users (
 );
 comment on column users.updated_at is 'on_updated_at';
 comment on column users.username_changed_at is 'on_username_updated';
-comment on column users.has_set_password is 'on_auth_user_password_updated';
+comment on column users.has_set_password is 'on_encrypted_password_updated';
 
 alter table users enable row level security;
 
@@ -736,12 +739,108 @@ $$ language plpgsql;
 
 ----------------------------------------------------------------
 
+create or replace function handle_new_post()
+returns trigger
+security definer set search_path = public
+as $$
+begin
+  insert into post_metas (post_id, meta_key, meta_value) values (new.id, 'views', '0');
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger on_created after insert on posts
+  for each row execute procedure handle_new_post();
+
+----------------------------------------------------------------
+
 create or replace function truncate_posts()
 returns void
 security definer set search_path = public
 as $$
 begin
   truncate table posts restart identity cascade;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
+create or replace function get_posts_by_meta(
+  userid uuid,
+  posttype text = 'post',
+  poststatus text = 'publish',
+  metakey text = 'views',
+  ascending boolean = true,
+  textsearch text = null,
+  count integer = null,
+  range integer[] = null
+)
+returns setof posts
+security definer set search_path = public
+as $$
+begin
+  if count is not null and textsearch is not null then
+    return query
+    select p.*
+    from posts p join post_metas m on p.id = m.post_id
+    where p.user_id = userid
+      and p.type = posttype
+      and p.status = poststatus
+      and m.meta_key = metakey
+      and to_tsvector(p.title) @@ to_tsquery(textsearch)
+    order by
+    	case ascending when true then m.meta_value::integer else 0 end asc,
+    	case ascending when false then m.meta_value::integer else 0 end desc
+    limit count;
+  elsif count is not null then
+    return query
+    select p.*
+    from posts p join post_metas m on p.id = m.post_id
+    where p.user_id = userid
+      and p.type = posttype
+      and p.status = poststatus
+      and m.meta_key = metakey
+    order by
+    	case ascending when true then m.meta_value::integer else 0 end asc,
+    	case ascending when false then m.meta_value::integer else 0 end desc
+    limit count;
+  elsif range is not null and textsearch is not null then
+    return query
+    select p.*
+    from posts p join post_metas m on p.id = m.post_id
+    where p.user_id = userid
+      and p.type = posttype
+      and p.status = poststatus
+      and m.meta_key = metakey
+      and to_tsvector(p.title) @@ to_tsquery(textsearch)
+    order by
+    	case ascending when true then m.meta_value::integer else 0 end asc,
+    	case ascending when false then m.meta_value::integer else 0 end desc
+    limit range[2] - range[1] + 1 offset range[1];
+  elsif range is not null then
+    return query
+    select p.*
+    from posts p join post_metas m on p.id = m.post_id
+    where p.user_id = userid
+      and p.type = posttype
+      and p.status = poststatus
+      and m.meta_key = metakey
+    order by
+    	case ascending when true then m.meta_value::integer else 0 end asc,
+    	case ascending when false then m.meta_value::integer else 0 end desc
+    limit range[2] - range[1] + 1 offset range[1];
+  else
+    return query
+    select p.*
+    from posts p join post_metas m on p.id = m.post_id
+    where p.user_id = userid
+      and p.type = posttype
+      and p.status = poststatus
+      and m.meta_key = metakey
+    order by
+    	case ascending when true then m.meta_value::integer else 0 end asc,
+    	case ascending when false then m.meta_value::integer else 0 end desc;
+  end if;
 end;
 $$ language plpgsql;
 
@@ -783,15 +882,15 @@ $$ language plpgsql;
 
 ----------------------------------------------------------------
 
-create or replace function set_view_count(postid bigint)
+create or replace function set_post_views(postid bigint)
 returns void
 security definer set search_path = public
 as $$
 begin
-  if exists (select 1 from post_metas where post_id = postid and meta_key = 'view_count') then
-    update post_metas set meta_value = meta_value::integer + 1 where post_id = postid and meta_key = 'view_count';
+  if exists (select 1 from post_metas where post_id = postid and meta_key = 'views') then
+    update post_metas set meta_value = meta_value::integer + 1 where post_id = postid and meta_key = 'views';
   else
-    insert into post_metas(post_id, meta_key, meta_value) values(postid, 'view_count', '1');
+    insert into post_metas(post_id, meta_key, meta_value) values(postid, 'views', '1');
   end if;
 end;
 $$ language plpgsql;

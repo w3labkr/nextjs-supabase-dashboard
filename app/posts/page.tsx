@@ -18,17 +18,30 @@ export const revalidate = 0
 export default async function PostsPage({
   searchParams,
 }: {
-  searchParams?: { page?: string; perPage?: string; pageSize?: string }
+  searchParams?: {
+    page?: string
+    perPage?: string
+    pageSize?: string
+    q?: string
+    orderBy?: string
+    order?: string
+  }
 }) {
   const page = +(searchParams?.page ?? '1')
   const perPage = +(searchParams?.perPage ?? '10')
   const pageSize = +(searchParams?.pageSize ?? '10')
+  const q = searchParams?.orderBy
+  const orderBy = searchParams?.orderBy ?? 'id'
+  const order = searchParams?.order ?? 'desc'
 
   const { posts, count } = await getPostsAPI(null, {
     page,
     perPage,
     postType: 'post',
     status: 'publish',
+    q,
+    orderBy,
+    order,
   })
 
   const total = count ?? 0

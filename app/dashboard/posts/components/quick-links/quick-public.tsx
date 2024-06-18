@@ -74,6 +74,8 @@ const QuickPublic = ({ post, ...props }: QuickPublicProps) => {
         postType: paging?.postType,
         status: paging?.status,
         q: paging?.q,
+        orderBy: paging?.orderBy,
+        order: paging?.order,
       })
 
       mutate(`/api/v1/post?id=${post?.id}`)

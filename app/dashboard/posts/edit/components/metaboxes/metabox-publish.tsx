@@ -33,7 +33,7 @@ const MetaboxPublish = () => {
   const { post } = usePostForm()
 
   const visibility = getMeta(post?.meta, 'visibility')
-  const view_count = getMeta(post?.meta, 'view_count', '0')
+  const views = getMeta(post?.meta, 'views', '0')
   const future_date = getMeta(post?.meta, 'future_date')
 
   const dateText = React.useMemo(() => {
@@ -81,7 +81,7 @@ const MetaboxPublish = () => {
             <li className="flex items-center">
               <LucideIcon name="BarChart" className="mr-2 size-4 min-w-4" />
               {`${t('PostMetabox.post_views')}: `}
-              {view_count?.toLocaleString()}
+              {views?.toLocaleString()}
             </li>
           </ul>
           <div className="flex justify-between">

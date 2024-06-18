@@ -15,15 +15,21 @@ interface LatestPostsProps extends React.HTMLAttributes<HTMLDivElement> {
   postType?: string
   status?: string
   q?: string
+  orderBy?: string
+  order?: 'asc' | 'desc'
+  limit?: number
 }
 
 const LatestPosts = ({
   userId,
   page = 1,
-  perPage = 5,
+  perPage = 10,
   postType = 'post',
   status = 'publish',
-  q = '',
+  q,
+  orderBy = 'id',
+  order = 'desc',
+  limit,
   ...props
 }: LatestPostsProps) => {
   const { posts } = usePostsAPI(userId, {
@@ -32,6 +38,9 @@ const LatestPosts = ({
     postType,
     status,
     q,
+    orderBy,
+    order,
+    limit,
   })
 
   return (

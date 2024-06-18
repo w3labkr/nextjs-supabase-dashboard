@@ -5,6 +5,7 @@ import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { pricingPlans } from '@/config/site'
 import { PricingPlan } from '@/types/config'
+import { Post } from '@/types/database'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -12,7 +13,7 @@ export async function GET(request: NextRequest) {
   const userId = searchParams.get('userId') as string
   const slug = searchParams.get('slug') as string
 
-  let match = {}
+  let match: Record<string, any> = {}
 
   if (id) match = { ...match, id }
   if (userId) match = { ...match, user_id: userId }
@@ -50,7 +51,7 @@ export async function POST(request: NextRequest) {
   const supabase = createClient()
 
   if (Array.isArray(meta) && meta?.length > 0) {
-    const denyMetaKeys: string[] = ['view_count']
+    const denyMetaKeys: string[] = ['views']
     const addMeta = meta
       ?.filter((r: Record<string, any>) => !denyMetaKeys.includes(r.meta_key))
       ?.filter((r: Record<string, any>) => !r.id)
@@ -155,11 +156,7 @@ export async function PUT(request: NextRequest) {
     let endIndex = data?.length - (total + data?.length - plan?.post)
     if (endIndex < 0) endIndex = 0
 
-    const {
-      data: list,
-      count: listCount,
-      error,
-    } = await supabase
+    const { data: list, error } = await supabase
       .from('posts')
       .insert(plan?.post > -1 ? data.slice(0, endIndex) : data)
       .select('*, author:users(*), meta:post_metas(*)')
@@ -173,7 +170,7 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({
       data: list,
-      count: listCount ?? 0,
+      count: list?.length,
       error: null,
       revalidated: revalidates(options),
       now: Date.now(),

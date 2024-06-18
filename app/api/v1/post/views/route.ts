@@ -8,9 +8,9 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const userId = searchParams.get('userId') as string
   const postType = (searchParams.get('postType') as string) ?? 'post'
-  const status = searchParams.get('status') as string
+  const status = (searchParams.get('status') as string) ?? 'publish'
   const q = searchParams.get('q') as string
-  const orderBy = (searchParams.get('orderBy') as string) ?? 'id'
+  // const orderBy = (searchParams.get('orderBy') as string) ?? 'id'
   const order = (searchParams.get('order') as string) ?? 'asc'
   const limit = +((searchParams.get('limit') as string) ?? '0')
 
@@ -22,12 +22,6 @@ export async function GET(request: NextRequest) {
   if (perPage < 1) perPage = 1
   if (offset < 0) offset = 0
 
-  let match: Record<string, any> = {}
-
-  if (userId) match = { ...match, user_id: userId }
-  if (postType) match = { ...match, type: postType }
-  if (status) match = { ...match, status }
-
   const supabase = createClient()
   const counterQuery = supabase
     .from('posts')
@@ -35,11 +29,8 @@ export async function GET(request: NextRequest) {
       count: 'exact',
       head: true,
     })
+    .match({ user_id: userId, type: postType, status })
 
-  if (match.constructor === Object && Object.keys(match).length > 0) {
-    counterQuery.match(match)
-  }
-  if (!status) counterQuery.neq('status', 'trash')
   if (q) counterQuery.textSearch('title', q)
 
   const counter = await counterQuery
@@ -51,24 +42,18 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const query = supabase
-    .from('posts')
+  const { data: list, error } = await supabase
+    .rpc('get_posts_by_meta', {
+      userid: userId,
+      posttype: postType,
+      poststatus: status,
+      textsearch: q,
+      metakey: 'views',
+      ascending: order === 'asc',
+      count: limit > 0 ? limit : undefined,
+      range: limit === 0 ? [offset, page * perPage - 1] : undefined,
+    })
     .select('*, author:users(*), meta:post_metas(*)')
-
-  if (match.constructor === Object && Object.keys(match).length > 0) {
-    query.match(match)
-  }
-  if (!status) query.neq('status', 'trash')
-  if (q) query.textSearch('title', q)
-  if (orderBy) query.order(orderBy, { ascending: order === 'asc' })
-
-  if (limit) {
-    query.limit(limit)
-  } else {
-    query.range(offset, page * perPage - 1)
-  }
-
-  const { data: list, error } = await query
 
   if (error) {
     return NextResponse.json(

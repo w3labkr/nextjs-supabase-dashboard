@@ -85,6 +85,8 @@ const AddDummyPost = ({
         postType: (searchParams.get('postType') as string) ?? 'post',
         status: searchParams.get('status') as string,
         q: searchParams.get('q') as string,
+        orderBy: (searchParams.get('orderBy') as string) ?? 'id',
+        order: (searchParams.get('order') as string) ?? 'desc',
       })
 
       mutate(`/api/v1/post?userId=${user?.id}`)

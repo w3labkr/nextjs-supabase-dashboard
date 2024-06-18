@@ -13,7 +13,7 @@ import { Aside } from '../aside'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { cn, getAuthorUrl, getPostUrl, getProfileUrl } from '@/lib/utils'
 import { getUserAPI } from '@/queries/server/users'
-import { getFavoritePostsAPI } from '@/queries/server/posts'
+import { getFavoritePostsAPI } from '@/queries/server/favorites'
 import { siteConfig } from '@/config/site'
 import { Post, User } from '@/types/database'
 
@@ -48,7 +48,14 @@ export default async function FavoritesPage({
   searchParams,
 }: {
   params: { username: string }
-  searchParams?: { page?: string; perPage?: string; pageSize?: string }
+  searchParams?: {
+    page?: string
+    perPage?: string
+    pageSize?: string
+    q?: string
+    orderBy?: string
+    order?: string
+  }
 }) {
   const { user } = await getUserAPI(null, { username })
 
@@ -57,13 +64,18 @@ export default async function FavoritesPage({
   const page = +(searchParams?.page ?? '1')
   const perPage = +(searchParams?.perPage ?? '10')
   const pageSize = +(searchParams?.pageSize ?? '10')
+  const q = searchParams?.q
+  const orderBy = searchParams?.orderBy ?? 'id'
+  const order = searchParams?.order ?? 'desc'
 
   const { posts, count } = await getFavoritePostsAPI(user?.id ?? null, {
     page,
     perPage,
     postType: 'post',
     status: 'publish',
-    q: '',
+    q,
+    orderBy,
+    order,
   })
 
   const total = count ?? 0
