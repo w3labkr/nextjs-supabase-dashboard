@@ -107,7 +107,7 @@ const NavSubItem = ({ item }: NavSubItemProps) => {
       onClick={() => router.push(href, { scroll: !siteConfig?.fixedHeader })}
     >
       {iconName ? (
-        <LucideIcon name={iconName} className="mr-2 size-4 min-w-4" />
+        <LucideIcon name={iconName} size={16} className="mr-2" />
       ) : null}
       {title && translate === 'yes' ? t(title) : title}
     </Button>

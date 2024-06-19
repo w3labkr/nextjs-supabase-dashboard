@@ -49,7 +49,8 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
         {startIconName ? (
           <LucideIcon
             name={startIconName}
-            className={cn('mr-2 size-4 min-w-4', startIconClassName)}
+            size={16}
+            className={cn('mr-2', startIconClassName)}
           />
         ) : null}
         {text && translate === 'yes' ? t(text, { ns }) : text}
@@ -59,7 +60,8 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
         {endIconName ? (
           <LucideIcon
             name={endIconName}
-            className={cn('ml-2 size-4 min-w-4', endIconClassName)}
+            size={16}
+            className={cn('ml-2', endIconClassName)}
           />
         ) : null}
       </Link>

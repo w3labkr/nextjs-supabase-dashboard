@@ -80,15 +80,15 @@ const PaginationPrevious = ({
 
   return (
     <PaginationLink
-      aria-label={translate === 'yes' ? t(ariaLabel, { ns }) : ariaLabel}
+      aria-label={
+        ariaLabel && translate === 'yes' ? t(ariaLabel, { ns }) : ariaLabel
+      }
       size="default"
       className={cn('gap-1 pl-2.5', className)}
       {...props}
     >
-      {iconName && (
-        <LucideIcon name={iconName} className={cn('size-4 min-w-4')} />
-      )}
-      <span>{translate === 'yes' ? t(text, { ns }) : text}</span>
+      {iconName ? <LucideIcon name={iconName} size={16} /> : null}
+      <span>{text && translate === 'yes' ? t(text, { ns }) : text}</span>
     </PaginationLink>
   )
 }
@@ -107,15 +107,15 @@ const PaginationNext = ({
 
   return (
     <PaginationLink
-      aria-label={translate === 'yes' ? t(ariaLabel, { ns }) : ariaLabel}
+      aria-label={
+        ariaLabel && translate === 'yes' ? t(ariaLabel, { ns }) : ariaLabel
+      }
       size="default"
       className={cn('gap-1 pr-2.5', className)}
       {...props}
     >
-      <span>{translate === 'yes' ? t(text, { ns }) : text}</span>
-      {iconName && (
-        <LucideIcon name={iconName} className={cn('size-4 min-w-4')} />
-      )}
+      <span>{text && translate === 'yes' ? t(text, { ns }) : text}</span>
+      {iconName ? <LucideIcon name={iconName} size={16} /> : null}
     </PaginationLink>
   )
 }
@@ -143,11 +143,9 @@ const PaginationEllipsis = ({
       className={cn('flex h-9 w-9 items-center justify-center', className)}
       {...props}
     >
-      {iconName && (
-        <LucideIcon name={iconName} className={cn('size-4 min-w-4')} />
-      )}
+      {iconName ? <LucideIcon name={iconName} size={16} /> : null}
       <span className="sr-only">
-        {translate === 'yes' ? t(text, { ns }) : text}
+        {text && translate === 'yes' ? t(text, { ns }) : text}
       </span>
     </span>
   )

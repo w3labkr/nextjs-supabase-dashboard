@@ -60,12 +60,13 @@ const SearchForm = ({ className, ...props }: SearchFormProps) => {
         method="POST"
         noValidate
         onSubmit={form.handleSubmit(onSubmit)}
-        className={cn('relative flex w-full items-center px-4', className)}
+        className={cn('relative flex w-full items-center', className)}
         {...props}
       >
         <LucideIcon
           name="Search"
-          className="absolute left-7 size-5 min-w-5 text-muted-foreground"
+          size={20}
+          className="absolute left-4 text-muted-foreground"
         />
         <FormField
           control={form.control}
@@ -74,8 +75,8 @@ const SearchForm = ({ className, ...props }: SearchFormProps) => {
             <FormItem className="w-full">
               <FormControl>
                 <Input
-                  placeholder={t('search_text') + '...'}
-                  className="pl-10"
+                  placeholder={t('search_text')}
+                  className="pl-12"
                   {...field}
                 />
               </FormControl>

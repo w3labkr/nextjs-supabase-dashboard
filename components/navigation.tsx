@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from 'react'
 import Link from 'next/link'
 
@@ -22,7 +24,7 @@ const Navigation = () => {
             href={absoluteUrl('/posts')}
             scroll={!siteConfig?.fixedHeader}
           >
-            Posts
+            POSTS
           </Link>
         </NavigationMenuLink>
       </NavigationMenuList>

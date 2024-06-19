@@ -81,8 +81,9 @@ const SignedInAction = ({ postId, ...props }: FavoriteButtonProps) => {
     <button type="button" onClick={onClick} disabled={isSubmitting} {...props}>
       <LucideIcon
         name="Heart"
+        size={20}
         fill={cn(isLike ? '#ef4444' : 'transparent')}
-        className={cn('size-5 min-w-5 text-destructive')}
+        className={cn('text-destructive')}
       />
     </button>
   )
@@ -104,8 +105,9 @@ const SignedOutAction = ({ postId, ...props }: FavoriteButtonProps) => {
     >
       <LucideIcon
         name="Heart"
+        size={20}
         fill="transparent"
-        className={cn('size-5 min-w-5 text-destructive')}
+        className={cn('text-destructive')}
       />
     </button>
   )

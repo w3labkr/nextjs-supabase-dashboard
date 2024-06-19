@@ -45,7 +45,7 @@ const MiniNavigation = ({
     >
       <div className={cn('flex items-center justify-center border-b', height)}>
         <Link href="/" scroll={!siteConfig?.fixedHeader}>
-          <LucideIcon name={siteConfig.symbol} className="size-5 min-w-5" />
+          <LucideIcon name={siteConfig.symbol} size={20} />
           <span className="sr-only">{siteConfig.name}</span>
         </Link>
       </div>
@@ -112,7 +112,7 @@ const NavSubItem = ({ item }: NavSubItemProps) => {
               disabled={disabled}
             >
               {iconName ? (
-                <LucideIcon name={iconName} className="mr-0 size-5 min-w-5" />
+                <LucideIcon name={iconName} size={20} className="mr-0" />
               ) : null}
               {badge && badge > 0 ? (
                 <Badge

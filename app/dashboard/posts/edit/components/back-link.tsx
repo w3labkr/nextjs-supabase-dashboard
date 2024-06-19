@@ -11,7 +11,7 @@ const BackLink = () => {
       scroll={!siteConfig?.fixedHeader}
       className="hover:text-muted-foreground"
     >
-      <LucideIcon name="ChevronLeft" className="size-6 min-w-6" />
+      <LucideIcon name="ChevronLeft" size={24} />
     </Link>
   )
 }

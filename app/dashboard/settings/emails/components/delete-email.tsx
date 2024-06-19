@@ -74,7 +74,7 @@ const DeleteEmail = ({ item }: DeleteEmailProps) => {
           className="h-auto p-1.5 text-destructive hover:bg-destructive hover:text-white"
           disabled={isSubmitting}
         >
-          <LucideIcon name="Trash" className="size-4 min-w-4" />
+          <LucideIcon name="Trash" size={16} />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

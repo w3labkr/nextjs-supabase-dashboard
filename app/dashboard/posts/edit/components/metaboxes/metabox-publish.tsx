@@ -61,21 +61,21 @@ const MetaboxPublish = () => {
           </div>
           <ul className="space-y-1">
             <li className="flex items-center">
-              <LucideIcon name="Signpost" className="mr-2 size-4 min-w-4" />
+              <LucideIcon name="Signpost" size={16} className="mr-2" />
               {`${t('status')}: `}
               {post?.status ? t(`${post?.status}`) : null}
             </li>
             <li className="flex items-center">
-              <LucideIcon name="Eye" className="mr-2 size-4 min-w-4" />
+              <LucideIcon name="Eye" size={16} className="mr-2" />
               {`${t('visibility')}: `}
               {visibility === 'private' ? t('private') : t('public')}
             </li>
             <li className="flex items-center">
-              <LucideIcon name="CalendarDays" className="mr-2 size-4 min-w-4" />
+              <LucideIcon name="CalendarDays" size={16} className="mr-2" />
               {dateText}
             </li>
             <li className="flex items-center">
-              <LucideIcon name="BarChart" className="mr-2 size-4 min-w-4" />
+              <LucideIcon name="BarChart" size={16} className="mr-2" />
               {`${t('post_views')}: `}
               {views?.toLocaleString()}
             </li>

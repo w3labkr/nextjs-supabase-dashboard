@@ -31,7 +31,7 @@ const Notify = () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button type="button" variant="ghost" className="h-8 w-8" size="icon">
+        <Button type="button" variant="ghost" size="icon" className="-mr-2">
           <LucideIcon name="Bell" />
         </Button>
       </PopoverTrigger>
@@ -51,7 +51,7 @@ const Notify = () => {
           </CardContent>
           <CardFooter>
             <Button type="button" className="w-full">
-              <LucideIcon name="Check" className="mr-2 size-4 min-w-4" />
+              <LucideIcon name="Check" size={16} className="mr-2" />
               {t('mark_all_as_read')}
             </Button>
           </CardFooter>

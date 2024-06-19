@@ -135,7 +135,7 @@ const RecentLink = ({ user }: TabLinkProps) => {
       scroll={!siteConfig?.fixedHeader}
       className="flex w-full items-center text-muted-foreground sm:w-auto"
     >
-      <LucideIcon name="History" className="mr-1 size-4 min-w-4" />
+      <LucideIcon name="History" size={16} className="mr-1" />
       Recent
     </Link>
   )
@@ -151,7 +151,8 @@ const FavoritesLink = ({ user }: TabLinkProps) => {
       <LucideIcon
         name="Heart"
         fill="#ef4444"
-        className="mr-1 size-4 min-w-4 text-destructive"
+        size={16}
+        className="mr-1 text-destructive"
       />
       Favorites
     </Link>

@@ -12,7 +12,7 @@ const Brand = () => {
       href={absoluteUrl('/')}
       scroll={!siteConfig?.fixedHeader}
     >
-      <LucideIcon name={siteConfig.symbol} className="size-6 min-w-6" />
+      <LucideIcon name={siteConfig.symbol} size={24} />
       <span className="sr-only">{siteConfig.name}</span>
     </Link>
   )

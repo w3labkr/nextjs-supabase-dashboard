@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Paging, PagingProvider } from '@/components/paging'
+import { SearchForm } from '@/components/search-form'
 import { ArchiveTitle } from './archive-title'
 import { EmptyPosts } from './empty-posts'
 
@@ -51,6 +52,7 @@ export default async function PostsPage({
   return (
     <>
       <Header />
+      {/* <SearchForm /> */}
       <main
         className={cn(
           'min-h-[80vh] pb-40',

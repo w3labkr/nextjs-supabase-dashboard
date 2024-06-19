@@ -40,14 +40,14 @@ const Header = () => {
               size="icon"
               variant="outline"
             >
-              <LucideIcon name="Menu" className="size-6 min-w-6" />
+              <LucideIcon name="Menu" size={24} />
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
           <Brand />
           <Navigation />
-          <SearchForm />
           <div className="ml-auto flex gap-2">
+            <SearchForm />
             {user ? <SignedInNav /> : <SignedOutNav />}
           </div>
         </div>
