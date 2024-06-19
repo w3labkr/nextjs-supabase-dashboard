@@ -28,11 +28,11 @@ const AccountMenu = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="size-8 rounded-full border border-gray-200 dark:border-gray-800"
+          className="rounded-full border border-gray-200 dark:border-gray-800"
           size="icon"
           variant="ghost"
         >
-          <Avatar className="size-8">
+          <Avatar>
             <AvatarImage
               src={user?.avatar_url ?? undefined}
               alt={`@${user?.username}`}

@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -18,10 +18,11 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useQueryString } from '@/hooks/use-query-string'
-import { siteConfig } from '@/config/site'
+
 import { cn, getArchivePath } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
+import { useQueryString } from '@/hooks/use-query-string'
+import { siteConfig } from '@/config/site'
 
 const FormSchema = z.object({
   q: z.string(),
@@ -34,13 +35,15 @@ interface SearchFormProps extends React.FormHTMLAttributes<HTMLFormElement> {}
 const SearchForm = ({ className, ...props }: SearchFormProps) => {
   const { t } = useTranslation()
   const { qs } = useQueryString()
+
+  const searchParams = useSearchParams()
   const router = useRouter()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
-    defaultValues: {
-      q: '',
+    values: {
+      q: searchParams?.get('q') ?? '',
     },
   })
 
@@ -63,11 +66,6 @@ const SearchForm = ({ className, ...props }: SearchFormProps) => {
         className={cn('relative flex w-full items-center', className)}
         {...props}
       >
-        <LucideIcon
-          name="Search"
-          size={20}
-          className="absolute left-4 text-muted-foreground"
-        />
         <FormField
           control={form.control}
           name="q"
@@ -76,7 +74,7 @@ const SearchForm = ({ className, ...props }: SearchFormProps) => {
               <FormControl>
                 <Input
                   placeholder={t('search_text')}
-                  className="pl-12"
+                  className="pr-8"
                   {...field}
                 />
               </FormControl>
@@ -84,6 +82,13 @@ const SearchForm = ({ className, ...props }: SearchFormProps) => {
             </FormItem>
           )}
         />
+        <button type="submit" className="absolute right-2">
+          <LucideIcon
+            name="Search"
+            size={20}
+            className="text-muted-foreground"
+          />
+        </button>
       </form>
     </Form>
   )
