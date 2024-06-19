@@ -12,7 +12,10 @@ const EmptyPosts = ({ q, ...props }: EmptyPostsProps) => {
 
   return (
     <div {...props}>
-      {q ? t('SearchResults.empty') : t('sentences.no_posts_yet')}
+      {q
+        ? t('sorry_but_nothing_matched_your_search_terms') +
+          t('please_try_again_with_some_different_keywords')
+        : t('no_posts_yet')}
     </div>
   )
 }

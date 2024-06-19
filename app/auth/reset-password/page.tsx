@@ -34,13 +34,15 @@ export default function ResetPasswordPage({
         startIconName="ChevronLeft"
         translate="yes"
       >
-        ButtonLink.signin
+        signin
       </ButtonLink>
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title text="ResetPasswordPage.title" translate="yes" />
-          <Description text="ResetPasswordPage.description" translate="yes" />
+          <Title translate="yes">reset_your_password</Title>
+          <Description translate="yes">
+            please_enter_your_new_password_below
+          </Description>
         </div>
         <div className="grid gap-6">
           <ResetPasswordForm />
@@ -51,7 +53,7 @@ export default function ResetPasswordPage({
             className="hover:underline"
             translate="yes"
           >
-            AuthLink.signup
+            dont_have_an_account_sign_up
           </TextLink>
           <LanguageToggleButton />
         </div>

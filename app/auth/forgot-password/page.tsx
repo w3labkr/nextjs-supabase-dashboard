@@ -18,13 +18,15 @@ export default function ForgotPasswordPage() {
         startIconName="ChevronLeft"
         translate="yes"
       >
-        ButtonLink.signin
+        signin
       </ButtonLink>
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title text="ForgotPasswordPage.title" translate="yes" />
-          <Description text="ForgotPasswordPage.description" translate="yes" />
+          <Title translate="yes">forgot_your_password</Title>
+          <Description translate="yes">
+            enter_your_email_address_below_and_we_will_send_you_a_message_to_reset_your_password
+          </Description>
         </div>
         <div className="grid gap-6">
           <ForgotPasswordForm />
@@ -35,7 +37,7 @@ export default function ForgotPasswordPage() {
             className="hover:underline"
             translate="yes"
           >
-            AuthLink.signup
+            dont_have_an_account_sign_up
           </TextLink>
           <LanguageToggleButton />
         </div>

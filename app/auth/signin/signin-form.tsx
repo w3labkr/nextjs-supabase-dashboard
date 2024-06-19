@@ -65,7 +65,7 @@ const EmailField = () => {
       name="email"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('FormLabel.email')}</FormLabel>
+          <FormLabel>{t('email')}</FormLabel>
           <FormControl>
             <Input
               type="email"
@@ -94,13 +94,13 @@ const PasswordField = () => {
       render={({ field }) => (
         <FormItem>
           <div className="flex items-center justify-between">
-            <FormLabel>{t('FormLabel.password')}</FormLabel>
+            <FormLabel>{t('password')}</FormLabel>
             <TextLink
               href="/auth/forgot-password"
               className="text-sm underline hover:decoration-muted"
               translate="yes"
             >
-              AuthLink.forgot_password
+              forgot_your_password
             </TextLink>
           </div>
           <FormControl>
@@ -109,7 +109,7 @@ const PasswordField = () => {
               autoCapitalize="none"
               autoComplete="current-password"
               autoCorrect="off"
-              placeholder={t('FormLabel.password')}
+              placeholder={t('password')}
               {...field}
             />
           </FormControl>
@@ -147,7 +147,7 @@ const SubmitButton = () => {
       setSession(signed?.data?.session)
       setUser(signed?.data?.user)
 
-      toast.success(t('FormMessage.you_have_successfully_logged_in'))
+      toast.success(t('you_have_successfully_logged_in'))
 
       router.refresh()
       router.replace(next)
@@ -155,10 +155,10 @@ const SubmitButton = () => {
       const err = (e as Error)?.message
       if (err.startsWith('Invalid login credentials')) {
         setError('email', {
-          message: t('FormMessage.invalid_login_credentials'),
+          message: t('invalid_login_credentials'),
         })
         setError('password', {
-          message: t('FormMessage.invalid_login_credentials'),
+          message: t('invalid_login_credentials'),
         })
       } else {
         toast.error(err)
@@ -175,7 +175,7 @@ const SubmitButton = () => {
       disabled={isSubmitting}
       className="w-full"
     >
-      {t('FormSubmit.signin')}
+      {t('signin')}
     </Button>
   )
 }

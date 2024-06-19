@@ -12,7 +12,7 @@ export default function NotFound() {
         startIconName="ChevronLeft"
         translate="yes"
       >
-        ButtonLink.home
+        home
       </ButtonLink>
       <Error status="404" />
     </div>

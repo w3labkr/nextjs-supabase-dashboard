@@ -10,9 +10,9 @@ export default function SessionsPage() {
   return (
     <main className="flex-1 space-y-16 overflow-auto p-10 pb-16">
       <div className="space-y-4">
-        <Title text="SessionsForm.title" translate="yes" />
+        <Title translate="yes">session</Title>
         <Separator />
-        <Description text="SessionsForm.description" translate="yes" />
+        <Description translate="yes"></Description>
         <SessionsForm />
       </div>
     </main>

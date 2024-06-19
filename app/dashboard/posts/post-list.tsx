@@ -186,21 +186,15 @@ const Body = () => {
               onCheckedChange={onCheckedChange}
             />
           </TableHead>
+          <TableHead className="w-[70px] text-center">{t('num')}</TableHead>
+          <TableHead>{t('title')}</TableHead>
+          <TableHead className="w-[120px] text-center">{t('author')}</TableHead>
           <TableHead className="w-[70px] text-center">
-            {t('Table.num')}
+            {t('visibility')}
           </TableHead>
-          <TableHead>{t('Table.title')}</TableHead>
-          <TableHead className="w-[120px] text-center">
-            {t('Table.author')}
-          </TableHead>
-          <TableHead className="w-[70px] text-center">
-            {t('Table.visibility')}
-          </TableHead>
-          <TableHead className="w-[100px] text-center">
-            {t('Table.views')}
-          </TableHead>
+          <TableHead className="w-[100px] text-center">{t('views')}</TableHead>
           <TableHead className="w-[200px] text-center">
-            {t('Table.created_at')}
+            {t('created_at')}
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -243,7 +237,7 @@ const PostItem = ({ post }: { post: Post }) => {
           <div className="line-clamp-1">
             <span>
               {!['publish'].includes(post?.status)
-                ? `[${t(`PostStatus.${post?.status}`)}] `
+                ? `[${t(`${post?.status}`)}] `
                 : null}
             </span>
             <span className="break-all">{post?.title}</span>
@@ -356,7 +350,7 @@ const EmptyItem = () => {
   return (
     <TableRow className="hover:bg-inherit">
       <TableCell colSpan={6} align="center">
-        {t('Table.empty_post')}
+        {t('no_posts_yet')}
       </TableCell>
     </TableRow>
   )
@@ -368,7 +362,7 @@ const LoadingItem = () => {
   return (
     <TableRow className="hover:bg-inherit">
       <TableCell colSpan={5} align="center">
-        {t('Table.is_loading')}
+        {t('is_loading')}
       </TableCell>
     </TableRow>
   )

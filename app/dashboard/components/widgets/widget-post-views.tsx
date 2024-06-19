@@ -38,7 +38,7 @@ const WidgetPostViews = (props: WidgetPostViewsProps) => {
   return (
     <Card {...props}>
       <CardHeader>
-        <CardTitle>{t('Widget.post_views')} Top 10</CardTitle>
+        <CardTitle>{t('post_views_top_%d', { count: 10 })}</CardTitle>
         {/* <CardDescription></CardDescription> */}
       </CardHeader>
       <CardContent>
@@ -46,8 +46,8 @@ const WidgetPostViews = (props: WidgetPostViewsProps) => {
           <thead>
             <tr>
               <th className="w-[20px] text-left">#</th>
-              <th className="text-left">{t('Widget.post')}</th>
-              <th className="w-[60px] text-right">{t('Widget.views')}</th>
+              <th className="text-left">{t('post')}</th>
+              <th className="w-[60px] text-right">{t('views')}</th>
             </tr>
           </thead>
           <tbody>
@@ -95,7 +95,7 @@ const EmptyItem = () => {
 
   return (
     <tr>
-      <td colSpan={3}>{t('Widget.empty_post')}</td>
+      <td colSpan={3}>{t('no_posts_yet')}</td>
     </tr>
   )
 }

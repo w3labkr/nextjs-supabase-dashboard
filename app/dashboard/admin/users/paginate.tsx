@@ -72,11 +72,12 @@ const Paging = ({
           <PaginationItem>
             <PaginationPrevious
               href="#"
-              text=""
               className="p-0"
               iconName="ChevronsLeft"
+              text=""
               ariaLabel="Pagination.firstAriaLabel"
               translate="yes"
+              ns="components"
               onClick={() => setPage(firstPage)}
             />
           </PaginationItem>
@@ -85,11 +86,12 @@ const Paging = ({
           <PaginationItem>
             <PaginationPrevious
               href="#"
-              text=""
               className="p-0"
               iconName="ChevronLeft"
+              text=""
               ariaLabel="Pagination.previousAriaLabel"
               translate="yes"
+              ns="components"
               onClick={() => setPage(previousPage)}
             />
           </PaginationItem>
@@ -111,11 +113,12 @@ const Paging = ({
           <PaginationItem>
             <PaginationNext
               href="#"
-              text=""
-              iconName="ChevronRight"
               className="p-0"
+              iconName="ChevronRight"
+              text=""
               ariaLabel="Pagination.nextAriaLabel"
               translate="yes"
+              ns="components"
               onClick={() => setPage(nextPage)}
             />
           </PaginationItem>
@@ -124,11 +127,12 @@ const Paging = ({
           <PaginationItem>
             <PaginationNext
               href="#"
-              text=""
               className="p-0"
               iconName="ChevronsRight"
+              text=""
               ariaLabel="Pagination.lastAriaLabel"
               translate="yes"
+              ns="components"
               onClick={() => setPage(lastPage)}
             />
           </PaginationItem>

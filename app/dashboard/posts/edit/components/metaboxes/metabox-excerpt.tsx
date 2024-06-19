@@ -21,11 +21,11 @@ const MetaboxExcerpt = () => {
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
       <AccordionItem value="item-1">
-        <AccordionTrigger>{t('PostMetabox.excerpt')}</AccordionTrigger>
+        <AccordionTrigger>{t('excerpt')}</AccordionTrigger>
         <AccordionContent className="px-1 py-1 pb-4">
           <Textarea
             {...register('excerpt')}
-            placeholder={t('Textarea.please_enter_your_message')}
+            placeholder={t('please_enter_your_message')}
             rows={5}
           />
           <FormMessage className="mt-2">

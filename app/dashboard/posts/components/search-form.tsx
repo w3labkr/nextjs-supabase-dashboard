@@ -68,7 +68,7 @@ const SearchForm = () => {
               <FormControl>
                 <Input
                   className="sm:w-60"
-                  placeholder={t('SearchForm.placeholder')}
+                  placeholder={t('search_text')}
                   {...field}
                 />
               </FormControl>
@@ -76,7 +76,7 @@ const SearchForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">{t('SearchForm.submit')}</Button>
+        <Button type="submit">{t('search')}</Button>
       </form>
     </Form>
   )

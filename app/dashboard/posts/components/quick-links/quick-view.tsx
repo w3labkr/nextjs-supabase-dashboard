@@ -23,7 +23,7 @@ const QuickView = ({ post }: QuickViewProps) => {
       target="_blank"
       rel="noopener noreferrer"
     >
-      {t('QuickLinks.view')}
+      {t('view')}
     </Link>
   )
 }

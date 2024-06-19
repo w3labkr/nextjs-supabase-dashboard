@@ -17,7 +17,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { useAppBar } from './app-bar'
 
-import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
+import { LucideIcon } from '@/lib/lucide-icon'
 import { siteConfig } from '@/config/site'
 import { DashboardMiniNavItem, DashboardMiniNavSubItem } from '@/types/config'
 
@@ -86,6 +86,8 @@ interface NavSubItemProps {
 
 const NavSubItem = ({ item }: NavSubItemProps) => {
   const { href, iconName, title, translate, disabled, badge } = item
+  const { t } = useTranslation()
+
   const router = useRouter()
   const pathname = usePathname()
 
@@ -109,50 +111,25 @@ const NavSubItem = ({ item }: NavSubItemProps) => {
               }
               disabled={disabled}
             >
-              {iconName ? <TooltipIcon name={iconName} /> : null}
-              {badge && badge > 0 ? <TooltipBadge badge={badge} /> : null}
+              {iconName ? (
+                <LucideIcon name={iconName} className="mr-0 size-5 min-w-5" />
+              ) : null}
+              {badge && badge > 0 ? (
+                <Badge
+                  className="absolute bottom-0 right-0 justify-center px-1 py-0.5"
+                  style={{ fontSize: 10, lineHeight: 1 }}
+                >
+                  {badge}
+                </Badge>
+              ) : null}
             </Button>
           </div>
         </TooltipTrigger>
         <TooltipContent side="right" align="end" alignOffset={6}>
-          {title ? <TooltipTitle title={title} translate={translate} /> : null}
+          {title && translate === 'yes' ? t(title) : null}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  )
-}
-
-interface TooltipTitleProps {
-  title: string
-  translate?: 'yes' | 'no'
-}
-
-const TooltipTitle = ({ title, translate }: TooltipTitleProps) => {
-  const { t } = useTranslation()
-
-  return translate === 'yes' ? t(`DashboardNavigation.${title}`) : title
-}
-
-interface TooltipIconProps {
-  name: LucideIconName
-}
-
-const TooltipIcon = ({ name }: TooltipIconProps) => {
-  return <LucideIcon name={name} className="mr-0 size-5 min-w-5" />
-}
-
-interface TooltipBadgeProps {
-  badge: number
-}
-
-const TooltipBadge = ({ badge }: TooltipBadgeProps) => {
-  return (
-    <Badge
-      className="absolute bottom-0 right-0 justify-center px-1 py-0.5"
-      style={{ fontSize: 10, lineHeight: 1 }}
-    >
-      {badge}
-    </Badge>
   )
 }
 

@@ -12,10 +12,10 @@ const DemoSiteWarningNotification = () => {
   return (
     <Alert variant="destructive" className="rounded-none">
       <Terminal className="h-4 w-4" />
-      {/* <AlertTitle>{t('Alert.heads_up')}</AlertTitle> */}
+      {/* <AlertTitle>{t('heads_up')}</AlertTitle> */}
       <AlertDescription>
-        {t('Alert.heads_up')}{' '}
-        {t('Alert.data_stored_on_the_demo_site_is_reset_periodically')}
+        {t('heads_up')}{' '}
+        {t('data_stored_on_the_demo_site_is_reset_periodically')}
       </AlertDescription>
     </Alert>
   )

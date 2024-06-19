@@ -52,7 +52,7 @@ const SignInWithGoogle = ({
   return (
     <Button type="button" variant={variant} onClick={onClick} {...props}>
       <FcGoogle className="mr-2 size-4 min-w-4" />
-      {t('SignInWithGoogle.label')}
+      {t('signin_with_google')}
     </Button>
   )
 }

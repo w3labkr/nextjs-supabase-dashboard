@@ -141,11 +141,11 @@ const SubmitButton = () => {
 
       setTheme(formValues?.theme)
 
-      toast.success(t('FormMessage.changed_successfully'))
+      toast.success(t('changed_successfully'))
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Nothing has changed')) {
-        toast(t('FormMessage.nothing_has_changed'))
+        toast(t('nothing_has_changed'))
       } else {
         toast.error(err)
       }
@@ -160,7 +160,7 @@ const SubmitButton = () => {
       onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
-      {t('FormSubmit.update_theme')}
+      {t('update_theme')}
     </Button>
   )
 }

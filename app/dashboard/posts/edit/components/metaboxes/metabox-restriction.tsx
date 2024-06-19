@@ -39,7 +39,7 @@ const MetaboxRectriction = () => {
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
       <AccordionItem value="item-1">
-        <AccordionTrigger>{t('PostMetabox.private')}</AccordionTrigger>
+        <AccordionTrigger>{t('private')}</AccordionTrigger>
         <AccordionContent className="flex items-center gap-2">
           <Switch
             checked={checked}

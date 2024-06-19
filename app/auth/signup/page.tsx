@@ -18,13 +18,15 @@ export default function SignUpPage() {
         className="absolute right-4 top-4 md:right-8 md:top-8"
         translate="yes"
       >
-        ButtonLink.signin
+        signin
       </ButtonLink>
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title text="SignUpPage.title" translate="yes" />
-          <Description text="SignUpPage.description" translate="yes" />
+          <Title translate="yes">create_an_account</Title>
+          <Description translate="yes">
+            enter_your_email_below_to_create_your_account
+          </Description>
         </div>
         <div className="grid gap-6">
           <SignUpForm />
@@ -36,7 +38,7 @@ export default function SignUpPage() {
             className="hover:underline"
             translate="yes"
           >
-            AuthLink.signin
+            already_have_an_account_sign_in
           </TextLink>
           <LanguageToggleButton />
         </div>

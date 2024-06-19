@@ -7,11 +7,11 @@ import { getMeta } from '@/lib/utils'
 import { usePostAPI } from '@/queries/client/posts'
 
 interface PostViewsProps extends React.HTMLAttributes<HTMLDivElement> {
-  id: number
+  postId: number
 }
 
-const PostViews = ({ id, ...props }: PostViewsProps) => {
-  const { post } = usePostAPI(id ?? null)
+const PostViews = ({ postId, ...props }: PostViewsProps) => {
+  const { post } = usePostAPI(postId ?? null)
   const views = getMeta(post?.meta, 'views', '0')
 
   return (

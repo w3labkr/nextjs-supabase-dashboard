@@ -12,7 +12,7 @@ export default function AuthCodeError() {
         startIconName="ChevronLeft"
         translate="yes"
       >
-        ButtonLink.signin
+        signin
       </ButtonLink>
       <Error status="500" />
     </div>

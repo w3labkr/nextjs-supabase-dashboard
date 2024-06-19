@@ -19,13 +19,15 @@ export default function SignInPage() {
         startIconName="ChevronLeft"
         translate="yes"
       >
-        ButtonLink.home
+        home
       </ButtonLink>
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title text="SignInPage.title" translate="yes" />
-          <Description text="SignInPage.description" translate="yes" />
+          <Title translate="yes">welcome_back</Title>
+          <Description translate="yes">
+            enter_your_email_to_sign_in_to_your_account
+          </Description>
         </div>
         <div className="grid gap-6">
           <SignInForm />
@@ -37,7 +39,7 @@ export default function SignInPage() {
             className="hover:underline"
             translate="yes"
           >
-            AuthLink.signup
+            dont_have_an_account_sign_up
           </TextLink>
           <LanguageToggleButton />
         </div>

@@ -25,17 +25,19 @@ import { Post } from '@/types/database'
 interface AddDummyPostProps
   extends ButtonProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
-  text?: string
   startIconName?: LucideIconName
   endIconName?: LucideIconName
+  text?: string
+  ns?: string
 }
 
 const AddDummyPost = ({
   children,
-  text,
-  translate,
   startIconName,
   endIconName,
+  translate,
+  text,
+  ns,
   ...props
 }: AddDummyPostProps) => {
   const searchParams = useSearchParams()
@@ -106,12 +108,16 @@ const AddDummyPost = ({
 
   return (
     <Button type="button" onClick={onClick} disabled={isSubmitting} {...props}>
-      {startIconName && (
+      {startIconName ? (
         <LucideIcon name={startIconName} className="mr-2 size-4" />
-      )}
-      {text && translate === 'yes' ? t(text) : text}
-      {children}
-      {endIconName && <LucideIcon name={endIconName} className="ml-2 size-4" />}
+      ) : null}
+      {text && translate === 'yes' ? t(text, { ns }) : text}
+      {children && typeof children === 'string' && translate === 'yes'
+        ? t(children, { ns })
+        : children}
+      {endIconName ? (
+        <LucideIcon name={endIconName} className="ml-2 size-4" />
+      ) : null}
     </Button>
   )
 }

@@ -65,11 +65,12 @@ const FirstItem = () => {
       <PaginationPrevious
         href={pathname + '?' + qs({ page: firstPage })}
         scroll={!siteConfig?.fixedHeader}
-        text=""
         className="p-0"
         iconName="ChevronsLeft"
+        text=""
         ariaLabel="Pagination.firstAriaLabel"
         translate="yes"
+        ns="components"
       />
     </PaginationItem>
   )
@@ -87,11 +88,12 @@ const PreviousItem = () => {
       <PaginationPrevious
         href={pathname + '?' + qs({ page: previousPage })}
         scroll={!siteConfig?.fixedHeader}
-        text=""
         className="p-0"
         iconName="ChevronLeft"
+        text=""
         ariaLabel="Pagination.previousAriaLabel"
         translate="yes"
+        ns="components"
       />
     </PaginationItem>
   )
@@ -109,11 +111,12 @@ const NextItem = () => {
       <PaginationNext
         href={pathname + '?' + qs({ page: nextPage })}
         scroll={!siteConfig?.fixedHeader}
-        text=""
-        iconName="ChevronRight"
         className="p-0"
+        iconName="ChevronRight"
+        text=""
         ariaLabel="Pagination.nextAriaLabel"
         translate="yes"
+        ns="components"
       />
     </PaginationItem>
   )
@@ -131,11 +134,12 @@ const LastItem = () => {
       <PaginationNext
         href={pathname + '?' + qs({ page: lastPage })}
         scroll={!siteConfig?.fixedHeader}
-        text=""
         className="p-0"
         iconName="ChevronsRight"
+        text=""
         ariaLabel="Pagination.lastAriaLabel"
         translate="yes"
+        ns="components"
       />
     </PaginationItem>
   )

@@ -62,9 +62,13 @@ const EditPrimaryEmail = () => {
     <div className="space-y-2">
       <div>
         <span className="text-sm font-semibold">
-          {t('EditPrimaryEmail.title')}
+          {t('primary_email_address')}
         </span>
-        <p className="text-xs">{t('EditPrimaryEmail.description')}</p>
+        <p className="text-xs">
+          {t(
+            'your_primary_email_address_may_be_used_to_receive_account_related_notifications_and_reset_your_password'
+          )}
+        </p>
       </div>
       <Form {...form}>
         <form
@@ -96,9 +100,7 @@ const EmailField = ({ hasPrimary }: { hasPrimary: boolean }) => {
             <FormControl>
               <SelectTrigger className="w-[180px]">
                 <SelectValue
-                  placeholder={t(
-                    'SelectValue.select_a_verified_email_to_display'
-                  )}
+                  placeholder={t('select_a_verified_email_to_display')}
                 />
               </SelectTrigger>
             </FormControl>
@@ -106,7 +108,7 @@ const EmailField = ({ hasPrimary }: { hasPrimary: boolean }) => {
               <SelectGroup>
                 {!hasPrimary ? (
                   <SelectItem value="unassigned">
-                    {t('SelectValue.select_a_verified_email_to_display')}
+                    {t('select_a_verified_email_to_display')}
                   </SelectItem>
                 ) : null}
                 {emails?.map(({ id, email, email_confirmed_at }) => {
@@ -163,13 +165,13 @@ const SubmitButton = () => {
 
       mutate(`/api/v1/email?userId=${user?.id}`)
 
-      toast.success(t('FormMessage.changed_successfully'))
+      toast.success(t('changed_successfully'))
 
       router.refresh()
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Nothing has changed')) {
-        toast(t('FormMessage.nothing_has_changed'))
+        toast(t('nothing_has_changed'))
       } else {
         toast.error(err)
       }
@@ -184,7 +186,7 @@ const SubmitButton = () => {
       onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
-      {t('FormSubmit.save')}
+      {t('save')}
     </Button>
   )
 }

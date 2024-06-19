@@ -17,6 +17,7 @@ interface ButtonLinkProps
   endIconName?: LucideIconName
   endIconClassName?: string
   text?: string
+  ns?: string
   variant?: ButtonProps['variant']
 }
 
@@ -31,6 +32,7 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
       endIconClassName,
       text,
       translate,
+      ns,
       variant = 'ghost',
       scroll,
       ...rest
@@ -50,9 +52,9 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
             className={cn('mr-2 size-4 min-w-4', startIconClassName)}
           />
         ) : null}
-        {translate === 'yes' && text ? t(text) : text}
-        {translate === 'yes' && children && typeof children === 'string'
-          ? t(children)
+        {text && translate === 'yes' ? t(text, { ns }) : text}
+        {children && typeof children === 'string' && translate === 'yes'
+          ? t(children, { ns })
           : children}
         {endIconName ? (
           <LucideIcon

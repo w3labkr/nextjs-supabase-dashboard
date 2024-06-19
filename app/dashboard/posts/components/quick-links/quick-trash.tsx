@@ -71,7 +71,7 @@ const QuickTrash = ({ post, ...props }: QuickTrashProps) => {
       mutate(`/api/v1/post/count?${countSearchParams}`)
       mutate(`/api/v1/post/list?${listSearchParams}`)
 
-      toast.success(t('FormMessage.deleted_successfully'))
+      toast.success(t('deleted_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -86,7 +86,7 @@ const QuickTrash = ({ post, ...props }: QuickTrashProps) => {
       disabled={isSubmitting}
       {...props}
     >
-      {t('QuickLinks.trash')}
+      {t('trash')}
     </button>
   )
 }

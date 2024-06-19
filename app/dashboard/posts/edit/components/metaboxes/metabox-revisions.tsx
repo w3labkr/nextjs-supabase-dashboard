@@ -21,7 +21,7 @@ const MetaboxRevisions = () => {
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
       <AccordionItem value="item-1">
-        <AccordionTrigger>{t('PostMetabox.revisions')}</AccordionTrigger>
+        <AccordionTrigger>{t('revisions')}</AccordionTrigger>
         <AccordionContent className="px-1 py-1 pb-4">
           <ul>
             <li>1</li>

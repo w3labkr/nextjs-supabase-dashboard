@@ -57,7 +57,7 @@ const QuickRestore = ({ post, ...props }: QuickRestoreProps) => {
       mutate(`/api/v1/post/count?${countSearchParams}`)
       mutate(`/api/v1/post/list?${listSearchParams}`)
 
-      toast.success(t('FormMessage.changed_successfully'))
+      toast.success(t('changed_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -72,7 +72,7 @@ const QuickRestore = ({ post, ...props }: QuickRestoreProps) => {
       disabled={isSubmitting}
       {...props}
     >
-      {t('QuickLinks.restore')}
+      {t('restore')}
     </button>
   )
 }

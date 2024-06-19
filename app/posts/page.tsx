@@ -60,7 +60,7 @@ export default async function PostsPage({
         <div className="container flex-1 overflow-auto">
           <ArchiveTitle
             q={q}
-            className="mt-16 text-center font-serif text-4xl"
+            className="mt-16 text-center font-serif text-4xl font-bold"
           />
           <PagingProvider value={{ total, page, perPage, pageSize }}>
             <div className="mt-12 space-y-16">

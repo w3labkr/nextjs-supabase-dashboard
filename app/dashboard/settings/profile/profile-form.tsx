@@ -82,14 +82,12 @@ const FullNameField = () => {
       name="full_name"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('FormLabel.full_name')}</FormLabel>
+          <FormLabel>{t('full_name')}</FormLabel>
           <FormControl className="w-[180px]">
-            <Input placeholder={t('FormLabel.your_full_name')} {...field} />
+            <Input placeholder={t('your_full_name')} {...field} />
           </FormControl>
           <FormDescription>
-            {t(
-              'FormDescription.this_is_the_name_that_appears_on_your_profile_and_email'
-            )}
+            {t('this_is_the_name_that_appears_on_your_profile_and_email')}
           </FormDescription>
           <FormMessage />
         </FormItem>
@@ -111,21 +109,19 @@ const EmailField = () => {
       name="email"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('FormLabel.email')}</FormLabel>
+          <FormLabel>{t('email')}</FormLabel>
           <Select onValueChange={field.onChange} value={field.value}>
             <FormControl>
               <SelectTrigger className="w-[180px]">
                 <SelectValue
-                  placeholder={t(
-                    'SelectValue.select_a_verified_email_to_display'
-                  )}
+                  placeholder={t('select_a_verified_email_to_display')}
                 />
               </SelectTrigger>
             </FormControl>
             <SelectContent>
               <SelectGroup>
                 <SelectItem value="unassigned">
-                  {t('SelectValue.select_a_verified_email_to_display')}
+                  {t('select_a_verified_email_to_display')}
                 </SelectItem>
                 {emails?.map(({ id, email, email_confirmed_at }) => {
                   if (!email_confirmed_at) return null
@@ -139,20 +135,17 @@ const EmailField = () => {
             </SelectContent>
           </Select>
           <FormDescription>
-            {trans(
-              'FormDescription.you_can_manage_your_email_address_in_your_email_settings',
-              {
-                components: {
-                  link1: (
-                    <Link
-                      href="/dashboard/settings/emails"
-                      scroll={!siteConfig?.fixedHeader}
-                      className="text-primary underline"
-                    />
-                  ),
-                },
-              }
-            )}
+            {trans('you_can_manage_your_email_address_in_your_email_settings', {
+              components: {
+                link1: (
+                  <Link
+                    href="/dashboard/settings/emails"
+                    scroll={!siteConfig?.fixedHeader}
+                    className="text-primary underline"
+                  />
+                ),
+              },
+            })}
           </FormDescription>
           <FormMessage />
         </FormItem>
@@ -171,10 +164,10 @@ const BioField = () => {
       name="bio"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('FormLabel.bio')}</FormLabel>
+          <FormLabel>{t('bio')}</FormLabel>
           <FormControl className="w-[360px]">
             <Textarea
-              placeholder={t('Textarea.please_tell_us_a_little_about_yourself')}
+              placeholder={t('please_tell_us_a_little_about_yourself')}
               rows={5}
               {...field}
             />
@@ -226,11 +219,11 @@ const SubmitButton = () => {
 
       mutate(`/api/v1/user?id=${user?.id}`)
 
-      toast.success(t('FormMessage.changed_successfully'))
+      toast.success(t('changed_successfully'))
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Nothing has changed')) {
-        toast(t('FormMessage.nothing_has_changed'))
+        toast(t('nothing_has_changed'))
       } else {
         toast.error(err)
       }
@@ -245,7 +238,7 @@ const SubmitButton = () => {
       onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
-      {t('FormSubmit.update_profile')}
+      {t('update_profile')}
     </Button>
   )
 }

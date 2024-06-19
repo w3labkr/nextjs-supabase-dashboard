@@ -82,7 +82,7 @@ const QuickPublic = ({ post, ...props }: QuickPublicProps) => {
       mutate(`/api/v1/post/count?${countSearchParams}`)
       mutate(`/api/v1/post/list?${listSearchParams}`)
 
-      toast.success(t('FormMessage.changed_successfully'))
+      toast.success(t('changed_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -97,7 +97,7 @@ const QuickPublic = ({ post, ...props }: QuickPublicProps) => {
       disabled={isSubmitting}
       {...props}
     >
-      {t('QuickLinks.public')}
+      {t('public')}
     </button>
   )
 }

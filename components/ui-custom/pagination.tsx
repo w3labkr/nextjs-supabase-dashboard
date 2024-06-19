@@ -40,9 +40,10 @@ PaginationItem.displayName = 'PaginationItem'
 
 type PaginationLinkProps = {
   isActive?: boolean
+  iconName?: LucideIconName
   text?: string
   ariaLabel?: string
-  iconName?: LucideIconName
+  ns?: string
 } & Pick<ButtonProps, 'size'> &
   React.ComponentProps<typeof Link>
 
@@ -68,17 +69,18 @@ PaginationLink.displayName = 'PaginationLink'
 
 const PaginationPrevious = ({
   className,
+  iconName = 'ChevronLeft',
   text = 'Previous',
   ariaLabel = 'Go to previous page',
-  iconName = 'ChevronLeft',
   translate,
+  ns,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) => {
   const { t } = useTranslation()
 
   return (
     <PaginationLink
-      aria-label={translate === 'yes' ? t(ariaLabel) : ariaLabel}
+      aria-label={translate === 'yes' ? t(ariaLabel, { ns }) : ariaLabel}
       size="default"
       className={cn('gap-1 pl-2.5', className)}
       {...props}
@@ -86,7 +88,7 @@ const PaginationPrevious = ({
       {iconName && (
         <LucideIcon name={iconName} className={cn('size-4 min-w-4')} />
       )}
-      <span>{translate === 'yes' ? t(text) : text}</span>
+      <span>{translate === 'yes' ? t(text, { ns }) : text}</span>
     </PaginationLink>
   )
 }
@@ -98,18 +100,19 @@ const PaginationNext = ({
   ariaLabel = 'Go to next page',
   iconName = 'ChevronRight',
   translate,
+  ns,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) => {
   const { t } = useTranslation()
 
   return (
     <PaginationLink
-      aria-label={translate === 'yes' ? t(ariaLabel) : ariaLabel}
+      aria-label={translate === 'yes' ? t(ariaLabel, { ns }) : ariaLabel}
       size="default"
       className={cn('gap-1 pr-2.5', className)}
       {...props}
     >
-      <span>{translate === 'yes' ? t(text) : text}</span>
+      <span>{translate === 'yes' ? t(text, { ns }) : text}</span>
       {iconName && (
         <LucideIcon name={iconName} className={cn('size-4 min-w-4')} />
       )}
@@ -119,15 +122,17 @@ const PaginationNext = ({
 PaginationNext.displayName = 'PaginationNext'
 
 type PaginationEllipsisProps = {
-  text?: string
   iconName?: LucideIconName
+  text?: string
+  ns?: string
 } & React.ComponentProps<'span'>
 
 const PaginationEllipsis = ({
   className,
-  text = 'More pages',
   iconName = 'Ellipsis',
+  text = 'More pages',
   translate,
+  ns,
   ...props
 }: PaginationEllipsisProps) => {
   const { t } = useTranslation()
@@ -141,7 +146,9 @@ const PaginationEllipsis = ({
       {iconName && (
         <LucideIcon name={iconName} className={cn('size-4 min-w-4')} />
       )}
-      <span className="sr-only">{translate === 'yes' ? t(text) : text}</span>
+      <span className="sr-only">
+        {translate === 'yes' ? t(text, { ns }) : text}
+      </span>
     </span>
   )
 }

@@ -53,7 +53,7 @@ const MetaboxFutureDate = () => {
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
       <AccordionItem value="item-1">
-        <AccordionTrigger>{t('PostMetabox.future')}</AccordionTrigger>
+        <AccordionTrigger>{t('future')}</AccordionTrigger>
         <AccordionContent className="space-y-2 px-1 py-1 pb-4">
           <Switch
             checked={checked}

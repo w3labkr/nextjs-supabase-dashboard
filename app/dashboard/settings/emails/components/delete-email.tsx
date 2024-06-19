@@ -56,7 +56,7 @@ const DeleteEmail = ({ item }: DeleteEmailProps) => {
 
       mutate(`/api/v1/email/list?userId=${user?.id}`)
 
-      toast.success(t('FormMessage.deleted_successfully'))
+      toast.success(t('deleted_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -80,18 +80,18 @@ const DeleteEmail = ({ item }: DeleteEmailProps) => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {t('DeleteEmail.AlertDialogTitle')}
+            {t('are_you_sure_you_want_to_remove_this_email_from_your_account')}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {t('DeleteEmail.AlertDialogDescription')}
+            {t(
+              'once_deleted_this_email_address_will_no_longer_be_associated_with_your_account'
+            )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>
-            {t('DeleteEmail.AlertDialogCancel')}
-          </AlertDialogCancel>
+          <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
           <AlertDialogAction onClick={onClick}>
-            {t('DeleteEmail.AlertDialogAction')}
+            {t('continue')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

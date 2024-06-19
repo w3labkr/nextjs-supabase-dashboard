@@ -14,9 +14,9 @@ import { DashboardNavItem, DashboardNavSubItem } from '@/types/config'
 import { siteConfig } from '@/config/site'
 
 interface NavigationProps extends React.HTMLAttributes<HTMLDivElement> {
-  title: string
   nav: DashboardNavItem[]
   user_role?: string
+  title: string
 }
 
 const Navigation = ({
@@ -43,9 +43,7 @@ const Navigation = ({
         className={cn('flex flex-row items-center gap-2 border-b px-4', height)}
       >
         <span className="font-semibold">
-          {title && translate === 'yes'
-            ? t(`DashboardNavigation.${title}`)
-            : title}
+          {title && translate === 'yes' ? t(title) : title}
         </span>
       </div>
       <div className="flex-1 space-y-1 overflow-auto p-2">
@@ -73,9 +71,7 @@ const NavItem = ({ item, user_role }: NavItemProps) => {
       {separator && <Separator className="!my-4" />}
       {label && (
         <span className="flex p-1 text-sm font-semibold text-muted-foreground">
-          {label && translate === 'yes'
-            ? t(`DashboardNavigation.${label}`)
-            : label}
+          {label && translate === 'yes' ? t(label) : label}
         </span>
       )}
       {items?.map((sub: DashboardNavSubItem) => {
@@ -113,7 +109,7 @@ const NavSubItem = ({ item }: NavSubItemProps) => {
       {iconName ? (
         <LucideIcon name={iconName} className="mr-2 size-4 min-w-4" />
       ) : null}
-      {title && translate === 'yes' ? t(`DashboardNavigation.${title}`) : title}
+      {title && translate === 'yes' ? t(title) : title}
     </Button>
   )
 }

@@ -15,11 +15,11 @@ export default function PostEditPage({
     <main className="flex-1 space-y-4 overflow-auto p-10 pb-16">
       <div className="flex items-center space-x-2">
         <BackLink />
-        <Title text="PostEditPage.title" translate="yes" />
+        <Title translate="yes">edit_post</Title>
         <AddPost
           variant="secondary"
           size="sm"
-          text="PostEditPage.AddPost"
+          text="add_post"
           translate="yes"
         />
       </div>

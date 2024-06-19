@@ -37,7 +37,7 @@ const WidgetLatestPosts = (props: WidgetLatestPostsProps) => {
   return (
     <Card {...props}>
       <CardHeader>
-        <CardTitle>{t('Widget.latest_posts')}</CardTitle>
+        <CardTitle>{t('latest_posts')}</CardTitle>
         {/* <CardDescription></CardDescription> */}
       </CardHeader>
       <CardContent>
@@ -78,7 +78,7 @@ const ListItem = ({ post, ...props }: ListItemProps) => {
 const EmptyItem = () => {
   const { t } = useTranslation()
 
-  return <div>{t('Widget.empty_post')}</div>
+  return <div>{t('no_posts_yet')}</div>
 }
 
 export { WidgetLatestPosts }

@@ -19,7 +19,7 @@ const QuickEdit = ({ post }: QuickEditProps) => {
       scroll={!siteConfig?.fixedHeader}
       className="text-xs text-blue-700 hover:underline"
     >
-      {t('QuickLinks.edit')}
+      {t('edit')}
     </Link>
   )
 }

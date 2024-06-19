@@ -70,7 +70,7 @@ const MetaboxThumbnail = () => {
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
       <AccordionItem value="item-1">
-        <AccordionTrigger>{t('PostMetabox.featured_image')}</AccordionTrigger>
+        <AccordionTrigger>{t('featured_image')}</AccordionTrigger>
         <AccordionContent>
           <input {...register('thumbnail_url')} type="hidden" />
           <input
@@ -86,7 +86,7 @@ const MetaboxThumbnail = () => {
               className="text-blue-700 underline"
               onClick={() => handleFileInputRef(fileInputRef)}
             >
-              {t('PostMetabox.set_featured_image')}
+              {t('set_featured_image')}
             </button>
           )}
           {watchThumbnailUrl ? (
@@ -104,7 +104,7 @@ const MetaboxThumbnail = () => {
                 />
               </button>
               <div className="text-muted-foreground">
-                {t('PostMetabox.edit_featured_image')}
+                {t('edit_featured_image')}
               </div>
             </>
           ) : null}
@@ -119,7 +119,7 @@ const MetaboxThumbnail = () => {
                 })
               }
             >
-              {t('PostMetabox.remove_featured_image')}
+              {t('remove_featured_image')}
             </button>
           ) : null}
         </AccordionContent>

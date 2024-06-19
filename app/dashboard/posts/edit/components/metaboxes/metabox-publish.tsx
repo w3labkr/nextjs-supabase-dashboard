@@ -39,23 +39,21 @@ const MetaboxPublish = () => {
   const dateText = React.useMemo(() => {
     if (future_date) {
       const date = dayjs(future_date).format('YYYY-MM-DD HH:mm:ss')
-      return `${t('PostMetabox.future_date')}: ${date}`
+      return `${t('future_date')}: ${date}`
     }
 
     if (post?.date) {
       const date = dayjs(post?.date).format('YYYY-MM-DD HH:mm:ss')
-      return `${t('PostMetabox.posted_on')}: ${date}`
+      return `${t('posted_on')}: ${date}`
     }
 
-    return `${t('PostMetabox.publish')}: ${t('PostMetabox.immediately')}`
+    return `${t('publish')}: ${t('immediately')}`
   }, [t, future_date, post?.date])
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
       <AccordionItem value="item-1">
-        <AccordionTrigger className="pt-0">
-          {t('PostMetabox.publish')}
-        </AccordionTrigger>
+        <AccordionTrigger className="pt-0">{t('publish')}</AccordionTrigger>
         <AccordionContent className="space-y-4">
           <div className="flex justify-between">
             <DraftButton />
@@ -64,15 +62,13 @@ const MetaboxPublish = () => {
           <ul className="space-y-1">
             <li className="flex items-center">
               <LucideIcon name="Signpost" className="mr-2 size-4 min-w-4" />
-              {`${t('PostMetabox.status')}: `}
-              {post?.status ? t(`PostStatus.${post?.status}`) : null}
+              {`${t('status')}: `}
+              {post?.status ? t(`${post?.status}`) : null}
             </li>
             <li className="flex items-center">
               <LucideIcon name="Eye" className="mr-2 size-4 min-w-4" />
-              {`${t('PostMetabox.visibility')}: `}
-              {visibility === 'private'
-                ? t('PostMetabox.private')
-                : t('PostMetabox.public')}
+              {`${t('visibility')}: `}
+              {visibility === 'private' ? t('private') : t('public')}
             </li>
             <li className="flex items-center">
               <LucideIcon name="CalendarDays" className="mr-2 size-4 min-w-4" />
@@ -80,7 +76,7 @@ const MetaboxPublish = () => {
             </li>
             <li className="flex items-center">
               <LucideIcon name="BarChart" className="mr-2 size-4 min-w-4" />
-              {`${t('PostMetabox.post_views')}: `}
+              {`${t('post_views')}: `}
               {views?.toLocaleString()}
             </li>
           </ul>
@@ -126,11 +122,11 @@ const DraftButton = () => {
 
       mutate(`/api/v1/post?id=${post?.id}`)
 
-      toast.success(t('FormMessage.changed_successfully'))
+      toast.success(t('changed_successfully'))
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
-        setError('slug', { message: t('FormMessage.duplicate_slug') })
+        setError('slug', { message: t('duplicate_slug') })
       } else {
         toast.error(err)
       }
@@ -147,7 +143,7 @@ const DraftButton = () => {
       onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
-      {t('PostMetabox.save_draft')}
+      {t('save_draft')}
     </Button>
   )
 }
@@ -187,7 +183,7 @@ const ViewButton = () => {
       onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
-      {t('PostMetabox.view')}
+      {t('view')}
     </Button>
   )
 }
@@ -233,7 +229,7 @@ const PreviewButton = () => {
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
-        setError('slug', { message: t('FormMessage.duplicate_slug') })
+        setError('slug', { message: t('duplicate_slug') })
       } else {
         toast.error(err)
       }
@@ -250,7 +246,7 @@ const PreviewButton = () => {
       onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
-      {t('PostMetabox.preview')}
+      {t('preview')}
     </Button>
   )
 }
@@ -291,7 +287,7 @@ const TrashButton = () => {
 
       if (result?.error) throw new Error(result?.error?.message)
 
-      toast.success(t('FormMessage.changed_successfully'))
+      toast.success(t('changed_successfully'))
 
       router.push('/dashboard/posts', {
         scroll: !siteConfig?.fixedHeader,
@@ -299,7 +295,7 @@ const TrashButton = () => {
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
-        setError('slug', { message: t('FormMessage.duplicate_slug') })
+        setError('slug', { message: t('duplicate_slug') })
       } else {
         toast.error(err)
       }
@@ -317,7 +313,7 @@ const TrashButton = () => {
       onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
-      {t('PostMetabox.move_to_trash')}
+      {t('move_to_trash')}
     </Button>
   )
 }
@@ -364,11 +360,11 @@ const PublishButton = () => {
 
       mutate(`/api/v1/post?id=${post?.id}`)
 
-      toast.success(t('FormMessage.changed_successfully'))
+      toast.success(t('changed_successfully'))
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
-        setError('slug', { message: t('FormMessage.duplicate_slug') })
+        setError('slug', { message: t('duplicate_slug') })
       } else {
         toast.error(err)
       }
@@ -385,9 +381,7 @@ const PublishButton = () => {
       onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
-      {post?.status === 'draft'
-        ? t('PostMetabox.publish')
-        : t('PostMetabox.update')}
+      {post?.status === 'draft' ? t('publish') : t('update')}
     </Button>
   )
 }

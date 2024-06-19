@@ -18,7 +18,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import { useQueryString } from '@/hooks/use-query-string'
 import { siteConfig } from '@/config/site'
 import { cn, getArchivePath } from '@/lib/utils'
@@ -75,7 +74,7 @@ const SearchForm = ({ className, ...props }: SearchFormProps) => {
             <FormItem className="w-full">
               <FormControl>
                 <Input
-                  placeholder={t('SearchForm.placeholder')}
+                  placeholder={t('search_text') + '...'}
                   className="pl-10"
                   {...field}
                 />

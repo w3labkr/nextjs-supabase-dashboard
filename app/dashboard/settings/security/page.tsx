@@ -19,9 +19,11 @@ export default async function SecurityPage() {
   return (
     <main className="flex-1 space-y-16 overflow-auto p-10 pb-16">
       <div className="space-y-4">
-        <Title text="ChangePasswordSection.title" translate="yes" />
+        <Title translate="yes">change_password</Title>
         <Separator />
-        <Description text="ChangePasswordSection.description" translate="yes" />
+        <Description translate="yes">
+          your_password_must_be_at_least_6_characters_long_and_must_be_different_from_your_previous_password
+        </Description>
         <ChangePasswordForm user={user} />
       </div>
     </main>

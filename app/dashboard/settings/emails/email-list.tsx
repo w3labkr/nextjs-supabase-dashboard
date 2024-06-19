@@ -40,7 +40,7 @@ const EmailItem = ({ item }: EmailItemProps) => {
             {item?.email === user?.email ? (
               <>
                 <span>{' - '}</span>
-                <span className="text-green-700">{t('EmailItem.title')}</span>
+                <span className="text-green-700">{t('primary_email')}</span>
               </>
             ) : null}
           </div>
@@ -49,7 +49,11 @@ const EmailItem = ({ item }: EmailItemProps) => {
           </div>
         </div>
         {item?.email === user?.email ? (
-          <div className="text-xs">{t('EmailItem.description')}</div>
+          <div className="text-xs">
+            {t(
+              'this_email_will_be_used_for_account_related_notifications_and_may_also_be_used_to_reset_your_password'
+            )}
+          </div>
         ) : null}
       </div>
       <ul className="list-outside list-disc space-y-2 pl-5">
@@ -69,8 +73,8 @@ const VisibleInEmails = ({ item }: EmailItemProps) => {
 
   return (
     <li className="text-xs text-muted-foreground">
-      <span>{t('VisibleInEmails.title')}</span>
-      <p>{t('VisibleInEmails.description')}</p>
+      <span>{t('visible_in_emails')}</span>
+      <p>{t('this_email_may_be_used_as_your_profile_and_author_address')}</p>
     </li>
   )
 }
@@ -84,8 +88,8 @@ const ReceivesNotifications = ({ item }: EmailItemProps) => {
 
   return (
     <li className="text-xs text-muted-foreground">
-      <span>{t('ReceivesNotifications.title')}</span>
-      <p>{t('ReceivesNotifications.description')}</p>
+      <span>{t('receives_notifications')}</span>
+      <p>{t('this_email_address_is_the_default_used_for_notifications')}</p>
     </li>
   )
 }
@@ -98,13 +102,15 @@ const UnverifiedEmails = ({ item }: EmailItemProps) => {
   return (
     <li className="text-xs text-muted-foreground">
       <div>
-        <span className="font-semibold text-amber-700">
-          {t('UnverifiedEmails.title')}
-        </span>
+        <span className="font-semibold text-amber-700">{t('unverified')}</span>
         &nbsp;&nbsp;
         <ResendVerifyEmail item={item} />
       </div>
-      <p>{t('UnverifiedEmails.description')}</p>
+      <p>
+        {t(
+          'unverified_email_addresses_cannot_receive_notifications_and_cannot_be_used_to_reset_your_password'
+        )}
+      </p>
     </li>
   )
 }
@@ -116,8 +122,8 @@ const NotVisibleInEmails = ({ item }: EmailItemProps) => {
 
   return (
     <li className="text-xs text-muted-foreground">
-      <span>{t('NotVisibleInEmails.title')}</span>
-      <p>{t('NotVisibleInEmails.description')}</p>
+      <span>{t('not_visible_in_emails')}</span>
+      <p>{t('this_email_cannot_be_used_as_your_profile_or_author_address')}</p>
     </li>
   )
 }

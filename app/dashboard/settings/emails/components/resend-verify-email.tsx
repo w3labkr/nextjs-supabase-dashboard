@@ -38,7 +38,7 @@ const ResendVerifyEmail = ({ item }: ResendVerifyEmailProps) => {
 
       mutate(`/api/v1/email/verify?userId=${user?.id}`)
 
-      toast.success(t('FormMessage.email_has_been_successfully_sent'))
+      toast.success(t('email_has_been_successfully_sent'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -55,7 +55,7 @@ const ResendVerifyEmail = ({ item }: ResendVerifyEmailProps) => {
       onClick={onClick}
       disabled={isSubmitting}
     >
-      {t('ResendVerificationButton.label')}
+      {t('resend_verification_email')}
     </button>
   )
 }

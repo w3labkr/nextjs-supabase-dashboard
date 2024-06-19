@@ -11,15 +11,19 @@ export default function AppearancePage() {
   return (
     <main className="flex-1 space-y-16 overflow-auto p-10 pb-16">
       <div className="space-y-4">
-        <Title text="ChangeThemeSection.title" translate="yes" />
+        <Title translate="yes">theme</Title>
         <Separator />
-        <Description text="ChangeThemeSection.description" translate="yes" />
+        <Description translate="yes">
+          select_the_theme_for_the_dashboard
+        </Description>
         <ChangeThemeForm />
       </div>
       <div className="space-y-4">
-        <Title text="ChangeLanguageSection.title" translate="yes" />
+        <Title translate="yes">language</Title>
         <Separator />
-        <Description text="ChangeLanguageSection.description" translate="yes" />
+        <Description translate="yes">
+          select_the_language_for_the_dashboard
+        </Description>
         <ChangeLanguageForm />
       </div>
     </main>

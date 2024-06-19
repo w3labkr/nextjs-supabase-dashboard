@@ -143,7 +143,7 @@ const TitleField = () => {
       render={({ field }) => (
         <FormItem>
           <FormControl>
-            <Input placeholder={t('Input.please_enter_your_text')} {...field} />
+            <Input placeholder={t('please_enter_your_text')} {...field} />
           </FormControl>
           <FormMessage />
         </FormItem>

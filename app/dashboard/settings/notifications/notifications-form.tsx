@@ -68,11 +68,9 @@ const MarketingEmailsField = () => {
       render={({ field }) => (
         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
           <div className="space-y-0.5">
-            <FormLabel className="text-base">
-              {t('NotificationsForm.marketing_emails.label')}
-            </FormLabel>
+            <FormLabel className="text-base">{t('marketing_emails')}</FormLabel>
             <FormDescription>
-              {t('NotificationsForm.marketing_emails.description')}
+              {t('receive_emails_about_new_products_features_and_more')}
             </FormDescription>
           </div>
           <FormControl>
@@ -95,11 +93,9 @@ const SecurityEmailsField = () => {
       render={({ field }) => (
         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
           <div className="space-y-0.5">
-            <FormLabel className="text-base">
-              {t('NotificationsForm.security_emails.label')}
-            </FormLabel>
+            <FormLabel className="text-base">{t('security_emails')}</FormLabel>
             <FormDescription>
-              {t('NotificationsForm.security_emails.description')}
+              {t('receive_emails_about_your_account_activity_and_security')}
             </FormDescription>
           </div>
           <FormControl>
@@ -149,11 +145,11 @@ const SubmitButton = () => {
 
       mutate(`/api/v1/notification?userId=${user?.id}`)
 
-      toast.success(t('FormMessage.changed_successfully'))
+      toast.success(t('changed_successfully'))
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Nothing has changed')) {
-        toast(t('FormMessage.nothing_has_changed'))
+        toast(t('nothing_has_changed'))
       } else {
         toast.error(err)
       }
@@ -168,7 +164,7 @@ const SubmitButton = () => {
       onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
-      {t('FormSubmit.update_notifications')}
+      {t('update_notifications')}
     </Button>
   )
 }

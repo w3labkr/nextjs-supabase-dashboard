@@ -9,9 +9,9 @@ const useTrans = () => {
   const trans = React.useCallback(
     <T extends Record<string, any>, U extends Record<string, any>>(
       key: string,
-      options?: { components?: T; values?: U }
+      options?: { ns?: string; components?: T; values?: U }
     ) => {
-      let translated: string = t(key)
+      let translated: string = t(key, { ns: options?.ns })
       let sentence: (string | React.JSX.Element)[] | null = null
 
       const values: U | undefined = options?.values

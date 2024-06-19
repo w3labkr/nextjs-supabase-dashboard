@@ -27,9 +27,9 @@ export default async function DashboardPage() {
           <AppBar />
           <main className="flex-1 space-y-16 overflow-auto p-10 pb-16">
             <div className="space-y-4">
-              <Title text="DashboardPage.title" translate="yes" />
+              <Title translate="yes">dashboard</Title>
               <Separator />
-              <Description text="DashboardPage.description" translate="yes" />
+              <Description translate="yes"></Description>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <WidgetLatestPosts />
                 <WidgetPostViews />

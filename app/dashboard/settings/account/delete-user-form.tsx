@@ -77,14 +77,16 @@ const DeleteUserForm = ({ user }: DeleteUserFormProps) => {
     <Dialog>
       <DialogTrigger asChild>
         <Button type="button" variant="outline" className="text-destructive">
-          {t('DeleteUserDialog.trigger')}
+          {t('delete_your_account')}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[480px]">
         <DialogHeader>
-          <DialogTitle>{t('DeleteUserDialog.title')}</DialogTitle>
+          <DialogTitle>{t('delete_account')}</DialogTitle>
           <DialogDescription className="text-destructive">
-            {t('DeleteUserDialog.description')}
+            {t(
+              'if_you_delete_your_account_your_posts_and_other_related_information_will_be_permanently_deleted_and_cannot_be_recovered'
+            )}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -111,7 +113,7 @@ const EmailField = () => {
       name="email"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('FormLabel.your_email')}:</FormLabel>
+          <FormLabel>{t('your_email')}:</FormLabel>
           <FormControl>
             <Input placeholder="name@example.com" {...field} />
           </FormControl>
@@ -132,14 +134,14 @@ const PasswordField = () => {
       name="password"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('FormLabel.confirm_your_password')}:</FormLabel>
+          <FormLabel>{t('confirm_your_password')}:</FormLabel>
           <FormControl>
             <Input
               type="password"
               autoCapitalize="none"
               autoComplete="current-password"
               autoCorrect="off"
-              placeholder={t('FormLabel.password')}
+              placeholder={t('password')}
               {...field}
             />
           </FormControl>
@@ -161,7 +163,7 @@ const ConfirmationPhraseField = () => {
       render={({ field }) => (
         <FormItem>
           <FormLabel>
-            {trans('FormLabel.verify_delete_my_account', {
+            {trans('to_verify_type_delete_my_account_below', {
               components: { i: <i /> },
             })}
           </FormLabel>
@@ -225,17 +227,17 @@ const SubmitButton = () => {
       setSession(null)
       setUser(null)
 
-      toast.success(t('FormMessage.deleted_successfully'))
+      toast.success(t('deleted_successfully'))
 
       router.replace('/auth/signin')
       router.refresh()
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Your email address is invalid')) {
-        setError('email', { message: t('FormMessage.email_is_invalid') })
+        setError('email', { message: t('email_is_invalid') })
       } else if (err.startsWith('Your password is invalid')) {
         setError('password', {
-          message: t('FormMessage.password_is_invalid'),
+          message: t('password_is_invalid'),
         })
       } else {
         toast.error(err)
@@ -252,7 +254,7 @@ const SubmitButton = () => {
       onClick={handleSubmit(onSubmit)}
       disabled={!formState?.isValid || isSubmitting}
     >
-      {t('FormSubmit.delete_your_account')}
+      {t('delete_your_account')}
     </Button>
   )
 }

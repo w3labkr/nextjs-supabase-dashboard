@@ -72,14 +72,14 @@ const SignedOutNav = () => {
           router.push('/auth/signin', { scroll: !siteConfig?.fixedHeader })
         }
       >
-        {t('Header.signin')}
+        {t('signin')}
       </Button>
       <Button
         onClick={() =>
           router.push('/auth/signup', { scroll: !siteConfig?.fixedHeader })
         }
       >
-        {t('Header.signup')}
+        {t('signup')}
       </Button>
     </>
   )

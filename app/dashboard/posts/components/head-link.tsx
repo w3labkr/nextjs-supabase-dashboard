@@ -33,7 +33,7 @@ const HeadLink = ({ status, label, count }: HeadLinkProps) => {
           : 'h-auto p-0 text-muted-foreground'
       )}
     >
-      {t(`PostStatus.${label}`)}({count})
+      {t(`${label}`)}({count})
     </Link>
   )
 }

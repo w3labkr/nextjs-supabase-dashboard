@@ -45,12 +45,12 @@ const MetaboxSlug = () => {
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
       <AccordionItem value="item-1">
-        <AccordionTrigger>{t('PostMetabox.slug')}</AccordionTrigger>
+        <AccordionTrigger>{t('slug')}</AccordionTrigger>
         <AccordionContent className="px-1 py-1 pb-4">
           <Input
             {...register('slug')}
             type="text"
-            placeholder={t('Input.please_enter_your_text')}
+            placeholder={t('please_enter_your_text')}
             onChange={debounce((e: React.ChangeEvent<HTMLInputElement>) => {
               setSlug((e.target as HTMLInputElement).value)
             }, 1000)}

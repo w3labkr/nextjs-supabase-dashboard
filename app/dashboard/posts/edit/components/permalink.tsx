@@ -24,7 +24,7 @@ const Permalink = () => {
 
   return (
     <div className="text-sm">
-      {`${t('PostMetabox.permalink')}: `}
+      {`${t('permalink')}: `}
       <Link
         href={permalink ?? '#'}
         scroll={!siteConfig?.fixedHeader}

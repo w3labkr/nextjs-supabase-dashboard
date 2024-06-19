@@ -38,9 +38,9 @@ const Notify = () => {
       <PopoverContent className="w-auto p-0" align="end">
         <Card className="w-[360px] border-0">
           <CardHeader>
-            <CardTitle>{t('Notify.title')}</CardTitle>
+            <CardTitle>{t('notifications')}</CardTitle>
             <CardDescription>
-              {t('Notify.description', { count: data?.count })}
+              {t('you_have_%d_unread_messages', { count: data?.count })}
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
@@ -52,7 +52,7 @@ const Notify = () => {
           <CardFooter>
             <Button type="button" className="w-full">
               <LucideIcon name="Check" className="mr-2 size-4 min-w-4" />
-              {t('Notify.submit')}
+              {t('mark_all_as_read')}
             </Button>
           </CardFooter>
         </Card>

@@ -10,10 +10,7 @@ const DarkModeStatus = () => {
   const { t } = useTranslation()
 
   React.useEffect(() => {
-    const mode =
-      theme === 'light'
-        ? 'DarkModeStatus.dark_mode_off'
-        : 'DarkModeStatus.dark_mode_on'
+    const mode = theme === 'light' ? 'dark_mode_off' : 'dark_mode_on'
     setStatus(mode)
   }, [theme])
 

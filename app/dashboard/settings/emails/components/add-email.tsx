@@ -47,8 +47,8 @@ const AddEmail = () => {
   return (
     <div className="space-y-2">
       <div>
-        <span className="text-sm font-semibold">{t('AddEmail.title')}</span>
-        {/* <p className="text-xs">{t('AddEmail.description')}</p> */}
+        <span className="text-sm font-semibold">{t('add_email_address')}</span>
+        {/* <p className="text-xs"></p> */}
       </div>
       <Form {...form}>
         <form
@@ -138,11 +138,11 @@ const SubmitButton = () => {
 
       reset()
 
-      toast.success(t('FormMessage.added_successfully'))
+      toast.success(t('added_successfully'))
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('This email has already been added')) {
-        toast(t('FormMessage.email_has_already_been_added'))
+        toast(t('email_has_already_been_added'))
       } else {
         toast.error(err)
       }
@@ -157,7 +157,7 @@ const SubmitButton = () => {
       onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
-      {t('FormSubmit.add')}
+      {t('add')}
     </Button>
   )
 }

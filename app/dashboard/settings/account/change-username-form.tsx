@@ -62,14 +62,12 @@ const UsernameField = () => {
       name="username"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('FormLabel.username')}</FormLabel>
+          <FormLabel>{t('username')}</FormLabel>
           <FormControl className="max-w-60">
             <Input placeholder="Username" {...field} />
           </FormControl>
           <FormDescription>
-            {t('FormMessage.you_can_change_it_only_once_every_few_days', {
-              count: 30,
-            })}
+            {t('you_can_change_it_only_once_every_%d_days', { count: 30 })}
           </FormDescription>
           <FormMessage />
         </FormItem>
@@ -111,20 +109,18 @@ const SubmitButton = () => {
 
       mutate(`/api/v1/user?id=${user?.id}`)
 
-      toast.success(t('FormMessage.changed_successfully'))
+      toast.success(t('changed_successfully'))
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
         setError('username', {
-          message: t('FormMessage.duplicate_username'),
+          message: t('duplicate_username'),
         })
       } else if (err.startsWith('You can change it after')) {
         const count = err?.replace(/[^0-9]/g, '') ?? '0'
-        toast.error(
-          t('FormMessage.you_can_change_it_in_a_few_days', { count: +count })
-        )
+        toast.error(t('you_can_change_it_after_%d_days', { count: +count }))
       } else if (err.startsWith('Nothing has changed')) {
-        toast(t('FormMessage.nothing_has_changed'))
+        toast(t('nothing_has_changed'))
       } else {
         toast.error(err)
       }
@@ -139,7 +135,7 @@ const SubmitButton = () => {
       onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
-      {t('FormSubmit.change_username')}
+      {t('change_username')}
     </Button>
   )
 }

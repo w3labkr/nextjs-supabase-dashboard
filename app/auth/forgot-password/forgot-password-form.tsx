@@ -59,7 +59,7 @@ const EmailField = () => {
       name="email"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('FormLabel.email')}</FormLabel>
+          <FormLabel>{t('email')}</FormLabel>
           <FormControl>
             <Input
               type="email"
@@ -101,7 +101,7 @@ const SubmitButton = () => {
       )
       if (result?.error) throw new Error(result?.error?.message)
 
-      toast.success(t('FormMessage.email_has_been_successfully_sent'))
+      toast.success(t('email_has_been_successfully_sent'))
 
       reset()
     } catch (e: unknown) {
@@ -118,7 +118,7 @@ const SubmitButton = () => {
       disabled={isSubmitting}
       className="w-full"
     >
-      {t('FormSubmit.reset_my_password')}
+      {t('reset_my_password')}
     </Button>
   )
 }

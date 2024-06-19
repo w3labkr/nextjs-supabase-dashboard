@@ -69,14 +69,14 @@ const NewPasswordField = () => {
       name="newPassword"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('FormLabel.new_password')}</FormLabel>
+          <FormLabel>{t('new_password')}</FormLabel>
           <FormControl>
             <Input
               type="password"
               autoCapitalize="none"
               autoComplete="new-password"
               autoCorrect="off"
-              placeholder={t('FormLabel.new_password')}
+              placeholder={t('new_password')}
               {...field}
             />
           </FormControl>
@@ -97,14 +97,14 @@ const ConfirmNewPasswordField = () => {
       name="confirmNewPassword"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('FormLabel.confirm_new_password')}</FormLabel>
+          <FormLabel>{t('confirm_new_password')}</FormLabel>
           <FormControl>
             <Input
               type="password"
               autoCapitalize="none"
               autoComplete="new-password"
               autoCorrect="off"
-              placeholder={t('FormLabel.confirm_new_password')}
+              placeholder={t('confirm_new_password')}
               {...field}
             />
           </FormControl>
@@ -141,7 +141,7 @@ const SubmitButton = () => {
       setSession(null)
       setUser(null)
 
-      toast.success(t('FormMessage.changed_successfully'))
+      toast.success(t('changed_successfully'))
 
       router.refresh()
       router.replace('/auth/signin')
@@ -151,9 +151,7 @@ const SubmitButton = () => {
         err.startsWith('New password should be different from the old password')
       ) {
         setError('newPassword', {
-          message: t(
-            'FormMessage.new_password_should_be_different_from_the_old_password'
-          ),
+          message: t('new_password_should_be_different_from_the_old_password'),
         })
       } else {
         toast.error(err)
@@ -170,7 +168,7 @@ const SubmitButton = () => {
       disabled={isSubmitting}
       className="w-full"
     >
-      {t('FormSubmit.change_password')}
+      {t('change_password')}
     </Button>
   )
 }

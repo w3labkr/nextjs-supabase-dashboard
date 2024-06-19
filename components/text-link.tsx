@@ -15,6 +15,7 @@ interface TextLinkProps
   endIconName?: LucideIconName
   endIconClassName?: string
   text?: string
+  ns?: string
 }
 
 const TextLink = React.forwardRef<HTMLAnchorElement, TextLinkProps>(
@@ -28,6 +29,7 @@ const TextLink = React.forwardRef<HTMLAnchorElement, TextLinkProps>(
       endIconClassName,
       text,
       translate,
+      ns,
       ...rest
     } = props
     const { t } = useTranslation()
@@ -40,9 +42,9 @@ const TextLink = React.forwardRef<HTMLAnchorElement, TextLinkProps>(
             className={cn('mr-2 size-4 min-w-4', startIconClassName)}
           />
         ) : null}
-        {translate === 'yes' && text ? t(text) : text}
-        {translate === 'yes' && children && typeof children === 'string'
-          ? t(children)
+        {text && translate === 'yes' ? t(text, { ns }) : text}
+        {children && typeof children === 'string' && translate === 'yes'
+          ? t(children, { ns })
           : children}
         {endIconName ? (
           <LucideIcon

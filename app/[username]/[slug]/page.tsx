@@ -149,8 +149,8 @@ const PostMeta = ({ post, ...props }: PostMetaProps) => {
         </Link>
       </div>
       <div className="flex space-x-4">
-        <PostViews id={post?.id} />
-        <FavoriteButton id={post?.id} />
+        <PostViews postId={post?.id} />
+        <FavoriteButton postId={post?.id} />
       </div>
     </div>
   )

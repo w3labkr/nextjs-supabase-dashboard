@@ -73,7 +73,7 @@ const EmailField = () => {
       name="email"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('FormLabel.email')}</FormLabel>
+          <FormLabel>{t('email')}</FormLabel>
           <FormControl>
             <Input
               type="email"
@@ -101,14 +101,14 @@ const NewPasswordField = () => {
       name="newPassword"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('FormLabel.password')}</FormLabel>
+          <FormLabel>{t('password')}</FormLabel>
           <FormControl>
             <Input
               type="password"
               autoCapitalize="none"
               autoComplete="new-password"
               autoCorrect="off"
-              placeholder={t('FormLabel.password')}
+              placeholder={t('password')}
               {...field}
             />
           </FormControl>
@@ -129,14 +129,14 @@ const ConfirmNewPasswordField = () => {
       name="confirmNewPassword"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('FormLabel.confirm_password')}</FormLabel>
+          <FormLabel>{t('confirm_password')}</FormLabel>
           <FormControl>
             <Input
               type="password"
               autoCapitalize="none"
               autoComplete="new-password"
               autoCorrect="off"
-              placeholder={t('FormLabel.confirm_password')}
+              placeholder={t('confirm_password')}
               {...field}
             />
           </FormControl>
@@ -174,9 +174,7 @@ const SubmitButton = () => {
       setSession(null)
       setUser(null)
 
-      toast.success(
-        t('FormMessage.you_have_successfully_registered_as_a_member')
-      )
+      toast.success(t('you_have_successfully_registered_as_a_member'))
 
       router.refresh()
       router.replace('/auth/signin')
@@ -184,7 +182,7 @@ const SubmitButton = () => {
       const err = (e as Error)?.message
       if (err.startsWith('User already registered')) {
         setError('email', {
-          message: t('FormMessage.user_already_registered'),
+          message: t('user_already_registered'),
         })
       } else {
         toast.error(err)
@@ -201,7 +199,7 @@ const SubmitButton = () => {
       disabled={isSubmitting}
       className="w-full"
     >
-      {t('FormSubmit.signup')}
+      {t('signup')}
     </Button>
   )
 }

@@ -20,7 +20,7 @@ const LanguageStatus = () => {
 
   return (
     <span>
-      {t('LanguageStatus.label')}: {label}
+      {t('language')}: {label}
     </span>
   )
 }

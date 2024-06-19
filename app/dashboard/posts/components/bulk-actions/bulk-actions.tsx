@@ -164,7 +164,7 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
         mutate(`/api/v1/post/list?${listSearchParams}`)
       }
 
-      toast.success(t('FormMessage.changed_successfully'))
+      toast.success(t('changed_successfully'))
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -194,12 +194,12 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder={t('BulkActions.placeholder')} />
+                    <SelectValue placeholder={t('bulk_actions')} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   <SelectItem value="unassigned">
-                    {t('BulkActions.placeholder')}
+                    {t('bulk_actions')}
                   </SelectItem>
                   {[null, 'publish', 'future', 'private'].includes(
                     paging?.status
@@ -226,7 +226,7 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
           )}
         />
         <Button type="submit" disabled={isSubmitting}>
-          {t('BulkActions.submit')}
+          {t('apply')}
         </Button>
       </form>
     </Form>
@@ -236,43 +236,43 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
 const DraftItem = () => {
   const { t } = useTranslation()
 
-  return <SelectItem value="draft">{t('BulkActions.draft')}</SelectItem>
+  return <SelectItem value="draft">{t('draft')}</SelectItem>
 }
 
 const PublishItem = () => {
   const { t } = useTranslation()
 
-  return <SelectItem value="publish">{t('BulkActions.publish')}</SelectItem>
+  return <SelectItem value="publish">{t('publish')}</SelectItem>
 }
 
 const PublicItem = () => {
   const { t } = useTranslation()
 
-  return <SelectItem value="public">{t('BulkActions.public')}</SelectItem>
+  return <SelectItem value="public">{t('public')}</SelectItem>
 }
 
 const PrivateItem = () => {
   const { t } = useTranslation()
 
-  return <SelectItem value="private">{t('BulkActions.private')}</SelectItem>
+  return <SelectItem value="private">{t('private')}</SelectItem>
 }
 
 const TrashItem = () => {
   const { t } = useTranslation()
 
-  return <SelectItem value="trash">{t('BulkActions.trash')}</SelectItem>
+  return <SelectItem value="trash">{t('trash')}</SelectItem>
 }
 
 const RestoreItem = () => {
   const { t } = useTranslation()
 
-  return <SelectItem value="restore">{t('BulkActions.restore')}</SelectItem>
+  return <SelectItem value="restore">{t('restore')}</SelectItem>
 }
 
 const DeleteItem = () => {
   const { t } = useTranslation()
 
-  return <SelectItem value="delete">{t('BulkActions.delete')}</SelectItem>
+  return <SelectItem value="delete">{t('delete')}</SelectItem>
 }
 
 export { BulkActions, type BulkActionsProps }

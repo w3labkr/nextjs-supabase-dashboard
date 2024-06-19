@@ -54,7 +54,7 @@ const AccountMenu = () => {
             scroll={!siteConfig?.fixedHeader}
             className="cursor-pointer"
           >
-            {t('AccountMenu.profile')}
+            {t('profile')}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
@@ -63,7 +63,7 @@ const AccountMenu = () => {
             scroll={!siteConfig?.fixedHeader}
             className="cursor-pointer"
           >
-            {t('AccountMenu.settings')}
+            {t('settings')}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />

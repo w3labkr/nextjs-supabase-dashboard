@@ -1,0 +1,13 @@
+{
+	"Pagination": {
+		"firstText": "First",
+		"firstAriaLabel": "Go to first page",
+		"previousText": "Previous",
+		"previousAriaLabel": "Go to previous page",
+		"nextText": "Next",
+		"nextAriaLabel": "Go to next page",
+		"lastText": "Last",
+		"lastAriaLabel": "Go to last page",
+		"ellipsisText": "More pages"
+	}
+}

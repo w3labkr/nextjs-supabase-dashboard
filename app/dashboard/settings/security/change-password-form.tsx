@@ -86,14 +86,14 @@ const OldPasswordField = () => {
       name="oldPassword"
       render={({ field }) => (
         <FormItem className="max-w-80">
-          <FormLabel>{t('FormLabel.old_password')}</FormLabel>
+          <FormLabel>{t('old_password')}</FormLabel>
           <FormControl>
             <Input
               type="password"
               autoCapitalize="none"
               autoComplete="current-password"
               autoCorrect="off"
-              placeholder={t('FormLabel.old_password')}
+              placeholder={t('old_password')}
               {...field}
             />
           </FormControl>
@@ -114,14 +114,14 @@ const NewPasswordField = () => {
       name="newPassword"
       render={({ field }) => (
         <FormItem className="max-w-80">
-          <FormLabel>{t('FormLabel.new_password')}</FormLabel>
+          <FormLabel>{t('new_password')}</FormLabel>
           <FormControl>
             <Input
               type="password"
               autoCapitalize="none"
               autoComplete="new-password"
               autoCorrect="off"
-              placeholder={t('FormLabel.new_password')}
+              placeholder={t('new_password')}
               {...field}
             />
           </FormControl>
@@ -142,14 +142,14 @@ const ConfirmNewPasswordField = () => {
       name="confirmNewPassword"
       render={({ field }) => (
         <FormItem className="max-w-80">
-          <FormLabel>{t('FormLabel.confirm_new_password')}</FormLabel>
+          <FormLabel>{t('confirm_new_password')}</FormLabel>
           <FormControl>
             <Input
               type="password"
               autoCapitalize="none"
               autoComplete="new-password"
               autoCorrect="off"
-              placeholder={t('FormLabel.confirm_new_password')}
+              placeholder={t('confirm_new_password')}
               {...field}
             />
           </FormControl>
@@ -200,20 +200,18 @@ const SubmitButton = () => {
       reset()
       router.refresh()
 
-      toast.success(t('FormMessage.changed_successfully'))
+      toast.success(t('changed_successfully'))
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Old password does not match')) {
         setError('oldPassword', {
-          message: t('FormMessage.old_password_does_not_match'),
+          message: t('old_password_does_not_match'),
         })
       } else if (
         err.startsWith('New password should be different from the old password')
       ) {
         setError('newPassword', {
-          message: t(
-            'FormMessage.new_password_should_be_different_from_the_old_password'
-          ),
+          message: t('new_password_should_be_different_from_the_old_password'),
         })
       } else {
         toast.error(err)
@@ -229,7 +227,7 @@ const SubmitButton = () => {
       onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}
     >
-      {t('FormSubmit.change_password')}
+      {t('change_password')}
     </Button>
   )
 }

@@ -39,16 +39,19 @@ export default function BlockedPage() {
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
-          <Title text="BlockedPage.title" translate="yes" />
+          <Title translate="yes">your_account_has_been_blocked</Title>
         </div>
         <div className="grid gap-4">
-          <p>{t('BlockedPage.description')}</p>
-          <p>{t('BlockedPage.message')}</p>
+          <p>{t('weve_detected_suspicious_activity_on_your_account')}</p>
+          <p>
+            {t('organizations_seeking_access_are_limiting_users_at_risk')}
+            {t('please_contact_your_administrator')}
+          </p>
           <button
             onClick={onClick}
             className="text-left text-blue-700 hover:underline"
           >
-            {t('BlockedPage.button')}
+            {t('sign_out_and_sign_in_with_a_different_account')}
           </button>
         </div>
         <div className="flex justify-between text-center text-sm">
