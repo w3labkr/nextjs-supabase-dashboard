@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 import { useAuth } from '@/hooks/use-auth'
 import { usePostsAPI } from '@/queries/client/posts'
@@ -23,7 +24,7 @@ interface WidgetLatestPostsProps extends React.HTMLAttributes<HTMLDivElement> {}
 const WidgetLatestPosts = (props: WidgetLatestPostsProps) => {
   const { t } = useTranslation()
   const { user } = useAuth()
-  const { posts } = usePostsAPI(user?.id ?? null, {
+  const { posts, isLoading } = usePostsAPI(user?.id ?? null, {
     // page: 1,
     // perPage: 5,
     postType: 'post',
@@ -33,6 +34,10 @@ const WidgetLatestPosts = (props: WidgetLatestPostsProps) => {
     order: 'desc',
     limit: 5,
   })
+
+  if (isLoading) {
+    return <Skeleton className="h-80 w-full" />
+  }
 
   return (
     <Card {...props}>

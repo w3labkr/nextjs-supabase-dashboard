@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Skeleton } from '@/components/ui/skeleton'
 import { DeleteEmail } from './components/delete-email'
 import { ResendVerifyEmail } from './components/resend-verify-email'
 
@@ -14,7 +15,7 @@ const EmailList = () => {
   const { user } = useAuth()
   const { emails } = useEmailsAPI(user?.id ?? null)
 
-  if (!emails) return <div>Loading...</div>
+  if (!emails) return <Skeleton className="h-36 w-full" />
 
   return (
     <div className="flex flex-col gap-2">

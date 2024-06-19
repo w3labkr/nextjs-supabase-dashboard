@@ -5,6 +5,7 @@ import { Post } from '@/types/database'
 
 interface PostFormContextProps {
   post: Post | null
+  [key: string]: any
 }
 
 const PostFormContext = React.createContext<PostFormContextProps | undefined>({

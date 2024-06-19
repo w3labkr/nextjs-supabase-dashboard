@@ -11,10 +11,10 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Switch } from '@/components/ui/switch'
+import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 import { Meta } from '@/types/database'
 import { getMeta, setMeta } from '@/lib/utils'
-import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 const MetaboxRectriction = () => {
   const { t } = useTranslation()

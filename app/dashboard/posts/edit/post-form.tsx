@@ -18,6 +18,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   MetaboxSlug,
   MetaboxExcerpt,
@@ -32,7 +33,10 @@ import { PostFormProvider } from './context/post-form-provider'
 
 import { usePostAPI } from '@/queries/client/posts'
 
-const Editor = dynamic(() => import('./components/editor'), { ssr: false })
+const Editor = dynamic(() => import('./components/editor'), {
+  ssr: false,
+  loading: () => <Skeleton className="h-96 w-full" />,
+})
 
 const FormSchema = z.object({
   user_id: z.string().nonempty().uuid(),
@@ -48,7 +52,7 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>
 
 const PostForm = ({ id }: { id: number }) => {
-  const { post } = usePostAPI(id)
+  const { post, isLoading } = usePostAPI(id)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -66,6 +70,25 @@ const PostForm = ({ id }: { id: number }) => {
     shouldUnregister: true,
   })
 
+  if (isLoading) {
+    return (
+      <div className="relative grid gap-10 md:grid-cols-[1fr_280px]">
+        <div className="mx-auto w-full min-w-0 space-y-4">
+          <Skeleton className="h-16 w-full" />
+          <Skeleton className="h-96 w-full" />
+          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-60 w-full" />
+        </div>
+        <div className="space-y-4">
+          <Skeleton className="h-60 w-full" />
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-24 w-full" />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <PostFormProvider value={{ post }}>
       <Form {...form}>
@@ -73,7 +96,7 @@ const PostForm = ({ id }: { id: number }) => {
         <MetaField />
         <form method="POST" noValidate>
           <div className="relative grid gap-10 md:grid-cols-[1fr_280px]">
-            <div className="mx-auto w-full min-w-0 space-y-6">
+            <div className="mx-auto w-full min-w-0 space-y-4">
               <div className="space-y-2">
                 <TitleField />
                 <Permalink />

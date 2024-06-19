@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 import { getMeta } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
@@ -25,7 +26,7 @@ const WidgetPostViews = (props: WidgetPostViewsProps) => {
   const { t } = useTranslation()
 
   const { user } = useAuth()
-  const { posts } = usePostViewsAPI(user?.id ?? null, {
+  const { posts, isLoading } = usePostViewsAPI(user?.id ?? null, {
     // page: 1,
     // perPage: 10,
     postType: 'post',
@@ -34,6 +35,10 @@ const WidgetPostViews = (props: WidgetPostViewsProps) => {
     order: 'desc',
     limit: 10,
   })
+
+  if (isLoading) {
+    return <Skeleton className="h-80 w-full" />
+  }
 
   return (
     <Card {...props}>

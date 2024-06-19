@@ -13,8 +13,8 @@ import {
 } from '@/components/ui/accordion'
 import { FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
+
 import { slugify } from '@/lib/slugify'
 
 const MetaboxSlug = () => {

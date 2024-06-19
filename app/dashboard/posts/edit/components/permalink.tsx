@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { getPostUrl } from '@/lib/utils'
-import { usePostForm } from '../context/post-form-provider'
 import { siteConfig } from '@/config/site'
+import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 const Permalink = () => {
   const { t } = useTranslation()
