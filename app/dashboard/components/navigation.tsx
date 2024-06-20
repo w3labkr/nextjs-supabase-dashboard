@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
-import { Button } from '@/components/ui/button'
 import { useAppBar } from './app-bar'
 
 import { LucideIcon } from '@/lib/lucide-icon'
@@ -94,13 +93,11 @@ const NavSubItem = ({ item }: NavSubItemProps) => {
   const router = useRouter()
 
   return (
-    <Button
-      variant="ghost"
+    <button
       className={cn(
-        'relative flex h-auto rounded px-1 py-0.5 text-sm transition-all',
-        'text-gray-500 hover:bg-transparent hover:text-gray-900',
-        'dark:text-gray-400 dark:hover:text-gray-50',
-        pathname?.startsWith(href) ? 'text-gray-900 dark:text-gray-50' : ''
+        'flex items-center text-sm',
+        'disabled:cursor-not-allowed disabled:opacity-70',
+        pathname?.startsWith(href) ? '' : 'text-muted-foreground'
       )}
       translate={translate}
       disabled={disabled}
@@ -110,7 +107,7 @@ const NavSubItem = ({ item }: NavSubItemProps) => {
         <LucideIcon name={iconName} size={16} className="mr-2" />
       ) : null}
       {title && translate === 'yes' ? t(title) : title}
-    </Button>
+    </button>
   )
 }
 

@@ -14,7 +14,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { Button } from '@/components/ui/button'
 import { useAppBar } from './app-bar'
 
 import { LucideIcon } from '@/lib/lucide-icon'
@@ -95,16 +94,14 @@ const NavSubItem = ({ item }: NavSubItemProps) => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div>
-            <Button
-              variant="ghost"
+          <div className="flex justify-center">
+            <button
               className={cn(
-                'relative flex h-auto justify-center rounded-lg px-2 py-0.5 transition-all',
-                'text-gray-500 hover:bg-transparent hover:text-gray-900',
-                'dark:text-gray-400 dark:hover:text-gray-50',
-                pathname?.startsWith(href)
-                  ? 'text-gray-900 dark:text-gray-50'
-                  : ''
+                href === '/dashboard' && pathname === href
+                  ? null
+                  : href !== '/dashboard' && pathname?.startsWith(href)
+                    ? null
+                    : 'text-muted-foreground'
               )}
               onClick={() =>
                 router.push(href, { scroll: !siteConfig?.fixedHeader })
@@ -122,7 +119,7 @@ const NavSubItem = ({ item }: NavSubItemProps) => {
                   {badge}
                 </Badge>
               ) : null}
-            </Button>
+            </button>
           </div>
         </TooltipTrigger>
         <TooltipContent side="right" align="end" alignOffset={6}>
