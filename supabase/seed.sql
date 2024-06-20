@@ -118,6 +118,10 @@ drop function if exists handle_new_post;
 drop function if exists truncate_posts;
 drop function if exists get_posts_by_meta;
 
+drop function if exists title_excerpt;
+drop function if exists title_content;
+drop function if exists title_excerpt_content;
+
 ----------------------------------------------------------------
 
 drop table if exists analyses;
@@ -606,8 +610,8 @@ create table posts (
   password varchar(255),
   slug text,
   title text,
-  content text,
   excerpt text,
+  content text,
   thumbnail_url text,
   is_ban boolean default false not null,
   banned_until timestamptz
@@ -843,6 +847,20 @@ begin
   end if;
 end;
 $$ language plpgsql;
+
+----------------------------------------------------------------
+
+create function title_excerpt(posts) returns text as $$
+  select $1.title || ' ' || $1.excerpt;
+$$ language sql immutable;
+
+create function title_content(posts) returns text as $$
+  select $1.title || ' ' || $1.content;
+$$ language sql immutable;
+
+create function title_excerpt_content(posts) returns text as $$
+  select $1.title || ' ' || $1.excerpt || ' ' || $1.content;
+$$ language sql immutable;
 
 ----------------------------------------------------------------
 --                                                            --

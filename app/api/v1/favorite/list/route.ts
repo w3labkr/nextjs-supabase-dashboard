@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
   if (match.constructor === Object && Object.keys(match).length > 0) {
     counterQuery.match(match)
   }
-  if (q) counterQuery.textSearch('title', q)
+  if (q) counterQuery.textSearch('title_excerpt', q)
 
   const counter = await counterQuery
 
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
   if (match.constructor === Object && Object.keys(match).length > 0) {
     query.match(match)
   }
-  if (q) query.textSearch('title', q)
+  if (q) query.textSearch('title_excerpt', q)
   if (orderBy) query.order(orderBy, { ascending: order === 'asc' })
 
   if (limit) {

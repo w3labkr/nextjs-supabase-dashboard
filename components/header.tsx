@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import { LucideIcon } from '@/lib/lucide-icon'
 import { Button } from '@/components/ui/button'
@@ -15,11 +15,15 @@ import { AccountMenu } from '@/components/account-menu'
 import { SearchForm } from '@/components/search-form'
 
 import { useAuth } from '@/hooks/use-auth'
-import { cn } from '@/lib/utils'
+import { cn, getArchivePath } from '@/lib/utils'
 import { siteConfig } from '@/config/site'
 
 const Header = () => {
   const { user } = useAuth()
+
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const archivePath = getArchivePath()
 
   return (
     <Sheet>
@@ -47,7 +51,16 @@ const Header = () => {
           <Brand />
           <Navigation />
           <div className="ml-auto flex gap-2">
-            <SearchForm />
+            <SearchForm
+              pathname={archivePath}
+              placeholder="search_text"
+              translate="yes"
+              values={{
+                q: pathname?.startsWith(archivePath)
+                  ? (searchParams.get('q') as string) ?? ''
+                  : '',
+              }}
+            />
             {user ? <SignedInNav /> : <SignedOutNav />}
           </div>
         </div>

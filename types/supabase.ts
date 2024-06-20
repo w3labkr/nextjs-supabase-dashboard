@@ -235,6 +235,9 @@ export type Database = {
           type: string
           updated_at: string
           user_id: string
+          title_content: string | null
+          title_excerpt: string | null
+          title_excerpt_content: string | null
         }
         Insert: {
           banned_until?: string | null
@@ -676,6 +679,24 @@ export type Database = {
           useremail?: string
         }
         Returns: undefined
+      }
+      title_content: {
+        Args: {
+          "": unknown
+        }
+        Returns: string
+      }
+      title_excerpt: {
+        Args: {
+          "": unknown
+        }
+        Returns: string
+      }
+      title_excerpt_content: {
+        Args: {
+          "": unknown
+        }
+        Returns: string
       }
       truncate_posts: {
         Args: Record<PropertyKey, never>

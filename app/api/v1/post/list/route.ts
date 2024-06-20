@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
     counterQuery.match(match)
   }
   if (!status) counterQuery.neq('status', 'trash')
-  if (q) counterQuery.textSearch('title', q)
+  if (q) counterQuery.textSearch('title_excerpt', q)
 
   const counter = await counterQuery
 
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
     query.match(match)
   }
   if (!status) query.neq('status', 'trash')
-  if (q) query.textSearch('title', q)
+  if (q) query.textSearch('title_excerpt', q)
   if (orderBy) query.order(orderBy, { ascending: order === 'asc' })
 
   if (limit) {

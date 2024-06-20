@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import { cn, getArchivePath } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { useQueryString } from '@/hooks/use-query-string'
 import { siteConfig } from '@/config/site'
@@ -30,27 +30,38 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-interface SearchFormProps extends React.FormHTMLAttributes<HTMLFormElement> {}
+interface SearchFormProps extends React.FormHTMLAttributes<HTMLFormElement> {
+  pathname?: string
+  placeholder?: string
+  translate?: 'yes' | 'no'
+  values: { q: string }
+}
 
-const SearchForm = ({ className, ...props }: SearchFormProps) => {
+const SearchForm = ({
+  className,
+  pathname,
+  placeholder = 'Search Text',
+  translate,
+  values,
+  ...props
+}: SearchFormProps) => {
   const { t } = useTranslation()
   const { qs } = useQueryString()
 
-  const searchParams = useSearchParams()
+  const basePathname = usePathname()
   const router = useRouter()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
-    values: {
-      q: searchParams?.get('q') ?? '',
-    },
+    values,
   })
 
   const onSubmit = async (formValues: FormValues) => {
-    const pathname = getArchivePath()
     const queryString = qs({ q: formValues?.q, page: 1 })
-    const href = [pathname, queryString].filter(Boolean).join('?')
+    const href = [pathname ?? basePathname, queryString]
+      .filter(Boolean)
+      .join('?')
 
     router.push(href, {
       scroll: !siteConfig?.fixedHeader,
@@ -73,7 +84,11 @@ const SearchForm = ({ className, ...props }: SearchFormProps) => {
             <FormItem className="w-full">
               <FormControl>
                 <Input
-                  placeholder={t('search_text')}
+                  placeholder={
+                    placeholder && translate === 'yes'
+                      ? t(placeholder)
+                      : placeholder
+                  }
                   className="pr-8"
                   {...field}
                 />

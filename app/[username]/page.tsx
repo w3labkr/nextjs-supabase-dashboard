@@ -4,14 +4,14 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import dayjs from 'dayjs'
 
-import { Separator } from '@/components/ui/separator'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { SearchForm } from '@/components/search-form'
 import { Paging, PagingProvider } from '@/components/paging'
 import { Aside } from './aside'
 
 import { LucideIcon } from '@/lib/lucide-icon'
-import { cn, getAuthorUrl, getFavoritesUrl, getPostUrl } from '@/lib/utils'
+import { cn, getFavoritesUrl, getPostUrl, getProfilePath } from '@/lib/utils'
 import { getUserAPI } from '@/queries/server/users'
 import { getPostsAPI } from '@/queries/server/posts'
 import { siteConfig } from '@/config/site'
@@ -64,7 +64,7 @@ export default async function UserPage({
   const page = +(searchParams?.page ?? '1')
   const perPage = +(searchParams?.perPage ?? '10')
   const pageSize = +(searchParams?.pageSize ?? '10')
-  const q = searchParams?.q
+  const q = searchParams?.q ?? ''
   const orderBy = searchParams?.orderBy ?? 'id'
   const order = searchParams?.order ?? 'desc'
 
@@ -94,17 +94,20 @@ export default async function UserPage({
             <div className="relative flex flex-col gap-4">
               <Aside user={user} />
             </div>
-            <div className="flex flex-col md:col-span-2 lg:col-span-3">
-              <div className="flex w-full flex-col-reverse justify-between sm:flex-row sm:items-end">
-                <div className="hidden sm:inline">Recent generations</div>
-                <div className="flex w-full gap-2 sm:w-auto">
+            <div className="flex flex-col space-y-4 md:col-span-2 lg:col-span-3">
+              <div className="space-y-2">
+                <div className="flex gap-2">
                   <RecentLink user={user} />
                   <FavoritesLink user={user} />
                 </div>
+                <SearchForm
+                  placeholder="find_a_post"
+                  translate="yes"
+                  values={{ q }}
+                />
               </div>
-              <Separator className="my-4" />
               <PagingProvider value={{ total, page, perPage, pageSize }}>
-                <div className="space-y-16">
+                <div className="space-y-16 border-t">
                   {Array.isArray(posts) && posts?.length > 0 ? (
                     <>
                       <PostList posts={posts} />
@@ -133,7 +136,7 @@ const RecentLink = ({ user }: TabLinkProps) => {
     <Link
       href="#"
       scroll={!siteConfig?.fixedHeader}
-      className="flex w-full items-center sm:w-auto"
+      className="flex items-center tracking-tight"
     >
       <LucideIcon name="History" size={16} className="mr-1" />
       Recent
@@ -146,14 +149,9 @@ const FavoritesLink = ({ user }: TabLinkProps) => {
     <Link
       href={getFavoritesUrl(user) ?? '#'}
       scroll={!siteConfig?.fixedHeader}
-      className="flex w-full items-center text-muted-foreground sm:w-auto"
+      className="flex items-center tracking-tight text-muted-foreground"
     >
-      <LucideIcon
-        name="Heart"
-        fill="transparent"
-        size={16}
-        className="mr-1 text-destructive"
-      />
+      <LucideIcon name="Heart" fill="transparent" size={16} className="mr-1" />
       Favorites
     </Link>
   )
@@ -165,14 +163,14 @@ interface PostListProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const PostList = ({ posts, ...props }: PostListProps) => {
   return (
-    <div className="grid grid-cols-1 gap-8" {...props}>
+    <div className="grid grid-cols-1" {...props}>
       {posts?.map((post: Post) => <PostItem key={post?.id} post={post} />)}
     </div>
   )
 }
 
 const EmptyList = () => {
-  return <div>No posts yet</div>
+  return <div className="py-4">No posts yet</div>
 }
 
 interface PostItemProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -181,7 +179,7 @@ interface PostItemProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const PostItem = ({ post, ...props }: PostItemProps) => {
   return (
-    <div className="space-y-2" {...props}>
+    <div className="space-y-2 border-b py-4" {...props}>
       <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
         <Link href={getPostUrl(post) ?? '#'} scroll={!siteConfig?.fixedHeader}>
           {post?.title}
@@ -192,14 +190,6 @@ const PostItem = ({ post, ...props }: PostItemProps) => {
         <time dateTime={post?.date ?? undefined}>
           {dayjs(post?.date).format('MMMM D, YYYY')}
         </time>
-        <span>— by</span>
-        <Link
-          href={getAuthorUrl(post) ?? '#'}
-          scroll={!siteConfig?.fixedHeader}
-          className="hover:underline"
-        >
-          {post?.author?.full_name ?? post?.author?.username}
-        </Link>
       </div>
     </div>
   )

@@ -24,26 +24,30 @@ const Aside = ({ user, ...props }: AsideProps) => {
         </h1>
         <p className="text-sm text-gray-600">@{user?.username}</p>
       </div>
-      <div className="mt-4">
-        <ul>
-          {user?.email ? <ListItem iconName="Mail" text={user?.email} /> : null}
-        </ul>
-        {user?.bio ? <Bio user={user} /> : null}
-      </div>
+      {user?.email || user?.bio ? (
+        <div className="mt-4">
+          <ul>
+            {user?.email ? (
+              <ListItem iconName="Mail">{user?.email}</ListItem>
+            ) : null}
+          </ul>
+          {user?.bio ? <Bio user={user} /> : null}
+        </div>
+      ) : null}
     </div>
   )
 }
 
 interface ListItemProps extends React.LiHTMLAttributes<HTMLLIElement> {
+  children?: React.ReactNode
   iconName: LucideIconName
-  text: string
 }
 
-const ListItem = ({ iconName, text, ...props }: ListItemProps) => {
+const ListItem = ({ children, iconName, ...props }: ListItemProps) => {
   return (
     <li className="flex items-center text-sm text-gray-600" {...props}>
       <LucideIcon name={iconName} size={16} className="mr-1" />
-      {text}
+      {children}
     </li>
   )
 }
