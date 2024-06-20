@@ -95,16 +95,18 @@ const PostForm = ({ id }: { id: number }) => {
         <UserIdField />
         <MetaField />
         <form method="POST" noValidate>
-          <div className="relative grid gap-10 md:grid-cols-[1fr_280px]">
-            <div className="mx-auto w-full min-w-0 space-y-4">
+          <div className="relative grid md:grid-cols-[1fr_280px] md:gap-8">
+            <div className="space-y-4">
               <div className="space-y-2">
                 <TitleField />
-                <Permalink />
+                <Permalink className="text-sm" />
               </div>
               <Editor />
-              <MetaboxSlug />
-              <MetaboxExcerpt />
-              {/* <MetaboxRevisions /> */}
+              <div>
+                <MetaboxSlug />
+                <MetaboxExcerpt />
+                {/* <MetaboxRevisions /> */}
+              </div>
             </div>
             <div className="space-y-0">
               <MetaboxPublish />

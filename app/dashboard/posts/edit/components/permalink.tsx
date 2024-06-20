@@ -9,7 +9,9 @@ import { getPostUrl } from '@/lib/utils'
 import { siteConfig } from '@/config/site'
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
-const Permalink = () => {
+interface PermalinkProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const Permalink = ({ className, ...props }: PermalinkProps) => {
   const { t } = useTranslation()
   const { post } = usePostForm()
   const { control } = useFormContext()
@@ -23,8 +25,8 @@ const Permalink = () => {
   }, [post, watchSlug])
 
   return (
-    <div className="text-sm">
-      {`${t('permalink')}: `}
+    <div className={className} {...props}>
+      {t('permalink') + ': '}
       <Link
         href={permalink ?? '#'}
         scroll={!siteConfig?.fixedHeader}
