@@ -770,81 +770,20 @@ $$ language plpgsql;
 ----------------------------------------------------------------
 
 create or replace function get_posts_by_meta(
-  userid uuid,
-  posttype text = 'post',
-  poststatus text = 'publish',
   metakey text = 'views',
-  ascending boolean = true,
-  textsearch text = null,
-  count integer = null,
-  range integer[] = null
+  ascending boolean = true
 )
 returns setof posts
 security definer set search_path = public
 as $$
 begin
-  if count is not null and textsearch is not null then
-    return query
-    select p.*
-    from posts p join post_metas m on p.id = m.post_id
-    where p.user_id = userid
-      and p.type = posttype
-      and p.status = poststatus
-      and m.meta_key = metakey
-      and to_tsvector(p.title) @@ to_tsquery(textsearch)
-    order by
-    	case ascending when true then m.meta_value::integer else 0 end asc,
-    	case ascending when false then m.meta_value::integer else 0 end desc
-    limit count;
-  elsif count is not null then
-    return query
-    select p.*
-    from posts p join post_metas m on p.id = m.post_id
-    where p.user_id = userid
-      and p.type = posttype
-      and p.status = poststatus
-      and m.meta_key = metakey
-    order by
-    	case ascending when true then m.meta_value::integer else 0 end asc,
-    	case ascending when false then m.meta_value::integer else 0 end desc
-    limit count;
-  elsif range is not null and textsearch is not null then
-    return query
-    select p.*
-    from posts p join post_metas m on p.id = m.post_id
-    where p.user_id = userid
-      and p.type = posttype
-      and p.status = poststatus
-      and m.meta_key = metakey
-      and to_tsvector(p.title) @@ to_tsquery(textsearch)
-    order by
-    	case ascending when true then m.meta_value::integer else 0 end asc,
-    	case ascending when false then m.meta_value::integer else 0 end desc
-    limit range[2] - range[1] + 1 offset range[1];
-  elsif range is not null then
-    return query
-    select p.*
-    from posts p join post_metas m on p.id = m.post_id
-    where p.user_id = userid
-      and p.type = posttype
-      and p.status = poststatus
-      and m.meta_key = metakey
-    order by
-    	case ascending when true then m.meta_value::integer else 0 end asc,
-    	case ascending when false then m.meta_value::integer else 0 end desc
-    limit range[2] - range[1] + 1 offset range[1];
-  else
-    return query
-    select p.*
-    from posts p join post_metas m on p.id = m.post_id
-    where p.user_id = userid
-      and p.type = posttype
-      and p.status = poststatus
-      and m.meta_key = metakey
-    order by
-    	case ascending when true then m.meta_value::integer else 0 end asc,
-    	case ascending when false then m.meta_value::integer else 0 end desc;
-  end if;
+  return query
+  select p.*
+  from posts p join post_metas m on p.id = m.post_id
+  where m.meta_key = metakey
+  order by
+    case ascending when true then m.meta_value::integer else 0 end asc,
+    case ascending when false then m.meta_value::integer else 0 end desc;
 end;
 $$ language plpgsql;
 

@@ -22,16 +22,23 @@ export async function GET(request: NextRequest) {
   if (perPage < 1) perPage = 1
   if (offset < 0) offset = 0
 
-  const supabase = createClient()
-  const counterQuery = supabase
-    .from('posts')
-    .select('*, author:users(*), meta:post_metas(*)', {
-      count: 'exact',
-      head: true,
-    })
-    .match({ user_id: userId, type: postType, status })
+  let match: Record<string, any> = {}
 
-  if (q) counterQuery.textSearch('title', q)
+  if (userId) match = { ...match, user_id: userId }
+  if (postType) match = { ...match, type: postType }
+  if (status) match = { ...match, status }
+
+  const supabase = createClient()
+  const counterQuery = supabase.rpc(
+    'get_posts_by_meta',
+    { metakey: 'views' },
+    { count: 'exact', head: true }
+  )
+
+  if (match.constructor === Object && Object.keys(match).length > 0) {
+    counterQuery.match(match)
+  }
+  if (q) counterQuery.textSearch('title_excerpt', q)
 
   const counter = await counterQuery
 
@@ -42,18 +49,25 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const { data: list, error } = await supabase
-    .rpc('get_posts_by_meta', {
-      userid: userId,
-      posttype: postType,
-      poststatus: status,
-      textsearch: q,
-      metakey: 'views',
-      ascending: order === 'asc',
-      count: limit > 0 ? limit : undefined,
-      range: limit === 0 ? [offset, page * perPage - 1] : undefined,
-    })
-    .select('*, author:users(*), meta:post_metas(*)')
+  const query = supabase.rpc('get_posts_by_meta', {
+    metakey: 'views',
+    ascending: order === 'asc',
+  })
+
+  query.select('*, author:users(*), meta:post_metas(*)')
+
+  if (match.constructor === Object && Object.keys(match).length > 0) {
+    query.match(match)
+  }
+  if (q) query.textSearch('title_excerpt', q)
+
+  if (limit) {
+    query.limit(limit)
+  } else {
+    query.range(offset, page * perPage - 1)
+  }
+
+  const { data: list, error } = await query
 
   if (error) {
     return NextResponse.json(
@@ -64,7 +78,7 @@ export async function GET(request: NextRequest) {
 
   const count = limit ? list?.length : counter?.count ?? 0
 
-  const data = list?.map((item: Post, index: number) => {
+  const data = list?.map((item: any, index: number) => {
     item['num'] = limit ? index + 1 : count - index - offset
     return item
   })

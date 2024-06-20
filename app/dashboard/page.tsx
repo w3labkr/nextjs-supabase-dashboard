@@ -6,7 +6,7 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 import { AppBar, AppBarProvider } from './components/app-bar'
 import { MiniNavigation } from './components/mini-navigation'
-import { WidgetLatestPosts, WidgetPostViews } from './components/widgets'
+import { WidgetLatestPosts, WidgetPostViews } from '@/components/widgets'
 
 import { dashboardConfig } from '@/config/dashboard'
 import { getAuth } from '@/queries/server/auth'

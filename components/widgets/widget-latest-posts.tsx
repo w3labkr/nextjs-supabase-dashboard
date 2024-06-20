@@ -29,14 +29,14 @@ const WidgetLatestPosts = (props: WidgetLatestPostsProps) => {
     // perPage: 5,
     postType: 'post',
     status: 'publish',
-    q: undefined,
+    // q: '',
     orderBy: 'id',
     order: 'desc',
     limit: 5,
   })
 
   if (isLoading) {
-    return <Skeleton className="h-80 w-full" />
+    return <Skeleton className="h-60 w-full" />
   }
 
   return (

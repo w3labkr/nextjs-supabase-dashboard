@@ -37,7 +37,7 @@ const WidgetPostViews = (props: WidgetPostViewsProps) => {
   })
 
   if (isLoading) {
-    return <Skeleton className="h-80 w-full" />
+    return <Skeleton className="h-60 w-full" />
   }
 
   return (

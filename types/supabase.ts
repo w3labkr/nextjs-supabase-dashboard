@@ -567,14 +567,8 @@ export type Database = {
       }
       get_posts_by_meta: {
         Args: {
-          userid: string
-          posttype?: string
-          poststatus?: string
           metakey?: string
           ascending?: boolean
-          textsearch?: string
-          count?: number
-          range?: number[]
         }
         Returns: {
           banned_until: string | null
