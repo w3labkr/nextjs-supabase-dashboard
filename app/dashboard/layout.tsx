@@ -9,7 +9,7 @@ import { DemoSiteWarningNotification } from './components/demo-site-warning-noti
 export default async function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children?: React.ReactNode
 }) {
   const { user: session } = await authenticate()
   const { user } = await getUserAPI(session?.id ?? null)

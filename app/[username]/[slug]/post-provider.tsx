@@ -13,7 +13,7 @@ function PostProvider({
   children,
   value,
 }: {
-  children: React.ReactNode
+  children?: React.ReactNode
   value: PostContextProps
 }) {
   const memoValue = React.useMemo(() => value, [value])

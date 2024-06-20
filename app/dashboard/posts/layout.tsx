@@ -11,7 +11,7 @@ import { getUserAPI } from '@/queries/server/users'
 export default async function PostListLayout({
   children,
 }: {
-  children: React.ReactNode
+  children?: React.ReactNode
 }) {
   const { session } = await getAuth()
   const { user } = await getUserAPI(session?.user?.id ?? null)

@@ -10,7 +10,7 @@ const AppBarContext = React.createContext<AppBarContextProps | undefined>(
   undefined
 )
 
-function AppBarProvider({ children }: { children: React.ReactNode }) {
+function AppBarProvider({ children }: { children?: React.ReactNode }) {
   return (
     <AppBarContext.Provider value={{ height: 'h-[60px]' }}>
       {children}

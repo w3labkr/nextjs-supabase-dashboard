@@ -18,7 +18,7 @@ const providers = [
 ]
 
 interface AppContextProps {
-  children: React.ReactNode
+  children?: React.ReactNode
   providers: Array<React.JSXElementConstructor<React.PropsWithChildren<any>>>
 }
 
@@ -36,7 +36,7 @@ const AppContext = ({ children, providers = [] }: AppContextProps) => {
 }
 
 interface AppProviderProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const AppProvider = ({ children }: AppProviderProps) => {

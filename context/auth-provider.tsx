@@ -24,7 +24,7 @@ const AuthContext = React.createContext<AuthContextProps | undefined>({
   setUser: () => void 0,
 })
 
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+const AuthProvider = ({ children }: { children?: React.ReactNode }) => {
   const [session, setSession] = React.useState<Session | null>(null)
   const [user, setUser] = React.useState<User | null>(null)
 

@@ -16,7 +16,7 @@ const BulkActionsContext = React.createContext<
   setChecks: () => void 0,
 })
 
-const BulkActionsProvider = ({ children }: { children: React.ReactNode }) => {
+const BulkActionsProvider = ({ children }: { children?: React.ReactNode }) => {
   const [checks, setChecks] = React.useState<Post[]>([])
 
   return (

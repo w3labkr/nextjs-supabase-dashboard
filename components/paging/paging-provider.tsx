@@ -18,7 +18,7 @@ const PagingProvider = ({
   children,
   value,
 }: {
-  children: React.ReactNode
+  children?: React.ReactNode
   value: PagingContextProps
 }) => {
   const memoValue = React.useMemo(() => {

@@ -16,7 +16,7 @@ const PostFormProvider = ({
   children,
   value,
 }: {
-  children: React.ReactNode
+  children?: React.ReactNode
   value: PostFormContextProps
 }) => {
   const memoValue = React.useMemo(() => value, [value])

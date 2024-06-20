@@ -7,7 +7,7 @@ import { getUserAPI } from '@/queries/server/users'
 export default async function BlockedLayout({
   children,
 }: {
-  children: React.ReactNode
+  children?: React.ReactNode
 }) {
   const { user: session } = await authenticate()
   const { user } = await getUserAPI(session?.id ?? null)
