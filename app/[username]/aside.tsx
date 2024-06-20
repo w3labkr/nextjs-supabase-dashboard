@@ -10,13 +10,15 @@ interface AsideProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Aside = ({ user, ...props }: AsideProps) => {
   return (
-    <div className="flex flex-col gap-2" {...props}>
-      <Avatar className="size-12 min-w-12">
+    <div {...props}>
+      <Avatar className="size-64">
         <AvatarImage
           src={user?.avatar_url ?? undefined}
           alt={`@${user?.username}`}
         />
-        <AvatarFallback>{user?.username?.charAt(0)}</AvatarFallback>
+        <AvatarFallback className="font-serif text-9xl">
+          {user?.username?.charAt(0)}
+        </AvatarFallback>
       </Avatar>
       <div>
         <h1 className="text-4xl font-semibold leading-none tracking-tight">

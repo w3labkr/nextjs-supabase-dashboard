@@ -4,20 +4,13 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import dayjs from 'dayjs'
 
-import { Separator } from '@/components/ui/separator'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Paging, PagingProvider } from '@/components/paging'
 import { Aside } from '../aside'
 
 import { LucideIcon } from '@/lib/lucide-icon'
-import {
-  cn,
-  getAuthorUrl,
-  getFavoritesPath,
-  getPostUrl,
-  getProfileUrl,
-} from '@/lib/utils'
+import { cn, getPostUrl, getProfileUrl } from '@/lib/utils'
 import { getUserAPI } from '@/queries/server/users'
 import { getFavoritePostsAPI } from '@/queries/server/favorites'
 import { siteConfig } from '@/config/site'
@@ -98,9 +91,7 @@ export default async function FavoritesPage({
       >
         <div className="container flex-1 overflow-auto pt-12">
           <div className="mx-auto grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 lg:grid-cols-4 lg:gap-[60px]">
-            <div className="relative flex flex-col gap-4">
-              <Aside user={user} />
-            </div>
+            <Aside className="space-y-2" user={user} />
             <div className="flex flex-col space-y-4 md:col-span-2 lg:col-span-3">
               <div className="space-y-2">
                 <div className="flex gap-2">
@@ -143,7 +134,7 @@ const RecentLink = ({ user }: TabLinkProps) => {
     <Link
       href={getProfileUrl(user) ?? '#'}
       scroll={!siteConfig?.fixedHeader}
-      className="flex items-center tracking-tight text-muted-foreground"
+      className="flex items-center text-muted-foreground"
     >
       <LucideIcon name="History" size={16} className="mr-1" />
       Recent
@@ -156,7 +147,7 @@ const FavoritesLink = ({ user }: TabLinkProps) => {
     <Link
       href="#"
       scroll={!siteConfig?.fixedHeader}
-      className="flex items-center tracking-tight"
+      className="flex items-center"
     >
       <LucideIcon
         name="Heart"

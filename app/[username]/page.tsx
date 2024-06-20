@@ -11,7 +11,7 @@ import { Paging, PagingProvider } from '@/components/paging'
 import { Aside } from './aside'
 
 import { LucideIcon } from '@/lib/lucide-icon'
-import { cn, getFavoritesUrl, getPostUrl, getProfilePath } from '@/lib/utils'
+import { cn, getFavoritesUrl, getPostUrl } from '@/lib/utils'
 import { getUserAPI } from '@/queries/server/users'
 import { getPostsAPI } from '@/queries/server/posts'
 import { siteConfig } from '@/config/site'
@@ -91,9 +91,7 @@ export default async function UserPage({
       >
         <div className="container flex-1 overflow-auto pt-12">
           <div className="mx-auto grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 lg:grid-cols-4 lg:gap-[60px]">
-            <div className="relative flex flex-col gap-4">
-              <Aside user={user} />
-            </div>
+            <Aside className="space-y-2" user={user} />
             <div className="flex flex-col space-y-4 md:col-span-2 lg:col-span-3">
               <div className="space-y-2">
                 <div className="flex gap-2">
@@ -136,7 +134,7 @@ const RecentLink = ({ user }: TabLinkProps) => {
     <Link
       href="#"
       scroll={!siteConfig?.fixedHeader}
-      className="flex items-center tracking-tight"
+      className="flex items-center"
     >
       <LucideIcon name="History" size={16} className="mr-1" />
       Recent
@@ -149,7 +147,7 @@ const FavoritesLink = ({ user }: TabLinkProps) => {
     <Link
       href={getFavoritesUrl(user) ?? '#'}
       scroll={!siteConfig?.fixedHeader}
-      className="flex items-center tracking-tight text-muted-foreground"
+      className="flex items-center text-muted-foreground"
     >
       <LucideIcon name="Heart" fill="transparent" size={16} className="mr-1" />
       Favorites
