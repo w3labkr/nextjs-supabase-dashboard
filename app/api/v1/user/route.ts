@@ -5,8 +5,6 @@ import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import dayjs from 'dayjs'
 
-import { User } from '@/types/database'
-
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const id = searchParams.get('id') as string
@@ -20,7 +18,7 @@ export async function GET(request: NextRequest) {
   const supabase = createClient()
   const { data: user, error } = await supabase
     .from('users')
-    .select('*, role:user_roles(*), plan:user_plans(*), meta:user_metas(*)')
+    .select('*, meta:usermeta(*)')
     .match(match)
     .maybeSingle()
 
@@ -32,13 +30,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ data: null, error: null })
   }
 
-  const data: User = {
-    ...user,
-    role: user?.role[0]?.role,
-    plan: user?.plan[0]?.plan,
-  }
-
-  return NextResponse.json({ data, error: null })
+  return NextResponse.json({ data: user, error: null })
 }
 
 export async function POST(request: NextRequest) {
@@ -74,16 +66,13 @@ export async function POST(request: NextRequest) {
   const supabase = createClient()
 
   if (Array.isArray(meta) && meta?.length > 0) {
-    const denyMetaKeys: string[] = []
-    const addMeta = meta
-      ?.filter((r: Record<string, any>) => !denyMetaKeys.includes(r.meta_key))
+    const denies: string[] = []
+    const data1 = meta
+      ?.filter((r: Record<string, any>) => !denies.includes(r.meta_key))
       ?.filter((r: Record<string, any>) => !r.id)
 
-    if (addMeta) {
-      const inserted = await supabase
-        .from('user_metas')
-        .insert(addMeta)
-        .select()
+    if (data1) {
+      const inserted = await supabase.from('usermeta').insert(data1).select()
       if (inserted?.error) {
         return NextResponse.json(
           { data: null, error: inserted?.error },
@@ -92,15 +81,12 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const editMeta = meta
-      ?.filter((r: Record<string, any>) => !denyMetaKeys.includes(r.meta_key))
+    const data2 = meta
+      ?.filter((r: Record<string, any>) => !denies.includes(r.meta_key))
       ?.filter((r: Record<string, any>) => r.id)
 
-    if (editMeta) {
-      const upserted = await supabase
-        .from('user_metas')
-        .upsert(editMeta)
-        .select()
+    if (data2) {
+      const upserted = await supabase.from('usermeta').upsert(data2).select()
       if (upserted?.error) {
         return NextResponse.json(
           { data: null, error: upserted?.error },

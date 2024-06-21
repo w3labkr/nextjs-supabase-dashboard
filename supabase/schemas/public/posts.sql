@@ -13,7 +13,7 @@ drop trigger if exists on_created on posts;
 drop trigger if exists on_updated_at on posts;
 drop trigger if exists on_slug_upsert on posts;
 
-drop function if exists generate_slug;
+drop function if exists unique_post_slug;
 drop function if exists count_posts;
 drop function if exists get_adjacent_post_id;
 drop function if exists create_new_posts;
@@ -52,6 +52,10 @@ comment on column posts.slug is 'on_slug_upsert';
 comment on column posts.type is 'post, page, revision';
 comment on column posts.status is 'publish, future, draft, pending, private, trash';
 
+-- Add table indexing
+create index posts_slug_idx on posts (slug);
+create index posts_type_idx on posts (type, status, date, id);
+
 -- Secure the table
 alter table posts enable row level security;
 
@@ -67,7 +71,7 @@ create trigger on_updated_at before update on posts
 
 ----------------------------------------------------------------
 
-create or replace function generate_slug()
+create or replace function unique_post_slug()
 returns trigger
 security definer set search_path = public
 as $$
@@ -94,7 +98,7 @@ end;
 $$ language plpgsql;
 
 create trigger on_slug_upsert before insert or update of slug on posts
-  for each row execute function generate_slug();
+  for each row execute function unique_post_slug();
 
 ----------------------------------------------------------------
 
@@ -182,7 +186,7 @@ returns trigger
 security definer set search_path = public
 as $$
 begin
-  insert into post_metas (post_id, meta_key, meta_value) values (new.id, 'views', '0');
+  insert into postmeta (post_id, meta_key, meta_value) values (new.id, 'views', '0');
   return new;
 end;
 $$ language plpgsql;
@@ -213,7 +217,7 @@ as $$
 begin
   return query
   select p.*
-  from posts p join post_metas m on p.id = m.post_id
+  from posts p join postmeta m on p.id = m.post_id
   where m.meta_key = metakey
   order by
     case ascending when true then m.meta_value::integer else 0 end asc,

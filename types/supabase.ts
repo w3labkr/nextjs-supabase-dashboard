@@ -188,7 +188,40 @@ export type Database = {
           },
         ]
       }
-      post_metas: {
+      post_tags: {
+        Row: {
+          id: number
+          post_id: number
+          tag_id: number | null
+        }
+        Insert: {
+          id?: number
+          post_id: number
+          tag_id?: number | null
+        }
+        Update: {
+          id?: number
+          post_id?: number
+          tag_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_tags_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "post_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      postmeta: {
         Row: {
           id: number
           meta_key: string
@@ -209,7 +242,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "post_metas_post_id_fkey"
+            foreignKeyName: "postmeta_post_id_fkey"
             columns: ["post_id"]
             isOneToOne: false
             referencedRelation: "posts"
@@ -303,7 +336,57 @@ export type Database = {
         }
         Relationships: []
       }
-      user_metas: {
+      tagmeta: {
+        Row: {
+          id: number
+          meta_key: string
+          meta_value: string | null
+          tag_id: number
+        }
+        Insert: {
+          id?: number
+          meta_key: string
+          meta_value?: string | null
+          tag_id: number
+        }
+        Update: {
+          id?: number
+          meta_key?: string
+          meta_value?: string | null
+          tag_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tagmeta_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tags: {
+        Row: {
+          description: string | null
+          id: number
+          name: string | null
+          slug: string | null
+        }
+        Insert: {
+          description?: string | null
+          id?: number
+          name?: string | null
+          slug?: string | null
+        }
+        Update: {
+          description?: string | null
+          id?: number
+          name?: string | null
+          slug?: string | null
+        }
+        Relationships: []
+      }
+      usermeta: {
         Row: {
           id: number
           meta_key: string
@@ -324,71 +407,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "user_metas_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      user_plans: {
-        Row: {
-          created_at: string
-          id: number
-          plan: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          plan?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          plan?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_plans_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      user_roles: {
-        Row: {
-          created_at: string
-          id: number
-          role: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          role?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          role?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_roles_user_id_fkey"
+            foreignKeyName: "usermeta_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
@@ -411,6 +430,10 @@ export type Database = {
           id: string
           is_ban: boolean
           last_name: string | null
+          plan: string
+          plan_changed_at: string | null
+          role: string
+          role_changed_at: string | null
           updated_at: string
           username: string
           username_changed_at: string | null
@@ -430,6 +453,10 @@ export type Database = {
           id: string
           is_ban?: boolean
           last_name?: string | null
+          plan?: string
+          plan_changed_at?: string | null
+          role?: string
+          role_changed_at?: string | null
           updated_at?: string
           username: string
           username_changed_at?: string | null
@@ -449,6 +476,10 @@ export type Database = {
           id?: string
           is_ban?: boolean
           last_name?: string | null
+          plan?: string
+          plan_changed_at?: string | null
+          role?: string
+          role_changed_at?: string | null
           updated_at?: string
           username?: string
           username_changed_at?: string | null
@@ -608,6 +639,10 @@ export type Database = {
           id: string
           is_ban: boolean
           last_name: string | null
+          plan: string
+          plan_changed_at: string | null
+          role: string
+          role_changed_at: string | null
           updated_at: string
           username: string
           username_changed_at: string | null
@@ -647,6 +682,14 @@ export type Database = {
       set_post_views: {
         Args: {
           postid: number
+        }
+        Returns: undefined
+      }
+      set_tag_meta: {
+        Args: {
+          tagid: number
+          metakey: string
+          metavalue: string
         }
         Returns: undefined
       }

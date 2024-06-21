@@ -9,12 +9,11 @@
 
 truncate table cron.job_run_details restart identity;
 
-select cron.unschedule('hourly-publish-future-posts');
-
 drop function if exists hourly_publish_future_posts;
 
 ----------------------------------------------------------------
 
+-- select cron.unschedule('hourly-publish-future-posts');
 select cron.schedule('hourly-publish-future-posts', '0 * * * *', 'SELECT hourly_publish_future_posts()');
 
 ----------------------------------------------------------------
@@ -29,7 +28,7 @@ declare
 begin
 
   for r in (select * from posts where status = 'future' and date < now()) loop
-    select meta_value into visibility from post_metas where post_id = r.id and meta_key = 'visibility';
+    select meta_value into visibility from postmeta where post_id = r.id and meta_key = 'visibility';
 
     if visibility = 'private' then
       update posts set status = 'private' where id = r.id;
@@ -37,7 +36,7 @@ begin
       update posts set status = 'publish' where id = r.id;
     end if;
 
-    update post_metas set meta_value = null where post_id = r.id and meta_key = 'future_date';
+    update postmeta set meta_value = null where post_id = r.id and meta_key = 'future_date';
   end loop;
 
 end;

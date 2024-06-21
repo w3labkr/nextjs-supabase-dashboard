@@ -22,13 +22,13 @@ import { DashboardMiniNavItem, DashboardMiniNavSubItem } from '@/types/config'
 
 interface MiniNavigationProps extends React.HTMLAttributes<HTMLDivElement> {
   nav: DashboardMiniNavItem[]
-  user_role?: string
+  userrole?: string
 }
 
 const MiniNavigation = ({
   className,
   nav,
-  user_role,
+  userrole,
   ...props
 }: MiniNavigationProps) => {
   const { height } = useAppBar()
@@ -51,8 +51,8 @@ const MiniNavigation = ({
       <nav className="flex-1 space-y-2 overflow-auto py-2">
         {nav?.map((item: DashboardMiniNavItem) => {
           const { id, roles } = item
-          if (roles && user_role && !roles?.includes(user_role)) return null
-          return <NavItem key={id} item={item} user_role={user_role} />
+          if (roles && userrole && !roles?.includes(userrole)) return null
+          return <NavItem key={id} item={item} userrole={userrole} />
         })}
       </nav>
     </div>
@@ -61,10 +61,10 @@ const MiniNavigation = ({
 
 interface NavItemProps {
   item: DashboardMiniNavItem
-  user_role?: string
+  userrole?: string
 }
 
-const NavItem = ({ item, user_role }: NavItemProps) => {
+const NavItem = ({ item, userrole }: NavItemProps) => {
   const { separator, items } = item
 
   return (
@@ -72,7 +72,7 @@ const NavItem = ({ item, user_role }: NavItemProps) => {
       {separator && <Separator />}
       {items?.map((sub: DashboardMiniNavSubItem) => {
         const { id, roles } = sub
-        if (roles && user_role && !roles?.includes(user_role)) return null
+        if (roles && userrole && !roles?.includes(userrole)) return null
         return <NavSubItem key={id} item={sub} />
       })}
     </React.Fragment>

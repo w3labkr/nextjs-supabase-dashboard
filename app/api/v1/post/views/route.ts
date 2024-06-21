@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     ascending: order === 'asc',
   })
 
-  query.select('*, author:users(*), meta:post_metas(*)')
+  query.select('*, author:users(*), meta:postmeta(*)')
 
   if (match.constructor === Object && Object.keys(match).length > 0) {
     query.match(match)

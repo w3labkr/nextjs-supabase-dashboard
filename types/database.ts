@@ -6,16 +6,8 @@ export type Role = 'guest' | 'user' | 'admin' | 'superadmin'
 
 export type Plan = 'free' | 'basic' | 'standard' | 'premium'
 
-export type UserRole = Tables<'user_roles'>
-
-export type UserPlan = Tables<'user_plans'>
-
-export type UserMeta = Tables<'user_metas'>
-
 export type User = Tables<'users'> & {
-  role?: string
-  plan?: string
-  meta?: UserMeta[]
+  meta?: Tables<'usermeta'>[]
 }
 
 export type Email = Tables<'emails'>
@@ -32,19 +24,19 @@ export type PostStatus =
 
 export type PostType = 'post' | 'page' | 'revision'
 
-export type PostMeta = Tables<'post_metas'>
-
-export type Author = Tables<'users'>
-
 export type Post = Tables<'posts'> & {
   num?: number
-  author?: Author | null
-  meta?: PostMeta[]
+  author?: Tables<'users'> | null
+  meta?: Tables<'postmeta'>[]
 }
 
 export type CountPosts = {
   status: PostStatus
   count: number
+}
+
+export type Tags = Tables<'tags'> & {
+  meta?: Tables<'tagmeta'>[]
 }
 
 export type Favorite = Tables<'favorites'>

@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
   const supabase = createClient()
   const { data: post, error } = await supabase
     .from('posts')
-    .select('*, author:users(*), meta:post_metas(*)')
+    .select('*, author:users(*), meta:postmeta(*)')
     .match(match)
     .maybeSingle()
 
@@ -51,16 +51,13 @@ export async function POST(request: NextRequest) {
   const supabase = createClient()
 
   if (Array.isArray(meta) && meta?.length > 0) {
-    const denyMetaKeys: string[] = ['views']
-    const addMeta = meta
-      ?.filter((r: Record<string, any>) => !denyMetaKeys.includes(r.meta_key))
+    const denies: string[] = ['views']
+    const data1 = meta
+      ?.filter((r: Record<string, any>) => !denies.includes(r.meta_key))
       ?.filter((r: Record<string, any>) => !r.id)
 
-    if (addMeta) {
-      const insersted = await supabase
-        .from('post_metas')
-        .insert(addMeta)
-        .select()
+    if (data1) {
+      const insersted = await supabase.from('postmeta').insert(data1).select()
       if (insersted?.error) {
         return NextResponse.json(
           { data: null, error: insersted?.error },
@@ -69,15 +66,12 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const editMeta = meta
-      ?.filter((r: Record<string, any>) => !denyMetaKeys.includes(r.meta_key))
+    const data2 = meta
+      ?.filter((r: Record<string, any>) => !denies.includes(r.meta_key))
       ?.filter((r: Record<string, any>) => r.id)
 
-    if (editMeta) {
-      const upserted = await supabase
-        .from('post_metas')
-        .upsert(editMeta)
-        .select()
+    if (data2) {
+      const upserted = await supabase.from('postmeta').upsert(data2).select()
       if (upserted?.error) {
         return NextResponse.json(
           { data: null, error: upserted?.error },
@@ -91,7 +85,7 @@ export async function POST(request: NextRequest) {
     .from('posts')
     .update(formData)
     .match({ id, user_id })
-    .select('*, author:users(*), meta:post_metas(*)')
+    .select('*, author:users(*), meta:postmeta(*)')
     .single()
 
   if (error) {
@@ -159,7 +153,7 @@ export async function PUT(request: NextRequest) {
     const { data: list, error } = await supabase
       .from('posts')
       .insert(plan?.post > -1 ? data.slice(0, endIndex) : data)
-      .select('*, author:users(*), meta:post_metas(*)')
+      .select('*, author:users(*), meta:postmeta(*)')
 
     if (error) {
       return NextResponse.json(
@@ -180,7 +174,7 @@ export async function PUT(request: NextRequest) {
   const { data: post, error } = await supabase
     .from('posts')
     .insert(data)
-    .select('*, author:users(*), meta:post_metas(*)')
+    .select('*, author:users(*), meta:postmeta(*)')
     .single()
 
   if (error) {

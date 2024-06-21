@@ -14,14 +14,14 @@ import { siteConfig } from '@/config/site'
 
 interface NavigationProps extends React.HTMLAttributes<HTMLDivElement> {
   nav: DashboardNavItem[]
-  user_role?: string
+  userrole?: string
   title: string
 }
 
 const Navigation = ({
   className,
   nav,
-  user_role,
+  userrole,
   title,
   translate,
   ...props
@@ -48,8 +48,8 @@ const Navigation = ({
       <div className="flex-1 space-y-1 overflow-auto p-2">
         {nav?.map((item: DashboardNavItem) => {
           const { id, roles } = item
-          if (roles && user_role && !roles?.includes(user_role)) return null
-          return <NavItem key={id} item={item} user_role={user_role} />
+          if (roles && userrole && !roles?.includes(userrole)) return null
+          return <NavItem key={id} item={item} userrole={userrole} />
         })}
       </div>
     </div>
@@ -58,10 +58,10 @@ const Navigation = ({
 
 interface NavItemProps {
   item: DashboardNavItem
-  user_role?: string
+  userrole?: string
 }
 
-const NavItem = ({ item, user_role }: NavItemProps) => {
+const NavItem = ({ item, userrole }: NavItemProps) => {
   const { separator, label, translate, items } = item
   const { t } = useTranslation()
 
@@ -75,7 +75,7 @@ const NavItem = ({ item, user_role }: NavItemProps) => {
       )}
       {items?.map((sub: DashboardNavSubItem) => {
         const { id, roles } = sub
-        if (roles && user_role && !roles?.includes(user_role)) return null
+        if (roles && userrole && !roles?.includes(userrole)) return null
         return <NavSubItem key={id} item={sub} />
       })}
     </React.Fragment>

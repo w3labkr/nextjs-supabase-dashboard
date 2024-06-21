@@ -22,7 +22,7 @@ export default async function PostListLayout({
   return (
     <div className="body-overflow-hidden flex h-screen w-screen">
       <AppBarProvider>
-        <MiniNavigation nav={dashboardConfig?.nav} user_role={user?.role} />
+        <MiniNavigation nav={dashboardConfig?.nav} userrole={user?.role} />
         <div className="flex flex-1 flex-col">
           <AppBar />
           {children}

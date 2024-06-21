@@ -22,7 +22,7 @@ export default async function DashboardPage() {
   return (
     <div className="body-overflow-hidden flex h-screen w-screen">
       <AppBarProvider>
-        <MiniNavigation nav={dashboardConfig?.nav} user_role={user?.role} />
+        <MiniNavigation nav={dashboardConfig?.nav} userrole={user?.role} />
         <div className="flex flex-1 flex-col">
           <AppBar />
           <main className="flex-1 space-y-16 overflow-auto p-10 pb-16">

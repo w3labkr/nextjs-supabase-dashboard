@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
   const supabase = createClient()
   const counterQuery = supabase
     .from('posts')
-    .select('*, author:users(*), meta:post_metas(*)', {
+    .select('*, author:users(*), meta:postmeta(*)', {
       count: 'exact',
       head: true,
     })
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
 
   const query = supabase
     .from('posts')
-    .select('*, author:users(*), meta:post_metas(*)')
+    .select('*, author:users(*), meta:postmeta(*)')
 
   if (match.constructor === Object && Object.keys(match).length > 0) {
     query.match(match)

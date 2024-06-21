@@ -62,10 +62,9 @@ create policy "User can delete their own objects" on storage.objects
 
 truncate table cron.job_run_details restart identity;
 
-select cron.unschedule('hourly-publish-future-posts');
-
 drop function if exists hourly_publish_future_posts;
 
+-- select cron.unschedule('hourly-publish-future-posts');
 select cron.schedule('hourly-publish-future-posts', '0 * * * *', 'SELECT hourly_publish_future_posts()');
 
 ----------------------------------------------------------------
@@ -78,9 +77,9 @@ drop trigger if exists on_created on auth.users;
 drop trigger if exists on_encrypted_password_updated on auth.users;
 drop trigger if exists on_updated_at on users;
 drop trigger if exists on_username_updated on users;
+drop trigger if exists on_role_updated on users;
+drop trigger if exists on_plan_updated on users;
 drop trigger if exists on_updated_at on role_permissions;
-drop trigger if exists on_updated_at on user_roles;
-drop trigger if exists on_updated_at on user_plans;
 drop trigger if exists on_updated_at on users;
 drop trigger if exists on_updated_at on emails;
 drop trigger if exists on_updated_at on notifications;
@@ -89,6 +88,7 @@ drop trigger if exists on_updated_at on favorites;
 drop trigger if exists on_created on posts;
 drop trigger if exists on_updated_at on posts;
 drop trigger if exists on_slug_upsert on posts;
+drop trigger if exists on_slug_upsert on tags;
 
 ----------------------------------------------------------------
 
@@ -101,16 +101,20 @@ drop function if exists create_new_user;
 drop function if exists assign_user_data;
 
 drop function if exists handle_username_changed_at;
-drop function if exists get_users;
-drop function if exists set_user_meta;
+drop function if exists handle_role_changed_at;
+drop function if exists handle_plan_changed_at;
 drop function if exists set_user_role;
 drop function if exists set_user_plan;
+drop function if exists set_user_meta;
+drop function if exists get_users;
 
+drop function if exists set_tag_meta;
+drop function if exists unique_tag_slug;
 drop function if exists get_vote;
 drop function if exists set_favorite;
 drop function if exists set_post_meta;
 drop function if exists set_post_views;
-drop function if exists generate_slug;
+drop function if exists unique_post_slug;
 drop function if exists count_posts;
 drop function if exists get_adjacent_post_id;
 drop function if exists create_new_posts;
@@ -124,17 +128,18 @@ drop function if exists title_excerpt_content;
 
 ----------------------------------------------------------------
 
+drop table if exists post_tags;
+drop table if exists tagmeta;
+drop table if exists tags;
 drop table if exists analyses;
 drop table if exists votes;
 drop table if exists favorites;
-drop table if exists post_metas;
+drop table if exists postmeta;
 drop table if exists posts;
 drop table if exists notifications;
 drop table if exists emails;
 drop table if exists role_permissions;
-drop table if exists user_roles;
-drop table if exists user_plans;
-drop table if exists user_metas;
+drop table if exists usermeta;
 drop table if exists users;
 
 ----------------------------------------------------------------
@@ -210,36 +215,6 @@ $$ language plpgsql;
 
 ----------------------------------------------------------------
 
-create or replace function handle_new_user()
-returns trigger
-security definer set search_path = public
-as $$
-declare
-  new_username text;
-  new_has_set_password boolean;
-begin
-  new_username := generate_username(new.email);
-  new_username := substr(new_username, 1, 255);
-  new_has_set_password := case when new.encrypted_password is null or new.encrypted_password = '' then false else true end;
-
-  insert into users
-  (id, has_set_password, username, full_name, avatar_url)
-  values
-  (new.id, new_has_set_password, new_username, new_username, new.raw_user_meta_data ->> 'avatar_url');
-  insert into emails (user_id, email) values (new.id, new.email);
-  insert into user_roles (user_id) values (new.id);
-  insert into user_plans (user_id) values (new.id);
-  insert into notifications (user_id) values (new.id);
-
-  return new;
-end;
-$$ language plpgsql;
-
-create trigger on_created after insert on auth.users
-  for each row execute procedure handle_new_user();
-
-----------------------------------------------------------------
-
 create or replace function create_new_user(useremail text, password text = null, metadata JSONB = '{}'::JSONB)
 returns uuid
 as $$
@@ -272,6 +247,34 @@ $$ language plpgsql;
 
 ----------------------------------------------------------------
 
+create or replace function handle_new_user()
+returns trigger
+security definer set search_path = public
+as $$
+declare
+  new_username text;
+  new_has_set_password boolean;
+begin
+  new_username := generate_username(new.email);
+  new_username := substr(new_username, 1, 255);
+  new_has_set_password := case when new.encrypted_password is null or new.encrypted_password = '' then false else true end;
+
+  insert into users
+  (id, has_set_password, username, full_name, avatar_url)
+  values
+  (new.id, new_has_set_password, new_username, new_username, new.raw_user_meta_data ->> 'avatar_url');
+  insert into emails (user_id, email) values (new.id, new.email);
+  insert into notifications (user_id) values (new.id);
+
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger on_created after insert on auth.users
+  for each row execute procedure handle_new_user();
+
+----------------------------------------------------------------
+
 create or replace function assign_user_data()
 returns void
 security definer set search_path = public
@@ -292,8 +295,6 @@ begin
     values
     (r.id, new_has_set_password, new_username, new_username, r.raw_user_meta_data ->> 'avatar_url');
     insert into emails (user_id, email) values (r.id, r.email);
-    insert into user_roles (user_id) values (r.id);
-    insert into user_plans (user_id) values (r.id);
     insert into notifications (user_id) values (r.id);
 
   end loop;
@@ -305,6 +306,7 @@ $$ language plpgsql;
 --                        public.users                        --
 --                                                            --
 ----------------------------------------------------------------
+
 
 create table users (
   id uuid not null references auth.users on delete cascade primary key,
@@ -324,11 +326,21 @@ create table users (
   has_set_password boolean default false not null,
   is_ban boolean default false not null,
   banned_until timestamptz,
+  role text default 'guest'::text not null,
+  role_changed_at timestamptz,
+  plan text default 'free'::text not null,
+  plan_changed_at timestamptz,
   unique (username)
 );
 comment on column users.updated_at is 'on_updated_at';
 comment on column users.username_changed_at is 'on_username_updated';
 comment on column users.has_set_password is 'on_encrypted_password_updated';
+comment on column users.role is 'guest, user, admin, superadmin';
+comment on column users.role_changed_at is 'on_role_updated';
+comment on column users.plan is 'free, basic, standard, premium';
+comment on column users.plan_changed_at is 'on_plan_updated';
+
+create index users_username_idx on users (username);
 
 alter table users enable row level security;
 
@@ -357,94 +369,33 @@ create trigger on_username_updated after update of username on users
 
 ----------------------------------------------------------------
 
-create or replace function get_users(userrole text = null, userplan text = null)
-returns setof users
+create or replace function handle_role_changed_at()
+returns trigger
 security definer set search_path = public
 as $$
 begin
-	if userrole is not null and userplan is not null then
-		return query
-      select u.*
-      from users u
-        join user_roles ur on u.id = ur.user_id
-        join user_plans up on u.id = up.user_id
-      where ur.role = userrole and up.plan = userplan;
-	elsif userrole is not null then
-		return query
-      select u.*
-      from users u join user_roles ur on u.id = ur.user_id
-      where ur.role = userrole;
-	elsif userplan is not null then
-    return query
-      select u.*
-      from users u join user_plans up on u.id = up.user_id
-      where up.plan = userplan;
-	end if;
+  update users set role_changed_at = now() where id = new.id;
+  return new;
 end;
 $$ language plpgsql;
 
-----------------------------------------------------------------
---                                                            --
---                     public.user_metas                      --
---                                                            --
-----------------------------------------------------------------
-
-create table user_metas (
-  id bigint generated by default as identity primary key,
-  user_id uuid references users(id) on delete cascade not null,
-  meta_key varchar(255) not null,
-  meta_value text,
-  unique (user_id, meta_key)
-);
-
-alter table user_metas enable row level security;
-
-create policy "Public access for all users" on user_metas for select to authenticated, anon using ( true );
-create policy "User can insert their own user_metas" on user_metas for insert to authenticated with check ( (select auth.uid()) = user_id );
-create policy "User can update their own user_metas" on user_metas for update to authenticated using ( (select auth.uid()) = user_id );
-create policy "User can delete their own user_metas" on user_metas for delete to authenticated using ( (select auth.uid()) = user_id );
+create trigger on_role_updated after update of role on users
+  for each row execute function handle_role_changed_at();
 
 ----------------------------------------------------------------
 
-create or replace function set_user_meta(userid bigint, metakey text, metavalue text)
-returns void
+create or replace function handle_plan_changed_at()
+returns trigger
 security definer set search_path = public
 as $$
 begin
-  if exists (select 1 from user_metas where user_id = userid and meta_key = metakey) then
-    update user_metas set meta_value = metavalue where user_id = userid and meta_key = metakey;
-  else
-    insert into user_metas(user_id, meta_key, meta_value) values(userid, metakey, metavalue);
-  end if;
+  update users set plan_changed_at = now() where id = new.id;
+  return new;
 end;
 $$ language plpgsql;
 
-----------------------------------------------------------------
---                                                            --
---                     public.user_roles                      --
---                                                            --
-----------------------------------------------------------------
-
-create table user_roles (
-  id bigint generated by default as identity primary key,
-  created_at timestamptz default now() not null,
-  updated_at timestamptz default now() not null,
-  user_id uuid references users(id) on delete cascade not null,
-  role text default 'guest'::text not null,
-  unique (user_id, role)
-);
-comment on column user_roles.updated_at is 'on_updated_at';
-comment on column user_roles.role is 'guest, user, admin, superadmin';
-
-alter table user_roles enable row level security;
-
-create policy "Public access for all users" on user_roles for select to authenticated, anon using ( true );
-create policy "User can insert their own user_roles" on user_roles for insert to authenticated with check ( (select auth.uid()) = user_id );
-create policy "User can update their own user_roles" on user_roles for update to authenticated using ( (select auth.uid()) = user_id );
-create policy "User can delete their own user_roles" on user_roles for delete to authenticated using ( (select auth.uid()) = user_id );
-
-create trigger on_updated_at before update on user_roles
-  for each row execute procedure moddatetime (updated_at);
+create trigger on_plan_updated after update of plan on users
+  for each row execute function handle_plan_changed_at();
 
 ----------------------------------------------------------------
 
@@ -454,17 +405,87 @@ security definer set search_path = public
 as $$
 begin
   if userid is not null and useremail is not null then
-    update user_roles set role = userrole
-    from auth.users u
-    where user_id = u.id and u.id = userid and u.email = useremail;
+    update users set role = userrole from auth.users au where au.id = userid and au.email = useremail;
   elsif userid is not null then
-    update user_roles set role = userrole
-    from auth.users u
-    where user_id = u.id and u.id = userid;
+    update users set role = userrole from auth.users au where au.id = userid;
   elsif useremail is not null then
-    update user_roles set role = userrole
-    from auth.users u
-    where user_id = u.id and u.email = useremail;
+    update users set role = userrole from auth.users au where au.email = useremail;
+  end if;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
+create or replace function set_user_plan(userplan text, userid uuid = null, useremail text = null)
+returns void
+security definer set search_path = public
+as $$
+begin
+  if userid is not null and useremail is not null then
+    update users set plan = userplan from auth.users au where au.id = userid and au.email = useremail;
+  elsif userid is not null then
+    update users set plan = userplan from auth.users au where au.id = userid;
+  elsif useremail is not null then
+    update users set plan = userplan from auth.users au where au.email = useremail;
+  end if;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
+create or replace function get_users(userrole text = null, userplan text = null)
+returns setof users
+security definer set search_path = public
+as $$
+begin
+	if userrole is not null and userplan is not null then
+		return query
+    select * from users where role = userrole and plan = userplan;
+	elsif userrole is not null then
+		return query
+    select * from users where role = userrole;
+	elsif userplan is not null then
+    return query
+    select * from users where plan = userplan;
+	end if;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+--                                                            --
+--                      public.usermeta                       --
+--                                                            --
+----------------------------------------------------------------
+
+create table usermeta (
+  id bigint generated by default as identity primary key,
+  user_id uuid references users(id) on delete cascade not null,
+  meta_key varchar(255) not null,
+  meta_value text,
+  unique(user_id, meta_key)
+);
+
+create index usermeta_user_id_idx on usermeta (user_id);
+create index usermeta_meta_key_idx on usermeta (meta_key);
+
+alter table usermeta enable row level security;
+
+create policy "Public access for all users" on usermeta for select to authenticated, anon using ( true );
+create policy "User can insert their own usermeta" on usermeta for insert to authenticated with check ( (select auth.uid()) = user_id );
+create policy "User can update their own usermeta" on usermeta for update to authenticated using ( (select auth.uid()) = user_id );
+create policy "User can delete their own usermeta" on usermeta for delete to authenticated using ( (select auth.uid()) = user_id );
+
+----------------------------------------------------------------
+
+create or replace function set_user_meta(userid bigint, metakey text, metavalue text)
+returns void
+security definer set search_path = public
+as $$
+begin
+  if exists (select 1 from usermeta where user_id = userid and meta_key = metakey) then
+    update usermeta set meta_value = metavalue where user_id = userid and meta_key = metakey;
+  else
+    insert into usermeta(user_id, meta_key, meta_value) values(userid, metakey, metavalue);
   end if;
 end;
 $$ language plpgsql;
@@ -488,56 +509,6 @@ create policy "Public access for all users" on role_permissions for select to au
 create policy "User can insert role_permissions" on role_permissions for insert to authenticated with check ( true );
 create policy "User can update role_permissions" on role_permissions for update to authenticated using ( true );
 create policy "User can delete role_permissions" on role_permissions for delete to authenticated using ( true );
-
-----------------------------------------------------------------
---                                                            --
---                     public.user_plans                      --
---                                                            --
-----------------------------------------------------------------
-
-create table user_plans (
-  id bigint generated by default as identity primary key,
-  created_at timestamptz default now() not null,
-  updated_at timestamptz default now() not null,
-  user_id uuid references users(id) on delete cascade not null,
-  plan text default 'free'::text not null,
-  unique (user_id, plan)
-);
-comment on column user_plans.updated_at is 'on_updated_at';
-comment on column user_plans.plan is 'free, basic, standard, premium';
-
-alter table user_plans enable row level security;
-
-create policy "Public access for all users" on user_plans for select to authenticated, anon using ( true );
-create policy "User can insert their own user_plans" on user_plans for insert to authenticated with check ( (select auth.uid()) = user_id );
-create policy "User can update their own user_plans" on user_plans for update to authenticated using ( (select auth.uid()) = user_id );
-create policy "User can delete their own user_plans" on user_plans for delete to authenticated using ( (select auth.uid()) = user_id );
-
-create trigger on_updated_at before update on user_plans
-  for each row execute procedure moddatetime (updated_at);
-
-----------------------------------------------------------------
-
-create or replace function set_user_plan(userplan text, userid uuid = null, useremail text = null)
-returns void
-security definer set search_path = public
-as $$
-begin
-  if userid is not null and useremail is not null then
-    update user_plans set plan = userplan
-    from auth.users u
-    where user_id = u.id and u.id = userid and u.email = useremail;
-  elsif userid is not null then
-    update user_plans set plan = userplan
-    from auth.users u
-    where user_id = u.id and u.id = userid;
-  elsif useremail is not null then
-    update user_plans set plan = userplan
-    from auth.users u
-    where user_id = u.id and u.email = useremail;
-  end if;
-end;
-$$ language plpgsql;
 
 ----------------------------------------------------------------
 --                                                            --
@@ -621,6 +592,9 @@ comment on column posts.slug is 'on_slug_upsert';
 comment on column posts.type is 'post, page, revision';
 comment on column posts.status is 'publish, future, draft, pending, private, trash';
 
+create index posts_slug_idx on posts (slug);
+create index posts_type_idx on posts (type, status, date, id);
+
 alter table posts enable row level security;
 
 create policy "Public access for all users" on posts for select to authenticated, anon using ( true );
@@ -633,7 +607,7 @@ create trigger on_updated_at before update on posts
 
 ----------------------------------------------------------------
 
-create or replace function generate_slug()
+create or replace function unique_post_slug()
 returns trigger
 security definer set search_path = public
 as $$
@@ -660,7 +634,7 @@ end;
 $$ language plpgsql;
 
 create trigger on_slug_upsert before insert or update of slug on posts
-  for each row execute function generate_slug();
+  for each row execute function unique_post_slug();
 
 ----------------------------------------------------------------
 
@@ -748,7 +722,7 @@ returns trigger
 security definer set search_path = public
 as $$
 begin
-  insert into post_metas (post_id, meta_key, meta_value) values (new.id, 'views', '0');
+  insert into postmeta (post_id, meta_key, meta_value) values (new.id, 'views', '0');
   return new;
 end;
 $$ language plpgsql;
@@ -779,7 +753,7 @@ as $$
 begin
   return query
   select p.*
-  from posts p join post_metas m on p.id = m.post_id
+  from posts p join postmeta m on p.id = m.post_id
   where m.meta_key = metakey
   order by
     case ascending when true then m.meta_value::integer else 0 end asc,
@@ -803,24 +777,27 @@ $$ language sql immutable;
 
 ----------------------------------------------------------------
 --                                                            --
---                     public.post_metas                      --
+--                      public.postmeta                       --
 --                                                            --
 ----------------------------------------------------------------
 
-create table post_metas (
+create table postmeta (
   id bigint generated by default as identity primary key,
   post_id bigint references posts(id) on delete cascade not null,
   meta_key varchar(255) not null,
   meta_value text,
-  unique (post_id, meta_key)
+  unique(post_id, meta_key)
 );
 
-alter table post_metas enable row level security;
+create index postmeta_post_id_idx on postmeta (post_id);
+create index postmeta_meta_key_idx on postmeta (meta_key);
 
-create policy "Public access for all users" on post_metas for select to authenticated, anon using ( true );
-create policy "User can insert post_metas" on post_metas for insert to authenticated with check ( true );
-create policy "User can update post_metas" on post_metas for update to authenticated using ( true );
-create policy "User can delete post_metas" on post_metas for delete to authenticated using ( true );
+alter table postmeta enable row level security;
+
+create policy "Public access for all users" on postmeta for select to authenticated, anon using ( true );
+create policy "User can insert postmeta" on postmeta for insert to authenticated with check ( true );
+create policy "User can update postmeta" on postmeta for update to authenticated using ( true );
+create policy "User can delete postmeta" on postmeta for delete to authenticated using ( true );
 
 ----------------------------------------------------------------
 
@@ -829,10 +806,10 @@ returns void
 security definer set search_path = public
 as $$
 begin
-  if exists (select 1 from post_metas where post_id = postid and meta_key = metakey) then
-    update post_metas set meta_value = metavalue where post_id = postid and meta_key = metakey;
+  if exists (select 1 from postmeta where post_id = postid and meta_key = metakey) then
+    update postmeta set meta_value = metavalue where post_id = postid and meta_key = metakey;
   else
-    insert into post_metas(post_id, meta_key, meta_value) values(postid, metakey, metavalue);
+    insert into postmeta(post_id, meta_key, meta_value) values(postid, metakey, metavalue);
   end if;
 end;
 $$ language plpgsql;
@@ -844,10 +821,10 @@ returns void
 security definer set search_path = public
 as $$
 begin
-  if exists (select 1 from post_metas where post_id = postid and meta_key = 'views') then
-    update post_metas set meta_value = meta_value::integer + 1 where post_id = postid and meta_key = 'views';
+  if exists (select 1 from postmeta where post_id = postid and meta_key = 'views') then
+    update postmeta set meta_value = meta_value::integer + 1 where post_id = postid and meta_key = 'views';
   else
-    insert into post_metas(post_id, meta_key, meta_value) values(postid, 'views', '1');
+    insert into postmeta(post_id, meta_key, meta_value) values(postid, 'views', '1');
   end if;
 end;
 $$ language plpgsql;
@@ -964,6 +941,124 @@ create policy "User can delete analyses" on analyses for delete to authenticated
 
 ----------------------------------------------------------------
 --                                                            --
+--                        public.tags                         --
+--                                                            --
+----------------------------------------------------------------
+
+create table tags (
+  id bigint generated by default as identity primary key,
+  name text,
+  slug text,
+  description text,
+  unique (slug)
+);
+
+create index tags_name_idx on tags (name);
+
+alter table tags enable row level security;
+
+create policy "Public access for all users" on tags for select to authenticated, anon using ( true );
+create policy "User can insert tags" on tags for insert to authenticated with check ( true );
+create policy "User can update tags" on tags for update to authenticated using ( true );
+create policy "User can delete tags" on tags for delete to authenticated using ( true );
+
+----------------------------------------------------------------
+
+create or replace function unique_tag_slug()
+returns trigger
+security definer set search_path = public
+as $$
+declare
+  old_slug text;
+  new_slug text;
+  counter integer := 1;
+begin
+  old_slug := new.slug;
+  new_slug := old_slug;
+
+  loop
+    if exists (select 1 from tags where slug = new_slug and id != coalesce(new.id, 0)) then
+      new_slug := old_slug || '-' || counter;
+      counter := counter + 1;
+    else
+      exit;
+    end if;
+  end loop;
+
+  new.slug := new_slug;
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger on_slug_upsert before insert or update of slug on tags
+  for each row execute function unique_tag_slug();
+
+----------------------------------------------------------------
+--                                                            --
+--                       public.tagmeta                       --
+--                                                            --
+----------------------------------------------------------------
+
+create table tagmeta (
+  id bigint generated by default as identity primary key,
+  tag_id bigint references tags(id) on delete cascade not null,
+  meta_key varchar(255) not null,
+  meta_value text,
+  unique (tag_id, meta_key)
+);
+
+create index tagmeta_tag_id_idx on tagmeta (tag_id);
+create index tagmeta_meta_key_idx on tagmeta (meta_key);
+
+alter table tagmeta enable row level security;
+
+create policy "Public access for all users" on tagmeta for select to authenticated, anon using ( true );
+create policy "User can insert tagmeta" on tagmeta for insert to authenticated with check ( true );
+create policy "User can update tagmeta" on tagmeta for update to authenticated using ( true );
+create policy "User can delete tagmeta" on tagmeta for delete to authenticated using ( true );
+
+----------------------------------------------------------------
+
+create or replace function set_tag_meta(tagid bigint, metakey text, metavalue text)
+returns void
+security definer set search_path = public
+as $$
+begin
+  if exists (select 1 from tagmeta where tag_id = tagid and meta_key = metakey) then
+    update tagmeta set meta_value = metavalue where tag_id = tagid and meta_key = metakey;
+  else
+    insert into tagmeta(tag_id, meta_key, meta_value) values(tagid, metakey, metavalue);
+  end if;
+end;
+$$ language plpgsql;
+----------------------------------------------------------------
+--                                                            --
+--                      public.post_tags                      --
+--                                                            --
+----------------------------------------------------------------
+
+drop table if exists post_tags;
+
+----------------------------------------------------------------
+
+create table post_tags (
+  id bigint generated by default as identity primary key,
+  post_id bigint references tags(id) on delete cascade not null,
+  tag_id bigint references tags(id),
+  unique (post_id, tag_id)
+);
+
+create index post_tags_post_id_idx on post_tags(post_id, tag_id);
+
+alter table post_tags enable row level security;
+
+create policy "Public access for all users" on post_tags for select to authenticated, anon using ( true );
+create policy "User can insert post_tags" on post_tags for insert to authenticated with check ( true );
+create policy "User can update post_tags" on post_tags for update to authenticated using ( true );
+create policy "User can delete post_tags" on post_tags for delete to authenticated using ( true );
+
+----------------------------------------------------------------
+--                                                            --
 --                       Job Scheduling                       --
 --                                                            --
 ----------------------------------------------------------------
@@ -977,7 +1072,7 @@ declare
   visibility text;
 begin
   for r in (select * from posts where status = 'future' and date < now()) loop
-    select meta_value into visibility from post_metas where post_id = r.id and meta_key = 'visibility';
+    select meta_value into visibility from postmeta where post_id = r.id and meta_key = 'visibility';
 
     if visibility = 'private' then
       update posts set status = 'private' where id = r.id;
@@ -985,7 +1080,7 @@ begin
       update posts set status = 'publish' where id = r.id;
     end if;
 
-    update post_metas set meta_value = null where post_id = r.id and meta_key = 'future_date';
+    update postmeta set meta_value = null where post_id = r.id and meta_key = 'future_date';
   end loop;
 end;
 $$ language plpgsql;

@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
   const counterQuery = supabase
     .from('posts')
     .select(
-      '*, author:users(*), meta:post_metas(*), favorite:favorites!inner(*)',
+      '*, author:users(*), meta:postmeta(*), favorite:favorites!inner(*)',
       { count: 'exact', head: true }
     )
 
@@ -52,9 +52,7 @@ export async function GET(request: NextRequest) {
 
   const query = supabase
     .from('posts')
-    .select(
-      '*, author:users(*), meta:post_metas(*), favorite:favorites!inner(*)'
-    )
+    .select('*, author:users(*), meta:postmeta(*), favorite:favorites!inner(*)')
 
   if (match.constructor === Object && Object.keys(match).length > 0) {
     query.match(match)

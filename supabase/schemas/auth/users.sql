@@ -91,36 +91,6 @@ $$ language plpgsql;
 
 ----------------------------------------------------------------
 
-create or replace function handle_new_user()
-returns trigger
-security definer set search_path = public
-as $$
-declare
-  new_username text;
-  new_has_set_password boolean;
-begin
-  new_username := generate_username(new.email);
-  new_username := substr(new_username, 1, 255);
-  new_has_set_password := case when new.encrypted_password is null or new.encrypted_password = '' then false else true end;
-
-  insert into users
-  (id, has_set_password, username, full_name, avatar_url)
-  values
-  (new.id, new_has_set_password, new_username, new_username, new.raw_user_meta_data ->> 'avatar_url');
-  insert into emails (user_id, email) values (new.id, new.email);
-  insert into user_roles (user_id) values (new.id);
-  insert into user_plans (user_id) values (new.id);
-  insert into notifications (user_id) values (new.id);
-
-  return new;
-end;
-$$ language plpgsql;
-
-create trigger on_created after insert on auth.users
-  for each row execute procedure handle_new_user();
-
-----------------------------------------------------------------
-
 create or replace function create_new_user(useremail text, password text = null, metadata JSONB = '{}'::JSONB)
 returns uuid
 as $$
@@ -153,6 +123,34 @@ $$ language plpgsql;
 
 ----------------------------------------------------------------
 
+create or replace function handle_new_user()
+returns trigger
+security definer set search_path = public
+as $$
+declare
+  new_username text;
+  new_has_set_password boolean;
+begin
+  new_username := generate_username(new.email);
+  new_username := substr(new_username, 1, 255);
+  new_has_set_password := case when new.encrypted_password is null or new.encrypted_password = '' then false else true end;
+
+  insert into users
+  (id, has_set_password, username, full_name, avatar_url)
+  values
+  (new.id, new_has_set_password, new_username, new_username, new.raw_user_meta_data ->> 'avatar_url');
+  insert into emails (user_id, email) values (new.id, new.email);
+  insert into notifications (user_id) values (new.id);
+
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger on_created after insert on auth.users
+  for each row execute procedure handle_new_user();
+
+----------------------------------------------------------------
+
 create or replace function assign_user_data()
 returns void
 security definer set search_path = public
@@ -173,8 +171,6 @@ begin
     values
     (r.id, new_has_set_password, new_username, new_username, r.raw_user_meta_data ->> 'avatar_url');
     insert into emails (user_id, email) values (r.id, r.email);
-    insert into user_roles (user_id) values (r.id);
-    insert into user_plans (user_id) values (r.id);
     insert into notifications (user_id) values (r.id);
 
   end loop;

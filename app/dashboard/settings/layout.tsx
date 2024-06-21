@@ -28,13 +28,13 @@ export default async function SettingsLayout({
   return (
     <div className="body-overflow-hidden flex h-screen w-screen">
       <AppBarProvider>
-        <MiniNavigation nav={dashboardConfig?.nav} user_role={user?.role} />
+        <MiniNavigation nav={dashboardConfig?.nav} userrole={user?.role} />
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={25} className="max-w-64 !overflow-auto">
             <Navigation
               className="w-full border-none lg:max-w-full"
               nav={settingsConfig?.nav}
-              user_role={user?.role}
+              userrole={user?.role}
               title="settings"
               translate="yes"
             />
