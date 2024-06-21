@@ -41,6 +41,7 @@ import {
   setMeta,
   getMeta,
 } from '@/lib/utils'
+import { slugify } from '@/lib/slugify'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
@@ -80,6 +81,7 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
     } else if (action === 'publish') {
       const data = {
         status: visibility === 'private' ? 'private' : 'publish',
+        slug: post?.slug ?? slugify(post?.title ?? ''),
         meta: setMeta(post?.meta, 'future_date', null, {
           post_id: post?.id,
         }),
