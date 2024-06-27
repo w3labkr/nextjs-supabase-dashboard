@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
   const postId = +(searchParams.get('postId') as string)
   const userId = searchParams.get('userId') as string
 
+  const { data, options } = await request.json()
   const { authorized } = await authorize(userId)
 
   if (!authorized) {
@@ -43,20 +44,16 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const { data, options } = await request.json()
-
   const supabase = createClient()
-  const updated = await supabase.rpc('set_favorite', {
+
+  const { error } = await supabase.rpc('set_favorite', {
     postid: postId,
     userid: userId,
     isfavorite: data?.is_favorite,
   })
 
-  if (updated?.error) {
-    return NextResponse.json(
-      { data: null, error: updated?.error },
-      { status: 400 }
-    )
+  if (error) {
+    return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
   return NextResponse.json({

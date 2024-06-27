@@ -1,18 +1,26 @@
 import { Tables } from '@/types/supabase'
 
-export type Meta = Array<Record<string, any>>
+export type Meta = Record<string, any>
 
 export type Role = 'guest' | 'user' | 'admin' | 'superadmin'
 
 export type Plan = 'free' | 'basic' | 'standard' | 'premium'
 
+export type UserMeta = Tables<'usermeta'>
+
 export type User = Tables<'users'> & {
-  meta?: Tables<'usermeta'>[]
+  meta?: UserMeta[]
 }
 
 export type Email = Tables<'emails'>
 
 export type Notification = Tables<'notifications'>
+
+export type Vote = Tables<'votes'>
+
+export type Analysis = Tables<'analyses'>
+
+export type Author = Tables<'users'>
 
 export type PostStatus =
   | 'publish'
@@ -24,23 +32,25 @@ export type PostStatus =
 
 export type PostType = 'post' | 'page' | 'revision'
 
-export type Post = Tables<'posts'> & {
-  num?: number
-  author?: Tables<'users'> | null
-  meta?: Tables<'postmeta'>[]
-}
+export type PostMeta = Tables<'postmeta'>
 
 export type CountPosts = {
   status: PostStatus
   count: number
 }
 
-export type Tags = Tables<'tags'> & {
-  meta?: Tables<'tagmeta'>[]
+export type Post = Tables<'posts'> & {
+  num?: number
+  author: Author | null
+  meta?: PostMeta[]
 }
 
 export type Favorite = Tables<'favorites'>
 
-export type Vote = Tables<'votes'>
+export type TagMeta = Tables<'tagmeta'>
 
-export type Analysis = Tables<'analyses'>
+export type Tag = Tables<'tags'> & {
+  meta?: TagMeta[]
+}
+
+export type PostTag = Tables<'post_tags'>

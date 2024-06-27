@@ -55,45 +55,48 @@ const AddDummyPost = ({
       if (!user) throw new Error('Require is not defined.')
 
       const posts = generateRecentPosts(user?.id, 1)
-      const postPaths = posts?.map((post: Partial<Post>) =>
-        getPostPath(post, { username: user?.username })
-      )
-      const revalidatePaths = [
-        ...postPaths,
-        getProfilePath(user),
-        getFavoritesPath(user),
-      ]
 
-      const inserted = await fetcher<PostAPI>(
-        `/api/v1/post?userId=${user?.id}`,
-        {
-          method: 'PUT',
-          body: JSON.stringify({ data: posts, options: { revalidatePaths } }),
-        }
-      )
+      for (let i = 0; i < posts.length; i++) {
+        const post = posts[i]
 
-      if (inserted?.error) throw new Error(inserted?.error?.message)
+        const { error } = await fetcher<PostAPI>(
+          `/api/v1/post?userId=${user?.id}`,
+          {
+            method: 'PUT',
+            body: JSON.stringify({
+              data: post,
+              options: {
+                revalidatePaths: getPostPath(post, {
+                  username: user?.username,
+                }),
+              },
+            }),
+          }
+        )
 
-      const countSearchParams = setQueryString({
-        userId: user?.id,
-        postType: (searchParams.get('postType') as string) ?? 'post',
-        q: searchParams.get('q') as string,
-      })
+        if (error) throw new Error(error?.message)
 
-      const listSearchParams = setQueryString({
-        userId: user?.id,
-        page: +((searchParams.get('page') as string) ?? '1'),
-        perPage: +((searchParams.get('perPage') as string) ?? '10'),
-        postType: (searchParams.get('postType') as string) ?? 'post',
-        status: searchParams.get('status') as string,
-        q: searchParams.get('q') as string,
-        orderBy: (searchParams.get('orderBy') as string) ?? 'id',
-        order: (searchParams.get('order') as string) ?? 'desc',
-      })
+        const countSearchParams = setQueryString({
+          userId: user?.id,
+          postType: (searchParams.get('postType') as string) ?? 'post',
+          q: searchParams.get('q') as string,
+        })
 
-      mutate(`/api/v1/post?userId=${user?.id}`)
-      mutate(`/api/v1/post/count?${countSearchParams}`)
-      mutate(`/api/v1/post/list?${listSearchParams}`)
+        const listSearchParams = setQueryString({
+          userId: user?.id,
+          page: +((searchParams.get('page') as string) ?? '1'),
+          perPage: +((searchParams.get('perPage') as string) ?? '10'),
+          postType: (searchParams.get('postType') as string) ?? 'post',
+          status: searchParams.get('status') as string,
+          q: searchParams.get('q') as string,
+          orderBy: (searchParams.get('orderBy') as string) ?? 'id',
+          order: (searchParams.get('order') as string) ?? 'desc',
+        })
+
+        mutate(`/api/v1/post?userId=${user?.id}`)
+        mutate(`/api/v1/post/count?${countSearchParams}`)
+        mutate(`/api/v1/post/list?${listSearchParams}`)
+      }
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Payment Required')) {

@@ -26,7 +26,6 @@ declare
   r record;
   visibility text;
 begin
-
   for r in (select * from posts where status = 'future' and date < now()) loop
     select meta_value into visibility from postmeta where post_id = r.id and meta_key = 'visibility';
 
@@ -38,6 +37,5 @@ begin
 
     update postmeta set meta_value = null where post_id = r.id and meta_key = 'future_date';
   end loop;
-
 end;
 $$ language plpgsql;

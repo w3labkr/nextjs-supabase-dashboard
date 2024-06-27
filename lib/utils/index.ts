@@ -28,5 +28,5 @@ export {
   getFavoritesPath,
   getFavoritesUrl,
 } from './url'
-export { getMeta, setMeta } from './functions'
+export { getMeta, setMeta, compareTags } from './functions'
 export { generateRecentPosts } from './dummy-text'

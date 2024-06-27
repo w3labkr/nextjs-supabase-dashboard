@@ -21,12 +21,14 @@ import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   MetaboxSlug,
-  MetaboxExcerpt,
+  MetaboxDescription,
+  MetaboxKeywords,
   MetaboxRevisions,
   MetaboxThumbnail,
   MetaboxPublish,
   MetaboxRectriction,
   MetaboxFutureDate,
+  MetaboxTags,
 } from './components/metaboxes'
 import { Permalink } from './components/permalink'
 import { PostFormProvider } from './context/post-form-provider'
@@ -40,11 +42,12 @@ const Editor = dynamic(() => import('./components/editor'), {
 
 const FormSchema = z.object({
   user_id: z.string().nonempty().uuid(),
+  date: z.string().datetime({ offset: true }).optional(),
   title: z.string().nonempty(),
   slug: z.string().nonempty(),
-  date: z.string().datetime({ offset: true }).optional(),
+  description: z.string().optional(),
+  keywords: z.string().optional(),
   content: z.string().optional(),
-  excerpt: z.string().optional(),
   thumbnail_url: z.string().optional(),
   meta: z.array(z.record(z.string(), z.any())).optional(),
 })
@@ -59,11 +62,12 @@ const PostForm = ({ id }: { id: number }) => {
     mode: 'onSubmit',
     values: {
       user_id: post?.user_id ?? '',
+      date: post?.date ?? '',
       title: post?.title ?? '',
       slug: post?.slug ?? '',
-      date: post?.date ?? '',
+      description: post?.description ?? '',
+      keywords: post?.keywords ?? '',
       content: post?.content ?? '',
-      excerpt: post?.excerpt ?? '',
       thumbnail_url: post?.thumbnail_url ?? '',
       meta: post?.meta ?? [],
     },
@@ -93,6 +97,7 @@ const PostForm = ({ id }: { id: number }) => {
     <PostFormProvider value={{ post }}>
       <Form {...form}>
         <UserIdField />
+        {/* <KeywordsField /> */}
         <MetaField />
         <form method="POST" noValidate>
           <div className="relative grid md:grid-cols-[1fr_280px] md:gap-8">
@@ -104,7 +109,8 @@ const PostForm = ({ id }: { id: number }) => {
               <Editor />
               <div>
                 <MetaboxSlug />
-                <MetaboxExcerpt />
+                <MetaboxDescription />
+                <MetaboxKeywords />
                 {/* <MetaboxRevisions /> */}
               </div>
             </div>
@@ -113,6 +119,7 @@ const PostForm = ({ id }: { id: number }) => {
               <MetaboxFutureDate />
               <MetaboxRectriction />
               <MetaboxThumbnail />
+              <MetaboxTags />
             </div>
           </div>
         </form>
@@ -131,7 +138,7 @@ const UserIdField = () => {
       render={({ field }) => (
         <FormItem>
           <FormControl>
-            <Input type="hidden" {...field} />
+            <input type="hidden" {...field} />
           </FormControl>
         </FormItem>
       )}
@@ -149,7 +156,7 @@ const MetaField = () => {
       render={({ field }) => (
         <FormItem>
           <FormControl>
-            <Input type="hidden" {...field} />
+            <input type="hidden" {...field} />
           </FormControl>
         </FormItem>
       )}

@@ -36,11 +36,9 @@ export async function GET(request: NextRequest) {
       head: true,
     })
 
-  if (match.constructor === Object && Object.keys(match).length > 0) {
-    counterQuery.match(match)
-  }
+  if (Object.keys(match).length > 0) counterQuery.match(match)
   if (!status) counterQuery.neq('status', 'trash')
-  if (q) counterQuery.textSearch('title_excerpt', q)
+  if (q) counterQuery.textSearch('title_description', q)
 
   const counter = await counterQuery
 
@@ -55,11 +53,9 @@ export async function GET(request: NextRequest) {
     .from('posts')
     .select('*, author:users(*), meta:postmeta(*)')
 
-  if (match.constructor === Object && Object.keys(match).length > 0) {
-    query.match(match)
-  }
+  if (Object.keys(match).length > 0) query.match(match)
   if (!status) query.neq('status', 'trash')
-  if (q) query.textSearch('title_excerpt', q)
+  if (q) query.textSearch('title_description', q)
   if (orderBy) query.order(orderBy, { ascending: order === 'asc' })
 
   if (limit) {

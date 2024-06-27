@@ -52,20 +52,17 @@ const SignedInAction = ({ postId, ...props }: FavoriteButtonProps) => {
 
       if (!user) throw new Error('Require is not defined.')
 
-      const revalidatePaths = [getProfilePath(user), getFavoritesPath(user)]
-
-      const result = await fetcher<FavoriteAPI>(
+      const { error } = await fetcher<FavoriteAPI>(
         `/api/v1/favorite?postId=${postId}&userId=${user?.id}`,
         {
           method: 'POST',
           body: JSON.stringify({
             data: { is_favorite: !isLike },
-            options: { revalidatePaths },
           }),
         }
       )
 
-      if (result?.error) throw new Error(result?.error?.message)
+      if (error) throw new Error(error?.message)
 
       setIsLike(!isLike)
 

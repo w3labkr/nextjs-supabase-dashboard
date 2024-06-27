@@ -38,6 +38,7 @@ drop table if exists users;
 
 ----------------------------------------------------------------
 
+-- Create a table
 create table users (
   id uuid not null references auth.users on delete cascade primary key,
   created_at timestamptz default now() not null,
@@ -72,6 +73,8 @@ comment on column users.plan_changed_at is 'on_plan_updated';
 
 -- Add table indexing
 create index users_username_idx on users (username);
+create index users_role_idx on users (role);
+create index users_plan_idx on users (plan);
 
 -- Secure the table
 alter table users enable row level security;

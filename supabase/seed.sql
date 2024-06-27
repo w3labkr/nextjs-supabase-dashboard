@@ -85,9 +85,10 @@ drop trigger if exists on_updated_at on emails;
 drop trigger if exists on_updated_at on notifications;
 drop trigger if exists on_updated_at on votes;
 drop trigger if exists on_updated_at on favorites;
-drop trigger if exists on_created on posts;
-drop trigger if exists on_updated_at on posts;
 drop trigger if exists on_slug_upsert on posts;
+drop trigger if exists on_updated_at on posts;
+drop trigger if exists on_created on posts;
+drop trigger if exists on_updated_at on tags;
 drop trigger if exists on_slug_upsert on tags;
 
 ----------------------------------------------------------------
@@ -108,13 +109,18 @@ drop function if exists set_user_plan;
 drop function if exists set_user_meta;
 drop function if exists get_users;
 
+drop function if exists set_post_tags;
 drop function if exists set_tag_meta;
 drop function if exists unique_tag_slug;
+drop function if exists generate_tag_slug;
+drop function if exists set_tag;
+
 drop function if exists get_vote;
 drop function if exists set_favorite;
 drop function if exists set_post_meta;
 drop function if exists set_post_views;
 drop function if exists unique_post_slug;
+drop function if exists generate_post_slug;
 drop function if exists count_posts;
 drop function if exists get_adjacent_post_id;
 drop function if exists create_new_posts;
@@ -122,9 +128,11 @@ drop function if exists handle_new_post;
 drop function if exists truncate_posts;
 drop function if exists get_posts_by_meta;
 
-drop function if exists title_excerpt;
+drop function if exists title_description;
+drop function if exists title_keywords;
 drop function if exists title_content;
-drop function if exists title_excerpt_content;
+drop function if exists title_description_keywords;
+drop function if exists title_description_content;
 
 ----------------------------------------------------------------
 
@@ -285,7 +293,6 @@ declare
   new_has_set_password boolean;
 begin
   for r in (select * from auth.users) loop
-
     new_username := generate_username(r.email);
     new_username := substr(new_username, 1, 255);
     new_has_set_password := case when r.encrypted_password is null or r.encrypted_password = '' then false else true end;
@@ -296,7 +303,6 @@ begin
     (r.id, new_has_set_password, new_username, new_username, r.raw_user_meta_data ->> 'avatar_url');
     insert into emails (user_id, email) values (r.id, r.email);
     insert into notifications (user_id) values (r.id);
-
   end loop;
 end;
 $$ language plpgsql;
@@ -341,6 +347,8 @@ comment on column users.plan is 'free, basic, standard, premium';
 comment on column users.plan_changed_at is 'on_plan_updated';
 
 create index users_username_idx on users (username);
+create index users_role_idx on users (role);
+create index users_plan_idx on users (plan);
 
 alter table users enable row level security;
 
@@ -477,7 +485,7 @@ create policy "User can delete their own usermeta" on usermeta for delete to aut
 
 ----------------------------------------------------------------
 
-create or replace function set_user_meta(userid bigint, metakey text, metavalue text)
+create or replace function set_user_meta(userid bigint, metakey text, metavalue text = null)
 returns void
 security definer set search_path = public
 as $$
@@ -527,6 +535,9 @@ create table emails (
 );
 comment on column emails.updated_at is 'on_updated_at';
 
+create index emails_user_id_idx on emails (user_id);
+create index emails_email_idx on emails (email);
+
 alter table emails enable row level security;
 
 create policy "User can select their own emails" on emails for select to authenticated using ( (select auth.uid()) = user_id );
@@ -552,6 +563,8 @@ create table notifications (
   security_emails boolean default true not null
 );
 comment on column notifications.updated_at is 'on_updated_at';
+
+create index notifications_user_id_idx on notifications (user_id);
 
 alter table notifications enable row level security;
 
@@ -579,9 +592,10 @@ create table posts (
   type text default 'post'::text not null,
   status text default 'draft'::text not null,
   password varchar(255),
-  slug text,
   title text,
-  excerpt text,
+  slug text,
+  description text,
+  keywords text,
   content text,
   thumbnail_url text,
   is_ban boolean default false not null,
@@ -593,7 +607,9 @@ comment on column posts.type is 'post, page, revision';
 comment on column posts.status is 'publish, future, draft, pending, private, trash';
 
 create index posts_slug_idx on posts (slug);
-create index posts_type_idx on posts (type, status, date, id);
+create index posts_type_status_date_idx on posts (type, status, date, id);
+create index posts_user_id_idx on posts (user_id);
+create index posts_user_id_slug_idx on posts (user_id, slug);
 
 alter table posts enable row level security;
 
@@ -614,18 +630,18 @@ as $$
 declare
   old_slug text;
   new_slug text;
+  slug_exists boolean;
   counter integer := 1;
 begin
   old_slug := new.slug;
   new_slug := old_slug;
 
-  loop
-    if exists (select 1 from posts where user_id = new.user_id and slug = new_slug and id != coalesce(new.id, 0)) then
-      new_slug := old_slug || '-' || counter;
-      counter := counter + 1;
-    else
-      exit;
-    end if;
+  select exists(select 1 from posts where user_id = new.user_id and slug = new_slug and id != coalesce(new.id, 0)) into slug_exists;
+
+  while slug_exists loop
+    new_slug := old_slug || '-' || counter;
+    counter := counter + 1;
+    select exists(select 1 from posts where user_id = new.user_id and slug = new_slug and id != coalesce(new.id, 0)) into slug_exists;
   end loop;
 
   new.slug := new_slug;
@@ -635,6 +651,33 @@ $$ language plpgsql;
 
 create trigger on_slug_upsert before insert or update of slug on posts
   for each row execute function unique_post_slug();
+
+----------------------------------------------------------------
+
+create or replace function generate_post_slug(userid uuid, postslug text)
+returns text
+security definer set search_path = public
+as $$
+declare
+  old_slug text;
+  new_slug text;
+  slug_exists boolean;
+  counter integer := 1;
+begin
+  old_slug := postslug;
+  new_slug := old_slug;
+
+  select exists(select 1 from posts where user_id = userid and slug = new_slug) into slug_exists;
+
+  while slug_exists loop
+    new_slug := old_slug || '-' || counter;
+    counter := counter + 1;
+    select exists(select 1 from posts where user_id = userid and slug = new_slug) into slug_exists;
+  end loop;
+
+  return new_slug;
+end;
+$$ language plpgsql;
 
 ----------------------------------------------------------------
 
@@ -688,11 +731,11 @@ security definer set search_path = public
 as $$
 declare
   r json;
+  postid bigint;
 begin
-  foreach r in array data
-  loop
+  foreach r in array data loop
     insert into posts
-    (created_at, updated_at, deleted_at, date, user_id, type, status, password, title, slug, content, excerpt, thumbnail_url, is_ban, banned_until)
+    (created_at, updated_at, deleted_at, date, user_id, type, status, password, title, slug, content, description, keywords, thumbnail_url, is_ban, banned_until)
     values
     (
       coalesce((r ->> 'created_at')::timestamptz, now()),
@@ -705,8 +748,9 @@ begin
       (r ->> 'password')::varchar(255),
       (r ->> 'title')::text,
       (r ->> 'slug')::text,
+      (r ->> 'description')::text,
+      (r ->> 'keywords')::text,
       (r ->> 'content')::text,
-      (r ->> 'excerpt')::text,
       (r ->> 'thumbnail_url')::text,
       coalesce((r ->> 'is_ban')::boolean, false),
       (r ->> 'banned_until')::timestamptz
@@ -763,17 +807,26 @@ $$ language plpgsql;
 
 ----------------------------------------------------------------
 
-create function title_excerpt(posts) returns text as $$
-  select $1.title || ' ' || $1.excerpt;
+create function title_description(posts) returns text as $$
+  select $1.title || ' ' || $1.description;
+$$ language sql immutable;
+
+create function title_keywords(posts) returns text as $$
+  select $1.title || ' ' || $1.keywords;
 $$ language sql immutable;
 
 create function title_content(posts) returns text as $$
   select $1.title || ' ' || $1.content;
 $$ language sql immutable;
 
-create function title_excerpt_content(posts) returns text as $$
-  select $1.title || ' ' || $1.excerpt || ' ' || $1.content;
+create function title_description_keywords(posts) returns text as $$
+  select $1.title || ' ' || $1.description || ' ' || $1.keywords;
 $$ language sql immutable;
+
+create function title_description_content(posts) returns text as $$
+  select $1.title || ' ' || $1.description || ' ' || $1.content;
+$$ language sql immutable;
+
 
 ----------------------------------------------------------------
 --                                                            --
@@ -801,7 +854,7 @@ create policy "User can delete postmeta" on postmeta for delete to authenticated
 
 ----------------------------------------------------------------
 
-create or replace function set_post_meta(postid bigint, metakey text, metavalue text)
+create or replace function set_post_meta(postid bigint, metakey text, metavalue text = null)
 returns void
 security definer set search_path = public
 as $$
@@ -839,12 +892,15 @@ create table favorites (
   id bigint generated by default as identity primary key,
   created_at timestamptz default now() not null,
   updated_at timestamptz default now() not null,
-  user_id uuid references users(id) on delete cascade not null,
+  user_id uuid references users(id) not null,
   post_id bigint references posts(id) on delete cascade not null,
   is_favorite boolean default false not null,
   unique (user_id, post_id)
 );
 comment on column favorites.updated_at is 'on_updated_at';
+
+create index favorites_user_id_idx on favorites (user_id);
+create index favorites_post_id_idx on favorites (post_id);
 
 alter table favorites enable row level security;
 
@@ -881,13 +937,16 @@ create table votes (
   id bigint generated by default as identity primary key,
   created_at timestamptz default now() not null,
   updated_at timestamptz default now() not null,
-  user_id uuid references users(id) on delete cascade not null,
+  user_id uuid references users(id) not null,
   post_id bigint references posts(id) on delete cascade not null,
   is_like smallint default 0 not null,
   is_dislike smallint default 0 not null,
   unique (user_id, post_id)
 );
 comment on column votes.updated_at is 'on_updated_at';
+
+create index votes_user_id_idx on votes (user_id);
+create index votes_post_id_idx on votes (post_id);
 
 alter table votes enable row level security;
 
@@ -911,9 +970,7 @@ security definer set search_path = public
 as $$
 begin
 	return query
-	select v.post_id, sum(v.is_like), sum(v.is_dislike)
-  from votes v where v.post_id = postid
-  group by v.post_id;
+	select v.post_id, sum(v.is_like), sum(v.is_dislike) from votes v where v.post_id = postid group by v.post_id;
 end;
 $$ language plpgsql;
 
@@ -926,11 +983,14 @@ $$ language plpgsql;
 create table analyses (
   id bigint generated by default as identity primary key,
   created_at timestamptz default now() not null,
+  user_id uuid references users(id) not null,
   post_id bigint references posts(id) on delete cascade not null,
-  user_id uuid references users(id) on delete cascade not null,
   ip inet,
   user_agent text
 );
+
+create index analyses_user_id_idx on analyses (user_id);
+create index analyses_post_id_idx on analyses (post_id);
 
 alter table analyses enable row level security;
 
@@ -947,20 +1007,30 @@ create policy "User can delete analyses" on analyses for delete to authenticated
 
 create table tags (
   id bigint generated by default as identity primary key,
+  created_at timestamptz default now() not null,
+  updated_at timestamptz default now() not null,
+  user_id uuid references users(id) on delete cascade not null,
   name text,
   slug text,
-  description text,
-  unique (slug)
+  description text
 );
+comment on column tags.updated_at is 'on_updated_at';
 
 create index tags_name_idx on tags (name);
+create index tags_slug_idx on tags (slug);
+create index tags_user_id_idx on tags (user_id);
+create index tags_user_id_name_idx on tags (user_id, name);
+create index tags_user_id_slug_idx on tags (user_id, slug);
 
 alter table tags enable row level security;
 
 create policy "Public access for all users" on tags for select to authenticated, anon using ( true );
-create policy "User can insert tags" on tags for insert to authenticated with check ( true );
-create policy "User can update tags" on tags for update to authenticated using ( true );
-create policy "User can delete tags" on tags for delete to authenticated using ( true );
+create policy "User can insert their own tags" on tags for insert to authenticated with check ( (select auth.uid()) = user_id );
+create policy "User can update their own tags" on tags for update to authenticated using ( (select auth.uid()) = user_id );
+create policy "User can delete their own tags" on tags for delete to authenticated using ( (select auth.uid()) = user_id );
+
+create trigger on_updated_at before update on tags
+  for each row execute procedure moddatetime (updated_at);
 
 ----------------------------------------------------------------
 
@@ -971,18 +1041,18 @@ as $$
 declare
   old_slug text;
   new_slug text;
+  slug_exists boolean;
   counter integer := 1;
 begin
   old_slug := new.slug;
   new_slug := old_slug;
 
-  loop
-    if exists (select 1 from tags where slug = new_slug and id != coalesce(new.id, 0)) then
-      new_slug := old_slug || '-' || counter;
-      counter := counter + 1;
-    else
-      exit;
-    end if;
+  select exists(select 1 from tags where user_id = new.user_id and slug = new_slug and id != coalesce(new.id, 0)) into slug_exists;
+
+  while slug_exists loop
+    new_slug := old_slug || '-' || counter;
+    counter := counter + 1;
+    select exists(select 1 from tags where user_id = new.user_id and slug = new_slug and id != coalesce(new.id, 0)) into slug_exists;
   end loop;
 
   new.slug := new_slug;
@@ -992,6 +1062,57 @@ $$ language plpgsql;
 
 create trigger on_slug_upsert before insert or update of slug on tags
   for each row execute function unique_tag_slug();
+
+----------------------------------------------------------------
+
+create or replace function generate_tag_slug(userid uuid, tagslug text)
+returns text
+security definer set search_path = public
+as $$
+declare
+  old_slug text;
+  new_slug text;
+  slug_exists boolean;
+  counter integer := 1;
+begin
+  old_slug := tagslug;
+  new_slug := old_slug;
+
+  select exists(select 1 from tags where user_id = userid and slug = new_slug) into slug_exists;
+
+  while slug_exists loop
+    new_slug := old_slug || '-' || counter;
+    counter := counter + 1;
+    select exists(select 1 from tags where user_id = userid and slug = new_slug) into slug_exists;
+  end loop;
+
+  return new_slug;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
+create or replace function set_tag(
+  userid uuid,
+  tagname text,
+  tagslug text,
+  tagdescription text = null
+)
+returns setof tags
+security definer set search_path = public
+as $$
+begin
+
+  if exists (select 1 from tags where user_id = userid and slug = tagslug) then
+    update tags set name = tagname, slug = tagslug, description = tagdescription where user_id = userid and slug = tagslug;
+  else
+    insert into tags(user_id, name, slug, description) values(userid, tagname, tagslug, tagdescription);
+  end if;
+
+  return query
+  select * from tags where user_id = userid and slug = tagslug;
+end;
+$$ language plpgsql;
 
 ----------------------------------------------------------------
 --                                                            --
@@ -1019,7 +1140,7 @@ create policy "User can delete tagmeta" on tagmeta for delete to authenticated u
 
 ----------------------------------------------------------------
 
-create or replace function set_tag_meta(tagid bigint, metakey text, metavalue text)
+create or replace function set_tag_meta(tagid bigint, metakey text, metavalue text = null)
 returns void
 security definer set search_path = public
 as $$
@@ -1031,31 +1152,70 @@ begin
   end if;
 end;
 $$ language plpgsql;
+
 ----------------------------------------------------------------
 --                                                            --
 --                      public.post_tags                      --
 --                                                            --
 ----------------------------------------------------------------
 
-drop table if exists post_tags;
-
-----------------------------------------------------------------
-
 create table post_tags (
   id bigint generated by default as identity primary key,
-  post_id bigint references tags(id) on delete cascade not null,
-  tag_id bigint references tags(id),
-  unique (post_id, tag_id)
+  user_id uuid references users(id) not null,
+  post_id bigint references posts(id) on delete cascade not null,
+  tag_id bigint references tags(id) on delete cascade not null,
+  unique (user_id, post_id, tag_id)
 );
 
-create index post_tags_post_id_idx on post_tags(post_id, tag_id);
+create index post_tags_user_id_idx on post_tags (user_id);
+create index post_tags_post_id_idx on post_tags (post_id);
+create index post_tags_tag_id_idx on post_tags (tag_id);
+create index post_tags_user_id_post_id_idx on post_tags (user_id, post_id);
 
 alter table post_tags enable row level security;
 
 create policy "Public access for all users" on post_tags for select to authenticated, anon using ( true );
-create policy "User can insert post_tags" on post_tags for insert to authenticated with check ( true );
-create policy "User can update post_tags" on post_tags for update to authenticated using ( true );
-create policy "User can delete post_tags" on post_tags for delete to authenticated using ( true );
+create policy "User can insert their own post_tags" on post_tags for insert to authenticated with check ( (select auth.uid()) = user_id );
+create policy "User can update their own post_tags" on post_tags for update to authenticated using ( (select auth.uid()) = user_id );
+create policy "User can delete their own post_tags" on post_tags for delete to authenticated using ( (select auth.uid()) = user_id );
+
+----------------------------------------------------------------
+
+create or replace function set_post_tags(
+  userid uuid,
+  postid bigint,
+  added json[],
+  removed json[]
+)
+returns setof post_tags
+security definer set search_path = public
+as $$
+declare
+  tag json;
+  tagid bigint;
+begin
+
+ 	foreach tag in array removed loop
+	  delete from post_tags pt
+    using tags t
+    where pt.user_id = userid and pt.post_id = postid and pt.tag_id = t.id and t.name = (tag ->> 'name')::text;
+ 	end loop;
+
+ 	foreach tag in array added loop
+		if exists (select 1 from tags t where t.user_id = userid and t.name = (tag ->> 'name')::text) then
+		  select t.id into tagid from tags t where t.user_id = userid and t.name = (tag ->> 'name')::text;
+		else
+      insert into tags(user_id, name, slug) values(userid, (tag ->> 'name')::text, (tag ->> 'slug')::text)
+      returning id into tagid;
+	  end if;
+
+	  insert into post_tags(user_id, post_id, tag_id) values(userid, postid, tagid);
+	end loop;
+
+  return query
+  select * from post_tags where user_id = userid and post_id = postid;
+end;
+$$ language plpgsql;
 
 ----------------------------------------------------------------
 --                                                            --

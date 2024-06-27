@@ -4,20 +4,22 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
 import dayjs from 'dayjs'
+import { Tag } from 'emblor'
+
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { RelatedPosts } from '@/components/related-posts'
 import { Forbidden } from '@/components/error'
 import { PostProvider } from './post-provider'
 import { Analysis } from './analysis'
 import { PostViews } from './post-views'
 import { FavoriteButton } from './favorite-button'
+import { RelatedPosts } from './related-posts'
 
-import { cn, getAuthorUrl } from '@/lib/utils'
+import { cn, getAuthorUrl, getMeta } from '@/lib/utils'
 import { getAuth, authenticate } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { getPostAPI, getAdjacentPostAPI } from '@/queries/server/posts'
-import { Post } from '@/types/database'
+import { Author, Post, PostMeta } from '@/types/database'
 import { siteConfig } from '@/config/site'
 
 // revalidate the data at most every month
@@ -41,12 +43,12 @@ export async function generateMetadata(
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL!),
     title: post?.title,
-    description: post?.excerpt,
+    description: post?.description,
     openGraph: {
       type: 'website',
       siteName: process.env.NEXT_PUBLIC_APP_NAME!,
       title: post?.title ?? undefined,
-      description: post?.excerpt ?? undefined,
+      description: post?.description ?? undefined,
       images: post?.thumbnail_url ?? undefined,
     },
   }
@@ -99,12 +101,21 @@ export default async function PostPage({
         )}
       >
         <div className="container min-w-0 flex-1 overflow-auto pt-16">
-          {post?.title ? <PostTitle title={post?.title} /> : null}
-          <PostMeta post={post} />
-          {post?.thumbnail_url ? (
-            <PostThumbnail thumbnailUrl={post?.thumbnail_url} />
-          ) : null}
-          {post?.content ? <PostContent content={post?.content} /> : null}
+          <PostTitle title={post?.title} />
+          <div className="mb-8 flex justify-between">
+            <div className="space-x-1">
+              <PostDate date={post?.date} />
+              <span>— by</span>
+              <PostAuthor author={post?.author} />
+            </div>
+            <div className="flex space-x-4">
+              <PostViews postId={post?.id} />
+              <FavoriteButton postId={post?.id} />
+            </div>
+          </div>
+          <PostThumbnail thumbnailUrl={post?.thumbnail_url} />
+          <PostContent content={post?.content} />
+          <PostTags meta={post?.meta} />
           <RelatedPosts previousPost={previousPost} nextPost={nextPost} />
         </div>
       </main>
@@ -113,56 +124,41 @@ export default async function PostPage({
   )
 }
 
-interface PostTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
-  title: string
-}
+const PostTitle = ({ title }: { title: string | null }) => {
+  if (!title) return null
 
-const PostTitle = ({ title, ...props }: PostTitleProps) => {
   return (
-    <h1
-      className="mb-16 text-center font-serif text-6xl font-bold leading-tight tracking-tighter md:text-7xl md:leading-none lg:text-8xl"
-      {...props}
-    >
+    <h1 className="mb-16 text-center font-serif text-6xl font-bold leading-tight tracking-tighter md:text-7xl md:leading-none lg:text-8xl">
       {title}
     </h1>
   )
 }
 
-interface PostMetaProps extends React.HTMLAttributes<HTMLDivElement> {
-  post: Post
-}
-
-const PostMeta = ({ post, ...props }: PostMetaProps) => {
+const PostDate = ({ date }: { date: string | null }) => {
   return (
-    <div className="mb-8 flex justify-between" {...props}>
-      <div className="space-x-1">
-        <time dateTime={post?.date ?? undefined}>
-          {dayjs(post?.date).format('MMMM D, YYYY')}
-        </time>
-        <span>— by</span>
-        <Link
-          href={getAuthorUrl(post) ?? '#'}
-          scroll={!siteConfig?.fixedHeader}
-          className="hover:underline"
-        >
-          {post?.author?.full_name}
-        </Link>
-      </div>
-      <div className="flex space-x-4">
-        <PostViews postId={post?.id} />
-        <FavoriteButton postId={post?.id} />
-      </div>
-    </div>
+    <time dateTime={date ?? undefined}>
+      {dayjs(date).format('MMMM D, YYYY')}
+    </time>
   )
 }
 
-interface PostThumbnailProps extends React.HTMLAttributes<HTMLDivElement> {
-  thumbnailUrl: string
+const PostAuthor = ({ author }: { author: Author | null }) => {
+  return (
+    <Link
+      href={getAuthorUrl(null, { username: author?.username }) ?? '#'}
+      scroll={!siteConfig?.fixedHeader}
+      className="underline hover:no-underline"
+    >
+      {author?.full_name}
+    </Link>
+  )
 }
 
-const PostThumbnail = ({ thumbnailUrl, ...props }: PostThumbnailProps) => {
+const PostThumbnail = ({ thumbnailUrl }: { thumbnailUrl: string | null }) => {
+  if (!thumbnailUrl) return null
+
   return (
-    <div className="mb-8 sm:mx-0 md:mb-16" {...props}>
+    <div className="mb-8 sm:mx-0 md:mb-16">
       <div
         className="min-h-96 bg-cover bg-center bg-no-repeat sm:mx-0"
         style={{ backgroundImage: `url(${thumbnailUrl})` }}
@@ -171,16 +167,45 @@ const PostThumbnail = ({ thumbnailUrl, ...props }: PostThumbnailProps) => {
   )
 }
 
-interface PostContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  content: string
+const PostContent = ({ content }: { content: string | null }) => {
+  if (!content) return null
+
+  return (
+    <div className="mb-8" dangerouslySetInnerHTML={{ __html: content }}></div>
+  )
 }
 
-const PostContent = ({ content, ...props }: PostContentProps) => {
+const PostTags = ({ meta }: { meta?: PostMeta[] }) => {
+  const tags: Tag[] = JSON.parse(getMeta(meta, 'tags', '[]'))
+
+  if (Array.isArray(tags) && tags?.length === 0) {
+    return null
+  }
+
   return (
-    <div
-      className="mb-16"
-      dangerouslySetInnerHTML={{ __html: content }}
-      {...props}
-    ></div>
+    <div className="mb-16">
+      <p>Tags: </p>
+      <div>
+        {tags?.map((tag: Tag, i: number) => (
+          <React.Fragment key={tag.id}>
+            {i === 0 ? null : <span>, </span>}
+            <PostTag tag={tag} />
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+const PostTag = ({ tag }: { tag: Tag }) => {
+  return (
+    <Link
+      href="#"
+      className="underline hover:no-underline"
+      rel="tag"
+      scroll={!siteConfig?.fixedHeader}
+    >
+      {tag?.text}
+    </Link>
   )
 }

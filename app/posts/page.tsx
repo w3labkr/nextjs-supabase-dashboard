@@ -110,7 +110,7 @@ const PostItem = ({ post, ...props }: PostItemProps) => {
           {post?.title}
         </Link>
       </h3>
-      <p className="line-clamp-3">{post?.excerpt}</p>
+      <p className="line-clamp-3">{post?.description}</p>
       <div className="space-x-1 text-sm">
         <time dateTime={post?.date ?? undefined}>
           {dayjs(post?.date).format('MMMM D, YYYY')}

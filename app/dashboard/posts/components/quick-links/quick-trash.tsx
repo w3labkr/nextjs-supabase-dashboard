@@ -34,21 +34,16 @@ const QuickTrash = ({ post, ...props }: QuickTrashProps) => {
       setIsSubmitting(true)
 
       const now = new Date().toISOString()
-      const revalidatePaths = [
-        getPostPath(post),
-        getAuthorPath(post),
-        getAuthorFavoritesPath(post),
-      ]
 
-      const updated = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
+      const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: { status: 'trash', deleted_at: now, user_id: post?.user_id },
-          options: { revalidatePaths },
+          options: { revalidatePaths: getPostPath(post) },
         }),
       })
 
-      if (updated?.error) throw new Error(updated?.error?.message)
+      if (error) throw new Error(error?.message)
 
       const countSearchParams = setQueryString({
         userId: post?.user_id,

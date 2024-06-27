@@ -45,9 +45,9 @@ export async function GET(request: NextRequest) {
     return result?.data?.find((r) => r.status === row.status) ?? row
   })
 
-  const count = data?.reduce((acc, obj) => {
-    if (obj.status === 'trash') return acc
-    return acc + obj.count
+  const count = data?.reduce((acc, curr) => {
+    if (curr.status === 'trash') return acc
+    return acc + curr.count
   }, 0)
 
   // const orderBy = ['publish', 'draft', 'pending', 'private', 'future', 'trash']

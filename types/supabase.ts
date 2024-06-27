@@ -192,24 +192,27 @@ export type Database = {
         Row: {
           id: number
           post_id: number
-          tag_id: number | null
+          tag_id: number
+          user_id: string
         }
         Insert: {
           id?: number
           post_id: number
-          tag_id?: number | null
+          tag_id: number
+          user_id: string
         }
         Update: {
           id?: number
           post_id?: number
-          tag_id?: number | null
+          tag_id?: number
+          user_id?: string
         }
         Relationships: [
           {
             foreignKeyName: "post_tags_post_id_fkey"
             columns: ["post_id"]
             isOneToOne: false
-            referencedRelation: "tags"
+            referencedRelation: "posts"
             referencedColumns: ["id"]
           },
           {
@@ -217,6 +220,13 @@ export type Database = {
             columns: ["tag_id"]
             isOneToOne: false
             referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "post_tags_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -257,9 +267,10 @@ export type Database = {
           created_at: string
           date: string | null
           deleted_at: string | null
-          excerpt: string | null
+          description: string | null
           id: number
           is_ban: boolean
+          keywords: string | null
           password: string | null
           slug: string | null
           status: string
@@ -269,8 +280,10 @@ export type Database = {
           updated_at: string
           user_id: string
           title_content: string | null
-          title_excerpt: string | null
-          title_excerpt_content: string | null
+          title_description: string | null
+          title_description_content: string | null
+          title_description_keywords: string | null
+          title_keywords: string | null
         }
         Insert: {
           banned_until?: string | null
@@ -278,9 +291,10 @@ export type Database = {
           created_at?: string
           date?: string | null
           deleted_at?: string | null
-          excerpt?: string | null
+          description?: string | null
           id?: number
           is_ban?: boolean
+          keywords?: string | null
           password?: string | null
           slug?: string | null
           status?: string
@@ -296,9 +310,10 @@ export type Database = {
           created_at?: string
           date?: string | null
           deleted_at?: string | null
-          excerpt?: string | null
+          description?: string | null
           id?: number
           is_ban?: boolean
+          keywords?: string | null
           password?: string | null
           slug?: string | null
           status?: string
@@ -367,24 +382,41 @@ export type Database = {
       }
       tags: {
         Row: {
+          created_at: string
           description: string | null
           id: number
           name: string | null
           slug: string | null
+          updated_at: string
+          user_id: string
         }
         Insert: {
+          created_at?: string
           description?: string | null
           id?: number
           name?: string | null
           slug?: string | null
+          updated_at?: string
+          user_id: string
         }
         Update: {
+          created_at?: string
           description?: string | null
           id?: number
           name?: string | null
           slug?: string | null
+          updated_at?: string
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "tags_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       usermeta: {
         Row: {
@@ -578,6 +610,20 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      generate_post_slug: {
+        Args: {
+          userid: string
+          postslug: string
+        }
+        Returns: string
+      }
+      generate_tag_slug: {
+        Args: {
+          userid: string
+          tagslug: string
+        }
+        Returns: string
+      }
       generate_username: {
         Args: {
           email: string
@@ -607,9 +653,10 @@ export type Database = {
           created_at: string
           date: string | null
           deleted_at: string | null
-          excerpt: string | null
+          description: string | null
           id: number
           is_ban: boolean
+          keywords: string | null
           password: string | null
           slug: string | null
           status: string
@@ -675,9 +722,23 @@ export type Database = {
         Args: {
           postid: number
           metakey: string
-          metavalue: string
+          metavalue?: string
         }
         Returns: undefined
+      }
+      set_post_tags: {
+        Args: {
+          userid: string
+          postid: number
+          added: Json[]
+          removed: Json[]
+        }
+        Returns: {
+          id: number
+          post_id: number
+          tag_id: number
+          user_id: string
+        }[]
       }
       set_post_views: {
         Args: {
@@ -685,11 +746,28 @@ export type Database = {
         }
         Returns: undefined
       }
+      set_tag: {
+        Args: {
+          userid: string
+          tagname: string
+          tagslug: string
+          tagdescription?: string
+        }
+        Returns: {
+          created_at: string
+          description: string | null
+          id: number
+          name: string | null
+          slug: string | null
+          updated_at: string
+          user_id: string
+        }[]
+      }
       set_tag_meta: {
         Args: {
           tagid: number
           metakey: string
-          metavalue: string
+          metavalue?: string
         }
         Returns: undefined
       }
@@ -697,7 +775,7 @@ export type Database = {
         Args: {
           userid: number
           metakey: string
-          metavalue: string
+          metavalue?: string
         }
         Returns: undefined
       }
@@ -723,13 +801,25 @@ export type Database = {
         }
         Returns: string
       }
-      title_excerpt: {
+      title_description: {
         Args: {
           "": unknown
         }
         Returns: string
       }
-      title_excerpt_content: {
+      title_description_content: {
+        Args: {
+          "": unknown
+        }
+        Returns: string
+      }
+      title_description_keywords: {
+        Args: {
+          "": unknown
+        }
+        Returns: string
+      }
+      title_keywords: {
         Args: {
           "": unknown
         }

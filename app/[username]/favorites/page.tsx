@@ -1,20 +1,17 @@
 import * as React from 'react'
 import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import dayjs from 'dayjs'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { Paging, PagingProvider } from '@/components/paging'
-import { Aside } from '../aside'
 
-import { LucideIcon } from '@/lib/lucide-icon'
-import { cn, getPostUrl, getProfileUrl } from '@/lib/utils'
+import { Aside } from '../aside'
+import { PostList } from './post-list'
+import { RecentLink, FavoritesLink } from './tab-links'
+
+import { cn } from '@/lib/utils'
 import { getUserAPI } from '@/queries/server/users'
-import { getFavoritePostsAPI } from '@/queries/server/favorites'
 import { siteConfig } from '@/config/site'
-import { Post, User } from '@/types/database'
 import { SearchForm } from '@/components/search-form'
 
 // revalidate the data at most every week
@@ -48,37 +45,11 @@ export default async function FavoritesPage({
   searchParams,
 }: {
   params: { username: string }
-  searchParams?: {
-    page?: string
-    perPage?: string
-    pageSize?: string
-    q?: string
-    orderBy?: string
-    order?: string
-  }
+  searchParams?: { q?: string }
 }) {
   const { user } = await getUserAPI(null, { username })
 
   if (!user) notFound()
-
-  const page = +(searchParams?.page ?? '1')
-  const perPage = +(searchParams?.perPage ?? '10')
-  const pageSize = +(searchParams?.pageSize ?? '10')
-  const q = searchParams?.q ?? ''
-  const orderBy = searchParams?.orderBy ?? 'id'
-  const order = searchParams?.order ?? 'desc'
-
-  const { posts, count } = await getFavoritePostsAPI(user?.id ?? null, {
-    page,
-    perPage,
-    postType: 'post',
-    status: 'publish',
-    q,
-    orderBy,
-    order,
-  })
-
-  const total = count ?? 0
 
   return (
     <>
@@ -101,99 +72,15 @@ export default async function FavoritesPage({
                 <SearchForm
                   placeholder="find_favorites"
                   translate="yes"
-                  values={{ q }}
+                  values={{ q: searchParams?.q ?? '' }}
                 />
               </div>
-              <PagingProvider value={{ total, page, perPage, pageSize }}>
-                <div className="space-y-16 border-t">
-                  {Array.isArray(posts) && posts?.length > 0 ? (
-                    <>
-                      <PostList posts={posts} />
-                      <Paging />
-                    </>
-                  ) : (
-                    <EmptyList />
-                  )}
-                </div>
-              </PagingProvider>
+              <PostList className="space-y-16 border-t" />
             </div>
           </div>
         </div>
       </main>
       <Footer />
     </>
-  )
-}
-
-interface TabLinkProps {
-  user: User
-}
-
-const RecentLink = ({ user }: TabLinkProps) => {
-  return (
-    <Link
-      href={getProfileUrl(user) ?? '#'}
-      scroll={!siteConfig?.fixedHeader}
-      className="flex items-center text-muted-foreground"
-    >
-      <LucideIcon name="History" size={16} className="mr-1" />
-      Recent
-    </Link>
-  )
-}
-
-const FavoritesLink = ({ user }: TabLinkProps) => {
-  return (
-    <Link
-      href="#"
-      scroll={!siteConfig?.fixedHeader}
-      className="flex items-center"
-    >
-      <LucideIcon
-        name="Heart"
-        fill="#ef4444"
-        size={16}
-        className="mr-1 text-destructive"
-      />
-      Favorites
-    </Link>
-  )
-}
-
-interface PostListProps extends React.HTMLAttributes<HTMLDivElement> {
-  posts: Post[]
-}
-
-const PostList = ({ posts, ...props }: PostListProps) => {
-  return (
-    <div className="grid grid-cols-1" {...props}>
-      {posts?.map((post: Post) => <PostItem key={post?.id} post={post} />)}
-    </div>
-  )
-}
-
-const EmptyList = () => {
-  return <div className="py-4">No posts yet</div>
-}
-
-interface PostItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  post: Post
-}
-
-const PostItem = ({ post, ...props }: PostItemProps) => {
-  return (
-    <div className="space-y-2 border-b py-4" {...props}>
-      <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
-        <Link href={getPostUrl(post) ?? '#'} scroll={!siteConfig?.fixedHeader}>
-          {post?.title}
-        </Link>
-      </h3>
-      <p className="line-clamp-3">{post?.excerpt}</p>
-      <div className="space-x-1 text-sm">
-        <time dateTime={post?.date ?? undefined}>
-          {dayjs(post?.date).format('MMMM D, YYYY')}
-        </time>
-      </div>
-    </div>
   )
 }

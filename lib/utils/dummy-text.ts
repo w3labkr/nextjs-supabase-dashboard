@@ -10,6 +10,7 @@ export function generateRecentPosts(
 
   for (let index = 0; index < maximum; index++) {
     const title = faker.lorem.sentence()
+    const keywords = slugify(title, { replacement: ',', lower: false })
 
     const post: Partial<Post> = {
       // created_at: new Date().toISOString(),
@@ -21,9 +22,10 @@ export function generateRecentPosts(
       status: 'publish',
       password: null,
       title,
-      slug: slugify(title ?? ''),
+      slug: slugify(title),
+      description: faker.lorem.sentence(),
+      keywords,
       content: faker.lorem.paragraphs(),
-      excerpt: faker.lorem.sentence(),
       thumbnail_url: null,
       is_ban: false,
       banned_until: null,

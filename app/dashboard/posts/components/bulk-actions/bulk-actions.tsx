@@ -126,23 +126,22 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
 
       for (let i = 0; i < checks.length; i++) {
         const post = checks[i]
-
         const data = getData(formValues?.action, post)
-        const revalidatePaths = [
-          getPostPath(post),
-          getAuthorPath(post),
-          getAuthorFavoritesPath(post),
-        ]
 
         if (!data) throw new Error('Require is not defined.')
 
-        const method = formValues?.action === 'delete' ? 'DELETE' : 'POST'
-        const result = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
-          method,
-          body: JSON.stringify({ data, options: { revalidatePaths } }),
-        })
+        const { error } = await fetcher<PostAPI>(
+          `/api/v1/post?id=${post?.id}`,
+          {
+            method: formValues?.action === 'delete' ? 'DELETE' : 'POST',
+            body: JSON.stringify({
+              data,
+              options: { revalidatePaths: getPostPath(post) },
+            }),
+          }
+        )
 
-        if (result?.error) throw new Error(result?.error?.message)
+        if (error) throw new Error(error?.message)
 
         const countSearchParams = setQueryString({
           userId: post?.user_id,

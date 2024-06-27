@@ -5,7 +5,7 @@ This is a starter template for the [NextJS](https://nextjs.org/) 14 app router w
 Denpendency
 
 - NextJS 14 + Typescript + Tailwind
-- Shadcn UI (Radix UI)
+- Shadcn UI (Radix UI) + TimePicker + TagInput
 - react-hook-form + zod
 - react-i18next + zod-i18n-map
 - Redux Toolkit + Redux Persist
@@ -28,6 +28,8 @@ Denpendency
   - [Installation](#installation)
     - [Tailwind CSS](#tailwind-css)
     - [Shadcn UI](#shadcn-ui)
+    - [Shadcn UI - Time Picker](#shadcn-ui---time-picker)
+    - [Shadcn UI - Emblor](#shadcn-ui---emblor)
     - [Internationalization (i18n)](#internationalization-i18n)
     - [Schema Validation](#schema-validation)
     - [Redux Toolkit](#redux-toolkit)
@@ -195,6 +197,22 @@ npx shadcn-ui@latest add [component]
 ```
 
 The configuration for Shadcn UI is `components.json`.
+
+### Shadcn UI - Time Picker
+
+A simple TimePicker for your Shadcn UI project.
+
+- <https://github.com/openstatusHQ/time-picker>
+
+### Shadcn UI - Emblor
+
+A fully-featured tag input component built with shadcn/ui
+
+```shell
+npm install emblor
+```
+
+- <https://github.com/JaleelB/emblor>
 
 ### Internationalization (i18n)
 

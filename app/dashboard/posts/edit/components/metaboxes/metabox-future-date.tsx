@@ -23,12 +23,12 @@ const MetaboxFutureDate = () => {
   const { post } = usePostForm()
   const { control, setValue } = useFormContext()
 
-  const watchMeta: Meta | undefined = useWatch({ control, name: 'meta' })
+  const watchMeta: Meta[] | undefined = useWatch({ control, name: 'meta' })
   const [checked, setChecked] = React.useState<boolean>(false)
   const [date, setDate] = React.useState<Date | undefined>(new Date())
 
   const setMetaValue = React.useCallback(
-    (meta: Meta | undefined, key: string, value: string | null) => {
+    (meta: Meta[] | undefined, key: string, value: string | null) => {
       const metaValue = setMeta(meta, key, value, {
         post_id: post?.id,
       })

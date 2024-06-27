@@ -13,18 +13,18 @@ import {
 import { FormMessage } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 
-const MetaboxExcerpt = () => {
+const MetaboxDescription = () => {
   const { t } = useTranslation()
   const { register, getFieldState, formState } = useFormContext()
-  const fieldState = getFieldState('excerpt', formState)
+  const fieldState = getFieldState('description', formState)
 
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
       <AccordionItem value="item-1">
-        <AccordionTrigger>{t('excerpt')}</AccordionTrigger>
+        <AccordionTrigger>{t('description')}</AccordionTrigger>
         <AccordionContent className="px-1 py-1 pb-4">
           <Textarea
-            {...register('excerpt')}
+            {...register('description')}
             placeholder={t('please_enter_your_message')}
             rows={5}
           />
@@ -37,4 +37,4 @@ const MetaboxExcerpt = () => {
   )
 }
 
-export { MetaboxExcerpt }
+export { MetaboxDescription }

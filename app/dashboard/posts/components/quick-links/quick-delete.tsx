@@ -33,21 +33,15 @@ const QuickDelete = ({ post, ...props }: QuickDeleteProps) => {
     try {
       setIsSubmitting(true)
 
-      const revalidatePaths = [
-        getPostPath(post),
-        getAuthorPath(post),
-        getAuthorFavoritesPath(post),
-      ]
-
-      const deleted = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
+      const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'DELETE',
         body: JSON.stringify({
           data: { user_id: post?.user_id },
-          options: { revalidatePaths },
+          options: { revalidatePaths: getPostPath(post) },
         }),
       })
 
-      if (deleted?.error) throw new Error(deleted?.error?.message)
+      if (error) throw new Error(error?.message)
 
       const countSearchParams = setQueryString({
         userId: post?.user_id,

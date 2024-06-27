@@ -93,7 +93,7 @@ const MetaboxPublish = () => {
 const DraftButton = () => {
   const { t } = useTranslation()
   const { post } = usePostForm()
-  const { getValues, setError, handleSubmit } = useFormContext()
+  const { getValues, handleSubmit } = useFormContext()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -104,17 +104,11 @@ const DraftButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const revalidatePaths = [
-        getPostPath(post),
-        getAuthorPath(post),
-        getAuthorFavoritesPath(post),
-      ]
-
       const result = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: { ...getValues(), status: 'draft' },
-          options: { revalidatePaths },
+          options: { revalidatePaths: getPostPath(post) },
         }),
       })
 
@@ -124,12 +118,7 @@ const DraftButton = () => {
 
       toast.success(t('changed_successfully'))
     } catch (e: unknown) {
-      const err = (e as Error)?.message
-      if (err.startsWith('duplicate key value violates unique constraint')) {
-        setError('slug', { message: t('duplicate_slug') })
-      } else {
-        toast.error(err)
-      }
+      toast.error((e as Error)?.message)
     } finally {
       setIsSubmitting(false)
     }
@@ -192,7 +181,7 @@ const PreviewButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { post } = usePostForm()
-  const { getValues, setError, handleSubmit } = useFormContext()
+  const { getValues, handleSubmit } = useFormContext()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -203,36 +192,27 @@ const PreviewButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const postPath = getPostPath(post)
-      const revalidatePaths = [
-        postPath,
-        getAuthorPath(post),
-        getAuthorFavoritesPath(post),
-      ]
-
-      const result = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
+      const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: { ...getValues(), status: 'draft' },
-          options: { revalidatePaths },
+          options: { revalidatePaths: getPostPath(post) },
         }),
       })
 
-      if (result?.error) throw new Error(result?.error?.message)
+      if (error) throw new Error(error?.message)
 
       mutate(`/api/v1/post?id=${post?.id}`)
 
-      if (postPath)
+      const postPath = getPostPath(post)
+
+      if (postPath) {
         router.push(postPath + '?preview=true', {
           scroll: !siteConfig?.fixedHeader,
         })
-    } catch (e: unknown) {
-      const err = (e as Error)?.message
-      if (err.startsWith('duplicate key value violates unique constraint')) {
-        setError('slug', { message: t('duplicate_slug') })
-      } else {
-        toast.error(err)
       }
+    } catch (e: unknown) {
+      toast.error((e as Error)?.message)
     } finally {
       setIsSubmitting(false)
     }
@@ -255,7 +235,7 @@ const TrashButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { post } = usePostForm()
-  const { getValues, setError, handleSubmit, unregister } = useFormContext()
+  const { getValues, handleSubmit, unregister } = useFormContext()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -271,21 +251,16 @@ const TrashButton = () => {
       if (!post) throw new Error('Require is not defined.')
 
       const now = new Date().toISOString()
-      const revalidatePaths = [
-        getPostPath(post),
-        getAuthorPath(post),
-        getAuthorFavoritesPath(post),
-      ]
 
-      const result = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
+      const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: { ...getValues(), status: 'trash', deleted_at: now },
-          options: { revalidatePaths },
+          options: { revalidatePaths: getPostPath(post) },
         }),
       })
 
-      if (result?.error) throw new Error(result?.error?.message)
+      if (error) throw new Error(error?.message)
 
       toast.success(t('changed_successfully'))
 
@@ -293,12 +268,7 @@ const TrashButton = () => {
         scroll: !siteConfig?.fixedHeader,
       })
     } catch (e: unknown) {
-      const err = (e as Error)?.message
-      if (err.startsWith('duplicate key value violates unique constraint')) {
-        setError('slug', { message: t('duplicate_slug') })
-      } else {
-        toast.error(err)
-      }
+      toast.error((e as Error)?.message)
     } finally {
       setIsSubmitting(false)
     }
@@ -321,7 +291,7 @@ const TrashButton = () => {
 const PublishButton = () => {
   const { t } = useTranslation()
   const { post } = usePostForm()
-  const { getValues, setError, handleSubmit } = useFormContext()
+  const { getValues, handleSubmit } = useFormContext()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -342,32 +312,21 @@ const PublishButton = () => {
       const now = new Date().toISOString()
       const data = { ...formValues, status }
 
-      const revalidatePaths = [
-        getPostPath(post),
-        getAuthorPath(post),
-        getAuthorFavoritesPath(post),
-      ]
-
-      const result = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
+      const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: post?.date ? data : { ...data, date: now },
-          options: { revalidatePaths },
+          options: { revalidatePaths: getPostPath(post) },
         }),
       })
 
-      if (result?.error) throw new Error(result?.error?.message)
+      if (error) throw new Error(error?.message)
 
       mutate(`/api/v1/post?id=${post?.id}`)
 
       toast.success(t('changed_successfully'))
     } catch (e: unknown) {
-      const err = (e as Error)?.message
-      if (err.startsWith('duplicate key value violates unique constraint')) {
-        setError('slug', { message: t('duplicate_slug') })
-      } else {
-        toast.error(err)
-      }
+      toast.error((e as Error)?.message)
     } finally {
       setIsSubmitting(false)
     }

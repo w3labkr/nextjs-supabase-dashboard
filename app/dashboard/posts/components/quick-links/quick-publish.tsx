@@ -47,21 +47,15 @@ const QuickPublish = ({ post, ...props }: QuickPublishProps) => {
         user_id: post?.user_id,
       }
 
-      const revalidatePaths = [
-        getPostPath(post),
-        getAuthorPath(post),
-        getAuthorFavoritesPath(post),
-      ]
-
-      const updated = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
+      const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: post?.date ? data : { ...data, date: now },
-          options: { revalidatePaths },
+          options: { revalidatePaths: getPostPath(post) },
         }),
       })
 
-      if (updated?.error) throw new Error(updated?.error?.message)
+      if (error) throw new Error(error?.message)
 
       const countSearchParams = setQueryString({
         userId: post?.user_id,

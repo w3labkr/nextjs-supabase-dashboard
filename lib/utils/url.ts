@@ -22,11 +22,11 @@ export function getQueryString(searchParams: URLSearchParams) {
 export function setQueryString<T extends Record<string, any>>(
   object: T
 ): string {
-  const params = Object.keys(object).reduce((acc: T, k: string) => {
-    if (object[k] === undefined || object[k] === null) {
+  const params = Object.keys(object).reduce((acc: T, key: string) => {
+    if (object[key] === undefined || object[key] === null) {
       return acc
     }
-    acc[k as keyof T] = object[k]
+    acc[key as keyof T] = object[key]
     return acc
   }, {} as T)
 
