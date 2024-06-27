@@ -2,7 +2,6 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
 import { ApiError, revalidates } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
-import { Post } from '@/types/database'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -75,7 +74,7 @@ export async function GET(request: NextRequest) {
 
   const count = limit ? list?.length : counter?.count ?? 0
 
-  const data = list?.map((item: Post, index: number) => {
+  const data = list?.map((item: any, index: number) => {
     item['num'] = limit ? index + 1 : count - index - offset
     return item
   })

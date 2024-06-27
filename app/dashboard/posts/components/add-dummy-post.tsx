@@ -13,8 +13,6 @@ import {
   setQueryString,
   generateRecentPosts,
   getPostPath,
-  getProfilePath,
-  getFavoritesPath,
 } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { PostAPI } from '@/types/api'
@@ -58,6 +56,10 @@ const AddDummyPost = ({
 
       for (let i = 0; i < posts.length; i++) {
         const post = posts[i]
+        const postPath = getPostPath(null, {
+          username: user?.username,
+          slug: post?.slug,
+        })
 
         const { error } = await fetcher<PostAPI>(
           `/api/v1/post?userId=${user?.id}`,
@@ -65,11 +67,7 @@ const AddDummyPost = ({
             method: 'PUT',
             body: JSON.stringify({
               data: post,
-              options: {
-                revalidatePaths: getPostPath(post, {
-                  username: user?.username,
-                }),
-              },
+              options: { revalidatePaths: postPath },
             }),
           }
         )

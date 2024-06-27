@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
       ?.filter((r: UserMeta) => !denies.includes(r.meta_key))
       ?.filter((r: UserMeta) => !r.id)
 
-    if (findNewMeta) {
+    if (Array.isArray(findNewMeta) && findNewMeta?.length > 0) {
       const { error } = await supabase
         .from('usermeta')
         .insert(findNewMeta)
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
       ?.filter((r: UserMeta) => r.id)
       ?.filter((r: UserMeta) => r.meta_value !== getMeta(old?.meta, r.meta_key))
 
-    if (findExistsMeta) {
+    if (Array.isArray(findExistsMeta) && findExistsMeta?.length > 0) {
       const { error } = await supabase
         .from('usermeta')
         .upsert(findExistsMeta)

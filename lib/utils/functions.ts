@@ -9,30 +9,30 @@ export function getMeta(
   return meta?.find((r: Meta) => r.meta_key === key)?.meta_value ?? defaultValue
 }
 
-export function setMeta(
-  meta: Meta[] | null | undefined,
+export function setMeta<T extends Meta[] | undefined>(
+  meta: T,
   key: string,
   value: string | null,
-  options?: Meta
-): Meta[] {
+  options?: { [x: string]: any }
+): T {
   const found: boolean = !!meta?.find((r: Meta) => r.meta_key === key)
 
   if (meta && found) {
-    const newMeta: Meta[] = meta?.map((r: Meta) => {
+    const newMeta = meta?.map((r: Meta) => {
       if (r.meta_key === key) r.meta_value = value
       return r
     })
-    return newMeta
+    return newMeta as T
   }
 
-  const data: Meta = options
+  const data = options
     ? Object.assign({}, { meta_key: key, meta_value: value }, options)
     : { meta_key: key, meta_value: value }
 
-  const newMeta: Meta[] =
+  const newMeta =
     Array.isArray(meta) && meta?.length > 0 ? [...meta, data] : [data]
 
-  return newMeta
+  return newMeta as T
 }
 
 export function compareTags(

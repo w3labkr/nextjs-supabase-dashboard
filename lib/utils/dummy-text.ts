@@ -1,5 +1,8 @@
 import { faker } from '@faker-js/faker'
+import { Tag } from 'emblor'
+
 import { slugify } from '@/lib/slugify'
+import { setMeta } from '@/lib/utils/functions'
 import { Post } from '@/types/database'
 
 export function generateRecentPosts(
@@ -8,9 +11,16 @@ export function generateRecentPosts(
 ): Partial<Post>[] {
   let posts: Partial<Post>[] = []
 
-  for (let index = 0; index < maximum; index++) {
+  for (let i = 0; i < maximum; i++) {
     const title = faker.lorem.sentence()
     const keywords = slugify(title, { replacement: ',', lower: false })
+    const metaTags: Tag[] = keywords
+      ?.toLowerCase()
+      ?.split(',')
+      ?.map((text: string) => ({
+        id: crypto.getRandomValues(new Uint32Array(1))[0].toString(),
+        text,
+      }))
 
     const post: Partial<Post> = {
       // created_at: new Date().toISOString(),
@@ -29,6 +39,7 @@ export function generateRecentPosts(
       thumbnail_url: null,
       is_ban: false,
       banned_until: null,
+      meta: setMeta(undefined, 'tags', JSON.stringify(metaTags)),
     }
 
     posts = [...posts, post]

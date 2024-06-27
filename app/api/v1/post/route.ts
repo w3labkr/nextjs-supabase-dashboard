@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
       ?.filter((r: PostMeta) => !denies.includes(r.meta_key))
       ?.filter((r: PostMeta) => !r.id)
 
-    if (findNewMeta) {
+    if (Array.isArray(findNewMeta) && findNewMeta?.length > 0) {
       const { error } = await supabase
         .from('postmeta')
         .insert(findNewMeta)
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
       ?.filter((r: PostMeta) => r.id)
       ?.filter((r: PostMeta) => r.meta_value !== getMeta(old?.meta, r.meta_key))
 
-    if (findExistsMeta) {
+    if (Array.isArray(findExistsMeta) && findExistsMeta?.length > 0) {
       const { error } = await supabase
         .from('postmeta')
         .upsert(findExistsMeta)
@@ -91,7 +91,11 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    if (findExistsMeta) {
+    const findMetaTags: PostMeta[] = meta
+      ?.filter((r: PostMeta) => r.meta_key === 'tags')
+      ?.filter((r: PostMeta) => r.meta_value !== getMeta(old?.meta, r.meta_key))
+
+    if (Array.isArray(findMetaTags) && findMetaTags?.length > 0) {
       const oldTags: Tag[] = JSON.parse(getMeta(old?.meta, 'tags', '[]'))
       const newTags: Tag[] = JSON.parse(getMeta(meta, 'tags', '[]'))
       const { added, removed } = compareTags(oldTags, newTags)
@@ -134,6 +138,7 @@ export async function PUT(request: NextRequest) {
   const userId = searchParams.get('userId') as string
 
   const { data, options } = await request.json()
+  const { meta, ...formData } = data
   const { authorized } = await authorize(userId)
   const { user } = await getUserAPI(userId)
 
@@ -177,12 +182,54 @@ export async function PUT(request: NextRequest) {
 
   const { data: post, error } = await supabase
     .from('posts')
-    .insert(data)
+    .insert(formData)
     .select('*, author:users(*), meta:postmeta(*)')
     .single()
 
   if (error) {
     return NextResponse.json({ data: null, error }, { status: 400 })
+  }
+
+  if (Array.isArray(meta) && meta?.length > 0) {
+    // Views updates are done on the client side.
+    const denies: string[] = ['views']
+
+    const findNewMeta: PostMeta[] = meta
+      ?.filter((r: PostMeta) => !denies.includes(r.meta_key))
+      ?.filter((r: PostMeta) => !r.id)
+      ?.map((r: PostMeta) => ({ ...r, post_id: post?.id }))
+
+    if (Array.isArray(findNewMeta) && findNewMeta?.length > 0) {
+      const { error } = await supabase
+        .from('postmeta')
+        .insert(findNewMeta)
+        .select('*')
+      if (error) {
+        return NextResponse.json({ data: null, error }, { status: 400 })
+      }
+    }
+
+    const findMetaTags: PostMeta[] = meta?.filter(
+      (r: PostMeta) => r.meta_key === 'tags'
+    )
+
+    if (Array.isArray(findMetaTags) && findMetaTags?.length > 0) {
+      const oldTags: Tag[] = []
+      const newTags: Tag[] = JSON.parse(getMeta(meta, 'tags', '[]'))
+      const { added, removed } = compareTags(oldTags, newTags)
+      const { error } = await supabase.rpc('set_post_tags', {
+        userid: userId,
+        postid: post?.id,
+        added: added?.map((r: Tag) => ({
+          name: r.text,
+          slug: slugify(r.text),
+        })),
+        removed: removed?.map((r: Tag) => ({ name: r.text })),
+      })
+      if (error) {
+        return NextResponse.json({ data: null, error }, { status: 400 })
+      }
+    }
   }
 
   return NextResponse.json({

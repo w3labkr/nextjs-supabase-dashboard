@@ -19,7 +19,7 @@ import { cn, getAuthorUrl, getMeta } from '@/lib/utils'
 import { getAuth, authenticate } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { getPostAPI, getAdjacentPostAPI } from '@/queries/server/posts'
-import { Author, Post, PostMeta } from '@/types/database'
+import { Author, PostMeta } from '@/types/database'
 import { siteConfig } from '@/config/site'
 
 // revalidate the data at most every month
@@ -189,23 +189,10 @@ const PostTags = ({ meta }: { meta?: PostMeta[] }) => {
         {tags?.map((tag: Tag, i: number) => (
           <React.Fragment key={tag.id}>
             {i === 0 ? null : <span>, </span>}
-            <PostTag tag={tag} />
+            <span>{tag?.text}</span>
           </React.Fragment>
         ))}
       </div>
     </div>
-  )
-}
-
-const PostTag = ({ tag }: { tag: Tag }) => {
-  return (
-    <Link
-      href="#"
-      className="underline hover:no-underline"
-      rel="tag"
-      scroll={!siteConfig?.fixedHeader}
-    >
-      {tag?.text}
-    </Link>
   )
 }
