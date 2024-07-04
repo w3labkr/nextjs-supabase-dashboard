@@ -68,16 +68,32 @@ interface PostItemProps extends React.HTMLAttributes<HTMLDivElement> {
 const PostItem = ({ post, ...props }: PostItemProps) => {
   return (
     <div className="space-y-2 border-b py-4" {...props}>
-      <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
-        <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
-      </h3>
-      <p className="line-clamp-3">{post?.description}</p>
+      <PostTitle post={post} />
+      <PostDescription description={post?.description} />
       <div className="space-x-1 text-sm">
-        <time dateTime={post?.date ?? undefined}>
-          {dayjs(post?.date).format('MMMM D, YYYY')}
-        </time>
+        <PostDate date={post?.date} />
       </div>
     </div>
+  )
+}
+
+const PostTitle = ({ post }: { post: Post }) => {
+  return (
+    <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
+      <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
+    </h3>
+  )
+}
+
+const PostDescription = ({ description }: { description: string | null }) => {
+  return <p className="line-clamp-3">{description}</p>
+}
+
+const PostDate = ({ date }: { date: string | null }) => {
+  return (
+    <time dateTime={date ?? undefined}>
+      {dayjs(date).format('MMMM D, YYYY')}
+    </time>
   )
 }
 

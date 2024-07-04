@@ -8,9 +8,9 @@ import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 import { Paging, PagingProvider } from '@/components/paging'
 
-import { getPostUrl } from '@/lib/utils'
+import { getAuthorUrl, getPostUrl } from '@/lib/utils'
 import { useFavoritePostsAPI } from '@/queries/client/favorites'
-import { Post, User } from '@/types/database'
+import { Author, Post, User } from '@/types/database'
 
 interface PostListProps extends React.HTMLAttributes<HTMLDivElement> {
   user: User
@@ -68,16 +68,45 @@ interface PostItemProps extends React.HTMLAttributes<HTMLDivElement> {
 const PostItem = ({ post, ...props }: PostItemProps) => {
   return (
     <div className="space-y-2 border-b py-4" {...props}>
-      <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
-        <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
-      </h3>
-      <p className="line-clamp-3">{post?.description}</p>
+      <PostTitle post={post} />
+      <PostDescription description={post?.description} />
       <div className="space-x-1 text-sm">
-        <time dateTime={post?.date ?? undefined}>
-          {dayjs(post?.date).format('MMMM D, YYYY')}
-        </time>
+        <PostDate date={post?.date} />
+        <span>— by</span>
+        <PostAuthor author={post?.author} />
       </div>
     </div>
+  )
+}
+
+const PostTitle = ({ post }: { post: Post }) => {
+  return (
+    <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
+      <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
+    </h3>
+  )
+}
+
+const PostDescription = ({ description }: { description: string | null }) => {
+  return <p className="line-clamp-3">{description}</p>
+}
+
+const PostDate = ({ date }: { date: string | null }) => {
+  return (
+    <time dateTime={date ?? undefined}>
+      {dayjs(date).format('MMMM D, YYYY')}
+    </time>
+  )
+}
+
+const PostAuthor = ({ author }: { author: Author | null }) => {
+  return (
+    <Link
+      href={getAuthorUrl(null, { username: author?.username }) ?? '#'}
+      className="underline hover:no-underline"
+    >
+      {author?.full_name}
+    </Link>
   )
 }
 

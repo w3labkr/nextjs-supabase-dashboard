@@ -21,20 +21,18 @@ export async function GET(request: NextRequest) {
   if (perPage < 1) perPage = 1
   if (offset < 0) offset = 0
 
-  let match: Record<string, any> = {}
+  let match: Record<string, any> = { 'favorites.is_favorite': true }
 
-  if (userId) match = { ...match, user_id: userId }
   if (postType) match = { ...match, type: postType }
   if (status) match = { ...match, status: status }
 
   const supabase = createClient()
   const counterQuery = supabase
     .from('posts')
-    .select(
-      '*, author:users(*), meta:postmeta(*), favorite:favorites!inner(*)',
-      { count: 'exact', head: true }
-    )
-    .eq('favorites.is_favorite', true)
+    .select('*, author:users(*), meta:postmeta(*), favorites!inner(*)', {
+      count: 'exact',
+      head: true,
+    })
 
   if (Object.keys(match).length > 0) counterQuery.match(match)
   if (q) counterQuery.textSearch('title_description', q)
@@ -50,8 +48,7 @@ export async function GET(request: NextRequest) {
 
   const query = supabase
     .from('posts')
-    .select('*, author:users(*), meta:postmeta(*), favorite:favorites!inner(*)')
-    .eq('favorites.is_favorite', true)
+    .select('*, author:users(*), meta:postmeta(*), favorites!inner(*)')
 
   if (Object.keys(match).length > 0) query.match(match)
   if (q) query.textSearch('title_description', q)
