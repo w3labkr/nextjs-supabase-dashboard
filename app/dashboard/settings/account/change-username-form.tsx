@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
 import { fetcher, getFavoritesPath, getProfilePath } from '@/lib/utils'
+import { slugify } from '@/lib/slugify'
 import { useUserAPI } from '@/queries/client/users'
 import { UserAPI } from '@/types/api'
 
@@ -100,7 +101,7 @@ const SubmitButton = () => {
       const result = await fetcher<UserAPI>(`/api/v1/user?id=${user?.id}`, {
         method: 'POST',
         body: JSON.stringify({
-          data: { username: formValues?.username },
+          data: { username: slugify(formValues?.username) },
           options: { revalidatePaths },
         }),
       })
