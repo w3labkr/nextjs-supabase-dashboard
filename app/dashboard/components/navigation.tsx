@@ -104,7 +104,7 @@ const NavSub = ({ item }: { item: DashboardNavItem }) => {
   if (Array.isArray(item?.sub) && collapsed) return null
 
   return (
-    <AccordionContent className="ml-6 border-l px-4 pb-0">
+    <AccordionContent className="mb-2 ml-6 space-y-1 border-l px-4 pb-0 pt-1">
       {item?.sub?.map((sub: DashboardNavSubItem) => {
         const denied =
           Array.isArray(sub?.roles) &&

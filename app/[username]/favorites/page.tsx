@@ -78,7 +78,7 @@ export default async function FavoritesPage({
                   values={{ q: searchParams?.q ?? '' }}
                 />
               </div>
-              <PostList className="space-y-16 border-t" />
+              <PostList user={user} className="space-y-16 border-t" />
             </div>
           </div>
         </div>

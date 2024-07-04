@@ -9,13 +9,14 @@ import dayjs from 'dayjs'
 import { Paging, PagingProvider } from '@/components/paging'
 
 import { getPostUrl } from '@/lib/utils'
-import { Post } from '@/types/database'
-import { useAuth } from '@/hooks/use-auth'
+import { Post, User } from '@/types/database'
 import { usePostsAPI } from '@/queries/client/posts'
 
-interface PostListProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface PostListProps extends React.HTMLAttributes<HTMLDivElement> {
+  user: User
+}
 
-const PostList = (props: PostListProps) => {
+const PostList = ({ user, ...props }: PostListProps) => {
   const { t } = useTranslation()
 
   const searchParams = useSearchParams()
@@ -28,7 +29,6 @@ const PostList = (props: PostListProps) => {
   const orderBy = (searchParams.get('orderBy') as string) ?? 'id'
   const order = (searchParams.get('order') as string) ?? 'desc'
 
-  const { user } = useAuth()
   const { posts, count } = usePostsAPI(user?.id ?? null, {
     page,
     perPage,
