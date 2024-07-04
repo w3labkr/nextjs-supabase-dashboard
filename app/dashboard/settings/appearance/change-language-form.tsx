@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { languageItems } from '@/i18next.config'
 
@@ -88,9 +89,10 @@ const LanguageField = () => {
 }
 
 const SubmitButton = () => {
-  const { t, i18n } = useTranslation()
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const { resolvedLanguage } = useAppSelector(({ i18n }) => i18n)
+  const { t, i18n } = useTranslation()
   const { handleSubmit, getValues } = useFormContext()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
@@ -109,6 +111,8 @@ const SubmitButton = () => {
       dispatch(setResolvedLanguage(formValues?.language))
 
       toast.success(t('changed_successfully'))
+
+      router.refresh()
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Nothing has changed')) {

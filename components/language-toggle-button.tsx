@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { useRouter } from 'next/navigation'
 
 import { useTranslation } from 'react-i18next'
 import { defaultLng, fallbackLng } from '@/i18next.config'
@@ -18,6 +19,7 @@ const LanguageToggleButton = ({
   size = 'sm',
   ...props
 }: LanguageToggleButtonProps) => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const { resolvedLanguage } = useAppSelector(({ i18n }) => i18n)
   const [currentLanguage, setCurrentLanguage] =
@@ -32,6 +34,8 @@ const LanguageToggleButton = ({
     document.documentElement.lang = currentValue
     setCurrentLanguage(currentValue)
     dispatch(setResolvedLanguage(currentValue))
+
+    router.refresh()
   }
 
   return (

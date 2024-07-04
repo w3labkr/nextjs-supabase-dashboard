@@ -21,6 +21,7 @@ export const i18nSlice = createSlice({
       action: PayloadAction<I18nState['resolvedLanguage']>
     ) => {
       state.resolvedLanguage = action.payload
+      document.cookie = `i18n:resolvedLanguage=${action.payload}`
     },
   },
 })

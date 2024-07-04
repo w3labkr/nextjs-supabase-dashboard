@@ -15,14 +15,13 @@ import { AccountMenu } from '@/components/account-menu'
 import { SearchForm } from '@/components/search-form'
 
 import { useAuth } from '@/hooks/use-auth'
-import { cn, getArchivePath } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 
 const Header = () => {
   const { user } = useAuth()
 
   const searchParams = useSearchParams()
   const pathname = usePathname()
-  const archivePath = getArchivePath()
 
   return (
     <Sheet>
@@ -51,11 +50,11 @@ const Header = () => {
           <Navigation />
           <div className="ml-auto flex gap-2">
             <SearchForm
-              pathname={archivePath}
+              pathname="/search"
               placeholder="search_text"
               translate="yes"
               values={{
-                q: pathname?.startsWith(archivePath)
+                q: pathname?.startsWith('/search')
                   ? (searchParams.get('q') as string) ?? ''
                   : '',
               }}

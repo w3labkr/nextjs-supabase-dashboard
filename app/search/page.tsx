@@ -15,7 +15,7 @@ import { Post } from '@/types/database'
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
 export const revalidate = 0
 
-export default async function PostsPage({
+export default async function SearchPage({
   searchParams,
 }: {
   searchParams?: {
@@ -58,7 +58,7 @@ export default async function PostsPage({
       <main className={cn('min-h-[80vh] pb-40')}>
         <div className="container flex-1 overflow-auto">
           <h2 className="mt-16 text-center font-serif text-4xl font-bold">
-            {translation['posts']}
+            {translation['search_results_for'] + q}
           </h2>
           <PagingProvider value={{ total, page, perPage, pageSize }}>
             <div className="mt-12 space-y-16">
@@ -68,7 +68,10 @@ export default async function PostsPage({
                   <Paging />
                 </>
               ) : (
-                <div className="text-center">{translation['no_posts_yet']}</div>
+                <div className="text-center">
+                  {translation['sorry_no_content_matches_your_search_results']}{' '}
+                  {translation['please_try_again_with_some_different_keywords']}
+                </div>
               )}
             </div>
           </PagingProvider>

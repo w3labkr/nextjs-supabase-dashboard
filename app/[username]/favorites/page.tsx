@@ -1,17 +1,20 @@
 import * as React from 'react'
 import type { Metadata, ResolvingMetadata } from 'next'
+import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { SearchForm } from '@/components/search-form'
 
 import { Aside } from '../aside'
 import { PostList } from './post-list'
-import { RecentLink, FavoritesLink } from './tab-links'
 
-import { cn } from '@/lib/utils'
+import { cn, getProfileUrl } from '@/lib/utils'
+import { LucideIcon } from '@/lib/lucide-icon'
 import { getUserAPI } from '@/queries/server/users'
-import { SearchForm } from '@/components/search-form'
+import { User } from '@/types/database'
 
 // revalidate the data at most every week
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
@@ -50,6 +53,12 @@ export default async function FavoritesPage({
 
   if (!user) notFound()
 
+  const resolvedLanguage = cookies().get('i18n:resolvedLanguage')?.value
+  const translation =
+    resolvedLanguage === 'ko'
+      ? await import(`@/public/locales/ko/translation.json`)
+      : await import(`@/public/locales/en/translation.json`)
+
   return (
     <>
       <Header />
@@ -60,8 +69,8 @@ export default async function FavoritesPage({
             <div className="flex flex-col space-y-4 md:col-span-2 lg:col-span-3">
               <div className="space-y-2">
                 <div className="flex gap-2">
-                  <RecentLink user={user} />
-                  <FavoritesLink user={user} />
+                  <RecentLink user={user} text={translation['posts']} />
+                  <FavoritesLink user={user} text={translation['favorites']} />
                 </div>
                 <SearchForm
                   placeholder="find_favorites"
@@ -76,5 +85,31 @@ export default async function FavoritesPage({
       </main>
       <Footer />
     </>
+  )
+}
+
+const RecentLink = ({ user, text }: { user: User; text: string }) => {
+  return (
+    <Link
+      href={getProfileUrl(user) ?? '#'}
+      className="flex items-center text-muted-foreground"
+    >
+      <LucideIcon name="History" size={16} className="mr-1" />
+      {text}
+    </Link>
+  )
+}
+
+const FavoritesLink = ({ user, text }: { user: User; text: string }) => {
+  return (
+    <Link href="#" className="flex items-center">
+      <LucideIcon
+        name="Heart"
+        fill="#ef4444"
+        size={16}
+        className="mr-1 text-destructive"
+      />
+      {text}
+    </Link>
   )
 }

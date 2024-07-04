@@ -1,13 +1,12 @@
 'use client'
 
 import * as React from 'react'
+import { useRouter } from 'next/navigation'
 
 import { useTranslation } from 'react-i18next'
 import { languageItems } from '@/i18next.config'
 import { ResolvedLanguage, LanguageItem } from '@/types/i18next'
 
-import { cn } from '@/lib/utils'
-import { LucideIcon } from '@/lib/lucide-icon'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -22,6 +21,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 
+import { cn } from '@/lib/utils'
+import { LucideIcon } from '@/lib/lucide-icon'
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
 import { setResolvedLanguage } from '@/store/features/i18n-slice'
 
@@ -36,17 +37,22 @@ const LanguageSwitcher = ({
   triggerClassName,
   contentClassName,
 }: LanguageSwitcherProps) => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const { resolvedLanguage } = useAppSelector(({ i18n }) => i18n)
-  const [open, setOpen] = React.useState<boolean>(false)
   const { t, i18n } = useTranslation()
+  const [open, setOpen] = React.useState<boolean>(false)
 
   const onSelect = (currentValue: string) => {
     if (currentValue === resolvedLanguage) return false
+
     i18n.changeLanguage(currentValue)
     document.documentElement.lang = currentValue
     dispatch(setResolvedLanguage(currentValue))
+
     setOpen(false)
+
+    router.refresh()
   }
 
   return (

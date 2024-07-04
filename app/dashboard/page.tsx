@@ -26,7 +26,7 @@ export default async function DashboardPage() {
               <Title translate="yes">dashboard</Title>
               <Separator />
               <Description translate="yes"></Description>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 <LatestPosts />
                 <PostViews />
               </div>

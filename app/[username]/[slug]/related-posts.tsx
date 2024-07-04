@@ -1,5 +1,6 @@
 import * as React from 'react'
 import Link from 'next/link'
+import { cookies } from 'next/headers'
 import dayjs from 'dayjs'
 
 import { getPostUrl } from '@/lib/utils'
@@ -10,29 +11,43 @@ interface RelatedPostsProps extends React.HTMLAttributes<HTMLDivElement> {
   nextPost: Post | null
 }
 
-const RelatedPosts = ({
+const RelatedPosts = async ({
   previousPost,
   nextPost,
   ...props
 }: RelatedPostsProps) => {
+  const resolvedLanguage = cookies().get('i18n:resolvedLanguage')?.value
+  const translation =
+    resolvedLanguage === 'ko'
+      ? await import(`@/public/locales/ko/translation.json`)
+      : await import(`@/public/locales/en/translation.json`)
+
   return (
     <div {...props}>
       <h2 className="mb-8 font-serif text-4xl font-bold leading-tight tracking-tighter">
-        Related Posts
+        {translation['related_posts']}
       </h2>
       <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-2">
-        <PreviousPost post={previousPost} />
-        <NextPost post={nextPost} />
+        {previousPost ? (
+          <PreviousPost post={previousPost} />
+        ) : (
+          <div className="text-center">
+            {translation['the_previous_post_does_not_exist']}
+          </div>
+        )}
+        {nextPost ? (
+          <NextPost post={nextPost} />
+        ) : (
+          <div className="text-center">
+            {translation['the_next_post_does_not_exist']}
+          </div>
+        )}
       </div>
     </div>
   )
 }
 
 const PreviousPost = ({ post }: { post: Post | null }) => {
-  if (!post) {
-    return <div className="text-center">The previous post does not exist.</div>
-  }
-
   return (
     <div className="grid gap-2">
       <h3 className="line-clamp-2 font-serif text-2xl underline hover:no-underline">
@@ -46,10 +61,6 @@ const PreviousPost = ({ post }: { post: Post | null }) => {
 }
 
 const NextPost = ({ post }: { post: Post | null }) => {
-  if (!post) {
-    return <div className="text-center">The next post does not exist.</div>
-  }
-
   return (
     <div className="grid gap-2">
       <h3 className="line-clamp-2 font-serif text-2xl underline hover:no-underline">

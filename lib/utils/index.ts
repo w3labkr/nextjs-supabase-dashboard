@@ -21,8 +21,6 @@ export {
   getAuthorUrl,
   getAuthorFavoritesPath,
   getAuthorFavoritesUrl,
-  getArchivePath,
-  getArchiveUrl,
   getProfilePath,
   getProfileUrl,
   getFavoritesPath,

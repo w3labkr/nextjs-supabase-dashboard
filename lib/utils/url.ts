@@ -88,14 +88,6 @@ export function getAuthorFavoritesUrl(
   return pathname ? absoluteUrl(pathname) : null
 }
 
-export function getArchivePath(): string {
-  return `/posts`
-}
-
-export function getArchiveUrl(): string {
-  return absoluteUrl(getArchivePath())
-}
-
 export function getProfilePath(
   user: User | null,
   params?: { username?: string | null }
