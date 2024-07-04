@@ -1,6 +1,5 @@
 import * as React from 'react'
 import Link from 'next/link'
-import { cookies } from 'next/headers'
 import dayjs from 'dayjs'
 
 import { Header } from '@/components/header'
@@ -8,7 +7,13 @@ import { Footer } from '@/components/footer'
 import { Paging, PagingProvider } from '@/components/paging'
 
 import { getPostsAPI } from '@/queries/server/posts'
-import { cn, getAuthorUrl, getPostUrl } from '@/lib/utils'
+import {
+  cn,
+  getAuthorUrl,
+  getPostUrl,
+  getTranslation,
+  type Translation,
+} from '@/lib/utils'
 import { Post } from '@/types/database'
 
 // revalidate the data at most every week
@@ -45,12 +50,7 @@ export default async function PostsPage({
   })
 
   const total = count ?? 0
-
-  const resolvedLanguage = cookies().get('i18n:resolvedLanguage')?.value
-  const translation =
-    resolvedLanguage === 'ko'
-      ? await import(`@/public/locales/ko/translation.json`)
-      : await import(`@/public/locales/en/translation.json`)
+  const translation: Translation = await getTranslation()
 
   return (
     <>

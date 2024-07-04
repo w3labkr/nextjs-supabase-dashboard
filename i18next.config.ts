@@ -10,6 +10,7 @@ import {
 // If you're using a language detector, do not define the lng option
 // https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
 export const defaultLng: DefaultLng = 'en'
+
 export const fallbackLng: FallbackLng = 'ko'
 
 // If passing the ns option, the defaultNS will, by default, be set to the first ns passed.

@@ -1,6 +1,5 @@
 import * as React from 'react'
 import type { Metadata, ResolvingMetadata } from 'next'
-import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
@@ -11,7 +10,12 @@ import { SearchForm } from '@/components/search-form'
 import { Aside } from './aside'
 import { PostList } from './post-list'
 
-import { cn, getFavoritesUrl } from '@/lib/utils'
+import {
+  cn,
+  getFavoritesUrl,
+  getTranslation,
+  type Translation,
+} from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { getUserAPI } from '@/queries/server/users'
 import { User } from '@/types/database'
@@ -53,11 +57,7 @@ export default async function UserPage({
 
   if (!user) notFound()
 
-  const resolvedLanguage = cookies().get('i18n:resolvedLanguage')?.value
-  const translation =
-    resolvedLanguage === 'ko'
-      ? await import(`@/public/locales/ko/translation.json`)
-      : await import(`@/public/locales/en/translation.json`)
+  const translation: Translation = await getTranslation()
 
   return (
     <>

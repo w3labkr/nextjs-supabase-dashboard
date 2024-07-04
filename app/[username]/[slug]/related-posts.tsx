@@ -1,27 +1,22 @@
 import * as React from 'react'
 import Link from 'next/link'
-import { cookies } from 'next/headers'
 import dayjs from 'dayjs'
 
-import { getPostUrl } from '@/lib/utils'
+import { Translation, getPostUrl } from '@/lib/utils'
 import { Post } from '@/types/database'
 
 interface RelatedPostsProps extends React.HTMLAttributes<HTMLDivElement> {
   previousPost: Post | null
   nextPost: Post | null
+  translation: Translation
 }
 
 const RelatedPosts = async ({
   previousPost,
   nextPost,
+  translation,
   ...props
 }: RelatedPostsProps) => {
-  const resolvedLanguage = cookies().get('i18n:resolvedLanguage')?.value
-  const translation =
-    resolvedLanguage === 'ko'
-      ? await import(`@/public/locales/ko/translation.json`)
-      : await import(`@/public/locales/en/translation.json`)
-
   return (
     <div {...props}>
       <h2 className="mb-8 font-serif text-4xl font-bold leading-tight tracking-tighter">

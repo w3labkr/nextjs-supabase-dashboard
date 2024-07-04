@@ -28,3 +28,4 @@ export {
 } from './url'
 export { getMeta, setMeta, compareTags } from './functions'
 export { generateRecentPosts } from './dummy-text'
+export { getTranslation, type Translation } from './i18n'

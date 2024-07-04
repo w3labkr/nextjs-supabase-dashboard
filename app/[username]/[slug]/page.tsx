@@ -1,7 +1,7 @@
 import * as React from 'react'
 import type { Metadata, ResolvingMetadata } from 'next'
-import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
 import dayjs from 'dayjs'
 import { Tag } from 'emblor'
@@ -15,7 +15,13 @@ import { PostViews } from './post-views'
 import { FavoriteButton } from './favorite-button'
 import { RelatedPosts } from './related-posts'
 
-import { cn, getAuthorUrl, getMeta } from '@/lib/utils'
+import {
+  cn,
+  getAuthorUrl,
+  getMeta,
+  getTranslation,
+  type Translation,
+} from '@/lib/utils'
 import { getAuth, authenticate } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { getPostAPI, getAdjacentPostAPI } from '@/queries/server/posts'
@@ -90,6 +96,8 @@ export default async function PostPage({
     status: 'publish',
   })
 
+  const translation: Translation = await getTranslation()
+
   return (
     <PostProvider value={{ post }}>
       <Analysis />
@@ -110,8 +118,12 @@ export default async function PostPage({
           </div>
           <PostThumbnail thumbnailUrl={post?.thumbnail_url} />
           <PostContent content={post?.content} />
-          <PostTags meta={post?.meta} />
-          <RelatedPosts previousPost={previousPost} nextPost={nextPost} />
+          <PostTags meta={post?.meta} translation={translation} />
+          <RelatedPosts
+            previousPost={previousPost}
+            nextPost={nextPost}
+            translation={translation}
+          />
         </div>
       </main>
       <Footer />
@@ -169,7 +181,13 @@ const PostContent = ({ content }: { content: string | null }) => {
   )
 }
 
-const PostTags = ({ meta }: { meta?: PostMeta[] }) => {
+const PostTags = ({
+  meta,
+  translation,
+}: {
+  meta?: PostMeta[]
+  translation: Translation
+}) => {
   const tags: Tag[] = JSON.parse(getMeta(meta, 'tags', '[]'))
 
   if (Array.isArray(tags) && tags?.length === 0) {
@@ -178,7 +196,7 @@ const PostTags = ({ meta }: { meta?: PostMeta[] }) => {
 
   return (
     <div className="mb-16">
-      <p>Tags: </p>
+      <p>{translation['tags']}: </p>
       <div>
         {tags?.map((tag: Tag, i: number) => (
           <React.Fragment key={tag.id}>
