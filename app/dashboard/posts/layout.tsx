@@ -1,11 +1,9 @@
 import * as React from 'react'
 import { redirect } from 'next/navigation'
 
-import { AppBar, AppBarProvider } from '../components/app-bar'
-import { MiniNavigation } from '../components/mini-navigation'
+import { AppBar } from '@/app/dashboard/components/app-bar'
+import { AppPanel } from '@/app/dashboard/components/app-panel'
 
-import { dashboardConfig } from '@/config/dashboard'
-import { getAuth } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 
 export default async function PostListLayout({
@@ -13,21 +11,16 @@ export default async function PostListLayout({
 }: {
   children?: React.ReactNode
 }) {
-  const { session } = await getAuth()
-  const { user } = await getUserAPI(session?.user?.id ?? null)
+  const { user } = await getUserAPI()
 
-  if (!session) redirect('/auth/signin')
   if (!user) redirect('/auth/signin')
 
   return (
-    <div className="body-overflow-hidden flex h-screen w-screen">
-      <AppBarProvider>
-        <MiniNavigation nav={dashboardConfig?.nav} userrole={user?.role} />
-        <div className="flex flex-1 flex-col">
-          <AppBar />
-          {children}
-        </div>
-      </AppBarProvider>
+    <div className="h-screen w-screen overflow-hidden">
+      <AppBar className="sticky left-0 top-0 z-10" />
+      <AppPanel>
+        <div className="flex flex-1 flex-col">{children}</div>
+      </AppPanel>
     </div>
   )
 }

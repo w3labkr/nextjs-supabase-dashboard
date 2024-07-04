@@ -3,7 +3,6 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { useTrans } from '@/hooks/use-trans'
-import { siteConfig } from '@/config/site'
 
 const Policy = () => {
   const { trans } = useTrans()
@@ -15,18 +14,10 @@ const Policy = () => {
         {
           components: {
             link1: (
-              <Link
-                href="/policy/terms"
-                scroll={!siteConfig?.fixedHeader}
-                className="text-primary underline"
-              />
+              <Link href="/policy/terms" className="text-primary underline" />
             ),
             link2: (
-              <Link
-                href="/policy/privacy"
-                scroll={!siteConfig?.fixedHeader}
-                className="text-primary underline"
-              />
+              <Link href="/policy/privacy" className="text-primary underline" />
             ),
           },
         }

@@ -11,7 +11,6 @@ import { EmptyPosts } from './empty-posts'
 
 import { getPostsAPI } from '@/queries/server/posts'
 import { cn, getAuthorUrl, getPostUrl } from '@/lib/utils'
-import { siteConfig } from '@/config/site'
 import { Post } from '@/types/database'
 
 // revalidate the data at most every week
@@ -53,12 +52,7 @@ export default async function PostsPage({
     <>
       <Header />
       {/* <SearchForm /> */}
-      <main
-        className={cn(
-          'min-h-[80vh] pb-40',
-          siteConfig?.fixedHeader ? 'pt-[61px]' : ''
-        )}
-      >
+      <main className={cn('min-h-[80vh] pb-40')}>
         <div className="container flex-1 overflow-auto">
           <ArchiveTitle
             q={q}
@@ -105,10 +99,9 @@ interface PostItemProps extends React.HTMLAttributes<HTMLDivElement> {
 const PostItem = ({ post, ...props }: PostItemProps) => {
   return (
     <div className="space-y-2" {...props}>
+      <div className="h-40 bg-secondary"></div>
       <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
-        <Link href={getPostUrl(post) ?? '#'} scroll={!siteConfig?.fixedHeader}>
-          {post?.title}
-        </Link>
+        <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
       </h3>
       <p className="line-clamp-3">{post?.description}</p>
       <div className="space-x-1 text-sm">
@@ -116,11 +109,7 @@ const PostItem = ({ post, ...props }: PostItemProps) => {
           {dayjs(post?.date).format('MMMM D, YYYY')}
         </time>
         <span>— by</span>
-        <Link
-          href={getAuthorUrl(post) ?? '#'}
-          scroll={!siteConfig?.fixedHeader}
-          className="hover:underline"
-        >
+        <Link href={getAuthorUrl(post) ?? '#'} className="hover:underline">
           {post?.author?.full_name ?? post?.author?.username}
         </Link>
       </div>

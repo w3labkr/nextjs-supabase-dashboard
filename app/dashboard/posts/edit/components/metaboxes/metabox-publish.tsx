@@ -18,15 +18,8 @@ import { Button } from '@/components/ui/button'
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 import { useSWRConfig } from 'swr'
-import {
-  fetcher,
-  getMeta,
-  getPostPath,
-  getAuthorPath,
-  getAuthorFavoritesPath,
-} from '@/lib/utils'
+import { fetcher, getMeta, getPostPath } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
-import { siteConfig } from '@/config/site'
 
 const MetaboxPublish = () => {
   const { t } = useTranslation()
@@ -153,10 +146,7 @@ const ViewButton = () => {
 
       const postPath = getPostPath(post)
 
-      if (postPath)
-        router.push(postPath, {
-          scroll: !siteConfig?.fixedHeader,
-        })
+      if (postPath) router.push(postPath)
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -207,9 +197,7 @@ const PreviewButton = () => {
       const postPath = getPostPath(post)
 
       if (postPath) {
-        router.push(postPath + '?preview=true', {
-          scroll: !siteConfig?.fixedHeader,
-        })
+        router.push(postPath + '?preview=true')
       }
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
@@ -264,9 +252,7 @@ const TrashButton = () => {
 
       toast.success(t('changed_successfully'))
 
-      router.push('/dashboard/posts', {
-        scroll: !siteConfig?.fixedHeader,
-      })
+      router.push('/dashboard/posts')
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {

@@ -37,7 +37,6 @@ import { useAuth } from '@/hooks/use-auth'
 import { useUserAPI } from '@/queries/client/users'
 import { useEmailsAPI } from '@/queries/client/emails'
 import { UserAPI } from '@/types/api'
-import { siteConfig } from '@/config/site'
 
 const FormSchema = z.object({
   full_name: z.string().nonempty(),
@@ -140,7 +139,6 @@ const EmailField = () => {
                 link1: (
                   <Link
                     href="/dashboard/settings/emails"
-                    scroll={!siteConfig?.fixedHeader}
                     className="text-primary underline"
                   />
                 ),

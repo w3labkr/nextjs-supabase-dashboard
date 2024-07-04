@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 
 import { getPostPath } from '@/lib/utils'
 import { Post } from '@/types/database'
-import { siteConfig } from '@/config/site'
 
 interface QuickViewProps {
   post: Post
@@ -18,7 +17,6 @@ const QuickView = ({ post }: QuickViewProps) => {
   return (
     <Link
       href={getPostPath(post) ?? '#'}
-      scroll={!siteConfig?.fixedHeader}
       className="text-xs text-blue-700 hover:underline"
       target="_blank"
       rel="noopener noreferrer"

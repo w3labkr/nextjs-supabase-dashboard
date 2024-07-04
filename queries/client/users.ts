@@ -39,8 +39,18 @@ export function useUsersAPI(
   id: string | null,
   params?: { page?: number; perPage?: number }
 ) {
-  const query = setQueryString({ id, ...params })
-  const url = query ? `/api/v1/user/list?${query}` : null
+  const { session } = useAuth()
+  const query = setQueryString({ ...params })
+
+  let url: string | null = null
+
+  if (id) {
+    url = `/api/v1/user/list?id=${id}`
+  } else if (session?.user) {
+    url = `/api/v1/user/list?id=${session?.user?.id}`
+  }
+
+  if (url && query) url = url + '&' + query
 
   const { data, error, isLoading, isValidating, mutate } = useSWR<
     UsersAPI,

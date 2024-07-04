@@ -4,14 +4,13 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
-import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
+import { LucideIcon, type LucideIconName } from '@/lib/lucide-icon'
 import { toast } from 'sonner'
 import { Button, ButtonProps } from '@/components/ui/button'
 
 import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { PostAPI } from '@/types/api'
-import { siteConfig } from '@/config/site'
 
 interface AddPostProps
   extends ButtonProps,
@@ -55,9 +54,7 @@ const AddPost = ({
 
       if (error) throw new Error(error?.message)
 
-      router.push(`/dashboard/posts/edit?id=${post?.id}`, {
-        scroll: !siteConfig?.fixedHeader,
-      })
+      router.push(`/dashboard/posts/edit?id=${post?.id}`)
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Payment Required')) {

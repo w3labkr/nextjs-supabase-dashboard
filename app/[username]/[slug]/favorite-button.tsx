@@ -5,14 +5,13 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import { toast } from 'sonner'
 import { LucideIcon } from '@/lib/lucide-icon'
-import { cn, fetcher, getFavoritesPath, getProfilePath } from '@/lib/utils'
+import { cn, fetcher } from '@/lib/utils'
 
 import { useSWRConfig } from 'swr'
 import { useAuth } from '@/hooks/use-auth'
 import { useFavoriteAPI } from '@/queries/client/favorites'
 import { useUserAPI } from '@/queries/client/users'
 import { FavoriteAPI } from '@/types/api'
-import { siteConfig } from '@/config/site'
 
 interface FavoriteButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -93,11 +92,7 @@ const SignedOutAction = ({ postId, ...props }: FavoriteButtonProps) => {
   return (
     <button
       type="button"
-      onClick={() =>
-        router.push(`/auth/signin?next=${pathname}`, {
-          scroll: !siteConfig?.fixedHeader,
-        })
-      }
+      onClick={() => router.push(`/auth/signin?next=${pathname}`)}
       {...props}
     >
       <LucideIcon

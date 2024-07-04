@@ -17,11 +17,10 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useAuth } from '@/hooks/use-auth'
 import { usePostsAPI } from '@/queries/client/posts'
 import { Post } from '@/types/database'
-import { siteConfig } from '@/config/site'
 
-interface WidgetLatestPostsProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface LatestPostsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const WidgetLatestPosts = (props: WidgetLatestPostsProps) => {
+const LatestPosts = (props: LatestPostsProps) => {
   const { t } = useTranslation()
   const { user } = useAuth()
   const { posts, isLoading } = usePostsAPI(user?.id ?? null, {
@@ -70,7 +69,6 @@ const ListItem = ({ post, ...props }: ListItemProps) => {
       <span>
         <Link
           href={`/dashboard/posts/edit?id=${post?.id}`}
-          scroll={!siteConfig?.fixedHeader}
           className="font-serif hover:underline"
         >
           {post?.title}
@@ -86,4 +84,4 @@ const EmptyItem = () => {
   return <div>{t('no_posts_yet')}</div>
 }
 
-export { WidgetLatestPosts }
+export { LatestPosts }

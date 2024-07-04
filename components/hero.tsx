@@ -4,11 +4,10 @@ import * as React from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 
-import { LucideIcon } from '@/lib/lucide-icon'
 import { buttonVariants } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
-import { siteConfig } from '@/config/site'
+import { LucideIcon } from '@/lib/lucide-icon'
 
 const Hero = () => {
   const { t } = useTranslation()
@@ -29,14 +28,12 @@ const Hero = () => {
             <Link
               className={cn(buttonVariants({ variant: 'default' }))}
               href="/posts"
-              scroll={!siteConfig?.fixedHeader}
             >
               {t('getting_started')}
             </Link>
             <Link
               className={cn(buttonVariants({ variant: 'outline' }))}
               href="https://github.com/w3labkr/nextjs-with-supabase-auth"
-              scroll={!siteConfig?.fixedHeader}
               target="_blank"
             >
               {t('github')}

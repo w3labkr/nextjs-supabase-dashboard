@@ -1,169 +1,115 @@
-import { DashboardConfig, DashboardPageConfig } from '@/types/config'
+import { type LucideIconName } from '@/lib/lucide-icon'
+
+export interface DashboardNavSubItem {
+  id: number
+  href: string
+  text: string
+  translate?: 'yes' | 'no'
+  iconName?: LucideIconName
+  disabled?: boolean
+  separator?: boolean
+  roles?: string[]
+}
+
+export interface DashboardNavItem extends DashboardNavSubItem {
+  sub?: DashboardNavSubItem[]
+}
+
+export interface DashboardConfig {
+  nav: DashboardNavItem[]
+}
 
 export const dashboardConfig: DashboardConfig = {
   nav: [
     {
       id: 1,
-      separator: false,
-      // roles: ['user'],
-      items: [
-        {
-          id: 1,
-          href: '/dashboard',
-          iconName: 'LayoutDashboard',
-          title: 'dashboard',
-          badge: 0,
-          translate: 'yes',
-          disabled: false,
-          // roles: ['user'],
-        },
-        {
-          id: 2,
-          href: '/dashboard/posts',
-          iconName: 'StickyNote',
-          title: 'posts',
-          badge: 0,
-          translate: 'yes',
-          disabled: false,
-          // roles: ['user'],
-        },
-      ],
+      href: '/dashboard',
+      text: 'dashboard',
+      translate: 'yes',
+      iconName: 'LayoutDashboard',
     },
     {
       id: 2,
-      separator: true,
-      // roles: ['user'],
-      items: [
-        {
-          id: 1,
-          href: '/dashboard/settings',
-          iconName: 'Settings',
-          title: 'settings',
-          badge: 0,
-          translate: 'yes',
-          disabled: false,
-          // roles: ['user'],
-        },
-        {
-          id: 2,
-          href: '/dashboard/admin',
-          iconName: 'FolderLock',
-          title: 'admin',
-          badge: 0,
-          translate: 'yes',
-          disabled: false,
-          roles: ['admin', 'superadmin'],
-        },
-      ],
+      href: '/dashboard/posts',
+      text: 'posts',
+      translate: 'yes',
+      iconName: 'StickyNote',
     },
-  ],
-}
-
-export const settingsConfig: DashboardPageConfig = {
-  nav: [
     {
-      id: 1,
-      label: '',
-      separator: false,
-      translate: 'no',
-      // roles: ['user'],
-      items: [
+      id: 3,
+      href: '/dashboard/tags',
+      text: 'tags',
+      translate: 'yes',
+      iconName: 'Tag',
+      disabled: true,
+    },
+    {
+      id: 4,
+      href: '/dashboard/settings',
+      text: 'settings',
+      translate: 'yes',
+      iconName: 'Settings',
+      sub: [
         {
           id: 1,
-          title: 'profile',
           href: '/dashboard/settings/profile',
-          iconName: 'UserRound',
+          text: 'profile',
           translate: 'yes',
-          disabled: false,
-          // roles: ['user'],
+          iconName: 'User',
         },
         {
           id: 2,
-          title: 'account',
           href: '/dashboard/settings/account',
-          iconName: 'Settings',
+          text: 'account',
           translate: 'yes',
-          disabled: false,
-          // roles: ['user'],
+          iconName: 'UserCog',
         },
         {
           id: 3,
-          title: 'appearance',
           href: '/dashboard/settings/appearance',
-          iconName: 'Paintbrush',
+          text: 'appearance',
           translate: 'yes',
-          disabled: false,
-          // roles: ['user'],
+          iconName: 'Paintbrush',
         },
         {
           id: 4,
-          title: 'notifications',
           href: '/dashboard/settings/notifications',
+          text: 'notifications',
+          translate: 'yes',
           iconName: 'Bell',
-          translate: 'yes',
-          disabled: false,
-          // roles: ['user'],
         },
-      ],
-    },
-    {
-      id: 2,
-      label: 'access',
-      separator: true,
-      translate: 'yes',
-      // roles: ['user'],
-      items: [
         {
-          id: 1,
-          title: 'emails',
+          id: 5,
           href: '/dashboard/settings/emails',
+          text: 'emails',
+          translate: 'yes',
           iconName: 'Mail',
-          translate: 'yes',
-          disabled: false,
-          // roles: ['user'],
         },
         {
-          id: 2,
-          title: 'security',
+          id: 6,
           href: '/dashboard/settings/security',
-          iconName: 'ShieldAlert',
+          text: 'security',
           translate: 'yes',
-          disabled: false,
-          // roles: ['user'],
+          iconName: 'ShieldAlert',
         },
         {
-          id: 3,
-          title: 'sessions',
+          id: 7,
           href: '/dashboard/settings/sessions',
-          iconName: 'RadioTower',
+          text: 'sessions',
           translate: 'yes',
+          iconName: 'RadioTower',
           disabled: true,
-          // roles: ['user'],
         },
       ],
     },
-  ],
-}
-
-export const adminConfig: DashboardPageConfig = {
-  nav: [
     {
-      id: 1,
-      label: '',
-      separator: false,
-      translate: 'no',
-      // roles: ['user'],
-      items: [
-        {
-          id: 1,
-          title: 'users',
-          href: '/dashboard/admin/users',
-          // iconName: '',
-          translate: 'yes',
-          disabled: false,
-          // roles: ['user'],
-        },
-      ],
+      id: 5,
+      href: '/dashboard/admin/users',
+      text: 'admin',
+      translate: 'yes',
+      iconName: 'FolderLock',
+      separator: true,
+      roles: ['admin', 'superadmin'],
     },
   ],
 }

@@ -9,10 +9,10 @@ export default async function BlockedLayout({
 }: {
   children?: React.ReactNode
 }) {
-  const { user: session } = await authenticate()
-  const { user } = await getUserAPI(session?.id ?? null)
+  const { authenticated } = await authenticate()
+  const { user } = await getUserAPI()
 
-  if (!session) redirect('/auth/signin')
+  if (!authenticated) redirect('/auth/signin')
   if (!user) redirect('/auth/signin')
   if (!user?.is_ban) redirect('/dashboard')
 

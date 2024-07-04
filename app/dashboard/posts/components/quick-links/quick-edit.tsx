@@ -4,7 +4,6 @@ import * as React from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { Post } from '@/types/database'
-import { siteConfig } from '@/config/site'
 
 interface QuickEditProps {
   post: Post
@@ -16,7 +15,6 @@ const QuickEdit = ({ post }: QuickEditProps) => {
   return (
     <Link
       href={`/dashboard/posts/edit?id=${post?.id}`}
-      scroll={!siteConfig?.fixedHeader}
       className="text-xs text-blue-700 hover:underline"
     >
       {t('edit')}

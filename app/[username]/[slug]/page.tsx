@@ -20,7 +20,6 @@ import { getAuth, authenticate } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { getPostAPI, getAdjacentPostAPI } from '@/queries/server/posts'
 import { Author, PostMeta } from '@/types/database'
-import { siteConfig } from '@/config/site'
 
 // revalidate the data at most every month
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
@@ -94,12 +93,7 @@ export default async function PostPage({
     <PostProvider value={{ post }}>
       <Analysis />
       <Header />
-      <main
-        className={cn(
-          'min-h-[80vh] pb-40',
-          siteConfig?.fixedHeader ? 'pt-[61px]' : ''
-        )}
-      >
+      <main className={cn('min-h-[80vh] pb-40')}>
         <div className="container min-w-0 flex-1 overflow-auto pt-16">
           <PostTitle title={post?.title} />
           <div className="mb-8 flex justify-between">
@@ -146,7 +140,6 @@ const PostAuthor = ({ author }: { author: Author | null }) => {
   return (
     <Link
       href={getAuthorUrl(null, { username: author?.username }) ?? '#'}
-      scroll={!siteConfig?.fixedHeader}
       className="underline hover:no-underline"
     >
       {author?.full_name}

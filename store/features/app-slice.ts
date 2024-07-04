@@ -1,26 +1,34 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 // Define a type for the slice state
-interface AppState {
-  value: any
+interface appState {
+  panelSizes: number[]
+  panelCollapsed: boolean
 }
 
 // Define the initial state using that type
-const initialState: AppState = {
-  value: null,
+const initialState: appState = {
+  panelSizes: [25, 75],
+  panelCollapsed: false,
 }
 
 export const appSlice = createSlice({
-  name: 'initial',
+  name: 'app',
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    setAppValue: (state, action: PayloadAction<AppState>) => {
-      state.value = action.payload
+    setPanelSizes: (state, action: PayloadAction<appState['panelSizes']>) => {
+      state.panelSizes = action.payload
+    },
+    setPanelCollapsed: (
+      state,
+      action: PayloadAction<appState['panelCollapsed']>
+    ) => {
+      state.panelCollapsed = action.payload
     },
   },
 })
 
-export const { setAppValue } = appSlice.actions
+export const { setPanelSizes, setPanelCollapsed } = appSlice.actions
 
 export default appSlice.reducer

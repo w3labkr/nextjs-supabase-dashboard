@@ -19,9 +19,7 @@ const LanguageToggleButton = ({
   ...props
 }: LanguageToggleButtonProps) => {
   const dispatch = useAppDispatch()
-  const resolvedLanguage = useAppSelector(
-    (state) => state.i18n.resolvedLanguage
-  )
+  const { resolvedLanguage } = useAppSelector(({ i18n }) => i18n)
   const [currentLanguage, setCurrentLanguage] =
     React.useState<string>(resolvedLanguage)
   const { i18n } = useTranslation()

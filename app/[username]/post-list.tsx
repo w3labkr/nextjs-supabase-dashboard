@@ -2,17 +2,16 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
 
 import dayjs from 'dayjs'
 import { Paging, PagingProvider } from '@/components/paging'
 
 import { getPostUrl } from '@/lib/utils'
 import { Post } from '@/types/database'
-import { siteConfig } from '@/config/site'
 import { useAuth } from '@/hooks/use-auth'
 import { usePostsAPI } from '@/queries/client/posts'
-import { useSearchParams } from 'next/navigation'
-import { useTranslation } from 'react-i18next'
 
 interface PostListProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -70,9 +69,7 @@ const PostItem = ({ post, ...props }: PostItemProps) => {
   return (
     <div className="space-y-2 border-b py-4" {...props}>
       <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
-        <Link href={getPostUrl(post) ?? '#'} scroll={!siteConfig?.fixedHeader}>
-          {post?.title}
-        </Link>
+        <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
       </h3>
       <p className="line-clamp-3">{post?.description}</p>
       <div className="space-x-1 text-sm">

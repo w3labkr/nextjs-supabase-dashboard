@@ -5,9 +5,8 @@ import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { useFormContext, useWatch } from 'react-hook-form'
 
-import { getPostUrl } from '@/lib/utils'
-import { siteConfig } from '@/config/site'
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
+import { getPostUrl } from '@/lib/utils'
 
 interface PermalinkProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -29,7 +28,6 @@ const Permalink = ({ className, ...props }: PermalinkProps) => {
       {t('permalink') + ': '}
       <Link
         href={permalink ?? '#'}
-        scroll={!siteConfig?.fixedHeader}
         className="text-blue-700 hover:underline"
         target="_blank"
         rel="noopener noreferrer"

@@ -9,7 +9,7 @@ import { ChangeLanguageForm } from './change-language-form'
 
 export default function AppearancePage() {
   return (
-    <main className="flex-1 space-y-16 overflow-auto p-10 pb-16">
+    <main className="flex-1 space-y-16 overflow-auto p-8 pb-36">
       <div className="space-y-4">
         <Title translate="yes">theme</Title>
         <Separator />

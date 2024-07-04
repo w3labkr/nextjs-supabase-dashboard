@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { User } from '@/types/database'
-import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
+import { LucideIcon, type LucideIconName } from '@/lib/lucide-icon'
 
 interface AsideProps extends React.HTMLAttributes<HTMLDivElement> {
   user: User

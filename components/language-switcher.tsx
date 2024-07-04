@@ -37,9 +37,7 @@ const LanguageSwitcher = ({
   contentClassName,
 }: LanguageSwitcherProps) => {
   const dispatch = useAppDispatch()
-  const resolvedLanguage = useAppSelector(
-    (state) => state?.i18n?.resolvedLanguage
-  )
+  const { resolvedLanguage } = useAppSelector(({ i18n }) => i18n)
   const [open, setOpen] = React.useState<boolean>(false)
   const { t, i18n } = useTranslation()
 

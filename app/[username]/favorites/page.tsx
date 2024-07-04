@@ -11,7 +11,6 @@ import { RecentLink, FavoritesLink } from './tab-links'
 
 import { cn } from '@/lib/utils'
 import { getUserAPI } from '@/queries/server/users'
-import { siteConfig } from '@/config/site'
 import { SearchForm } from '@/components/search-form'
 
 // revalidate the data at most every week
@@ -54,12 +53,7 @@ export default async function FavoritesPage({
   return (
     <>
       <Header />
-      <main
-        className={cn(
-          'min-h-[80vh] pb-40',
-          siteConfig?.fixedHeader ? 'pt-[61px]' : ''
-        )}
-      >
+      <main className={cn('min-h-[80vh] pb-40')}>
         <div className="container flex-1 overflow-auto pt-12">
           <div className="mx-auto grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 lg:grid-cols-4 lg:gap-[60px]">
             <Aside className="space-y-2" user={user} />

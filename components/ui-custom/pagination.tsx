@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 import { ButtonProps, buttonVariants } from '@/components/ui/button'
-import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
+import { LucideIcon, type LucideIconName } from '@/lib/lucide-icon'
 
 const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
   <nav

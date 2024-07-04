@@ -1,13 +1,12 @@
 'use client'
 
 import * as React from 'react'
-import Link, { LinkProps } from 'next/link'
+import Link, { type LinkProps } from 'next/link'
 import { useTranslation } from 'react-i18next'
 
-import { cn } from '@/lib/utils'
-import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
 import { ButtonProps, buttonVariants } from '@/components/ui/button'
-import { siteConfig } from '@/config/site'
+import { cn } from '@/lib/utils'
+import { LucideIcon, type LucideIconName } from '@/lib/lucide-icon'
 
 interface ButtonLinkProps
   extends LinkProps,
@@ -34,7 +33,6 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
       translate,
       ns,
       variant = 'ghost',
-      scroll,
       ...rest
     } = props
     const { t } = useTranslation()
@@ -42,7 +40,6 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
     return (
       <Link
         ref={ref}
-        scroll={scroll ?? !siteConfig?.fixedHeader}
         className={cn(buttonVariants({ variant }), className)}
         {...rest}
       >

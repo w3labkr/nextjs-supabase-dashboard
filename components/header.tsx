@@ -8,7 +8,7 @@ import { LucideIcon } from '@/lib/lucide-icon'
 import { Button } from '@/components/ui/button'
 import { SheetTrigger, SheetContent, Sheet } from '@/components/ui/sheet'
 
-import { Brand } from '@/components/brand'
+import { SiteBrand } from '@/components/site-brand'
 import { Navigation } from '@/components/navigation'
 import { MobileNavigation } from '@/components/mobile-navigation'
 import { AccountMenu } from '@/components/account-menu'
@@ -16,7 +16,6 @@ import { SearchForm } from '@/components/search-form'
 
 import { useAuth } from '@/hooks/use-auth'
 import { cn, getArchivePath } from '@/lib/utils'
-import { siteConfig } from '@/config/site'
 
 const Header = () => {
   const { user } = useAuth()
@@ -32,8 +31,8 @@ const Header = () => {
       </SheetContent>
       <header
         className={cn(
-          'flex w-full flex-col border-0 border-b border-solid border-input bg-white',
-          siteConfig?.fixedHeader ? 'fixed z-10' : ''
+          'flex w-full flex-col border-0 border-b border-solid border-input bg-white'
+          // 'sticky left-0 top-0 z-10'
         )}
       >
         <div className="container flex h-[60px] items-center">
@@ -48,7 +47,7 @@ const Header = () => {
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
-          <Brand />
+          <SiteBrand className="mr-6 hidden lg:flex" />
           <Navigation />
           <div className="ml-auto flex gap-2">
             <SearchForm
@@ -79,21 +78,10 @@ const SignedOutNav = () => {
 
   return (
     <>
-      <Button
-        variant="outline"
-        onClick={() =>
-          router.push('/auth/signin', { scroll: !siteConfig?.fixedHeader })
-        }
-      >
+      <Button variant="outline" onClick={() => router.push('/auth/signin')}>
         {t('signin')}
       </Button>
-      <Button
-        onClick={() =>
-          router.push('/auth/signup', { scroll: !siteConfig?.fixedHeader })
-        }
-      >
-        {t('signup')}
-      </Button>
+      <Button onClick={() => router.push('/auth/signup')}>{t('signup')}</Button>
     </>
   )
 }

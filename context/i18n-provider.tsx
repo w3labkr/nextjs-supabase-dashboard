@@ -9,9 +9,7 @@ import { defaultNS } from '@/i18next.config'
 import { useAppSelector } from '@/lib/redux/hooks'
 
 const I18nProvider = ({ children }: { children?: React.ReactNode }) => {
-  const resolvedLanguage = useAppSelector(
-    (state) => state.i18n.resolvedLanguage
-  )
+  const { resolvedLanguage } = useAppSelector(({ i18n }) => i18n)
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
 
   React.useEffect(() => {

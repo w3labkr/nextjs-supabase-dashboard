@@ -40,8 +40,7 @@ const MetaboxTags = () => {
   )
 
   const handleSetTags = (newTags: React.SetStateAction<Tag[]>) => {
-    const metaTags: Tag[] =
-      Array.isArray(newTags) && newTags?.length > 0 ? newTags : []
+    const metaTags: Tag[] = Array.isArray(newTags) ? newTags : []
     setTags(metaTags)
     setMetaValue(watchMeta, 'tags', JSON.stringify(metaTags))
   }

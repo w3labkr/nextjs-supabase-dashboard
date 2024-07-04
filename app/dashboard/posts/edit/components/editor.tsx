@@ -157,11 +157,8 @@ const Editor = () => {
   const { user } = useAuth()
   const { post } = usePostForm()
   const { setValue } = useFormContext()
+  const { resolvedLanguage } = useAppSelector(({ i18n }) => i18n)
   const [watchValue, setWatchValue] = React.useState<string>('')
-
-  const resolvedLanguage = useAppSelector(
-    (state) => state?.i18n?.resolvedLanguage
-  )
 
   React.useEffect(() => {
     setValue('content', post?.content ?? '')

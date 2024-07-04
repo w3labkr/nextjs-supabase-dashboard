@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
+import { LucideIcon, type LucideIconName } from '@/lib/lucide-icon'
 import { toast } from 'sonner'
 import { Button, ButtonProps } from '@/components/ui/button'
 
@@ -14,11 +14,9 @@ import {
   generateRecentPosts,
   getPostPath,
 } from '@/lib/utils'
-import { useAuth } from '@/hooks/use-auth'
 import { PostAPI } from '@/types/api'
 import { useSearchParams } from 'next/navigation'
 import { useUserAPI } from '@/queries/client/users'
-import { Post } from '@/types/database'
 
 interface AddDummyPostProps
   extends ButtonProps,
@@ -40,8 +38,7 @@ const AddDummyPost = ({
 }: AddDummyPostProps) => {
   const searchParams = useSearchParams()
   const { t } = useTranslation()
-  const { session } = useAuth()
-  const { user } = useUserAPI(session?.user?.id ?? null)
+  const { user } = useUserAPI()
   const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)

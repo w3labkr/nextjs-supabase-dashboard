@@ -3,18 +3,12 @@ import * as React from 'react'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { cn } from '@/lib/utils'
-import { siteConfig } from '@/config/site'
 
 export default function PrivacyPage() {
   return (
     <div>
       <Header />
-      <main
-        className={cn(
-          'min-h-[80vh] pb-40',
-          siteConfig?.fixedHeader ? 'pt-[61px]' : ''
-        )}
-      >
+      <main className={cn('min-h-[80vh] pb-40')}>
         <div className="container pt-16">
           <h1 className="mb-16 text-center font-serif text-6xl font-bold leading-tight tracking-tighter md:text-7xl md:leading-none lg:text-8xl">
             Privacy Policy

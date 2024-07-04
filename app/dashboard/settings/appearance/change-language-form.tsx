@@ -38,10 +38,7 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>
 
 const ChangeLanguageForm = () => {
-  const resolvedLanguage = useAppSelector(
-    (state) => state?.i18n?.resolvedLanguage
-  )
-
+  const { resolvedLanguage } = useAppSelector(({ i18n }) => i18n)
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
@@ -93,9 +90,7 @@ const LanguageField = () => {
 const SubmitButton = () => {
   const { t, i18n } = useTranslation()
   const dispatch = useAppDispatch()
-  const resolvedLanguage = useAppSelector(
-    (state) => state?.i18n?.resolvedLanguage
-  )
+  const { resolvedLanguage } = useAppSelector(({ i18n }) => i18n)
   const { handleSubmit, getValues } = useFormContext()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 

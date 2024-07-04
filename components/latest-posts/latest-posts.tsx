@@ -5,7 +5,6 @@ import Link from 'next/link'
 
 import { getPostUrl } from '@/lib/utils'
 import { Post } from '@/types/database'
-import { siteConfig } from '@/config/site'
 import { usePostsAPI } from '@/queries/client/posts'
 
 interface LatestPostsProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -63,9 +62,7 @@ const LatestItem = ({ post, ...props }: LatestItemProps) => {
     <div className="text-sm leading-4" {...props}>
       <span>&bull;&nbsp;</span>
       <span className="font-serif hover:underline">
-        <Link href={getPostUrl(post) ?? '#'} scroll={!siteConfig?.fixedHeader}>
-          {post?.title}
-        </Link>
+        <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
       </span>
     </div>
   )

@@ -18,11 +18,10 @@ import { getMeta } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { usePostViewsAPI } from '@/queries/client/posts'
 import { Post } from '@/types/database'
-import { siteConfig } from '@/config/site'
 
-interface WidgetPostViewsProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface PostViewsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const WidgetPostViews = (props: WidgetPostViewsProps) => {
+const PostViews = (props: PostViewsProps) => {
   const { t } = useTranslation()
 
   const { user } = useAuth()
@@ -84,7 +83,6 @@ const ListItem = ({ post, ...props }: ListItemProps) => {
       <td>
         <Link
           href={`/dashboard/posts/edit?id=${post?.id}`}
-          scroll={!siteConfig?.fixedHeader}
           className="line-clamp-1 font-serif hover:underline"
         >
           {post?.title}
@@ -105,4 +103,4 @@ const EmptyItem = () => {
   )
 }
 
-export { WidgetPostViews }
+export { PostViews }

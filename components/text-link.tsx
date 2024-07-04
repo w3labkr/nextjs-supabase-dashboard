@@ -1,10 +1,10 @@
 'use client'
 
 import * as React from 'react'
-import Link, { LinkProps } from 'next/link'
+import Link, { type LinkProps } from 'next/link'
 import { useTranslation } from 'react-i18next'
-import { siteConfig } from '@/config/site'
-import { LucideIcon, LucideIconName } from '@/lib/lucide-icon'
+
+import { LucideIcon, type LucideIconName } from '@/lib/lucide-icon'
 import { cn } from '@/lib/utils'
 
 interface TextLinkProps
@@ -22,7 +22,6 @@ const TextLink = React.forwardRef<HTMLAnchorElement, TextLinkProps>(
   (props, ref) => {
     const {
       children,
-      scroll,
       startIconName,
       startIconClassName,
       endIconName,
@@ -35,7 +34,7 @@ const TextLink = React.forwardRef<HTMLAnchorElement, TextLinkProps>(
     const { t } = useTranslation()
 
     return (
-      <Link ref={ref} scroll={scroll ?? !siteConfig?.fixedHeader} {...rest}>
+      <Link ref={ref} {...rest}>
         {startIconName ? (
           <LucideIcon
             name={startIconName}

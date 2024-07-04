@@ -12,7 +12,6 @@ import { getPostUrl } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useFavoritePostsAPI } from '@/queries/client/favorites'
 import { Post } from '@/types/database'
-import { siteConfig } from '@/config/site'
 
 interface PostListProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -70,9 +69,7 @@ const PostItem = ({ post, ...props }: PostItemProps) => {
   return (
     <div className="space-y-2 border-b py-4" {...props}>
       <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
-        <Link href={getPostUrl(post) ?? '#'} scroll={!siteConfig?.fixedHeader}>
-          {post?.title}
-        </Link>
+        <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
       </h3>
       <p className="line-clamp-3">{post?.description}</p>
       <div className="space-x-1 text-sm">

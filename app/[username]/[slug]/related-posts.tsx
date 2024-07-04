@@ -3,7 +3,6 @@ import Link from 'next/link'
 import dayjs from 'dayjs'
 
 import { getPostUrl } from '@/lib/utils'
-import { siteConfig } from '@/config/site'
 import { Post } from '@/types/database'
 
 interface RelatedPostsProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -37,9 +36,7 @@ const PreviousPost = ({ post }: { post: Post | null }) => {
   return (
     <div className="grid gap-2">
       <h3 className="line-clamp-2 font-serif text-2xl underline hover:no-underline">
-        <Link href={getPostUrl(post) ?? '#'} scroll={!siteConfig?.fixedHeader}>
-          {post?.title}
-        </Link>
+        <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
       </h3>
       <time dateTime={post?.date ?? undefined}>
         {dayjs(post?.date).format('MMMM D, YYYY')}
@@ -56,9 +53,7 @@ const NextPost = ({ post }: { post: Post | null }) => {
   return (
     <div className="grid gap-2">
       <h3 className="line-clamp-2 font-serif text-2xl underline hover:no-underline">
-        <Link href={getPostUrl(post) ?? '#'} scroll={!siteConfig?.fixedHeader}>
-          {post?.title}
-        </Link>
+        <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
       </h3>
       <time dateTime={post?.date ?? undefined}>
         {dayjs(post?.date).format('MMMM D, YYYY')}

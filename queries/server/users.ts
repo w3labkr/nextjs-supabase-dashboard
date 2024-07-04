@@ -1,16 +1,21 @@
 import { fetcher } from '@/lib/utils'
 import { UserAPI } from '@/types/api'
+import { getAuth } from '@/queries/server/auth'
 
 export async function getUserAPI(
-  id: string | null,
+  id: string | null = null,
   params?: { username?: string }
 ) {
+  const { session } = await getAuth()
+
   let url: string | null = null
 
-  if (id) {
-    url = `/api/v1/user?id=${id}`
-  } else if (params?.username) {
+  if (params?.username) {
     url = `/api/v1/user?username=${params?.username}`
+  } else if (id) {
+    url = `/api/v1/user?id=${id}`
+  } else if (session?.user) {
+    url = `/api/v1/user?id=${session?.user?.id}`
   }
 
   if (!url) return { user: null }

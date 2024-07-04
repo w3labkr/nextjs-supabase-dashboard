@@ -7,9 +7,7 @@ import { useAppSelector } from '@/lib/redux/hooks'
 
 const LanguageStatus = () => {
   const { t } = useTranslation()
-  const resolvedLanguage = useAppSelector(
-    (state) => state?.i18n?.resolvedLanguage
-  )
+  const { resolvedLanguage } = useAppSelector(({ i18n }) => i18n)
   const [label, setLabel] = React.useState<string>(defaultLabel)
 
   React.useEffect(() => {

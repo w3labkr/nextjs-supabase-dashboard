@@ -22,7 +22,6 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { useQueryString } from '@/hooks/use-query-string'
-import { siteConfig } from '@/config/site'
 
 const FormSchema = z.object({
   q: z.string(),
@@ -63,9 +62,7 @@ const SearchForm = ({
       .filter(Boolean)
       .join('?')
 
-    router.push(href, {
-      scroll: !siteConfig?.fixedHeader,
-    })
+    router.push(href)
   }
 
   return (

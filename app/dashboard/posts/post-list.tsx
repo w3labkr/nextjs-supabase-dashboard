@@ -16,7 +16,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { PagingProvider, usePaging, Paging } from '@/components/paging'
 
@@ -234,6 +233,9 @@ const PostItem = ({ post }: { post: Post }) => {
       <TableCell align="center">{post?.num}</TableCell>
       <TableCell>
         <div className="flex items-center space-x-2">
+          {dayjs().isBefore(dayjs(post?.created_at).add(1, 'day')) ? (
+            <span className="font-bold text-destructive text-2xs">NEW</span>
+          ) : null}
           <div className="line-clamp-1">
             <span>
               {!['publish'].includes(post?.status)
@@ -242,11 +244,6 @@ const PostItem = ({ post }: { post: Post }) => {
             </span>
             <span className="break-all">{post?.title}</span>
           </div>
-          {dayjs().isBefore(dayjs(post?.created_at).add(1, 'day')) ? (
-            <Badge variant="destructive" className="px-1.5 text-2xs">
-              New
-            </Badge>
-          ) : null}
         </div>
         <QuickLinks post={post} />
       </TableCell>

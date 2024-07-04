@@ -7,18 +7,15 @@ import { Separator } from '@/components/ui/separator'
 import { ChangeUsernameForm } from './change-username-form'
 import { DeleteUserForm } from './delete-user-form'
 
-import { getAuth } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 
 export default async function AccountPage() {
-  const { session } = await getAuth()
-  const { user } = await getUserAPI(session?.user?.id ?? null)
+  const { user } = await getUserAPI()
 
-  if (!session) redirect('/auth/signin')
   if (!user) redirect('/auth/signin')
 
   return (
-    <main className="flex-1 space-y-16 overflow-auto p-10 pb-16">
+    <main className="flex-1 space-y-16 overflow-auto p-8 pb-36">
       <div className="space-y-4">
         <Title translate="yes">username</Title>
         <Separator />
