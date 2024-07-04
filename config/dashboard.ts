@@ -104,7 +104,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       id: 5,
-      href: '/dashboard/admin/users',
+      href: '/dashboard/admin',
       text: 'admin',
       translate: 'yes',
       iconName: 'FolderLock',
