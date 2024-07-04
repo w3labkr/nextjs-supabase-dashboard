@@ -72,6 +72,7 @@ const NavItem = ({ item }: { item: DashboardNavItem }) => {
                 href={item?.href}
                 translate={item?.translate}
                 iconName={item?.iconName}
+                iconSize={16}
                 iconClassName="mr-2"
                 disabled={item?.disabled}
               >
@@ -92,7 +93,7 @@ const NavItem = ({ item }: { item: DashboardNavItem }) => {
           ) : null}
         </Tooltip>
       </TooltipProvider>
-      <NavSub item={item} />
+      {!collapsed ? <NavSub item={item} /> : null}
     </AccordionItem>
   )
 }
@@ -101,10 +102,15 @@ const NavSub = ({ item }: { item: DashboardNavItem }) => {
   const { user } = useUserAPI()
   const { panelCollapsed: collapsed } = useAppSelector(({ app }) => app)
 
-  if (Array.isArray(item?.sub) && collapsed) return null
-
   return (
-    <AccordionContent className="mb-2 ml-6 space-y-1 border-l px-4 pb-0 pt-1">
+    <AccordionContent
+      className={cn(
+        'pb-0',
+        Array.isArray(item?.sub) && item?.sub?.length > 0
+          ? 'mb-2 ml-6 space-y-1 border-l px-4 pt-1'
+          : ''
+      )}
+    >
       {item?.sub?.map((sub: DashboardNavSubItem) => {
         const denied =
           Array.isArray(sub?.roles) &&
@@ -118,6 +124,7 @@ const NavSub = ({ item }: { item: DashboardNavItem }) => {
               href={sub?.href}
               translate={sub?.translate}
               iconName={sub?.iconName}
+              iconSize={14}
               iconClassName="mr-1"
               disabled={sub?.disabled}
             >
