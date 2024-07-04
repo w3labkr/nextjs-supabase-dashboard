@@ -43,6 +43,7 @@ export async function generateMetadata(
     metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL!),
     title: post?.title,
     description: post?.description,
+    keywords: post?.keywords,
     openGraph: {
       type: 'website',
       siteName: process.env.NEXT_PUBLIC_APP_NAME!,
