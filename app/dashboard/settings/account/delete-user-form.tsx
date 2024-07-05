@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { toast } from 'sonner'
+import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -29,10 +30,10 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 
-import { fetcher, getFavoritesPath, getProfilePath } from '@/lib/utils'
+import { useSWRConfig } from 'swr'
 import { createClient } from '@/supabase/client'
+import { fetcher, getFavoritesPath, getProfilePath } from '@/lib/utils'
 import { User } from '@/types/database'
 import { UserAPI } from '@/types/api'
 import { useAuth } from '@/hooks/use-auth'
@@ -44,7 +45,7 @@ const FormSchema = z.object({
   confirmationPhrase: z
     .string()
     .nonempty()
-    .refine((val) => val === 'delete my account'),
+    .refine((val: string) => val === 'delete my account'),
 })
 
 type FormValues = z.infer<typeof FormSchema>
@@ -61,6 +62,8 @@ interface DeleteUserFormProps {
 
 const DeleteUserForm = ({ user }: DeleteUserFormProps) => {
   const { t } = useTranslation()
+  const [open, setOpen] = React.useState<boolean>(false)
+
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
@@ -71,10 +74,10 @@ const DeleteUserForm = ({ user }: DeleteUserFormProps) => {
 
   React.useEffect(() => {
     user?.has_set_password ? register('password') : unregister('password')
-  }, [register, unregister, user?.has_set_password])
+  }, [user?.has_set_password, register, unregister])
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button type="button" variant="outline" className="text-destructive">
           {t('delete_your_account')}
@@ -94,7 +97,7 @@ const DeleteUserForm = ({ user }: DeleteUserFormProps) => {
             <EmailField />
             {user?.has_set_password ? <PasswordField /> : null}
             <ConfirmationPhraseField />
-            <SubmitButton />
+            <SubmitButton open={open} onOpenChange={setOpen} />
           </form>
         </Form>
         {/* <DialogFooter></DialogFooter> */}
@@ -177,13 +180,21 @@ const ConfirmationPhraseField = () => {
   )
 }
 
-const SubmitButton = () => {
+const SubmitButton = ({
+  open,
+  onOpenChange,
+}: {
+  open: boolean
+  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
   const router = useRouter()
   const { t } = useTranslation()
-  const { handleSubmit, setError, getValues, formState } = useFormContext()
   const { session, setSession, setUser } = useAuth()
   const { user } = useUserAPI()
+  const { mutate } = useSWRConfig()
 
+  const { handleSubmit, reset, setError, getValues, formState } =
+    useFormContext()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async () => {
@@ -215,14 +226,18 @@ const SubmitButton = () => {
 
       const revalidatePaths = [getProfilePath(user), getFavoritesPath(user)]
 
-      const deleted = await fetcher<UserAPI>(`/api/v1/user?id=${user?.id}`, {
+      const { error } = await fetcher<UserAPI>(`/api/v1/user?id=${user?.id}`, {
         method: 'DELETE',
         body: JSON.stringify({
           options: { revalidatePaths },
         }),
       })
 
-      if (deleted?.error) throw new Error(deleted?.error?.message)
+      if (error) throw new Error(error?.message)
+
+      onOpenChange(false)
+      reset()
+      mutate(`/api/v1/user?id=${user?.id}`)
 
       setSession(null)
       setUser(null)

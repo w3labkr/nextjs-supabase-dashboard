@@ -13,8 +13,7 @@ const Logo = ({ className }: LogoProps) => {
   return (
     <LucideIcon
       name={siteConfig.symbol}
-      size={24}
-      className={cn('mx-auto', className)}
+      className={cn('mx-auto size-6 min-w-6', className)}
     />
   )
 }

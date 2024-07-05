@@ -39,8 +39,7 @@ const Hero = () => {
               {t('github')}
               <LucideIcon
                 name="ExternalLink"
-                size={15}
-                className="-mt-0.5 ml-1"
+                className="-mt-0.5 ml-1 size-3.5 min-w-3.5"
               />
             </Link>
           </div>

@@ -250,12 +250,11 @@ const PostItem = ({ post }: { post: Post }) => {
       <TableCell align="center">{post?.author?.full_name}</TableCell>
       <TableCell align="center">
         {getMeta(post?.meta, 'visibility') === 'private' ? (
-          <LucideIcon name="LockKeyhole" size={16} />
+          <LucideIcon name="LockKeyhole" className="size-4 min-w-4" />
         ) : (
           <LucideIcon
             name="LockKeyholeOpen"
-            size={16}
-            className="text-muted-foreground"
+            className="size-4 min-w-4 text-muted-foreground"
           />
         )}
       </TableCell>

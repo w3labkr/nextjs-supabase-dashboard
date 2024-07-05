@@ -42,7 +42,7 @@ const Header = () => {
               size="icon"
               variant="outline"
             >
-              <LucideIcon name="Menu" size={24} />
+              <LucideIcon name="Menu" className="size-6 min-w-6" />
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>

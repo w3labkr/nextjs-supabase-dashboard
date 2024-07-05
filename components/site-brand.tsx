@@ -8,7 +8,7 @@ import { absoluteUrl } from '@/lib/utils'
 const SiteBrand = ({ className }: { className?: string }) => {
   return (
     <Link className={className} href={absoluteUrl('/')}>
-      <LucideIcon name={siteConfig?.symbol} size={20} />
+      <LucideIcon name={siteConfig?.symbol} className="size-5 min-w-5" />
       <span className="sr-only">{siteConfig?.name}</span>
     </Link>
   )

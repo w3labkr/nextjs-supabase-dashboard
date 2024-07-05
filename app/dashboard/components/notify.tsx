@@ -51,7 +51,7 @@ const Notify = () => {
           </CardContent>
           <CardFooter>
             <Button type="button" className="w-full">
-              <LucideIcon name="Check" size={16} className="mr-2" />
+              <LucideIcon name="Check" className="mr-2 size-4 min-w-4" />
               {t('mark_all_as_read')}
             </Button>
           </CardFooter>

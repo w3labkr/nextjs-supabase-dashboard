@@ -44,7 +44,7 @@ const FormSchema = z.object({
   confirmationPhrase: z
     .string()
     .nonempty()
-    .refine((val) => val === 'delete my account'),
+    .refine((val: string) => val === 'delete my account'),
 })
 
 type FormValues = z.infer<typeof FormSchema>
@@ -61,6 +61,8 @@ interface DeactivateUserFormProps {
 
 const DeactivateUserForm = ({ user }: DeactivateUserFormProps) => {
   const { t } = useTranslation()
+  const [open, setOpen] = React.useState<boolean>(false)
+
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
@@ -75,7 +77,7 @@ const DeactivateUserForm = ({ user }: DeactivateUserFormProps) => {
   }, [register, unregister, has_set_password])
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button type="button" variant="outline" className="text-destructive">
           {t('delete_your_account')}
@@ -95,7 +97,7 @@ const DeactivateUserForm = ({ user }: DeactivateUserFormProps) => {
             <EmailField />
             {has_set_password ? <PasswordField /> : null}
             <ConfirmationPhraseField />
-            <SubmitButton />
+            <SubmitButton open={open} onOpenChange={setOpen} />
           </form>
         </Form>
         {/* <DialogFooter></DialogFooter> */}
@@ -178,13 +180,19 @@ const ConfirmationPhraseField = () => {
   )
 }
 
-const SubmitButton = () => {
+const SubmitButton = ({
+  open,
+  onOpenChange,
+}: {
+  open: boolean
+  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
   const router = useRouter()
   const { t } = useTranslation()
-  const { handleSubmit, setError, getValues, formState } = useFormContext()
   const { setSession, setUser } = useAuth()
   const { user } = useUserAPI()
 
+  const { handleSubmit, setError, getValues, formState } = useFormContext()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async () => {

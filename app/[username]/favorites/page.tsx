@@ -94,7 +94,7 @@ const RecentLink = ({ user, text }: { user: User; text: string }) => {
       href={getProfileUrl(user) ?? '#'}
       className="flex items-center text-muted-foreground"
     >
-      <LucideIcon name="History" size={16} className="mr-1" />
+      <LucideIcon name="History" className="mr-1 size-4 min-w-4" />
       {text}
     </Link>
   )
@@ -106,8 +106,7 @@ const FavoritesLink = ({ user, text }: { user: User; text: string }) => {
       <LucideIcon
         name="Heart"
         fill="#ef4444"
-        size={16}
-        className="mr-1 text-destructive"
+        className="mr-1 size-4 min-w-4 text-destructive"
       />
       {text}
     </Link>

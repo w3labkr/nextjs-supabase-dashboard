@@ -107,14 +107,14 @@ const AddDummyPost = ({
   return (
     <Button type="button" onClick={onClick} disabled={isSubmitting} {...props}>
       {startIconName ? (
-        <LucideIcon name={startIconName} size={16} className="mr-2" />
+        <LucideIcon name={startIconName} className="mr-2 size-4 min-w-4" />
       ) : null}
       {text && translate === 'yes' ? t(text, { ns }) : text}
       {children && typeof children === 'string' && translate === 'yes'
         ? t(children, { ns })
         : children}
       {endIconName ? (
-        <LucideIcon name={endIconName} size={16} className="ml-2" />
+        <LucideIcon name={endIconName} className="ml-2 size-4 min-w-4" />
       ) : null}
     </Button>
   )

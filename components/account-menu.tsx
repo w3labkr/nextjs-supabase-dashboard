@@ -53,7 +53,7 @@ const AccountMenu = () => {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/dashboard/settings/profile" className="cursor-pointer">
+          <Link href="/dashboard/users/profile" className="cursor-pointer">
             {t('settings')}
           </Link>
         </DropdownMenuItem>

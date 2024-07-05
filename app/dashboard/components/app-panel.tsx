@@ -25,8 +25,8 @@ const AppPanel = ({ children }: { children?: React.ReactNode }) => {
     >
       <ResizablePanel
         className={cn(
-          'max-w-[250px] !overflow-auto',
-          panelCollapsed ? 'min-w-[50px]' : 'min-w-[150px]'
+          'max-w-[300px] !overflow-auto',
+          panelCollapsed ? 'min-w-[50px]' : 'min-w-[200px]'
         )}
         defaultSize={Array.isArray(panelSizes) ? panelSizes[0] : 25}
         minSize={10}

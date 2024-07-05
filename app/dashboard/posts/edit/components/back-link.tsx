@@ -5,7 +5,7 @@ import { LucideIcon } from '@/lib/lucide-icon'
 const BackLink = () => {
   return (
     <Link href="/dashboard/posts" className="hover:text-muted-foreground">
-      <LucideIcon name="ChevronLeft" size={24} />
+      <LucideIcon name="ChevronLeft" className="size-6 min-w-6" />
     </Link>
   )
 }

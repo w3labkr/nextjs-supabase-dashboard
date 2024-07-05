@@ -13,8 +13,8 @@ const ThemeToggle = () => {
       type="button"
       onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
     >
-      <LucideIcon name="Sun" size={20} className="dark:hidden" />
-      <LucideIcon name="Moon" size={20} className="hidden dark:block" />
+      <LucideIcon name="Sun" className="size-5 min-w-5 dark:hidden" />
+      <LucideIcon name="Moon" className="hidden size-5 min-w-5 dark:block" />
       <span className="sr-only">Toggle theme</span>
     </button>
   )

@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 import { Separator } from '@/components/ui/separator'
+
 import { ChangeUsernameForm } from './change-username-form'
 import { DeleteUserForm } from './delete-user-form'
 
@@ -19,7 +20,9 @@ export default async function AccountPage() {
       <div className="space-y-4">
         <Title translate="yes">username</Title>
         <Separator />
-        <Description translate="yes"></Description>
+        <Description translate="yes">
+          changing_your_username_may_have_unintended_side_effects
+        </Description>
         <ChangeUsernameForm />
       </div>
       <div className="space-y-4">

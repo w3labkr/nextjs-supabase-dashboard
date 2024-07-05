@@ -69,8 +69,7 @@ const LanguageSwitcher = ({
             : t('search_language')}
           <LucideIcon
             name="ChevronsUpDown"
-            size={16}
-            className="ml-2 shrink-0 opacity-50"
+            className="ml-2 size-4 min-w-4 shrink-0 opacity-50"
           />
         </Button>
       </PopoverTrigger>
@@ -111,9 +110,8 @@ const LanguageSwitcherItem = ({
     >
       <LucideIcon
         name="Check"
-        size={16}
         className={cn(
-          'mr-2',
+          'mr-2 size-4 min-w-4',
           item?.value === resolvedLanguage ? 'opacity-100' : 'opacity-0'
         )}
       />

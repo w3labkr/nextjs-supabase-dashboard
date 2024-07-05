@@ -28,7 +28,7 @@ import { NotificationAPI } from '@/types/api'
 
 const FormSchema = z.object({
   marketing_emails: z.boolean(),
-  security_emails: z.boolean().refine((val) => val === true),
+  security_emails: z.boolean().refine((val: boolean) => val === true),
 })
 
 type FormValues = z.infer<typeof FormSchema>

@@ -87,7 +87,9 @@ const PaginationPrevious = ({
       className={cn('gap-1 pl-2.5', className)}
       {...props}
     >
-      {iconName ? <LucideIcon name={iconName} size={16} /> : null}
+      {iconName ? (
+        <LucideIcon name={iconName} className="size-4 min-w-4" />
+      ) : null}
       <span>{text && translate === 'yes' ? t(text, { ns }) : text}</span>
     </PaginationLink>
   )
@@ -115,7 +117,9 @@ const PaginationNext = ({
       {...props}
     >
       <span>{text && translate === 'yes' ? t(text, { ns }) : text}</span>
-      {iconName ? <LucideIcon name={iconName} size={16} /> : null}
+      {iconName ? (
+        <LucideIcon name={iconName} className="size-4 min-w-4" />
+      ) : null}
     </PaginationLink>
   )
 }
@@ -143,7 +147,9 @@ const PaginationEllipsis = ({
       className={cn('flex h-9 w-9 items-center justify-center', className)}
       {...props}
     >
-      {iconName ? <LucideIcon name={iconName} size={16} /> : null}
+      {iconName ? (
+        <LucideIcon name={iconName} className="size-4 min-w-4" />
+      ) : null}
       <span className="sr-only">
         {text && translate === 'yes' ? t(text, { ns }) : text}
       </span>

@@ -9,6 +9,17 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { toast } from 'sonner'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import {
   Form,
   FormControl,
@@ -18,8 +29,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
 import { createClient } from '@/supabase/client'
@@ -51,6 +60,9 @@ interface ChangePasswordFormProps {
 }
 
 const ChangePasswordForm = ({ user }: ChangePasswordFormProps) => {
+  const { t } = useTranslation()
+  const [open, setOpen] = React.useState<boolean>(false)
+
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
@@ -65,14 +77,35 @@ const ChangePasswordForm = ({ user }: ChangePasswordFormProps) => {
   }, [register, unregister, has_set_password])
 
   return (
-    <Form {...form}>
-      <form method="POST" noValidate className="space-y-4">
-        {has_set_password ? <OldPasswordField /> : null}
-        <NewPasswordField />
-        <ConfirmNewPasswordField />
-        <SubmitButton />
-      </form>
-    </Form>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button type="button" variant="outline">
+          {t('change_password')}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-[480px]">
+        <DialogHeader>
+          <DialogTitle>{t('password')}</DialogTitle>
+          <DialogDescription>
+            {t(
+              'must_be_at_least_%d_characters_including_numbers_and_lowercase_letters',
+              {
+                count: 6,
+              }
+            )}
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form method="POST" noValidate className="space-y-4">
+            {has_set_password ? <OldPasswordField /> : null}
+            <NewPasswordField />
+            <ConfirmNewPasswordField />
+            <SubmitButton open={open} onOpenChange={setOpen} />
+          </form>
+        </Form>
+        {/* <DialogFooter></DialogFooter> */}
+      </DialogContent>
+    </Dialog>
   )
 }
 
@@ -160,13 +193,20 @@ const ConfirmNewPasswordField = () => {
   )
 }
 
-const SubmitButton = () => {
+const SubmitButton = ({
+  open,
+  onOpenChange,
+}: {
+  open: boolean
+  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
   const router = useRouter()
   const { t } = useTranslation()
-  const { handleSubmit, reset, setError, getValues } = useFormContext()
   const { user } = useUserAPI()
   const { mutate } = useSWRConfig()
 
+  const { handleSubmit, reset, setError, getValues, formState } =
+    useFormContext()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async () => {
@@ -190,17 +230,19 @@ const SubmitButton = () => {
         }
       }
 
-      const updated = await supabase.auth.updateUser({
+      const { error } = await supabase.auth.updateUser({
         password: formValues?.newPassword,
       })
-      if (updated?.error) throw new Error(updated?.error?.message)
 
+      if (error) throw new Error(error?.message)
+
+      onOpenChange(false)
+      reset()
       mutate(`/api/v1/user?id=${user?.id}`)
 
-      reset()
-      router.refresh()
-
       toast.success(t('changed_successfully'))
+
+      router.refresh()
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('Old password does not match')) {
@@ -225,7 +267,7 @@ const SubmitButton = () => {
     <Button
       type="submit"
       onClick={handleSubmit(onSubmit)}
-      disabled={isSubmitting}
+      disabled={!formState?.isValid || isSubmitting}
     >
       {t('change_password')}
     </Button>

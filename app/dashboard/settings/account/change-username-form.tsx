@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
 import { useForm, useFormContext } from 'react-hook-form'
@@ -8,6 +9,17 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { toast } from 'sonner'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import {
   Form,
   FormControl,
@@ -17,8 +29,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
 import { fetcher, getFavoritesPath, getProfilePath } from '@/lib/utils'
@@ -40,8 +50,10 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>
 
 const ChangeUsernameForm = () => {
-  const { user } = useUserAPI()
+  const { t } = useTranslation()
+  const [open, setOpen] = React.useState<boolean>(false)
 
+  const { user } = useUserAPI()
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
@@ -50,13 +62,34 @@ const ChangeUsernameForm = () => {
     },
   })
 
+  const handleOpenChange = () => {
+    if (!open) form.reset()
+    setOpen()
+  }
+
   return (
-    <Form {...form}>
-      <form method="POST" noValidate className="space-y-4">
-        <UsernameField />
-        <SubmitButton />
-      </form>
-    </Form>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogTrigger asChild>
+        <Button type="button" variant="outline">
+          {t('change_username')}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-[320px]">
+        <DialogHeader>
+          <DialogTitle>{t('username')}</DialogTitle>
+          <DialogDescription>
+            {t('you_can_change_it_only_once_every_%d_days', { count: 30 })}
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form method="POST" noValidate className="space-y-4">
+            <UsernameField />
+            <SubmitButton open={open} onOpenChange={setOpen} />
+          </form>
+        </Form>
+        {/* <DialogFooter></DialogFooter> */}
+      </DialogContent>
+    </Dialog>
   )
 }
 
@@ -70,13 +103,10 @@ const UsernameField = () => {
       name="username"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{t('username')}</FormLabel>
-          <FormControl className="max-w-60">
+          <FormLabel>{t('username')}:</FormLabel>
+          <FormControl>
             <Input placeholder="Username" {...field} />
           </FormControl>
-          <FormDescription>
-            {t('you_can_change_it_only_once_every_%d_days', { count: 30 })}
-          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
@@ -84,12 +114,20 @@ const UsernameField = () => {
   )
 }
 
-const SubmitButton = () => {
+const SubmitButton = ({
+  open,
+  onOpenChange,
+}: {
+  open: boolean
+  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
+  const router = useRouter()
   const { t } = useTranslation()
-  const { handleSubmit, setError, getValues } = useFormContext()
   const { user } = useUserAPI()
   const { mutate } = useSWRConfig()
 
+  const { handleSubmit, reset, setError, getValues, formState } =
+    useFormContext()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const onSubmit = async () => {
@@ -115,9 +153,13 @@ const SubmitButton = () => {
 
       if (result?.error) throw new Error(result?.error?.message)
 
+      onOpenChange(false)
+      reset()
       mutate(`/api/v1/user?id=${user?.id}`)
 
       toast.success(t('changed_successfully'))
+
+      router.refresh()
     } catch (e: unknown) {
       const err = (e as Error)?.message
       if (err.startsWith('duplicate key value violates unique constraint')) {
@@ -141,7 +183,7 @@ const SubmitButton = () => {
     <Button
       type="submit"
       onClick={handleSubmit(onSubmit)}
-      disabled={isSubmitting}
+      disabled={!formState?.isValid || isSubmitting}
     >
       {t('change_username')}
     </Button>

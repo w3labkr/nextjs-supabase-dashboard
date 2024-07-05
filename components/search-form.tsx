@@ -97,8 +97,7 @@ const SearchForm = ({
         <button type="submit" className="absolute right-2">
           <LucideIcon
             name="Search"
-            size={20}
-            className="text-muted-foreground"
+            className="size-5 min-w-5 text-muted-foreground"
           />
         </button>
       </form>

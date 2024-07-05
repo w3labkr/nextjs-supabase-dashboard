@@ -48,7 +48,7 @@ interface ListItemProps extends React.LiHTMLAttributes<HTMLLIElement> {
 const ListItem = ({ children, iconName, ...props }: ListItemProps) => {
   return (
     <li className="flex items-center text-sm text-gray-600" {...props}>
-      <LucideIcon name={iconName} size={16} className="mr-1" />
+      <LucideIcon name={iconName} className="mr-1 size-4 min-w-4" />
       {children}
     </li>
   )

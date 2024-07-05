@@ -72,7 +72,6 @@ const NavItem = ({ item }: { item: DashboardNavItem }) => {
                 href={item?.href}
                 translate={item?.translate}
                 iconName={item?.iconName}
-                iconSize={16}
                 iconClassName="mr-2"
                 disabled={item?.disabled}
               >
@@ -81,7 +80,7 @@ const NavItem = ({ item }: { item: DashboardNavItem }) => {
               {!collapsed && Array.isArray(item?.sub) ? (
                 <LucideIcon
                   name="ChevronDown"
-                  className="h-4 w-4 shrink-0 transition-transform duration-200"
+                  className="size-4 min-w-4 shrink-0 transition-transform duration-200"
                 />
               ) : null}
             </AccordionTrigger>
@@ -124,8 +123,7 @@ const NavSub = ({ item }: { item: DashboardNavItem }) => {
               href={sub?.href}
               translate={sub?.translate}
               iconName={sub?.iconName}
-              iconSize={14}
-              iconClassName="mr-1"
+              iconClassName="mr-1 size-3.5 min-w-3.5"
               disabled={sub?.disabled}
             >
               {sub?.text}
@@ -142,7 +140,6 @@ interface NavLinkProps
     Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
   collapsed: boolean
   iconName?: LucideIconName
-  iconSize?: string | number
   iconClassName?: string
   text?: string
   ns?: string
@@ -155,7 +152,6 @@ const NavLink = ({
   href,
   collapsed,
   iconName,
-  iconSize = 16,
   iconClassName,
   text,
   ns,
@@ -172,7 +168,7 @@ const NavLink = ({
       <Link
         href={href}
         className={cn(
-          'flex items-center break-all text-left text-sm',
+          'flex items-start break-all text-left text-sm',
           disabled ? 'pointer-events-none opacity-55' : 'hover:underline',
           [pathname, parent].includes(href as string)
             ? ''
@@ -186,8 +182,7 @@ const NavLink = ({
         {iconName ? (
           <LucideIcon
             name={iconName}
-            size={iconSize}
-            className={cn('mr-2', iconClassName)}
+            className={cn(`mr-2 mt-[3px] size-4 min-w-4`, iconClassName)}
           />
         ) : null}
         <span className={cn(collapsed ? 'hidden' : '')}>

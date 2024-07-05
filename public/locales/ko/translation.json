@@ -85,6 +85,7 @@
   "latest_posts": "최근 게시물",
   "mark_all_as_read": "모두 읽음으로 표시",
   "marketing_emails": "마케팅 이메일",
+  "media": "미디어",
   "move_to_trash": "휴지통으로 이동",
   "name": "이름",
   "new_password": "새 비밀번호",
@@ -211,7 +212,14 @@
   "your_last_name": "성",
   "your_name": "이름",
   "your_password": "비밀번호",
-  "your_password_must_be_at_least_6_characters_long_and_must_be_different_from_your_previous_password": "비밀번호는 6자 이상이어야 하며 이전 비밀번호와 달라야 합니다.",
+  "must_be_at_least_%d_characters_including_numbers_and_lowercase_letters": "숫자와 소문자를 포함하여 {{count}}자 이상이어야 합니다.",
   "your_primary_email_address_may_be_used_to_receive_account_related_notifications_and_reset_your_password": "기본 이메일 주소는 계정 관련 알림을 받고 비밀번호를 재설정하는 데 사용될 수 있습니다.",
-  "your_username": "사용자 이름"
+  "your_username": "사용자 이름",
+  "changing_your_username_may_have_unintended_side_effects": "사용자 이름을 변경하면 의도하지 않은 부작용이 발생할 수 있습니다.",
+  "strengthen_your_account_by_keeping_your_password_strong": "비밀번호를 강력하게 유지하여 계정을 강화하세요.",
+  "authentication": "인증",
+  "password_and_authentication": "비밀번호와 인증",
+  "manage_two_factor_authentication": "2단계 인증 관리",
+  "two_factor_authentication": "2단계 인증",
+  "two_factor_authentication_is_a_method_of_adding_additional_security_to_your_account": "2단계 인증은 계정에 추가 보안을 추가하는 방법입니다."
 }

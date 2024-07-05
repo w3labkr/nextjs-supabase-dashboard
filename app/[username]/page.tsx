@@ -91,7 +91,7 @@ export default async function UserPage({
 const RecentLink = ({ user, text }: { user: User; text: string }) => {
   return (
     <Link href="#" className="flex items-center">
-      <LucideIcon name="History" size={16} className="mr-1" />
+      <LucideIcon name="History" className="mr-1 size-4 min-w-4" />
       {text}
     </Link>
   )
@@ -103,7 +103,11 @@ const FavoritesLink = ({ user, text }: { user: User; text: string }) => {
       href={getFavoritesUrl(user) ?? '#'}
       className="flex items-center text-muted-foreground"
     >
-      <LucideIcon name="Heart" fill="transparent" size={16} className="mr-1" />
+      <LucideIcon
+        name="Heart"
+        fill="transparent"
+        className="mr-1 size-4 min-w-4"
+      />
       {text}
     </Link>
   )
