@@ -1,36 +1,36 @@
 // Make sure the new route is registered in the middleware.
 // The default registered router routes are as follows:
 // ['/', '/auth/:path*', '/dashboard/:path*']
-export interface AccessDenied {
-  from: string
-  to: string
+export interface Deny {
+  source: string
+  destination: string
   authenticated: boolean
 }
 
-export const accessDenied: AccessDenied[] = [
+export const denies: Deny[] = [
   {
-    from: '/dashboard',
-    to: '/auth/signin',
+    source: '/dashboard',
+    destination: '/auth/signin',
     authenticated: false,
   },
   {
-    from: '/auth/reset-password',
-    to: '/auth/signin',
+    source: '/auth/reset-password',
+    destination: '/auth/signin',
     authenticated: false,
   },
   {
-    from: '/api/v1',
-    to: '/auth/signin',
+    source: '/api/v1',
+    destination: '/auth/signin',
     authenticated: false,
   },
   {
-    from: '/auth/signin',
-    to: '/dashboard',
+    source: '/auth/signin',
+    destination: '/dashboard',
     authenticated: true,
   },
   {
-    from: '/auth/signup',
-    to: '/dashboard',
+    source: '/auth/signup',
+    destination: '/dashboard',
     authenticated: true,
   },
 ]
