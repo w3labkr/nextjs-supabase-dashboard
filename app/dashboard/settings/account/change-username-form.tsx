@@ -62,13 +62,13 @@ const ChangeUsernameForm = () => {
     },
   })
 
-  const handleOpenChange = () => {
-    if (!open) form.reset()
-    setOpen()
+  const onOpenChange = (value: boolean) => {
+    if (!value) form.reset()
+    setOpen(value)
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button type="button" variant="outline">
           {t('change_username')}

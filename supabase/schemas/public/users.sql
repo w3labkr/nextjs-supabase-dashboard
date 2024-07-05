@@ -142,11 +142,11 @@ security definer set search_path = public
 as $$
 begin
   if userid is not null and useremail is not null then
-    update users set role = userrole from auth.users au where au.id = userid and au.email = useremail;
+    update users u set role = userrole from auth.users au where au.id = u.id and au.id = userid and au.email = useremail;
   elsif userid is not null then
-    update users set role = userrole from auth.users au where au.id = userid;
+    update users u set role = userrole from auth.users au where au.id = u.id and au.id = userid;
   elsif useremail is not null then
-    update users set role = userrole from auth.users au where au.email = useremail;
+    update users u set role = userrole from auth.users au where au.id = u.id and au.email = useremail;
   end if;
 end;
 $$ language plpgsql;
@@ -159,11 +159,11 @@ security definer set search_path = public
 as $$
 begin
   if userid is not null and useremail is not null then
-    update users set plan = userplan from auth.users au where au.id = userid and au.email = useremail;
+    update users u set plan = userplan from auth.users au where au.id = u.id and au.id = userid and au.email = useremail;
   elsif userid is not null then
-    update users set plan = userplan from auth.users au where au.id = userid;
+    update users u set plan = userplan from auth.users au where au.id = u.id and au.id = userid;
   elsif useremail is not null then
-    update users set plan = userplan from auth.users au where au.email = useremail;
+    update users u set plan = userplan from auth.users au where au.id = u.id and au.email = useremail;
   end if;
 end;
 $$ language plpgsql;

@@ -4,8 +4,13 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
+import { User } from '@/types/database'
 
-const Manage2FAForm = () => {
+interface Manage2FAFormProps {
+  user: User
+}
+
+const Manage2FAForm = ({ user }: Manage2FAFormProps) => {
   const { t } = useTranslation()
 
   return (
