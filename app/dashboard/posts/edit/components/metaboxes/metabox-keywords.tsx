@@ -24,9 +24,9 @@ const MetaboxKeywords = () => {
         <AccordionTrigger>{t('keywords')}</AccordionTrigger>
         <AccordionContent className="px-1 py-1 pb-4">
           <Textarea
-            {...register('keywords')}
             placeholder={t('please_enter_your_message')}
             rows={3}
+            {...register('keywords')}
           />
           <FormMessage className="mt-2">
             {fieldState?.error?.message}

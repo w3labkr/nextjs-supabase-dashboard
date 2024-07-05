@@ -48,20 +48,22 @@ const MetaboxSlug = () => {
         <AccordionTrigger>{t('slug')}</AccordionTrigger>
         <AccordionContent className="px-1 py-1 pb-4">
           <Input
-            {...register('slug')}
-            type="text"
             placeholder={t('please_enter_your_text')}
-            onChange={debounce((e: React.ChangeEvent<HTMLInputElement>) => {
-              setSlug((e.target as HTMLInputElement).value)
-            }, 1000)}
-            onBlur={(e: React.FocusEvent<HTMLInputElement, Element>) => {
+            onChangeCapture={debounce(
+              (e: React.FormEvent<HTMLInputElement>) => {
+                setSlug((e.target as HTMLInputElement).value)
+              },
+              1000
+            )}
+            onBlurCapture={(e: React.FocusEvent<HTMLInputElement, Element>) => {
               setSlug((e.target as HTMLInputElement).value)
             }}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+            onKeyDownCapture={(e: React.KeyboardEvent<HTMLInputElement>) => {
               if (e.key === 'Enter') {
                 setSlug((e.target as HTMLInputElement).value)
               }
             }}
+            {...register('slug')}
           />
           <FormMessage className="mt-2">
             {fieldState?.error?.message}

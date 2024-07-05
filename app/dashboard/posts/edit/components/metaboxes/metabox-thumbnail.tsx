@@ -72,7 +72,7 @@ const MetaboxThumbnail = () => {
       <AccordionItem value="item-1">
         <AccordionTrigger>{t('featured_image')}</AccordionTrigger>
         <AccordionContent>
-          <input {...register('thumbnail_url')} type="hidden" />
+          <input type="hidden" {...register('thumbnail_url')} />
           <input
             ref={fileInputRef}
             type="file"

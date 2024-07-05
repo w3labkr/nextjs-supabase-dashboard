@@ -27,7 +27,14 @@ import { useUserAPI } from '@/queries/client/users'
 import { UserAPI } from '@/types/api'
 
 const FormSchema = z.object({
-  username: z.string().nonempty().min(2).max(30),
+  username: z
+    .string()
+    .nonempty()
+    .min(2)
+    .max(30)
+    .refine((val: string) => !/[^A-Za-z0-9-_]/g.test(val), {
+      params: { i18n: 'invalid_username' },
+    }),
 })
 
 type FormValues = z.infer<typeof FormSchema>
