@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { useQueryString } from '@/hooks/use-query-string'
+import { useQueryString } from '@/hooks/url'
 
 const FormSchema = z.object({
   q: z.string(),

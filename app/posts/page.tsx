@@ -7,13 +7,8 @@ import { Footer } from '@/components/footer'
 import { Paging, PagingProvider } from '@/components/paging'
 
 import { getPostsAPI } from '@/queries/server/posts'
-import {
-  cn,
-  getAuthorUrl,
-  getPostUrl,
-  getTranslation,
-  type Translation,
-} from '@/lib/utils'
+import { cn, getAuthorUrl, getPostUrl } from '@/lib/utils'
+import { getTranslation, type Translation } from '@/hooks/i18next'
 import { Post } from '@/types/database'
 
 // revalidate the data at most every week

@@ -6,6 +6,8 @@ import HttpBackend, { HttpBackendOptions } from 'i18next-http-backend'
 import { z } from 'zod'
 import { makeZodI18nMap } from 'zod-i18n-map'
 
+// import * as i18next from 'i18next'
+
 i18n
   // load translation using http -> see /public/locales (i.e. https://github.com/i18next/react-i18next/tree/master/example/react/public/locales)
   // learn more: https://github.com/i18next/i18next-http-backend

@@ -10,13 +10,9 @@ import { SearchForm } from '@/components/search-form'
 import { Aside } from './aside'
 import { PostList } from './post-list'
 
-import {
-  cn,
-  getFavoritesUrl,
-  getTranslation,
-  type Translation,
-} from '@/lib/utils'
+import { cn, getFavoritesUrl } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
+import { getTranslation, type Translation } from '@/hooks/i18next'
 import { getUserAPI } from '@/queries/server/users'
 import { User } from '@/types/database'
 

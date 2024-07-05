@@ -14,7 +14,7 @@ import {
 } from '@/components/ui-custom/pagination'
 
 import { usePaging } from './paging-provider'
-import { useQueryString } from '@/hooks/use-query-string'
+import { useQueryString } from '@/hooks/url'
 
 interface PagingProps extends React.ComponentProps<'nav'> {}
 

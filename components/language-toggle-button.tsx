@@ -32,8 +32,8 @@ const LanguageToggleButton = ({
 
     i18n.changeLanguage(currentValue)
     document.documentElement.lang = currentValue
-    setCurrentLanguage(currentValue)
     dispatch(setResolvedLanguage(currentValue))
+    setCurrentLanguage(currentValue)
 
     router.refresh()
   }

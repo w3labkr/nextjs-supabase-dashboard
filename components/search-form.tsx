@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -21,7 +21,7 @@ import { Input } from '@/components/ui/input'
 
 import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
-import { useQueryString } from '@/hooks/use-query-string'
+import { useQueryString } from '@/hooks/url'
 
 const FormSchema = z.object({
   q: z.string(),

@@ -51,7 +51,6 @@ const LanguageSwitcher = ({
     dispatch(setResolvedLanguage(currentValue))
 
     setOpen(false)
-
     router.refresh()
   }
 

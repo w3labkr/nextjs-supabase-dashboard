@@ -231,7 +231,7 @@ npm install zod-i18n-map
 [Trans component](https://react.i18next.com/latest/trans-component) rendering for the client side
 
 ```javascript
-import { useTrans } from '@/hooks/use-trans'
+import { useTrans } from '@/hooks/i18next'
 
 const { trans } = useTrans()
 

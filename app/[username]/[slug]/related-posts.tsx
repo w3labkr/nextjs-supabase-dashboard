@@ -2,7 +2,8 @@ import * as React from 'react'
 import Link from 'next/link'
 import dayjs from 'dayjs'
 
-import { Translation, getPostUrl } from '@/lib/utils'
+import { getPostUrl } from '@/lib/utils'
+import { type Translation } from '@/hooks/i18next'
 import { Post } from '@/types/database'
 
 interface RelatedPostsProps extends React.HTMLAttributes<HTMLDivElement> {

@@ -15,13 +15,8 @@ import { PostViews } from './post-views'
 import { FavoriteButton } from './favorite-button'
 import { RelatedPosts } from './related-posts'
 
-import {
-  cn,
-  getAuthorUrl,
-  getMeta,
-  getTranslation,
-  type Translation,
-} from '@/lib/utils'
+import { cn, getAuthorUrl, getMeta } from '@/lib/utils'
+import { getTranslation, type Translation } from '@/hooks/i18next'
 import { getAuth, authenticate } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { getPostAPI, getAdjacentPostAPI } from '@/queries/server/posts'

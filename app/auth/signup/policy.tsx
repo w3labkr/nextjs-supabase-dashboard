@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import { useTrans } from '@/hooks/use-trans'
+import { useTrans } from '@/hooks/i18next'
 
 const Policy = () => {
   const { trans } = useTrans()

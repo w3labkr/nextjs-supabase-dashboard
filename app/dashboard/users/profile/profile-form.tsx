@@ -3,7 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
-import { useTrans } from '@/hooks/use-trans'
+import { useTrans } from '@/hooks/i18next'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useFormContext } from 'react-hook-form'
