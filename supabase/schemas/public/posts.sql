@@ -190,7 +190,7 @@ declare
 begin
   foreach r in array data loop
     insert into posts
-    (created_at, updated_at, deleted_at, date, user_id, type, status, password, title, slug, content, description, keywords, thumbnail_url, is_ban, banned_until)
+    (created_at,updated_at,deleted_at,date,user_id,type,status,password,title,slug,description,keywords,content,thumbnail_url,is_ban,banned_until)
     values
     (
       coalesce((r ->> 'created_at')::timestamptz, now()),
