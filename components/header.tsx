@@ -13,15 +13,15 @@ import { Navigation } from '@/components/navigation'
 import { MobileNavigation } from '@/components/mobile-navigation'
 import { AccountMenu } from '@/components/account-menu'
 import { SearchForm } from '@/components/search-form'
+import { SearchFormDialog } from '@/components/search-form-dialog'
 
-import { useAuth } from '@/hooks/use-auth'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/hooks/use-auth'
 
 const Header = () => {
-  const { user } = useAuth()
-
   const searchParams = useSearchParams()
   const pathname = usePathname()
+  const { user } = useAuth()
 
   return (
     <Sheet>
@@ -49,16 +49,22 @@ const Header = () => {
           <SiteBrand className="mr-6 hidden lg:flex" />
           <Navigation />
           <div className="ml-auto flex gap-2">
-            <SearchForm
-              pathname="/search"
-              placeholder="search_text"
-              translate="yes"
-              values={{
-                q: pathname?.startsWith('/search')
-                  ? (searchParams.get('q') as string) ?? ''
-                  : '',
-              }}
-            />
+            {pathname !== '/' ? (
+              <SearchForm
+                path="/search"
+                placeholder="search_text"
+                translate="yes"
+                values={{
+                  q: pathname?.startsWith('/search')
+                    ? (searchParams.get('q') as string) ?? ''
+                    : '',
+                }}
+                className="hidden sm:flex"
+              />
+            ) : null}
+            {pathname !== '/' ? (
+              <SearchFormDialog className="sm:hidden" />
+            ) : null}
             {user ? <SignedInNav /> : <SignedOutNav />}
           </div>
         </div>
@@ -77,10 +83,21 @@ const SignedOutNav = () => {
 
   return (
     <>
-      <Button variant="outline" onClick={() => router.push('/auth/signin')}>
-        {t('signin')}
+      <Button
+        variant="outline"
+        className="w-10 sm:w-auto"
+        onClick={() => router.push('/auth/signin')}
+      >
+        <LucideIcon name="LogIn" className="size-5 min-w-5 sm:hidden" />
+        <span className="hidden sm:inline">{t('signin')}</span>
       </Button>
-      <Button onClick={() => router.push('/auth/signup')}>{t('signup')}</Button>
+      <Button
+        className="w-10 sm:w-auto"
+        onClick={() => router.push('/auth/signup')}
+      >
+        <LucideIcon name="UserPlus" className="size-5 min-w-5 sm:hidden" />
+        <span className="hidden sm:inline">{t('signup')}</span>
+      </Button>
     </>
   )
 }

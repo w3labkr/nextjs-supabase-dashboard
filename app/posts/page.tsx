@@ -7,7 +7,7 @@ import { Footer } from '@/components/footer'
 import { Paging, PagingProvider } from '@/components/paging'
 
 import { getPostsAPI } from '@/queries/server/posts'
-import { cn, getAuthorUrl, getPostUrl } from '@/lib/utils'
+import { getAuthorUrl, getPostUrl } from '@/lib/utils'
 import { getTranslation, type Translation } from '@/hooks/i18next'
 import { Post } from '@/types/database'
 
@@ -50,7 +50,7 @@ export default async function PostsPage({
   return (
     <>
       <Header />
-      <main className={cn('min-h-[80vh] pb-40')}>
+      <main className="min-h-[80vh] pb-20 sm:pb-40">
         <div className="container flex-1 overflow-auto">
           <h2 className="mt-16 text-center font-serif text-4xl font-bold">
             {translation['posts']}

@@ -1,18 +1,18 @@
 import { Post, User } from '@/types/database'
 
-export function absoluteUrl(pathname?: string): string {
+export function absoluteUrl(path?: string): string {
   const origin = process.env.NEXT_PUBLIC_APP_URL!
-  const uri = `${origin}/${pathname}`
+  const uri = `${origin}/${path}`
   const sanitized = uri.replace(/\/+/g, '/').replace(/\/+$/, '')
   const url = new URL(sanitized)
 
   return url.toString()
 }
 
-export function setUrn(pathname: string, queryString: string): string {
-  const sanitized = pathname.replace(/\/+/g, '/').replace(/\/+$/, '')
+export function setUrn(path: string, query: string): string {
+  const sanitized = path.replace(/\/+/g, '/').replace(/\/+$/, '')
 
-  return [sanitized, queryString].filter(Boolean).join('?')
+  return [sanitized, query].filter(Boolean).join('?')
 }
 
 export function getQueryString(searchParams: URLSearchParams) {
@@ -47,9 +47,9 @@ export function getPostUrl(
   post: Partial<Post> | null,
   params?: { username?: string | null; slug?: string | null }
 ): string | null {
-  const pathname = getPostPath(post, params)
+  const path = getPostPath(post, params)
 
-  return pathname ? absoluteUrl(pathname) : null
+  return path ? absoluteUrl(path) : null
 }
 
 export function getAuthorPath(
@@ -65,61 +65,61 @@ export function getAuthorUrl(
   post: Partial<Post> | null,
   params?: { username?: string | null }
 ): string | null {
-  const pathname = getAuthorPath(post, params)
+  const path = getAuthorPath(post, params)
 
-  return pathname ? absoluteUrl(pathname) : null
+  return path ? absoluteUrl(path) : null
 }
 
 export function getAuthorFavoritesPath(
   post: Partial<Post> | null,
   params?: { username?: string | null }
 ): string | null {
-  const pathname = getAuthorPath(post, params)
+  const path = getAuthorPath(post, params)
 
-  return pathname ? pathname + '/favorites' : null
+  return path ? path + '/favorites' : null
 }
 
 export function getAuthorFavoritesUrl(
   post: Partial<Post> | null,
   params?: { username?: string | null }
 ): string | null {
-  const pathname = getAuthorFavoritesPath(post, params)
+  const path = getAuthorFavoritesPath(post, params)
 
-  return pathname ? absoluteUrl(pathname) : null
+  return path ? absoluteUrl(path) : null
 }
 
 export function getProfilePath(
   user: User | null,
   params?: { username?: string | null }
 ): string | null {
-  const pathname = params?.username ?? user?.username
+  const username = params?.username ?? user?.username
 
-  return pathname ? `/${pathname}` : null
+  return username ? `/${username}` : null
 }
 
 export function getProfileUrl(
   user: User | null,
   params?: { username?: string | null }
 ): string | null {
-  const pathname = getProfilePath(user, params)
+  const path = getProfilePath(user, params)
 
-  return pathname ? absoluteUrl(pathname) : null
+  return path ? absoluteUrl(path) : null
 }
 
 export function getFavoritesPath(
   user: User | null,
   params?: { username?: string | null }
 ): string | null {
-  const pathname = getProfilePath(user, params)
+  const path = getProfilePath(user, params)
 
-  return pathname ? pathname + '/favorites' : null
+  return path ? path + '/favorites' : null
 }
 
 export function getFavoritesUrl(
   user: User | null,
   params?: { username?: string | null }
 ): string | null {
-  const pathname = getFavoritesPath(user, params)
+  const path = getFavoritesPath(user, params)
 
-  return pathname ? absoluteUrl(pathname) : null
+  return path ? absoluteUrl(path) : null
 }

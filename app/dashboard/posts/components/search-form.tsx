@@ -43,10 +43,10 @@ const SearchForm = () => {
   })
 
   const onSubmit = async (formValues: FormValues) => {
-    const queryString = qs({ q: formValues?.q, page: 1 })
-    const href = [pathname, queryString].filter(Boolean).join('?')
+    const query = qs({ q: formValues?.q, page: 1 })
+    const url = [pathname, query].filter(Boolean).join('?')
 
-    router.push(href)
+    router.push(url)
   }
 
   return (

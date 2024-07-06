@@ -30,7 +30,7 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>
 
 interface SearchFormProps extends React.FormHTMLAttributes<HTMLFormElement> {
-  pathname?: string
+  path: string
   placeholder?: string
   translate?: 'yes' | 'no'
   values: { q: string }
@@ -38,7 +38,7 @@ interface SearchFormProps extends React.FormHTMLAttributes<HTMLFormElement> {
 
 const SearchForm = ({
   className,
-  pathname,
+  path,
   placeholder = 'Search Text',
   translate,
   values,
@@ -46,8 +46,6 @@ const SearchForm = ({
 }: SearchFormProps) => {
   const { t } = useTranslation()
   const { qs } = useQueryString()
-
-  const basePathname = usePathname()
   const router = useRouter()
 
   const form = useForm<FormValues>({
@@ -55,14 +53,13 @@ const SearchForm = ({
     mode: 'onSubmit',
     values,
   })
+  const { control, handleSubmit } = form
 
   const onSubmit = async (formValues: FormValues) => {
-    const queryString = qs({ q: formValues?.q, page: 1 })
-    const href = [pathname ?? basePathname, queryString]
-      .filter(Boolean)
-      .join('?')
+    const query = qs({ q: formValues?.q, page: 1 })
+    const url = [path, query].filter(Boolean).join('?')
 
-    router.push(href)
+    router.push(url)
   }
 
   return (
@@ -70,12 +67,12 @@ const SearchForm = ({
       <form
         method="POST"
         noValidate
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit)}
         className={cn('relative flex w-full items-center', className)}
         {...props}
       >
         <FormField
-          control={form.control}
+          control={control}
           name="q"
           render={({ field }) => (
             <FormItem className="w-full">

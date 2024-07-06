@@ -97,7 +97,7 @@ export default async function PostPage({
     <PostProvider value={{ post }}>
       <Analysis />
       <Header />
-      <main className={cn('min-h-[80vh] pb-40')}>
+      <main className="min-h-[80vh] pb-20 sm:pb-40">
         <div className="container min-w-0 flex-1 overflow-auto pt-16">
           <PostTitle title={post?.title} />
           <div className="mb-8 flex justify-between">
@@ -130,7 +130,12 @@ const PostTitle = ({ title }: { title: string | null }) => {
   if (!title) return null
 
   return (
-    <h1 className="mb-16 text-center font-serif text-6xl font-bold leading-tight tracking-tighter md:text-7xl md:leading-none lg:text-8xl">
+    <h1
+      className={cn(
+        'mb-8 break-all text-center font-serif text-6xl font-bold leading-none tracking-tighter',
+        'sm:mb-16 sm:leading-tight md:text-7xl md:leading-none lg:text-8xl'
+      )}
+    >
       {title}
     </h1>
   )

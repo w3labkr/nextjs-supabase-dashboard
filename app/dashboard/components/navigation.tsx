@@ -169,7 +169,7 @@ const NavLink = ({
         href={href}
         className={cn(
           'flex items-start break-all text-left text-sm',
-          disabled ? 'pointer-events-none opacity-55' : 'hover:underline',
+          disabled ? 'pointer-events-none opacity-50' : 'hover:underline',
           [pathname, parent].includes(href as string)
             ? ''
             : 'text-muted-foreground',

@@ -10,9 +10,10 @@ import { SearchForm } from '@/components/search-form'
 import { Aside } from './aside'
 import { PostList } from './post-list'
 
-import { cn, getFavoritesUrl } from '@/lib/utils'
+import { getFavoritesUrl } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { getTranslation, type Translation } from '@/hooks/i18next'
+import { getPathname } from '@/hooks/headers'
 import { getUserAPI } from '@/queries/server/users'
 import { User } from '@/types/database'
 
@@ -54,11 +55,12 @@ export default async function UserPage({
   if (!user) notFound()
 
   const translation: Translation = await getTranslation()
+  const pathname = getPathname()
 
   return (
     <>
       <Header />
-      <main className={cn('min-h-[80vh] pb-40')}>
+      <main className="min-h-[80vh] pb-20 sm:pb-40">
         <div className="container flex-1 overflow-auto pt-12">
           <div className="mx-auto grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 lg:grid-cols-4 lg:gap-[60px]">
             <Aside className="space-y-2" user={user} />
@@ -69,6 +71,7 @@ export default async function UserPage({
                   <FavoritesLink user={user} text={translation['favorites']} />
                 </div>
                 <SearchForm
+                  path={pathname}
                   placeholder="find_a_post"
                   translate="yes"
                   values={{ q: searchParams?.q ?? '' }}

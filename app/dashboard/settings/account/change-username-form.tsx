@@ -51,9 +51,8 @@ type FormValues = z.infer<typeof FormSchema>
 
 const ChangeUsernameForm = () => {
   const { t } = useTranslation()
-  const [open, setOpen] = React.useState<boolean>(false)
-
   const { user } = useUserAPI()
+
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
@@ -62,6 +61,7 @@ const ChangeUsernameForm = () => {
     },
   })
 
+  const [open, setOpen] = React.useState<boolean>(false)
   const onOpenChange = (value: boolean) => {
     if (!value) form.reset()
     setOpen(value)
