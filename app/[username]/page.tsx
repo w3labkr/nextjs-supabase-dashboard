@@ -12,7 +12,7 @@ import { PostList } from './post-list'
 
 import { getFavoritesUrl } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
-import { getTranslation, type Translation } from '@/hooks/i18next'
+import { getTranslation } from '@/hooks/i18next'
 import { getPathname } from '@/hooks/headers'
 import { getUserAPI } from '@/queries/server/users'
 import { User } from '@/types/database'
@@ -54,7 +54,7 @@ export default async function UserPage({
 
   if (!user) notFound()
 
-  const translation: Translation = await getTranslation()
+  const { t } = await getTranslation()
   const pathname = getPathname()
 
   return (
@@ -67,8 +67,8 @@ export default async function UserPage({
             <div className="flex flex-col space-y-4 md:col-span-2 lg:col-span-3">
               <div className="space-y-2">
                 <div className="flex gap-2">
-                  <RecentLink user={user} text={translation['posts']} />
-                  <FavoritesLink user={user} text={translation['favorites']} />
+                  <RecentLink user={user} text={t['posts']} />
+                  <FavoritesLink user={user} text={t['favorites']} />
                 </div>
                 <SearchForm
                   path={pathname}

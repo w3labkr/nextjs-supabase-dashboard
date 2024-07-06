@@ -9,34 +9,32 @@ import { Post } from '@/types/database'
 interface RelatedPostsProps extends React.HTMLAttributes<HTMLDivElement> {
   previousPost: Post | null
   nextPost: Post | null
-  translation: Translation
+  t: Translation['t']
 }
 
 const RelatedPosts = async ({
   previousPost,
   nextPost,
-  translation,
+  t,
   ...props
 }: RelatedPostsProps) => {
   return (
     <div {...props}>
       <h2 className="mb-8 font-serif text-4xl font-bold leading-tight tracking-tighter">
-        {translation['related_posts']}
+        {t['related_posts']}
       </h2>
       <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-2">
         {previousPost ? (
           <PreviousPost post={previousPost} />
         ) : (
           <div className="text-center">
-            {translation['the_previous_post_does_not_exist']}
+            {t['the_previous_post_does_not_exist']}
           </div>
         )}
         {nextPost ? (
           <NextPost post={nextPost} />
         ) : (
-          <div className="text-center">
-            {translation['the_next_post_does_not_exist']}
-          </div>
+          <div className="text-center">{t['the_next_post_does_not_exist']}</div>
         )}
       </div>
     </div>

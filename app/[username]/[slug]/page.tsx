@@ -91,7 +91,7 @@ export default async function PostPage({
     status: 'publish',
   })
 
-  const translation: Translation = await getTranslation()
+  const { t } = await getTranslation()
 
   return (
     <PostProvider value={{ post }}>
@@ -113,12 +113,8 @@ export default async function PostPage({
           </div>
           <PostThumbnail thumbnailUrl={post?.thumbnail_url} />
           <PostContent content={post?.content} />
-          <PostTags meta={post?.meta} translation={translation} />
-          <RelatedPosts
-            previousPost={previousPost}
-            nextPost={nextPost}
-            translation={translation}
-          />
+          <PostTags meta={post?.meta} t={t} />
+          <RelatedPosts previousPost={previousPost} nextPost={nextPost} t={t} />
         </div>
       </main>
       <Footer />
@@ -181,13 +177,7 @@ const PostContent = ({ content }: { content: string | null }) => {
   )
 }
 
-const PostTags = ({
-  meta,
-  translation,
-}: {
-  meta?: PostMeta[]
-  translation: Translation
-}) => {
+const PostTags = ({ meta, t }: { meta?: PostMeta[]; t: Translation['t'] }) => {
   const tags: Tag[] = JSON.parse(getMeta(meta, 'tags', '[]'))
 
   if (Array.isArray(tags) && tags?.length === 0) {
@@ -196,7 +186,7 @@ const PostTags = ({
 
   return (
     <div className="mb-16">
-      <p>{translation['tags']}: </p>
+      <p>{t['tags']}: </p>
       <div>
         {tags?.map((tag: Tag, i: number) => (
           <React.Fragment key={tag.id}>

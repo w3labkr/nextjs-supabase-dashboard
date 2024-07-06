@@ -8,7 +8,7 @@ import { Paging, PagingProvider } from '@/components/paging'
 
 import { getPostsAPI } from '@/queries/server/posts'
 import { getAuthorUrl, getPostUrl } from '@/lib/utils'
-import { getTranslation, type Translation } from '@/hooks/i18next'
+import { getTranslation } from '@/hooks/i18next'
 import { Post } from '@/types/database'
 
 // revalidate the data at most every week
@@ -45,7 +45,7 @@ export default async function PostsPage({
   })
 
   const total = count ?? 0
-  const translation: Translation = await getTranslation()
+  const { t } = await getTranslation()
 
   return (
     <>
@@ -53,7 +53,7 @@ export default async function PostsPage({
       <main className="min-h-[80vh] pb-20 sm:pb-40">
         <div className="container flex-1 overflow-auto">
           <h2 className="mt-16 text-center font-serif text-4xl font-bold">
-            {translation['posts']}
+            {t['posts']}
           </h2>
           <PagingProvider value={{ total, page, perPage, pageSize }}>
             <div className="mt-12 space-y-16">
@@ -63,7 +63,7 @@ export default async function PostsPage({
                   <Paging />
                 </>
               ) : (
-                <div className="text-center">{translation['no_posts_yet']}</div>
+                <div className="text-center">{t['no_posts_yet']}</div>
               )}
             </div>
           </PagingProvider>
