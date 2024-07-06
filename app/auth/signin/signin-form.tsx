@@ -97,7 +97,7 @@ const PasswordField = () => {
             <FormLabel>{t('password')}</FormLabel>
             <TextLink
               href="/auth/forgot-password"
-              className="text-sm underline hover:decoration-muted"
+              className="text-sm underline hover:no-underline"
               translate="yes"
             >
               forgot_your_password

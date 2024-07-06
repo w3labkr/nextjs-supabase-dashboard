@@ -1,7 +1,7 @@
 {
-    "name": "My Next.js Application",
-    "short_name": "Next.js App",
-    "description": "An application built with Next.js",
+    "name": "Next.js Starter Kit",
+    "short_name": "Next.js Starter Kit",
+    "description": "This is a starter template for the NextJS 14 app router using supabase based on shadcn-ui.",
     "start_url": "/",
     "scope": "/",
     "display": "standalone",

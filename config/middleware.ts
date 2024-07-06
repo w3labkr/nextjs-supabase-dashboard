@@ -19,6 +19,11 @@ export const denies: Deny[] = [
     authenticated: false,
   },
   {
+    source: '/auth/blocked',
+    destination: '/auth/signin',
+    authenticated: false,
+  },
+  {
     source: '/api/v1',
     destination: '/auth/signin',
     authenticated: false,

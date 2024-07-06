@@ -36,7 +36,7 @@ export default function BlockedPage() {
 
   return (
     <div className="container flex min-h-screen w-screen flex-col items-center justify-center py-8">
-      <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
+      <div className="mx-auto flex w-full max-w-[360px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <Logo />
           <Title translate="yes">your_account_has_been_blocked</Title>
@@ -49,7 +49,7 @@ export default function BlockedPage() {
           </p>
           <button
             onClick={onClick}
-            className="text-left text-blue-700 hover:underline"
+            className="text-left text-blue-700 underline hover:no-underline"
           >
             {t('sign_out_and_sign_in_with_a_different_account')}
           </button>

@@ -34,7 +34,7 @@ export default function ForgotPasswordPage() {
         <div className="flex items-center justify-between text-sm">
           <TextLink
             href="/auth/signup"
-            className="hover:underline"
+            className="underline hover:no-underline"
             translate="yes"
           >
             dont_have_an_account_sign_up

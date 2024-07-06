@@ -14,10 +14,16 @@ const Policy = () => {
         {
           components: {
             link1: (
-              <Link href="/policy/terms" className="text-primary underline" />
+              <Link
+                href="/policy/terms"
+                className="text-primary underline hover:no-underline"
+              />
             ),
             link2: (
-              <Link href="/policy/privacy" className="text-primary underline" />
+              <Link
+                href="/policy/privacy"
+                className="text-primary underline hover:no-underline"
+              />
             ),
           },
         }

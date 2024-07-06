@@ -35,7 +35,7 @@ export default function SignUpPage() {
         <div className="flex items-center justify-between text-sm">
           <TextLink
             href="/auth/signin"
-            className="hover:underline"
+            className="underline hover:no-underline"
             translate="yes"
           >
             already_have_an_account_sign_in

@@ -1,6 +1,6 @@
 # NextJS with Supabase Auth
 
-This is a starter template for the [NextJS](https://nextjs.org/) 14 app router with supabase auth based on [shadcn-ui](https://ui.shadcn.com/).
+This is a starter template for the [NextJS](https://nextjs.org) 14 app router using supabase based on [shadcn-ui](https://ui.shadcn.com).
 
 Denpendency
 

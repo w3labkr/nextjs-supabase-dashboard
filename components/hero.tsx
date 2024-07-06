@@ -8,6 +8,7 @@ import { buttonVariants } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
+import { siteConfig } from '@/config/site'
 
 const Hero = () => {
   const { t } = useTranslation()
@@ -18,10 +19,10 @@ const Hero = () => {
         <div className="flex flex-col items-center space-y-4 text-center">
           <div className="space-y-2">
             <h1 className="text-3xl font-semibold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-              {t('welcome_to_%s_inc', { name: 'Acme' })}
+              {siteConfig.title}
             </h1>
-            <p className="mx-auto max-w-[700px] text-gray-500 dark:text-gray-400 md:text-xl">
-              {t('we_provide_high_quality_services_for_your_business')}
+            <p className="mx-auto max-w-[640px] text-gray-500 dark:text-gray-400 md:text-xl">
+              {siteConfig.description}
             </p>
           </div>
           <div className="space-x-4">
