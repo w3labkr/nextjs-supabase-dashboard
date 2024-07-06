@@ -30,7 +30,7 @@ const Header = () => {
       </SheetContent>
       <header
         className={cn(
-          'flex w-full flex-col border-0 border-b border-solid border-input bg-white'
+          'flex w-full flex-col border-0 border-b border-solid border-input'
           // 'sticky left-0 top-0 z-10'
         )}
       >

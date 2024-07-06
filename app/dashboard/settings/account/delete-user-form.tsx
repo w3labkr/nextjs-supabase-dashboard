@@ -79,14 +79,18 @@ const DeleteUserForm = ({ user }: DeleteUserFormProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button type="button" variant="outline" className="text-destructive">
+        <Button
+          type="button"
+          variant="outline"
+          className="text-destructive dark:text-white"
+        >
           {t('delete_your_account')}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[480px]">
         <DialogHeader>
           <DialogTitle>{t('delete_account')}</DialogTitle>
-          <DialogDescription className="text-destructive">
+          <DialogDescription className="text-destructive dark:text-white">
             {t(
               'if_you_delete_your_account_your_posts_and_other_related_information_will_be_permanently_deleted_and_cannot_be_recovered'
             )}
@@ -265,6 +269,7 @@ const SubmitButton = ({
   return (
     <Button
       variant="destructive"
+      className="dark:bg-white dark:text-black"
       type="submit"
       onClick={handleSubmit(onSubmit)}
       disabled={!formState?.isValid || isSubmitting}

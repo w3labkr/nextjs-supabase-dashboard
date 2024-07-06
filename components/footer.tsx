@@ -8,15 +8,15 @@ import { LanguageSwitcher } from '@/components/language-switcher'
 
 const Footer = () => {
   return (
-    <footer className="flex h-20 border-0 border-t border-solid border-input bg-inherit">
-      <div className="container flex items-center justify-between bg-inherit">
+    <footer className="flex border-0 border-t border-solid border-input bg-inherit">
+      <div className="container flex flex-col items-center gap-2 bg-inherit py-4 sm:flex-row sm:justify-between">
         <div className="text-sm">
           <Copyright />
           <LanguageStatus />
           {', '}
           <DarkModeStatus />
         </div>
-        <div className="flex flex-row gap-2">
+        <div className="flex gap-2">
           <ThemeToggle />
           <LanguageSwitcher />
         </div>

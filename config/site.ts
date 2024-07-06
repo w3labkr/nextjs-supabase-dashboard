@@ -8,7 +8,7 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: 'Acme Inc',
+  name: 'NextJS with Supabase Auth',
   title: 'Next.js Starter Kit',
   description:
     'This is a starter template for the NextJS 14 app router using supabase based on shadcn-ui.',

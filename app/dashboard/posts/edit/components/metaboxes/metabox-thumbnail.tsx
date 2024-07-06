@@ -83,7 +83,7 @@ const MetaboxThumbnail = () => {
           {watchThumbnailUrl ? null : (
             <button
               type="button"
-              className="text-blue-700 underline"
+              className="text-blue-700 underline hover:no-underline dark:text-white"
               onClick={() => handleFileInputRef(fileInputRef)}
             >
               {t('set_featured_image')}

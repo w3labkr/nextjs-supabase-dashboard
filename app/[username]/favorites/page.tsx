@@ -10,7 +10,7 @@ import { SearchForm } from '@/components/search-form'
 import { Aside } from '../aside'
 import { PostList } from './post-list'
 
-import { getProfileUrl } from '@/lib/utils'
+import { cn, getProfileUrl } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { getTranslation } from '@/hooks/i18next'
 import { getPathname } from '@/hooks/headers'
@@ -104,8 +104,10 @@ const FavoritesLink = ({ user, text }: { user: User; text: string }) => {
     <Link href="#" className="flex items-center">
       <LucideIcon
         name="Heart"
-        fill="#ef4444"
-        className="mr-1 size-4 min-w-4 text-destructive"
+        className={cn(
+          'mr-1 size-4 min-w-4 fill-destructive text-destructive',
+          'dark:fill-white dark:text-white'
+        )}
       />
       {text}
     </Link>

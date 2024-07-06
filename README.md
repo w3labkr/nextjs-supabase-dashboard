@@ -15,9 +15,6 @@ Denpendency
 - CKEditor 5 + Supabase Upload Adapter
 - PWA (Progressive Web Apps)
 
-> The administrator page cannot be viewed on the demo page.  
-> Check the files in the `app/dashboard/admin` directory.
-
 ## Table of Contents
 
 - [NextJS with Supabase Auth](#nextjs-with-supabase-auth)

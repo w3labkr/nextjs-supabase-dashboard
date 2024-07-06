@@ -86,7 +86,7 @@ const QuickPrivate = ({ post, ...props }: QuickPrivateProps) => {
 
   return (
     <button
-      className="text-xs text-blue-700 hover:underline"
+      className="text-xs text-blue-700 hover:underline dark:text-white"
       onClick={onClick}
       disabled={isSubmitting}
       {...props}

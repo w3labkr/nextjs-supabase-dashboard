@@ -264,7 +264,7 @@ const TrashButton = () => {
     <Button
       type="button"
       variant="link"
-      className="h-auto p-0 text-destructive underline"
+      className="h-auto p-0 text-destructive underline hover:no-underline dark:text-white"
       size="sm"
       onClick={handleSubmit(onSubmit)}
       disabled={isSubmitting}

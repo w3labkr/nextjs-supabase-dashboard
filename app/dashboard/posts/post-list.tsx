@@ -234,7 +234,9 @@ const PostItem = ({ post }: { post: Post }) => {
       <TableCell>
         <div className="flex items-center space-x-2">
           {dayjs().isBefore(dayjs(post?.created_at).add(1, 'day')) ? (
-            <span className="font-bold text-destructive text-2xs">NEW</span>
+            <span className="font-bold text-destructive text-2xs dark:text-white">
+              NEW
+            </span>
           ) : null}
           <div className="line-clamp-1">
             <span>

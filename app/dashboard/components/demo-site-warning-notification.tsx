@@ -10,8 +10,11 @@ const DemoSiteWarningNotification = () => {
   const { t } = useTranslation()
 
   return (
-    <Alert variant="destructive" className="rounded-none">
-      <Terminal className="h-4 w-4" />
+    <Alert
+      variant="destructive"
+      className="rounded-none dark:border-white dark:text-white"
+    >
+      <Terminal className="h-4 w-4 dark:text-white" />
       {/* <AlertTitle>{t('heads_up')}</AlertTitle> */}
       <AlertDescription>
         {t('heads_up')}{' '}

@@ -51,7 +51,7 @@ const ResendVerifyEmail = ({ item }: ResendVerifyEmailProps) => {
   return (
     <button
       type="button"
-      className="text-xs font-semibold text-blue-700 hover:underline"
+      className="text-xs font-semibold text-blue-700 underline hover:no-underline dark:text-white"
       onClick={onClick}
       disabled={isSubmitting}
     >

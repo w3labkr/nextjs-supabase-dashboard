@@ -77,8 +77,10 @@ const SignedInAction = ({ postId, ...props }: FavoriteButtonProps) => {
     <button type="button" onClick={onClick} disabled={isSubmitting} {...props}>
       <LucideIcon
         name="Heart"
-        fill={cn(isLike ? '#ef4444' : 'transparent')}
-        className="size-5 min-w-5 text-destructive"
+        className={cn(
+          'size-5 min-w-5 text-destructive dark:text-white',
+          isLike ? 'fill-destructive dark:fill-white' : ''
+        )}
       />
     </button>
   )
@@ -94,11 +96,7 @@ const SignedOutAction = ({ postId, ...props }: FavoriteButtonProps) => {
       onClick={() => router.push(`/auth/signin?next=${pathname}`)}
       {...props}
     >
-      <LucideIcon
-        name="Heart"
-        fill="transparent"
-        className="size-5 min-w-5 text-destructive"
-      />
+      <LucideIcon name="Heart" className="size-5 min-w-5 text-destructive" />
     </button>
   )
 }

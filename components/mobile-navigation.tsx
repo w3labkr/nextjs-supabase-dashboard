@@ -10,7 +10,7 @@ const MobileNavigation = () => {
     <div className="grid w-full max-w-md gap-4">
       <div className="flex items-center gap-4">
         <LucideIcon name={siteConfig?.symbol} className="size-6 min-w-6" />
-        <span>{siteConfig?.name}</span>
+        <span>{siteConfig?.title}</span>
       </div>
       <nav className="grid">
         <Link

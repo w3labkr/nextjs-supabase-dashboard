@@ -74,7 +74,7 @@ const QuickDelete = ({ post, ...props }: QuickDeleteProps) => {
 
   return (
     <button
-      className="text-xs text-destructive hover:underline"
+      className="text-xs text-destructive hover:underline dark:text-white"
       onClick={onClick}
       disabled={isSubmitting}
       {...props}

@@ -139,7 +139,7 @@ const EmailField = () => {
                 link1: (
                   <Link
                     href="/dashboard/settings/emails"
-                    className="text-primary underline"
+                    className="text-primary underline hover:no-underline"
                   />
                 ),
               },

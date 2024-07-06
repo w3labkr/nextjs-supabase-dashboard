@@ -15,7 +15,7 @@ const QuickEdit = ({ post }: QuickEditProps) => {
   return (
     <Link
       href={`/dashboard/posts/edit?id=${post?.id}`}
-      className="text-xs text-blue-700 hover:underline"
+      className="text-xs text-blue-700 hover:underline dark:text-white"
     >
       {t('edit')}
     </Link>

@@ -26,7 +26,7 @@ export default async function AccountPage() {
         <ChangeUsernameForm />
       </div>
       <div className="space-y-4">
-        <Title className="text-destructive" translate="yes">
+        <Title className="text-destructive dark:text-white" translate="yes">
           delete_account
         </Title>
         <Separator />

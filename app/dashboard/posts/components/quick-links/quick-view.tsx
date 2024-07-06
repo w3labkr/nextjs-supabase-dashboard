@@ -17,7 +17,7 @@ const QuickView = ({ post }: QuickViewProps) => {
   return (
     <Link
       href={getPostPath(post) ?? '#'}
-      className="text-xs text-blue-700 hover:underline"
+      className="text-xs text-blue-700 hover:underline dark:text-white"
       target="_blank"
       rel="noopener noreferrer"
     >

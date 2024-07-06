@@ -41,7 +41,9 @@ const EmailItem = ({ item }: EmailItemProps) => {
             {item?.email === user?.email ? (
               <>
                 <span>{' - '}</span>
-                <span className="text-green-700">{t('primary_email')}</span>
+                <span className="text-green-700 dark:text-white">
+                  {t('primary_email')}
+                </span>
               </>
             ) : null}
           </div>
@@ -103,7 +105,9 @@ const UnverifiedEmails = ({ item }: EmailItemProps) => {
   return (
     <li className="text-xs text-muted-foreground">
       <div>
-        <span className="font-semibold text-amber-700">{t('unverified')}</span>
+        <span className="font-semibold text-amber-700 dark:text-white">
+          {t('unverified')}
+        </span>
         &nbsp;&nbsp;
         <ResendVerifyEmail item={item} />
       </div>

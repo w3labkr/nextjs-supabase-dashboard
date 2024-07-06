@@ -28,7 +28,7 @@ const Permalink = ({ className, ...props }: PermalinkProps) => {
       {t('permalink') + ': '}
       <Link
         href={permalink ?? '#'}
-        className="text-blue-700 hover:underline"
+        className="text-blue-700 underline hover:no-underline dark:text-white"
         target="_blank"
         rel="noopener noreferrer"
       >
