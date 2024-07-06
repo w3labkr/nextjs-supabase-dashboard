@@ -7,7 +7,7 @@ import {
   VerifyErrors,
 } from 'jsonwebtoken'
 
-const secret: Secret = process.env.JWT_SECRET!
+const secret: Secret = process.env.SECRET_KEY!
 
 function jwtSign(
   payload: string | object | Buffer,
