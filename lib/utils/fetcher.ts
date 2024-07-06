@@ -6,7 +6,7 @@ export function fetcher<JSON = any>(
 ): Promise<JSON> {
   if (/^\//.test(input)) input = absoluteUrl(input)
   return fetch(input, init).then((response: Response) =>
-    response.headers.get('content-type').includes('application/json')
+    response.headers.get('content-type')?.includes('application/json')
       ? response.json()
       : response.text()
   )

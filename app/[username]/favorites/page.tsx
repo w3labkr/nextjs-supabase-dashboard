@@ -10,7 +10,7 @@ import { SearchForm } from '@/components/search-form'
 import { Aside } from '../aside'
 import { PostList } from './post-list'
 
-import { fetcher, getProfileUrl } from '@/lib/utils'
+import { getProfileUrl } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { getTranslation, type Translation } from '@/hooks/i18next'
 import { getPathname } from '@/hooks/headers'
