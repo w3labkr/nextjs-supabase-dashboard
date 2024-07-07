@@ -16,12 +16,9 @@ export default function PostEditPage({
       <div className="flex items-center space-x-2">
         <BackLink />
         <Title translate="yes">edit_post</Title>
-        <AddPost
-          variant="secondary"
-          size="sm"
-          text="add_post"
-          translate="yes"
-        />
+        <AddPost variant="secondary" translate="yes">
+          add_post
+        </AddPost>
       </div>
       <PostForm id={+id} />
     </main>

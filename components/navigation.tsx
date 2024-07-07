@@ -15,7 +15,7 @@ import { absoluteUrl } from '@/lib/utils'
 
 const Navigation = () => {
   return (
-    <NavigationMenu className="hidden lg:flex">
+    <NavigationMenu className="hidden md:flex">
       <NavigationMenuList>
         <NavigationMenuLink asChild>
           <Link

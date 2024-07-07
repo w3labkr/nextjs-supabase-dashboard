@@ -62,9 +62,9 @@ export default async function UserPage({
       <Header />
       <main className="min-h-[80vh] pb-20 sm:pb-40">
         <div className="container flex-1 overflow-auto pt-12">
-          <div className="mx-auto grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 lg:grid-cols-4 lg:gap-[60px]">
+          <div className="mx-auto grid grid-cols-1 gap-4 md:grid-cols-4 lg:grid-cols-5">
             <Aside className="space-y-2" user={user} />
-            <div className="flex flex-col space-y-4 md:col-span-2 lg:col-span-3">
+            <div className="flex flex-col space-y-4 md:col-span-3 lg:col-span-4">
               <div className="space-y-2">
                 <div className="flex gap-2">
                   <RecentLink user={user} text={t['posts']} />

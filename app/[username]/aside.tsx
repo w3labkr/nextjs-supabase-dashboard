@@ -11,7 +11,7 @@ interface AsideProps extends React.HTMLAttributes<HTMLDivElement> {
 const Aside = ({ user, ...props }: AsideProps) => {
   return (
     <div {...props}>
-      <Avatar className="size-32 lg:size-64">
+      <Avatar className="size-32 lg:size-48">
         <AvatarImage
           src={user?.avatar_url ?? undefined}
           alt={`@${user?.username}`}

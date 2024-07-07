@@ -46,7 +46,7 @@ const MetaboxPublish = () => {
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
       <AccordionItem value="item-1">
-        <AccordionTrigger className="md:pt-0">{t('publish')}</AccordionTrigger>
+        <AccordionTrigger className="lg:pt-0">{t('publish')}</AccordionTrigger>
         <AccordionContent className="space-y-4">
           <div className="flex justify-between">
             <DraftButton />

@@ -76,7 +76,7 @@ const PostForm = ({ id }: { id: number }) => {
 
   if (isLoading) {
     return (
-      <div className="relative grid gap-10 md:grid-cols-[1fr_280px]">
+      <div className="relative grid gap-10 lg:grid-cols-[1fr_280px]">
         <div className="mx-auto w-full min-w-0 space-y-4">
           <Skeleton className="h-16 w-full" />
           <Skeleton className="h-96 w-full" />
@@ -100,7 +100,7 @@ const PostForm = ({ id }: { id: number }) => {
         {/* <KeywordsField /> */}
         <MetaField />
         <form method="POST" noValidate>
-          <div className="relative grid md:grid-cols-[1fr_280px] md:gap-8">
+          <div className="relative grid lg:grid-cols-[1fr_280px] lg:gap-8">
             <div className="space-y-4">
               <div className="space-y-2">
                 <TitleField />

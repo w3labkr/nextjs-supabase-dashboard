@@ -8,15 +8,17 @@ import { LucideIcon, type LucideIconName } from '@/lib/lucide-icon'
 import { toast } from 'sonner'
 import { Button, ButtonProps } from '@/components/ui/button'
 
-import { fetcher } from '@/lib/utils'
+import { cn, fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { PostAPI } from '@/types/api'
 
 interface AddPostProps
   extends ButtonProps,
-    React.ButtonHTMLAttributes<HTMLButtonElement> {
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
   startIconName?: LucideIconName
+  startIconClassName?: string
   endIconName?: LucideIconName
+  endIconClassName?: string
   text?: string
   ns?: string
 }
@@ -24,10 +26,12 @@ interface AddPostProps
 const AddPost = ({
   children,
   startIconName,
+  startIconClassName,
   endIconName,
-  translate,
+  endIconClassName,
   text,
   ns,
+  translate,
   ...props
 }: AddPostProps) => {
   const router = useRouter()
@@ -70,14 +74,20 @@ const AddPost = ({
   return (
     <Button type="button" onClick={onClick} disabled={isSubmitting} {...props}>
       {startIconName ? (
-        <LucideIcon name={startIconName} className="mr-2 size-4 min-w-4" />
+        <LucideIcon
+          name={startIconName}
+          className={cn('mr-2 size-4 min-w-4', startIconClassName)}
+        />
       ) : null}
       {text && translate === 'yes' ? t(text, { ns }) : text}
       {children && typeof children === 'string' && translate === 'yes'
         ? t(children, { ns })
         : children}
       {endIconName ? (
-        <LucideIcon name={endIconName} className="ml-2 size-4 min-w-4" />
+        <LucideIcon
+          name={endIconName}
+          className={cn('ml-2 size-4 min-w-4', endIconClassName)}
+        />
       ) : null}
     </Button>
   )

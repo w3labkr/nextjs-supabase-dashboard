@@ -32,7 +32,6 @@ import {
   QuickPrivate,
   QuickDraft,
 } from './components/quick-links'
-
 import {
   BulkActions,
   BulkActionsProvider,
@@ -96,9 +95,9 @@ const Header = () => {
   return (
     <div className="space-y-6">
       <HeadLinks />
-      <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:space-y-0">
-        <BulkActions />
-        <SearchForm />
+      <div className="flex flex-wrap justify-between gap-2">
+        <BulkActions className="w-full sm:w-auto" />
+        <SearchForm className="w-full sm:w-auto" />
       </div>
     </div>
   )
@@ -124,7 +123,7 @@ const HeadLinks = ({ className, ...props }: HeadLinksProps) => {
   return (
     <div
       className={cn(
-        'flex items-center space-x-1 text-sm text-muted-foreground',
+        'flex flex-wrap items-center space-x-1 text-sm text-muted-foreground',
         className
       )}
       {...props}
@@ -162,13 +161,6 @@ const Body = () => {
   })
 
   const { checks, setChecks } = useBulkActions()
-  const onCheckedChange = (checked: CheckedState) => {
-    if (checked && posts) {
-      setChecks(posts)
-    } else {
-      setChecks([])
-    }
-  }
 
   React.useEffect(() => {
     setChecks([])
@@ -176,23 +168,28 @@ const Body = () => {
 
   return (
     <Table className="border-t">
-      {/* <TableCaption></TableCaption> */}
       <TableHeader>
         <TableRow>
           <TableHead className="w-[50px]">
             <Checkbox
               checked={checks?.length > 0 && checks?.length === posts?.length}
-              onCheckedChange={onCheckedChange}
+              onCheckedChange={(checked: CheckedState) => {
+                setChecks(checked && posts ? posts : [])
+              }}
             />
           </TableHead>
-          <TableHead className="w-[70px] text-center">{t('num')}</TableHead>
-          <TableHead>{t('title')}</TableHead>
-          <TableHead className="w-[120px] text-center">{t('author')}</TableHead>
-          <TableHead className="w-[70px] text-center">
+          <TableHead className="min-w-[70px] text-center">{t('num')}</TableHead>
+          <TableHead className="min-w-[250px]">{t('title')}</TableHead>
+          <TableHead className="min-w-[100px] text-center">
+            {t('author')}
+          </TableHead>
+          <TableHead className="min-w-[70px] text-center">
             {t('visibility')}
           </TableHead>
-          <TableHead className="w-[100px] text-center">{t('views')}</TableHead>
-          <TableHead className="w-[200px] text-center">
+          <TableHead className="min-w-[70px] text-center">
+            {t('views')}
+          </TableHead>
+          <TableHead className="min-w-[200px] text-center">
             {t('created_at')}
           </TableHead>
         </TableRow>
@@ -212,22 +209,19 @@ const Body = () => {
 
 const PostItem = ({ post }: { post: Post }) => {
   const { t } = useTranslation()
-
   const { checks, setChecks } = useBulkActions()
-  const onCheckedChange = (checked: CheckedState) => {
-    if (checked) {
-      setChecks([...checks, post])
-    } else {
-      setChecks(checks?.filter((r) => r.id !== post?.id))
-    }
-  }
 
   return (
     <TableRow>
       <TableCell>
         <Checkbox
-          checked={checks?.some((r) => r.id === post?.id)}
-          onCheckedChange={onCheckedChange}
+          checked={checks?.some((x: Post) => x.id === post?.id)}
+          onCheckedChange={(checked: CheckedState) => {
+            const value = checked
+              ? [...checks, post]
+              : checks?.filter((x: Post) => x.id !== post?.id)
+            setChecks(value)
+          }}
         />
       </TableCell>
       <TableCell align="center">{post?.num}</TableCell>

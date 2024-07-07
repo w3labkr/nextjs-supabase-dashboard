@@ -183,7 +183,7 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
         method="POST"
         noValidate
         onSubmit={handleSubmit(onSubmit)}
-        className={cn('flex items-start space-x-2', className)}
+        className={cn('flex items-start gap-2', className)}
         {...props}
       >
         <FormField

@@ -2,10 +2,11 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSearchParams } from 'next/navigation'
 
-import { LucideIcon, type LucideIconName } from '@/lib/lucide-icon'
 import { toast } from 'sonner'
 import { Button, ButtonProps } from '@/components/ui/button'
+import { LucideIcon, type LucideIconName } from '@/lib/lucide-icon'
 
 import { useSWRConfig } from 'swr'
 import {
@@ -13,16 +14,18 @@ import {
   setQueryString,
   generateRecentPosts,
   getPostPath,
+  cn,
 } from '@/lib/utils'
-import { PostAPI } from '@/types/api'
-import { useSearchParams } from 'next/navigation'
 import { useUserAPI } from '@/queries/client/users'
+import { PostAPI } from '@/types/api'
 
 interface AddDummyPostProps
   extends ButtonProps,
-    React.ButtonHTMLAttributes<HTMLButtonElement> {
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
   startIconName?: LucideIconName
+  startIconClassName?: string
   endIconName?: LucideIconName
+  endIconClassName?: string
   text?: string
   ns?: string
 }
@@ -30,10 +33,12 @@ interface AddDummyPostProps
 const AddDummyPost = ({
   children,
   startIconName,
+  startIconClassName,
   endIconName,
-  translate,
+  endIconClassName,
   text,
   ns,
+  translate,
   ...props
 }: AddDummyPostProps) => {
   const searchParams = useSearchParams()
@@ -107,14 +112,20 @@ const AddDummyPost = ({
   return (
     <Button type="button" onClick={onClick} disabled={isSubmitting} {...props}>
       {startIconName ? (
-        <LucideIcon name={startIconName} className="mr-2 size-4 min-w-4" />
+        <LucideIcon
+          name={startIconName}
+          className={cn('mr-2 size-4 min-w-4', startIconClassName)}
+        />
       ) : null}
       {text && translate === 'yes' ? t(text, { ns }) : text}
       {children && typeof children === 'string' && translate === 'yes'
         ? t(children, { ns })
         : children}
       {endIconName ? (
-        <LucideIcon name={endIconName} className="ml-2 size-4 min-w-4" />
+        <LucideIcon
+          name={endIconName}
+          className={cn('ml-2 size-4 min-w-4', endIconClassName)}
+        />
       ) : null}
     </Button>
   )

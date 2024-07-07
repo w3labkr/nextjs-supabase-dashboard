@@ -20,6 +20,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useQueryString } from '@/hooks/url'
+import { cn } from '@/lib/utils'
 
 const FormSchema = z.object({
   q: z.string(),
@@ -27,7 +28,9 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>
 
-const SearchForm = () => {
+interface SearchFormProps extends React.FormHTMLAttributes<HTMLFormElement> {}
+
+const SearchForm = ({ className, ...props }: SearchFormProps) => {
   const { t } = useTranslation()
 
   const pathname = usePathname()
@@ -55,19 +58,16 @@ const SearchForm = () => {
         method="POST"
         noValidate
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex items-start space-x-2"
+        className={cn('flex items-start gap-2', className)}
+        {...props}
       >
         <FormField
           control={form.control}
           name="q"
           render={({ field }) => (
-            <FormItem className="w-full sm:w-auto">
+            <FormItem className="w-full">
               <FormControl>
-                <Input
-                  className="sm:w-60"
-                  placeholder={t('search_text')}
-                  {...field}
-                />
+                <Input placeholder={t('search_text')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -79,4 +79,4 @@ const SearchForm = () => {
   )
 }
 
-export { SearchForm }
+export { SearchForm, type SearchFormProps }

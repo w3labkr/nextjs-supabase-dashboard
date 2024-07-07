@@ -38,7 +38,7 @@ const Header = () => {
           <SheetTrigger asChild>
             <Button
               type="button"
-              className="lg:hidden"
+              className="md:hidden"
               size="icon"
               variant="outline"
             >
@@ -46,7 +46,7 @@ const Header = () => {
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
-          <SiteBrand className="mr-6 hidden lg:flex" />
+          <SiteBrand className="mr-6 hidden md:flex" />
           <Navigation />
           <div className="ml-auto flex gap-2">
             {pathname !== '/' ? (
