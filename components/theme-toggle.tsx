@@ -14,7 +14,11 @@ const ThemeToggle = (props: ThemeToggleProps) => {
   return (
     <button
       type="button"
-      onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+      onClick={() => {
+        const value = theme === 'light' ? 'dark' : 'light'
+        setTheme(value)
+        document.cookie = `theme=${value};path=/`
+      }}
       {...props}
     >
       <LucideIcon name="Sun" className="size-5 min-w-5 dark:hidden" />

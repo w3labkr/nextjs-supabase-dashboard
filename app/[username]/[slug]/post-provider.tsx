@@ -9,13 +9,13 @@ interface PostContextProps {
 
 const PostContext = React.createContext<PostContextProps | undefined>(undefined)
 
-function PostProvider({
+const PostProvider = ({
   children,
   value,
 }: {
   children?: React.ReactNode
   value: PostContextProps
-}) {
+}) => {
   const memoValue = React.useMemo(() => value, [value])
 
   return (
@@ -23,7 +23,7 @@ function PostProvider({
   )
 }
 
-function usePost() {
+const usePost = () => {
   const context = React.useContext<PostContextProps | undefined>(PostContext)
 
   if (context === undefined) {

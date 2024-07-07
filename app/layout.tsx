@@ -1,15 +1,19 @@
 import * as React from 'react'
 import type { Metadata, Viewport } from 'next'
+import { cookies } from 'next/headers'
 import { Inter as FontSans } from 'next/font/google'
-import { Analytics } from '@/components/analytics'
 
-import { defaultLng } from '@/i18next.config'
 import { AppProvider } from '@/context/app-provider'
+import { I18nProvider } from '@/context/i18n-provider'
+import { ThemeProvider } from '@/context/theme-provider'
+
+import { Toaster } from '@/components/ui/sonner'
+import { Analytics } from '@/components/analytics'
+import { TailwindIndicator } from '@/components/tailwind-indicator'
 
 import { cn } from '@/lib/utils'
-import { Toaster } from '@/components/ui/sonner'
-import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { siteConfig } from '@/config/site'
+import { defaultLng } from '@/i18next.config'
 
 import './globals.css'
 
@@ -39,14 +43,21 @@ export default function RootLayout({
 }: Readonly<{
   children?: React.ReactNode
 }>) {
+  const language = cookies().get('language')?.value ?? defaultLng
+  const theme = cookies().get('theme')?.value ?? 'system'
+
   return (
-    <html lang={defaultLng} suppressHydrationWarning>
+    <html lang={language} suppressHydrationWarning>
       <body className={cn('font-sans antialiased', fontSans.variable)}>
         <AppProvider>
-          <div id="__next">{children}</div>
-          <Toaster richColors closeButton />
-          <TailwindIndicator />
-          <Analytics />
+          <I18nProvider value={{ language }}>
+            <ThemeProvider value={{ defaultTheme: theme }}>
+              <div id="__next">{children}</div>
+              <Toaster richColors closeButton />
+              <TailwindIndicator />
+              <Analytics />
+            </ThemeProvider>
+          </I18nProvider>
         </AppProvider>
       </body>
     </html>

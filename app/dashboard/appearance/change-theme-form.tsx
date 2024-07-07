@@ -142,21 +142,12 @@ const SubmitButton = () => {
 
       const formValues = getValues()
 
-      if (!theme) throw new Error('Require is not defined.')
-      if (formValues?.theme === theme) {
-        throw new Error('Nothing has changed.')
-      }
-
       setTheme(formValues?.theme)
+      document.cookie = `theme=${formValues?.theme};path=/`
 
       toast.success(t('changed_successfully'))
     } catch (e: unknown) {
-      const err = (e as Error)?.message
-      if (err.startsWith('Nothing has changed')) {
-        toast(t('nothing_has_changed'))
-      } else {
-        toast.error(err)
-      }
+      toast.error((e as Error)?.message)
     } finally {
       setIsSubmitting(false)
     }

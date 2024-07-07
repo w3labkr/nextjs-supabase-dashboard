@@ -91,7 +91,7 @@ const LanguageField = () => {
 const SubmitButton = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const { resolvedLanguage } = useAppSelector(({ i18n }) => i18n)
+
   const { t, i18n } = useTranslation()
   const { handleSubmit, getValues } = useFormContext()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
@@ -102,10 +102,6 @@ const SubmitButton = () => {
 
       const formValues = getValues()
 
-      if (formValues?.language === resolvedLanguage) {
-        throw new Error('Nothing has changed.')
-      }
-
       i18n.changeLanguage(formValues?.language)
       document.documentElement.lang = formValues?.language
       dispatch(setResolvedLanguage(formValues?.language))
@@ -114,12 +110,7 @@ const SubmitButton = () => {
 
       router.refresh()
     } catch (e: unknown) {
-      const err = (e as Error)?.message
-      if (err.startsWith('Nothing has changed')) {
-        toast(t('nothing_has_changed'))
-      } else {
-        toast.error(err)
-      }
+      toast.error((e as Error)?.message)
     } finally {
       setIsSubmitting(false)
     }
