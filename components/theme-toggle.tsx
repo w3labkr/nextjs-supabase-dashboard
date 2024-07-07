@@ -5,13 +5,17 @@ import { useTheme } from 'next-themes'
 
 import { LucideIcon } from '@/lib/lucide-icon'
 
-const ThemeToggle = () => {
+interface ThemeToggleProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+
+const ThemeToggle = (props: ThemeToggleProps) => {
   const { theme, setTheme } = useTheme()
 
   return (
     <button
       type="button"
       onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+      {...props}
     >
       <LucideIcon name="Sun" className="size-5 min-w-5 dark:hidden" />
       <LucideIcon name="Moon" className="hidden size-5 min-w-5 dark:block" />
@@ -20,4 +24,4 @@ const ThemeToggle = () => {
   )
 }
 
-export { ThemeToggle }
+export { ThemeToggle, type ThemeToggleProps }

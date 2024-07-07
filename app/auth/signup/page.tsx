@@ -5,7 +5,7 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 import { TextLink } from '@/components/text-link'
 import { ButtonLink } from '@/components/button-link'
-import { LanguageToggleButton } from '@/components/language-toggle-button'
+import { CountryFlagButton } from '@/components/country-flag-button'
 
 import { SignUpForm } from './signup-form'
 import { Policy } from './policy'
@@ -40,7 +40,7 @@ export default function SignUpPage() {
           >
             already_have_an_account_sign_in
           </TextLink>
-          <LanguageToggleButton />
+          <CountryFlagButton />
         </div>
       </div>
     </div>

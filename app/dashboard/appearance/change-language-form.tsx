@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
-import { languageItems } from '@/i18next.config'
+import { languages, Language } from '@/i18next.config'
 
 import { useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -73,9 +73,9 @@ const LanguageField = () => {
             </FormControl>
             <SelectContent>
               <SelectGroup>
-                {languageItems?.map((item) => (
-                  <SelectItem key={item?.value} value={item?.value}>
-                    {item?.label}
+                {languages?.map((language: Language) => (
+                  <SelectItem key={language?.value} value={language?.value}>
+                    {language?.native}
                   </SelectItem>
                 ))}
               </SelectGroup>

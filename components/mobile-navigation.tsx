@@ -13,8 +13,12 @@ const MobileNavigation = () => {
         <span>{siteConfig?.title}</span>
       </div>
       <nav className="grid gap-2 text-sm">
-        <Link href={absoluteUrl('/')}>Home</Link>
-        <Link href={absoluteUrl('/posts')}>Posts</Link>
+        <Link href={absoluteUrl('/')} className="hover:underline">
+          Home
+        </Link>
+        <Link href={absoluteUrl('/posts')} className="hover:underline">
+          Posts
+        </Link>
       </nav>
     </div>
   )

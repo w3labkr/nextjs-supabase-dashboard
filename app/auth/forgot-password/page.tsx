@@ -5,7 +5,7 @@ import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 import { TextLink } from '@/components/text-link'
 import { ButtonLink } from '@/components/button-link'
-import { LanguageToggleButton } from '@/components/language-toggle-button'
+import { CountryFlagButton } from '@/components/country-flag-button'
 
 import { ForgotPasswordForm } from './forgot-password-form'
 
@@ -39,7 +39,7 @@ export default function ForgotPasswordPage() {
           >
             dont_have_an_account_sign_up
           </TextLink>
-          <LanguageToggleButton />
+          <CountryFlagButton />
         </div>
       </div>
     </div>

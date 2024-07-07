@@ -18,7 +18,10 @@ const Navigation = () => {
     <NavigationMenu className="hidden lg:flex">
       <NavigationMenuList>
         <NavigationMenuLink asChild>
-          <Link className="text-sm" href={absoluteUrl('/posts')}>
+          <Link
+            className="text-sm hover:underline"
+            href={absoluteUrl('/posts')}
+          >
             POSTS
           </Link>
         </NavigationMenuLink>

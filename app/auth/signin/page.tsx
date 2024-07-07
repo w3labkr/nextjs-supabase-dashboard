@@ -6,7 +6,7 @@ import { Description } from '@/components/description'
 import { SignInWith } from '@/components/signin-with'
 import { TextLink } from '@/components/text-link'
 import { ButtonLink } from '@/components/button-link'
-import { LanguageToggleButton } from '@/components/language-toggle-button'
+import { CountryFlagButton } from '@/components/country-flag-button'
 
 import { SignInForm } from './signin-form'
 
@@ -41,7 +41,7 @@ export default function SignInPage() {
           >
             dont_have_an_account_sign_up
           </TextLink>
-          <LanguageToggleButton />
+          <CountryFlagButton />
         </div>
       </div>
     </div>

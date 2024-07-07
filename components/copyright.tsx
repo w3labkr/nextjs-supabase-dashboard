@@ -1,7 +1,9 @@
 import * as React from 'react'
 
-const Copyright = () => {
-  return <span>&copy; {' 2024. '}</span>
+interface CopyrightProps extends React.HTMLAttributes<HTMLSpanElement> {}
+
+const Copyright = (props: CopyrightProps) => {
+  return <span {...props}>&copy; {' 2024. '}</span>
 }
 
-export { Copyright }
+export { Copyright, type CopyrightProps }

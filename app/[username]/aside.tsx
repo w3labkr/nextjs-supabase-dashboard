@@ -11,12 +11,12 @@ interface AsideProps extends React.HTMLAttributes<HTMLDivElement> {
 const Aside = ({ user, ...props }: AsideProps) => {
   return (
     <div {...props}>
-      <Avatar className="size-64">
+      <Avatar className="size-32 lg:size-64">
         <AvatarImage
           src={user?.avatar_url ?? undefined}
           alt={`@${user?.username}`}
         />
-        <AvatarFallback className="font-serif text-9xl">
+        <AvatarFallback className="font-serif text-7xl lg:text-9xl">
           {user?.username?.charAt(0)}
         </AvatarFallback>
       </Avatar>

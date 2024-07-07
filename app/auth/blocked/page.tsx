@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { Logo } from '@/components/logo'
 import { Title } from '@/components/title'
-import { LanguageToggleButton } from '@/components/language-toggle-button'
+import { CountryFlagButton } from '@/components/country-flag-button'
 
 import { createClient } from '@/supabase/client'
 import { useAuth } from '@/hooks/use-auth'
@@ -56,7 +56,7 @@ export default function BlockedPage() {
         </div>
         <div className="flex justify-between text-center text-sm">
           <div></div>
-          <LanguageToggleButton />
+          <CountryFlagButton />
         </div>
       </div>
     </div>
