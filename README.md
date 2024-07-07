@@ -509,6 +509,12 @@ Generate massive amounts of fake data in the browser and node.js
 npm install @faker-js/faker
 ```
 
+Vector (*.svg) country flag icons in 3:2 aspect ratio.
+
+```shell
+npm install country-flag-icons
+```
+
 ### ESLint
 
 ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.

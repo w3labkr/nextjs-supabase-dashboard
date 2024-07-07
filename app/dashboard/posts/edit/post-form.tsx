@@ -97,7 +97,6 @@ const PostForm = ({ id }: { id: number }) => {
     <PostFormProvider value={{ post }}>
       <Form {...form}>
         <UserIdField />
-        {/* <KeywordsField /> */}
         <MetaField />
         <form method="POST" noValidate>
           <div className="relative grid lg:grid-cols-[1fr_280px] lg:gap-8">
