@@ -98,26 +98,6 @@ export default function RootPage() {
               )}
               alt=""
             />
-            <img
-              className="rounded-md"
-              src={absoluteUrl('https://source.unsplash.com/ZBquC1f8SJ0')}
-              alt=""
-            />
-            <img
-              className="rounded-md"
-              src={absoluteUrl('https://source.unsplash.com/8n7ipHhI8CI')}
-              alt=""
-            />
-            <img
-              className="rounded-md"
-              src={absoluteUrl('https://source.unsplash.com/iEEBWgY_6lA')}
-              alt=""
-            />
-            <img
-              className="rounded-md"
-              src={absoluteUrl('https://source.unsplash.com/xOBpdqH2Uao')}
-              alt=""
-            />
           </div>
         </div>
       </main>

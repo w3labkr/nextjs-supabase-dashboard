@@ -515,6 +515,12 @@ Vector (*.svg) country flag icons in 3:2 aspect ratio.
 npm install country-flag-icons
 ```
 
+A simple, lightweight JavaScript API for handling browser cookies
+
+```shell
+npm install js-cookie
+```
+
 ### ESLint
 
 ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.

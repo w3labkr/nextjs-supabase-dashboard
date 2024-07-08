@@ -11,35 +11,35 @@ import { Navigation } from '@/app/dashboard/components/navigation'
 
 import { cn } from '@/lib/utils'
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
-import { setPanelSizes, setPanelCollapsed } from '@/store/features/app-slice'
+import { setAppLayout, setAppCollapsed } from '@/store/reducers/app-reducer'
 
 const AppPanel = ({ children }: { children?: React.ReactNode }) => {
   const dispatch = useAppDispatch()
-  const { panelSizes, panelCollapsed } = useAppSelector(({ app }) => app)
+  const { layout, collapsed } = useAppSelector(({ app }) => app)
 
   return (
     <ResizablePanelGroup
       direction="horizontal"
       className="min-h-screen"
-      onLayout={(sizes: number[]) => dispatch(setPanelSizes(sizes))}
+      onLayout={(sizes: number[]) => dispatch(setAppLayout(sizes))}
     >
       <ResizablePanel
         className={cn(
           'max-w-[300px] !overflow-auto',
-          panelCollapsed ? 'min-w-[50px]' : 'min-w-[200px]'
+          collapsed ? 'min-w-[50px]' : 'min-w-[200px]'
         )}
-        defaultSize={Array.isArray(panelSizes) ? panelSizes[0] : 25}
+        defaultSize={Array.isArray(layout) ? layout[0] : 25}
         minSize={10}
         maxSize={25}
         collapsible={true}
-        onCollapse={() => dispatch(setPanelCollapsed(true))}
-        onExpand={() => dispatch(setPanelCollapsed(false))}
+        onCollapse={() => dispatch(setAppCollapsed(true))}
+        onExpand={() => dispatch(setAppCollapsed(false))}
       >
         <Navigation />
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel
-        defaultSize={Array.isArray(panelSizes) ? panelSizes[1] : 75}
+        defaultSize={Array.isArray(layout) ? layout[1] : 75}
         minSize={75}
         className="!overflow-auto"
       >

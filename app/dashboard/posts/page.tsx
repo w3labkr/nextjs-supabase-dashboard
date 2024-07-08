@@ -8,7 +8,7 @@ import { AddDummyPost } from './components/add-dummy-post'
 import { AddPost } from './components/add-post'
 import { PostList } from './post-list'
 
-export default function PostListPage() {
+export default function PostsPage() {
   return (
     <main className="flex-1 space-y-4 overflow-auto p-8 pb-36">
       <div className="flex flex-wrap items-center justify-between gap-4">

@@ -157,7 +157,7 @@ const Editor = () => {
   const { user } = useAuth()
   const { post } = usePostForm()
   const { setValue } = useFormContext()
-  const { resolvedLanguage } = useAppSelector(({ i18n }) => i18n)
+  const { language } = useAppSelector(({ app }) => app)
   const [watchValue, setWatchValue] = React.useState<string>('')
 
   React.useEffect(() => {
@@ -166,8 +166,8 @@ const Editor = () => {
   }, [setValue, post?.content])
 
   React.useEffect(() => {
-    editorConfiguration.language = resolvedLanguage
-  }, [resolvedLanguage])
+    editorConfiguration.language = language
+  }, [language])
 
   React.useEffect(() => {
     localStorage.setItem('ckeditor5', JSON.stringify({ userId: user?.id }))

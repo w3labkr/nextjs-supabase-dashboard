@@ -9,7 +9,7 @@ import { Flag } from '@/lib/country-flag-icons'
 
 import { cn } from '@/lib/utils'
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
-import { setResolvedLanguage } from '@/store/features/i18n-slice'
+import { setAppLanguage } from '@/store/reducers/app-reducer'
 
 interface CountryFlagButtonProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {}
@@ -18,25 +18,20 @@ const CountryFlagButton = ({ className, ...props }: CountryFlagButtonProps) => {
   const router = useRouter()
 
   const dispatch = useAppDispatch()
-  const { resolvedLanguage } = useAppSelector(({ i18n }) => i18n)
-  const [currentLanguage, setCurrentLanguage] =
-    React.useState<string>(resolvedLanguage)
   const { i18n } = useTranslation()
+  const { language } = useAppSelector(({ app }) => app)
 
   const onClick = () => {
-    const currentValue =
-      currentLanguage === defaultLng ? fallbackLng : defaultLng
+    const currentValue = language === defaultLng ? fallbackLng : defaultLng
 
     i18n.changeLanguage(currentValue)
-    document.documentElement.lang = currentValue
-    dispatch(setResolvedLanguage(currentValue))
-    setCurrentLanguage(currentValue)
+    dispatch(setAppLanguage(currentValue))
 
     router.refresh()
   }
 
   const code = languages?.find(
-    (l: Language) => l.value === currentLanguage
+    (lang: Language) => lang?.value === language
   )?.code
 
   return (

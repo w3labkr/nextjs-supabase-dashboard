@@ -43,15 +43,15 @@ export default function RootLayout({
 }: Readonly<{
   children?: React.ReactNode
 }>) {
-  const language = cookies().get('language')?.value ?? defaultLng
-  const theme = cookies().get('theme')?.value ?? 'system'
+  const language = cookies().get('app:language')?.value ?? defaultLng
+  const theme = cookies().get('app:theme')?.value ?? 'system'
 
   return (
     <html lang={language} suppressHydrationWarning>
       <body className={cn('font-sans antialiased', fontSans.variable)}>
         <AppProvider>
           <I18nProvider value={{ language }}>
-            <ThemeProvider value={{ defaultTheme: theme }}>
+            <ThemeProvider value={{ theme }}>
               <div id="__next">{children}</div>
               <Toaster richColors closeButton />
               <TailwindIndicator />

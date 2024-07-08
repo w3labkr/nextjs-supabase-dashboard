@@ -6,7 +6,7 @@ import { AppPanel } from '@/app/dashboard/components/app-panel'
 
 import { getUserAPI } from '@/queries/server/users'
 
-export default async function PostListLayout({
+export default async function PostsLayout({
   children,
 }: {
   children?: React.ReactNode

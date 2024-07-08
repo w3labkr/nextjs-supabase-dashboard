@@ -30,7 +30,7 @@ import {
 import { Button } from '@/components/ui/button'
 
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
-import { setResolvedLanguage } from '@/store/features/i18n-slice'
+import { setAppLanguage } from '@/store/reducers/app-reducer'
 
 const FormSchema = z.object({
   language: z.string(),
@@ -39,11 +39,11 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>
 
 const ChangeLanguageForm = () => {
-  const { resolvedLanguage } = useAppSelector(({ i18n }) => i18n)
+  const { language } = useAppSelector(({ app }) => app)
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
-    values: { language: resolvedLanguage },
+    values: { language },
   })
 
   return (
@@ -103,8 +103,7 @@ const SubmitButton = () => {
       const formValues = getValues()
 
       i18n.changeLanguage(formValues?.language)
-      document.documentElement.lang = formValues?.language
-      dispatch(setResolvedLanguage(formValues?.language))
+      dispatch(setAppLanguage(formValues?.language))
 
       toast.success(t('changed_successfully'))
 

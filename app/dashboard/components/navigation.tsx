@@ -54,7 +54,7 @@ const Navigation = () => {
 
 const NavItem = ({ item }: { item: DashboardNavItem }) => {
   const { t } = useTranslation()
-  const { panelCollapsed: collapsed } = useAppSelector(({ app }) => app)
+  const { collapsed } = useAppSelector(({ app }) => app)
 
   return (
     <AccordionItem value={item?.href} className="border-none">
@@ -99,7 +99,7 @@ const NavItem = ({ item }: { item: DashboardNavItem }) => {
 
 const NavSub = ({ item }: { item: DashboardNavItem }) => {
   const { user } = useUserAPI()
-  const { panelCollapsed: collapsed } = useAppSelector(({ app }) => app)
+  const { collapsed } = useAppSelector(({ app }) => app)
 
   return (
     <AccordionContent

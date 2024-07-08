@@ -3,6 +3,8 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
+import { useAppDispatch } from '@/lib/redux/hooks'
+import { setAppTheme } from '@/store/reducers/app-reducer'
 
 import { useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -88,9 +90,6 @@ const ThemeField = () => {
                     </div>
                   </div>
                 </div>
-                <span className="block w-full p-2 text-center font-normal">
-                  Light
-                </span>
               </FormLabel>
             </FormItem>
             <FormItem>
@@ -118,9 +117,6 @@ const ThemeField = () => {
                     </div>
                   </div>
                 </div>
-                <span className="block w-full p-2 text-center font-normal">
-                  Dark
-                </span>
               </FormLabel>
             </FormItem>
           </RadioGroup>
@@ -131,19 +127,21 @@ const ThemeField = () => {
 }
 
 const SubmitButton = () => {
+  const dispatch = useAppDispatch()
+  const { setTheme } = useTheme()
   const { t } = useTranslation()
-  const { theme, setTheme } = useTheme()
+
   const { handleSubmit, getValues } = useFormContext()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     try {
       setIsSubmitting(true)
 
       const formValues = getValues()
 
       setTheme(formValues?.theme)
-      document.cookie = `theme=${formValues?.theme};path=/`
+      dispatch(setAppTheme(formValues?.theme))
 
       toast.success(t('changed_successfully'))
     } catch (e: unknown) {

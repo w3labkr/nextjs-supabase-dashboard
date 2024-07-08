@@ -23,7 +23,7 @@ import {
 import { cn } from '@/lib/utils'
 import { LucideIcon } from '@/lib/lucide-icon'
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
-import { setResolvedLanguage } from '@/store/features/i18n-slice'
+import { setAppLanguage } from '@/store/reducers/app-reducer'
 
 interface LanguageComboboxProps
   extends ButtonProps,
@@ -39,16 +39,15 @@ const LanguageCombobox = ({
 }: LanguageComboboxProps) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const { resolvedLanguage } = useAppSelector(({ i18n }) => i18n)
+  const { language } = useAppSelector(({ app }) => app)
   const { t, i18n } = useTranslation()
   const [open, setOpen] = React.useState<boolean>(false)
 
   const onSelect = (currentValue: string) => {
-    if (currentValue === resolvedLanguage) return false
+    if (currentValue === language) return false
 
     i18n.changeLanguage(currentValue)
-    document.documentElement.lang = currentValue
-    dispatch(setResolvedLanguage(currentValue))
+    dispatch(setAppLanguage(currentValue))
 
     setOpen(false)
 
@@ -66,8 +65,8 @@ const LanguageCombobox = ({
           {...props}
         >
           <span>
-            {resolvedLanguage
-              ? languages?.find((l: Language) => l.value === resolvedLanguage)
+            {language
+              ? languages?.find((lang: Language) => lang?.value === language)
                   ?.native
               : null}
           </span>
@@ -82,11 +81,11 @@ const LanguageCombobox = ({
           <CommandInput placeholder={t('search_language')} />
           <CommandEmpty>{t('no_language_found')}</CommandEmpty>
           <CommandGroup>
-            {languages?.map((language: Language) => (
+            {languages?.map((lang: Language) => (
               <ListItem
-                key={language?.value}
+                key={lang?.value}
+                lang={lang}
                 language={language}
-                resolvedLanguage={resolvedLanguage}
                 onSelect={onSelect}
               />
             ))}
@@ -98,17 +97,17 @@ const LanguageCombobox = ({
 }
 
 const ListItem = ({
+  lang,
   language,
-  resolvedLanguage,
   onSelect,
 }: {
-  language: Language
-  resolvedLanguage: string
+  lang: Language
+  language: string
   onSelect: (value: string) => void
 }) => {
   return (
     <CommandItem
-      value={language?.value}
+      value={lang?.value}
       onSelect={onSelect}
       className="cursor-pointer"
     >
@@ -116,10 +115,10 @@ const ListItem = ({
         name="Check"
         className={cn(
           'mr-2 size-4 min-w-4',
-          language?.value === resolvedLanguage ? 'opacity-100' : 'opacity-0'
+          lang?.value === language ? 'opacity-100' : 'opacity-0'
         )}
       />
-      {language?.native}
+      {lang?.native}
     </CommandItem>
   )
 }

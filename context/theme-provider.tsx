@@ -5,16 +5,14 @@ import { ThemeProvider as NextThemeProvider } from 'next-themes'
 
 interface ThemeProviderProps {
   children?: React.ReactNode
-  value: {
-    defaultTheme: string
-  }
+  value: { theme: string }
 }
 
 const ThemeProvider = ({ children, value }: ThemeProviderProps) => {
   return (
     <NextThemeProvider
       attribute="class"
-      defaultTheme={value?.defaultTheme}
+      defaultTheme={value?.theme}
       enableSystem
       disableTransitionOnChange
     >
@@ -23,4 +21,4 @@ const ThemeProvider = ({ children, value }: ThemeProviderProps) => {
   )
 }
 
-export { ThemeProvider }
+export { ThemeProvider, type ThemeProviderProps }
