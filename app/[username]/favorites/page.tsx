@@ -67,8 +67,8 @@ export default async function FavoritesPage({
             <div className="flex flex-col space-y-4 md:col-span-3 lg:col-span-4">
               <div className="space-y-2">
                 <div className="flex gap-2">
-                  <RecentLink user={user} text={t['posts']} />
-                  <FavoritesLink user={user} text={t['favorites']} />
+                  <RecentLink user={user} text={t('posts')} />
+                  <FavoritesLink user={user} text={t('favorites')} />
                 </div>
                 <SearchForm
                   path={pathname}

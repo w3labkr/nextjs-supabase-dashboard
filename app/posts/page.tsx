@@ -53,7 +53,7 @@ export default async function PostsPage({
       <main className="min-h-[80vh] pb-20 sm:pb-40">
         <div className="container flex-1 overflow-auto">
           <h2 className="mt-16 text-center font-serif text-4xl font-bold">
-            {t['posts']}
+            {t('posts')}
           </h2>
           <PagingProvider value={{ total, page, perPage, pageSize }}>
             <div className="mt-12 space-y-16">
@@ -63,7 +63,7 @@ export default async function PostsPage({
                   <Paging />
                 </>
               ) : (
-                <div className="text-center">{t['no_posts_yet']}</div>
+                <div className="text-center">{t('no_posts_yet')}</div>
               )}
             </div>
           </PagingProvider>

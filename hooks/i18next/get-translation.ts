@@ -6,7 +6,7 @@ import { cookies } from 'next/headers'
 import { defaultLng } from '@/i18next.config'
 
 export interface Translation {
-  t: Record<string, string>
+  t: (key: string) => string
 }
 
 export async function getTranslation(
@@ -17,8 +17,11 @@ export async function getTranslation(
   const filePath = path.join(process.cwd(), `/public/locales/${lng}/${ns}.json`)
   const file = await fs.readFile(filePath, 'utf8')
 
-  const t: Translation['t'] =
-    typeof file === 'string' ? JSON.parse(file) : ({} as JSON)
+  const t = (key: string): string => {
+    const obj: Record<string, string> =
+      file && typeof file === 'string' ? JSON.parse(file) : ({} as JSON)
+    return obj[key] ?? ''
+  }
 
   return { t }
 }

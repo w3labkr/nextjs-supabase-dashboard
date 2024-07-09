@@ -53,7 +53,7 @@ export default async function SearchPage({
       <main className="min-h-[80vh] pb-20 sm:pb-40">
         <div className="container flex-1 overflow-auto">
           <h2 className="mt-16 text-center font-serif text-4xl font-bold">
-            {t['search_results_for'] + q}
+            {t('search_results_for') + q}
           </h2>
           <PagingProvider value={{ total, page, perPage, pageSize }}>
             <div className="mt-12 space-y-16">
@@ -64,8 +64,8 @@ export default async function SearchPage({
                 </>
               ) : (
                 <div className="text-center">
-                  {t['sorry_no_content_matches_your_search_results']}{' '}
-                  {t['please_try_again_with_some_different_keywords']}
+                  {t('sorry_no_content_matches_your_search_results')}{' '}
+                  {t('please_try_again_with_some_different_keywords')}
                 </div>
               )}
             </div>

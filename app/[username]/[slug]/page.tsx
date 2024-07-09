@@ -186,7 +186,7 @@ const PostTags = ({ meta, t }: { meta?: PostMeta[]; t: Translation['t'] }) => {
 
   return (
     <div className="mb-16">
-      <p>{t['tags']}: </p>
+      <p>{t('tags')}: </p>
       <div>
         {tags?.map((tag: Tag, i: number) => (
           <React.Fragment key={tag.id}>
