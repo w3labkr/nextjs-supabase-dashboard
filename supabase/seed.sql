@@ -1208,8 +1208,9 @@ begin
       insert into tags(user_id, name, slug) values(userid, (tag ->> 'name')::text, (tag ->> 'slug')::text)
       returning id into tagid;
 	  end if;
-
-	  insert into post_tags(user_id, post_id, tag_id) values(userid, postid, tagid);
+    if not exists (select 1 from post_tags where user_id = userid and post_id = postid and tag_id = tagid) then
+	    insert into post_tags(user_id, post_id, tag_id) values(userid, postid, tagid);
+    end if;
 	end loop;
 
   return query
