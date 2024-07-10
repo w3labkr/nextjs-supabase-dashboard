@@ -1,16 +1,20 @@
 'use client'
 
 import * as React from 'react'
-import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
-import dayjs from 'dayjs'
 import { Paging, PagingProvider } from '@/components/paging'
+import {
+  EntryTitle,
+  EntrySummary,
+  EntryPublished,
+  EntryTags,
+} from '@/components/hentry'
 
-import { getPostUrl } from '@/lib/utils'
 import { Post, User } from '@/types/database'
 import { usePostsAPI } from '@/queries/client/posts'
+import { absoluteUrl } from '@/lib/utils'
 
 interface PostListProps extends React.HTMLAttributes<HTMLDivElement> {
   user: User
@@ -25,6 +29,7 @@ const PostList = ({ user, ...props }: PostListProps) => {
   const pageSize = +((searchParams.get('pageSize') as string) ?? '10')
   const postType = 'post'
   const status = 'publish'
+  const tag = searchParams.get('tag') as string
   const q = searchParams.get('q') as string
   const orderBy = (searchParams.get('orderBy') as string) ?? 'id'
   const order = (searchParams.get('order') as string) ?? 'desc'
@@ -34,6 +39,7 @@ const PostList = ({ user, ...props }: PostListProps) => {
     perPage,
     postType,
     status,
+    tag,
     q,
     orderBy,
     order,
@@ -66,34 +72,27 @@ interface PostItemProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const PostItem = ({ post, ...props }: PostItemProps) => {
+  const username = post?.author?.username
+  const slug = post?.slug
+
   return (
-    <div className="space-y-2 border-b py-4" {...props}>
-      <PostTitle post={post} />
-      <PostDescription description={post?.description} />
-      <div className="space-x-1 text-sm">
-        <PostDate date={post?.date} />
+    <div
+      className="flex flex-row flex-wrap gap-4 border-b py-4 md:flex-col"
+      {...props}
+    >
+      <EntryTitle
+        href={username && slug ? absoluteUrl(`/${username}/${slug}`) : '#'}
+        text={post?.title}
+      />
+      <EntrySummary text={post?.description} />
+      <EntryTags
+        pathname={username ? `/${username}` : undefined}
+        meta={post?.meta}
+      />
+      <div className="w-full text-sm">
+        <EntryPublished dateTime={post?.date ?? undefined} />
       </div>
     </div>
-  )
-}
-
-const PostTitle = ({ post }: { post: Post }) => {
-  return (
-    <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
-      <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
-    </h3>
-  )
-}
-
-const PostDescription = ({ description }: { description: string | null }) => {
-  return <p className="line-clamp-3">{description}</p>
-}
-
-const PostDate = ({ date }: { date: string | null }) => {
-  return (
-    <time dateTime={date ?? undefined}>
-      {dayjs(date).format('MMMM D, YYYY')}
-    </time>
   )
 }
 

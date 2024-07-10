@@ -33,7 +33,7 @@ import {
 
 import { useSWRConfig } from 'swr'
 import { createClient } from '@/supabase/client'
-import { fetcher, getFavoritesPath, getProfilePath } from '@/lib/utils'
+import { fetcher } from '@/lib/utils'
 import { User } from '@/types/database'
 import { UserAPI } from '@/types/api'
 import { useAuth } from '@/hooks/use-auth'
@@ -228,7 +228,8 @@ const SubmitButton = ({
         }
       }
 
-      const revalidatePaths = [getProfilePath(user), getFavoritesPath(user)]
+      const username = user?.username
+      const revalidatePaths = [`/${username}`, `/${username}/favorites`]
 
       const { error } = await fetcher<UserAPI>(`/api/v1/user?id=${user?.id}`, {
         method: 'DELETE',

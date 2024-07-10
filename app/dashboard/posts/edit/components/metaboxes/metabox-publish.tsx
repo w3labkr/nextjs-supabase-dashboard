@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/button'
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getMeta, getPostPath } from '@/lib/utils'
+import { fetcher, getMeta } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 
 const MetaboxPublish = () => {
@@ -97,11 +97,15 @@ const DraftButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
+      const username = post?.author?.username
+      const slug = post?.slug
+      const revalidatePaths = username && slug ? `/${username}/${slug}` : null
+
       const result = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: { ...getValues(), status: 'draft' },
-          options: { revalidatePaths: getPostPath(post) },
+          options: { revalidatePaths },
         }),
       })
 
@@ -144,9 +148,10 @@ const ViewButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const postPath = getPostPath(post)
+      const username = post?.author?.username
+      const slug = post?.slug
 
-      if (postPath) router.push(postPath)
+      if (username && slug) router.push(`/${username}/${slug}`)
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -182,11 +187,15 @@ const PreviewButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
+      const username = post?.author?.username
+      const slug = post?.slug
+      const revalidatePaths = username && slug ? `/${username}/${slug}` : null
+
       const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: { ...getValues(), status: 'draft' },
-          options: { revalidatePaths: getPostPath(post) },
+          options: { revalidatePaths },
         }),
       })
 
@@ -194,10 +203,8 @@ const PreviewButton = () => {
 
       mutate(`/api/v1/post?id=${post?.id}`)
 
-      const postPath = getPostPath(post)
-
-      if (postPath) {
-        router.push(postPath + '?preview=true')
+      if (username && slug) {
+        router.push(`${username}/${slug}?preview=true`)
       }
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
@@ -240,11 +247,15 @@ const TrashButton = () => {
 
       const now = new Date().toISOString()
 
+      const username = post?.author?.username
+      const slug = post?.slug
+      const revalidatePaths = username && slug ? `/${username}/${slug}` : null
+
       const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: { ...getValues(), status: 'trash', deleted_at: now },
-          options: { revalidatePaths: getPostPath(post) },
+          options: { revalidatePaths },
         }),
       })
 
@@ -298,11 +309,15 @@ const PublishButton = () => {
       const now = new Date().toISOString()
       const data = { ...formValues, status }
 
+      const username = post?.author?.username
+      const slug = post?.slug
+      const revalidatePaths = username && slug ? `/${username}/${slug}` : null
+
       const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: post?.date ? data : { ...data, date: now },
-          options: { revalidatePaths: getPostPath(post) },
+          options: { revalidatePaths },
         }),
       })
 

@@ -32,7 +32,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getFavoritesPath, getProfilePath } from '@/lib/utils'
+import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useUserAPI } from '@/queries/client/users'
 import { useEmailsAPI } from '@/queries/client/emails'
@@ -206,7 +206,8 @@ const SubmitButton = () => {
         email: formValues?.email?.replace('unassigned', ''),
       }
 
-      const revalidatePaths = [getProfilePath(user), getFavoritesPath(user)]
+      const username = user?.username
+      const revalidatePaths = [`/${username}`, `/${username}/favorites`]
 
       const result = await fetcher<UserAPI>(`/api/v1/user?id=${user?.id}`, {
         method: 'POST',

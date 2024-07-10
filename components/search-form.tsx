@@ -56,7 +56,7 @@ const SearchForm = ({
   const { control, handleSubmit } = form
 
   const onSubmit = async (formValues: FormValues) => {
-    const query = qs({ q: formValues?.q, page: 1 })
+    const query = qs({ q: formValues?.q, tag: undefined, page: 1 })
     const url = [path, query].filter(Boolean).join('?')
 
     router.push(url)

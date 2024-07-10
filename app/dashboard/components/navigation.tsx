@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import Link, { LinkProps } from 'next/link'
+import Link, { type LinkProps } from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 

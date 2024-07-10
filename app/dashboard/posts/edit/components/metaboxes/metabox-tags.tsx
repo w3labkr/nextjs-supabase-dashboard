@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFormContext, useWatch } from 'react-hook-form'
-import { Tag, TagInput } from 'emblor'
+import { TagInput } from 'emblor'
 
 import {
   Accordion,
@@ -15,6 +15,8 @@ import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provid
 
 import { Meta } from '@/types/database'
 import { getMeta, setMeta } from '@/lib/utils'
+import { slugify } from '@/lib/slugify'
+import { Tag } from '@/lib/emblor'
 
 const MetaboxTags = () => {
   const { t } = useTranslation()
@@ -40,9 +42,16 @@ const MetaboxTags = () => {
   )
 
   const handleSetTags = (newTags: React.SetStateAction<Tag[]>) => {
-    const metaTags: Tag[] = Array.isArray(newTags) ? newTags : []
-    setTags(metaTags)
-    setMetaValue(watchMeta, 'tags', JSON.stringify(metaTags))
+    const tags: Tag[] =
+      Array.isArray(newTags) && newTags?.length > 0
+        ? newTags?.map((tag: Tag) => ({
+            ...tag,
+            name: tag?.text,
+            slug: slugify(tag?.text),
+          }))
+        : []
+    setTags(tags)
+    setMetaValue(watchMeta, 'tags', JSON.stringify(tags))
   }
 
   return (

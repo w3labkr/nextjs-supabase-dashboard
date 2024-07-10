@@ -1,26 +1,23 @@
 import * as React from 'react'
 import type { Metadata, ResolvingMetadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
-
-import dayjs from 'dayjs'
-import { Tag } from 'emblor'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Forbidden } from '@/components/error'
+import { EntryPublished, EntryAuthor, EntryTags } from '@/components/hentry'
+
 import { PostProvider } from './post-provider'
 import { Analysis } from './analysis'
 import { PostViews } from './post-views'
 import { FavoriteButton } from './favorite-button'
 import { RelatedPosts } from './related-posts'
 
-import { cn, getAuthorUrl, getMeta } from '@/lib/utils'
-import { getTranslation, type Translation } from '@/hooks/i18next'
+import { absoluteUrl, cn } from '@/lib/utils'
+import { getTranslation } from '@/hooks/i18next'
 import { getAuth, authenticate } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { getPostAPI, getAdjacentPostAPI } from '@/queries/server/posts'
-import { Author, PostMeta } from '@/types/database'
 
 // revalidate the data at most every month
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
@@ -92,6 +89,7 @@ export default async function PostPage({
   })
 
   const { t } = await getTranslation()
+  const { id, date, title, content, thumbnail_url, author, meta } = post
 
   return (
     <PostProvider value={{ post }}>
@@ -99,21 +97,34 @@ export default async function PostPage({
       <Header />
       <main className="min-h-[80vh] pb-20 sm:pb-40">
         <div className="container min-w-0 flex-1 overflow-auto pt-16">
-          <PostTitle title={post?.title} />
+          <PostTitle text={title} />
           <div className="mb-8 flex justify-between">
             <div className="space-x-1">
-              <PostDate date={post?.date} />
+              <EntryPublished dateTime={date ?? undefined} />
               <span>— by</span>
-              <PostAuthor author={post?.author} />
+              <EntryAuthor
+                href={
+                  author?.username ? absoluteUrl(`/${author?.username}`) : '#'
+                }
+                className="underline hover:no-underline"
+                author={author}
+              />
             </div>
             <div className="flex space-x-4">
-              <PostViews postId={post?.id} />
-              <FavoriteButton postId={post?.id} />
+              <PostViews postId={id} />
+              <FavoriteButton postId={id} />
             </div>
           </div>
-          <PostThumbnail thumbnailUrl={post?.thumbnail_url} />
-          <PostContent content={post?.content} />
-          <PostTags meta={post?.meta} t={t} />
+          <PostThumbnail
+            className="mb-8 sm:mx-0 md:mb-16"
+            backgroundImage={
+              thumbnail_url ? `url(${thumbnail_url})` : undefined
+            }
+          />
+          <PostContent className="mb-8" __html={content} />
+          <div className="mb-16">
+            <EntryTags pathname={`/${username}`} meta={meta} />
+          </div>
           <RelatedPosts previousPost={previousPost} nextPost={nextPost} t={t} />
         </div>
       </main>
@@ -122,79 +133,52 @@ export default async function PostPage({
   )
 }
 
-const PostTitle = ({ title }: { title: string | null }) => {
-  if (!title) return null
+interface PostTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  text: string | null
+}
 
+const PostTitle = ({ className, text, ...props }: PostTitleProps) => {
   return (
     <h1
       className={cn(
         'mb-8 break-all text-center font-serif text-6xl font-bold leading-none tracking-tighter',
-        'sm:mb-16 sm:leading-tight md:text-7xl md:leading-none lg:text-8xl'
+        'sm:mb-16 sm:leading-tight md:text-7xl md:leading-none lg:text-8xl',
+        className
       )}
+      {...props}
     >
-      {title}
+      {text}
     </h1>
   )
 }
 
-const PostDate = ({ date }: { date: string | null }) => {
-  return (
-    <time dateTime={date ?? undefined}>
-      {dayjs(date).format('MMMM D, YYYY')}
-    </time>
-  )
+interface PostThumbnailProps extends React.HTMLAttributes<HTMLDivElement> {
+  backgroundImage?: string
 }
 
-const PostAuthor = ({ author }: { author: Author | null }) => {
-  return (
-    <Link
-      href={getAuthorUrl(null, { username: author?.username }) ?? '#'}
-      className="underline hover:no-underline"
-    >
-      {author?.full_name}
-    </Link>
-  )
-}
-
-const PostThumbnail = ({ thumbnailUrl }: { thumbnailUrl: string | null }) => {
-  if (!thumbnailUrl) return null
+const PostThumbnail = ({ backgroundImage, ...props }: PostThumbnailProps) => {
+  if (!backgroundImage) return null
 
   return (
-    <div className="mb-8 sm:mx-0 md:mb-16">
+    <div {...props}>
       <div
         className="min-h-96 bg-cover bg-center bg-no-repeat sm:mx-0"
-        style={{ backgroundImage: `url(${thumbnailUrl})` }}
+        style={{ backgroundImage }}
       ></div>
     </div>
   )
 }
 
-const PostContent = ({ content }: { content: string | null }) => {
-  if (!content) return null
-
-  return (
-    <div className="mb-8" dangerouslySetInnerHTML={{ __html: content }}></div>
-  )
+interface PostContentProps
+  extends Omit<
+    React.HTMLAttributes<HTMLDivElement>,
+    'dangerouslySetInnerHTML'
+  > {
+  __html: string | null
 }
 
-const PostTags = ({ meta, t }: { meta?: PostMeta[]; t: Translation['t'] }) => {
-  const tags: Tag[] = JSON.parse(getMeta(meta, 'tags', '[]'))
+const PostContent = ({ __html, ...props }: PostContentProps) => {
+  if (!__html) return null
 
-  if (Array.isArray(tags) && tags?.length === 0) {
-    return null
-  }
-
-  return (
-    <div className="mb-16">
-      <p>{t('tags')}: </p>
-      <div>
-        {tags?.map((tag: Tag, i: number) => (
-          <React.Fragment key={tag.id}>
-            {i === 0 ? null : <span>, </span>}
-            <span>{tag?.text}</span>
-          </React.Fragment>
-        ))}
-      </div>
-    </div>
-  )
+  return <div dangerouslySetInnerHTML={{ __html }} {...props}></div>
 }

@@ -7,13 +7,7 @@ import { toast } from 'sonner'
 import { usePaging } from '@/components/paging'
 
 import { useSWRConfig } from 'swr'
-import {
-  fetcher,
-  setQueryString,
-  getPostPath,
-  getAuthorPath,
-  getAuthorFavoritesPath,
-} from '@/lib/utils'
+import { fetcher, setQueryString } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
@@ -35,11 +29,15 @@ const QuickTrash = ({ post, ...props }: QuickTrashProps) => {
 
       const now = new Date().toISOString()
 
+      const username = post?.author?.username
+      const slug = post?.slug
+      const revalidatePaths = username && slug ? `/${username}/${slug}` : null
+
       const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: { status: 'trash', deleted_at: now, user_id: post?.user_id },
-          options: { revalidatePaths: getPostPath(post) },
+          options: { revalidatePaths },
         }),
       })
 

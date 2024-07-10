@@ -1,6 +1,6 @@
 import slug from 'slugify'
 
-type SlugifyOptions =
+export type SlugifyOptions =
   | string
   | {
       replacement?: string
@@ -11,7 +11,7 @@ type SlugifyOptions =
       trim?: boolean
     }
 
-const slugify = (string: string, options?: SlugifyOptions): string => {
+export function slugify(string: string, options?: SlugifyOptions): string {
   const defaults = {
     replacement: '-', // replace spaces with replacement character, defaults to `-`
     remove: /[^\p{L}\d\s]+/gu, // remove characters that match regex, defaults to `undefined`
@@ -35,5 +35,3 @@ const slugify = (string: string, options?: SlugifyOptions): string => {
 
   return slug(string, settings)
 }
-
-export { slugify, type SlugifyOptions }

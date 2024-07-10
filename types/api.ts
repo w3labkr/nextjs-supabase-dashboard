@@ -5,6 +5,7 @@ import {
   Post,
   CountPosts,
   Favorite,
+  Tag,
   Vote,
   Analysis,
   User,
@@ -44,6 +45,10 @@ export type CountPostsAPI =
 
 export type FavoriteAPI =
   | { data: Favorite | null; error: null }
+  | { data: null; error: Error }
+
+export type TagAPI =
+  | { data: Tag | null; error: null }
   | { data: null; error: Error }
 
 export type VoteAPI =

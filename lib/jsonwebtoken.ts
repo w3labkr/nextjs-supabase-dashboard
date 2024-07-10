@@ -7,20 +7,20 @@ import {
   VerifyErrors,
 } from 'jsonwebtoken'
 
-const secret: Secret = process.env.SECRET_KEY!
+export const secret: Secret = process.env.SECRET_KEY!
 
-function jwtSign(
+export function jwtSign(
   payload: string | object | Buffer,
   options?: SignOptions
 ): string {
   return jwt.sign(payload, secret, { algorithm: 'HS256', ...options })
 }
 
-type JwtVerify =
+export type JwtVerify =
   | { payload: string | JwtPayload; error: null }
   | { payload: null; error: VerifyErrors }
 
-function jwtVerify(
+export function jwtVerify(
   token: string,
   options?: VerifyOptions & { complete?: false }
 ): JwtVerify {
@@ -31,5 +31,3 @@ function jwtVerify(
     return { payload: null, error: e as VerifyErrors }
   }
 }
-
-export { secret, jwtSign, jwtVerify, type JwtVerify }

@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import { fetcher, getFavoritesPath, getProfilePath } from '@/lib/utils'
+import { fetcher } from '@/lib/utils'
 import { createClient } from '@/supabase/client'
 import { User } from '@/types/database'
 import { UserAPI } from '@/types/api'
@@ -222,7 +222,8 @@ const SubmitButton = ({
       }
 
       const now = new Date().toISOString()
-      const revalidatePaths = [getProfilePath(user), getFavoritesPath(user)]
+      const username = user?.username
+      const revalidatePaths = [`/${username}`, `/${username}/favorites`]
 
       const deleted = await fetcher<UserAPI>(`/api/v1/user?id=${user?.id}`, {
         method: 'POST',

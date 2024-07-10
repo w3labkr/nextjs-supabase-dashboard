@@ -1,13 +1,18 @@
 import * as React from 'react'
-import Link from 'next/link'
-import dayjs from 'dayjs'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Paging, PagingProvider } from '@/components/paging'
+import {
+  EntryTitle,
+  EntrySummary,
+  EntryPublished,
+  EntryAuthor,
+  EntryTags,
+} from '@/components/hentry'
 
+import { absoluteUrl } from '@/lib/utils'
 import { getPostsAPI } from '@/queries/server/posts'
-import { getAuthorUrl, getPostUrl } from '@/lib/utils'
 import { getTranslation } from '@/hooks/i18next'
 import { Post } from '@/types/database'
 
@@ -22,6 +27,7 @@ export default async function SearchPage({
     page?: string
     perPage?: string
     pageSize?: string
+    tag?: string
     q?: string
     orderBy?: string
     order?: string
@@ -30,6 +36,7 @@ export default async function SearchPage({
   const page = +(searchParams?.page ?? '1')
   const perPage = +(searchParams?.perPage ?? '10')
   const pageSize = +(searchParams?.pageSize ?? '10')
+  const tag = searchParams?.tag
   const q = searchParams?.q
   const orderBy = searchParams?.orderBy ?? 'id'
   const order = searchParams?.order ?? 'desc'
@@ -39,6 +46,7 @@ export default async function SearchPage({
     perPage,
     postType: 'post',
     status: 'publish',
+    tag,
     q,
     orderBy,
     order,
@@ -97,21 +105,25 @@ interface PostItemProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const PostItem = ({ post, ...props }: PostItemProps) => {
+  const { title, slug, description, date, author, meta } = post
+  const username = author?.username
+
   return (
     <div className="space-y-2" {...props}>
       <div className="h-40 bg-secondary"></div>
-      <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
-        <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
-      </h3>
-      <p className="line-clamp-3">{post?.description}</p>
-      <div className="space-x-1 text-sm">
-        <time dateTime={post?.date ?? undefined}>
-          {dayjs(post?.date).format('MMMM D, YYYY')}
-        </time>
-        <span>— by</span>
-        <Link href={getAuthorUrl(post) ?? '#'} className="hover:underline">
-          {post?.author?.full_name ?? post?.author?.username}
-        </Link>
+      <EntryTitle
+        href={username && slug ? absoluteUrl(`/${username}/${slug}`) : '#'}
+        text={title}
+      />
+      <EntrySummary text={description} />
+      <EntryTags pathname="/posts" meta={meta} />
+      <div className="w-full text-sm">
+        <EntryPublished dateTime={date ?? undefined} />
+        <span> — by </span>
+        <EntryAuthor
+          href={username ? absoluteUrl(`/${username}`) : '#'}
+          author={author}
+        />
       </div>
     </div>
   )

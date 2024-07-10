@@ -788,20 +788,30 @@ $$ language plpgsql;
 ----------------------------------------------------------------
 
 create or replace function get_posts_by_meta(
-  metakey text = 'views',
-  ascending boolean = true
+  metakey text,
+  datatype text = 'text',
+  ascending boolean = null
 )
 returns setof posts
 security definer set search_path = public
 as $$
 begin
-  return query
-  select p.*
-  from posts p join postmeta m on p.id = m.post_id
-  where m.meta_key = metakey
-  order by
-    case ascending when true then m.meta_value::integer else 0 end asc,
-    case ascending when false then m.meta_value::integer else 0 end desc;
+  if ascending is not null and datatype = 'integer' then
+    return query
+    select p.* from posts p join postmeta m on p.id = m.post_id where m.meta_key = metakey
+    order by
+      case ascending when true then m.meta_value::integer else 0 end asc,
+      case ascending when false then m.meta_value::integer else 0 end desc;
+  elsif ascending is not null then
+    return query
+    select p.* from posts p join postmeta m on p.id = m.post_id where m.meta_key = metakey
+    order by
+      case ascending when true then m.meta_value else 0 end asc,
+      case ascending when false then m.meta_value else 0 end desc;
+  else
+    return query
+    select p.* from posts p join postmeta m on p.id = m.post_id where m.meta_key = metakey;
+  end if;
 end;
 $$ language plpgsql;
 

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
-import { getPostUrl } from '@/lib/utils'
+import { absoluteUrl } from '@/lib/utils'
 
 interface PermalinkProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -19,7 +19,9 @@ const Permalink = ({ className, ...props }: PermalinkProps) => {
   const [permalink, setPermalink] = React.useState<string>('')
 
   React.useEffect(() => {
-    const url = getPostUrl(post, { slug: watchSlug })
+    const username = post?.author?.username
+    const slug = watchSlug ?? post?.slug
+    const url = username && slug ? absoluteUrl(`/${username}/${slug}`) : null
     if (url) setPermalink(url)
   }, [post, watchSlug])
 

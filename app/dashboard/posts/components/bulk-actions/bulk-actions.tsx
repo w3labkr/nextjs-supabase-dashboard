@@ -31,16 +31,7 @@ import { usePaging } from '@/components/paging'
 import { useBulkActions } from './bulk-actions-provider'
 
 import { useSWRConfig } from 'swr'
-import {
-  cn,
-  fetcher,
-  setQueryString,
-  getPostPath,
-  getAuthorPath,
-  getAuthorFavoritesPath,
-  setMeta,
-  getMeta,
-} from '@/lib/utils'
+import { cn, fetcher, setQueryString, setMeta, getMeta } from '@/lib/utils'
 import { slugify } from '@/lib/slugify'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
@@ -130,13 +121,17 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
 
         if (!data) throw new Error('Require is not defined.')
 
+        const username = post?.author?.username
+        const slug = post?.slug
+        const revalidatePaths = username && slug ? `/${username}/${slug}` : null
+
         const { error } = await fetcher<PostAPI>(
           `/api/v1/post?id=${post?.id}`,
           {
             method: formValues?.action === 'delete' ? 'DELETE' : 'POST',
             body: JSON.stringify({
               data,
-              options: { revalidatePaths: getPostPath(post) },
+              options: { revalidatePaths },
             }),
           }
         )

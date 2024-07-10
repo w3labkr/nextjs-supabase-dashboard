@@ -1,21 +1,19 @@
 import * as React from 'react'
 import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { SearchForm } from '@/components/search-form'
 
-import { Aside } from '../aside'
-import { PostList } from './post-list'
+import { TabLink } from '@/app/[username]/components/tab-link'
+import { Aside } from '@/app/[username]/aside'
+import { PostList } from '@/app/[username]/favorites/post-list'
 
-import { cn, getProfileUrl } from '@/lib/utils'
-import { LucideIcon } from '@/lib/lucide-icon'
+import { absoluteUrl } from '@/lib/utils'
 import { getTranslation } from '@/hooks/i18next'
 import { getPathname } from '@/hooks/headers'
 import { getUserAPI } from '@/queries/server/users'
-import { User } from '@/types/database'
 
 // revalidate the data at most every week
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
@@ -67,8 +65,25 @@ export default async function FavoritesPage({
             <div className="flex flex-col space-y-4 md:col-span-3 lg:col-span-4">
               <div className="space-y-2">
                 <div className="flex gap-2">
-                  <RecentLink user={user} text={t('posts')} />
-                  <FavoritesLink user={user} text={t('favorites')} />
+                  <TabLink
+                    t={t}
+                    translate="yes"
+                    iconName="History"
+                    href={absoluteUrl(`/${username}`)}
+                    active={false}
+                  >
+                    posts
+                  </TabLink>
+                  <TabLink
+                    t={t}
+                    translate="yes"
+                    iconName="Heart"
+                    iconClassName="fill-destructive text-destructive dark:fill-white dark:text-white"
+                    href={absoluteUrl(`/${username}/favorites`)}
+                    active={true}
+                  >
+                    favorites
+                  </TabLink>
                 </div>
                 <SearchForm
                   path={pathname}
@@ -84,32 +99,5 @@ export default async function FavoritesPage({
       </main>
       <Footer />
     </>
-  )
-}
-
-const RecentLink = ({ user, text }: { user: User; text: string }) => {
-  return (
-    <Link
-      href={getProfileUrl(user) ?? '#'}
-      className="flex items-center text-muted-foreground"
-    >
-      <LucideIcon name="History" className="mr-1 size-4 min-w-4" />
-      {text}
-    </Link>
-  )
-}
-
-const FavoritesLink = ({ user, text }: { user: User; text: string }) => {
-  return (
-    <Link href="#" className="flex items-center">
-      <LucideIcon
-        name="Heart"
-        className={cn(
-          'mr-1 size-4 min-w-4 fill-destructive text-destructive',
-          'dark:fill-white dark:text-white'
-        )}
-      />
-      {text}
-    </Link>
   )
 }

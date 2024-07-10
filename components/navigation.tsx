@@ -16,13 +16,13 @@ import { absoluteUrl } from '@/lib/utils'
 const Navigation = () => {
   return (
     <NavigationMenu className="hidden md:flex">
-      <NavigationMenuList>
+      <NavigationMenuList className="gap-2">
         <NavigationMenuLink asChild>
           <Link
             className="text-sm hover:underline"
             href={absoluteUrl('/posts')}
           >
-            POSTS
+            Posts
           </Link>
         </NavigationMenuLink>
       </NavigationMenuList>

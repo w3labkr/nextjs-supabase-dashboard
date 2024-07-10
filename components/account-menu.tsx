@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { SignOutButton } from '@/components/signout-button'
 
-import { getProfileUrl } from '@/lib/utils'
+import { absoluteUrl } from '@/lib/utils'
 import { useUserAPI } from '@/queries/client/users'
 
 const AccountMenu = () => {
@@ -48,7 +48,10 @@ const AccountMenu = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href={getProfileUrl(user) ?? '#'} className="cursor-pointer">
+          <Link
+            href={user?.username ? absoluteUrl(`/${user?.username}`) : '#'}
+            className="cursor-pointer"
+          >
             {t('profile')}
           </Link>
         </DropdownMenuItem>

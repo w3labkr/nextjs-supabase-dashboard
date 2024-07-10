@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/form'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getFavoritesPath, getProfilePath } from '@/lib/utils'
+import { fetcher } from '@/lib/utils'
 import { slugify } from '@/lib/slugify'
 import { useUserAPI } from '@/queries/client/users'
 import { UserAPI } from '@/types/api'
@@ -141,7 +141,8 @@ const SubmitButton = ({
         throw new Error('Nothing has changed.')
       }
 
-      const revalidatePaths = [getProfilePath(user), getFavoritesPath(user)]
+      const username = user?.username
+      const revalidatePaths = [`/${username}`, `/${username}/favorites`]
 
       const result = await fetcher<UserAPI>(`/api/v1/user?id=${user?.id}`, {
         method: 'POST',

@@ -1,13 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
+import { Tag } from '@/lib/emblor'
 import { ApiError, compareTags, getMeta, revalidates } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { pricingPlans, type PricingPlan } from '@/config/site'
 import { PostMeta } from '@/types/database'
-
-import { Tag } from 'emblor'
-import { slugify } from '@/lib/slugify'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -101,11 +99,8 @@ export async function POST(request: NextRequest) {
       const { error } = await supabase.rpc('set_post_tags', {
         userid: user_id,
         postid: +id,
-        added: added?.map((r: Tag) => ({
-          name: r.text,
-          slug: slugify(r.text),
-        })),
-        removed: removed?.map((r: Tag) => ({ name: r.text })),
+        added,
+        removed,
       })
       if (error) {
         return NextResponse.json({ data: null, error }, { status: 400 })
@@ -158,21 +153,21 @@ export async function PUT(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const counter = await supabase
+  const total = await supabase
     .from('posts')
     .select('*', { count: 'exact', head: true })
     .eq('user_id', userId)
 
-  if (counter?.error) {
+  if (total?.error) {
     return NextResponse.json(
-      { data: null, error: counter?.error },
+      { data: null, error: total?.error },
       { status: 400 }
     )
   }
 
-  const total = counter?.count ?? 0
+  const count = total?.count ?? 0
 
-  if (plan?.post > -1 && total >= plan?.post) {
+  if (plan?.post > -1 && count >= plan?.post) {
     return NextResponse.json(
       { data: null, error: new ApiError(402) },
       { status: 402 }
@@ -219,11 +214,8 @@ export async function PUT(request: NextRequest) {
       const { error } = await supabase.rpc('set_post_tags', {
         userid: userId,
         postid: post?.id,
-        added: added?.map((r: Tag) => ({
-          name: r.text,
-          slug: slugify(r.text),
-        })),
-        removed: removed?.map((r: Tag) => ({ name: r.text })),
+        added,
+        removed,
       })
       if (error) {
         return NextResponse.json({ data: null, error }, { status: 400 })

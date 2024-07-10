@@ -644,7 +644,8 @@ export type Database = {
       }
       get_posts_by_meta: {
         Args: {
-          metakey?: string
+          metakey: string
+          datatype?: string
           ascending?: boolean
         }
         Returns: {

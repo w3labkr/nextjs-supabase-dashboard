@@ -7,15 +7,7 @@ import { toast } from 'sonner'
 import { usePaging } from '@/components/paging'
 
 import { useSWRConfig } from 'swr'
-import {
-  fetcher,
-  setQueryString,
-  getPostPath,
-  getAuthorPath,
-  getAuthorFavoritesPath,
-  setMeta,
-  getMeta,
-} from '@/lib/utils'
+import { fetcher, setQueryString, setMeta, getMeta } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 import { Post } from '@/types/database'
 
@@ -45,11 +37,15 @@ const QuickPrivate = ({ post, ...props }: QuickPrivateProps) => {
         user_id: post?.user_id,
       }
 
+      const username = post?.author?.username
+      const slug = post?.slug
+      const revalidatePaths = username && slug ? `/${username}/${slug}` : null
+
       const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
           data: post?.date ? data : { ...data, date: now },
-          options: { revalidatePaths: getPostPath(post) },
+          options: { revalidatePaths },
         }),
       })
 

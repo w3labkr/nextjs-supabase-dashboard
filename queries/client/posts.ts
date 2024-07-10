@@ -54,6 +54,8 @@ export function usePostsAPI(
     perPage?: number
     postType?: string
     status?: string
+    isFavorite?: number
+    tag?: string
     q?: string
     orderBy?: string
     order?: string

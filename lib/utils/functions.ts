@@ -1,5 +1,5 @@
-import { Tag } from 'emblor'
 import { Meta } from '@/types/database'
+import { Tag } from '@/lib/emblor'
 
 export function getMeta(
   meta: Meta[] | undefined,

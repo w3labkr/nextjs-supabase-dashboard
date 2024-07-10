@@ -9,13 +9,7 @@ import { Button, ButtonProps } from '@/components/ui/button'
 import { LucideIcon, type LucideIconName } from '@/lib/lucide-icon'
 
 import { useSWRConfig } from 'swr'
-import {
-  fetcher,
-  setQueryString,
-  generateRecentPosts,
-  getPostPath,
-  cn,
-} from '@/lib/utils'
+import { fetcher, setQueryString, generateRecentPosts, cn } from '@/lib/utils'
 import { useUserAPI } from '@/queries/client/users'
 import { PostAPI } from '@/types/api'
 
@@ -58,10 +52,10 @@ const AddDummyPost = ({
 
       for (let i = 0; i < posts.length; i++) {
         const post = posts[i]
-        const postPath = getPostPath(null, {
-          username: user?.username,
-          slug: post?.slug,
-        })
+
+        const username = user?.username
+        const slug = post?.slug
+        const revalidatePaths = username && slug ? `/${username}/${slug}` : null
 
         const { error } = await fetcher<PostAPI>(
           `/api/v1/post?userId=${user?.id}`,
@@ -69,7 +63,7 @@ const AddDummyPost = ({
             method: 'PUT',
             body: JSON.stringify({
               data: post,
-              options: { revalidatePaths: postPath },
+              options: { revalidatePaths },
             }),
           }
         )

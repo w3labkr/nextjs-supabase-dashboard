@@ -29,41 +29,34 @@ export async function GET(request: NextRequest) {
   if (status) match = { ...match, status }
 
   const supabase = createClient()
-  const counterQuery = supabase.rpc(
+  const totalQuery = supabase.rpc(
     'get_posts_by_meta',
     { metakey: 'views' },
     { count: 'exact', head: true }
   )
 
-  if (Object.keys(match).length > 0) counterQuery.match(match)
-  if (q) counterQuery.textSearch('title_description', q)
+  if (Object.keys(match).length > 0) totalQuery.match(match)
+  if (q) totalQuery.textSearch('title_description', q)
 
-  const counter = await counterQuery
-
-  if (counter?.error) {
-    return NextResponse.json(
-      { data: null, count: null, error: counter?.error },
-      { status: 400 }
-    )
-  }
-
-  const query = supabase.rpc('get_posts_by_meta', {
+  const total = await totalQuery
+  const listQuery = supabase.rpc('get_posts_by_meta', {
     metakey: 'views',
+    datatype: 'integer',
     ascending: order === 'asc',
   })
 
-  query.select('*, author:users(*), meta:postmeta(*)')
+  listQuery.select('*, author:users(*), meta:postmeta(*)')
 
-  if (Object.keys(match).length > 0) query.match(match)
-  if (q) query.textSearch('title_description', q)
+  if (Object.keys(match).length > 0) listQuery.match(match)
+  if (q) listQuery.textSearch('title_description', q)
 
   if (limit) {
-    query.limit(limit)
+    listQuery.limit(limit)
   } else {
-    query.range(offset, page * perPage - 1)
+    listQuery.range(offset, page * perPage - 1)
   }
 
-  const { data: list, error } = await query
+  const { data: list, error } = await listQuery
 
   if (error) {
     return NextResponse.json(
@@ -72,7 +65,7 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const count = limit ? list?.length : counter?.count ?? 0
+  const count = limit ? list?.length : total?.count ?? 0
 
   const data = list?.map((item: any, index: number) => {
     item['num'] = limit ? index + 1 : count - index - offset

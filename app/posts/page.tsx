@@ -1,14 +1,19 @@
 import * as React from 'react'
-import Link from 'next/link'
-import dayjs from 'dayjs'
 
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Paging, PagingProvider } from '@/components/paging'
+import {
+  EntryTitle,
+  EntrySummary,
+  EntryPublished,
+  EntryAuthor,
+  EntryTags,
+} from '@/components/hentry'
 
-import { getPostsAPI } from '@/queries/server/posts'
-import { getAuthorUrl, getPostUrl } from '@/lib/utils'
+import { absoluteUrl } from '@/lib/utils'
 import { getTranslation } from '@/hooks/i18next'
+import { getPostsAPI } from '@/queries/server/posts'
 import { Post } from '@/types/database'
 
 // revalidate the data at most every week
@@ -22,6 +27,7 @@ export default async function PostsPage({
     page?: string
     perPage?: string
     pageSize?: string
+    tag?: string
     q?: string
     orderBy?: string
     order?: string
@@ -30,6 +36,7 @@ export default async function PostsPage({
   const page = +(searchParams?.page ?? '1')
   const perPage = +(searchParams?.perPage ?? '10')
   const pageSize = +(searchParams?.pageSize ?? '10')
+  const tag = searchParams?.tag
   const q = searchParams?.q
   const orderBy = searchParams?.orderBy ?? 'id'
   const order = searchParams?.order ?? 'desc'
@@ -39,6 +46,7 @@ export default async function PostsPage({
     perPage,
     postType: 'post',
     status: 'publish',
+    tag,
     q,
     orderBy,
     order,
@@ -53,7 +61,7 @@ export default async function PostsPage({
       <main className="min-h-[80vh] pb-20 sm:pb-40">
         <div className="container flex-1 overflow-auto">
           <h2 className="mt-16 text-center font-serif text-4xl font-bold">
-            {t('posts')}
+            {tag ? `${t('tags')} : ${tag}` : t('posts')}
           </h2>
           <PagingProvider value={{ total, page, perPage, pageSize }}>
             <div className="mt-12 space-y-16">
@@ -94,21 +102,25 @@ interface PostItemProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const PostItem = ({ post, ...props }: PostItemProps) => {
+  const { title, slug, description, date, author, meta } = post
+  const username = author?.username
+
   return (
     <div className="space-y-2" {...props}>
       <div className="h-40 bg-secondary"></div>
-      <h3 className="line-clamp-2 font-serif text-3xl hover:underline">
-        <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
-      </h3>
-      <p className="line-clamp-3">{post?.description}</p>
-      <div className="space-x-1 text-sm">
-        <time dateTime={post?.date ?? undefined}>
-          {dayjs(post?.date).format('MMMM D, YYYY')}
-        </time>
-        <span>— by</span>
-        <Link href={getAuthorUrl(post) ?? '#'} className="hover:underline">
-          {post?.author?.full_name ?? post?.author?.username}
-        </Link>
+      <EntryTitle
+        href={username && slug ? absoluteUrl(`/${username}/${slug}`) : '#'}
+        text={title}
+      />
+      <EntrySummary text={description} />
+      <EntryTags pathname="/posts" meta={meta} />
+      <div className="w-full text-sm">
+        <EntryPublished dateTime={date ?? undefined} />
+        <span> — by </span>
+        <EntryAuthor
+          href={username ? absoluteUrl(`/${username}`) : '#'}
+          author={author}
+        />
       </div>
     </div>
   )

@@ -3,7 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 
-import { getPostUrl } from '@/lib/utils'
+import { absoluteUrl } from '@/lib/utils'
 import { Post } from '@/types/database'
 import { usePostsAPI } from '@/queries/client/posts'
 
@@ -58,11 +58,18 @@ interface LatestItemProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const LatestItem = ({ post, ...props }: LatestItemProps) => {
+  const username = post?.author?.username
+  const slug = post?.slug
+
   return (
     <div className="text-sm leading-4" {...props}>
       <span>&bull;&nbsp;</span>
       <span className="font-serif hover:underline">
-        <Link href={getPostUrl(post) ?? '#'}>{post?.title}</Link>
+        <Link
+          href={username && slug ? absoluteUrl(`/${username}/${slug}`) : '#'}
+        >
+          {post?.title}
+        </Link>
       </span>
     </div>
   )
