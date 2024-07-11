@@ -731,15 +731,8 @@ export type Database = {
         Args: {
           userid: string
           postid: number
-          added: Json[]
-          removed: Json[]
         }
-        Returns: {
-          id: number
-          post_id: number
-          tag_id: number
-          user_id: string
-        }[]
+        Returns: undefined
       }
       set_post_views: {
         Args: {

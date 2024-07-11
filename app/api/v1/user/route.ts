@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ data: null, error }, { status: 400 })
       }
     }
-  }
+  } // end of meta
 
   const { data: newUser, error } = await supabase
     .from('users')

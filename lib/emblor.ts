@@ -1,7 +1,6 @@
 import { Tag as EmblorTag } from 'emblor'
 
 export type Tag = EmblorTag & {
-  name?: string
   slug?: string
 }
 

@@ -38,37 +38,39 @@ create policy "User can delete their own post_tags" on post_tags for delete to a
 
 create or replace function set_post_tags(
   userid uuid,
-  postid bigint,
-  added json[],
-  removed json[]
+  postid bigint
 )
-returns setof post_tags
+returns void
 security definer set search_path = public
 as $$
 declare
-  tag json;
+  tagnames text[];
   tagid bigint;
+  metavalue text;
+  element jsonb;
 begin
 
- 	foreach tag in array removed loop
-	  delete from post_tags pt
-    using tags t
-    where pt.user_id = userid and pt.post_id = postid and pt.tag_id = t.id and t.name = (tag ->> 'name')::text;
+	select array_agg(names) into tagnames from (select jsonb_array_elements(meta_value::jsonb)->>'text'::text as names from postmeta where post_id = postid and meta_key = 'tags') t;
+
+ 	if array_length(tagnames, 1) > 0 then
+		delete from post_tags pt using tags t where pt.user_id = userid and pt.post_id = postid and pt.tag_id = t.id and t.name != all(coalesce(tagnames, array[]::text[]));
+  else
+		delete from post_tags where user_id = userid and post_id = postid;
+ 	end if;
+
+  select meta_value into metavalue from postmeta where post_id = postid and meta_key = 'tags';
+
+ 	for element in (select * from jsonb_array_elements(metavalue::jsonb)) loop
+ 		if not exists (select 1 from post_tags pt join tags t on t.id = pt.tag_id where pt.user_id = userid and pt.post_id = postid and t.name = element->>'text') then
+ 			if exists (select 1 from tags where user_id = userid and name = element->>'text') then
+ 				select id into tagid from tags where user_id = userid and name = element->>'text';
+ 			else
+	 			insert into tags(user_id, name, slug) values(userid, element->>'text', element->>'slug')
+		    returning id into tagid;
+	    end if;
+ 			insert into post_tags(user_id, post_id, tag_id) values(userid, postid, tagid);
+ 		end if;
  	end loop;
 
- 	foreach tag in array added loop
-		if exists (select 1 from tags t where t.user_id = userid and t.name = (tag ->> 'name')::text) then
-		  select t.id into tagid from tags t where t.user_id = userid and t.name = (tag ->> 'name')::text;
-		else
-      insert into tags(user_id, name, slug) values(userid, (tag ->> 'name')::text, (tag ->> 'slug')::text)
-      returning id into tagid;
-	  end if;
-    if not exists (select 1 from post_tags where user_id = userid and post_id = postid and tag_id = tagid) then
-	    insert into post_tags(user_id, post_id, tag_id) values(userid, postid, tagid);
-    end if;
-	end loop;
-
-  return query
-  select * from post_tags where user_id = userid and post_id = postid;
 end;
 $$ language plpgsql;

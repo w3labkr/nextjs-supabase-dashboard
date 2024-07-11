@@ -44,11 +44,7 @@ const MetaboxTags = () => {
   const handleSetTags = (newTags: React.SetStateAction<Tag[]>) => {
     const tags: Tag[] =
       Array.isArray(newTags) && newTags?.length > 0
-        ? newTags?.map((tag: Tag) => ({
-            ...tag,
-            name: tag?.text,
-            slug: slugify(tag?.text),
-          }))
+        ? newTags?.map((tag: Tag) => ({ ...tag, slug: slugify(tag?.text) }))
         : []
     setTags(tags)
     setMetaValue(watchMeta, 'tags', JSON.stringify(tags))

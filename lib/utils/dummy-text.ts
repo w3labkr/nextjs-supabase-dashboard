@@ -16,7 +16,6 @@ export function generateRecentPosts(
     const tags: Tag[] = keywords?.split(',')?.map((text: string) => ({
       id: generateTagId(),
       text,
-      name: text,
       slug: slugify(text),
     }))
 

@@ -88,25 +88,20 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const findMetaTags: PostMeta[] = meta
+    const findTags: PostMeta[] = meta
       ?.filter((r: PostMeta) => r.meta_key === 'tags')
       ?.filter((r: PostMeta) => r.meta_value !== getMeta(old?.meta, r.meta_key))
 
-    if (Array.isArray(findMetaTags) && findMetaTags?.length > 0) {
-      const oldTags: Tag[] = JSON.parse(getMeta(old?.meta, 'tags', '[]'))
-      const newTags: Tag[] = JSON.parse(getMeta(meta, 'tags', '[]'))
-      const { added, removed } = compareTags(oldTags, newTags)
+    if (Array.isArray(findTags) && findTags?.length > 0) {
       const { error } = await supabase.rpc('set_post_tags', {
         userid: user_id,
         postid: +id,
-        added,
-        removed,
       })
       if (error) {
         return NextResponse.json({ data: null, error }, { status: 400 })
       }
     }
-  }
+  } // end of meta
 
   const { data: post, error } = await supabase
     .from('posts')
@@ -203,25 +198,20 @@ export async function PUT(request: NextRequest) {
       }
     }
 
-    const findMetaTags: PostMeta[] = meta?.filter(
+    const findTags: PostMeta[] = meta?.filter(
       (r: PostMeta) => r.meta_key === 'tags'
     )
 
-    if (Array.isArray(findMetaTags) && findMetaTags?.length > 0) {
-      const oldTags: Tag[] = []
-      const newTags: Tag[] = JSON.parse(getMeta(meta, 'tags', '[]'))
-      const { added, removed } = compareTags(oldTags, newTags)
+    if (Array.isArray(findTags) && findTags?.length > 0) {
       const { error } = await supabase.rpc('set_post_tags', {
         userid: userId,
         postid: post?.id,
-        added,
-        removed,
       })
       if (error) {
         return NextResponse.json({ data: null, error }, { status: 400 })
       }
     }
-  }
+  } // end of meta
 
   return NextResponse.json({
     data: post,
