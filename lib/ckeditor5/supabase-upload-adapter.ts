@@ -1,3 +1,5 @@
+'use client'
+
 import {
   FileLoader,
   UploadResponse,
@@ -20,17 +22,16 @@ class SupabaseUploadAdapter {
   upload(): Promise<UploadResponse> {
     return this.loader.file.then((file: File | null) => {
       return new Promise((resolve, reject) => {
-        const raw: string = localStorage.getItem('ckeditor5') ?? '{}'
-        const storage: Record<string, any> = JSON.parse(raw)
-
         const supabase = createClient()
-        const bucketId = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET!
-        const filePath = `${storage?.userId}/${file?.name}`
 
-        if (file) {
+        const bucketId = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET!
+        const folder = localStorage.getItem('ckeditor5:uploadFolder')
+        const path = folder && file?.name ? `${folder}/${file?.name}` : null
+
+        if (file && path) {
           supabase.storage
             .from(bucketId)
-            .upload(filePath, file, { upsert: true })
+            .upload(path, file, { upsert: true })
             .then((uploaded) => {
               if (uploaded?.error) {
                 reject('The file cannot be uploaded.')

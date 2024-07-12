@@ -170,7 +170,9 @@ const Editor = () => {
   }, [language])
 
   React.useEffect(() => {
-    localStorage.setItem('ckeditor5', JSON.stringify({ userId: user?.id }))
+    if (user?.id) {
+      localStorage.setItem('ckeditor5:uploadFolder', user?.id)
+    }
   }, [user?.id])
 
   const onChange = (event: EventInfo, editor: ClassicEditor) => {
