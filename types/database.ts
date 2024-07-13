@@ -18,8 +18,6 @@ export type Notification = Tables<'notifications'>
 
 export type Vote = Tables<'votes'>
 
-export type Analysis = Tables<'analyses'>
-
 export type Author = Tables<'users'>
 
 export type PostStatus =

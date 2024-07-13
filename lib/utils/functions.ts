@@ -4,8 +4,8 @@ import { Tag } from '@/lib/emblor'
 export function getMeta(
   meta: Meta[] | undefined,
   key: string,
-  defaultValue?: string | null
-): any {
+  defaultValue: string = ''
+): string {
   return meta?.find((r: Meta) => r.meta_key === key)?.meta_value ?? defaultValue
 }
 

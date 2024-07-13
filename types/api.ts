@@ -7,7 +7,6 @@ import {
   Favorite,
   Tag,
   Vote,
-  Analysis,
   User,
 } from '@/types/database'
 
@@ -55,8 +54,6 @@ export type VoteAPI =
   | { data: Vote | null; error: null }
   | { data: null; error: Error }
 
-export type AnalysisAPI =
-  | { data: Analysis | null; error: null }
-  | { data: null; error: Error }
-
 export type CronAPI = { data: null; error: null } | { data: null; error: Error }
+
+export type IpAPI = string

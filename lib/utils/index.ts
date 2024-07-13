@@ -1,6 +1,7 @@
 export { cn } from './tailwind'
 export { fetcher } from './fetcher'
 export { revalidates, revalidatePaths, revalidateTags } from './cache'
+export { setCookie, getCookie, deleteCookie } from './cookie'
 export {
   httpStatusCodes,
   type HttpStatusCode,

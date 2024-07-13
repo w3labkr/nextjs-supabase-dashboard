@@ -1,7 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
-import { Tag } from '@/lib/emblor'
-import { ApiError, compareTags, getMeta, revalidates } from '@/lib/utils'
+import { ApiError, getMeta, revalidates } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { pricingPlans, type PricingPlan } from '@/config/site'

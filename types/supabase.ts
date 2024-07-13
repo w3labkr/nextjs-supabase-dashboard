@@ -34,48 +34,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      analyses: {
-        Row: {
-          created_at: string
-          id: number
-          ip: unknown | null
-          post_id: number
-          user_agent: string | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          ip?: unknown | null
-          post_id: number
-          user_agent?: string | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          ip?: unknown | null
-          post_id?: number
-          user_agent?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "analyses_post_id_fkey"
-            columns: ["post_id"]
-            isOneToOne: false
-            referencedRelation: "posts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "analyses_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       emails: {
         Row: {
           created_at: string
@@ -350,6 +308,56 @@ export type Database = {
           role?: string
         }
         Relationships: []
+      }
+      statistics: {
+        Row: {
+          browser: Json | null
+          created_at: string
+          id: number
+          ip: unknown | null
+          location: string | null
+          path: string | null
+          referrer: string | null
+          title: string | null
+          user_agent: string | null
+          user_id: string | null
+          visitor_id: string
+        }
+        Insert: {
+          browser?: Json | null
+          created_at?: string
+          id?: number
+          ip?: unknown | null
+          location?: string | null
+          path?: string | null
+          referrer?: string | null
+          title?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          visitor_id: string
+        }
+        Update: {
+          browser?: Json | null
+          created_at?: string
+          id?: number
+          ip?: unknown | null
+          location?: string | null
+          path?: string | null
+          referrer?: string | null
+          title?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          visitor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "statistics_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tagmeta: {
         Row: {
@@ -737,6 +745,12 @@ export type Database = {
       set_post_views: {
         Args: {
           postid: number
+        }
+        Returns: undefined
+      }
+      set_statistics: {
+        Args: {
+          data: Json
         }
         Returns: undefined
       }

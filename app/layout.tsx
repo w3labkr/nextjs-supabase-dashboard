@@ -8,8 +8,9 @@ import { I18nProvider } from '@/context/i18n-provider'
 import { ThemeProvider } from '@/context/theme-provider'
 
 import { Toaster } from '@/components/ui/sonner'
-import { Analytics } from '@/components/analytics'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
+import { Analytics } from '@/components/analytics'
+import { Statistics } from '@/components/statistics'
 
 import { cn } from '@/lib/utils'
 import { siteConfig } from '@/config/site'
@@ -43,8 +44,9 @@ export default function RootLayout({
 }: Readonly<{
   children?: React.ReactNode
 }>) {
-  const language = cookies().get('app:language')?.value ?? defaultLng
-  const theme = cookies().get('app:theme')?.value ?? 'system'
+  const cookieStore = cookies()
+  const language = cookieStore.get('app:language')?.value ?? defaultLng
+  const theme = cookieStore.get('app:theme')?.value ?? 'system'
 
   return (
     <html lang={language} suppressHydrationWarning>
@@ -55,6 +57,7 @@ export default function RootLayout({
               <div id="__next">{children}</div>
               <Toaster richColors closeButton />
               <TailwindIndicator />
+              <Statistics />
               <Analytics />
             </ThemeProvider>
           </I18nProvider>

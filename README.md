@@ -472,12 +472,6 @@ A modern JavaScript utility library delivering modularity, performance, & extras
 npm install lodash @types/lodash
 ```
 
-Generate RFC-compliant UUIDs in JavaScript
-
-```shell
-npm install uuid @types/uuid
-```
-
 Day.js 2kB immutable date-time library alternative to Moment.js with the same modern API
 
 ```shell
@@ -515,10 +509,16 @@ Vector (*.svg) country flag icons in 3:2 aspect ratio.
 npm install country-flag-icons
 ```
 
-A simple, lightweight JavaScript API for handling browser cookies
+A small, fast and rich-API browser/platform/engine detector for both browser and node.
 
 ```shell
-npm install js-cookie
+npm install bowser
+```
+
+Flatten/unflatten nested Javascript objects
+
+```shell
+npm install flat
 ```
 
 ### ESLint

@@ -7,8 +7,6 @@ import { Footer } from '@/components/footer'
 import { Forbidden } from '@/components/error'
 import { EntryPublished, EntryAuthor, EntryTags } from '@/components/hentry'
 
-import { PostProvider } from './post-provider'
-import { Analysis } from './analysis'
 import { PostViews } from './post-views'
 import { FavoriteButton } from './favorite-button'
 import { RelatedPosts } from './related-posts'
@@ -92,8 +90,7 @@ export default async function PostPage({
   const { id, date, title, content, thumbnail_url, author, meta } = post
 
   return (
-    <PostProvider value={{ post }}>
-      <Analysis />
+    <>
       <Header />
       <main className="min-h-[80vh] pb-20 sm:pb-40">
         <div className="container min-w-0 flex-1 overflow-auto pt-16">
@@ -129,7 +126,7 @@ export default async function PostPage({
         </div>
       </main>
       <Footer />
-    </PostProvider>
+    </>
   )
 }
 

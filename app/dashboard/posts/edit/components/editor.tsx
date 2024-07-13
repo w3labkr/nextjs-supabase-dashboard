@@ -171,7 +171,7 @@ const Editor = () => {
 
   React.useEffect(() => {
     if (user?.id) {
-      localStorage.setItem('ckeditor5:uploadFolder', user?.id)
+      globalThis.localStorage.setItem('ckeditor5:uploadFolder', user?.id)
     }
   }, [user?.id])
 

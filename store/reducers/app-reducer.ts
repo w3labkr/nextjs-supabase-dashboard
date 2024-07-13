@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { defaultLng } from '@/i18next.config'
+import { setCookie } from '@/lib/utils'
 
 // Define a type for the slice state
 interface State {
@@ -24,12 +25,12 @@ export const slice = createSlice({
   reducers: {
     setAppTheme: (state, action: PayloadAction<State['theme']>) => {
       state.theme = action.payload
-      document.cookie = `app:theme=${action.payload};path=/`
+      setCookie('app:theme', action.payload)
     },
     setAppLanguage: (state, action: PayloadAction<State['language']>) => {
       state.language = action.payload
       document.documentElement.lang = action.payload
-      document.cookie = `app:language=${action.payload};path=/`
+      setCookie('app:language', action.payload)
     },
     setAppLayout: (state, action: PayloadAction<State['layout']>) => {
       state.layout = action.payload

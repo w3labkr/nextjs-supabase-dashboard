@@ -25,7 +25,7 @@ class SupabaseUploadAdapter {
         const supabase = createClient()
 
         const bucketId = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET!
-        const folder = localStorage.getItem('ckeditor5:uploadFolder')
+        const folder = globalThis.localStorage.getItem('ckeditor5:uploadFolder')
         const path = folder && file?.name ? `${folder}/${file?.name}` : null
 
         if (file && path) {
