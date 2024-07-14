@@ -79,7 +79,13 @@ export async function GET(request: NextRequest) {
   if (!status) listQuery.neq('status', 'trash')
   if (hasTag) listQuery.in('post_tags.tag_id', tagIds)
   if (q) listQuery.textSearch('title_description', q)
-  if (orderBy) listQuery.order(orderBy, { ascending: order === 'asc' })
+
+  if (orderBy === 'views') {
+    // listQuery.eq('postmeta.meta_key', 'views')
+    listQuery.order('meta(meta_value)', { ascending: order === 'asc' })
+  } else {
+    listQuery.order(orderBy, { ascending: order === 'asc' })
+  }
 
   if (limit) {
     listQuery.limit(limit)
@@ -88,6 +94,8 @@ export async function GET(request: NextRequest) {
   }
 
   const { data: list, error } = await listQuery
+
+  console.log(error)
 
   if (error) {
     return NextResponse.json(

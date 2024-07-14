@@ -12,7 +12,6 @@ import {
   EntryTags,
 } from '@/components/hentry'
 
-import { absoluteUrl } from '@/lib/utils'
 import { usePostsAPI } from '@/queries/client/posts'
 import { Post, User } from '@/types/database'
 
@@ -74,17 +73,13 @@ interface PostItemProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const PostItem = ({ post, ...props }: PostItemProps) => {
   const username = post?.author?.username
-  const slug = post?.slug
 
   return (
     <div
       className="flex flex-row flex-wrap gap-4 border-b py-4 md:flex-col"
       {...props}
     >
-      <EntryTitle
-        href={username && slug ? absoluteUrl(`/${username}/${slug}`) : '#'}
-        text={post?.title}
-      />
+      <EntryTitle href={post?.permalink ?? '#'} text={post?.title} />
       <EntrySummary text={post?.description} />
       <EntryTags
         pathname={username ? `/${username}` : undefined}

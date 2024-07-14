@@ -63,9 +63,10 @@ create policy "User can delete their own objects" on storage.objects
 truncate table cron.job_run_details restart identity;
 
 drop function if exists hourly_publish_future_posts;
+drop function if exists daily_delete_old_cron_run_details;
 
--- select cron.unschedule('hourly-publish-future-posts');
 select cron.schedule('hourly-publish-future-posts', '0 * * * *', 'SELECT hourly_publish_future_posts()');
+select cron.schedule('daily-delete-old-cron-run-details', '0 0 * * *', 'SELECT daily_delete_old_cron_run_details()');
 
 ----------------------------------------------------------------
 --                                                            --
@@ -633,9 +634,11 @@ declare
   new_slug text;
   slug_exists boolean;
   counter integer := 1;
+  old_permalink text;
 begin
   old_slug := new.slug;
   new_slug := old_slug;
+  old_permalink := new.permalink;
 
   select exists(select 1 from posts where user_id = new.user_id and slug = new_slug and id != coalesce(new.id, 0)) into slug_exists;
 
@@ -646,6 +649,7 @@ begin
   end loop;
 
   new.slug := new_slug;
+  new.permalink := replace(old_permalink, old_slug, new_slug);
   return new;
 end;
 $$ language plpgsql;
@@ -736,7 +740,7 @@ declare
 begin
   foreach r in array data loop
     insert into posts
-    (created_at,updated_at,deleted_at,date,user_id,type,status,password,title,slug,description,keywords,content,thumbnail_url,is_ban,banned_until)
+    (created_at,updated_at,deleted_at,date,user_id,type,status,password,title,slug,description,keywords,content,thumbnail_url,permalink,is_ban,banned_until)
     values
     (
       coalesce((r ->> 'created_at')::timestamptz, now()),
@@ -753,6 +757,7 @@ begin
       (r ->> 'keywords')::text,
       (r ->> 'content')::text,
       (r ->> 'thumbnail_url')::text,
+      (r ->> 'permalink')::text,
       coalesce((r ->> 'is_ban')::boolean, false),
       (r ->> 'banned_until')::timestamptz
     );
@@ -1286,6 +1291,17 @@ begin
 
     update postmeta set meta_value = null where post_id = r.id and meta_key = 'future_date';
   end loop;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
+create or replace function daily_delete_old_cron_run_details()
+returns void
+security definer set search_path = public
+as $$
+begin
+  delete from cron.job_run_details where start_time < now() - interval '30 days';
 end;
 $$ language plpgsql;
 

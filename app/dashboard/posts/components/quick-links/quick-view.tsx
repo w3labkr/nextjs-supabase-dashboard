@@ -12,15 +12,11 @@ interface QuickViewProps {
 const QuickView = ({ post }: QuickViewProps) => {
   const { t } = useTranslation()
 
-  const username = post?.author?.username
-  const slug = post?.slug
-
   return (
     <Link
-      href={username && slug ? `/${username}/${slug}` : '#'}
+      href={post?.permalink ?? '#'}
       className="text-xs text-blue-700 hover:underline dark:text-white"
       target="_blank"
-      rel="noopener noreferrer"
     >
       {t('view')}
     </Link>

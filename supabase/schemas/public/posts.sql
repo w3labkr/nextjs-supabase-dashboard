@@ -49,6 +49,7 @@ create table posts (
   keywords text,
   content text,
   thumbnail_url text,
+  permalink text,
   is_ban boolean default false not null,
   banned_until timestamptz
 );
@@ -87,9 +88,11 @@ declare
   new_slug text;
   slug_exists boolean;
   counter integer := 1;
+  old_permalink text;
 begin
   old_slug := new.slug;
   new_slug := old_slug;
+  old_permalink := new.permalink;
 
   select exists(select 1 from posts where user_id = new.user_id and slug = new_slug and id != coalesce(new.id, 0)) into slug_exists;
 
@@ -100,6 +103,7 @@ begin
   end loop;
 
   new.slug := new_slug;
+  new.permalink := replace(old_permalink, old_slug, new_slug);
   return new;
 end;
 $$ language plpgsql;
@@ -190,7 +194,7 @@ declare
 begin
   foreach r in array data loop
     insert into posts
-    (created_at,updated_at,deleted_at,date,user_id,type,status,password,title,slug,description,keywords,content,thumbnail_url,is_ban,banned_until)
+    (created_at,updated_at,deleted_at,date,user_id,type,status,password,title,slug,description,keywords,content,thumbnail_url,permalink,is_ban,banned_until)
     values
     (
       coalesce((r ->> 'created_at')::timestamptz, now()),
@@ -207,6 +211,7 @@ begin
       (r ->> 'keywords')::text,
       (r ->> 'content')::text,
       (r ->> 'thumbnail_url')::text,
+      (r ->> 'permalink')::text,
       coalesce((r ->> 'is_ban')::boolean, false),
       (r ->> 'banned_until')::timestamptz
     );

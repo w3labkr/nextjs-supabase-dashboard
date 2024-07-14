@@ -1,10 +1,15 @@
 export function absoluteUrl(path?: string): string {
   const origin = process.env.NEXT_PUBLIC_APP_URL!
-  const uri = `${origin}/${path}`
-  const sanitized = uri.replace(/\/+/g, '/').replace(/\/+$/, '')
-  const url = new URL(sanitized)
+  const uri = origin && path ? `${origin}/${path}` : origin
+  const sanitized = uri?.replace(/\/+/g, '/')?.replace(/\/+$/, '')
 
-  return url.toString()
+  return new URL(sanitized).toString()
+}
+
+export function relativeUrl(url: string): string {
+  const sanitized = url?.replace(/\/+/g, '/')?.replace(/\/+$/, '')
+
+  return sanitized?.replace(/^(?:\/\/|[^/]+)*\//, '/')
 }
 
 export function setUrn(path: string, query: string): string {

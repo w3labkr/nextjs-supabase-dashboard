@@ -9,7 +9,13 @@ import { Button, ButtonProps } from '@/components/ui/button'
 import { LucideIcon, type LucideIconName } from '@/lib/lucide-icon'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, setQueryString, generateRecentPosts, cn } from '@/lib/utils'
+import {
+  fetcher,
+  setQueryString,
+  generateRecentPosts,
+  cn,
+  relativeUrl,
+} from '@/lib/utils'
 import { useUserAPI } from '@/queries/client/users'
 import { PostAPI } from '@/types/api'
 
@@ -48,14 +54,13 @@ const AddDummyPost = ({
 
       if (!user) throw new Error('Require is not defined.')
 
-      const posts = generateRecentPosts(user?.id, 1)
+      const posts = generateRecentPosts(user, 1)
 
       for (let i = 0; i < posts.length; i++) {
         const post = posts[i]
-
-        const username = user?.username
-        const slug = post?.slug
-        const revalidatePaths = username && slug ? `/${username}/${slug}` : null
+        const revalidatePaths = post?.permalink
+          ? relativeUrl(post?.permalink)
+          : null
 
         const { error } = await fetcher<PostAPI>(
           `/api/v1/post?userId=${user?.id}`,

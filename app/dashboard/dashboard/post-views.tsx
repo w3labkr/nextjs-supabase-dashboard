@@ -16,7 +16,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 import { getMeta } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
-import { usePostViewsAPI } from '@/queries/client/posts'
+import { usePostViewsAPI, usePostsAPI } from '@/queries/client/posts'
 import { Post } from '@/types/database'
 
 interface PostViewsProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -25,15 +25,27 @@ const PostViews = (props: PostViewsProps) => {
   const { t } = useTranslation()
 
   const { user } = useAuth()
-  const { posts, isLoading } = usePostViewsAPI(user?.id ?? null, {
+  const { posts, isLoading } = usePostsAPI(user?.id ?? null, {
     // page: 1,
     // perPage: 10,
     postType: 'post',
     status: 'publish',
     // q: '',
+    orderBy: 'views',
+    // order: 'asc',
     order: 'desc',
     limit: 10,
   })
+
+  // const { posts, isLoading } = usePostsAPI(user?.id ?? null, {
+  //   // page: 1,
+  //   // perPage: 10,
+  //   postType: 'post',
+  //   status: 'publish',
+  //   // q: '',
+  //   order: 'desc',
+  //   limit: 10,
+  // })
 
   if (isLoading) {
     return <Skeleton className="h-60 w-full" />

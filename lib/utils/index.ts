@@ -11,6 +11,12 @@ export {
   httpStatusMessage,
 } from './http-status-codes'
 export { ApiError } from './error'
-export { absoluteUrl, setUrn, getQueryString, setQueryString } from './url'
+export {
+  absoluteUrl,
+  relativeUrl,
+  setUrn,
+  getQueryString,
+  setQueryString,
+} from './url'
 export { getMeta, setMeta, compareTags } from './functions'
 export { generateRecentPosts } from './dummy-text'

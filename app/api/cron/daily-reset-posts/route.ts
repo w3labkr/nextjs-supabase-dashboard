@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
   if (Array.isArray(users) && users?.length > 0) {
     for (let i = 0; i < users?.length; i++) {
       const { error } = await supabase.rpc('create_new_posts', {
-        data: generateRecentPosts(users[i]?.id, 11),
+        data: generateRecentPosts(users[i], 11),
       })
       if (error) continue
     }

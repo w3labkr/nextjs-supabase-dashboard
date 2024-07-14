@@ -10,13 +10,6 @@ import { fetcher } from '@/lib/utils'
 import { IpAPI } from '@/types/api'
 import { useAuth } from '@/hooks/use-auth'
 
-interface StorageValues {
-  visitorId: string
-  location: string
-  path: string
-  referrer: string
-}
-
 interface Browser {
   'browser.name': string
   'browser.version': string
@@ -29,30 +22,37 @@ interface Browser {
   [key: string]: string
 }
 
+interface StatisticsValues {
+  visitorId: string
+  href: string
+  referrer: string
+}
+
 const Statistics = () => {
   const pathname = usePathname()
   const { user } = useAuth()
 
   const setStatistics = React.useCallback(
-    async (values: StorageValues) => {
+    async (values: StatisticsValues) => {
       const ip = await fetcher<IpAPI>('/api/ip')
       const ua = globalThis?.navigator.userAgent
       const browser: Browser = flatten(Bowser.parse(ua))
 
-      const data = {
-        user_id: user?.id ?? null,
-        visitor_id: values?.visitorId,
-        title: document.title,
-        location: values.location,
-        path: values.path,
-        referrer: values.referrer,
-        ip,
-        browser,
-        user_agent: ua,
-      }
-
       const supabase = createClient()
-      const { error } = await supabase.rpc('set_statistics', { data })
+      const { error } = await supabase.rpc('set_statistics', {
+        data: {
+          user_id: user?.id ?? null,
+          visitor_id: values?.visitorId,
+          title: document.title,
+          location: values?.href,
+          path: globalThis?.location.pathname,
+          referrer: values?.referrer,
+          ip,
+          browser,
+          user_agent: ua,
+        },
+      })
+
       if (error) console.error(error)
     },
     [user?.id]
@@ -64,14 +64,13 @@ const Statistics = () => {
 
     const data = storage?.getItem('app:statistics') ?? '{}'
     const previous = JSON.parse(data)
-    const values: StorageValues = {
+    const values: StatisticsValues = {
       visitorId: previous?.visitorId ?? crypto.randomUUID(),
-      location: globalThis?.location.href,
-      path: globalThis?.location.pathname,
+      href: globalThis?.location.href,
       referrer:
-        previous?.location === globalThis?.location.href
+        previous?.href === globalThis?.location.href
           ? ''
-          : previous?.location ?? '',
+          : previous?.href ?? '',
     }
 
     storage?.setItem('app:statistics', JSON.stringify(values))

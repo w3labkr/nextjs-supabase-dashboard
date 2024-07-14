@@ -102,16 +102,13 @@ interface PostItemProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const PostItem = ({ post, ...props }: PostItemProps) => {
-  const { title, slug, description, date, author, meta } = post
+  const { title, description, date, author, meta } = post
   const username = author?.username
 
   return (
     <div className="space-y-2" {...props}>
       <div className="h-40 bg-secondary"></div>
-      <EntryTitle
-        href={username && slug ? absoluteUrl(`/${username}/${slug}`) : '#'}
-        text={title}
-      />
+      <EntryTitle href={post?.permalink ?? '#'} text={title} />
       <EntrySummary text={description} />
       <EntryTags pathname="/posts" meta={meta} />
       <div className="w-full text-sm">

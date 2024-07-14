@@ -2,7 +2,6 @@ import * as React from 'react'
 import Link from 'next/link'
 import dayjs from 'dayjs'
 
-import { absoluteUrl } from '@/lib/utils'
 import { type Translation } from '@/hooks/i18next'
 import { Post } from '@/types/database'
 
@@ -42,17 +41,10 @@ const RelatedPosts = async ({
 }
 
 const PreviousPost = ({ post }: { post: Post }) => {
-  const username = post?.author?.username
-  const slug = post?.slug
-
   return (
     <div className="grid gap-2">
       <h3 className="line-clamp-2 font-serif text-2xl underline hover:no-underline">
-        <Link
-          href={username && slug ? absoluteUrl(`/${username}/${slug}`) : '#'}
-        >
-          {post?.title}
-        </Link>
+        <Link href={post?.permalink ?? '#'}>{post?.title}</Link>
       </h3>
       <time dateTime={post?.date ?? undefined}>
         {dayjs(post?.date).format('MMMM D, YYYY')}
@@ -62,17 +54,10 @@ const PreviousPost = ({ post }: { post: Post }) => {
 }
 
 const NextPost = ({ post }: { post: Post }) => {
-  const username = post?.author?.username
-  const slug = post?.slug
-
   return (
     <div className="grid gap-2">
       <h3 className="line-clamp-2 font-serif text-2xl underline hover:no-underline">
-        <Link
-          href={username && slug ? absoluteUrl(`/${username}/${slug}`) : '#'}
-        >
-          {post?.title}
-        </Link>
+        <Link href={post?.permalink ?? '#'}>{post?.title}</Link>
       </h3>
       <time dateTime={post?.date ?? undefined}>
         {dayjs(post?.date).format('MMMM D, YYYY')}

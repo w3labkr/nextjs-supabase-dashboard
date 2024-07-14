@@ -230,6 +230,7 @@ export type Database = {
           is_ban: boolean
           keywords: string | null
           password: string | null
+          permalink: string | null
           slug: string | null
           status: string
           thumbnail_url: string | null
@@ -254,6 +255,7 @@ export type Database = {
           is_ban?: boolean
           keywords?: string | null
           password?: string | null
+          permalink?: string | null
           slug?: string | null
           status?: string
           thumbnail_url?: string | null
@@ -273,6 +275,7 @@ export type Database = {
           is_ban?: boolean
           keywords?: string | null
           password?: string | null
+          permalink?: string | null
           slug?: string | null
           status?: string
           thumbnail_url?: string | null
@@ -667,6 +670,7 @@ export type Database = {
           is_ban: boolean
           keywords: string | null
           password: string | null
+          permalink: string | null
           slug: string | null
           status: string
           thumbnail_url: string | null

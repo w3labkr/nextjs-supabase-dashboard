@@ -7,37 +7,41 @@ import { useFormContext, useWatch } from 'react-hook-form'
 
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 import { absoluteUrl } from '@/lib/utils'
+import { Input } from '@/components/ui/input'
 
-interface PermalinkProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface MetaboxPermalinkProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const Permalink = ({ className, ...props }: PermalinkProps) => {
+const MetaboxPermalink = ({ className, ...props }: MetaboxPermalinkProps) => {
   const { t } = useTranslation()
   const { post } = usePostForm()
-  const { control } = useFormContext()
+  const { control, register, setValue } = useFormContext()
 
   const watchSlug: string = useWatch({ control, name: 'slug' })
-  const [permalink, setPermalink] = React.useState<string>('')
+  const watchPermalink: string = useWatch({ control, name: 'permalink' })
 
   React.useEffect(() => {
     const username = post?.author?.username
     const slug = watchSlug ?? post?.slug
-    const url = username && slug ? absoluteUrl(`/${username}/${slug}`) : null
-    if (url) setPermalink(url)
-  }, [post, watchSlug])
+    const url = username && slug ? absoluteUrl(`/${username}/${slug}`) : ''
+    setValue('permalink', url, {
+      shouldDirty: true,
+      shouldValidate: true,
+    })
+  }, [post, watchSlug, setValue])
 
   return (
     <div className={className} {...props}>
+      <Input type="hidden" {...register('permalink')} />
       {t('permalink') + ': '}
       <Link
-        href={permalink ?? '#'}
+        href={watchPermalink ?? '#'}
         className="text-blue-700 underline hover:no-underline dark:text-white"
         target="_blank"
-        rel="noopener noreferrer"
       >
-        {decodeURIComponent(permalink)}
+        {decodeURIComponent(watchPermalink)}
       </Link>
     </div>
   )
 }
 
-export { Permalink }
+export { MetaboxPermalink }

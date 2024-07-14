@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/button'
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getMeta } from '@/lib/utils'
+import { fetcher, getMeta, relativeUrl } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 
 const MetaboxPublish = () => {
@@ -97,9 +97,9 @@ const DraftButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const username = post?.author?.username
-      const slug = post?.slug
-      const revalidatePaths = username && slug ? `/${username}/${slug}` : null
+      const revalidatePaths = post?.permalink
+        ? relativeUrl(post?.permalink)
+        : null
 
       const result = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
@@ -145,13 +145,7 @@ const ViewButton = () => {
   const onSubmit = async () => {
     try {
       setIsSubmitting(true)
-
-      if (!post) throw new Error('Require is not defined.')
-
-      const username = post?.author?.username
-      const slug = post?.slug
-
-      if (username && slug) router.push(`/${username}/${slug}`)
+      if (post?.permalink) router.push(post?.permalink)
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -187,9 +181,9 @@ const PreviewButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const username = post?.author?.username
-      const slug = post?.slug
-      const revalidatePaths = username && slug ? `/${username}/${slug}` : null
+      const revalidatePaths = post?.permalink
+        ? relativeUrl(post?.permalink)
+        : null
 
       const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
@@ -203,8 +197,8 @@ const PreviewButton = () => {
 
       mutate(`/api/v1/post?id=${post?.id}`)
 
-      if (username && slug) {
-        router.push(`${username}/${slug}?preview=true`)
+      if (post?.permalink) {
+        router.push(`${post?.permalink}?preview=true`)
       }
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
@@ -246,10 +240,9 @@ const TrashButton = () => {
       if (!post) throw new Error('Require is not defined.')
 
       const now = new Date().toISOString()
-
-      const username = post?.author?.username
-      const slug = post?.slug
-      const revalidatePaths = username && slug ? `/${username}/${slug}` : null
+      const revalidatePaths = post?.permalink
+        ? relativeUrl(post?.permalink)
+        : null
 
       const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
@@ -306,12 +299,11 @@ const PublishButton = () => {
       let status: string = visibility === 'private' ? 'private' : 'publish'
       if (future_date) status = 'future'
 
-      const now = new Date().toISOString()
       const data = { ...formValues, status }
-
-      const username = post?.author?.username
-      const slug = post?.slug
-      const revalidatePaths = username && slug ? `/${username}/${slug}` : null
+      const now = new Date().toISOString()
+      const revalidatePaths = post?.permalink
+        ? relativeUrl(post?.permalink)
+        : null
 
       const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',

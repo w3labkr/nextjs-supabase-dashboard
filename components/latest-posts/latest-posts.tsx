@@ -58,18 +58,11 @@ interface LatestItemProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const LatestItem = ({ post, ...props }: LatestItemProps) => {
-  const username = post?.author?.username
-  const slug = post?.slug
-
   return (
     <div className="text-sm leading-4" {...props}>
       <span>&bull;&nbsp;</span>
       <span className="font-serif hover:underline">
-        <Link
-          href={username && slug ? absoluteUrl(`/${username}/${slug}`) : '#'}
-        >
-          {post?.title}
-        </Link>
+        <Link href={post?.permalink ?? '#'}>{post?.title}</Link>
       </span>
     </div>
   )

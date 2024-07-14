@@ -14,7 +14,6 @@ import {
 
 import { Post, User } from '@/types/database'
 import { usePostsAPI } from '@/queries/client/posts'
-import { absoluteUrl } from '@/lib/utils'
 
 interface PostListProps extends React.HTMLAttributes<HTMLDivElement> {
   user: User
@@ -80,10 +79,7 @@ const PostItem = ({ post, ...props }: PostItemProps) => {
       className="flex flex-row flex-wrap gap-4 border-b py-4 md:flex-col"
       {...props}
     >
-      <EntryTitle
-        href={username && slug ? absoluteUrl(`/${username}/${slug}`) : '#'}
-        text={post?.title}
-      />
+      <EntryTitle href={post?.permalink ?? '#'} text={post?.title} />
       <EntrySummary text={post?.description} />
       <EntryTags
         pathname={username ? `/${username}` : undefined}

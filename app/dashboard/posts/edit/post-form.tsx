@@ -21,6 +21,7 @@ import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   MetaboxSlug,
+  MetaboxPermalink,
   MetaboxDescription,
   MetaboxKeywords,
   MetaboxRevisions,
@@ -30,7 +31,6 @@ import {
   MetaboxFutureDate,
   MetaboxTags,
 } from './components/metaboxes'
-import { Permalink } from './components/permalink'
 import { PostFormProvider } from './context/post-form-provider'
 
 import { usePostAPI } from '@/queries/client/posts'
@@ -49,6 +49,7 @@ const FormSchema = z.object({
   keywords: z.string().optional(),
   content: z.string().optional(),
   thumbnail_url: z.string().optional(),
+  permalink: z.string().nonempty(),
   meta: z.array(z.record(z.string(), z.any())).optional(),
 })
 
@@ -69,6 +70,7 @@ const PostForm = ({ id }: { id: number }) => {
       keywords: post?.keywords ?? '',
       content: post?.content ?? '',
       thumbnail_url: post?.thumbnail_url ?? '',
+      permalink: post?.permalink ?? '',
       meta: post?.meta ?? [],
     },
     shouldUnregister: true,
@@ -103,7 +105,8 @@ const PostForm = ({ id }: { id: number }) => {
             <div className="space-y-4">
               <div className="space-y-2">
                 <TitleField />
-                <Permalink className="text-sm" />
+                {/* <Permalink className="text-sm" /> */}
+                <MetaboxPermalink className="text-sm" />
               </div>
               <Editor />
               <div>

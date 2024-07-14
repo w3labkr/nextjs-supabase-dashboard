@@ -1,20 +1,19 @@
 ----------------------------------------------------------------
 --                                                            --
---                  Call a Postgres function                  --
+--                       Job Scheduling                       --
 --                                                            --
 ----------------------------------------------------------------
 
--- Call a Postgres function
--- https://supabase.com/docs/reference/javascript/rpc
-
-truncate table cron.job_run_details restart identity;
+select cron.unschedule('hourly-publish-future-posts');
+select cron.unschedule('daily-delete-old-cron-run-details');
 
 drop function if exists hourly_publish_future_posts;
+drop function if exists daily_delete_old_cron_run_details;
 
 ----------------------------------------------------------------
 
--- select cron.unschedule('hourly-publish-future-posts');
 select cron.schedule('hourly-publish-future-posts', '0 * * * *', 'SELECT hourly_publish_future_posts()');
+select cron.schedule('daily-delete-old-cron-run-details', '0 0 * * *', 'SELECT daily_delete_old_cron_run_details()');
 
 ----------------------------------------------------------------
 
@@ -37,5 +36,16 @@ begin
 
     update postmeta set meta_value = null where post_id = r.id and meta_key = 'future_date';
   end loop;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
+create or replace function daily_delete_old_cron_run_details()
+returns void
+security definer set search_path = public
+as $$
+begin
+  delete from cron.job_run_details where start_time < now() - interval '30 days';
 end;
 $$ language plpgsql;
