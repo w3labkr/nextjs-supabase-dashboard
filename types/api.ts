@@ -8,6 +8,8 @@ import {
   Tag,
   Vote,
   User,
+  Statistic,
+  PostRank,
 } from '@/types/database'
 
 export type UserAPI =
@@ -42,6 +44,10 @@ export type CountPostsAPI =
   | { data: CountPosts[]; count: number; error: null }
   | { data: null; count: null; error: Error }
 
+export type PostRankAPI =
+  | { data: PostRank[]; count: number; error: null }
+  | { data: null; count: null; error: Error }
+
 export type FavoriteAPI =
   | { data: Favorite | null; error: null }
   | { data: null; error: Error }
@@ -53,6 +59,14 @@ export type TagAPI =
 export type VoteAPI =
   | { data: Vote | null; error: null }
   | { data: null; error: Error }
+
+export type StatisticAPI =
+  | { data: Statistic | null; error: null }
+  | { data: null; error: Error }
+
+export type StatisticsAPI =
+  | { data: Statistic[]; count: number; error: null }
+  | { data: null; count: null; error: Error }
 
 export type CronAPI = { data: null; error: null } | { data: null; error: Error }
 

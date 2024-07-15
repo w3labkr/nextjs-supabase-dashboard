@@ -38,9 +38,9 @@ export type CountPosts = {
 }
 
 export type Post = Tables<'posts'> & {
-  num?: number
   author: Author | null
   meta?: PostMeta[]
+  num?: number
 }
 
 export type Favorite = Tables<'favorites'>
@@ -52,3 +52,12 @@ export type Tag = Tables<'tags'> & {
 }
 
 export type PostTag = Tables<'post_tags'>
+
+export type PostRank = {
+  id: number
+  title: string
+  views: number
+  num: number
+}
+
+export type Statistic = Tables<'statistics'>

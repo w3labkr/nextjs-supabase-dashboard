@@ -2,7 +2,7 @@
 
 import useSWR from 'swr'
 import { setQueryString } from '@/lib/utils'
-import { PostAPI, PostsAPI, CountPostsAPI } from '@/types/api'
+import { PostAPI, PostsAPI, CountPostsAPI, PostRankAPI } from '@/types/api'
 
 export function usePostAPI(
   id: number | null,
@@ -18,6 +18,39 @@ export function usePostAPI(
 
   return {
     post: data?.data ?? null,
+    error: error ?? data?.error ?? null,
+    isLoading,
+    isValidating,
+    mutate,
+  }
+}
+
+export function usePostsAPI(
+  userId: string | null,
+  params?: {
+    postType?: string
+    status?: string
+    isFavorite?: number
+    tag?: string
+    q?: string
+    orderBy?: string
+    order?: string
+    limit?: number
+    perPage?: number
+    page?: number
+  }
+) {
+  const query = setQueryString({ userId, ...params })
+  const url = query ? `/api/v1/post/list?${query}` : null
+
+  const { data, error, isLoading, isValidating, mutate } = useSWR<
+    PostsAPI,
+    Error
+  >(url)
+
+  return {
+    posts: data?.data ?? null,
+    count: data?.count ?? null,
     error: error ?? data?.error ?? null,
     isLoading,
     isValidating,
@@ -47,57 +80,21 @@ export function useCountPostsAPI(
   }
 }
 
-export function usePostsAPI(
+export function usePostRank(
   userId: string | null,
   params?: {
-    page?: number
-    perPage?: number
-    postType?: string
-    status?: string
-    isFavorite?: number
-    tag?: string
     q?: string
     orderBy?: string
     order?: string
-    limit?: number
-  }
-) {
-  const query = setQueryString({ userId, ...params })
-  const url = query ? `/api/v1/post/list?${query}` : null
-
-  const { data, error, isLoading, isValidating, mutate } = useSWR<
-    PostsAPI,
-    Error
-  >(url)
-
-  return {
-    posts: data?.data ?? null,
-    count: data?.count ?? null,
-    error: error ?? data?.error ?? null,
-    isLoading,
-    isValidating,
-    mutate,
-  }
-}
-
-export function usePostViewsAPI(
-  userId: string | null,
-  params?: {
-    page?: number
     perPage?: number
-    postType?: string
-    status?: string
-    q?: string
-    // orderBy?: string
-    order?: string
-    limit?: number
+    page?: number
   }
 ) {
   const query = setQueryString({ userId, ...params })
-  const url = query ? `/api/v1/post/views?${query}` : null
+  const url = query ? `/api/v1/post/rank?${query}` : null
 
   const { data, error, isLoading, isValidating, mutate } = useSWR<
-    PostsAPI,
+    PostRankAPI,
     Error
   >(url)
 

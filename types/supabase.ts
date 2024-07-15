@@ -320,6 +320,7 @@ export type Database = {
           ip: unknown | null
           location: string | null
           path: string | null
+          post_id: number
           referrer: string | null
           title: string | null
           user_agent: string | null
@@ -333,6 +334,7 @@ export type Database = {
           ip?: unknown | null
           location?: string | null
           path?: string | null
+          post_id: number
           referrer?: string | null
           title?: string | null
           user_agent?: string | null
@@ -346,6 +348,7 @@ export type Database = {
           ip?: unknown | null
           location?: string | null
           path?: string | null
+          post_id?: number
           referrer?: string | null
           title?: string | null
           user_agent?: string | null
@@ -353,6 +356,13 @@ export type Database = {
           visitor_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "statistics_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "statistics_user_id_fkey"
             columns: ["user_id"]
@@ -617,6 +627,10 @@ export type Database = {
         }
         Returns: string
       }
+      daily_delete_old_cron_run_details: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       generate_password: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -653,31 +667,21 @@ export type Database = {
           next_id: number
         }[]
       }
-      get_posts_by_meta: {
+      get_post_rank_by_views: {
         Args: {
-          metakey: string
-          datatype?: string
+          userid: string
+          q?: string
+          order_by?: string
           ascending?: boolean
+          per_page?: number
+          page?: number
+          head?: boolean
         }
         Returns: {
-          banned_until: string | null
-          content: string | null
-          created_at: string
-          date: string | null
-          deleted_at: string | null
-          description: string | null
           id: number
-          is_ban: boolean
-          keywords: string | null
-          password: string | null
-          permalink: string | null
-          slug: string | null
-          status: string
-          thumbnail_url: string | null
-          title: string | null
-          type: string
-          updated_at: string
-          user_id: string
+          path: string
+          title: string
+          views: number
         }[]
       }
       get_users: {

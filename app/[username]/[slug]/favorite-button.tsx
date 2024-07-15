@@ -15,23 +15,23 @@ import { FavoriteAPI } from '@/types/api'
 
 interface FavoriteButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  postId: number
+  id: number
 }
 
-const FavoriteButton = ({ postId, ...props }: FavoriteButtonProps) => {
+const FavoriteButton = ({ id, ...props }: FavoriteButtonProps) => {
   const { user } = useAuth()
 
   return user ? (
-    <SignedInAction postId={postId} {...props} />
+    <SignedInAction id={id} {...props} />
   ) : (
-    <SignedOutAction postId={postId} {...props} />
+    <SignedOutAction id={id} {...props} />
   )
 }
 
-const SignedInAction = ({ postId, ...props }: FavoriteButtonProps) => {
+const SignedInAction = ({ id, ...props }: FavoriteButtonProps) => {
   const { user } = useUserAPI()
   const { favorite } = useFavoriteAPI(null, {
-    postId,
+    postId: id,
     userId: user?.id ?? undefined,
   })
   const { mutate } = useSWRConfig()
@@ -52,7 +52,7 @@ const SignedInAction = ({ postId, ...props }: FavoriteButtonProps) => {
       if (!user) throw new Error('Require is not defined.')
 
       const { error } = await fetcher<FavoriteAPI>(
-        `/api/v1/favorite?postId=${postId}&userId=${user?.id}`,
+        `/api/v1/favorite?postId=${id}&userId=${user?.id}`,
         {
           method: 'POST',
           body: JSON.stringify({
@@ -65,7 +65,7 @@ const SignedInAction = ({ postId, ...props }: FavoriteButtonProps) => {
 
       setIsLike(!isLike)
 
-      mutate(`/api/v1/favorite?postId=${postId}&userId=${user?.id}`)
+      mutate(`/api/v1/favorite?postId=${id}&userId=${user?.id}`)
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -86,7 +86,7 @@ const SignedInAction = ({ postId, ...props }: FavoriteButtonProps) => {
   )
 }
 
-const SignedOutAction = ({ postId, ...props }: FavoriteButtonProps) => {
+const SignedOutAction = ({ id, ...props }: FavoriteButtonProps) => {
   const router = useRouter()
   const pathname = usePathname()
 

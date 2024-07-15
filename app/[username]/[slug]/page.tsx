@@ -10,6 +10,7 @@ import { EntryPublished, EntryAuthor, EntryTags } from '@/components/hentry'
 import { PostViews } from './post-views'
 import { FavoriteButton } from './favorite-button'
 import { RelatedPosts } from './related-posts'
+import { Statistics } from './statistics'
 
 import { absoluteUrl, cn } from '@/lib/utils'
 import { getTranslation } from '@/hooks/i18next'
@@ -108,8 +109,8 @@ export default async function PostPage({
               />
             </div>
             <div className="flex space-x-4">
-              <PostViews postId={id} />
-              <FavoriteButton postId={id} />
+              <PostViews meta={post?.meta} />
+              <FavoriteButton id={id} />
             </div>
           </div>
           <PostThumbnail
@@ -126,6 +127,7 @@ export default async function PostPage({
         </div>
       </main>
       <Footer />
+      <Statistics post={post} />
     </>
   )
 }

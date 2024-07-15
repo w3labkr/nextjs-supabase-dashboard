@@ -20,7 +20,6 @@ drop function if exists get_adjacent_post_id;
 drop function if exists create_new_posts;
 drop function if exists handle_new_post;
 drop function if exists truncate_posts;
-drop function if exists get_posts_by_meta;
 
 drop function if exists title_description;
 drop function if exists title_keywords;
@@ -152,12 +151,14 @@ begin
   if q is not null then
     return query
     select p.status, count(*)
-    from posts p where p.user_id = userid and p.type = posttype and to_tsvector(title) @@ to_tsquery(q)
+    from posts p
+    where p.user_id = userid and p.type = posttype and to_tsvector(title) @@ to_tsquery(q)
     group by p.status;
   else
     return query
     select p.status, count(*)
-    from posts p where p.user_id = userid and p.type = posttype
+    from posts p
+    where p.user_id = userid and p.type = posttype
     group by p.status;
   end if;
 end;
@@ -242,36 +243,6 @@ security definer set search_path = public
 as $$
 begin
   truncate table posts restart identity cascade;
-end;
-$$ language plpgsql;
-
-----------------------------------------------------------------
-
-create or replace function get_posts_by_meta(
-  metakey text,
-  datatype text = 'text',
-  ascending boolean = null
-)
-returns setof posts
-security definer set search_path = public
-as $$
-begin
-  if ascending is not null and datatype = 'integer' then
-    return query
-    select p.* from posts p join postmeta m on p.id = m.post_id where m.meta_key = metakey
-    order by
-      case ascending when true then m.meta_value::integer else 0 end asc,
-      case ascending when false then m.meta_value::integer else 0 end desc;
-  elsif ascending is not null then
-    return query
-    select p.* from posts p join postmeta m on p.id = m.post_id where m.meta_key = metakey
-    order by
-      case ascending when true then m.meta_value else 0 end asc,
-      case ascending when false then m.meta_value else 0 end desc;
-  else
-    return query
-    select p.* from posts p join postmeta m on p.id = m.post_id where m.meta_key = metakey;
-  end if;
 end;
 $$ language plpgsql;
 

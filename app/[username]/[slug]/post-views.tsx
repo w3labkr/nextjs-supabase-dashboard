@@ -1,35 +1,17 @@
 'use client'
 
 import * as React from 'react'
-import { createClient } from '@/supabase/client'
 
 import { LucideIcon } from '@/lib/lucide-icon'
 import { getMeta } from '@/lib/utils'
-import { usePostAPI } from '@/queries/client/posts'
+import { PostMeta } from '@/types/database'
 
 interface PostViewsProps extends React.HTMLAttributes<HTMLDivElement> {
-  postId: number
+  meta?: PostMeta
 }
 
-const PostViews = ({ postId, ...props }: PostViewsProps) => {
-  const { post } = usePostAPI(postId ?? null)
-  const views = getMeta(post?.meta, 'views', '0')
-  const [mounted, setMounted] = React.useState<boolean>(false)
-
-  React.useEffect(() => setMounted(true), [])
-
-  React.useEffect(() => {
-    if (mounted) {
-      const setPostViews = async () => {
-        const supabase = createClient()
-        const { error } = await supabase.rpc('set_post_views', {
-          postid: postId,
-        })
-        if (error) console.error(error)
-      }
-      setPostViews()
-    }
-  }, [mounted])
+const PostViews = ({ meta, ...props }: PostViewsProps) => {
+  const views = getMeta(meta, 'views', '0')
 
   return (
     <div className="flex items-center" {...props}>

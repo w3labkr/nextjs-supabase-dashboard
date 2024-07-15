@@ -16,8 +16,8 @@ export async function GET(request: NextRequest) {
   const order = (searchParams.get('order') as string) ?? 'asc'
   const limit = +((searchParams.get('limit') as string) ?? '0')
 
-  let page = +((searchParams.get('page') as string) ?? '1')
   let perPage = +((searchParams.get('perPage') as string) ?? '50')
+  let page = +((searchParams.get('page') as string) ?? '1')
   let offset = (page - 1) * perPage
 
   if (page < 1) page = 1
@@ -27,10 +27,9 @@ export async function GET(request: NextRequest) {
   const supabase = createClient()
 
   let tagIds: number[] = []
-  let hasTag: boolean = false
 
   if (tag) {
-    const slug: string[] = tag
+    const tagSlugs: string[] = tag
       ?.split(',')
       ?.map((s: string) => s.trim())
       ?.filter(Boolean)
@@ -38,7 +37,7 @@ export async function GET(request: NextRequest) {
     const tagQuery = supabase
       .from('tags')
       .select('*, meta:tagmeta(*)')
-      .in('slug', slug)
+      .in('slug', tagSlugs)
 
     if (userId) tagQuery.eq('user_id', userId)
 
@@ -46,14 +45,13 @@ export async function GET(request: NextRequest) {
 
     if (Array.isArray(data) && data?.length > 0) {
       tagIds = data?.map((x: Tag) => x.id)
-      hasTag = true
     }
   }
 
   let columns: string = '*, author:users(*), meta:postmeta(*)'
 
   if (isFavorite) columns += ', favorites!inner(*)'
-  if (hasTag) columns += ', post_tags!inner(*)'
+  if (tagIds?.length > 0) columns += ', post_tags!inner(*)'
 
   let match: Record<string, any> = {}
 
@@ -69,23 +67,26 @@ export async function GET(request: NextRequest) {
 
   if (Object.keys(match).length > 0) totalQuery.match(match)
   if (!status) totalQuery.neq('status', 'trash')
-  if (hasTag) totalQuery.in('post_tags.tag_id', tagIds)
+  if (tagIds?.length > 0) totalQuery.in('post_tags.tag_id', tagIds)
   if (q) totalQuery.textSearch('title_description', q)
 
   const total = await totalQuery
+
+  if (total?.error) {
+    return NextResponse.json(
+      { data: null, count: null, error: total?.error },
+      { status: 400 }
+    )
+  }
+
   const listQuery = supabase.from('posts').select(columns)
 
   if (Object.keys(match).length > 0) listQuery.match(match)
   if (!status) listQuery.neq('status', 'trash')
-  if (hasTag) listQuery.in('post_tags.tag_id', tagIds)
+  if (tagIds?.length > 0) listQuery.in('post_tags.tag_id', tagIds)
   if (q) listQuery.textSearch('title_description', q)
 
-  if (orderBy === 'views') {
-    // listQuery.eq('postmeta.meta_key', 'views')
-    listQuery.order('meta(meta_value)', { ascending: order === 'asc' })
-  } else {
-    listQuery.order(orderBy, { ascending: order === 'asc' })
-  }
+  listQuery.order(orderBy, { ascending: order === 'asc' })
 
   if (limit) {
     listQuery.limit(limit)
@@ -94,8 +95,6 @@ export async function GET(request: NextRequest) {
   }
 
   const { data: list, error } = await listQuery
-
-  console.log(error)
 
   if (error) {
     return NextResponse.json(

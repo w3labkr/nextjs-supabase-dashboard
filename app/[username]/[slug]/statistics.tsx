@@ -9,6 +9,7 @@ import { createClient } from '@/supabase/client'
 import { fetcher } from '@/lib/utils'
 import { IpAPI } from '@/types/api'
 import { useAuth } from '@/hooks/use-auth'
+import { Post } from '@/types/database'
 
 interface Browser {
   'browser.name': string
@@ -22,18 +23,22 @@ interface Browser {
   [key: string]: string
 }
 
-interface StatisticsValues {
+interface StorageValues {
   visitorId: string
   href: string
   referrer: string
 }
 
-const Statistics = () => {
+interface StatisticsProps {
+  post: Post
+}
+
+const Statistics = ({ post }: StatisticsProps) => {
   const pathname = usePathname()
   const { user } = useAuth()
 
   const setStatistics = React.useCallback(
-    async (values: StatisticsValues) => {
+    async (values: StorageValues) => {
       const ip = await fetcher<IpAPI>('/api/ip')
       const ua = globalThis?.navigator.userAgent
       const browser: Browser = flatten(Bowser.parse(ua))
@@ -41,8 +46,9 @@ const Statistics = () => {
       const supabase = createClient()
       const { error } = await supabase.rpc('set_statistics', {
         data: {
-          user_id: user?.id ?? null,
           visitor_id: values?.visitorId,
+          user_id: user?.id ?? null,
+          post_id: post?.id,
           title: document.title,
           location: values?.href,
           path: globalThis?.location.pathname,
@@ -52,10 +58,9 @@ const Statistics = () => {
           user_agent: ua,
         },
       })
-
-      if (error) console.error(error)
+      if (error) console.log(error)
     },
-    [user?.id]
+    [user?.id, post?.id]
   )
 
   React.useEffect(() => {
@@ -64,7 +69,7 @@ const Statistics = () => {
 
     const data = storage?.getItem('app:statistics') ?? '{}'
     const previous = JSON.parse(data)
-    const values: StatisticsValues = {
+    const values: StorageValues = {
       visitorId: previous?.visitorId ?? crypto.randomUUID(),
       href: globalThis?.location.href,
       referrer:
@@ -81,4 +86,4 @@ const Statistics = () => {
   return null
 }
 
-export { Statistics }
+export { Statistics, type StatisticsProps }

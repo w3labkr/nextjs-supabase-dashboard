@@ -14,38 +14,22 @@ import {
 } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
-import { getMeta } from '@/lib/utils'
-import { useAuth } from '@/hooks/use-auth'
-import { usePostViewsAPI, usePostsAPI } from '@/queries/client/posts'
-import { Post } from '@/types/database'
+import { usePostRank } from '@/queries/client/posts'
+import { User, PostRank } from '@/types/database'
 
-interface PostViewsProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface PostRankProps extends React.HTMLAttributes<HTMLDivElement> {
+  user: User
+}
 
-const PostViews = (props: PostViewsProps) => {
+const PostRank = ({ user, ...props }: PostRankProps) => {
   const { t } = useTranslation()
-
-  const { user } = useAuth()
-  const { posts, isLoading } = usePostsAPI(user?.id ?? null, {
-    // page: 1,
-    // perPage: 10,
-    postType: 'post',
-    status: 'publish',
+  const { posts, isLoading } = usePostRank(user?.id, {
     // q: '',
     orderBy: 'views',
-    // order: 'asc',
     order: 'desc',
-    limit: 10,
+    perPage: 10,
+    page: 1,
   })
-
-  // const { posts, isLoading } = usePostsAPI(user?.id ?? null, {
-  //   // page: 1,
-  //   // perPage: 10,
-  //   postType: 'post',
-  //   status: 'publish',
-  //   // q: '',
-  //   order: 'desc',
-  //   limit: 10,
-  // })
 
   if (isLoading) {
     return <Skeleton className="h-60 w-full" />
@@ -68,8 +52,8 @@ const PostViews = (props: PostViewsProps) => {
           </thead>
           <tbody>
             {Array.isArray(posts) && posts?.length > 0 ? (
-              posts?.map((post: Post) => (
-                <ListItem key={post?.id} post={post} />
+              posts?.map((post: PostRank) => (
+                <ListItem key={post?.num} post={post} />
               ))
             ) : (
               <EmptyItem />
@@ -83,24 +67,22 @@ const PostViews = (props: PostViewsProps) => {
 }
 
 interface ListItemProps extends React.HTMLAttributes<HTMLTableRowElement> {
-  post: Post
+  post: PostRank
 }
 
 const ListItem = ({ post, ...props }: ListItemProps) => {
-  const views = getMeta(post?.meta, 'views', '0')
-
   return (
     <tr {...props}>
       <td>{post?.num}</td>
       <td>
         <Link
-          href={`/dashboard/posts/edit?id=${post?.id}`}
+          href={`/dashboard/posts/edit=${post?.id}`}
           className="line-clamp-1 font-serif hover:underline"
         >
           {post?.title}
         </Link>
       </td>
-      <td className="text-right">{views?.toLocaleString()}</td>
+      <td className="text-right">{post?.views?.toLocaleString()}</td>
     </tr>
   )
 }
@@ -115,4 +97,4 @@ const EmptyItem = () => {
   )
 }
 
-export { PostViews }
+export { PostRank }

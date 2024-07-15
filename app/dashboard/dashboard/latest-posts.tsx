@@ -14,16 +14,16 @@ import {
 } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
-import { useAuth } from '@/hooks/use-auth'
 import { usePostsAPI } from '@/queries/client/posts'
-import { Post } from '@/types/database'
+import { Post, User } from '@/types/database'
 
-interface LatestPostsProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface LatestPostsProps extends React.HTMLAttributes<HTMLDivElement> {
+  user: User
+}
 
-const LatestPosts = (props: LatestPostsProps) => {
+const LatestPosts = ({ user, ...props }: LatestPostsProps) => {
   const { t } = useTranslation()
-  const { user } = useAuth()
-  const { posts, isLoading } = usePostsAPI(user?.id ?? null, {
+  const { posts, isLoading } = usePostsAPI(user?.id, {
     // page: 1,
     // perPage: 5,
     postType: 'post',

@@ -20,8 +20,6 @@ export async function getPostAPI(
 export async function getPostsAPI(
   userId: string | null,
   params?: {
-    page?: number
-    perPage?: number
     postType?: string
     status?: string
     isFavorite?: number
@@ -30,6 +28,8 @@ export async function getPostsAPI(
     orderBy?: string
     order?: string
     limit?: number
+    perPage?: number
+    page?: number
   }
 ) {
   const query = setQueryString({ userId, ...params })

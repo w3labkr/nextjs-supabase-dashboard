@@ -31,7 +31,7 @@ export async function generateMetadata(
 
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL!),
-    title: user?.full_name,
+    title: `${username} Favorites`,
     description: user?.bio,
     openGraph: {
       title: user?.full_name ?? undefined,
