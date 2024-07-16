@@ -3,8 +3,7 @@ import { createClient } from '@/supabase/server'
 import { ApiError, getMeta, revalidates } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
-import { pricingPlans, type PricingPlan } from '@/config/site'
-import { PostMeta } from '@/types/database'
+import { TagMeta } from '@/types/database'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -19,9 +18,9 @@ export async function GET(request: NextRequest) {
   if (slug) match = { ...match, slug }
 
   const supabase = createClient()
-  const { data: post, error } = await supabase
-    .from('posts')
-    .select('*, author:users(*), meta:postmeta(*)')
+  const { data: tag, error } = await supabase
+    .from('tags')
+    .select('*, meta:tagmeta(*)')
     .match(match)
     .maybeSingle()
 
@@ -29,7 +28,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
-  return NextResponse.json({ data: post, error: null })
+  return NextResponse.json({ data: tag, error: null })
 }
 
 export async function POST(request: NextRequest) {
@@ -49,8 +48,8 @@ export async function POST(request: NextRequest) {
 
   const supabase = createClient()
   const { data: old } = await supabase
-    .from('posts')
-    .select('*, author:users(*), meta:postmeta(*)')
+    .from('tags')
+    .select('*, meta:tagmeta(*)')
     .eq('id', id)
     .single()
 
@@ -58,13 +57,13 @@ export async function POST(request: NextRequest) {
     // Views updates are done on the client side.
     const denies: string[] = ['views']
 
-    const findNewMeta: PostMeta[] = meta
-      ?.filter((r: PostMeta) => !denies.includes(r.meta_key))
-      ?.filter((r: PostMeta) => !r.id)
+    const findNewMeta: TagMeta[] = meta
+      ?.filter((r: TagMeta) => !denies.includes(r.meta_key))
+      ?.filter((r: TagMeta) => !r.id)
 
     if (Array.isArray(findNewMeta) && findNewMeta?.length > 0) {
       const { error } = await supabase
-        .from('postmeta')
+        .from('tagmeta')
         .insert(findNewMeta)
         .select('*')
       if (error) {
@@ -72,41 +71,27 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const findExistsMeta: PostMeta[] = meta
-      ?.filter((r: PostMeta) => !denies.includes(r.meta_key))
-      ?.filter((r: PostMeta) => r.id)
-      ?.filter((r: PostMeta) => r.meta_value !== getMeta(old?.meta, r.meta_key))
+    const findExistsMeta: TagMeta[] = meta
+      ?.filter((r: TagMeta) => !denies.includes(r.meta_key))
+      ?.filter((r: TagMeta) => r.id)
+      ?.filter((r: TagMeta) => r.meta_value !== getMeta(old?.meta, r.meta_key))
 
     if (Array.isArray(findExistsMeta) && findExistsMeta?.length > 0) {
       const { error } = await supabase
-        .from('postmeta')
+        .from('tagmeta')
         .upsert(findExistsMeta)
         .select('*')
       if (error) {
         return NextResponse.json({ data: null, error }, { status: 400 })
       }
     }
-
-    const findTags: PostMeta[] = meta
-      ?.filter((r: PostMeta) => r.meta_key === 'tags')
-      ?.filter((r: PostMeta) => r.meta_value !== getMeta(old?.meta, r.meta_key))
-
-    if (Array.isArray(findTags) && findTags?.length > 0) {
-      const { error } = await supabase.rpc('set_post_tags', {
-        userid: user_id,
-        postid: +id,
-      })
-      if (error) {
-        return NextResponse.json({ data: null, error }, { status: 400 })
-      }
-    }
   } // end of meta
 
-  const { data: post, error } = await supabase
-    .from('posts')
+  const { data: tag, error } = await supabase
+    .from('tags')
     .update(formData)
     .eq('id', id)
-    .select('*, author:users(*), meta:postmeta(*)')
+    .select('*, meta:tagmeta(*)')
     .single()
 
   if (error) {
@@ -114,7 +99,7 @@ export async function POST(request: NextRequest) {
   }
 
   return NextResponse.json({
-    data: post,
+    data: tag,
     error: null,
     revalidated: revalidates(options),
     now: Date.now(),
@@ -138,40 +123,10 @@ export async function PUT(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const plan = pricingPlans.find((r: PricingPlan) => r.name === user?.plan)
-
-  if (!plan) {
-    return NextResponse.json(
-      { data: null, error: new ApiError(401) },
-      { status: 400 }
-    )
-  }
-
-  const total = await supabase
-    .from('posts')
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', userId)
-
-  if (total?.error) {
-    return NextResponse.json(
-      { data: null, error: total?.error },
-      { status: 400 }
-    )
-  }
-
-  const count = total?.count ?? 0
-
-  if (plan?.post > -1 && count >= plan?.post) {
-    return NextResponse.json(
-      { data: null, error: new ApiError(402) },
-      { status: 402 }
-    )
-  }
-
-  const { data: post, error } = await supabase
-    .from('posts')
+  const { data: tag, error } = await supabase
+    .from('tags')
     .insert(formData)
-    .select('*, author:users(*), meta:postmeta(*)')
+    .select('*, meta:tagmeta(*)')
     .single()
 
   if (error) {
@@ -182,14 +137,14 @@ export async function PUT(request: NextRequest) {
     // Views updates are done on the client side.
     const denies: string[] = ['views']
 
-    const findNewMeta: PostMeta[] = meta
-      ?.filter((r: PostMeta) => !denies.includes(r.meta_key))
-      ?.filter((r: PostMeta) => !r.id)
-      ?.map((r: PostMeta) => ({ ...r, post_id: post?.id }))
+    const findNewMeta: TagMeta[] = meta
+      ?.filter((r: TagMeta) => !denies.includes(r.meta_key))
+      ?.filter((r: TagMeta) => !r.id)
+      ?.map((r: TagMeta) => ({ ...r, tag_id: tag?.id }))
 
     if (Array.isArray(findNewMeta) && findNewMeta?.length > 0) {
       const { error } = await supabase
-        .from('postmeta')
+        .from('tagmeta')
         .insert(findNewMeta)
         .select('*')
       if (error) {
@@ -197,12 +152,10 @@ export async function PUT(request: NextRequest) {
       }
     }
 
-    const findExistsMeta: PostMeta[] = meta
-      ?.filter((r: PostMeta) => !denies.includes(r.meta_key))
-      ?.filter((r: PostMeta) => r.id)
-      ?.filter(
-        (r: PostMeta) => r.meta_value !== getMeta(post?.meta, r.meta_key)
-      )
+    const findExistsMeta: TagMeta[] = meta
+      ?.filter((r: TagMeta) => !denies.includes(r.meta_key))
+      ?.filter((r: TagMeta) => r.id)
+      ?.filter((r: TagMeta) => r.meta_value !== getMeta(tag?.meta, r.meta_key))
 
     if (Array.isArray(findExistsMeta) && findExistsMeta?.length > 0) {
       const { error } = await supabase
@@ -213,26 +166,10 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ data: null, error }, { status: 400 })
       }
     }
-
-    const findTags: PostMeta[] = meta
-      ?.filter((r: PostMeta) => r.meta_key === 'tags')
-      ?.filter(
-        (r: PostMeta) => r.meta_value !== getMeta(post?.meta, r.meta_key)
-      )
-
-    if (Array.isArray(findTags) && findTags?.length > 0) {
-      const { error } = await supabase.rpc('set_post_tags', {
-        userid: userId,
-        postid: post?.id,
-      })
-      if (error) {
-        return NextResponse.json({ data: null, error }, { status: 400 })
-      }
-    }
   } // end of meta
 
   return NextResponse.json({
-    data: post,
+    data: tag,
     error: null,
     revalidated: revalidates(options),
     now: Date.now(),
@@ -255,7 +192,7 @@ export async function DELETE(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const { error } = await supabase.from('posts').delete().eq('id', id)
+  const { error } = await supabase.from('tags').delete().eq('id', id)
 
   if (error) {
     return NextResponse.json({ data: null, error }, { status: 400 })

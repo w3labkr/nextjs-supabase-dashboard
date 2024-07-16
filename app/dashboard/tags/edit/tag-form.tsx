@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import dynamic from 'next/dynamic'
 
 import { useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -21,57 +20,35 @@ import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   MetaboxSlug,
-  MetaboxPermalink,
   MetaboxDescription,
-  MetaboxKeywords,
-  MetaboxRevisions,
-  MetaboxThumbnail,
   MetaboxPublish,
-  MetaboxRectriction,
-  MetaboxFutureDate,
-  MetaboxTags,
 } from './components/metaboxes'
-import { PostFormProvider } from './context/post-form-provider'
+import { TagFormProvider } from './context/tag-form-provider'
 
-import { usePostAPI } from '@/queries/client/posts'
-
-const Editor = dynamic(() => import('./components/editor'), {
-  ssr: false,
-  loading: () => <Skeleton className="h-96 w-full" />,
-})
+import { useTagAPI } from '@/queries/client/tags'
 
 const FormSchema = z.object({
   user_id: z.string().nonempty().uuid(),
-  date: z.string().datetime({ offset: true }).optional(),
-  title: z.string().nonempty(),
+  name: z.string().nonempty(),
   slug: z.string().nonempty(),
   description: z.string().optional(),
-  keywords: z.string().optional(),
-  content: z.string().optional(),
-  thumbnail_url: z.string().optional(),
-  permalink: z.string().nonempty(),
   meta: z.array(z.record(z.string(), z.any())).optional(),
 })
 
 type FormValues = z.infer<typeof FormSchema>
 
-const PostForm = ({ id }: { id: number }) => {
-  const { post, isLoading } = usePostAPI(id)
+const TagForm = ({ id }: { id: number }) => {
+  const { tag, isLoading } = useTagAPI(id)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     mode: 'onSubmit',
     values: {
-      user_id: post?.user_id ?? '',
-      date: post?.date ?? '',
-      title: post?.title ?? '',
-      slug: post?.slug ?? '',
-      description: post?.description ?? '',
-      keywords: post?.keywords ?? '',
-      content: post?.content ?? '',
-      thumbnail_url: post?.thumbnail_url ?? '',
-      permalink: post?.permalink ?? '',
-      meta: post?.meta ?? [],
+      user_id: tag?.user_id ?? '',
+      name: tag?.name ?? '',
+      slug: tag?.slug ?? '',
+      description: tag?.description ?? '',
+      meta: tag?.meta ?? [],
     },
     shouldUnregister: true,
   })
@@ -96,36 +73,24 @@ const PostForm = ({ id }: { id: number }) => {
   }
 
   return (
-    <PostFormProvider value={{ post }}>
+    <TagFormProvider value={{ tag }}>
       <Form {...form}>
         <UserIdField />
         <MetaField />
         <form method="POST" noValidate>
           <div className="relative grid lg:grid-cols-[1fr_280px] lg:gap-8">
             <div className="space-y-4">
-              <div className="space-y-2">
-                <TitleField />
-                <MetaboxPermalink className="text-sm" />
-              </div>
-              <Editor />
-              <div>
-                <MetaboxSlug />
-                <MetaboxDescription />
-                <MetaboxKeywords />
-                {/* <MetaboxRevisions /> */}
-              </div>
+              <NameField />
+              <MetaboxSlug />
+              <MetaboxDescription />
             </div>
             <div className="space-y-0">
               <MetaboxPublish />
-              <MetaboxFutureDate />
-              <MetaboxRectriction />
-              <MetaboxThumbnail />
-              <MetaboxTags />
             </div>
           </div>
         </form>
       </Form>
-    </PostFormProvider>
+    </TagFormProvider>
   )
 }
 
@@ -165,24 +130,27 @@ const MetaField = () => {
   )
 }
 
-const TitleField = () => {
+const NameField = () => {
   const { t } = useTranslation()
   const { control } = useFormContext()
 
   return (
-    <FormField
-      control={control}
-      name="title"
-      render={({ field }) => (
-        <FormItem>
-          <FormControl>
-            <Input placeholder={t('please_enter_your_text')} {...field} />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+    <div>
+      <div className="py-2">{t('name')}</div>
+      <FormField
+        control={control}
+        name="name"
+        render={({ field }) => (
+          <FormItem>
+            <FormControl>
+              <Input placeholder={t('please_enter_your_text')} {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </div>
   )
 }
 
-export { PostForm }
+export { TagForm }

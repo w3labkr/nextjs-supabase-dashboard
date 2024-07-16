@@ -57,13 +57,13 @@ const PostList = () => {
 
   const { user } = useAuth()
   const { count } = usePostsAPI(user?.id ?? null, {
-    page,
-    perPage,
     postType,
     status,
     q,
     orderBy,
     order,
+    perPage,
+    page,
   })
 
   const total = count ?? 0
@@ -72,14 +72,14 @@ const PostList = () => {
     <PagingProvider
       value={{
         total,
-        page,
-        perPage,
-        pageSize,
+        q,
         postType,
         status,
-        q,
         orderBy,
         order,
+        pageSize,
+        perPage,
+        page,
       }}
     >
       <BulkActionsProvider>
@@ -151,13 +151,13 @@ const Body = () => {
   const paging = usePaging()
   const { user } = useAuth()
   const { posts } = usePostsAPI(user?.id ?? null, {
-    page: paging?.page,
-    perPage: paging?.perPage,
     postType: paging?.postType,
     status: paging?.status,
     q: paging?.q,
     orderBy: paging?.orderBy,
     order: paging?.order,
+    perPage: paging?.perPage,
+    page: paging?.page,
   })
 
   const { checks, setChecks } = useBulkActions()
@@ -198,7 +198,7 @@ const Body = () => {
         {posts === null ? (
           <LoadingItem />
         ) : Array.isArray(posts) && posts?.length > 0 ? (
-          posts?.map((post: Post) => <PostItem key={post?.id} post={post} />)
+          posts?.map((post: Post) => <ListItem key={post?.id} post={post} />)
         ) : (
           <EmptyItem />
         )}
@@ -207,7 +207,7 @@ const Body = () => {
   )
 }
 
-const PostItem = ({ post }: { post: Post }) => {
+const ListItem = ({ post }: { post: Post }) => {
   const { t } = useTranslation()
   const { checks, setChecks } = useBulkActions()
 
@@ -255,7 +255,7 @@ const PostItem = ({ post }: { post: Post }) => {
         )}
       </TableCell>
       <TableCell align="center">
-        {getMeta(post?.meta, 'views', '0')?.toLocaleString()}
+        {(getMeta(post?.meta, 'views', '0') * 1)?.toLocaleString()}
       </TableCell>
       <TableCell align="center">
         {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm:ss')}
@@ -365,13 +365,13 @@ const Footer = () => {
   const paging = usePaging()
   const { user } = useAuth()
   const { posts } = usePostsAPI(user?.id ?? null, {
-    page: paging?.page,
-    perPage: paging?.perPage,
     postType: paging?.postType,
     status: paging?.status,
     q: paging?.q,
     orderBy: paging?.orderBy,
     order: paging?.order,
+    perPage: paging?.perPage,
+    page: paging?.page,
   })
 
   if (!posts) return null

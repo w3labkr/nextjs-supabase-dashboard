@@ -30,13 +30,6 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       id: 2,
-      href: '/dashboard/posts',
-      text: 'posts',
-      translate: 'yes',
-      iconName: 'StickyNote',
-    },
-    {
-      id: 3,
       href: '/dashboard/media',
       text: 'media',
       translate: 'yes',
@@ -44,12 +37,19 @@ export const dashboardConfig: DashboardConfig = {
       disabled: true,
     },
     {
+      id: 3,
+      href: '/dashboard/posts',
+      text: 'posts',
+      translate: 'yes',
+      iconName: 'StickyNote',
+    },
+    {
       id: 4,
       href: '/dashboard/tags',
       text: 'tags',
       translate: 'yes',
       iconName: 'Tag',
-      disabled: true,
+      disabled: false,
     },
     {
       id: 5,

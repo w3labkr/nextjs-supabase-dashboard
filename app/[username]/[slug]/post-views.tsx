@@ -16,7 +16,7 @@ const PostViews = ({ meta, ...props }: PostViewsProps) => {
   return (
     <div className="flex items-center" {...props}>
       <LucideIcon name="Eye" className="mr-2 size-5 min-w-5" />
-      {views?.toLocaleString()}
+      {(views * 1)?.toLocaleString()}
     </div>
   )
 }

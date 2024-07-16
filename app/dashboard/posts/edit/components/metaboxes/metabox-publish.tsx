@@ -70,7 +70,7 @@ const MetaboxPublish = () => {
             <li className="flex items-center">
               <LucideIcon name="BarChart" className="mr-2 size-4 min-w-4" />
               {`${t('post_views')}: `}
-              {views?.toLocaleString()}
+              {(views * 1)?.toLocaleString()}
             </li>
           </ul>
           <div className="flex justify-between">
@@ -97,6 +97,7 @@ const DraftButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
+      const formValues = getValues()
       const revalidatePaths = post?.permalink
         ? relativeUrl(post?.permalink)
         : null
@@ -104,7 +105,7 @@ const DraftButton = () => {
       const result = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
-          data: { ...getValues(), status: 'draft' },
+          data: { ...formValues, status: 'draft' },
           options: { revalidatePaths },
         }),
       })
@@ -181,6 +182,7 @@ const PreviewButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
+      const formValues = getValues()
       const revalidatePaths = post?.permalink
         ? relativeUrl(post?.permalink)
         : null
@@ -188,7 +190,7 @@ const PreviewButton = () => {
       const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
-          data: { ...getValues(), status: 'draft' },
+          data: { ...formValues, status: 'draft' },
           options: { revalidatePaths },
         }),
       })
@@ -239,6 +241,7 @@ const TrashButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
+      const formValues = getValues()
       const now = new Date().toISOString()
       const revalidatePaths = post?.permalink
         ? relativeUrl(post?.permalink)
@@ -247,7 +250,7 @@ const TrashButton = () => {
       const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
-          data: { ...getValues(), status: 'trash', deleted_at: now },
+          data: { ...formValues, status: 'trash', deleted_at: now },
           options: { revalidatePaths },
         }),
       })
