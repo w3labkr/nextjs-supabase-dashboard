@@ -16,7 +16,6 @@ const QuickView = ({ post }: QuickViewProps) => {
     <Link
       href={post?.permalink ?? '#'}
       className="text-xs text-blue-700 hover:underline dark:text-white"
-      target="_blank"
     >
       {t('view')}
     </Link>

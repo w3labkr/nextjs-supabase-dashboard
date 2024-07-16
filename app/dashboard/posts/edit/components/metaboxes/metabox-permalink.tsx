@@ -36,7 +36,6 @@ const MetaboxPermalink = ({ className, ...props }: MetaboxPermalinkProps) => {
       <Link
         href={watchPermalink ?? '#'}
         className="text-blue-700 underline hover:no-underline dark:text-white"
-        target="_blank"
       >
         {decodeURIComponent(watchPermalink)}
       </Link>
