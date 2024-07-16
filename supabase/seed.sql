@@ -63,10 +63,10 @@ create policy "User can delete their own objects" on storage.objects
 truncate table cron.job_run_details restart identity;
 
 drop function if exists hourly_publish_future_posts;
-drop function if exists daily_delete_old_cron_run_details;
+drop function if exists daily_delete_old_cron_job_run_details;
 
 select cron.schedule('hourly-publish-future-posts', '0 * * * *', 'SELECT hourly_publish_future_posts()');
-select cron.schedule('daily-delete-old-cron-run-details', '0 0 * * *', 'SELECT daily_delete_old_cron_run_details()');
+select cron.schedule('daily-delete-old-cron-job-run-details', '0 0 * * *', 'SELECT daily_delete_old_cron_job_run_details()');
 
 ----------------------------------------------------------------
 --                                                            --
@@ -100,6 +100,7 @@ drop function if exists handle_has_set_password;
 drop function if exists verify_user_password;
 drop function if exists handle_new_user;
 drop function if exists create_new_user;
+drop function if exists delete_user;
 drop function if exists assign_user_data;
 
 drop function if exists handle_username_changed_at;
@@ -257,6 +258,18 @@ $$ language plpgsql;
 
 ----------------------------------------------------------------
 
+create or replace function delete_user(useremail text)
+returns void
+as $$
+begin
+  if exists (select 1 from auth.users where email = useremail) then
+    delete from auth.users where email = useremail;
+  end if;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
 create or replace function handle_new_user()
 returns trigger
 security definer set search_path = public
@@ -370,6 +383,17 @@ security definer set search_path = public
 as $$
 begin
   update users set username_changed_at = now() where id = new.id;
+
+  update posts
+  set permalink = replace(permalink, old.username, new.username)
+  where user_id = new.id and permalink like '%/'|| old.username ||'/%';
+
+  update statistics
+  set path = replace(path, old.username, new.username),
+      location = replace(location, old.username, new.username),
+      referrer = replace(referrer, old.username, new.username)
+  where path like '/'|| old.username ||'/%';
+
   return new;
 end;
 $$ language plpgsql;
@@ -1321,7 +1345,7 @@ $$ language plpgsql;
 
 ----------------------------------------------------------------
 
-create or replace function daily_delete_old_cron_run_details()
+create or replace function daily_delete_old_cron_job_run_details()
 returns void
 security definer set search_path = public
 as $$
@@ -1337,6 +1361,7 @@ $$ language plpgsql;
 ----------------------------------------------------------------
 
 -- select create_new_user('username@example.com', '123456789');
+-- select delete_user('username@example.com');
 
 select assign_user_data();
 

@@ -7,7 +7,7 @@ import { getMeta } from '@/lib/utils'
 import { PostMeta } from '@/types/database'
 
 interface PostViewsProps extends React.HTMLAttributes<HTMLDivElement> {
-  meta?: PostMeta
+  meta?: PostMeta[]
 }
 
 const PostViews = ({ meta, ...props }: PostViewsProps) => {

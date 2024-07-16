@@ -15,6 +15,7 @@ drop function if exists generate_username;
 drop function if exists handle_has_set_password;
 drop function if exists verify_user_password;
 drop function if exists handle_new_user;
+drop function if exists delete_user;
 drop function if exists create_new_user;
 drop function if exists assign_user_data;
 
@@ -118,6 +119,18 @@ begin
   end if;
 
   return user_id;
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
+create or replace function delete_user(useremail text)
+returns void
+as $$
+begin
+  if exists (select 1 from auth.users where email = useremail) then
+    delete from auth.users where email = useremail;
+  end if;
 end;
 $$ language plpgsql;
 

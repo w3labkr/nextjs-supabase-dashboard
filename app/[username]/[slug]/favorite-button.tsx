@@ -12,26 +12,27 @@ import { useAuth } from '@/hooks/use-auth'
 import { useFavoriteAPI } from '@/queries/client/favorites'
 import { useUserAPI } from '@/queries/client/users'
 import { FavoriteAPI } from '@/types/api'
+import { Post } from '@/types/database'
 
 interface FavoriteButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  id: number
+  post: Post
 }
 
-const FavoriteButton = ({ id, ...props }: FavoriteButtonProps) => {
+const FavoriteButton = ({ post, ...props }: FavoriteButtonProps) => {
   const { user } = useAuth()
 
   return user ? (
-    <SignedInAction id={id} {...props} />
+    <SignedInAction post={post} {...props} />
   ) : (
-    <SignedOutAction id={id} {...props} />
+    <SignedOutAction post={post} {...props} />
   )
 }
 
-const SignedInAction = ({ id, ...props }: FavoriteButtonProps) => {
+const SignedInAction = ({ post, ...props }: FavoriteButtonProps) => {
   const { user } = useUserAPI()
   const { favorite } = useFavoriteAPI(null, {
-    postId: id,
+    postId: post?.id,
     userId: user?.id ?? undefined,
   })
   const { mutate } = useSWRConfig()
@@ -52,7 +53,7 @@ const SignedInAction = ({ id, ...props }: FavoriteButtonProps) => {
       if (!user) throw new Error('Require is not defined.')
 
       const { error } = await fetcher<FavoriteAPI>(
-        `/api/v1/favorite?postId=${id}&userId=${user?.id}`,
+        `/api/v1/favorite?postId=${post?.id}&userId=${user?.id}`,
         {
           method: 'POST',
           body: JSON.stringify({
@@ -65,7 +66,7 @@ const SignedInAction = ({ id, ...props }: FavoriteButtonProps) => {
 
       setIsLike(!isLike)
 
-      mutate(`/api/v1/favorite?postId=${id}&userId=${user?.id}`)
+      mutate(`/api/v1/favorite?postId=${post?.id}&userId=${user?.id}`)
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -86,7 +87,7 @@ const SignedInAction = ({ id, ...props }: FavoriteButtonProps) => {
   )
 }
 
-const SignedOutAction = ({ id, ...props }: FavoriteButtonProps) => {
+const SignedOutAction = ({ post, ...props }: FavoriteButtonProps) => {
   const router = useRouter()
   const pathname = usePathname()
 

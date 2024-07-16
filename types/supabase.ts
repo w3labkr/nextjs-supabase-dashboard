@@ -627,8 +627,14 @@ export type Database = {
         }
         Returns: string
       }
-      daily_delete_old_cron_run_details: {
+      daily_delete_old_cron_job_run_details: {
         Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      delete_user: {
+        Args: {
+          useremail: string
+        }
         Returns: undefined
       }
       generate_password: {

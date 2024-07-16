@@ -5,15 +5,15 @@
 ----------------------------------------------------------------
 
 select cron.unschedule('hourly-publish-future-posts');
-select cron.unschedule('daily-delete-old-cron-run-details');
+select cron.unschedule('daily-delete-old-cron-job-run-details');
 
 drop function if exists hourly_publish_future_posts;
-drop function if exists daily_delete_old_cron_run_details;
+drop function if exists daily_delete_old_cron_job_run_details;
 
 ----------------------------------------------------------------
 
 select cron.schedule('hourly-publish-future-posts', '0 * * * *', 'SELECT hourly_publish_future_posts()');
-select cron.schedule('daily-delete-old-cron-run-details', '0 0 * * *', 'SELECT daily_delete_old_cron_run_details()');
+select cron.schedule('daily-delete-old-cron-job-run-details', '0 0 * * *', 'SELECT daily_delete_old_cron_job_run_details()');
 
 ----------------------------------------------------------------
 
@@ -41,7 +41,7 @@ $$ language plpgsql;
 
 ----------------------------------------------------------------
 
-create or replace function daily_delete_old_cron_run_details()
+create or replace function daily_delete_old_cron_job_run_details()
 returns void
 security definer set search_path = public
 as $$

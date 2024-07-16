@@ -88,7 +88,7 @@ export default async function PostPage({
   })
 
   const { t } = await getTranslation()
-  const { id, date, title, content, thumbnail_url, author, meta } = post
+  const { date, title, content, thumbnail_url, author, meta } = post
 
   return (
     <>
@@ -110,7 +110,7 @@ export default async function PostPage({
             </div>
             <div className="flex space-x-4">
               <PostViews meta={post?.meta} />
-              <FavoriteButton id={id} />
+              <FavoriteButton post={post} />
             </div>
           </div>
           <PostThumbnail

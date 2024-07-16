@@ -97,6 +97,17 @@ security definer set search_path = public
 as $$
 begin
   update users set username_changed_at = now() where id = new.id;
+
+  update posts
+  set permalink = replace(permalink, old.username, new.username)
+  where user_id = new.id and permalink like '%/'|| old.username ||'/%';
+
+  update statistics
+  set path = replace(path, old.username, new.username),
+      location = replace(location, old.username, new.username),
+      referrer = replace(referrer, old.username, new.username)
+  where path like '/'|| old.username ||'/%';
+
   return new;
 end;
 $$ language plpgsql;
