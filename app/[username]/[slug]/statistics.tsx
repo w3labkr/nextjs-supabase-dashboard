@@ -58,7 +58,7 @@ const Statistics = ({ post }: StatisticsProps) => {
           user_agent: ua,
         },
       })
-      if (error) console.log(error)
+      // if (error) console.log(error)
     },
     [user?.id, post?.id]
   )

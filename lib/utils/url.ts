@@ -8,8 +8,9 @@ export function absoluteUrl(path?: string): string {
 
 export function relativeUrl(url: string): string {
   const sanitized = url?.replace(/\/+/g, '/')?.replace(/\/+$/, '')
+  const new_url = new URL(sanitized)
 
-  return sanitized?.replace(/^(?:\/\/|[^/]+)*\//, '/')
+  return new_url.toString().substring(new_url.origin.length)
 }
 
 export function setUrn(path: string, query: string): string {
