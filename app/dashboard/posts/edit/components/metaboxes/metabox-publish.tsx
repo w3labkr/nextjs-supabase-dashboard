@@ -18,16 +18,16 @@ import { Button } from '@/components/ui/button'
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getMeta, relativeUrl } from '@/lib/utils'
+import { fetcher, getMetaValue, relativeUrl } from '@/lib/utils'
 import { PostAPI } from '@/types/api'
 
 const MetaboxPublish = () => {
   const { t } = useTranslation()
   const { post } = usePostForm()
 
-  const visibility = getMeta(post?.meta, 'visibility')
-  const views = getMeta(post?.meta, 'views', '0')
-  const future_date = getMeta(post?.meta, 'future_date')
+  const visibility = getMetaValue(post?.meta, 'visibility')
+  const views = getMetaValue(post?.meta, 'views', '0')
+  const future_date = getMetaValue(post?.meta, 'future_date')
 
   const dateText = React.useMemo(() => {
     if (future_date) {
@@ -70,7 +70,7 @@ const MetaboxPublish = () => {
             <li className="flex items-center">
               <LucideIcon name="BarChart" className="mr-2 size-4 min-w-4" />
               {`${t('post_views')}: `}
-              {(views * 1)?.toLocaleString()}
+              {+views?.toLocaleString()}
             </li>
           </ul>
           <div className="flex justify-between">
@@ -226,14 +226,9 @@ const TrashButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { post } = usePostForm()
-  const { getValues, handleSubmit, unregister } = useFormContext()
+  const { handleSubmit } = useFormContext()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
-
-  React.useEffect(() => {
-    unregister('slug')
-    router.refresh()
-  }, [unregister, router])
 
   const onSubmit = async () => {
     try {
@@ -241,7 +236,6 @@ const TrashButton = () => {
 
       if (!post) throw new Error('Require is not defined.')
 
-      const formValues = getValues()
       const now = new Date().toISOString()
       const revalidatePaths = post?.permalink
         ? relativeUrl(post?.permalink)
@@ -250,7 +244,7 @@ const TrashButton = () => {
       const { error } = await fetcher<PostAPI>(`/api/v1/post?id=${post?.id}`, {
         method: 'POST',
         body: JSON.stringify({
-          data: { ...formValues, status: 'trash', deleted_at: now },
+          data: { status: 'trash', deleted_at: now, user_id: post?.user_id },
           options: { revalidatePaths },
         }),
       })
@@ -296,8 +290,8 @@ const PublishButton = () => {
       if (!post) throw new Error('Require is not defined.')
 
       const formValues = getValues()
-      const visibility = getMeta(formValues?.meta, 'visibility')
-      const future_date = getMeta(formValues?.meta, 'future_date')
+      const visibility = getMetaValue(formValues?.meta, 'visibility')
+      const future_date = getMetaValue(formValues?.meta, 'future_date')
 
       let status: string = visibility === 'private' ? 'private' : 'publish'
       if (future_date) status = 'future'

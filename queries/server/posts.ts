@@ -27,9 +27,9 @@ export async function getPostsAPI(
     q?: string
     orderBy?: string
     order?: string
-    limit?: number
     perPage?: number
     page?: number
+    limit?: number
   }
 ) {
   const query = setQueryString({ userId, ...params })

@@ -3,7 +3,9 @@
 import * as React from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
+import Link from 'next/link'
 
+import { CheckedState } from '@radix-ui/react-checkbox'
 import {
   Table,
   TableBody,
@@ -25,21 +27,19 @@ import {
   useBulkActions,
 } from './components/bulk-actions'
 
-import { Post, Tag } from '@/types/database'
+import { Tag } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 import { useTagsAPI } from '@/queries/client/tags'
-import { CheckedState } from '@radix-ui/react-checkbox'
-import Link from 'next/link'
 import { useUserAPI } from '@/queries/client/users'
 
 const TagList = () => {
   const searchParams = useSearchParams()
-  const page = +((searchParams.get('page') as string) ?? '1')
-  const perPage = +((searchParams.get('perPage') as string) ?? '10')
-  const pageSize = +((searchParams.get('pageSize') as string) ?? '10')
   const q = searchParams.get('q') as string
   const orderBy = (searchParams.get('orderBy') as string) ?? 'id'
   const order = (searchParams.get('order') as string) ?? 'desc'
+  const perPage = +((searchParams.get('perPage') as string) ?? '10')
+  const page = +((searchParams.get('page') as string) ?? '1')
+  const pageSize = +((searchParams.get('pageSize') as string) ?? '10')
 
   const { user } = useAuth()
   const { count } = useTagsAPI(user?.id ?? null, {
@@ -55,13 +55,13 @@ const TagList = () => {
   return (
     <PagingProvider
       value={{
-        total,
         q,
         orderBy,
         order,
-        pageSize,
         perPage,
         page,
+        pageSize,
+        total,
       }}
     >
       <BulkActionsProvider>
@@ -139,51 +139,48 @@ const Body = () => {
 }
 
 const ListItem = ({ tag }: { tag: Tag }) => {
-  const { user } = useUserAPI()
   const { checks, setChecks } = useBulkActions()
+  const { user } = useUserAPI()
+  const { id, num, name, slug, description, post_tags = [] } = tag
 
   return (
     <TableRow>
       <TableCell>
         <Checkbox
-          checked={checks?.some((x: Post) => x.id === tag?.id)}
+          checked={checks?.some((x: Tag) => x.id === id)}
           onCheckedChange={(checked: CheckedState) => {
             const value = checked
               ? [...checks, tag]
-              : checks?.filter((x: Post) => x.id !== tag?.id)
+              : checks?.filter((x: Tag) => x.id !== id)
             setChecks(value)
           }}
         />
       </TableCell>
-      <TableCell align="center">{tag?.num}</TableCell>
+      <TableCell align="center">{num}</TableCell>
       <TableCell>
         <div className="flex items-center space-x-2">
           <div className="line-clamp-1">
-            <span className="break-all">{tag?.name}</span>
+            <span className="break-all">{name}</span>
           </div>
         </div>
         <QuickLinks tag={tag} />
       </TableCell>
-      <TableCell>{tag?.slug}</TableCell>
+      <TableCell>{slug}</TableCell>
       <TableCell align="center">
         <Link
-          href={
-            user?.username && tag?.slug
-              ? `/${user?.username}?tag=${tag?.slug}`
-              : '#'
-          }
+          href={user?.username && slug ? `/${user?.username}?tag=${slug}` : '#'}
           className="text-blue-700 underline underline-offset-4 hover:no-underline"
         >
-          {tag?.post_tags?.length?.toLocaleString()}
+          {post_tags?.length?.toLocaleString()}
         </Link>
       </TableCell>
-      <TableCell>{tag?.description}</TableCell>
+      <TableCell>{description}</TableCell>
     </TableRow>
   )
 }
 
 interface QuickLinksProps extends React.HTMLAttributes<HTMLDivElement> {
-  tag: Post
+  tag: Tag
 }
 
 const QuickLinks = ({ tag, ...props }: QuickLinksProps) => {

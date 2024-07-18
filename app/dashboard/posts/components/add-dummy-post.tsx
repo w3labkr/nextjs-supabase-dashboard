@@ -83,13 +83,13 @@ const AddDummyPost = ({
 
         const listSearchParams = setQueryString({
           userId: user?.id,
-          page: +((searchParams.get('page') as string) ?? '1'),
-          perPage: +((searchParams.get('perPage') as string) ?? '10'),
           postType: (searchParams.get('postType') as string) ?? 'post',
           status: searchParams.get('status') as string,
           q: searchParams.get('q') as string,
           orderBy: (searchParams.get('orderBy') as string) ?? 'id',
           order: (searchParams.get('order') as string) ?? 'desc',
+          perPage: +((searchParams.get('perPage') as string) ?? '10'),
+          page: +((searchParams.get('page') as string) ?? '1'),
         })
 
         mutate(`/api/v1/post?userId=${user?.id}`)

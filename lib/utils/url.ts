@@ -6,7 +6,13 @@ export function absoluteUrl(path?: string): string {
   return new URL(sanitized).toString()
 }
 
+export function isAbsoluteUrl(url: string): boolean {
+  return /^(?:[a-zA-Z+]+:\/\/)/.test(url)
+}
+
 export function relativeUrl(url: string): string {
+  if (!isAbsoluteUrl(url)) return url
+
   const sanitized = url?.replace(/\/+/g, '/')?.replace(/\/+$/, '')
   const new_url = new URL(sanitized)
 

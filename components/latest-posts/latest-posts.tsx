@@ -9,36 +9,36 @@ import { usePostsAPI } from '@/queries/client/posts'
 
 interface LatestPostsProps extends React.HTMLAttributes<HTMLDivElement> {
   userId: string | null
-  page?: number
-  perPage?: number
   postType?: string
   status?: string
   q?: string
   orderBy?: string
   order?: 'asc' | 'desc'
+  perPage?: number
+  page?: number
   limit?: number
 }
 
 const LatestPosts = ({
   userId,
-  page = 1,
-  perPage = 10,
   postType = 'post',
   status = 'publish',
   q,
   orderBy = 'id',
   order = 'desc',
+  perPage = 10,
+  page = 1,
   limit,
   ...props
 }: LatestPostsProps) => {
   const { posts } = usePostsAPI(userId, {
-    page,
-    perPage,
     postType,
     status,
     q,
     orderBy,
     order,
+    perPage,
+    page,
     limit,
   })
 

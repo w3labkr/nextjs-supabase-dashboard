@@ -11,7 +11,7 @@ import {
   fetcher,
   setQueryString,
   setMeta,
-  getMeta,
+  getMetaValue,
   relativeUrl,
 } from '@/lib/utils'
 import { slugify } from '@/lib/slugify'
@@ -34,7 +34,7 @@ const QuickPublish = ({ post, ...props }: QuickPublishProps) => {
     try {
       setIsSubmitting(true)
 
-      const visibility = getMeta(post?.meta, 'visibility')
+      const visibility = getMetaValue(post?.meta, 'visibility')
       const now = new Date().toISOString()
       const data = {
         status: visibility === 'private' ? 'private' : 'publish',
@@ -67,13 +67,13 @@ const QuickPublish = ({ post, ...props }: QuickPublishProps) => {
 
       const listSearchParams = setQueryString({
         userId: post?.user_id,
-        page: paging?.page,
-        perPage: paging?.perPage,
         postType: paging?.postType,
         status: paging?.status,
         q: paging?.q,
         orderBy: paging?.orderBy,
         order: paging?.order,
+        perPage: paging?.perPage,
+        page: paging?.page,
       })
 
       mutate(`/api/v1/post?id=${post?.id}`)

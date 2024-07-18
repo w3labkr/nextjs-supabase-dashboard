@@ -2,7 +2,6 @@ import * as React from 'react'
 
 import { Title } from '@/components/title'
 import { AddPost } from '../components/add-post'
-
 import { BackLink } from './components/back-link'
 import { PostForm } from './post-form'
 

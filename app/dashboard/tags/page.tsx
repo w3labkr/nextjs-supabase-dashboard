@@ -4,6 +4,7 @@ import { Separator } from '@/components/ui/separator'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
+import { AddTag } from './components/add-tag'
 import { TagList } from './tag-list'
 
 export default function TagsPage() {
@@ -13,6 +14,11 @@ export default function TagsPage() {
         <div>
           <Title translate="yes">tag_list</Title>
           <Description translate="yes">create_and_manage_tags</Description>
+        </div>
+        <div className="flex space-x-2 align-bottom">
+          <AddTag variant="outline" startIconName="Plus" translate="yes">
+            new_tag
+          </AddTag>
         </div>
       </div>
       <Separator />

@@ -36,7 +36,7 @@ import {
   fetcher,
   setQueryString,
   setMeta,
-  getMeta,
+  getMetaValue,
   relativeUrl,
 } from '@/lib/utils'
 import { slugify } from '@/lib/slugify'
@@ -70,8 +70,8 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
 
   const getData = React.useCallback((action: string, post: Post) => {
     const user_id = post?.user_id
-    const visibility = getMeta(post?.meta, 'visibility')
-    const future_date = getMeta(post?.meta, 'future_date')
+    const visibility = getMetaValue(post?.meta, 'visibility')
+    const future_date = getMetaValue(post?.meta, 'future_date')
     const now = new Date().toISOString()
 
     if (action === 'draft') {
@@ -153,13 +153,13 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
 
         const listSearchParams = setQueryString({
           userId: post?.user_id,
-          page: paging?.page,
-          perPage: paging?.perPage,
           postType: paging?.postType,
           status: paging?.status,
           q: paging?.q,
           orderBy: paging?.orderBy,
           order: paging?.order,
+          perPage: paging?.perPage,
+          page: paging?.page,
         })
 
         mutate(`/api/v1/post?id=${post?.id}`)

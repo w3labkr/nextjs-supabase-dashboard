@@ -3,10 +3,10 @@
 import * as React from 'react'
 
 interface PagingContextProps {
-  total: number
-  page: number
   perPage: number
+  page: number
   pageSize: number
+  total: number
   [key: string]: any
 }
 

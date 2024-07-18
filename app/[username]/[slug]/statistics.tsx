@@ -49,7 +49,7 @@ const Statistics = ({ post }: StatisticsProps) => {
           visitor_id: values?.visitorId,
           user_id: user?.id ?? null,
           post_id: post?.id,
-          title: document.title,
+          title: globalThis?.document.title,
           location: values?.href,
           path: globalThis?.location.pathname,
           referrer: values?.referrer,

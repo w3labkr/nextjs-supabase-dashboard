@@ -1,23 +1,19 @@
 'use client'
 
 import * as React from 'react'
-import { useTranslation } from 'react-i18next'
 
-import { useForm, useFormContext } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+import { Form } from '@/components/ui/form'
 import { Skeleton } from '@/components/ui/skeleton'
+import {
+  FieldMeta,
+  FieldName,
+  FieldUserId,
+  FieldPostTags,
+} from './components/fields'
 import {
   MetaboxSlug,
   MetaboxDescription,
@@ -33,6 +29,7 @@ const FormSchema = z.object({
   slug: z.string().nonempty(),
   description: z.string().optional(),
   meta: z.array(z.record(z.string(), z.any())).optional(),
+  post_tags: z.array(z.record(z.string(), z.any())).optional(),
 })
 
 type FormValues = z.infer<typeof FormSchema>
@@ -49,6 +46,7 @@ const TagForm = ({ id }: { id: number }) => {
       slug: tag?.slug ?? '',
       description: tag?.description ?? '',
       meta: tag?.meta ?? [],
+      post_tags: tag?.post_tags ?? [],
     },
     shouldUnregister: true,
   })
@@ -58,15 +56,11 @@ const TagForm = ({ id }: { id: number }) => {
       <div className="relative grid gap-10 lg:grid-cols-[1fr_280px]">
         <div className="mx-auto w-full min-w-0 space-y-4">
           <Skeleton className="h-16 w-full" />
-          <Skeleton className="h-96 w-full" />
           <Skeleton className="h-32 w-full" />
           <Skeleton className="h-60 w-full" />
         </div>
         <div className="space-y-4">
           <Skeleton className="h-60 w-full" />
-          <Skeleton className="h-24 w-full" />
-          <Skeleton className="h-24 w-full" />
-          <Skeleton className="h-24 w-full" />
         </div>
       </div>
     )
@@ -75,12 +69,13 @@ const TagForm = ({ id }: { id: number }) => {
   return (
     <TagFormProvider value={{ tag }}>
       <Form {...form}>
-        <UserIdField />
-        <MetaField />
+        <FieldUserId />
+        <FieldMeta />
+        <FieldPostTags />
         <form method="POST" noValidate>
           <div className="relative grid lg:grid-cols-[1fr_280px] lg:gap-8">
             <div className="space-y-4">
-              <NameField />
+              <FieldName />
               <MetaboxSlug />
               <MetaboxDescription />
             </div>
@@ -91,65 +86,6 @@ const TagForm = ({ id }: { id: number }) => {
         </form>
       </Form>
     </TagFormProvider>
-  )
-}
-
-const UserIdField = () => {
-  const { control } = useFormContext()
-
-  return (
-    <FormField
-      control={control}
-      name="user_id"
-      render={({ field }) => (
-        <FormItem>
-          <FormControl>
-            <input type="hidden" {...field} />
-          </FormControl>
-        </FormItem>
-      )}
-    />
-  )
-}
-
-const MetaField = () => {
-  const { control } = useFormContext()
-
-  return (
-    <FormField
-      control={control}
-      name="meta"
-      render={({ field }) => (
-        <FormItem>
-          <FormControl>
-            <input type="hidden" {...field} />
-          </FormControl>
-        </FormItem>
-      )}
-    />
-  )
-}
-
-const NameField = () => {
-  const { t } = useTranslation()
-  const { control } = useFormContext()
-
-  return (
-    <div>
-      <div className="py-2">{t('name')}</div>
-      <FormField
-        control={control}
-        name="name"
-        render={({ field }) => (
-          <FormItem>
-            <FormControl>
-              <Input placeholder={t('please_enter_your_text')} {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-    </div>
   )
 }
 

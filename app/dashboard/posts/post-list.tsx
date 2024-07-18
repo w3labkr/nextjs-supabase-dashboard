@@ -38,7 +38,7 @@ import {
   useBulkActions,
 } from './components/bulk-actions'
 
-import { cn, getMeta } from '@/lib/utils'
+import { cn, getMetaValue } from '@/lib/utils'
 import { Post } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 import { usePostsAPI, useCountPostsAPI } from '@/queries/client/posts'
@@ -46,14 +46,14 @@ import { CheckedState } from '@radix-ui/react-checkbox'
 
 const PostList = () => {
   const searchParams = useSearchParams()
-  const page = +((searchParams.get('page') as string) ?? '1')
-  const perPage = +((searchParams.get('perPage') as string) ?? '10')
-  const pageSize = +((searchParams.get('pageSize') as string) ?? '10')
   const postType = (searchParams.get('postType') as string) ?? 'post'
   const status = searchParams.get('status') as string
   const q = searchParams.get('q') as string
   const orderBy = (searchParams.get('orderBy') as string) ?? 'id'
   const order = (searchParams.get('order') as string) ?? 'desc'
+  const perPage = +((searchParams.get('perPage') as string) ?? '10')
+  const page = +((searchParams.get('page') as string) ?? '1')
+  const pageSize = +((searchParams.get('pageSize') as string) ?? '10')
 
   const { user } = useAuth()
   const { count } = usePostsAPI(user?.id ?? null, {
@@ -71,15 +71,15 @@ const PostList = () => {
   return (
     <PagingProvider
       value={{
-        total,
-        q,
         postType,
         status,
+        q,
         orderBy,
         order,
-        pageSize,
         perPage,
         page,
+        pageSize,
+        total,
       }}
     >
       <BulkActionsProvider>
@@ -211,6 +211,9 @@ const ListItem = ({ post }: { post: Post }) => {
   const { t } = useTranslation()
   const { checks, setChecks } = useBulkActions()
 
+  const visibility = getMetaValue(post?.meta, 'visibility')
+  const views = getMetaValue(post?.meta, 'views', '0')
+
   return (
     <TableRow>
       <TableCell>
@@ -245,7 +248,7 @@ const ListItem = ({ post }: { post: Post }) => {
       </TableCell>
       <TableCell align="center">{post?.author?.full_name}</TableCell>
       <TableCell align="center">
-        {getMeta(post?.meta, 'visibility') === 'private' ? (
+        {visibility === 'private' ? (
           <LucideIcon name="LockKeyhole" className="size-4 min-w-4" />
         ) : (
           <LucideIcon
@@ -254,9 +257,7 @@ const ListItem = ({ post }: { post: Post }) => {
           />
         )}
       </TableCell>
-      <TableCell align="center">
-        {(getMeta(post?.meta, 'views', '0') * 1)?.toLocaleString()}
-      </TableCell>
+      <TableCell align="center">{+views?.toLocaleString()}</TableCell>
       <TableCell align="center">
         {dayjs(post?.created_at).format('YYYY-MM-DD HH:mm:ss')}
       </TableCell>

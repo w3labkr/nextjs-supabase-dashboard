@@ -3,7 +3,7 @@
 import * as React from 'react'
 
 import { LucideIcon } from '@/lib/lucide-icon'
-import { getMeta } from '@/lib/utils'
+import { getMetaValue } from '@/lib/utils'
 import { PostMeta } from '@/types/database'
 
 interface PostViewsProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -11,12 +11,12 @@ interface PostViewsProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const PostViews = ({ meta, ...props }: PostViewsProps) => {
-  const views = getMeta(meta, 'views', '0')
+  const views = getMetaValue(meta, 'views', '0')
 
   return (
     <div className="flex items-center" {...props}>
       <LucideIcon name="Eye" className="mr-2 size-5 min-w-5" />
-      {(views * 1)?.toLocaleString()}
+      {+views?.toLocaleString()}
     </div>
   )
 }

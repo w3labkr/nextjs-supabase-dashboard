@@ -4,10 +4,8 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { useFormContext } from 'react-hook-form'
-import dayjs from 'dayjs'
 
 import { toast } from 'sonner'
-import { LucideIcon } from '@/lib/lucide-icon'
 import {
   Accordion,
   AccordionContent,
@@ -18,8 +16,8 @@ import { Button } from '@/components/ui/button'
 import { useTagForm } from '@/app/dashboard/tags/edit/context/tag-form-provider'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, getMeta, relativeUrl } from '@/lib/utils'
-import { PostAPI } from '@/types/api'
+import { fetcher } from '@/lib/utils'
+import { TagAPI } from '@/types/api'
 
 const MetaboxPublish = () => {
   const { t } = useTranslation()
@@ -43,14 +41,10 @@ const DeleteButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { tag } = useTagForm()
-  const { getValues, handleSubmit, unregister } = useFormContext()
+  const { handleSubmit, getValues } = useFormContext()
+  const { mutate } = useSWRConfig()
 
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
-
-  React.useEffect(() => {
-    unregister('slug')
-    router.refresh()
-  }, [unregister, router])
 
   const onSubmit = async () => {
     try {
@@ -59,23 +53,27 @@ const DeleteButton = () => {
       if (!tag) throw new Error('Require is not defined.')
 
       const formValues = getValues()
-      const revalidatePaths = tag?.permalink
-        ? relativeUrl(tag?.permalink)
-        : null
+      const post_tags = formValues?.post_tags
 
-      const { error } = await fetcher<PostAPI>(`/api/v1/tag?id=${tag?.id}`, {
+      const { error } = await fetcher<TagAPI>(`/api/v1/tag?id=${tag?.id}`, {
         method: 'DELETE',
-        body: JSON.stringify({
-          data: { ...formValues, status: 'trash' },
-          options: { revalidatePaths },
-        }),
+        body: JSON.stringify({ data: formValues }),
       })
 
       if (error) throw new Error(error?.message)
 
-      toast.success(t('changed_successfully'))
+      mutate(`/api/v1/tag?id=${tag?.id}`)
 
-      router.push('/dashboard/posts')
+      if (Array.isArray(post_tags) && post_tags?.length > 0) {
+        for (let i = 0; i < post_tags.length; i++) {
+          const post_tag = post_tags[i]
+          mutate(`/api/v1/post?id=${post_tag?.post_id}`)
+        }
+      }
+
+      toast.success(t('deleted_successfully'))
+
+      router.push('/dashboard/tags')
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     } finally {
@@ -111,21 +109,23 @@ const PublishButton = () => {
       if (!tag) throw new Error('Require is not defined.')
 
       const formValues = getValues()
-      const revalidatePaths = tag?.slug
-        ? relativeUrl(`/posts?tag=${tag?.slug}`)
-        : null
+      const post_tags = formValues?.post_tags
 
-      const { error } = await fetcher<PostAPI>(`/api/v1/tag?id=${tag?.id}`, {
+      const { error } = await fetcher<TagAPI>(`/api/v1/tag?id=${tag?.id}`, {
         method: 'POST',
-        body: JSON.stringify({
-          data: formValues,
-          options: { revalidatePaths },
-        }),
+        body: JSON.stringify({ data: formValues }),
       })
 
       if (error) throw new Error(error?.message)
 
       mutate(`/api/v1/tag?id=${tag?.id}`)
+
+      if (Array.isArray(post_tags) && post_tags?.length > 0) {
+        for (let i = 0; i < post_tags.length; i++) {
+          const post_tag = post_tags[i]
+          mutate(`/api/v1/post?id=${post_tag?.post_id}`)
+        }
+      }
 
       toast.success(t('changed_successfully'))
     } catch (e: unknown) {

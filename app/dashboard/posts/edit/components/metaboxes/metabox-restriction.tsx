@@ -14,7 +14,7 @@ import { Switch } from '@/components/ui/switch'
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 import { Meta } from '@/types/database'
-import { getMeta, setMeta } from '@/lib/utils'
+import { getMetaValue, setMeta } from '@/lib/utils'
 
 const MetaboxRectriction = () => {
   const { t } = useTranslation()
@@ -33,7 +33,7 @@ const MetaboxRectriction = () => {
   )
 
   const checked: boolean = React.useMemo(() => {
-    return getMeta(watchMeta, 'visibility') === 'private'
+    return getMetaValue(watchMeta, 'visibility') === 'private'
   }, [watchMeta])
 
   return (

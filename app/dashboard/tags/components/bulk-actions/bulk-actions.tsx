@@ -61,10 +61,13 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const getData = React.useCallback((action: string, tag: Tag) => {
-    const user_id = tag?.user_id
-
     if (action === 'delete') {
-      return { user_id }
+      return {
+        user_id: tag?.user_id,
+        name: tag?.name,
+        slug: tag?.slug,
+        post_tags: tag?.post_tags,
+      }
     }
 
     return null
@@ -83,16 +86,9 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
 
         if (!data) throw new Error('Require is not defined.')
 
-        const revalidatePaths = tag?.permalink
-          ? relativeUrl(tag?.permalink)
-          : null
-
         const { error } = await fetcher<PostAPI>(`/api/v1/tag?id=${tag?.id}`, {
           method: formValues?.action === 'delete' ? 'DELETE' : 'POST',
-          body: JSON.stringify({
-            data,
-            options: { revalidatePaths },
-          }),
+          body: JSON.stringify({ data }),
         })
 
         if (error) throw new Error(error?.message)
@@ -108,7 +104,16 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
 
         mutate(`/api/v1/tag?id=${tag?.id}`)
         mutate(`/api/v1/tag/list?${listSearchParams}`)
-      }
+
+        const post_tags = tag?.post_tags
+
+        if (Array.isArray(post_tags) && post_tags?.length > 0) {
+          for (let i = 0; i < post_tags.length; i++) {
+            const post_tag = post_tags[i]
+            mutate(`/api/v1/post?id=${post_tag?.post_id}`)
+          }
+        }
+      } // end of item
 
       toast.success(t('changed_successfully'))
     } catch (e: unknown) {

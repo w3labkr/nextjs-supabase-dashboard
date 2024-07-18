@@ -23,25 +23,25 @@ const PostList = ({ user, ...props }: PostListProps) => {
   const { t } = useTranslation()
 
   const searchParams = useSearchParams()
-  const page = +((searchParams.get('page') as string) ?? '1')
-  const perPage = +((searchParams.get('perPage') as string) ?? '10')
-  const pageSize = +((searchParams.get('pageSize') as string) ?? '10')
   const postType = 'post'
   const status = 'publish'
   const tag = searchParams.get('tag') as string
   const q = searchParams.get('q') as string
   const orderBy = (searchParams.get('orderBy') as string) ?? 'id'
   const order = (searchParams.get('order') as string) ?? 'desc'
+  const perPage = +((searchParams.get('perPage') as string) ?? '10')
+  const page = +((searchParams.get('page') as string) ?? '1')
+  const pageSize = +((searchParams.get('pageSize') as string) ?? '10')
 
   const { posts, count } = usePostsAPI(user?.id ?? null, {
-    page,
-    perPage,
     postType,
     status,
     tag,
     q,
     orderBy,
     order,
+    perPage,
+    page,
   })
 
   const total = count ?? 0

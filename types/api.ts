@@ -57,8 +57,8 @@ export type TagAPI =
   | { data: null; error: Error }
 
 export type TagsAPI =
-  | { data: Tag[] | null; error: null }
-  | { data: null; error: Error }
+  | { data: Tag[] | null; count: number; error: null }
+  | { data: null; count: null; error: Error }
 
 export type VoteAPI =
   | { data: Vote | null; error: null }

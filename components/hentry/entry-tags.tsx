@@ -2,7 +2,7 @@ import * as React from 'react'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 
-import { absoluteUrl, cn, getMeta } from '@/lib/utils'
+import { absoluteUrl, cn, getMetaValue } from '@/lib/utils'
 import { Tag } from '@/lib/emblor'
 import { PostMeta } from '@/types/database'
 
@@ -12,7 +12,7 @@ interface EntryTagsProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const EntryTags = ({ className, meta, pathname, ...props }: EntryTagsProps) => {
-  const tags: Tag[] = JSON.parse(getMeta(meta, 'tags', '[]'))
+  const tags: Tag[] = JSON.parse(getMetaValue(meta, 'tags', '[]'))
 
   if (Array.isArray(tags) && tags?.length === 0) {
     return null

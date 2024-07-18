@@ -1,14 +1,6 @@
 import { Meta } from '@/types/database'
 import { Tag } from '@/lib/emblor'
 
-export function getMeta(
-  meta: Meta[] | undefined,
-  key: string,
-  defaultValue: string = ''
-): string {
-  return meta?.find((r: Meta) => r.meta_key === key)?.meta_value ?? defaultValue
-}
-
 export function setMeta<T extends Meta[] | undefined>(
   meta: T,
   key: string,
@@ -33,6 +25,33 @@ export function setMeta<T extends Meta[] | undefined>(
     Array.isArray(meta) && meta?.length > 0 ? [...meta, data] : [data]
 
   return newMeta as T
+}
+
+export function getMeta(
+  meta: Meta[] | undefined,
+  key: string
+): Meta | undefined {
+  return meta?.find((r: Meta) => r.meta_key === key)
+}
+
+export function getMetaValue(
+  meta: Meta[] | undefined,
+  key: string,
+  defaultValue: string = ''
+): string {
+  return meta?.find((r: Meta) => r.meta_key === key)?.meta_value ?? defaultValue
+}
+
+export function compareMetaValue(
+  older: Meta[] | undefined,
+  newer: Meta,
+  key: string
+): boolean {
+  const oldValue: string =
+    older?.find((r: Meta) => r.meta_key === key)?.meta_value ?? ''
+  const newValue: string = newer?.meta_value ?? ''
+
+  return oldValue === newValue
 }
 
 export function compareTags(

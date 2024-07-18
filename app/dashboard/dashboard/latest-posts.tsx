@@ -24,13 +24,13 @@ interface LatestPostsProps extends React.HTMLAttributes<HTMLDivElement> {
 const LatestPosts = ({ user, ...props }: LatestPostsProps) => {
   const { t } = useTranslation()
   const { posts, isLoading } = usePostsAPI(user?.id, {
-    // page: 1,
-    // perPage: 5,
     postType: 'post',
     status: 'publish',
     // q: '',
     orderBy: 'id',
     order: 'desc',
+    // perPage: 5,
+    // page: 1,
     limit: 5,
   })
 

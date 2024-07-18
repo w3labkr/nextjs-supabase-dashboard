@@ -1,6 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient, createAdminClient } from '@/supabase/server'
-import { ApiError, getMeta, revalidates } from '@/lib/utils'
+import {
+  ApiError,
+  getMetaValue,
+  revalidates,
+  compareMetaValue,
+} from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { UserMeta } from '@/types/database'
@@ -28,11 +33,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ data: null, error }, { status: 400 })
   }
 
-  if (!user) {
-    return NextResponse.json({ data: null, error: null })
-  }
-
-  return NextResponse.json({ data: user, error: null })
+  return user
+    ? NextResponse.json({ data: user, error: null })
+    : NextResponse.json({ data: null, error: null })
 }
 
 export async function POST(request: NextRequest) {
@@ -74,30 +77,25 @@ export async function POST(request: NextRequest) {
 
   if (Array.isArray(meta) && meta?.length > 0) {
     const denies: string[] = []
-    const findNewMeta: UserMeta[] = meta
+
+    const newMetas: UserMeta[] = meta
       ?.filter((r: UserMeta) => !denies.includes(r.meta_key))
       ?.filter((r: UserMeta) => !r.id)
 
-    if (Array.isArray(findNewMeta) && findNewMeta?.length > 0) {
-      const { error } = await supabase
-        .from('usermeta')
-        .insert(findNewMeta)
-        .select('*')
+    if (Array.isArray(newMetas) && newMetas?.length > 0) {
+      const { error } = await supabase.from('usermeta').insert(newMetas)
       if (error) {
         return NextResponse.json({ data: null, error }, { status: 400 })
       }
     }
 
-    const findExistsMeta: UserMeta[] = meta
+    const metas: UserMeta[] = meta
       ?.filter((r: UserMeta) => !denies.includes(r.meta_key))
       ?.filter((r: UserMeta) => r.id)
-      ?.filter((r: UserMeta) => r.meta_value !== getMeta(old?.meta, r.meta_key))
+      ?.filter((r: UserMeta) => !compareMetaValue(old?.meta, r, r.meta_key))
 
-    if (Array.isArray(findExistsMeta) && findExistsMeta?.length > 0) {
-      const { error } = await supabase
-        .from('usermeta')
-        .upsert(findExistsMeta)
-        .select('*')
+    if (Array.isArray(metas) && metas?.length > 0) {
+      const { error } = await supabase.from('usermeta').upsert(metas)
       if (error) {
         return NextResponse.json({ data: null, error }, { status: 400 })
       }

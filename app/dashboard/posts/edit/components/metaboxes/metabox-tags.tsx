@@ -14,7 +14,7 @@ import {
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 import { Meta } from '@/types/database'
-import { getMeta, setMeta } from '@/lib/utils'
+import { getMetaValue, setMeta } from '@/lib/utils'
 import { slugify } from '@/lib/slugify'
 import { Tag } from '@/lib/emblor'
 
@@ -24,7 +24,7 @@ const MetaboxTags = () => {
   const { control, setValue } = useFormContext()
 
   const watchMeta: Meta[] | undefined = useWatch({ control, name: 'meta' })
-  const watchTags: Tag[] = JSON.parse(getMeta(watchMeta, 'tags', '[]'))
+  const watchTags: Tag[] = JSON.parse(getMetaValue(watchMeta, 'tags', '[]'))
 
   const [, setTags] = React.useState<Tag[]>([])
   const [activeTagIndex, setActiveTagIndex] = React.useState<number | null>(

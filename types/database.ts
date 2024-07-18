@@ -50,6 +50,7 @@ export type TagMeta = Tables<'tagmeta'>
 export type Tag = Tables<'tags'> & {
   meta?: TagMeta[]
   post_tags?: PostTag[]
+  num?: number
 }
 
 export type PostRank = {

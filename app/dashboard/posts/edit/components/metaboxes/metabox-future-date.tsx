@@ -16,7 +16,7 @@ import { TimePicker } from '@/components/time-picker'
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
 import { Meta } from '@/types/database'
-import { getMeta, setMeta } from '@/lib/utils'
+import { getMetaValue, setMeta } from '@/lib/utils'
 
 const MetaboxFutureDate = () => {
   const { t } = useTranslation()
@@ -38,7 +38,7 @@ const MetaboxFutureDate = () => {
   )
 
   React.useEffect(() => {
-    const future_date = getMeta(watchMeta, 'future_date')
+    const future_date = getMetaValue(watchMeta, 'future_date')
     setChecked(!!future_date)
   }, [watchMeta])
 

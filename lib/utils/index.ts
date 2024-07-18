@@ -13,10 +13,17 @@ export {
 export { ApiError } from './error'
 export {
   absoluteUrl,
+  isAbsoluteUrl,
   relativeUrl,
   setUrn,
   getQueryString,
   setQueryString,
 } from './url'
-export { getMeta, setMeta, compareTags } from './functions'
+export {
+  setMeta,
+  getMeta,
+  getMetaValue,
+  compareMetaValue,
+  compareTags,
+} from './functions'
 export { generateRecentPosts } from './dummy-text'
