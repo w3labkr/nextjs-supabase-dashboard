@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 
-import { LatestPosts, PostRank } from '@/app/dashboard/dashboard'
+import { LatestPosts, PostRanks } from '@/app/dashboard/dashboard'
 import { AppBar } from '@/app/dashboard/components/app-bar'
 import { AppPanel } from '@/app/dashboard/components/app-panel'
 
@@ -28,7 +28,7 @@ export default async function DashboardPage() {
               <Description translate="yes"></Description>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 <LatestPosts user={user} />
-                <PostRank user={user} />
+                <PostRanks user={user} />
               </div>
             </div>
           </main>

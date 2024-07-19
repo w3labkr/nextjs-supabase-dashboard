@@ -15,13 +15,13 @@ import {
 import { Skeleton } from '@/components/ui/skeleton'
 
 import { usePostRank } from '@/queries/client/posts'
-import { User, PostRank } from '@/types/database'
+import { type User, type PostRank } from '@/types/database'
 
-interface PostRankProps extends React.HTMLAttributes<HTMLDivElement> {
+interface PostRanksProps extends React.HTMLAttributes<HTMLDivElement> {
   user: User
 }
 
-const PostRank = ({ user, ...props }: PostRankProps) => {
+const PostRanks = ({ user, ...props }: PostRanksProps) => {
   const { t } = useTranslation()
   const { posts, isLoading } = usePostRank(user?.id, {
     // q: '',
@@ -97,4 +97,4 @@ const EmptyItem = () => {
   )
 }
 
-export { PostRank }
+export { PostRanks }

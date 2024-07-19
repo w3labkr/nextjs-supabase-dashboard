@@ -1,2 +1,2 @@
 export { LatestPosts } from './latest-posts'
-export { PostRank } from './post-rank'
+export { PostRanks } from './post-ranks'
