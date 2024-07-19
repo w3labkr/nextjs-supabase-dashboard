@@ -1,4 +1,5 @@
 {
-  "invalid_confirm_password": "Passwords don't match.",
+  "invalid_confirm_password": "Passwords does not match.",
+  "invalid_confirmation_phrase": "Confirmation text does not match.",
   "invalid_username": "Username can only contain english, numbers, underscores, and hyphens."
 }

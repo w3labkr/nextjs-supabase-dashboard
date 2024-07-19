@@ -33,21 +33,21 @@ import { Input } from '@/components/ui/input'
 
 import { fetcher } from '@/lib/utils'
 import { createClient } from '@/supabase/client'
-import { User } from '@/types/database'
-import { UserAPI } from '@/types/api'
 import { type User } from '@/types/database'
 import { type UserAPI } from '@/types/api'
 import { useAuth } from '@/hooks/use-auth'
 import { useUserAPI } from '@/queries/client/users'
 
-const FormSchema = z.object({
-  email: z.string().nonempty().max(255).email(),
-  password: z.string().nonempty().min(6).max(72).optional(),
-  confirmationPhrase: z
-    .string()
-    .nonempty()
-    .refine((val: string) => val === 'delete my account'),
-})
+const FormSchema = z
+  .object({
+    email: z.string().nonempty().max(255).email(),
+    password: z.string().nonempty().min(6).max(72).optional(),
+    confirmationPhrase: z.string().nonempty(),
+  })
+  .refine((val) => val.confirmationPhrase === 'delete my account', {
+    path: ['confirmationPhrase'],
+    params: { i18n: 'invalid_confirmation_phrase' },
+  })
 
 type FormValues = z.infer<typeof FormSchema>
 
