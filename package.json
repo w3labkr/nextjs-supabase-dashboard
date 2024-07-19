@@ -13,7 +13,7 @@
     "clean": "npm run clean:files && npm run clean:cache",
     "upgrade:latest": "npm run clean && npx npm-check-updates -u && npm install",
     "reinstall": "npm run clean && npm install",
-    "gen-types": "supabase gen types typescript --linked > types/supabase.ts"
+    "gen-types": "supabase gen types --lang=typescript --linked > types/supabase.ts"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^8.0.0",
