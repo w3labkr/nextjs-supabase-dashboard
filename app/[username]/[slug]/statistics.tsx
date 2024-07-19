@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { usePathname } from 'next/navigation'
-import * as Bowser from 'bowser'
+import Bowser from 'bowser'
 import { flatten } from 'flat'
 
 import { createClient } from '@/supabase/client'
