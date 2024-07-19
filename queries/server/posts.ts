@@ -1,7 +1,7 @@
 import { createClient } from '@/supabase/server'
 import { fetcher, setQueryString } from '@/lib/utils'
-import { PostAPI, PostsAPI } from '@/types/api'
-import { Post } from '@/types/database'
+import { type PostAPI, type PostsAPI } from '@/types/api'
+import { type Post } from '@/types/database'
 
 export async function getPostAPI(
   id: number | null,

@@ -17,7 +17,7 @@ import { useTagForm } from '@/app/dashboard/tags/edit/context/tag-form-provider'
 
 import { useSWRConfig } from 'swr'
 import { fetcher } from '@/lib/utils'
-import { TagAPI } from '@/types/api'
+import { type TagAPI } from '@/types/api'
 
 const MetaboxPublish = () => {
   const { t } = useTranslation()

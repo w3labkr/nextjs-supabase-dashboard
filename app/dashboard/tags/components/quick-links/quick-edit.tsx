@@ -3,7 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
-import { Tag } from '@/types/database'
+import { type Tag } from '@/types/database'
 
 interface QuickEditProps {
   tag: Tag

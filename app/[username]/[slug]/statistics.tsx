@@ -7,9 +7,9 @@ import { flatten } from 'flat'
 
 import { createClient } from '@/supabase/client'
 import { fetcher } from '@/lib/utils'
-import { IpAPI } from '@/types/api'
 import { useAuth } from '@/hooks/use-auth'
-import { Post } from '@/types/database'
+import { type IpAPI } from '@/types/api'
+import { type Post } from '@/types/database'
 
 interface Browser {
   'browser.name': string
@@ -75,7 +75,7 @@ const Statistics = ({ post }: StatisticsProps) => {
       referrer:
         previous?.href === globalThis?.location.href
           ? ''
-          : previous?.href ?? '',
+          : (previous?.href ?? ''),
     }
 
     storage?.setItem('app:statistics', JSON.stringify(values))

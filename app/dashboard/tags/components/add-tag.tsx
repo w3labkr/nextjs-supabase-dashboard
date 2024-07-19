@@ -10,7 +10,7 @@ import { Button, ButtonProps } from '@/components/ui/button'
 
 import { cn, fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
-import { TagAPI } from '@/types/api'
+import { type TagAPI } from '@/types/api'
 
 interface AddTagProps
   extends ButtonProps,

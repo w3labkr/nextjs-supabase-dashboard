@@ -11,8 +11,8 @@ import {
 } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
-import { PostMeta, PostTag, TagMeta } from '@/types/database'
-import { Tag } from '@/lib/emblor'
+import { type PostMeta, type PostTag, type TagMeta } from '@/types/database'
+import { type Tag } from '@/lib/emblor'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams

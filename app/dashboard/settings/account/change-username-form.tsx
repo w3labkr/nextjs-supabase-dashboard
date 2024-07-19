@@ -34,7 +34,7 @@ import { useSWRConfig } from 'swr'
 import { fetcher } from '@/lib/utils'
 import { slugify } from '@/lib/slugify'
 import { useUserAPI } from '@/queries/client/users'
-import { UserAPI } from '@/types/api'
+import { type UserAPI } from '@/types/api'
 
 const FormSchema = z.object({
   username: z

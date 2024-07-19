@@ -17,7 +17,7 @@ import {
   relativeUrl,
 } from '@/lib/utils'
 import { useUserAPI } from '@/queries/client/users'
-import { PostAPI } from '@/types/api'
+import { type PostAPI } from '@/types/api'
 
 interface AddDummyPostProps
   extends ButtonProps,

@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-import { Post } from '@/types/database'
+import { type Post } from '@/types/database'
 
 interface BulkActionsContextProps {
   checks: Post[]

@@ -3,7 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
-import { Post } from '@/types/database'
+import { type Post } from '@/types/database'
 
 interface QuickEditProps {
   post: Post

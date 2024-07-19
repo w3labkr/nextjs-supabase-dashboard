@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 
 import { absoluteUrl, cn, getMetaValue } from '@/lib/utils'
-import { Tag } from '@/lib/emblor'
-import { PostMeta } from '@/types/database'
+import { type Tag } from '@/lib/emblor'
+import { type PostMeta } from '@/types/database'
 
 interface EntryTagsProps extends React.HTMLAttributes<HTMLDivElement> {
   pathname?: string

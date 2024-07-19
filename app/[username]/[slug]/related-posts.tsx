@@ -3,7 +3,7 @@ import Link from 'next/link'
 import dayjs from 'dayjs'
 
 import { type Translation } from '@/hooks/i18next'
-import { Post } from '@/types/database'
+import { type Post } from '@/types/database'
 
 interface RelatedPostsProps extends React.HTMLAttributes<HTMLDivElement> {
   previousPost: Post | null

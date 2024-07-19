@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Tag } from '@/types/database'
+import { type Tag } from '@/types/database'
 
 interface TagFormContextProps {
   tag: Tag | null

@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { authorize } from '@/queries/server/auth'
 import { createClient } from '@/supabase/server'
 import { jwtVerify } from '@/lib/jsonwebtoken'
-import { VerifyTokenPayload } from '@/types/token'
+import { type VerifyTokenPayload } from '@/types/token'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)

@@ -10,7 +10,7 @@ import { Button, ButtonProps } from '@/components/ui/button'
 
 import { cn, fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
-import { PostAPI } from '@/types/api'
+import { type PostAPI } from '@/types/api'
 
 interface AddPostProps
   extends ButtonProps,

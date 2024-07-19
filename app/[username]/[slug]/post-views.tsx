@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import { LucideIcon } from '@/lib/lucide-icon'
 import { getMetaValue } from '@/lib/utils'
-import { PostMeta } from '@/types/database'
+import { type PostMeta } from '@/types/database'
 
 interface PostViewsProps extends React.HTMLAttributes<HTMLDivElement> {
   meta?: PostMeta[]

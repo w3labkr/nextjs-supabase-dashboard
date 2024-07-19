@@ -2,7 +2,7 @@
 
 import useSWR from 'swr'
 import { setQueryString } from '@/lib/utils'
-import { FavoriteAPI } from '@/types/api'
+import { type FavoriteAPI } from '@/types/api'
 
 export function useFavoriteAPI(
   id: number | null,

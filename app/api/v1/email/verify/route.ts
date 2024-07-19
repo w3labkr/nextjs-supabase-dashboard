@@ -5,7 +5,7 @@ import { authorize } from '@/queries/server/auth'
 
 import { transporter, sender } from '@/lib/nodemailer'
 import { jwtSign } from '@/lib/jsonwebtoken'
-import { VerifyTokenPayload } from '@/types/token'
+import { type VerifyTokenPayload } from '@/types/token'
 
 export async function POST(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams

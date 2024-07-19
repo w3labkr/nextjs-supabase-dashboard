@@ -1,15 +1,19 @@
-import { User as AuthUser, AuthError, Pagination } from '@supabase/supabase-js'
 import {
-  Email,
-  Notification,
-  Post,
-  CountPosts,
-  Favorite,
-  Tag,
-  Vote,
-  User,
-  Statistic,
-  PostRank,
+  type User as AuthUser,
+  type AuthError,
+  type Pagination,
+} from '@supabase/supabase-js'
+import {
+  type Email,
+  type Notification,
+  type Post,
+  type CountPosts,
+  type Favorite,
+  type Tag,
+  type Vote,
+  type User,
+  type Statistic,
+  type PostRank,
 } from '@/types/database'
 
 export type UserAPI =

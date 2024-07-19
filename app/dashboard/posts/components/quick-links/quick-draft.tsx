@@ -8,8 +8,8 @@ import { usePaging } from '@/components/paging'
 
 import { useSWRConfig } from 'swr'
 import { fetcher, relativeUrl, setQueryString } from '@/lib/utils'
-import { PostAPI } from '@/types/api'
-import { Post } from '@/types/database'
+import { type PostAPI } from '@/types/api'
+import { type Post } from '@/types/database'
 
 interface QuickDraftProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {

@@ -13,10 +13,10 @@ import {
 } from '@/components/ui/accordion'
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
-import { Meta } from '@/types/database'
+import { type Meta } from '@/types/database'
 import { getMetaValue, setMeta } from '@/lib/utils'
 import { slugify } from '@/lib/slugify'
-import { Tag } from '@/lib/emblor'
+import { type Tag } from '@/lib/emblor'
 
 const MetaboxTags = () => {
   const { t } = useTranslation()

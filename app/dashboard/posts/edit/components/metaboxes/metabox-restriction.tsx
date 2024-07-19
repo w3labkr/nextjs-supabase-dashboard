@@ -13,7 +13,7 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
-import { Meta } from '@/types/database'
+import { type Meta } from '@/types/database'
 import { getMetaValue, setMeta } from '@/lib/utils'
 
 const MetaboxRectriction = () => {

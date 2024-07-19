@@ -3,7 +3,7 @@
 import useSWR from 'swr'
 import { useAuth } from '@/hooks/use-auth'
 import { setQueryString } from '@/lib/utils'
-import { UserAPI, UsersAPI } from '@/types/api'
+import { type UserAPI, type UsersAPI } from '@/types/api'
 
 export function useUserAPI(
   id: string | null = null,

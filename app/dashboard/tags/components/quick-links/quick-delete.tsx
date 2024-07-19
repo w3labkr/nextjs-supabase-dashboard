@@ -7,9 +7,9 @@ import { toast } from 'sonner'
 import { usePaging } from '@/components/paging'
 
 import { useSWRConfig } from 'swr'
-import { fetcher, relativeUrl, setQueryString } from '@/lib/utils'
-import { TagAPI } from '@/types/api'
-import { Tag } from '@/types/database'
+import { fetcher, setQueryString } from '@/lib/utils'
+import { type TagAPI } from '@/types/api'
+import { type Tag } from '@/types/database'
 
 interface QuickDeleteProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {

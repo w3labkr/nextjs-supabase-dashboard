@@ -32,7 +32,7 @@ import { useSWRConfig } from 'swr'
 import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useEmailsAPI } from '@/queries/client/emails'
-import { EmailAPI } from '@/types/api'
+import { type EmailAPI } from '@/types/api'
 
 const FormSchema = z.object({
   email: z.string().max(255),

@@ -8,7 +8,7 @@ import {
 } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
-import { UserMeta } from '@/types/database'
+import { type UserMeta } from '@/types/database'
 
 import dayjs from 'dayjs'
 

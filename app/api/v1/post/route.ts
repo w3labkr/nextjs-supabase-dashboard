@@ -9,7 +9,7 @@ import {
 import { authorize } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { pricingPlans, type PricingPlan } from '@/config/site'
-import { PostMeta } from '@/types/database'
+import { type PostMeta } from '@/types/database'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams

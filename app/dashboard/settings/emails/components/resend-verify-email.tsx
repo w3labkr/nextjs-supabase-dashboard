@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 import { useSWRConfig } from 'swr'
 import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
-import { Email } from '@/types/database'
+import { type Email } from '@/types/database'
 
 interface ResendVerifyEmailProps {
   item: Email

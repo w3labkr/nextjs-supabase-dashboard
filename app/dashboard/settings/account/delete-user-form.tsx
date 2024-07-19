@@ -36,6 +36,8 @@ import { createClient } from '@/supabase/client'
 import { fetcher } from '@/lib/utils'
 import { User } from '@/types/database'
 import { UserAPI } from '@/types/api'
+import { type User } from '@/types/database'
+import { type UserAPI } from '@/types/api'
 import { useAuth } from '@/hooks/use-auth'
 import { useUserAPI } from '@/queries/client/users'
 

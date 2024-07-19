@@ -1,8 +1,8 @@
 'use client'
 
 import useSWR from 'swr'
-import { StatisticsAPI } from '@/types/api'
 import { setQueryString } from '@/lib/utils'
+import { type StatisticsAPI } from '@/types/api'
 
 export function useStatisticsAPI(
   userId: string | null,

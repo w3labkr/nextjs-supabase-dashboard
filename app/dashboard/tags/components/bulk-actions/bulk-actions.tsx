@@ -31,9 +31,9 @@ import { usePaging } from '@/components/paging'
 import { useBulkActions } from './bulk-actions-provider'
 
 import { useSWRConfig } from 'swr'
-import { cn, fetcher, setQueryString, relativeUrl } from '@/lib/utils'
-import { PostAPI } from '@/types/api'
-import { Tag } from '@/types/database'
+import { cn, fetcher, setQueryString } from '@/lib/utils'
+import { type PostAPI } from '@/types/api'
+import { type Tag } from '@/types/database'
 
 const FormSchema = z.object({
   action: z.string(),

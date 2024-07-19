@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
-import { Database } from '@/types/supabase'
+import { type Database } from '@/types/supabase'
 
 /**
  * Setting up Server-Side Auth for Next.js

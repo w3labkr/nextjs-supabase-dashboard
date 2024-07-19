@@ -15,8 +15,8 @@ import {
   relativeUrl,
 } from '@/lib/utils'
 import { slugify } from '@/lib/slugify'
-import { PostAPI } from '@/types/api'
-import { Post } from '@/types/database'
+import { type PostAPI } from '@/types/api'
+import { type Post } from '@/types/database'
 
 interface QuickPublishProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {

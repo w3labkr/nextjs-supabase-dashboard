@@ -13,7 +13,7 @@ import {
 } from '@/components/hentry'
 
 import { usePostsAPI } from '@/queries/client/posts'
-import { Post, User } from '@/types/database'
+import { type Post, type User } from '@/types/database'
 
 interface PostListProps extends React.HTMLAttributes<HTMLDivElement> {
   user: User

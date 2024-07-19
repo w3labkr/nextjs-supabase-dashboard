@@ -8,8 +8,8 @@ import { usePaging } from '@/components/paging'
 
 import { useSWRConfig } from 'swr'
 import { fetcher, setQueryString } from '@/lib/utils'
-import { PostAPI } from '@/types/api'
-import { Post } from '@/types/database'
+import { type PostAPI } from '@/types/api'
+import { type Post } from '@/types/database'
 
 interface QuickRestoreProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {

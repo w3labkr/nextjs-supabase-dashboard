@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
 import { slugify } from '@/lib/slugify'
-import { Tag, generateTagId } from '@/lib/emblor'
+import { type Tag, generateTagId } from '@/lib/emblor'
 import { setMeta } from '@/lib/utils/functions'
-import { Post, User } from '@/types/database'
+import { type Post, type User } from '@/types/database'
 import { absoluteUrl } from './url'
 
 export function generateRecentPosts(

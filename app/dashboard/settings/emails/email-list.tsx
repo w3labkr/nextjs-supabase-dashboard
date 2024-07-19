@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { DeleteEmail } from './components/delete-email'
 import { ResendVerifyEmail } from './components/resend-verify-email'
 
-import { Email } from '@/types/database'
+import { type Email } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 import { useEmailsAPI } from '@/queries/client/emails'
 

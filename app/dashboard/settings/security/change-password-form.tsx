@@ -32,8 +32,8 @@ import {
 
 import { useSWRConfig } from 'swr'
 import { createClient } from '@/supabase/client'
-import { User } from '@/types/database'
 import { useUserAPI } from '@/queries/client/users'
+import { type User } from '@/types/database'
 
 const FormSchema = z
   .object({

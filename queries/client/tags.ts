@@ -2,7 +2,7 @@
 
 import useSWR from 'swr'
 import { setQueryString } from '@/lib/utils'
-import { TagAPI, TagsAPI } from '@/types/api'
+import { type TagAPI, type TagsAPI } from '@/types/api'
 
 export function useTagAPI(
   id: number | null,

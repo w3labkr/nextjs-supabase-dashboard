@@ -3,9 +3,8 @@
 import * as React from 'react'
 import Link from 'next/link'
 
-import { absoluteUrl } from '@/lib/utils'
-import { Post } from '@/types/database'
 import { usePostsAPI } from '@/queries/client/posts'
+import { type Post } from '@/types/database'
 
 interface LatestPostsProps extends React.HTMLAttributes<HTMLDivElement> {
   userId: string | null

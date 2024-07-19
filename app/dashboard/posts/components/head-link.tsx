@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 import { usePaging } from '@/components/paging'
 import { cn } from '@/lib/utils'
-import { PostStatus } from '@/types/database'
+import { type PostStatus } from '@/types/database'
 import { useQueryString } from '@/hooks/url'
 
 interface HeadLinkProps {

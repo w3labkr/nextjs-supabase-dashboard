@@ -2,7 +2,12 @@
 
 import useSWR from 'swr'
 import { setQueryString } from '@/lib/utils'
-import { PostAPI, PostsAPI, CountPostsAPI, PostRankAPI } from '@/types/api'
+import {
+  type PostAPI,
+  type PostsAPI,
+  type CountPostsAPI,
+  type PostRankAPI,
+} from '@/types/api'
 
 export function usePostAPI(
   id: number | null,

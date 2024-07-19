@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/supabase/server'
 import { ApiError, revalidates } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
-import { Tag } from '@/types/database'
+import { type Tag } from '@/types/database'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const count = limit ? list?.length : total?.count ?? 0
+  const count = limit ? list?.length : (total?.count ?? 0)
   const data = list?.map((item: any, index: number) => {
     item['num'] = limit ? index + 1 : count - index - offset
     return item

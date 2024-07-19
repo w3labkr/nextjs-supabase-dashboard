@@ -14,7 +14,7 @@ import {
 import { absoluteUrl } from '@/lib/utils'
 import { getTranslation } from '@/hooks/i18next'
 import { getPostsAPI } from '@/queries/server/posts'
-import { Post } from '@/types/database'
+import { type Post } from '@/types/database'
 
 // revalidate the data at most every week
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)

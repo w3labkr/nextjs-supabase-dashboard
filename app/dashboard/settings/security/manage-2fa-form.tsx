@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
-import { User } from '@/types/database'
+import { type User } from '@/types/database'
 
 interface Manage2FAFormProps {
   user: User

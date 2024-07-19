@@ -19,7 +19,7 @@ import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provid
 
 import { useSWRConfig } from 'swr'
 import { fetcher, getMetaValue, relativeUrl } from '@/lib/utils'
-import { PostAPI } from '@/types/api'
+import { type PostAPI } from '@/types/api'
 
 const MetaboxPublish = () => {
   const { t } = useTranslation()

@@ -21,8 +21,8 @@ import { Button } from '@/components/ui/button'
 import { useSWRConfig } from 'swr'
 import { fetcher } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
-import { EmailsAPI } from '@/types/api'
-import { Email } from '@/types/database'
+import { type EmailsAPI } from '@/types/api'
+import { type Email } from '@/types/database'
 
 interface DeleteEmailProps {
   item: Email

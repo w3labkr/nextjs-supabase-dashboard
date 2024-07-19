@@ -39,7 +39,7 @@ import {
 } from './components/bulk-actions'
 
 import { cn, getMetaValue } from '@/lib/utils'
-import { Post } from '@/types/database'
+import { type Post } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 import { usePostsAPI, useCountPostsAPI } from '@/queries/client/posts'
 import { CheckedState } from '@radix-ui/react-checkbox'

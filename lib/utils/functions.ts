@@ -1,5 +1,5 @@
-import { Meta } from '@/types/database'
-import { Tag } from '@/lib/emblor'
+import { type Tag } from '@/lib/emblor'
+import { type Meta } from '@/types/database'
 
 export function setMeta<T extends Meta[] | undefined>(
   meta: T,

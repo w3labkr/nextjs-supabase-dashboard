@@ -1,4 +1,4 @@
-import { Tables } from '@/types/supabase'
+import { type Tables } from '@/types/supabase'
 
 export type Meta = Record<string, any>
 

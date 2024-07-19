@@ -27,7 +27,7 @@ import {
   useBulkActions,
 } from './components/bulk-actions'
 
-import { Tag } from '@/types/database'
+import { type Tag } from '@/types/database'
 import { useAuth } from '@/hooks/use-auth'
 import { useTagsAPI } from '@/queries/client/tags'
 import { useUserAPI } from '@/queries/client/users'

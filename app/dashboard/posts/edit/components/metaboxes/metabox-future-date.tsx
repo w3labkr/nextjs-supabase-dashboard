@@ -15,7 +15,7 @@ import { Calendar } from '@/components/ui/calendar'
 import { TimePicker } from '@/components/time-picker'
 import { usePostForm } from '@/app/dashboard/posts/edit/context/post-form-provider'
 
-import { Meta } from '@/types/database'
+import { type Meta } from '@/types/database'
 import { getMetaValue, setMeta } from '@/lib/utils'
 
 const MetaboxFutureDate = () => {

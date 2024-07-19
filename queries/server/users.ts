@@ -1,6 +1,6 @@
 import { fetcher } from '@/lib/utils'
-import { UserAPI } from '@/types/api'
 import { getAuth } from '@/queries/server/auth'
+import { type UserAPI } from '@/types/api'
 
 export async function getUserAPI(
   id: string | null = null,

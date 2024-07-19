@@ -11,8 +11,8 @@ import { useSWRConfig } from 'swr'
 import { useAuth } from '@/hooks/use-auth'
 import { useFavoriteAPI } from '@/queries/client/favorites'
 import { useUserAPI } from '@/queries/client/users'
-import { FavoriteAPI } from '@/types/api'
-import { Post } from '@/types/database'
+import { type FavoriteAPI } from '@/types/api'
+import { type Post } from '@/types/database'
 
 interface FavoriteButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {

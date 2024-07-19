@@ -15,7 +15,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton'
 
 import { usePostsAPI } from '@/queries/client/posts'
-import { Post, User } from '@/types/database'
+import { type Post, type User } from '@/types/database'
 
 interface LatestPostsProps extends React.HTMLAttributes<HTMLDivElement> {
   user: User
