@@ -134,6 +134,8 @@ Generate manifest and splash screen
 vim public/manifest.json
 ```
 
+- [PWA Image Generator](https://www.pwabuilder.com/imageGenerator)
+- [Maskable Icon Generator](https://progressier.com/maskable-icons-editor)
 - [PWA Manifest Generator](https://www.simicart.com/manifest-generator.html)
 - [Custom Splash Screen on iOS](https://appsco.pe/developer/splash-screens)
 
