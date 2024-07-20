@@ -15,10 +15,16 @@ export async function GET(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const truncated = await supabase.rpc('truncate_posts')
+  const truncate = 1
 
-  if (truncated?.error) {
-    return new Response(truncated?.error?.message, { status: 400 })
+  if (truncate) {
+    const { error } = await supabase.rpc('truncate_statistics')
+    if (error) return new Response(error?.message, { status: 400 })
+  }
+
+  if (truncate) {
+    const { error } = await supabase.rpc('truncate_posts')
+    if (error) return new Response(error?.message, { status: 400 })
   }
 
   const { data: users } = await supabase.rpc('get_users', {

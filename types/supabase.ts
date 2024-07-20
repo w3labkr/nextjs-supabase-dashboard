@@ -851,6 +851,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      truncate_statistics: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       verify_user_password: {
         Args: {
           userid: string

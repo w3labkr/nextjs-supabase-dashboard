@@ -118,6 +118,7 @@ drop function if exists generate_tag_slug;
 drop function if exists set_tag;
 
 drop function if exists set_statistics;
+drop function if exists truncate_statistics;
 drop function if exists get_post_rank_by_views;
 drop function if exists get_vote;
 drop function if exists set_favorite;
@@ -1263,6 +1264,17 @@ begin
     (data ->> 'user_agent')::text
   );
   perform set_post_views((data->>'post_id')::bigint);
+end;
+$$ language plpgsql;
+
+----------------------------------------------------------------
+
+create or replace function truncate_statistics()
+returns void
+security definer set search_path = public
+as $$
+begin
+  truncate table statistics restart identity cascade;
 end;
 $$ language plpgsql;
 
