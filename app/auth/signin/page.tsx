@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { Logo } from '@/components/logo'
+import { SiteLogo } from '@/components/site-logo'
 import { Title } from '@/components/title'
 import { Description } from '@/components/description'
 import { SignInWith } from '@/components/signin-with'
@@ -23,7 +23,7 @@ export default function SignInPage() {
       </ButtonLink>
       <div className="mx-auto flex w-full max-w-[320px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
-          <Logo />
+          <SiteLogo className="mx-auto size-12 min-w-12" />
           <Title translate="yes">welcome_back</Title>
           <Description translate="yes">
             enter_your_email_to_sign_in_to_your_account

@@ -128,15 +128,15 @@ Add `favicon.ico` file to `/app` directory
 
 - [Favicon.ico & App Icon Generator](https://www.favicon-generator.org)
 
-Generate manifest and splash screen
+Generate manifest and splash screen.
 
 ```shell
 vim public/manifest.json
 ```
 
-- [PWA Image Generator](https://www.pwabuilder.com/imageGenerator)
-- [Maskable Icon Generator](https://progressier.com/maskable-icons-editor)
-- [PWA Manifest Generator](https://www.simicart.com/manifest-generator.html)
+- [PWA Image Generator](https://www.pwabuilder.com/imageGenerator),
+  [Maskable Icon Generator](https://progressier.com/maskable-icons-editor),
+  [PWA Manifest Generator](https://www.simicart.com/manifest-generator.html)
 - [Custom Splash Screen on iOS](https://appsco.pe/developer/splash-screens)
 
 Start the development server.

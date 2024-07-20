@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { cn } from '@/lib/utils'
 
 interface SiteLogoProps extends React.SVGProps<SVGSVGElement> {}
 
@@ -7,6 +8,7 @@ const SiteLogo = ({
   width = '1024',
   height = '1024',
   viewBox = '0 0 1024 1024',
+  className,
   ...props
 }: SiteLogoProps) => {
   return (
@@ -15,6 +17,7 @@ const SiteLogo = ({
       width={width}
       height={height}
       viewBox={viewBox}
+      className={cn('size-8 min-w-8', className)}
       {...props}
     >
       <path

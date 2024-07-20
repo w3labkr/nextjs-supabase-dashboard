@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
 import { toast } from 'sonner'
-import { Logo } from '@/components/logo'
+import { SiteLogo } from '@/components/site-logo'
 import { Title } from '@/components/title'
 import { CountryFlagButton } from '@/components/country-flag-button'
 
@@ -38,7 +38,7 @@ export default function BlockedPage() {
     <div className="container flex min-h-screen w-screen flex-col items-center justify-center py-8">
       <div className="mx-auto flex w-full max-w-[360px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-2 text-center">
-          <Logo />
+          <SiteLogo className="mx-auto size-12 min-w-12" />
           <Title translate="yes">your_account_has_been_blocked</Title>
         </div>
         <div className="grid gap-4">
