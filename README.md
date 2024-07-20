@@ -117,11 +117,20 @@ Set the current Node.js version.
 node -v > .nvmrc
 ```
 
-(Optional) Generating Types if supabase cli is installed
+(Optional) Generating Types if supabase cli is installed.
 
 ```shell
 npm run gen-types
 ```
+
+(Optional) Generate manifest and splash screen
+
+```shell
+vim public/manifest.json
+```
+
+- [PWA Manifest Generator](https://www.simicart.com/manifest-generator.html)
+- [Custom Splash Screen on iOS](https://appsco.pe/developer/splash-screens)
 
 Start the development server.
 
@@ -318,7 +327,7 @@ npx supabase gen types typescript --linked > types/supabase.ts
 ```json
 {
   "scripts": {
-    "gen-types": "supabase gen types typescript --linked > types/supabase.ts"
+    "gen-types": "supabase gen types --lang=typescript --linked > types/supabase.ts"
   }
 }
 ```
@@ -440,11 +449,6 @@ npm install next-pwa
 ```
 
 - [next-pwa](https://github.com/shadowwalker/next-pwa)
-
-Generate manifest and splash screen
-
-- [PWA Manifest Generator](https://www.simicart.com/manifest-generator.html)
-- [Custom Splash Screen on iOS](https://appsco.pe/developer/splash-screens)
 
 ### Utils
 
