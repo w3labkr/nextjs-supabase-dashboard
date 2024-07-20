@@ -6,7 +6,14 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import { LucideIcon } from '@/lib/lucide-icon'
 import { Button } from '@/components/ui/button'
-import { SheetTrigger, SheetContent, Sheet } from '@/components/ui/sheet'
+import {
+  SheetTrigger,
+  SheetContent,
+  Sheet,
+  SheetTitle,
+  SheetDescription,
+} from '@/components/ui/sheet'
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 
 import { SiteBrand } from '@/components/site-brand'
 import { Navigation } from '@/components/navigation'
@@ -25,6 +32,12 @@ const Header = () => {
 
   return (
     <Sheet>
+      <VisuallyHidden.Root>
+        <SheetTitle>Sheet Content</SheetTitle>
+        <SheetDescription>
+          This is a hidden description for screen readers.
+        </SheetDescription>
+      </VisuallyHidden.Root>
       <SheetContent className="bg-white dark:bg-gray-900" side="left">
         <MobileNavigation />
       </SheetContent>

@@ -3,18 +3,19 @@ import Link from 'next/link'
 
 import { absoluteUrl } from '@/lib/utils'
 import { siteConfig } from '@/config/site'
+import { SiteLogo } from '@/components/site-logo'
 
-const SiteBrand = ({ className }: { className?: string }) => {
+interface SiteBrandProps {
+  className?: string
+}
+
+const SiteBrand = ({ className }: SiteBrandProps) => {
   return (
     <Link className={className} href={absoluteUrl('/')}>
-      <img
-        className="size-8 min-w-8"
-        src="/assets/icons/manifest/icon.svg"
-        alt=""
-      />
+      <SiteLogo className="size-8 min-w-8" />
       <span className="sr-only">{siteConfig?.name}</span>
     </Link>
   )
 }
 
-export { SiteBrand }
+export { SiteBrand, type SiteBrandProps }

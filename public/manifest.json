@@ -6,7 +6,7 @@
     "scope": "/",
     "display": "standalone",
     "background_color": "#66B814",
-    "theme_color": "#ffffff",
+    "theme_color": "#66B814",
     "icons": [
         {
             "src": "/assets/icons/manifest/icon-192x192.png",
