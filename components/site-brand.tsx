@@ -1,14 +1,17 @@
 import * as React from 'react'
 import Link from 'next/link'
 
-import { LucideIcon } from '@/lib/lucide-icon'
-import { siteConfig } from '@/config/site'
 import { absoluteUrl } from '@/lib/utils'
+import { siteConfig } from '@/config/site'
 
 const SiteBrand = ({ className }: { className?: string }) => {
   return (
     <Link className={className} href={absoluteUrl('/')}>
-      <LucideIcon name={siteConfig?.symbol} className="size-5 min-w-5" />
+      <img
+        className="size-8 min-w-8"
+        src="/assets/icons/manifest/icon.svg"
+        alt=""
+      />
       <span className="sr-only">{siteConfig?.name}</span>
     </Link>
   )

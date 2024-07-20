@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
   }
 
   const supabase = createClient()
-  const truncate = 1
+  const truncate: boolean = true
 
   if (truncate) {
     const { error } = await supabase.rpc('truncate_statistics')

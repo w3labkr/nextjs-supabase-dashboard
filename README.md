@@ -23,6 +23,8 @@ Denpendency
   - [Folder and file Structure](#folder-and-file-structure)
   - [Seed](#seed)
   - [Installation](#installation)
+  - [Configuration](#configuration)
+  - [Dependencies](#dependencies)
     - [Tailwind CSS](#tailwind-css)
     - [Shadcn UI](#shadcn-ui)
     - [Shadcn UI - Time Picker](#shadcn-ui---time-picker)
@@ -36,14 +38,13 @@ Denpendency
     - [Firebase Auth](#firebase-auth)
     - [Text Editor](#text-editor)
     - [PWA (Progressive Web Apps)](#pwa-progressive-web-apps)
-    - [Utils](#utils)
     - [ESLint](#eslint)
-  - [Configuration](#configuration)
-  - [Usage](#usage)
+  - [Utilities](#utilities)
+  - [Examples](#examples)
     - [Data Fetching With JSON](#data-fetching-with-json)
     - [Data Fetching With FormData](#data-fetching-with-formdata)
     - [Error Handling](#error-handling)
-  - [Regular Expression](#regular-expression)
+    - [Regular Expression](#regular-expression)
   - [Deploying](#deploying)
   - [Troubleshooting](#troubleshooting)
   - [Reference](#reference)
@@ -123,7 +124,11 @@ node -v > .nvmrc
 npm run gen-types
 ```
 
-(Optional) Generate manifest and splash screen
+Add `favicon.ico` file to `/app` directory
+
+- [Favicon.ico & App Icon Generator](https://www.favicon-generator.org)
+
+Generate manifest and splash screen
 
 ```shell
 vim public/manifest.json
@@ -137,6 +142,49 @@ Start the development server.
 ```shell
 npm run dev
 ```
+
+## Configuration
+
+Edit `next.config.js`:
+
+```javascript
+module.exports = {
+  reactStrictMode: true,
+  swcMinify: true,
+}
+```
+
+To enable Turbopack. Edit `packages.json`:
+
+```json
+{
+  "scripts": {
+    "dev": "next dev --turbo"
+  }
+}
+```
+
+Edit `packages.json`:
+
+```json
+{
+  "scripts": {
+    "clean:files": "rm -rf node_modules && rm -rf .next && rm -rf package-lock.json",
+    "clean:cache": "npm cache clean --force && npm cache verify",
+    "clean": "npm run clean:files && npm run clean:cache",
+    "upgrade:latest": "npm run clean && npx npm-check-updates -u && npm install",
+    "reinstall": "npm run clean && npm install",
+  },
+}
+```
+
+After cleaning the directories and cache, install the dependency packages.
+
+```shell
+npm run reinstall
+```
+
+## Dependencies
 
 ### Tailwind CSS
 
@@ -290,9 +338,10 @@ npm install redux-persist
 
 Run the SQL code in `SQL Editor > New Query`.
 
-Generating Types
+Generating Database Types
 
 - `Api Docs` > `Introduction` > `Generating Types`
+- [Generating types using Supabase CLI](https://supabase.com/docs/guides/api/rest/generating-types)
 
 ### Supabase CLI
 
@@ -335,8 +384,6 @@ npx supabase gen types typescript --linked > types/supabase.ts
 ```shell
 npm run gen-types
 ```
-
-[Generating types using Supabase CLI](https://supabase.com/docs/guides/api/rest/generating-types)
 
 ### Supabase Auth
 
@@ -457,7 +504,46 @@ npm install next-pwa
 
 - [next-pwa](https://github.com/shadowwalker/next-pwa)
 
-### Utils
+### ESLint
+
+ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
+
+```shell
+npm install --save-dev eslint eslint-plugin-react eslint-plugin-react-hooks
+npm install --save-dev @next/eslint-plugin-next
+npm install --save-dev eslint-plugin-import eslint-import-resolver-typescript
+npm install --save-dev @typescript-eslint/parser @typescript-eslint/eslint-plugin 
+npm install --save-dev prettier eslint-plugin-prettier eslint-config-prettier
+npm install --save-dev eslint-plugin-tailwindcss prettier-plugin-tailwindcss
+```
+
+Edit `next.config.js`:
+
+```javascript
+module.exports = {
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
+}
+```
+
+Find and fix problems in your JavaScript code.
+
+```shell
+npx eslint ./app
+npx eslint --fix ./{app,components,context,hooks,lib,types,utils}
+```
+
+To format a file in-place
+
+```shell
+npx prettier --check "./app/**/*.{ts,tsx}"
+npx prettier --write "./{app,components,context,hooks,lib,types,utils}/**/*.{ts,tsx}"
+```
+
+## Utilities
 
 Share target browsers between different front-end tools, like Autoprefixer, Stylelint and babel-preset-env
 
@@ -532,92 +618,7 @@ Flatten/unflatten nested Javascript objects
 npm install flat
 ```
 
-### ESLint
-
-ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
-
-```shell
-npm install --save-dev eslint eslint-plugin-react eslint-plugin-react-hooks
-npm install --save-dev @next/eslint-plugin-next
-npm install --save-dev eslint-plugin-import eslint-import-resolver-typescript
-npm install --save-dev @typescript-eslint/parser @typescript-eslint/eslint-plugin 
-npm install --save-dev prettier eslint-plugin-prettier eslint-config-prettier
-npm install --save-dev eslint-plugin-tailwindcss prettier-plugin-tailwindcss
-```
-
-Edit `next.config.js`:
-
-```javascript
-module.exports = {
-  eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
-  },
-}
-```
-
-Find and fix problems in your JavaScript code.
-
-```shell
-npx eslint ./app
-npx eslint --fix ./{app,components,context,hooks,lib,types,utils}
-```
-
-To format a file in-place
-
-```shell
-npx prettier --check "./app/**/*.{ts,tsx}"
-npx prettier --write "./{app,components,context,hooks,lib,types,utils}/**/*.{ts,tsx}"
-```
-
-## Configuration
-
-Generating Database Types
-
-`Api Docs > Introduction > Generating Types`
-
-- [generating-types](https://supabase.com/docs/guides/api/rest/generating-types)
-
-Edit `next.config.js`:
-
-```javascript
-module.exports = {
-  reactStrictMode: true,
-  swcMinify: true,
-}
-```
-
-Edit `packages.json`:
-
-```json
-{
-    "scripts": {
-        "clean:dir": "rm -rf node_modules",
-        "clean:cache": "npm cache clean --force",
-        "clean": "npm run clean:dir && npm run clean:cache",
-        "reinstall": "npm run clean && npm install"
-    },
-}
-```
-
-To enable Turbopack. Edit `packages.json`:
-
-```json
-{
-    "scripts": {
-        "dev": "next dev --turbo"
-    }
-}
-```
-
-After cleaning the directories and cache, install the dependency packages.
-
-```shell
-npm run --force reinstall
-```
-
-## Usage
+## Examples
 
 Register your provider in `context/app-provider.tsx`.
 
@@ -717,7 +718,7 @@ export function Component() {
 }
 ```
 
-## Regular Expression
+### Regular Expression
 
 CJK (Chinese - Japanese - Korean)
 
@@ -751,7 +752,7 @@ Deploy app to Vercel
 vercel deploy
 ```
 
-Deploying Static Exports `next.config.js`:
+(Optional) Deploying Static Exports `next.config.js`:
 
 ```javascript
 module.exports = {
@@ -796,6 +797,22 @@ module.exports = {
   rules: {
     '@next/next/no-img-element': 'warn',
   }
+}
+```
+
+(Optional) Add cron jobs
+
+- [https://vercel.com/docs/cron-jobs/quickstart]
+
+```shell
+vim vercel.json
+{
+  "crons": [
+    {
+      "path": "/api/cron/daily-reset-posts",
+      "schedule": "0 0 * * *"
+    }
+  ]
 }
 ```
 
