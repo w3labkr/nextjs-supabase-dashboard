@@ -435,7 +435,14 @@ And run the script below:
 
 ```shell
 npm install file:./ckeditor5
-npm install @ckeditor/ckeditor5-react
+npm install @ckeditor/ckeditor5-react@6.2.0
+```
+
+Upgrade ckeditor5-custom-build
+
+```shell
+cd ./ckeditor5 && npx npm-check-updates -u
+cd .. && npm install file:./ckeditor5
 ```
 
 - [Integrate CKEditor 5 with Next.js](https://ckeditor.com/docs/ckeditor5/latest/installation/integrations/next-js.html)
