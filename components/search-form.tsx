@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'

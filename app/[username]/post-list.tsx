@@ -72,7 +72,6 @@ interface PostItemProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const PostItem = ({ post, ...props }: PostItemProps) => {
   const username = post?.author?.username
-  const slug = post?.slug
 
   return (
     <div

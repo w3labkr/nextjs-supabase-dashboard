@@ -6,9 +6,9 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { SearchForm } from '@/components/search-form'
 
-import { Aside } from '@/app/[username]/aside'
-import { PostList } from '@/app/[username]/post-list'
-import { TabLink } from '@/app/[username]/components/tab-link'
+import { Aside } from './aside'
+import { PostList } from './post-list'
+import { TabLink } from './components/tab-link'
 
 import { absoluteUrl } from '@/lib/utils'
 import { getTranslation } from '@/hooks/i18next'
@@ -41,7 +41,7 @@ export async function generateMetadata(
   }
 }
 
-export default async function UserPage({
+export default async function UsernamePage({
   params: { username },
   searchParams,
 }: {
@@ -53,7 +53,7 @@ export default async function UserPage({
   if (!user) notFound()
 
   const { t } = await getTranslation()
-  const pathname = getPathname()
+  const pathname = await getPathname()
 
   return (
     <>

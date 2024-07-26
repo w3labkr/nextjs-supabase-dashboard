@@ -6,9 +6,9 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { SearchForm } from '@/components/search-form'
 
-import { TabLink } from '@/app/[username]/components/tab-link'
-import { Aside } from '@/app/[username]/aside'
-import { PostList } from '@/app/[username]/favorites/post-list'
+import { TabLink } from '../components/tab-link'
+import { Aside } from '../aside'
+import { PostList } from './post-list'
 
 import { absoluteUrl } from '@/lib/utils'
 import { getTranslation } from '@/hooks/i18next'
@@ -53,7 +53,7 @@ export default async function FavoritesPage({
   if (!user) notFound()
 
   const { t } = await getTranslation()
-  const pathname = getPathname()
+  const pathname = await getPathname()
 
   return (
     <>
