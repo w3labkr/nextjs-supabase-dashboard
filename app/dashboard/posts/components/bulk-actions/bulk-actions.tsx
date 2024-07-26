@@ -68,53 +68,6 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
   const { mutate } = useSWRConfig()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const getData = React.useCallback((action: string, post: Post) => {
-    const user_id = post?.user_id
-    const visibility = getMetaValue(post?.meta, 'visibility')
-    const future_date = getMetaValue(post?.meta, 'future_date')
-    const now = new Date().toISOString()
-
-    if (action === 'draft') {
-      return { status: 'draft', user_id }
-    } else if (action === 'publish') {
-      const data = {
-        status: visibility === 'private' ? 'private' : 'publish',
-        slug: post?.slug ?? slugify(post?.title ?? ''),
-        meta: setMeta(post?.meta, 'future_date', null, {
-          post_id: post?.id,
-        }),
-        user_id,
-      }
-      return post?.date ? data : { ...data, date: now }
-    } else if (action === 'public') {
-      const data = {
-        status: future_date ? 'future' : 'publish',
-        meta: setMeta(post?.meta, 'visibility', 'public', {
-          post_id: post?.id,
-        }),
-        user_id,
-      }
-      return post?.date ? data : { ...data, date: now }
-    } else if (action === 'private') {
-      const data = {
-        status: future_date ? 'future' : 'private',
-        meta: setMeta(post?.meta, 'visibility', 'private', {
-          post_id: post?.id,
-        }),
-        user_id,
-      }
-      return post?.date ? data : { ...data, date: now }
-    } else if (action === 'trash') {
-      return { status: 'trash', deleted_at: now, user_id }
-    } else if (action === 'restore') {
-      return { status: 'draft', deleted_at: null, user_id }
-    } else if (action === 'delete') {
-      return { user_id }
-    }
-
-    return null
-  }, [])
-
   const onSubmit = async (formValues: FormValues) => {
     if (formValues?.action === 'unassigned') return false
     if (checks.length < 1) return false
@@ -123,36 +76,133 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
       setIsSubmitting(true)
 
       for (let i = 0; i < checks.length; i++) {
-        const post = checks[i]
-        const data = getData(formValues?.action, post)
+        const check = checks[i]
 
-        if (!data) throw new Error('Require is not defined.')
+        const user_id = check?.user_id
+        const visibility = getMetaValue(check?.meta, 'visibility')
+        const future_date = getMetaValue(check?.meta, 'future_date')
+        const now = new Date().toISOString()
 
-        const revalidatePaths = post?.permalink
-          ? relativeUrl(post?.permalink)
+        const revalidatePaths = check?.permalink
+          ? relativeUrl(check?.permalink)
           : null
 
-        const { error } = await fetcher<PostAPI>(
-          `/api/v1/post?id=${post?.id}`,
-          {
-            method: formValues?.action === 'delete' ? 'DELETE' : 'POST',
-            body: JSON.stringify({
-              data,
-              options: { revalidatePaths },
+        if (formValues?.action === 'draft') {
+          const { error } = await fetcher<PostAPI>(
+            `/api/v1/post?id=${check?.id}`,
+            {
+              method: 'POST',
+              body: JSON.stringify({
+                data: { status: 'draft', user_id },
+                options: { revalidatePaths },
+              }),
+            }
+          )
+          if (error) throw new Error(error?.message)
+        } else if (formValues?.action === 'publish') {
+          const data = {
+            status: visibility === 'private' ? 'private' : 'publish',
+            slug: check?.slug ?? slugify(check?.title ?? ''),
+            meta: setMeta(check?.meta, 'future_date', null, {
+              post_id: check?.id,
             }),
+            user_id,
           }
-        )
-
-        if (error) throw new Error(error?.message)
+          const { error } = await fetcher<PostAPI>(
+            `/api/v1/post?id=${check?.id}`,
+            {
+              method: 'POST',
+              body: JSON.stringify({
+                data: check?.date ? data : { ...data, date: now },
+                options: { revalidatePaths },
+              }),
+            }
+          )
+          if (error) throw new Error(error?.message)
+        } else if (formValues?.action === 'public') {
+          const data = {
+            status: future_date ? 'future' : 'publish',
+            meta: setMeta(check?.meta, 'visibility', 'public', {
+              post_id: check?.id,
+            }),
+            user_id,
+          }
+          const { error } = await fetcher<PostAPI>(
+            `/api/v1/post?id=${check?.id}`,
+            {
+              method: 'POST',
+              body: JSON.stringify({
+                data: check?.date ? data : { ...data, date: now },
+                options: { revalidatePaths },
+              }),
+            }
+          )
+          if (error) throw new Error(error?.message)
+        } else if (formValues?.action === 'private') {
+          const data = {
+            status: future_date ? 'future' : 'private',
+            meta: setMeta(check?.meta, 'visibility', 'private', {
+              post_id: check?.id,
+            }),
+            user_id,
+          }
+          const { error } = await fetcher<PostAPI>(
+            `/api/v1/post?id=${check?.id}`,
+            {
+              method: 'POST',
+              body: JSON.stringify({
+                data: check?.date ? data : { ...data, date: now },
+                options: { revalidatePaths },
+              }),
+            }
+          )
+          if (error) throw new Error(error?.message)
+        } else if (formValues?.action === 'trash') {
+          const { error } = await fetcher<PostAPI>(
+            `/api/v1/post?id=${check?.id}`,
+            {
+              method: 'POST',
+              body: JSON.stringify({
+                data: { status: 'trash', deleted_at: now, user_id },
+                options: { revalidatePaths },
+              }),
+            }
+          )
+          if (error) throw new Error(error?.message)
+        } else if (formValues?.action === 'restore') {
+          const { error } = await fetcher<PostAPI>(
+            `/api/v1/post?id=${check?.id}`,
+            {
+              method: 'POST',
+              body: JSON.stringify({
+                data: { status: 'draft', deleted_at: null, user_id },
+                options: { revalidatePaths },
+              }),
+            }
+          )
+          if (error) throw new Error(error?.message)
+        } else if (formValues?.action === 'delete') {
+          const { error } = await fetcher<PostAPI>(
+            `/api/v1/post?id=${check?.id}`,
+            {
+              method: 'DELETE',
+              body: JSON.stringify({
+                data: { user_id },
+                options: { revalidatePaths },
+              }),
+            }
+          )
+          if (error) throw new Error(error?.message)
+        }
 
         const countSearchParams = setQueryString({
-          userId: post?.user_id,
+          userId: check?.user_id,
           postType: paging?.postType,
           q: paging?.q,
         })
 
         const listSearchParams = setQueryString({
-          userId: post?.user_id,
+          userId: check?.user_id,
           postType: paging?.postType,
           status: paging?.status,
           q: paging?.q,
@@ -162,7 +212,7 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
           page: paging?.page,
         })
 
-        mutate(`/api/v1/post?id=${post?.id}`)
+        mutate(`/api/v1/post?id=${check?.id}`)
         mutate(`/api/v1/post/count?${countSearchParams}`)
         mutate(`/api/v1/post/list?${listSearchParams}`)
       }

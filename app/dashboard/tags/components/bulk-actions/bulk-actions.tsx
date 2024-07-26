@@ -60,19 +60,6 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
   const { mutate } = useSWRConfig()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
-  const getData = React.useCallback((action: string, tag: Tag) => {
-    if (action === 'delete') {
-      return {
-        user_id: tag?.user_id,
-        name: tag?.name,
-        slug: tag?.slug,
-        post_tags: tag?.post_tags,
-      }
-    }
-
-    return null
-  }, [])
-
   const onSubmit = async (formValues: FormValues) => {
     if (formValues?.action === 'unassigned') return false
     if (checks.length < 1) return false
@@ -81,20 +68,28 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
       setIsSubmitting(true)
 
       for (let i = 0; i < checks.length; i++) {
-        const tag = checks[i]
-        const data = getData(formValues?.action, tag)
+        const check = checks[i]
 
-        if (!data) throw new Error('Require is not defined.')
-
-        const { error } = await fetcher<PostAPI>(`/api/v1/tag?id=${tag?.id}`, {
-          method: formValues?.action === 'delete' ? 'DELETE' : 'POST',
-          body: JSON.stringify({ data }),
-        })
-
-        if (error) throw new Error(error?.message)
+        if (formValues?.action === 'delete') {
+          const { error } = await fetcher<PostAPI>(
+            `/api/v1/tag?id=${check?.id}`,
+            {
+              method: formValues?.action === 'delete' ? 'DELETE' : 'POST',
+              body: JSON.stringify({
+                data: {
+                  user_id: check?.user_id,
+                  name: check?.name,
+                  slug: check?.slug,
+                  post_tags: check?.post_tags,
+                },
+              }),
+            }
+          )
+          if (error) throw new Error(error?.message)
+        }
 
         const listSearchParams = setQueryString({
-          userId: tag?.user_id,
+          userId: check?.user_id,
           q: paging?.q,
           orderBy: paging?.orderBy,
           order: paging?.order,
@@ -102,10 +97,10 @@ const BulkActions = ({ className, ...props }: BulkActionsProps) => {
           page: paging?.page,
         })
 
-        mutate(`/api/v1/tag?id=${tag?.id}`)
+        mutate(`/api/v1/tag?id=${check?.id}`)
         mutate(`/api/v1/tag/list?${listSearchParams}`)
 
-        const post_tags = tag?.post_tags
+        const post_tags = check?.post_tags
 
         if (Array.isArray(post_tags) && post_tags?.length > 0) {
           for (let i = 0; i < post_tags.length; i++) {
