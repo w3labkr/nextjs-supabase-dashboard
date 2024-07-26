@@ -29,7 +29,7 @@ interface StorageValues {
 }
 
 interface FormValues extends StorageValues {
-  userId: string
+  userId: string | null
   query: string
 }
 
@@ -83,7 +83,7 @@ const Statistics = () => {
     const formValues: FormValues = {
       ...storageValues,
       userId: user?.id ?? null,
-      query: queryString ? '?' + queryString : null,
+      query: queryString ? '?' + queryString : '',
     }
 
     if (previous?.href !== current.href) {

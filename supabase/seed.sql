@@ -1252,7 +1252,7 @@ begin
   values
   (
     (data ->> 'visitor_id')::uuid,
-    (data ->> 'user_id')::uuid,
+    coalesce((data ->> 'user_id')::uuid, null),
     (data ->> 'title')::text,
     (data ->> 'location')::text,
     (data ->> 'path')::text,
@@ -1279,7 +1279,7 @@ $$ language plpgsql;
 ----------------------------------------------------------------
 
 create or replace function get_post_rank_by_views(
-	userid uuid,
+	username text,
 	q text = '',
 	order_by text = 'views',
 	ascending boolean = true,
@@ -1287,7 +1287,7 @@ create or replace function get_post_rank_by_views(
 	page integer = 1,
   head boolean = false
 )
-returns table(id bigint, path text, title text, views bigint)
+returns table(path text, title text, views bigint)
 security definer set search_path = public
 as $$
 declare
@@ -1295,30 +1295,44 @@ declare
   _order text;
   _offset integer;
 begin
-  _command := 'select s.post_id as id, s.path, s.title, count(*) as views
-    from statistics s
-      join posts p on p.id = s.post_id
-      join users u on u.id = p.user_id
-  ';
-
   _order := case when ascending is false then 'desc' else 'asc' end;
   _offset := (page - 1) * per_page;
 
   if q <> '' then
-    _command := _command || ' where u.id = $1 u.title like $2 group by s.post_id, s.path, s.title ';
     if head then
-      return query execute format(_command) using userid, q;
+      _command := 'select s.path, s.title, count(*) as views
+      from statistics s
+      where s.path like ''/'|| username ||'/%%''
+        and s.path not like ''/'|| username ||'/favorites''
+        and s.title ilike ''%%'|| q ||'%%''
+      group by s.path, s.title ';
+      return query execute format(_command) using username, q;
     else
-      _command := _command || ' order by %I %s limit %s offset %s ';
-      return query execute format(_command, order_by, _order, per_page, _offset) using userid, q;
+      _command := 'select s.path, s.title, count(*) as views
+      from statistics s
+      where s.path like ''/'|| username ||'/%%''
+        and s.path not like ''/'|| username ||'/favorites''
+        and s.title ilike ''%%'|| q ||'%%''
+      group by s.path, s.title
+      order by %I %s limit %s offset %s ';
+      return query execute format(_command, order_by, _order, per_page, _offset) using username, q;
     end if;
   else
-    _command := _command || ' where u.id = $1 group by s.post_id, s.path, s.title ';
     if head then
-      return query execute format(_command) using userid;
+      _command := 'select s.path, s.title, count(*) as views
+      from statistics s
+      where s.path like ''/'|| username ||'/%%''
+        and s.path not like ''/'|| username ||'/favorites''
+      group by s.path, s.title ';
+      return query execute format(_command) using username;
     else
-      _command := _command || ' order by %I %s limit %s offset %s ';
-      return query execute format(_command, order_by, _order, per_page, _offset) using userid;
+      _command := 'select s.path, s.title, count(*) as views
+      from statistics s
+      where s.path like ''/'|| username ||'/%%''
+        and s.path not like ''/'|| username ||'/favorites''
+      group by s.path, s.title
+      order by %I %s limit %s offset %s ';
+      return query execute format(_command, order_by, _order, per_page, _offset) using username;
     end if;
   end if;
 

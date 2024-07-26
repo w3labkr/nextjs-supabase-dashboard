@@ -3,6 +3,7 @@ import { createClient } from '@/supabase/server'
 import { ApiError, revalidates } from '@/lib/utils'
 import { authorize } from '@/queries/server/auth'
 import { type Post } from '@/types/database'
+import { getUserAPI } from '@/queries/server/users'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -11,9 +12,11 @@ export async function GET(request: NextRequest) {
   const orderBy = (searchParams.get('orderBy') as string) ?? 'id'
   const order = (searchParams.get('order') as string) ?? 'asc'
 
-  if (!userId) {
+  const { user } = await getUserAPI(userId)
+
+  if (!user) {
     return NextResponse.json(
-      { data: null, error: new ApiError(400) },
+      { data: null, error: new ApiError(401) },
       { status: 401 }
     )
   }
@@ -27,10 +30,9 @@ export async function GET(request: NextRequest) {
   if (offset < 0) offset = 0
 
   const supabase = createClient()
-
   const total = await supabase.rpc(
     'get_post_rank_by_views',
-    { userid: userId, q, head: true },
+    { username: user?.username, q, head: true },
     { count: 'exact' }
   )
 
@@ -42,7 +44,7 @@ export async function GET(request: NextRequest) {
   }
 
   const { data: list, error } = await supabase.rpc('get_post_rank_by_views', {
-    userid: userId,
+    username: user?.username,
     q,
     order_by: orderBy,
     ascending: order.toLowerCase() === 'asc',

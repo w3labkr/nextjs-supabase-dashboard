@@ -666,6 +666,22 @@ export type Database = {
           next_id: number
         }[]
       }
+      get_post_rank_by_views: {
+        Args: {
+          username: string
+          q?: string
+          order_by?: string
+          ascending?: boolean
+          per_page?: number
+          page?: number
+          head?: boolean
+        }
+        Returns: {
+          path: string
+          title: string
+          views: number
+        }[]
+      }
       get_users: {
         Args: {
           userrole?: string

@@ -54,10 +54,10 @@ export type Tag = Tables<'tags'> & {
 }
 
 export type PostRank = {
-  id: number
+  path: string
   title: string
   views: number
-  num: number
+  num?: number
 }
 
 export type Favorite = Tables<'favorites'>

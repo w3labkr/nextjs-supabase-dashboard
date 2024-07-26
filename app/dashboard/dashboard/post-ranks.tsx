@@ -76,7 +76,7 @@ const ListItem = ({ post, ...props }: ListItemProps) => {
       <td>{post?.num}</td>
       <td>
         <Link
-          href={`/dashboard/posts/edit?id=${post?.id}`}
+          href={post?.path ?? '#'}
           className="line-clamp-1 font-serif hover:underline"
         >
           {post?.title}
