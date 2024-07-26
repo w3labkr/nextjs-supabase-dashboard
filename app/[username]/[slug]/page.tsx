@@ -108,7 +108,7 @@ export default async function PostPage({
               />
             </div>
             <div className="flex space-x-4">
-              <PostViews meta={post?.meta} />
+              <PostViews post={post} />
               <FavoriteButton post={post} />
             </div>
           </div>
