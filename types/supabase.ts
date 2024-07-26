@@ -320,7 +320,7 @@ export type Database = {
           ip: unknown | null
           location: string | null
           path: string | null
-          post_id: number
+          query: string | null
           referrer: string | null
           title: string | null
           user_agent: string | null
@@ -334,7 +334,7 @@ export type Database = {
           ip?: unknown | null
           location?: string | null
           path?: string | null
-          post_id: number
+          query?: string | null
           referrer?: string | null
           title?: string | null
           user_agent?: string | null
@@ -348,7 +348,7 @@ export type Database = {
           ip?: unknown | null
           location?: string | null
           path?: string | null
-          post_id?: number
+          query?: string | null
           referrer?: string | null
           title?: string | null
           user_agent?: string | null
@@ -356,13 +356,6 @@ export type Database = {
           visitor_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "statistics_post_id_fkey"
-            columns: ["post_id"]
-            isOneToOne: false
-            referencedRelation: "posts"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "statistics_user_id_fkey"
             columns: ["user_id"]
@@ -671,23 +664,6 @@ export type Database = {
         Returns: {
           previous_id: number
           next_id: number
-        }[]
-      }
-      get_post_rank_by_views: {
-        Args: {
-          userid: string
-          q?: string
-          order_by?: string
-          ascending?: boolean
-          per_page?: number
-          page?: number
-          head?: boolean
-        }
-        Returns: {
-          id: number
-          path: string
-          title: string
-          views: number
         }[]
       }
       get_users: {

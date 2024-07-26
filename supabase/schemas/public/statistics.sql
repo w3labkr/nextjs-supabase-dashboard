@@ -18,10 +18,10 @@ create table statistics (
   created_at timestamptz default now() not null,
   visitor_id uuid not null,
   user_id uuid references users(id) on delete cascade,
-  post_id bigint references posts(id) on delete cascade not null,
   title text,
   location text,
   path text,
+  query text,
   referrer text,
   ip inet,
   browser jsonb,
@@ -31,7 +31,6 @@ create table statistics (
 -- Add table indexing
 create index statistics_visitor_id_idx on statistics (visitor_id);
 create index statistics_user_id_idx on statistics (user_id);
-create index statistics_post_id_idx on statistics (post_id);
 
 -- Secure the table
 alter table statistics enable row level security;
@@ -50,21 +49,20 @@ security definer set search_path = public
 as $$
 begin
   insert into statistics
-  (visitor_id,user_id,post_id,title,location,path,referrer,ip,browser,user_agent)
+  (visitor_id,user_id,title,location,path,query,referrer,ip,browser,user_agent)
   values
   (
     (data ->> 'visitor_id')::uuid,
     (data ->> 'user_id')::uuid,
-    (data ->> 'post_id')::bigint,
     (data ->> 'title')::text,
     (data ->> 'location')::text,
     (data ->> 'path')::text,
+    (data ->> 'query')::text,
     (data ->> 'referrer')::text,
     (data ->> 'ip')::inet,
     (data ->> 'browser')::jsonb,
     (data ->> 'user_agent')::text
   );
-  perform set_post_views((data->>'post_id')::bigint);
 end;
 $$ language plpgsql;
 

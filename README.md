@@ -353,6 +353,12 @@ Supabase CLI. Manage postgres migrations, run Supabase locally, deploy edge func
 npm install supabase --save-dev
 ```
 
+Updating the Supabase CLI.
+
+```shell
+npm update supabase --save-dev
+```
+
 Login with your Personal Access Token:
 
 ```shell

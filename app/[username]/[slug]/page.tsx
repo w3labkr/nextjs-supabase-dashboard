@@ -10,7 +10,6 @@ import { EntryPublished, EntryAuthor, EntryTags } from '@/components/hentry'
 import { PostViews } from './post-views'
 import { FavoriteButton } from './favorite-button'
 import { RelatedPosts } from './related-posts'
-import { Statistics } from './statistics'
 
 import { absoluteUrl, cn } from '@/lib/utils'
 import { getTranslation } from '@/hooks/i18next'
@@ -127,7 +126,6 @@ export default async function PostPage({
         </div>
       </main>
       <Footer />
-      <Statistics post={post} />
     </>
   )
 }
