@@ -2,3 +2,4 @@ out/
 dist/
 node_modules/
 components/ui/
+ckeditor5/

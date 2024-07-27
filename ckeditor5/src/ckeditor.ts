@@ -188,25 +188,7 @@ class Editor extends ClassicEditor {
 				'redo'
 			]
 		},
-		language: 'en',
-		image: {
-			toolbar: [
-				'imageTextAlternative',
-				'imageStyle:inline',
-				'imageStyle:block',
-				'imageStyle:side',
-				'linkImage'
-			]
-		},
-		table: {
-			contentToolbar: [
-				'tableColumn',
-				'tableRow',
-				'mergeTableCells',
-				'tableCellProperties',
-				'tableProperties'
-			]
-		}
+		language: 'en'
 	};
 }
 

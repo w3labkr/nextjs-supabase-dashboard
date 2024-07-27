@@ -1,10 +1,10 @@
 'use client'
 
 import * as React from 'react'
-import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from 'ckeditor5-custom-build'
+import { CKEditor } from '@ckeditor/ckeditor5-react'
+import Event from '@ckeditor/ckeditor5-utils/src/eventinfo'
 import type { EditorConfig } from '@ckeditor/ckeditor5-core'
-import EventInfo from '@ckeditor/ckeditor5-utils/src/eventinfo'
 import { SupabaseUploadAdapterPlugin } from '@/lib/ckeditor5/supabase-upload-adapter'
 import '@/lib/ckeditor5/style.css'
 import '@/ckeditor5/build/translations/ko.js'
@@ -175,14 +175,14 @@ const Editor = () => {
     }
   }, [user?.id])
 
-  const onChange = (event: EventInfo, editor: ClassicEditor) => {
+  const onChange = (event: Event, editor: ClassicEditor) => {
     const data = editor.getData()
     setValue('content', data, { shouldDirty: true, shouldValidate: true })
     setWatchValue(data)
   }
 
   // This for Revisions
-  // const onBlur = (event: EventInfo, editor: ClassicEditor) => {
+  // const onBlur = (event: Event, editor: ClassicEditor) => {
   //   console.log('onBlur')
   //   const data = editor.getData()
   //   console.log(data)
