@@ -1,4 +1,4 @@
-# NextJS supabase dashboard starter
+# NextJS Supabase Dashboard
 
 This is a dashboard starter template for the [NextJS](https://nextjs.org) 14 app router using supabase based on [shadcn-ui](https://ui.shadcn.com).
 
@@ -17,13 +17,14 @@ Denpendency
 
 ## Table of Contents
 
-- [NextJS supabase dashboard starter](#nextjs-supabase-dashboard-starter)
+- [NextJS Supabase Dashboard](#nextjs-supabase-dashboard)
   - [Table of Contents](#table-of-contents)
   - [Screenshots](#screenshots)
   - [Folder and file Structure](#folder-and-file-structure)
   - [Getting Started](#getting-started)
   - [Generate Favicon](#generate-favicon)
   - [Docs](#docs)
+  - [Change Site URL](#change-site-url)
   - [Troubleshootings](#troubleshootings)
   - [LICENSE](#license)
 
@@ -70,7 +71,7 @@ Find and replace the following text in `supabase/seed.sql` and run sql.
 Cloning a repository.
 
 ```shell
-git clone https://github.com/w3labkr/nextjs-supabase-dashboard-starter.git .
+git clone https://github.com/w3labkr/nextjs-supabase-dashboard.git .
 ```
 
 Install all modules listed as dependencies.
@@ -108,6 +109,12 @@ vim public/manifest.json
 - [CONFIGURATION](./docs/CONFIGURATION.md)
 - [DEPLOYING](./docs/DEPLOYING.md)
 - [EXAMPLES](./docs/EXAMPLES.md)
+
+## Change Site URL
+
+- `.env`: `NEXT_PUBLIC_APP_URL=`
+- Supabase Auth: Authentication > URL Configuration > Redirect URLs
+- Google cloud console: API > Credentials, API > OAuth
 
 ## Troubleshootings
 
