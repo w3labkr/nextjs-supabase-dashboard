@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 
 import { useTranslation } from 'react-i18next'
-import { languages, Language } from '@/i18next.config'
+import { languages, type Language } from '@/i18next.config'
 
 import { Button, ButtonProps } from '@/components/ui/button'
 import {
@@ -13,7 +13,8 @@ import {
   CommandGroup,
   CommandItem,
   CommandInput,
-} from '@/components/ui/command'
+  CommandList,
+} from '@/components/ui-custom/command'
 import {
   Popover,
   PopoverContent,
@@ -27,9 +28,7 @@ import { setAppLanguage } from '@/store/reducers/app-reducer'
 
 interface LanguageComboboxProps
   extends ButtonProps,
-    React.RefAttributes<HTMLButtonElement> {
-  className?: string
-}
+    React.RefAttributes<HTMLButtonElement> {}
 
 const LanguageCombobox = ({
   variant = 'outline',
@@ -39,15 +38,15 @@ const LanguageCombobox = ({
 }: LanguageComboboxProps) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const { language } = useAppSelector(({ app }) => app)
+  const { language: currentValue } = useAppSelector(({ app }) => app)
   const { t, i18n } = useTranslation()
   const [open, setOpen] = React.useState<boolean>(false)
 
-  const onSelect = (currentValue: string) => {
-    if (currentValue === language) return false
+  const onSelect = (value: string) => {
+    if (value === currentValue) return false
 
-    i18n.changeLanguage(currentValue)
-    dispatch(setAppLanguage(currentValue))
+    i18n.changeLanguage(value)
+    dispatch(setAppLanguage(value))
 
     setOpen(false)
 
@@ -65,8 +64,8 @@ const LanguageCombobox = ({
           {...props}
         >
           <span>
-            {language
-              ? languages?.find((lang: Language) => lang?.value === language)
+            {currentValue
+              ? languages?.find((l: Language) => l?.value === currentValue)
                   ?.native
               : null}
           </span>
@@ -79,17 +78,19 @@ const LanguageCombobox = ({
       <PopoverContent className="w-50 p-0">
         <Command>
           <CommandInput placeholder={t('search_language')} />
-          <CommandEmpty>{t('no_language_found')}</CommandEmpty>
-          <CommandGroup>
-            {languages?.map((lang: Language) => (
-              <ListItem
-                key={lang?.value}
-                lang={lang}
-                language={language}
-                onSelect={onSelect}
-              />
-            ))}
-          </CommandGroup>
+          <CommandList>
+            <CommandEmpty>{t('no_language_found')}</CommandEmpty>
+            <CommandGroup>
+              {languages?.map((language: Language) => (
+                <ListItem
+                  key={language?.value}
+                  language={language}
+                  currentValue={currentValue}
+                  onSelect={onSelect}
+                />
+              ))}
+            </CommandGroup>
+          </CommandList>
         </Command>
       </PopoverContent>
     </Popover>
@@ -97,17 +98,17 @@ const LanguageCombobox = ({
 }
 
 const ListItem = ({
-  lang,
   language,
+  currentValue,
   onSelect,
 }: {
-  lang: Language
-  language: string
+  language: Language
+  currentValue: string
   onSelect: (value: string) => void
 }) => {
   return (
     <CommandItem
-      value={lang?.value}
+      value={language?.value}
       onSelect={onSelect}
       className="cursor-pointer"
     >
@@ -115,10 +116,10 @@ const ListItem = ({
         name="Check"
         className={cn(
           'mr-2 size-4 min-w-4',
-          lang?.value === language ? 'opacity-100' : 'opacity-0'
+          language?.value === currentValue ? 'opacity-100' : 'opacity-0'
         )}
       />
-      {lang?.native}
+      {language?.native}
     </CommandItem>
   )
 }

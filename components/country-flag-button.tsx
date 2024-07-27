@@ -4,7 +4,12 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 
 import { useTranslation } from 'react-i18next'
-import { defaultLng, fallbackLng, languages, Language } from '@/i18next.config'
+import {
+  defaultLng,
+  fallbackLng,
+  languages,
+  type Language,
+} from '@/i18next.config'
 import { Flag } from '@/lib/country-flag-icons'
 
 import { cn } from '@/lib/utils'
