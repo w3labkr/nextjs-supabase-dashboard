@@ -55,7 +55,12 @@ export async function GET(request: NextRequest) {
 
   let match: Record<string, any> = {}
 
-  if (userId) match = { ...match, user_id: userId }
+  if (userId && isFavorite) {
+    match = { ...match, 'favorites.user_id': userId }
+  } else if (userId) {
+    match = { ...match, user_id: userId }
+  }
+
   if (postType) match = { ...match, type: postType }
   if (status) match = { ...match, status }
   if (isFavorite) match = { ...match, 'favorites.is_favorite': true }
@@ -103,7 +108,7 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const count = limit ? list?.length : (total?.count ?? 0)
+  const count = limit ? list?.length : total?.count ?? 0
   const data = list?.map((item: any, index: number) => {
     item['num'] = limit ? index + 1 : count - index - offset
     return item

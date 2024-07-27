@@ -33,7 +33,7 @@ const PostList = ({ user, ...props }: PostListProps) => {
   const page = +((searchParams.get('page') as string) ?? '1')
   const pageSize = +((searchParams.get('pageSize') as string) ?? '10')
 
-  const { posts, count } = usePostsAPI(user?.id ?? null, {
+  const { posts, count } = usePostsAPI(user?.id, {
     postType,
     status,
     tag,
