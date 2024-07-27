@@ -1,6 +1,6 @@
 {
-  "name": "nextjs-with-supabase-auth",
-  "description": "This is a starter template for the NextJS 14 app router using supabase based on shadcn-ui.",
+  "name": "nextjs-supabase-dashboard-starter",
+  "description": "This is a dashboard starter template for the NextJS 14 app router using supabase based on shadcn-ui.",
   "version": "0.1.0",
   "private": true,
   "scripts": {

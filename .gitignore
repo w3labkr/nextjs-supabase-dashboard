@@ -138,20 +138,6 @@ sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/react,nextjs
 
-# Created by https://www.toptal.com/developers/gitignore/api/firebase
-# Edit at https://www.toptal.com/developers/gitignore?templates=firebase
-
-### Firebase ###
-.idea
-**/node_modules/*
-**/.firebaserc
-
-### Firebase Patch ###
-.runtimeconfig.json
-.firebase/
-
-# End of https://www.toptal.com/developers/gitignore/api/firebase
-
 # next-pwa
 **/public/precache.*.*.js
 **/public/sw.js

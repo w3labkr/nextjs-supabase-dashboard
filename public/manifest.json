@@ -1,7 +1,7 @@
 {
-    "name": "Next.js Starter Kit",
-    "short_name": "Next.js Starter Kit",
-    "description": "This is a starter template for the NextJS 14 app router using supabase based on shadcn-ui.",
+    "name": "NextJS supabase dashboard starter",
+    "short_name": "NextJS supabase dashboard starter",
+    "description": "This is a dashboard starter template for the NextJS 14 app router using supabase based on shadcn-ui.",
     "start_url": "/",
     "scope": "/",
     "display": "standalone",

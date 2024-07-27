@@ -8,10 +8,10 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: 'NextJS with Supabase Auth',
-  title: 'Next.js Starter Kit',
+  name: 'NextJS supabase dashboard starter',
+  title: 'NextJS supabase dashboard starter',
   description:
-    'This is a starter template for the NextJS 14 app router using supabase based on shadcn-ui.',
+    'This is a dashboard starter template for the NextJS 14 app router using supabase based on shadcn-ui.',
   symbol: 'Activity', // LucideIcon
 }
 
