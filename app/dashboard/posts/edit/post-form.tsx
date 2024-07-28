@@ -23,10 +23,9 @@ import {
   MetaboxTags,
 } from './components/metaboxes'
 import { PostFormProvider } from './context/post-form-provider'
-
 import { usePostAPI } from '@/queries/client/posts'
 
-const Editor = dynamic(() => import('./components/editor'), {
+const Editor = dynamic(() => import('./components/ckeditor5/editor'), {
   ssr: false,
   loading: () => <Skeleton className="h-96 w-full" />,
 })
@@ -98,7 +97,7 @@ const PostForm = ({ id }: { id: number }) => {
                 <FieldTitle />
                 <MetaboxPermalink className="text-sm" />
               </div>
-              <Editor />
+              <Editor initialData={post?.content ?? ''} />
               <div>
                 <MetaboxSlug />
                 <MetaboxDescription />

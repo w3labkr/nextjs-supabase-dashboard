@@ -17,6 +17,8 @@ import { getAuth, authenticate } from '@/queries/server/auth'
 import { getUserAPI } from '@/queries/server/users'
 import { getPostAPI, getAdjacentPostAPI } from '@/queries/server/posts'
 
+import 'ckeditor5/ckeditor5.css'
+
 // revalidate the data at most every month
 // 3600 (hour), 86400 (day), 604800 (week), 2678400 (month), 31536000 (year)
 // export const revalidate = 2678400
@@ -174,8 +176,14 @@ interface PostContentProps
   __html: string | null
 }
 
-const PostContent = ({ __html, ...props }: PostContentProps) => {
+const PostContent = ({ className, __html, ...props }: PostContentProps) => {
   if (!__html) return null
 
-  return <div dangerouslySetInnerHTML={{ __html }} {...props}></div>
+  return (
+    <div
+      className={cn('ck-content', className)}
+      dangerouslySetInnerHTML={{ __html }}
+      {...props}
+    ></div>
+  )
 }
