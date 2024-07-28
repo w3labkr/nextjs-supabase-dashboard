@@ -21,10 +21,10 @@ const Aside = ({ user, ...props }: AsideProps) => {
         </AvatarFallback>
       </Avatar>
       <div>
-        <h1 className="text-4xl font-semibold leading-none tracking-tight">
+        <h1 className="break-all text-4xl font-semibold leading-none tracking-tight">
           {user?.full_name}
         </h1>
-        <p className="text-sm text-gray-600">@{user?.username}</p>
+        <p className="break-all text-sm text-gray-600">@{user?.username}</p>
       </div>
       {user?.email || user?.bio ? (
         <div className="mt-4">
