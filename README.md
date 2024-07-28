@@ -24,9 +24,10 @@ Denpendency
   - [Getting Started](#getting-started)
   - [Generate Favicon](#generate-favicon)
   - [Docs](#docs)
-  - [Change Site URL](#change-site-url)
+  - [Define app URL](#define-app-url)
   - [Troubleshootings](#troubleshootings)
-  - [LICENSE](#license)
+  - [License](#license)
+  - [Reference](#reference)
 
 ## Screenshots
 
@@ -71,7 +72,7 @@ Find and replace the following text in `supabase/seed.sql` and run sql.
 Cloning a repository.
 
 ```shell
-git clone https://github.com/w3labkr/nextjs-supabase-dashboard.git .
+git clone https://github.com/w3labkr/nextjs-supabase-dashboard.git
 ```
 
 Install all modules listed as dependencies.
@@ -108,19 +109,28 @@ vim public/manifest.json
 - [INSTALLATION](./docs/INSTALLATION.md)
 - [CONFIGURATION](./docs/CONFIGURATION.md)
 - [DEPLOYING](./docs/DEPLOYING.md)
+- [LINTER](./docs/LINTER.md)
 - [EXAMPLES](./docs/EXAMPLES.md)
 
-## Change Site URL
+## Define app URL
 
-- `.env`: `NEXT_PUBLIC_APP_URL=`
+- environment: `NEXT_PUBLIC_APP_URL=`
 - Supabase Auth: Authentication > URL Configuration > Redirect URLs
-- Google cloud console: API > Credentials, API > OAuth
+- Google cloud console: API > Credentials
+- Google cloud console: API > OAuth
 
 ## Troubleshootings
 
 - For eslint, check the [latest version](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin?activeTab=versions) of `@typescript-eslint/eslint-plugin` and upgrade.
 - For ckeditor5, check the downloadable version in the [online builder](https://ckeditor.com/ckeditor-5/online-builder/) and upgrade.
 
-## LICENSE
+## License
 
 This software license under the [MIT License](LICENSE).
+
+## Reference
+
+- [shadcn-ui/ui](https://github.com/shadcn-ui/ui)
+- [shadcn-ui/taxonomy](https://github.com/shadcn-ui/taxonomy)
+- [nextjs-slack-clone](https://github.com/supabase/supabase/tree/master/examples/slack-clone/nextjs-slack-clone)
+- [nextjs-subscription-payments](https://github.com/vercel/nextjs-subscription-payments)

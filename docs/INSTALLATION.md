@@ -4,8 +4,10 @@
 
 - [INSTALLATION](#installation)
   - [Table of contents](#table-of-contents)
-  - [Installation](#installation-1)
-    - [SWR](#swr)
+  - [Packages](#packages)
+    - [Next.js](#nextjs)
+    - [Supabase CLI](#supabase-cli)
+    - [Supabase Auth](#supabase-auth)
     - [Tailwind CSS](#tailwind-css)
     - [Shadcn UI](#shadcn-ui)
     - [Shadcn UI - Time Picker](#shadcn-ui---time-picker)
@@ -13,16 +15,15 @@
     - [Internationalization (i18n)](#internationalization-i18n)
     - [Schema Validation](#schema-validation)
     - [Redux Toolkit](#redux-toolkit)
-    - [Supabase Cloud Functions](#supabase-cloud-functions)
-    - [Supabase CLI](#supabase-cli)
-    - [Supabase Auth](#supabase-auth)
+    - [SWR](#swr)
     - [PWA (Progressive Web Apps)](#pwa-progressive-web-apps)
-    - [ESLint](#eslint)
-    - [CKEditor 5](#ckeditor-5)
+    - [Nodemailer](#nodemailer)
+    - [Ckeditor 5](#ckeditor-5)
   - [Utilities](#utilities)
-  - [Reference](#reference)
 
-## Installation
+## Packages
+
+### Next.js
 
 Prompts:
 
@@ -50,13 +51,77 @@ Start the development server.
 npm run dev
 ```
 
-### SWR
+### Supabase CLI
 
-React Hooks for Data Fetching.
+Supabase CLI. Manage postgres migrations, run Supabase locally, deploy edge functions. Postgres backups. Generating types from your database schema.
 
 ```shell
-npm install swr
+npm install supabase --save-dev
 ```
+
+Updating the Supabase CLI.
+
+```shell
+npm update supabase --save-dev
+```
+
+Login with your Personal Access Token:
+
+```shell
+npx supabase login
+```
+
+Generate types without init.
+
+```shell
+npx supabase gen types typescript --project-id "YOUR_PROJECT_ID" --schema public > types/supabase.ts
+```
+
+Generate types with init.
+
+```shell
+npx supabase init
+npx supabase link --project-ref YOUR_PROJECT_ID
+npx supabase gen types typescript --linked > types/supabase.ts
+```
+
+Edit `package.json`:
+
+```json
+{
+  "scripts": {
+    "gen-types": "supabase gen types --lang=typescript --linked > types/supabase.ts"
+  }
+}
+```
+
+Generating Types.
+
+```shell
+npm run gen-types
+```
+
+When creating a database type in `supabase.com`
+
+- `Api Docs` > `Introduction` > `Generating Types`
+
+### Supabase Auth
+
+Install Supabase packages.
+
+```shell
+npm install @supabase/supabase-js @supabase/ssr
+```
+
+Set environment variables. Edit `.env.local`:
+
+```txt
+NEXT_PUBLIC_SUPABASE_URL=<your_supabase_project_url>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<your_supabase_anon_key>
+```
+
+- [Setting up Server-Side Auth for Next.js](https://supabase.com/docs/guides/auth/server-side/nextjs)
+- [Auth rate limits](https://supabase.com/docs/guides/platform/going-into-prod#auth-rate-limits)
 
 ### Tailwind CSS
 
@@ -149,7 +214,7 @@ Internationalization for react done right. Using the i18next i18n ecosystem.
 npm install react-i18next i18next i18next-http-backend
 ```
 
-[Trans component](https://react.i18next.com/latest/trans-component) rendering for the client side.
+Custom [trans component](https://react.i18next.com/latest/trans-component) rendering for the client side.
 
 ```javascript
 import { useTrans } from '@/hooks/i18next'
@@ -210,82 +275,13 @@ persist and rehydrate a redux store.
 npm install redux-persist
 ```
 
-### Supabase Cloud Functions
+### SWR
 
-Run the SQL code in `SQL Editor > New Query`.
-
-Generating Database Types.
-
-- `Api Docs` > `Introduction` > `Generating Types`
-- [Generating types using Supabase CLI](https://supabase.com/docs/guides/api/rest/generating-types)
-
-### Supabase CLI
-
-Supabase CLI. Manage postgres migrations, run Supabase locally, deploy edge functions. Postgres backups. Generating types from your database schema.
+React Hooks for Data Fetching.
 
 ```shell
-npm install supabase --save-dev
+npm install swr
 ```
-
-Updating the Supabase CLI.
-
-```shell
-npm update supabase --save-dev
-```
-
-Login with your Personal Access Token:
-
-```shell
-npx supabase login
-```
-
-Generate types without init.
-
-```shell
-npx supabase gen types typescript --project-id "YOUR_PROJECT_ID" --schema public > types/supabase.ts
-```
-
-Generate types with init.
-
-```shell
-npx supabase init
-npx supabase link --project-ref YOUR_PROJECT_ID
-npx supabase gen types typescript --linked > types/supabase.ts
-```
-
-Edit `package.json`:
-
-```json
-{
-  "scripts": {
-    "gen-types": "supabase gen types --lang=typescript --linked > types/supabase.ts"
-  }
-}
-```
-
-Generating Types.
-
-```shell
-npm run gen-types
-```
-
-### Supabase Auth
-
-Install Supabase packages.
-
-```shell
-npm install @supabase/supabase-js @supabase/ssr
-```
-
-Set environment variables. Edit `.env.local`:
-
-```txt
-NEXT_PUBLIC_SUPABASE_URL=<your_supabase_project_url>
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<your_supabase_anon_key>
-```
-
-- [Setting up Server-Side Auth for Next.js](https://supabase.com/docs/guides/auth/server-side/nextjs)
-- [Auth rate limits](https://supabase.com/docs/guides/platform/going-into-prod#auth-rate-limits)
 
 ### PWA (Progressive Web Apps)
 
@@ -297,66 +293,22 @@ npm install next-pwa
 
 - [next-pwa](https://github.com/shadowwalker/next-pwa)
 
-### ESLint
+### Nodemailer
 
-ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
-
-```shell
-npm install --save-dev eslint eslint-plugin-react eslint-plugin-react-hooks
-npm install --save-dev @next/eslint-plugin-next
-npm install --save-dev eslint-plugin-import eslint-import-resolver-typescript
-npm install --save-dev @typescript-eslint/parser @typescript-eslint/eslint-plugin 
-npm install --save-dev prettier eslint-plugin-prettier eslint-config-prettier
-npm install --save-dev eslint-plugin-tailwindcss prettier-plugin-tailwindcss
-```
-
-Edit `next.config.js`:
-
-```javascript
-module.exports = {
-  eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
-  },
-}
-```
-
-Find and fix problems in your JavaScript code.
+Send e-mails with Node.JS.
 
 ```shell
-npx eslint ./app
-npx eslint --fix ./{app,components,context,hooks,lib,types,utils}
+npm install nodemailer
+npm install --save-dev @types/nodemailer
 ```
 
-To format a file in-place.
+### Ckeditor 5
+
+Install packages
 
 ```shell
-npx prettier --check "./app/**/*.{ts,tsx}"
-npx prettier --write "./{app,components,context,hooks,lib,types,utils}/**/*.{ts,tsx}"
+npm install ckeditor5 @ckeditor/ckeditor5-react
 ```
-
-### CKEditor 5
-
-Powerful rich text editor framework with a modular architecture, modern integrations, and features like collaborative editing.
-
-Download the files from [Online Builder](https://ckeditor.com/ckeditor-5/online-builder/) and unzip them into the ckeditor5 folder. However, exclude the [Watchdog](https://ckeditor.com/docs/ckeditor5/latest/installation/integrations/react.html#using-the-ckeditor-5-online-builder) feature.
-
-And run the script below:
-
-```shell
-npm install file:./ckeditor5
-npm install @ckeditor/ckeditor5-react@6.2.0
-```
-
-Upgrade ckeditor5-custom-build.
-
-```shell
-cd ./ckeditor5 && npx npm-check-updates -u
-cd .. && npm install file:./ckeditor5
-```
-
-- [Integrate CKEditor 5 with Next.js](https://ckeditor.com/docs/ckeditor5/latest/installation/integrations/next-js.html)
 
 ## Utilities
 
@@ -366,16 +318,22 @@ Share target browsers between different front-end tools, like Autoprefixer, Styl
 npm install browserslist
 ```
 
+A small, fast and rich-API browser/platform/engine detector for both browser and node.
+
+```shell
+npm install bowser
+```
+
 A collection of essential TypeScript types.
 
 ```shell
 npm install type-fest
 ```
 
-Svg react icons of popular icon packs.
+React hook library, ready to use, written in Typescript.
 
 ```shell
-npm install react-icons
+npm install usehooks-ts
 ```
 
 A modern JavaScript utility library delivering modularity, performance, & extras.
@@ -390,11 +348,10 @@ Day.js 2kB immutable date-time library alternative to Moment.js with the same mo
 npm install dayjs
 ```
 
-Send e-mails with Node.JS.
+Flatten/unflatten nested Javascript objects.
 
 ```shell
-npm install nodemailer
-npm install --save-dev @types/nodemailer
+npm install flat
 ```
 
 JsonWebToken implementation for node.js.
@@ -409,10 +366,10 @@ Slugifies a string
 npm install slugify
 ```
 
-Generate massive amounts of fake data in the browser and node.js.
+Svg react icons of popular icon packs.
 
 ```shell
-npm install @faker-js/faker
+npm install react-icons
 ```
 
 Vector (*.svg) country flag icons in 3:2 aspect ratio.
@@ -421,21 +378,8 @@ Vector (*.svg) country flag icons in 3:2 aspect ratio.
 npm install country-flag-icons
 ```
 
-A small, fast and rich-API browser/platform/engine detector for both browser and node.
+Generate massive amounts of fake data in the browser and node.js.
 
 ```shell
-npm install bowser
+npm install @faker-js/faker
 ```
-
-Flatten/unflatten nested Javascript objects.
-
-```shell
-npm install flat
-```
-
-## Reference
-
-- [shadcn-ui/ui](https://github.com/shadcn-ui/ui)
-- [shadcn-ui/taxonomy](https://github.com/shadcn-ui/taxonomy)
-- [nextjs-slack-clone](https://github.com/supabase/supabase/tree/master/examples/slack-clone/nextjs-slack-clone)
-- [nextjs-subscription-payments](https://github.com/vercel/nextjs-subscription-payments)
