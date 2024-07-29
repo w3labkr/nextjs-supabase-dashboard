@@ -24,7 +24,7 @@ Denpendency
   - [Getting Started](#getting-started)
   - [Generate Favicon](#generate-favicon)
   - [Docs](#docs)
-  - [Define app URL](#define-app-url)
+  - [Define App URL](#define-app-url)
   - [Troubleshootings](#troubleshootings)
   - [License](#license)
   - [Reference](#reference)
@@ -112,7 +112,7 @@ vim public/manifest.json
 - [LINTER](./docs/LINTER.md)
 - [EXAMPLES](./docs/EXAMPLES.md)
 
-## Define app URL
+## Define App URL
 
 - environment: `NEXT_PUBLIC_APP_URL=`
 - Supabase Auth: Authentication > URL Configuration > Redirect URLs

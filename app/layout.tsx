@@ -47,8 +47,8 @@ export default function RootLayout({
   children?: React.ReactNode
 }>) {
   const cookieStore = cookies()
-  const language = cookieStore.get('app:language')?.value ?? defaultLng
-  const theme = cookieStore.get('app:theme')?.value ?? 'system'
+  const language = cookieStore.get('app:language')?.value || defaultLng
+  const theme = cookieStore.get('app:theme')?.value || 'system'
 
   return (
     <html lang={language} suppressHydrationWarning>

@@ -84,6 +84,10 @@ import 'ckeditor5/ckeditor5.css'
 import Event from '@ckeditor/ckeditor5-utils/src/eventinfo'
 import { EditorConfig } from '@ckeditor/ckeditor5-core/src/editor/editorconfig'
 import { SupabaseUploadAdapterPlugin } from './supabase-upload-adapter'
+import { useAppSelector } from '@/lib/redux/hooks'
+import en from 'ckeditor5/translations/en.js'
+import ko from 'ckeditor5/translations/ko.js'
+
 import './style.css'
 
 import { useAuth } from '@/hooks/use-auth'
@@ -96,7 +100,7 @@ interface EditorProps {
 export default function Editor({ initialData }: EditorProps) {
   const editorContainerRef = useRef(null)
   const editorRef = useRef(null)
-  const [isLayoutReady, setIsLayoutReady] = useState(false)
+  const [isLayoutReady, setIsLayoutReady] = useState<boolean>(false)
 
   useEffect(() => {
     setIsLayoutReady(true)
@@ -104,7 +108,7 @@ export default function Editor({ initialData }: EditorProps) {
     return () => setIsLayoutReady(false)
   }, [])
 
-  const editorConfig: EditorConfig = {
+  let editorConfig: EditorConfig = {
     toolbar: {
       items: [
         'undo',
@@ -302,7 +306,6 @@ export default function Editor({ initialData }: EditorProps) {
         'resizeImage',
       ],
     },
-    initialData,
     link: {
       addTargetToExternalLinks: true,
       defaultProtocol: 'https://',
@@ -395,15 +398,21 @@ export default function Editor({ initialData }: EditorProps) {
         'tableCellProperties',
       ],
     },
+    translations: [en, ko],
     extraPlugins: [SupabaseUploadAdapterPlugin],
   }
 
+  const { language } = useAppSelector(({ app }) => app)
   const { user } = useAuth()
   const { setValue } = useFormContext()
 
+  editorConfig = { ...editorConfig, initialData, language }
+
   useEffect(() => {
-    if (user?.id) {
-      globalThis.localStorage.setItem('ckeditor5:uploadFolder', user?.id)
+    const storage = globalThis.localStorage
+    const item = storage.getItem('ckeditor5:uploadFolder')
+    if (user?.id && item && user?.id !== item) {
+      storage.setItem('ckeditor5:uploadFolder', user?.id)
     }
   }, [user?.id])
 
