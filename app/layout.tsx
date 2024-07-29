@@ -27,6 +27,10 @@ export const metadata: Metadata = {
   title: siteConfig.title,
   description: siteConfig.description,
   manifest: '/manifest.json',
+  verification: {
+    google: 'IxvN4WdPU9_KS-Tte2fenLPbVODRkNwhyqrXGx2rAJw',
+    // other: { 'naver-site-verification': '' },
+  },
 }
 
 export const viewport: Viewport = {

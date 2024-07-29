@@ -25,7 +25,7 @@ Denpendency
   - [Generate Favicon](#generate-favicon)
   - [Docs](#docs)
   - [Define App URL](#define-app-url)
-  - [Troubleshootings](#troubleshootings)
+  - [Troubleshooting](#troubleshooting)
   - [License](#license)
   - [Reference](#reference)
 
@@ -114,12 +114,12 @@ vim public/manifest.json
 
 ## Define App URL
 
-- environment: `NEXT_PUBLIC_APP_URL=`
+- Environment: `NEXT_PUBLIC_APP_URL=`
 - Supabase Auth: Authentication > URL Configuration > Redirect URLs
 - Google cloud console: API > Credentials
 - Google cloud console: API > OAuth
 
-## Troubleshootings
+## Troubleshooting
 
 - For eslint, check the [latest version](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin?activeTab=versions) of `@typescript-eslint/eslint-plugin` and upgrade.
 - For ckeditor5, check the downloadable version in the [online builder](https://ckeditor.com/ckeditor-5/online-builder/) and upgrade.

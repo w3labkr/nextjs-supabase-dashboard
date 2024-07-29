@@ -69,7 +69,7 @@ const Header = () => {
                 translate="yes"
                 values={{
                   q: pathname?.startsWith('/search')
-                    ? (searchParams.get('q') as string) ?? ''
+                    ? ((searchParams.get('q') as string) ?? '')
                     : '',
                 }}
                 className="hidden sm:flex"

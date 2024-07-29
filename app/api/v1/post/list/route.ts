@@ -108,7 +108,7 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const count = limit ? list?.length : total?.count ?? 0
+  const count = limit ? list?.length : (total?.count ?? 0)
   const data = list?.map((item: any, index: number) => {
     item['num'] = limit ? index + 1 : count - index - offset
     return item

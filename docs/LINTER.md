@@ -27,12 +27,12 @@ Find and fix problems in your JavaScript code.
 
 ```shell
 npx eslint ./app
-npx eslint --fix ./{app,components,context,hooks,lib,types,utils}
+npx eslint --fix ./{app,components,config,context,hooks,lib,queries,store,types}
 ```
 
 To format a file in-place.
 
 ```shell
 npx prettier --check "./app/**/*.{ts,tsx}"
-npx prettier --write "./{app,components,context,hooks,lib,types,utils}/**/*.{ts,tsx}"
+npx prettier --write "./{app,components,config,context,hooks,lib,queries,store,types}/**/*.{ts,tsx}"
 ```
