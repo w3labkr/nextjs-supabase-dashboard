@@ -251,22 +251,32 @@ $$ language plpgsql;
 -- Search multiple columns
 -- https://supabase.com/docs/guides/database/full-text-search?queryGroups=example-view&example-view=sql&queryGroups=language&language=js#search-multiple-columns
 
-create function title_description(posts) returns text as $$
+create or replace function title_description(posts)
+returns text
+as $$
   select $1.title || ' ' || $1.description;
 $$ language sql immutable;
 
-create function title_keywords(posts) returns text as $$
+create or replace function title_keywords(posts)
+returns text
+as $$
   select $1.title || ' ' || $1.keywords;
 $$ language sql immutable;
 
-create function title_content(posts) returns text as $$
+create or replace function title_content(posts)
+returns text
+as $$
   select $1.title || ' ' || $1.content;
 $$ language sql immutable;
 
-create function title_description_keywords(posts) returns text as $$
+create or replace function title_description_keywords(posts)
+returns text
+as $$
   select $1.title || ' ' || $1.description || ' ' || $1.keywords;
 $$ language sql immutable;
 
-create function title_description_content(posts) returns text as $$
+create or replace function title_description_content(posts)
+returns text
+as $$
   select $1.title || ' ' || $1.description || ' ' || $1.content;
 $$ language sql immutable;

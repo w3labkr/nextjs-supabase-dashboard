@@ -62,9 +62,6 @@ create policy "User can delete their own objects" on storage.objects
 
 truncate table cron.job_run_details restart identity;
 
-drop function if exists hourly_publish_future_posts;
-drop function if exists daily_delete_old_cron_job_run_details;
-
 select cron.schedule('hourly-publish-future-posts', '0 * * * *', 'SELECT hourly_publish_future_posts()');
 select cron.schedule('daily-delete-old-cron-job-run-details', '0 0 * * *', 'SELECT daily_delete_old_cron_job_run_details()');
 
@@ -137,6 +134,9 @@ drop function if exists title_keywords;
 drop function if exists title_content;
 drop function if exists title_description_keywords;
 drop function if exists title_description_content;
+
+drop function if exists hourly_publish_future_posts;
+drop function if exists daily_delete_old_cron_job_run_details;
 
 ----------------------------------------------------------------
 
@@ -309,16 +309,14 @@ declare
   new_has_set_password boolean;
 begin
   for r in (select * from auth.users) loop
-    new_username := generate_username(r.email);
-    new_username := substr(new_username, 1, 255);
-    new_has_set_password := case when r.encrypted_password is null or r.encrypted_password = '' then false else true end;
-
-    insert into users
-    (id, has_set_password, username, full_name, avatar_url)
-    values
-    (r.id, new_has_set_password, new_username, new_username, r.raw_user_meta_data ->> 'avatar_url');
-    insert into emails (user_id, email) values (r.id, r.email);
-    insert into notifications (user_id) values (r.id);
+    if not exists (select 1 from users where id = r.id) then
+      new_username := generate_username(r.email);
+      new_username := substr(new_username, 1, 255);
+      new_has_set_password := case when r.encrypted_password is null or r.encrypted_password = '' then false else true end;
+      insert into users (id, has_set_password, username, full_name, avatar_url) values (r.id, new_has_set_password, new_username, new_username, r.raw_user_meta_data ->> 'avatar_url');
+      insert into emails (user_id, email) values (r.id, r.email);
+      insert into notifications (user_id) values (r.id);
+    end if;
   end loop;
 end;
 $$ language plpgsql;
@@ -821,26 +819,35 @@ $$ language plpgsql;
 
 ----------------------------------------------------------------
 
-create function title_description(posts) returns text as $$
+create or replace function title_description(posts)
+returns text
+as $$
   select $1.title || ' ' || $1.description;
 $$ language sql immutable;
 
-create function title_keywords(posts) returns text as $$
+create or replace function title_keywords(posts)
+returns text
+as $$
   select $1.title || ' ' || $1.keywords;
 $$ language sql immutable;
 
-create function title_content(posts) returns text as $$
+create or replace function title_content(posts)
+returns text
+as $$
   select $1.title || ' ' || $1.content;
 $$ language sql immutable;
 
-create function title_description_keywords(posts) returns text as $$
+create or replace function title_description_keywords(posts)
+returns text
+as $$
   select $1.title || ' ' || $1.description || ' ' || $1.keywords;
 $$ language sql immutable;
 
-create function title_description_content(posts) returns text as $$
+create or replace function title_description_content(posts)
+returns text
+as $$
   select $1.title || ' ' || $1.description || ' ' || $1.content;
 $$ language sql immutable;
-
 
 ----------------------------------------------------------------
 --                                                            --

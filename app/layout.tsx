@@ -4,12 +4,12 @@ import { cookies } from 'next/headers'
 import { Inter as FontSans } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 
+import { Toaster } from '@/components/ui/sonner'
+import { TailwindIndicator } from '@/components/tailwind-indicator'
+
 import { AppProvider } from '@/context/app-provider'
 import { I18nProvider } from '@/context/i18n-provider'
 import { ThemeProvider } from '@/context/theme-provider'
-
-import { Toaster } from '@/components/ui/sonner'
-import { TailwindIndicator } from '@/components/tailwind-indicator'
 
 import { cn } from '@/lib/utils'
 import { siteConfig } from '@/config/site'
@@ -62,7 +62,6 @@ export default function RootLayout({
             <ThemeProvider value={{ theme }}>
               <div id="__next">{children}</div>
               <Toaster richColors closeButton />
-              {/* <Statistics /> */}
               <TailwindIndicator />
               {process.env.NODE_ENV === 'production' ? <Analytics /> : null}
             </ThemeProvider>
