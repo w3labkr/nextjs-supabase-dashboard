@@ -25,7 +25,9 @@ import { SearchFormDialog } from '@/components/search-form-dialog'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 
-const Header = () => {
+interface HeaderProps extends React.HTMLAttributes<HTMLElement> {}
+
+const Header = ({ className, ...props }: HeaderProps) => {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { user } = useAuth()
@@ -42,10 +44,14 @@ const Header = () => {
         <MobileNavigation />
       </SheetContent>
       <header
-        className={cn(
-          'flex w-full flex-col border-0 border-b border-solid border-input'
-          // 'sticky left-0 top-0 z-10'
-        )}
+        className={
+          (cn(
+            'flex w-full flex-col border-0 border-b border-solid border-input'
+            // 'sticky left-0 top-0 z-10'
+          ),
+          className)
+        }
+        {...props}
       >
         <div className="container flex h-[60px] items-center">
           <SheetTrigger asChild>
@@ -115,4 +121,4 @@ const SignedOutNav = () => {
   )
 }
 
-export { Header }
+export { Header, type HeaderProps }
