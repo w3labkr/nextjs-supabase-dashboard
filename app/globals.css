@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Noto+Serif+KR:wght@200..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -55,11 +57,5 @@
   }
   body {
     @apply bg-background text-foreground;
-  }
-}
-
-@layer base {
-  body:has(.body-overflow-hidden) {
-    @apply overflow-hidden;
   }
 }

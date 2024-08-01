@@ -1,7 +1,6 @@
 import * as React from 'react'
 import type { Metadata, Viewport } from 'next'
 import { cookies } from 'next/headers'
-import { Inter as FontSans } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 
 import { Toaster } from '@/components/ui/sonner'
@@ -16,11 +15,6 @@ import { siteConfig } from '@/config/site'
 import { defaultLng } from '@/i18next.config'
 
 import './globals.css'
-
-const fontSans = FontSans({
-  subsets: ['latin'],
-  variable: '--font-sans',
-})
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL!),
@@ -56,7 +50,7 @@ export default function RootLayout({
 
   return (
     <html lang={language} suppressHydrationWarning>
-      <body className={cn('font-sans antialiased', fontSans.variable)}>
+      <body className={cn('font-sans antialiased')}>
         <AppProvider>
           <I18nProvider value={{ language }}>
             <ThemeProvider value={{ theme }}>
