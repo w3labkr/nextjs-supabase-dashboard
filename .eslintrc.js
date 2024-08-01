@@ -4,7 +4,33 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es2021: true,
+    es2020: true,
+  },
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:react/recommended',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
+    'next',
+    'plugin:prettier/recommended',
+  ],
+  plugins: ['import', 'react', 'react-hooks', '@typescript-eslint'],
+  ignorePatterns: [
+    '.eslintrc.js',
+    'next.config.js',
+    'postcss.config.js',
+    'tailwind.config.js',
+    'components/ui',
+  ],
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      typescript: {},
+    },
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -13,20 +39,9 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 12,
+    ecmaVersion: 11,
     sourceType: 'module',
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:import/recommended',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:import/typescript',
-    'next',
-    'plugin:prettier/recommended',
-  ],
-  plugins: ['import', 'react', 'react-hooks', '@typescript-eslint'],
   rules: {
     // 'React' must be in scope when using JSX react/react-in-jsx-scope`
     // 'react/react-in-jsx-scope': 'warn',
@@ -49,20 +64,5 @@ module.exports = {
     'prefer-const': 'warn',
     // Don't use `{}` as a type.
     '@typescript-eslint/ban-types': 'warn',
-  },
-  ignorePatterns: [
-    '.eslintrc.js',
-    'next.config.js',
-    'postcss.config.js',
-    'tailwind.config.ts',
-    'components/ui',
-  ],
-  settings: {
-    'import/parsers': {
-      '@typescript-eslint/parser': ['.ts', '.tsx'],
-    },
-    'import/resolver': {
-      typescript: {},
-    },
   },
 }

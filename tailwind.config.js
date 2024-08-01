@@ -1,3 +1,5 @@
+const plugin = require('tailwindcss/plugin')
+
 /** @type {import('tailwindcss').Config} */
 const tailwindConfig = {
   darkMode: ['class'],
@@ -71,16 +73,20 @@ const tailwindConfig = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+      fontFamily: {
+        sans: ['Noto Sans KR', 'sans-serif'],
+        serif: ['Noto Serif KR', 'serif'],
+      },
     },
   },
   plugins: [
     require('tailwindcss-animate'),
-    require('tailwind-scrollbar-hide'),
-    ({ addUtilities }) => {
-      addUtilities({
+    plugin(function ({ addUtilities }) {
+      const newUtilities = {
         '.text-2xs': { fontSize: '10px', lineHeight: 1 },
-      })
-    },
+      }
+      addUtilities(newUtilities)
+    }),
   ],
 }
 

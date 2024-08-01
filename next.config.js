@@ -6,8 +6,6 @@ const withPWA = require('next-pwa')({
 const nextConfig = {
   reactStrictMode: process.env.NODE_ENV === 'production',
   swcMinify: true,
-  removeConsole:
-    process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
