@@ -91,7 +91,6 @@
     "sonner": "^1.5.0",
     "swr": "^2.2.5",
     "tailwind-merge": "^2.4.0",
-    "tailwind-scrollbar-hide": "^1.1.7",
     "tailwindcss-animate": "^1.0.7",
     "type-fest": "^4.22.1",
     "usehooks-ts": "^3.1.0",
