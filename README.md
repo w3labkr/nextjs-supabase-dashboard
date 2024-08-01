@@ -123,6 +123,7 @@ vim public/manifest.json
 
 - For eslint, check the [latest version](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin?activeTab=versions) of `@typescript-eslint/eslint-plugin` and upgrade.
 - For ckeditor5, check the downloadable version in the [online builder](https://ckeditor.com/ckeditor-5/online-builder/) and upgrade.
+- If an error occurs in the pre-rendered `sitemap.xml`, access the page in development mode and run a rebuild.
 
 ## License
 

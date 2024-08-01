@@ -138,12 +138,6 @@ Using 'clsx' or 'classnames' with 'tailwind-merge'.
 npm install tailwindcss-animate class-variance-authority clsx tailwind-merge
 ```
 
-Tailwindcss plugin for hide scrollbar.
-
-```shell
-npm install tailwind-scrollbar-hide
-```
-
 `lib/utils/cn.ts`:
 
 ```typescript
@@ -161,6 +155,24 @@ Beautifully designed components that you can copy and paste into your apps. Acce
 npx shadcn-ui@latest init
 ```
 
+Adding dark mode.
+
+```shell
+npm install next-themes
+```
+
+Use the add command to add components and dependencies to your project.
+
+```shell
+npx shadcn-ui@latest add
+```
+
+Hides content from the screen in an accessible way.
+
+```shell
+npm install @radix-ui/react-visually-hidden
+```
+
 Add icon libraries.
 
 ```shell
@@ -174,21 +186,6 @@ module.exports = {
   transpilePackages: ['lucide-react'],
 }
 ```
-
-Adding dark mode.
-
-```shell
-npm install next-themes
-```
-
-Use the add command to add components and dependencies to your project.
-
-```shell
-npx shadcn-ui@latest add
-npx shadcn-ui@latest add [component]
-```
-
-The configuration for Shadcn UI is `components.json`.
 
 ### Shadcn UI - Time Picker
 
